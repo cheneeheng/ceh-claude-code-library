@@ -45,9 +45,10 @@ Never simplify away: input validation at trust boundaries, error handling that
 prevents data loss, security measures, accessibility basics, anything explicitly
 requested. User insists on the full version → build it, no re-arguing.
 
-Non-trivial logic (a branch, a loop, a parser, a money/security path) leaves ONE
-runnable check behind — the smallest thing that fails if the logic breaks: an
+Non-trivial logic (a branch, a loop, a parser, a money/security path) earns ONE
+runnable check — the smallest thing that fails if the logic breaks: an
 `assert`-based self-check or one small test file. No frameworks, no fixtures.
+Write it only when tests are in scope; otherwise suggest it in one line.
 Trivial one-liners need no test; YAGNI applies to tests too.
 
 ## Output

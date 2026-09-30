@@ -90,9 +90,9 @@ and its reason, and the attribution footer, committed with `git commit -F`.
 
 **Canonical:** `plugins/ceh-coding-agent/skills/write-less-code/SKILL.md` — § Procedure + § When not to be lazy
 
-| Copy                                                    | Section                  | Diverges                                                                                |
-| ------------------------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------- |
-| `plugins/ceh-coding-agent/scripts/less-code-payload.sh` | `additionalContext` text | compact digest of the ladder and the never-simplify list, injected per turn by the hook |
+| Copy                                                    | Section                  | Diverges                                                                                                                       |
+| ------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `plugins/ceh-coding-agent/scripts/less-code-payload.sh` | `additionalContext` text | compact digest of the ladder and the never-simplify list, injected per turn by the hook, plus a pointer to load the full skill |
 
 **Shared:** the six-rung ladder (YAGNI → stdlib → native platform feature → already-installed
 dependency → one line → minimum that works) and the never-simplify-away list (trust-boundary

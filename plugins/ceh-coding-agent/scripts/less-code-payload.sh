@@ -16,6 +16,7 @@ WRITE LESS CODE — the best code is the code never written. Before writing any 
 6. Only then: the minimum code that works.
 Never simplify away: trust-boundary validation, data-loss handling, security, accessibility, anything explicitly requested.
 Mark deliberate shortcuts with a `// less-code:` comment naming the ceiling and upgrade path.
+Before implementing a feature or non-trivial logic, invoke the Skill tool with skill="ceh-coding-agent:write-less-code" for the full rules.
 EOF
 
 # JSON-escape: backslashes first, then double quotes, then newlines.
