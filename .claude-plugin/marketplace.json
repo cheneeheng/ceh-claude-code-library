@@ -7,5 +7,12 @@
   "metadata": {
     "description": "CEH Claude Code plugins for the full software development lifecycle."
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "ceh-git-workflow",
+      "source": "./plugins/ceh-git-workflow",
+      "version": "1.0.0",
+      "description": "CEH Git workflow: commits, branching, PRs (with definition-of-done gate), merging, changelog entries, releases, code review, and dependency management. Includes two orchestrated flows — merge-flow lands a branch, release-flow ships a release."
+    }
+  ]
 }
