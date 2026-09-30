@@ -22,7 +22,7 @@ the same commit. The content is the easy half. The half that gets forgotten is r
 same fact lives in both READMEs, both manifests, and sometimes `docs/CROSS_REFERENCES.md`, and CI
 fails when they drift.
 
-## 1. Pick the plugin
+## 1. Pick the plugin and the component type
 
 Plugins split on **use case**, not tech domain or lifecycle phase. Load exactly one plugin per
 use case, so each must be self-contained. The tiers are defined in `CLAUDE.md`.
@@ -40,9 +40,34 @@ use case, so each must be self-contained. The tiers are defined in `CLAUDE.md`.
 If no existing plugin owns the use case, create one first — see [New plugin](#new-plugin) — then
 continue at step 2.
 
+Then pick the component type by what the need is:
+
+| Need | Component | Settle before writing |
+|---|---|---|
+| Knowledge or a procedure Claude applies at a moment, or a user-invoked `/action` | Skill | Trigger phrases, what it adds beyond model knowledge, arguments, tools, interactive or automated |
+| An autonomous task whose output or cost should stay out of the main session | Agent | Proactive or on request, tool set, model, output format |
+| A rule that must hold on every event, whether or not Claude remembers it | Hook | Which events, prompt or command, what blocks vs warns |
+| An external service or API | MCP server | Server type, authentication, which tools |
+| User or project configuration | Environment variable, never a settings file | Variable names, required vs optional, defaults |
+
+New slash commands are skills (`skills/<name>/SKILL.md`), never the legacy `commands/` layout.
+Answer the "settle" column from the request and the code. Ask the user only for what neither
+settles.
+
 ## 2. Write the component
 
 Editing an existing skill instead? Check `docs/CROSS_REFERENCES.md` first (step 4).
+
+Creating any component, including one migrated from agent-skills, starts by loading its
+authoring skill. Where that skill's advice conflicts with this repo, this skill wins — see
+[the override table](#when-plugin-dev-or-skill-creator-skills-are-also-loaded).
+
+| Creating | First |
+|---|---|
+| Skill | Invoke the Skill tool with skill="skill-creator:skill-creator". Never `plugin-dev:skill-development`. Skip its eval loop (test runs, benchmark, viewer, description optimization) unless the user asks for it |
+| Agent | Invoke the Skill tool with skill="plugin-dev:agent-development" |
+| Hook | Invoke the Skill tool with skill="plugin-dev:hook-development" |
+| MCP server | Invoke the Skill tool with skill="plugin-dev:mcp-integration" |
 
 **Skill** — copy `${CLAUDE_SKILL_DIR}/assets/SKILL.template.md` to
 `plugins/ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. Fill every
@@ -61,6 +86,13 @@ mix heading case and section names, and the templates exist to end that.
 **Hook or script** — hook wiring goes in `plugins/ceh-<plugin>/hooks/hooks.json`, scripts in
 `plugins/ceh-<plugin>/scripts/`, referenced as `${CLAUDE_PLUGIN_ROOT}/scripts/<file>`. Keep
 `*.sh` LF-only: a CRLF checkout breaks bash with `$'\r'`.
+
+**MCP server** — config goes in `plugins/ceh-<plugin>/.mcp.json` with `${CLAUDE_PLUGIN_ROOT}`
+paths.
+
+**Configuration** — environment variables only, never a `.claude/*.local.md` settings file or
+other config file. Hooks, MCP servers, and scripts use HTTPS and never hardcode a credential: read
+it from an environment variable and document every variable in the plugin README.
 
 **`description` is always a folded block scalar (`>-`)** — never quoted, never plain. `validate.py`
 rejects anything else.
@@ -128,7 +160,9 @@ work, so no agent sets it.
 
 - Root `README.md` — add a row under the correct plugin group in **Skills** or **Agents**. If the
   plugin has no group there yet, add a `### <Plugin> (\`ceh-<plugin>\`)` subsection.
-- `plugins/ceh-<plugin>/README.md` — add a row to that plugin's own table.
+- `plugins/ceh-<plugin>/README.md` — add a row to that plugin's own table. The plugin README also
+  carries anything a user must do before the component works: prerequisites, when a hook fires,
+  and every environment variable the plugin reads, with its default and whether it is required.
 
 ## 4. Register any duplication
 
@@ -170,10 +204,22 @@ Same gate CI runs via `.github/workflows/validate.yml`. It checks:
 `validate.py` does not parse YAML strictly. For a YAML syntax check, also run
 `claude plugin validate plugins/ceh-<plugin>`.
 
+A green validator proves the files are well-formed, not that the component works. Load the plugin
+in a fresh session with `claude --plugin-dir plugins/ceh-<plugin>` and check what you added:
+
+- Skill: a prompt using a description trigger phrase loads it; `/ceh-<plugin>:<skill>` runs it
+- Agent: a prompt matching its description delegates to it
+- Hook: `claude --debug` shows it firing on its event
+- MCP server: `/mcp` lists the server and its tools
+
+Report any check you did not run as not run. Do not imply it passed.
+
 ## New plugin
 
-Only when step 1 finds no plugin that owns the use case. Decide the tier first (scenario bundle,
-cross-cutting, use-case workflow, stack/build — see `CLAUDE.md`), then:
+Only when step 1 finds no plugin that owns the use case. The layout is fixed by this section and
+the Structure section of `CLAUDE.md`, so do not load `plugin-dev:plugin-structure`. Decide the
+tier (scenario bundle, cross-cutting, use-case workflow, stack/build — see `CLAUDE.md`) and plan
+every component with the step 1 table before creating anything, then:
 
 1. `plugins/ceh-<name>/.claude-plugin/plugin.json`, flat under `plugins/` with no tier folder:
 
@@ -206,21 +252,26 @@ The repo tag bumps MINOR and `CHANGELOG.md` lists the plugin at `1.0.0` under `#
 
 ## When plugin-dev or skill-creator skills are also loaded
 
-`plugin-dev:create-plugin`, `skill-development`, `agent-development`, `hook-development`, and
-`skill-creator` trigger on the same phrases and give generic advice. Where it conflicts with this
-repo, this skill wins:
+Step 2 loads `skill-creator` and the plugin-dev authoring skills on purpose, and
+`plugin-dev:create-plugin` triggers on the same phrases as this skill. They give generic advice.
+Where it conflicts with this repo, this skill wins:
 
 | They say | This repo does |
 |---|---|
+| `plugin-dev:skill-development` for skills | `skill-creator:skill-creator` |
+| Run test prompts, benchmark, open the viewer, optimize the description | Only when the user asks. Otherwise stop after the draft |
+| `plugin-dev:plugin-structure` for layout | The layout in [New plugin](#new-plugin) and `CLAUDE.md` |
+| `plugin-dev:plugin-settings`, `.claude/<plugin>.local.md` settings files | Environment variables, documented in the plugin README |
 | Lean SKILL.md, detail in `references/` and `examples/` | Content inline. `references/` only for shared schemas or oversized standards |
 | "This skill should be used when…" descriptions, any scalar style | `>-` folded scalar, "Load this skill when…" (agents: "Use this agent to…") |
-| Write the file from scratch | Start from the template in `${CLAUDE_SKILL_DIR}/assets/` |
+| Write the file from scratch, or generate an agent with the `agent-creator` agent | Start from the template in `${CLAUDE_SKILL_DIR}/assets/` |
+| Skills in the legacy `commands/` layout | `skills/<name>/SKILL.md` only |
 | Hook scripts in `examples/` | `scripts/`, referenced as `${CLAUDE_PLUGIN_ROOT}/scripts/...` |
 | New plugin at `0.1.0`, marketplace entry optional | `1.0.0`, marketplace entry in the same commit |
-| `plugin-validator` agent, `validate-agent.sh`, `validate-hook-schema.sh` | `python tools/validate-plugins/validate.py` is the gate |
+| `plugin-validator` / `skill-reviewer` agents, `validate-agent.sh`, `validate-hook-schema.sh` | `python tools/validate-plugins/validate.py` is the gate, then the live checks in step 6 |
 | Agent `<example>` blocks and `color` | Prose `description`, no `<example>` blocks; `color` optional |
 | Eval workspace next to the skill directory | `.agents_workspace/skill-evals/<skill>/`, git-ignored, never inside `plugins/` |
 | Wait for user confirmation at each phase, ask where to create, `git init` | Autonomous mode, flat `plugins/`, existing repo |
 
-plugin-dev stays useful for Claude Code mechanics this skill does not cover — hook event payloads,
-MCP server config, settings files.
+Everything else in those skills applies — hook event payloads, prompt-based hooks, MCP server
+types, agent system-prompt design, skill-creator's drafting guidance.
