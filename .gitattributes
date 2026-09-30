@@ -1,0 +1,4 @@
+# Hook scripts must stay LF: a CRLF checkout breaks bash with $'\r'
+* text=auto eol=lf
+*.sh text eol=lf
+*.py text eol=lf

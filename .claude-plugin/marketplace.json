@@ -1,0 +1,11 @@
+{
+  "name": "ceh-claude-code-library",
+  "owner": {
+    "name": "cheneeheng",
+    "email": "eeheng.chen@gmail.com"
+  },
+  "metadata": {
+    "description": "CEH Claude Code plugins for the full software development lifecycle."
+  },
+  "plugins": []
+}
