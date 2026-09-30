@@ -6,10 +6,10 @@
 
 ## Plugins
 
-| Plugin                | Install as         | Contents                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| --------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff; explaining code until it lands; whole-repo orientation (`explain-codebase`, `repo-tree-mapper`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
-| Git Workflow          | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management, plus the `merge-flow` and `release-flow` orchestrations                                                                                                                                                                                                                                                                                                            |
+| Plugin                | Install as         | Contents                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| --------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff; explaining code until it lands; whole-repo orientation (`explain-codebase`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
+| Git Workflow          | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management, plus the `merge-flow` and `release-flow` orchestrations                                                                                                                                                                                                                                                                                        |
 
 ### Categorization
 
@@ -59,10 +59,9 @@
 
 ### Agent Coding Contract (`ceh-coding-agent`)
 
-| Agent            | Invoke                               | When                                                                                                                                                       |
-| ---------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Bulk Reader      | `/ceh-coding-agent:bulk-reader`      | Read large or numerous files on Haiku and return a compressed, line-anchored answer to one question, keeping the file contents out of the caller's context |
-| Repo Tree Mapper | `/ceh-coding-agent:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests                                                                            |
+| Agent       | Invoke                          | When                                                                                                                                                       |
+| ----------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bulk Reader | `/ceh-coding-agent:bulk-reader` | Read large or numerous files on Haiku and return a compressed, line-anchored answer to one question, keeping the file contents out of the caller's context |
 
 ---
 

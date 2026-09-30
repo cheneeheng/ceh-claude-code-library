@@ -8,10 +8,9 @@ description: >-
   "document what each module does", "walk me through this project", "write an onboarding doc for
   this repo", or "I inherited this repo — what is going on". Explains at component/module level by
   default; drops to one entry per file only when the user explicitly asks for per-file detail. Also
-  load before making the first change to an unfamiliar codebase. Not for a one-line-per-path
-  structure map (use the ceh-coding-agent:repo-tree-mapper agent), not for design diagrams and decision
-  records (ceh-architecture:document-architecture), and not for end-user or operator documentation
-  (ceh-documentation).
+  load before making the first change to an unfamiliar codebase. Not for design diagrams and
+  decision records (ceh-architecture:document-architecture), and not for end-user or operator
+  documentation (ceh-documentation).
 compatibility: >-
   Requires the git CLI on PATH and a git working tree (it checks tracking with `git ls-files` and
   untracks with `git rm --cached`). No language runtime or package manager is needed - the output
@@ -201,7 +200,6 @@ and what was checked.
 
 | Want                                                                              | Use                                                                                                                      |
 | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| One line per path, clickable tree, fast orientation                               | `ceh-coding-agent:repo-tree-mapper` agent                                                                                |
 | Diagrams of the system's shape + decision log                                     | `ceh-architecture:document-architecture`                                                                                 |
 | Docs for people who _use_ or _operate_ the product                                | `ceh-documentation:write-guides-and-runbooks` for the tasks, `ceh-documentation:write-project-docs` for a whole docs set |
 | Explain one subsystem to someone who is in the session and can say "still blurry" | `ceh-coding-agent:explain-until-understood`                                                                              |

@@ -54,6 +54,7 @@ Categorization rules of thumb:
 .agents_workspace/            # Session artifacts, git-ignored in full: DECISION_LOG.md, skill-evals/
 .claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
+archive/                      # Retired plugins or plugin contents — unpublished, not validated
 .github/workflows/            # validate.yml — runs validate.py on push and PR
 docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md
 plugins/                      # All plugins — flat, one directory per plugin, no tier subfolders
@@ -76,7 +77,7 @@ tools/
 
 | Plugin directory   | Domain                                                                                                                                                                                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation and mapping, usage-limit handoff, context economy via delegated bulk reads                                                                                                |
+| `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation, usage-limit handoff, context economy via delegated bulk reads                                                                                                            |
 | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management; plus the two orchestrated flows — `merge-flow` (lands a branch, no version) and `release-flow` (ships a release) — which sequence those skills and own only the gates |
 
 ## Skills

@@ -12,7 +12,7 @@
       "name": "ceh-coding-agent",
       "source": "./plugins/ceh-coding-agent",
       "version": "1.0.0",
-      "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, whole-repo explanation and mapping, and context economy via delegated bulk reads."
+      "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, whole-repo explanation, and context economy via delegated bulk reads."
     },
     {
       "name": "ceh-git-workflow",
