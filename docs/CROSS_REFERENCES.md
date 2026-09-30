@@ -86,6 +86,66 @@ push-and-tag sequence nine steps early.
 **Shared:** the version-bump commit is never subject-only: it carries what shipped, the bump level
 and its reason, and the attribution footer, committed with `git commit -F`.
 
+## Write-less-code ladder (skill + per-turn digest)
+
+**Canonical:** `plugins/ceh-coding-agent/skills/write-less-code/SKILL.md` — § Procedure + § When not to be lazy
+
+| Copy                                                    | Section                  | Diverges                                                                                |
+| ------------------------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------- |
+| `plugins/ceh-coding-agent/scripts/less-code-payload.sh` | `additionalContext` text | compact digest of the ladder and the never-simplify list, injected per turn by the hook |
+
+**Shared:** the six-rung ladder (YAGNI → stdlib → native platform feature → already-installed
+dependency → one line → minimum that works) and the never-simplify-away list (trust-boundary
+validation, data-loss handling, security, accessibility, anything explicitly requested). The
+retroactive ladder below re-frames the same six rungs, so a rung change propagates there too.
+
+## Retroactive ladder + behavior preservation
+
+**Canonical:** `plugins/ceh-coding-agent/skills/shrink-diff/SKILL.md` — § The retroactive ladder + § Behavior preservation
+
+| Copy                                                     | Section                                            | Diverges                                                                          |
+| -------------------------------------------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `plugins/ceh-coding-agent/skills/refactor-repo/SKILL.md` | § The retroactive ladder + § Behavior preservation | none in the text; applied per approved cluster rather than to the branch seed set |
+
+**Shared:** both blocks word for word — the six retroactive rungs, and the behavior-preservation
+bullets (no behavior change in a refactor, tests before and after, mechanical transforms only
+without coverage, pin behavior with `ceh-testing:verify-behavior-preserved`, `refactor:` commits).
+
+## Explanation honesty rules
+
+**Canonical:** `plugins/ceh-coding-agent/skills/explain-codebase/SKILL.md` — § Rules
+
+| Copy                                                                | Section | Diverges                                                                                 |
+| ------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `plugins/ceh-coding-agent/skills/explain-until-understood/SKILL.md` | § Rules | carries only the three rules that hold for a spoken explanation, not the file-bound ones |
+
+**Shared:** three bullets word for word — "Evidence over inference", "Don't paste code" (with the
+verbatim-literal exception), and "Describe what exists today".
+
+## Bulk-read guard exemption list (`ALWAYS_ALLOW`)
+
+**Canonical:** `plugins/ceh-coding-agent/scripts/bulk-read-guard.py` — `ALWAYS_ALLOW` tuple
+
+| Copy                                                       | Section              | Diverges |
+| ---------------------------------------------------------- | -------------------- | -------- |
+| `plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py` | `ALWAYS_ALLOW` tuple | none     |
+
+**Shared:** the glob tuple, verbatim. The two guards cover the same files by two routes (`Read` and
+`cat`/`head`), so a pattern in one and not the other denies a file on one route and allows it on
+the other. Each hook is a standalone script with no shared module, so the list is duplicated.
+
+## Bulk-reader answer format (Answer / Not found / Coverage)
+
+**Canonical:** `plugins/ceh-coding-agent/agents/bulk-reader.md` — § Output to parent session
+
+| Copy                                                           | Section                            | Diverges                                                                            |
+| -------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------- |
+| `plugins/ceh-coding-agent/skills/delegate-bulk-reads/SKILL.md` | § Trust the anchors, not the prose | names the sections only and carries the caller-side verification rules, no template |
+
+**Shared:** the three fixed sections and their order — `## Answer` (every claim anchored
+`path:line`), `## Not found / uncertain` (never omitted, `- Nothing outstanding.` when clean),
+`## Coverage` (lines read per file, then the sum).
+
 ---
 
 Entry shape:
@@ -101,5 +161,3 @@ Entry shape:
 
 **Shared:** <what must stay identical across every copy>.
 ```
-
----
