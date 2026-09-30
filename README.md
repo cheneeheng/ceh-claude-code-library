@@ -63,3 +63,12 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 | Tool             | Path                      | Purpose                                                                                                                                                                                         |
 | ---------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | validate-plugins | `tools/validate-plugins/` | Repo-integrity checker run by CI (`.github/workflows/validate.yml`): plugin manifests, skill/agent frontmatter, file and skill references, dependencies, and script syntax. Stdlib-only Python. |
+
+### Formatting
+
+`.pre-commit-config.yaml` formats staged files on commit: ruff for Python, prettier (official npm
+package) for Markdown and JSON, shfmt for shell scripts. Enable it once per clone:
+
+```bash
+pre-commit install
+```
