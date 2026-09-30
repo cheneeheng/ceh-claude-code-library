@@ -13,6 +13,7 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 - Add the `add-plugin-component` repo skill with `SKILL.md` and agent templates as the base for every new component
 - Add `tools/validate-plugins/validate.py` and its CI workflow, ported from agent-skills, now also rejecting undocumented frontmatter keys, malformed names, and leftover template guidance
 - Add the empty `ceh-claude-code-library` marketplace and skeleton `CLAUDE.md`, `docs/CROSS_REFERENCES.md`, and `docs/PLUGIN_DEPENDENCIES.md` for migrated plugins to land into
+- Add a pre-commit config that formats Python with ruff, Markdown and JSON with the official npm prettier, and shell scripts with shfmt
 
 ### Changed
 
