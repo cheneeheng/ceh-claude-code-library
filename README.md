@@ -6,22 +6,36 @@
 
 ## Plugins
 
-| Plugin       | Install as         | Contents                                                                                                                                                   |
-| ------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Git Workflow | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management, plus the `merge-flow` and `release-flow` orchestrations |
+| Plugin                | Install as         | Contents                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| --------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); usage-limit guard + handoff; explaining code until it lands; whole-repo orientation (`explain-codebase`, `repo-tree-mapper`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
+| Git Workflow          | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management, plus the `merge-flow` and `release-flow` orchestrations                                                                                                                                                                                                                                                                                                            |
 
 ### Categorization
 
-| Tier                  | Loaded            | Plugins            |
-| --------------------- | ----------------- | ------------------ |
-| **Scenario bundle**   | one per situation | —                  |
-| **Cross-cutting**     | most sessions     | `ceh-git-workflow` |
-| **Use-case workflow** | per activity      | —                  |
-| **Stack / build**     | per project type  | —                  |
+| Tier                  | Loaded            | Plugins                                |
+| --------------------- | ----------------- | -------------------------------------- |
+| **Scenario bundle**   | one per situation | —                                      |
+| **Cross-cutting**     | most sessions     | `ceh-coding-agent`, `ceh-git-workflow` |
+| **Use-case workflow** | per activity      | —                                      |
+| **Stack / build**     | per project type  | —                                      |
 
 ---
 
 ## Skills
+
+### Agent Coding Contract (`ceh-coding-agent`)
+
+| Skill                    | Invoke                                       | When                                                                                                                                                                                                          |
+| ------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Agent Coding Contract    | `/ceh-coding-agent:agent-coding-contract`    | Start of any coding session (auto via SessionStart hook) — core rules, five-step workflow, stop conditions, non-goals                                                                                         |
+| Write Less Code          | `/ceh-coding-agent:write-less-code`          | Every coding session (auto — per-turn digest via hook) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line)                                                                           |
+| Shrink Diff              | `/ceh-coding-agent:shrink-diff`              | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main`                                                                                               |
+| Refactor Repo            | `/ceh-coding-agent:refactor-repo`            | Manual only — propose-then-apply refactor campaign over the whole repo or a named module                                                                                                                      |
+| Usage Limit Handoff      | `/ceh-coding-agent:usage-limit-handoff`      | Auto via PostToolUse guard hook when 5h or weekly usage crosses the threshold (default 90%) — stop cleanly, write a handoff artifact, end the turn                                                            |
+| Explain Until Understood | `/ceh-coding-agent:explain-until-understood` | Explaining a subsystem, design, or diff to the person in the session: stated floor, foundations first, verified claims, ASCII pictures, one walked case, and the escalation ladder when an explanation misses |
+| Explain Codebase         | `/ceh-coding-agent:explain-codebase`         | Go through a whole repo and write what each component does, how they connect, and key flows into the ignored `.agents_workspace/CODEBASE_EXPLAINED.md`                                                        |
+| Delegate Bulk Reads      | `/ceh-coding-agent:delegate-bulk-reads`      | Before dispatching the `bulk-reader` agent, and before acting on its summary — the delegation prompt and the verification rules                                                                               |
 
 ### Git Workflow (`ceh-git-workflow`)
 
@@ -43,6 +57,13 @@
 
 ## Agents
 
+### Agent Coding Contract (`ceh-coding-agent`)
+
+| Agent            | Invoke                               | When                                                                                                                                                       |
+| ---------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bulk Reader      | `/ceh-coding-agent:bulk-reader`      | Read large or numerous files on Haiku and return a compressed, line-anchored answer to one question, keeping the file contents out of the caller's context |
+| Repo Tree Mapper | `/ceh-coding-agent:repo-tree-mapper` | Map or document a repository's structure; auto-triggers on orientation requests                                                                            |
+
 ---
 
 ## Installing in Claude Code
@@ -56,6 +77,7 @@
 ### Step 2 — Install plugins
 
 ```
+/plugin install ceh-coding-agent@ceh-claude-code-library --scope user
 /plugin install ceh-git-workflow@ceh-claude-code-library --scope user
 ```
 
@@ -69,7 +91,10 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 
 ```json
 {
-  "plugins": [{ "path": "~/ceh-claude-code-library/plugins/ceh-git-workflow" }]
+  "plugins": [
+    { "path": "~/ceh-claude-code-library/plugins/ceh-coding-agent" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-git-workflow" }
+  ]
 }
 ```
 

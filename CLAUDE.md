@@ -18,12 +18,12 @@ they live:
 
 Plugins fall into four tiers:
 
-| Tier                  | Loaded            | Plugins            |
-| --------------------- | ----------------- | ------------------ |
-| **Scenario bundle**   | one per situation | —                  |
-| **Cross-cutting**     | most sessions     | `ceh-git-workflow` |
-| **Use-case workflow** | per activity      | —                  |
-| **Stack / build**     | per project type  | —                  |
+| Tier                  | Loaded            | Plugins                                |
+| --------------------- | ----------------- | -------------------------------------- |
+| **Scenario bundle**   | one per situation | —                                      |
+| **Cross-cutting**     | most sessions     | `ceh-coding-agent`, `ceh-git-workflow` |
+| **Use-case workflow** | per activity      | —                                      |
+| **Stack / build**     | per project type  | —                                      |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
@@ -76,6 +76,7 @@ tools/
 
 | Plugin directory   | Domain                                                                                                                                                                                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation and mapping, usage-limit handoff, context economy via delegated bulk reads                                                                                                |
 | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management; plus the two orchestrated flows — `merge-flow` (lands a branch, no version) and `release-flow` (ships a release) — which sequence those skills and own only the gates |
 
 ## Skills

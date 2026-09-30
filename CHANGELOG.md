@@ -15,6 +15,7 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 - Add the empty `ceh-claude-code-library` marketplace and skeleton `CLAUDE.md`, `docs/CROSS_REFERENCES.md`, and `docs/PLUGIN_DEPENDENCIES.md` for migrated plugins to land into
 - Add a pre-commit config that formats Python with ruff, Markdown and JSON with the official npm prettier, and shell scripts with shfmt
 - Migrate `ceh-git-workflow` from agent-skills at `1.0.0`: its 11 skills (branch, commit, open-pr, merge, hotfix, release, code-review, dependency-management, update-changelog, merge-flow, release-flow) restructured onto the repo `SKILL.md` template, plus `scripts/check-semver.py` and its cross-reference entries
+- Migrate `ceh-coding-agent` from agent-skills at `1.0.0`: 8 skills, 2 agents, hooks, scripts, and the output style, reshaped to this repo's templates with content unchanged. The `delegate-bulk-reads` eval suite stays in agent-skills
 
 ### Changed
 
