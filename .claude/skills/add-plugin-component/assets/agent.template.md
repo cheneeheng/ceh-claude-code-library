@@ -8,6 +8,7 @@ description: >-
 model: inherit
 tools: Read, Grep, Glob
 ---
+
 <!-- TEMPLATE-GUIDANCE: delete this whole comment before committing. validate.py fails while it remains.
 
 Frontmatter

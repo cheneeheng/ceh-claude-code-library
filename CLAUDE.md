@@ -18,12 +18,12 @@ they live:
 
 Plugins fall into four tiers:
 
-| Tier | Loaded | Plugins |
-|------|--------|---------|
-| **Scenario bundle** | one per situation | — |
-| **Cross-cutting** | most sessions | — |
-| **Use-case workflow** | per activity | — |
-| **Stack / build** | per project type | — |
+| Tier                  | Loaded            | Plugins |
+| --------------------- | ----------------- | ------- |
+| **Scenario bundle**   | one per situation | —       |
+| **Cross-cutting**     | most sessions     | —       |
+| **Use-case workflow** | per activity      | —       |
+| **Stack / build**     | per project type  | —       |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
@@ -43,7 +43,7 @@ Categorization rules of thumb:
 - **App-specific patterns are not standards.** Anything bound to one application's schema or design
   is removed rather than kept as a niche plugin.
 - **The cross-cutting tier is orthogonal by construction.** It holds a discipline that applies
-  whatever you are building, so it loads *alongside* a use-case plugin, never instead of one.
+  whatever you are building, so it loads _alongside_ a use-case plugin, never instead of one.
 - **Technique splits from tooling when the technique is genuinely stack-agnostic.** The test:
   would the content be byte-identical across stacks? If a technique skill grows stack-specific
   branches, it was tooling all along.
@@ -75,7 +75,7 @@ tools/
 ## Plugins
 
 | Plugin directory | Domain |
-|-----------------|--------|
+| ---------------- | ------ |
 
 ## Skills
 
@@ -121,7 +121,7 @@ Every **other** frontmatter key containing `: ` must be quoted — single quotes
 
 Optional, max 500 chars, same `>-` scalar as `description`. Present **only when running the skill
 needs software the machine may not have** — a script interpreter, a CLI (`git`, `gh`, `uv`, `bun`,
-`docker`), a reachable server, or network access. Name the runtime *and* its minimum version and
+`docker`), a reachable server, or network access. Name the runtime _and_ its minimum version and
 what fails without it. A skill that only reads files and emits Markdown gets no `compatibility`.
 
 ## Plugin Dependencies
@@ -196,16 +196,16 @@ on what changed and why, a `### Plugin versions` table listing every plugin bump
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `plugins/ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version, metadata, dependencies |
-| `.claude-plugin/marketplace.json` | Marketplace listing (all plugins) |
-| `README.md` | User-facing docs — plugin, skill, and agent tables live here |
-| `docs/CROSS_REFERENCES.md` | Content duplicated across skills: canonical source and every copy |
-| `docs/PLUGIN_DEPENDENCIES.md` | Current dependency graph: every edge with its evidence |
-| `CHANGELOG.md` | Release notes per repo tag, each with a `### Plugin versions` table |
-| `.claude/skills/add-plugin-component/assets/` | `SKILL.template.md` and `agent.template.md` — the base for every new component |
-| `.agents_workspace/DECISION_LOG.md` | Agent decision log — **git-ignored, local only**, append-only |
+| File                                              | Purpose                                                                        |
+| ------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `plugins/ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version, metadata, dependencies                                         |
+| `.claude-plugin/marketplace.json`                 | Marketplace listing (all plugins)                                              |
+| `README.md`                                       | User-facing docs — plugin, skill, and agent tables live here                   |
+| `docs/CROSS_REFERENCES.md`                        | Content duplicated across skills: canonical source and every copy              |
+| `docs/PLUGIN_DEPENDENCIES.md`                     | Current dependency graph: every edge with its evidence                         |
+| `CHANGELOG.md`                                    | Release notes per repo tag, each with a `### Plugin versions` table            |
+| `.claude/skills/add-plugin-component/assets/`     | `SKILL.template.md` and `agent.template.md` — the base for every new component |
+| `.agents_workspace/DECISION_LOG.md`               | Agent decision log — **git-ignored, local only**, append-only                  |
 
 ## Cross-Reference Rule
 
