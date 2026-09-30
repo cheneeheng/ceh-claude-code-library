@@ -1,0 +1,22 @@
+# Formatters only. Install once per clone: pre-commit install
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.9
+    hooks:
+      - id: ruff-format
+
+  # Official prettier from npm, installed by pre-commit into its own node env.
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        language: node
+        additional_dependencies: [prettier@3.9.9]
+        entry: prettier --write --ignore-unknown
+        types_or: [markdown, json]
+
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.14.1-1
+    hooks:
+      - id: shfmt
+        args: [-w, -i, "2"]
