@@ -5,6 +5,7 @@ description: >-
   <what it makes Claude do, key use case first>. Trigger on "<user phrase>", "<user phrase>",
   "<user phrase>". Not for <near-miss task> (use ceh-<plugin>:<other-skill>).
 ---
+
 <!-- TEMPLATE-GUIDANCE: delete this whole comment before committing. validate.py fails while it remains.
 
 Frontmatter

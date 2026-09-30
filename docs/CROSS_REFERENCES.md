@@ -12,8 +12,8 @@ shape:
 
 **Canonical:** `plugins/ceh-<plugin>/skills/<skill>/SKILL.md` — § <section>
 
-| Copy | Section | Diverges |
-|------|---------|----------|
+| Copy                                           | Section     | Diverges                               |
+| ---------------------------------------------- | ----------- | -------------------------------------- |
 | `plugins/ceh-<plugin>/skills/<skill>/SKILL.md` | § <section> | <what deliberately differs, or "none"> |
 
 **Shared:** <what must stay identical across every copy>.

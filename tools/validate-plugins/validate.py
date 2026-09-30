@@ -49,14 +49,42 @@ TEMPLATE_MARKER = "TEMPLATE-GUIDANCE"
 # Sources: https://code.claude.com/docs/en/skills#frontmatter-reference
 #          https://code.claude.com/docs/en/sub-agents#supported-frontmatter-fields
 SKILL_KEYS = {
-    "name", "description", "when_to_use", "argument-hint", "arguments",
-    "disable-model-invocation", "user-invocable", "allowed-tools", "disallowed-tools", "model",
-    "effort", "context", "agent", "background", "hooks", "paths", "shell", "metadata", "license",
+    "name",
+    "description",
+    "when_to_use",
+    "argument-hint",
+    "arguments",
+    "disable-model-invocation",
+    "user-invocable",
+    "allowed-tools",
+    "disallowed-tools",
+    "model",
+    "effort",
+    "context",
+    "agent",
+    "background",
+    "hooks",
+    "paths",
+    "shell",
+    "metadata",
+    "license",
     "compatibility",
 }
 AGENT_KEYS = {
-    "name", "description", "tools", "disallowedTools", "model", "maxTurns", "skills", "memory",
-    "background", "omitClaudeMd", "effort", "isolation", "color", "experimental",
+    "name",
+    "description",
+    "tools",
+    "disallowedTools",
+    "model",
+    "maxTurns",
+    "skills",
+    "memory",
+    "background",
+    "omitClaudeMd",
+    "effort",
+    "isolation",
+    "color",
+    "experimental",
 }
 # Valid on project agents, but Claude Code ignores them on plugin agents.
 PLUGIN_AGENT_IGNORED_KEYS = {"permissionMode", "hooks", "mcpServers", "initialPrompt"}
@@ -108,6 +136,7 @@ def parse_frontmatter(path: Path) -> dict[str, str] | None:
 
 
 # --- manifests -------------------------------------------------------------
+
 
 def load_json(path: Path, where: str) -> dict | None:
     try:
@@ -165,6 +194,7 @@ def check_manifests() -> dict[str, str]:
 
 # --- skills & agents -------------------------------------------------------
 
+
 def check_scalar_style(path: Path) -> None:
     """Enforce the repo's frontmatter scalar conventions.
 
@@ -181,49 +211,71 @@ def check_scalar_style(path: Path) -> None:
         return
     lines = text.splitlines()
     end = next((i for i in range(1, len(lines)) if lines[i].strip() == "---"), None)
-    for line in lines[1:end or 1]:
+    for line in lines[1 : end or 1]:
         m = re.match(r"^([A-Za-z0-9_-]+):[ \t]*(.*)$", line)
         if not m:
             continue
         key, value = m.group(1), m.group(2).strip()
         if key == "description":
             if value != ">-":
-                fail(rel(path), "'description' must use the folded block scalar '>-' "
-                                f"(found {value[:12]!r}...) - see CLAUDE.md")
+                fail(
+                    rel(path),
+                    "'description' must use the folded block scalar '>-' "
+                    f"(found {value[:12]!r}...) - see CLAUDE.md",
+                )
         elif value and not value.startswith(("'", '"', ">", "|")) and ": " in value:
             fail(rel(path), f"'{key}' is an unquoted scalar containing ': ' - quote it")
 
 
-def check_frontmatter_doc(path: Path, expected_name: str, allowed_keys: set[str]) -> None:
+def check_frontmatter_doc(
+    path: Path, expected_name: str, allowed_keys: set[str]
+) -> None:
     where = rel(path)
     check_scalar_style(path)
     if TEMPLATE_MARKER in path.read_text(encoding="utf-8"):
-        fail(where, f"{TEMPLATE_MARKER} comment from the template is still present - delete it")
+        fail(
+            where,
+            f"{TEMPLATE_MARKER} comment from the template is still present - delete it",
+        )
     fm = parse_frontmatter(path)
     if fm is None:
         fail(where, "missing YAML frontmatter block")
         return
     for key in fm:
         if key not in allowed_keys:
-            why = ("is ignored on plugin agents" if key in PLUGIN_AGENT_IGNORED_KEYS
-                   else "is not a documented key, so Claude Code ignores it silently")
+            why = (
+                "is ignored on plugin agents"
+                if key in PLUGIN_AGENT_IGNORED_KEYS
+                else "is not a documented key, so Claude Code ignores it silently"
+            )
             fail(where, f"frontmatter '{key}' {why} - remove it")
     name = fm.get("name")
     if not name:
         fail(where, "frontmatter missing 'name'")
     elif not NAME.match(name) or len(name) > MAX_NAME_LEN:
-        fail(where, f"name '{name}' must be lowercase letters, digits and single hyphens, "
-                    f"max {MAX_NAME_LEN} chars")
+        fail(
+            where,
+            f"name '{name}' must be lowercase letters, digits and single hyphens, "
+            f"max {MAX_NAME_LEN} chars",
+        )
     elif name != expected_name:
-        fail(where, f"frontmatter name '{name}' != file/directory name '{expected_name}'")
+        fail(
+            where, f"frontmatter name '{name}' != file/directory name '{expected_name}'"
+        )
     desc = fm.get("description")
     if not desc:
         fail(where, "frontmatter missing 'description'")
     elif len(desc) > MAX_DESCRIPTION_LEN:
-        fail(where, f"description is {len(desc)} chars, exceeds {MAX_DESCRIPTION_LEN} limit")
+        fail(
+            where,
+            f"description is {len(desc)} chars, exceeds {MAX_DESCRIPTION_LEN} limit",
+        )
     compat = fm.get("compatibility")
     if compat and len(compat) > MAX_COMPATIBILITY_LEN:
-        fail(where, f"compatibility is {len(compat)} chars, exceeds {MAX_COMPATIBILITY_LEN} limit")
+        fail(
+            where,
+            f"compatibility is {len(compat)} chars, exceeds {MAX_COMPATIBILITY_LEN} limit",
+        )
 
 
 def check_skills() -> None:
@@ -246,6 +298,7 @@ def check_agents() -> None:
 
 # --- references ------------------------------------------------------------
 
+
 def doc_files() -> list[Path]:
     docs = []
     for d in plugin_dirs():
@@ -265,7 +318,9 @@ def check_references() -> None:
     for doc in doc_files():
         where = rel(doc)
         # SKILL.md -> plugins/ceh-<plugin>/skills/<name>/SKILL.md ; agent -> plugins/ceh-<plugin>/agents/<name>.md
-        plugin_root = doc.parents[2] if doc.parent.parent.name == "skills" else doc.parents[1]
+        plugin_root = (
+            doc.parents[2] if doc.parent.parent.name == "skills" else doc.parents[1]
+        )
         base_dir = doc.parent
         text = doc.read_text(encoding="utf-8")
         for rec in dict.fromkeys(ref_pat.findall(text)):
@@ -280,6 +335,7 @@ def check_references() -> None:
 
 
 # --- skill references (plugin:component) -----------------------------------
+
 
 def known_components() -> set[str]:
     comps: set[str] = set()
@@ -310,6 +366,7 @@ def check_skill_refs() -> None:
 
 # --- scripts ---------------------------------------------------------------
 
+
 def check_scripts() -> None:
     have_shellcheck = shutil.which("shellcheck") is not None
     have_bash = shutil.which("bash") is not None
@@ -337,6 +394,7 @@ def check_scripts() -> None:
 
 
 # --- dependencies & invocations --------------------------------------------
+
 
 def plugin_deps() -> dict[str, list[str]]:
     """{plugin: [dependency names]}. Accepts bare strings or {"name": ...} objects."""
@@ -374,7 +432,9 @@ def check_dependencies() -> None:
             if t not in deps:
                 fail(where, f"dependency '{t}' is not a plugin in this repo")
             elif t.startswith("ceh-scenario-") and not name.startswith("ceh-scenario-"):
-                fail(where, f"only a scenario bundle may depend on scenario bundle '{t}'")
+                fail(
+                    where, f"only a scenario bundle may depend on scenario bundle '{t}'"
+                )
 
     # acyclicity (iterative DFS with a colour map, so the cycle path is reportable)
     colour: dict[str, int] = {}
@@ -399,11 +459,16 @@ def check_dependencies() -> None:
         if not deps[d.name]:
             fail(where, "scenario bundle has no 'dependencies'")
         if d.name != CORE_BUNDLE and not reaches(d.name, CORE_BUNDLE, deps):
-            fail(where, f"scenario bundle must depend on '{CORE_BUNDLE}', directly or transitively")
+            fail(
+                where,
+                f"scenario bundle must depend on '{CORE_BUNDLE}', directly or transitively",
+            )
         allowed = {d / ".claude-plugin/plugin.json", d / "README.md"}
         for f in sorted(d.rglob("*")):
             if f.is_file() and f not in allowed:
-                fail(rel(f), "scenario bundle may contain only plugin.json and README.md")
+                fail(
+                    rel(f), "scenario bundle may contain only plugin.json and README.md"
+                )
 
 
 INVOKE_PAT = re.compile(r'Invoke the Skill tool with skill="([^"]+)"')
@@ -417,7 +482,9 @@ def check_invocations() -> None:
     for d in plugin_dirs():
         for skill_dir in (d / "skills").glob("*"):
             if (skill_dir / "SKILL.md").exists():
-                skill_fm[f"{d.name}:{skill_dir.name}"] = parse_frontmatter(skill_dir / "SKILL.md") or {}
+                skill_fm[f"{d.name}:{skill_dir.name}"] = (
+                    parse_frontmatter(skill_dir / "SKILL.md") or {}
+                )
 
     def reachable(root: str) -> set[str]:
         seen, stack = {root}, [root]
@@ -438,9 +505,17 @@ def check_invocations() -> None:
                 continue
             target = ref.split(":", 1)[0]
             if target not in allowed:
-                fail(where, f"invokes '{ref}' but '{source}' does not depend on '{target}'")
-            if str(skill_fm.get(ref, {}).get("disable-model-invocation", "")).lower() == "true":
-                fail(where, f"invokes '{ref}', which sets disable-model-invocation: true")
+                fail(
+                    where,
+                    f"invokes '{ref}' but '{source}' does not depend on '{target}'",
+                )
+            if (
+                str(skill_fm.get(ref, {}).get("disable-model-invocation", "")).lower()
+                == "true"
+            ):
+                fail(
+                    where, f"invokes '{ref}', which sets disable-model-invocation: true"
+                )
 
 
 def main() -> int:

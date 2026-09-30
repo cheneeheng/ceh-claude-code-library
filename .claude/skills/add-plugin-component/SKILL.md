@@ -12,7 +12,7 @@ description: >-
   asks why validate.py is failing. Overrides plugin-dev and skill-creator advice that conflicts
   with this repo. Not for building a skill into another project's .claude/skills/ (use
   ceh-workflow-builder:build-agentic-workflow).
-argument-hint: '[skill-or-agent-name]'
+argument-hint: "[skill-or-agent-name]"
 ---
 
 # Adding a Component to This Repo
@@ -42,13 +42,13 @@ continue at step 2.
 
 Then pick the component type by what the need is:
 
-| Need | Component | Settle before writing |
-|---|---|---|
-| Knowledge or a procedure Claude applies at a moment, or a user-invoked `/action` | Skill | Trigger phrases, what it adds beyond model knowledge, arguments, tools, interactive or automated |
-| An autonomous task whose output or cost should stay out of the main session | Agent | Proactive or on request, tool set, model, output format |
-| A rule that must hold on every event, whether or not Claude remembers it | Hook | Which events, prompt or command, what blocks vs warns |
-| An external service or API | MCP server | Server type, authentication, which tools |
-| User or project configuration | Environment variable, never a settings file | Variable names, required vs optional, defaults |
+| Need                                                                             | Component                                   | Settle before writing                                                                            |
+| -------------------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Knowledge or a procedure Claude applies at a moment, or a user-invoked `/action` | Skill                                       | Trigger phrases, what it adds beyond model knowledge, arguments, tools, interactive or automated |
+| An autonomous task whose output or cost should stay out of the main session      | Agent                                       | Proactive or on request, tool set, model, output format                                          |
+| A rule that must hold on every event, whether or not Claude remembers it         | Hook                                        | Which events, prompt or command, what blocks vs warns                                            |
+| An external service or API                                                       | MCP server                                  | Server type, authentication, which tools                                                         |
+| User or project configuration                                                    | Environment variable, never a settings file | Variable names, required vs optional, defaults                                                   |
 
 New slash commands are skills (`skills/<name>/SKILL.md`), never the legacy `commands/` layout.
 Answer the "settle" column from the request and the code. Ask the user only for what neither
@@ -62,12 +62,12 @@ Creating any component, including one migrated from agent-skills, starts by load
 authoring skill. Where that skill's advice conflicts with this repo, this skill wins — see
 [the override table](#when-plugin-dev-or-skill-creator-skills-are-also-loaded).
 
-| Creating | First |
-|---|---|
-| Skill | Invoke the Skill tool with skill="skill-creator:skill-creator". Never `plugin-dev:skill-development`. Skip its eval loop (test runs, benchmark, viewer, description optimization) unless the user asks for it |
-| Agent | Invoke the Skill tool with skill="plugin-dev:agent-development" |
-| Hook | Invoke the Skill tool with skill="plugin-dev:hook-development" |
-| MCP server | Invoke the Skill tool with skill="plugin-dev:mcp-integration" |
+| Creating   | First                                                                                                                                                                                                         |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Skill      | Invoke the Skill tool with skill="skill-creator:skill-creator". Never `plugin-dev:skill-development`. Skip its eval loop (test runs, benchmark, viewer, description optimization) unless the user asks for it |
+| Agent      | Invoke the Skill tool with skill="plugin-dev:agent-development"                                                                                                                                               |
+| Hook       | Invoke the Skill tool with skill="plugin-dev:hook-development"                                                                                                                                                |
+| MCP server | Invoke the Skill tool with skill="plugin-dev:mcp-integration"                                                                                                                                                 |
 
 **Skill** — copy `${CLAUDE_SKILL_DIR}/assets/SKILL.template.md` to
 `plugins/ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. Fill every
@@ -106,7 +106,7 @@ description: >-
 It is the only style with no escaping burden. A plain scalar cannot contain `: `, single-quoted
 needs `''` doubling, double-quoted needs `\` and `"` escaping — all three have silently produced
 invalid YAML in this repo. Keep the indent uniform (a more-indented line becomes a literal newline
-instead of folding) and avoid blank lines. Any *other* key containing `: ` gets single quotes.
+instead of folding) and avoid blank lines. Any _other_ key containing `: ` gets single quotes.
 Put the key use case first: Claude Code truncates long descriptions in the skill listing.
 
 Claude Code silently ignores a frontmatter field it does not recognize, so a typo reads as
@@ -116,20 +116,20 @@ working config. Use only fields from the official
 `validate.py` rejects any other key. Frontmatter worth reaching for before writing prose that does
 the same job:
 
-| Field | Use it for | Watch out |
-|---|---|---|
-| `paths` | Skills whose trigger really is a file type | **Narrows** auto-loading. A skill with real non-file triggers ("a `uv` command is run") loses them |
-| `effort` | Reasoning-heavy skills | Default inherits the session level. Set it only when the skill needs a different one |
-| `disable-model-invocation` | Workflows with side effects the user should trigger by hand | The skill can then never be preloaded into an agent or called with `Invoke the Skill tool` |
-| `disallowed-tools` | Skills that must not write | Check the body first; most "review" skills here do apply fixes |
-| `context: fork` | Heavy, self-contained task skills | The subagent does **not** see the conversation and runs in the background with the reduced tool set below. Set `background: false` if a step needs a tool outside it |
-| `argument-hint` | Skills the user invokes as `/name <arg>` | Cosmetic but free |
-| `${CLAUDE_SKILL_DIR}` | Referencing a file bundled with the skill | Substituted in the body *and* in `allowed-tools` Bash rules |
-| `${CLAUDE_PLUGIN_ROOT}` | Referencing a plugin-level script shared by several skills | Substituted in plugin skill bodies and `allowed-tools`, not in project skills |
-| `memory` | Agents that should learn across sessions | Auto-enables Read/Write/Edit on that agent |
-| `compatibility` | Skills that need software the machine may lack (`git`, `gh`, `uv`, `bun`, a server, network) | `>-` scalar, max 500 chars. Name runtime + minimum version and what fails without it. Omit for read-files-emit-Markdown skills |
+| Field                      | Use it for                                                                                   | Watch out                                                                                                                                                            |
+| -------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `paths`                    | Skills whose trigger really is a file type                                                   | **Narrows** auto-loading. A skill with real non-file triggers ("a `uv` command is run") loses them                                                                   |
+| `effort`                   | Reasoning-heavy skills                                                                       | Default inherits the session level. Set it only when the skill needs a different one                                                                                 |
+| `disable-model-invocation` | Workflows with side effects the user should trigger by hand                                  | The skill can then never be preloaded into an agent or called with `Invoke the Skill tool`                                                                           |
+| `disallowed-tools`         | Skills that must not write                                                                   | Check the body first; most "review" skills here do apply fixes                                                                                                       |
+| `context: fork`            | Heavy, self-contained task skills                                                            | The subagent does **not** see the conversation and runs in the background with the reduced tool set below. Set `background: false` if a step needs a tool outside it |
+| `argument-hint`            | Skills the user invokes as `/name <arg>`                                                     | Cosmetic but free                                                                                                                                                    |
+| `${CLAUDE_SKILL_DIR}`      | Referencing a file bundled with the skill                                                    | Substituted in the body _and_ in `allowed-tools` Bash rules                                                                                                          |
+| `${CLAUDE_PLUGIN_ROOT}`    | Referencing a plugin-level script shared by several skills                                   | Substituted in plugin skill bodies and `allowed-tools`, not in project skills                                                                                        |
+| `memory`                   | Agents that should learn across sessions                                                     | Auto-enables Read/Write/Edit on that agent                                                                                                                           |
+| `compatibility`            | Skills that need software the machine may lack (`git`, `gh`, `uv`, `bun`, a server, network) | `>-` scalar, max 500 chars. Name runtime + minimum version and what fails without it. Omit for read-files-emit-Markdown skills                                       |
 
-**Cross-plugin calls** — when a skill must call a skill in another plugin on *every* run, add the
+**Cross-plugin calls** — when a skill must call a skill in another plugin on _every_ run, add the
 target plugin to `dependencies` in `plugin.json` (never in `marketplace.json`; bare strings, no
 ranges) and call it explicitly: `Invoke the Skill tool with skill="ceh-<plugin>:<skill>"`.
 Conditional handoffs and negative routing ("Not for X, use ...") stay prose with no dependency. A
@@ -144,7 +144,7 @@ instead. Subagents run in the **background by default**, and background subagent
 reduced built-in tool set — if an agent needs a tool outside `Read/Grep/Glob/LSP/Bash/PowerShell/
 Edit/Write/NotebookEdit/WebFetch/WebSearch/TodoWrite/Skill/ToolSearch/EnterWorktree/ExitWorktree/
 Monitor/TaskStop/SendMessage/Artifact`, it will be stripped silently. `AskUserQuestion` is stripped
-from *every* subagent, foreground or background — an agent can never stop to ask.
+from _every_ subagent, foreground or background — an agent can never stop to ask.
 
 `skills:` entries must be fully qualified as `plugin:skill`; an entry that does not resolve is
 skipped with only a debug-log warning. The preload is also the only route a hook-loaded standard
@@ -236,6 +236,7 @@ every component with the step 1 table before creating anything, then:
    ```
 
    Add `"dependencies": ["ceh-<other>"]` only per the cross-plugin rule in step 2.
+
 2. `plugins/ceh-<name>/README.md` with the plugin's own skill/agent table.
 3. `.claude-plugin/marketplace.json` — a new entry whose `source` (`./plugins/ceh-<name>`),
    `version`, and `description` mirror `plugin.json`. `validate.py` fails on a plugin missing from
@@ -256,22 +257,22 @@ Step 2 loads `skill-creator` and the plugin-dev authoring skills on purpose, and
 `plugin-dev:create-plugin` triggers on the same phrases as this skill. They give generic advice.
 Where it conflicts with this repo, this skill wins:
 
-| They say | This repo does |
-|---|---|
-| `plugin-dev:skill-development` for skills | `skill-creator:skill-creator` |
-| Run test prompts, benchmark, open the viewer, optimize the description | Only when the user asks. Otherwise stop after the draft |
-| `plugin-dev:plugin-structure` for layout | The layout in [New plugin](#new-plugin) and `CLAUDE.md` |
-| `plugin-dev:plugin-settings`, `.claude/<plugin>.local.md` settings files | Environment variables, documented in the plugin README |
-| Lean SKILL.md, detail in `references/` and `examples/` | Content inline. `references/` only for shared schemas or oversized standards |
-| "This skill should be used when…" descriptions, any scalar style | `>-` folded scalar, "Load this skill when…" (agents: "Use this agent to…") |
-| Write the file from scratch, or generate an agent with the `agent-creator` agent | Start from the template in `${CLAUDE_SKILL_DIR}/assets/` |
-| Skills in the legacy `commands/` layout | `skills/<name>/SKILL.md` only |
-| Hook scripts in `examples/` | `scripts/`, referenced as `${CLAUDE_PLUGIN_ROOT}/scripts/...` |
-| New plugin at `0.1.0`, marketplace entry optional | `1.0.0`, marketplace entry in the same commit |
+| They say                                                                                     | This repo does                                                                          |
+| -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `plugin-dev:skill-development` for skills                                                    | `skill-creator:skill-creator`                                                           |
+| Run test prompts, benchmark, open the viewer, optimize the description                       | Only when the user asks. Otherwise stop after the draft                                 |
+| `plugin-dev:plugin-structure` for layout                                                     | The layout in [New plugin](#new-plugin) and `CLAUDE.md`                                 |
+| `plugin-dev:plugin-settings`, `.claude/<plugin>.local.md` settings files                     | Environment variables, documented in the plugin README                                  |
+| Lean SKILL.md, detail in `references/` and `examples/`                                       | Content inline. `references/` only for shared schemas or oversized standards            |
+| "This skill should be used when…" descriptions, any scalar style                             | `>-` folded scalar, "Load this skill when…" (agents: "Use this agent to…")              |
+| Write the file from scratch, or generate an agent with the `agent-creator` agent             | Start from the template in `${CLAUDE_SKILL_DIR}/assets/`                                |
+| Skills in the legacy `commands/` layout                                                      | `skills/<name>/SKILL.md` only                                                           |
+| Hook scripts in `examples/`                                                                  | `scripts/`, referenced as `${CLAUDE_PLUGIN_ROOT}/scripts/...`                           |
+| New plugin at `0.1.0`, marketplace entry optional                                            | `1.0.0`, marketplace entry in the same commit                                           |
 | `plugin-validator` / `skill-reviewer` agents, `validate-agent.sh`, `validate-hook-schema.sh` | `python tools/validate-plugins/validate.py` is the gate, then the live checks in step 6 |
-| Agent `<example>` blocks and `color` | Prose `description`, no `<example>` blocks; `color` optional |
-| Eval workspace next to the skill directory | `.agents_workspace/skill-evals/<skill>/`, git-ignored, never inside `plugins/` |
-| Wait for user confirmation at each phase, ask where to create, `git init` | Autonomous mode, flat `plugins/`, existing repo |
+| Agent `<example>` blocks and `color`                                                         | Prose `description`, no `<example>` blocks; `color` optional                            |
+| Eval workspace next to the skill directory                                                   | `.agents_workspace/skill-evals/<skill>/`, git-ignored, never inside `plugins/`          |
+| Wait for user confirmation at each phase, ask where to create, `git init`                    | Autonomous mode, flat `plugins/`, existing repo                                         |
 
 Everything else in those skills applies — hook event payloads, prompt-based hooks, MCP server
 types, agent system-prompt design, skill-creator's drafting guidance.

@@ -10,13 +10,13 @@ No edges yet.
 
 ## Edge evidence
 
-| From | To | Forcing reference |
-|------|----|-------------------|
+| From | To  | Forcing reference |
+| ---- | --- | ----------------- |
 
 ## What each scenario installs
 
 | Bundle | Installs |
-|--------|----------|
+| ------ | -------- |
 
 ## Checking the graph
 
