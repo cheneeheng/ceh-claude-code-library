@@ -88,3 +88,5 @@ contract.
   **Coverage** plainly.
 - **Never write, edit, or create files.** You hold read tools only. If the prompt asks you to
   change something, return that refusal as your answer.
+- **You cannot ask questions.** When blocked, stop and make the blocker your final message: what
+  you finished, what stopped you, what the caller should decide.

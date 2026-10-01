@@ -8,6 +8,9 @@ description: >-
   `build-agentic-workflow` finds its inputs incomplete. Produces the spec only. Not for deciding one
   skill vs a workflow, designing steps and gates, or writing any `SKILL.md` — that is
   ceh-workflow-builder:build-agentic-workflow, which reads this spec.
+disable-model-invocation: false
+user-invocable: true
+license: Apache-2.0
 ---
 
 # Interview a Workflow Task
@@ -18,13 +21,14 @@ without guessing. This skill asks and records. It does not design, and it does n
 The nine questions are not a formality. Questions 8 and 9 are the two people skip, and they are the
 two whose absence corrupts data or sends mail twice.
 
-## Where the spec goes
+## Procedure
 
-`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.md`, defaulting to `.agents_workspace/`. Use a
-provisional slug until the name is settled, then rename the file — otherwise a second interview
-overwrites the first one's spec.
+1. Read the spec file and this conversation, then label every row (Start from what already exists).
+2. Ask only about the rows that fail, using the nine questions below and the rules under How to ask.
+3. Record each answer under its fixed heading in the spec file (see Output).
+4. Check the file against Done when, then hand off.
 
-## Start from what already exists
+### Start from what already exists
 
 **Read the spec file first if there is one**, along with anything the user already said in this
 conversation. Then label every row before asking anything: each of the nine headings, and each
@@ -37,30 +41,7 @@ or you drop the answers that arrived before you did.
 Arriving from `build-agentic-workflow` is the common case, and it arrives precisely because some
 rows failed. Re-asking all nine there is the failure mode this section prevents.
 
-## How to ask
-
-- Write each answer into the spec as you get it, not at the end. An interview that dies halfway
-  should leave eight answers on disk, not zero.
-- Batch enumerable choices through `AskUserQuestion`; ask the open-ended ones plainly.
-- **Never answer for the user, least of all when the answer looks obvious.** This applies to each of
-  the nine separately, not just the two that read as risky. An unanswered question is recorded as
-  unanswered: not as "none", not as what the procedure plainly implies, and not as an assumption of
-  your own. Reading step 4, seeing that it mails finance, and writing that under 9 is the loud
-  version, and relabelling it "partial" or "assumed" does not make it theirs — they may know the
-  address is a dead alias. Deriving question 4's data flow from the steps listed under 2 is the
-  quiet version, and the one that gets through, because the chain reads plausibly and nobody
-  re-checks whether step 3's input has a producer at all. Silence on 8 becomes a workflow with no
-  re-run guard, silence on 9 becomes one that publishes without pausing, and a guessed 4 becomes one
-  whose steps hand each other data the user never said they hand.
-- **A decline is not a gap.** When the user says they do not know or will not answer — most often
-  on 8 or 9 — write `Declined` under that heading with their words, and stop asking. Re-asking a
-  declined question is how the interview and the builder's intake gate bounce off each other
-  forever. The builder has a conservative fallback for a declined row; it has none for a missing
-  one, which is why the two are recorded differently.
-- Push back on an answer that fails its own check below, then re-ask. A recorded answer that cannot
-  be checked is worse than a gap, because the next skill trusts it.
-
-## The nine questions
+### The nine questions
 
 1. **The moment.** What happens right before you would want this to run? This becomes the trigger,
    and it must be a verb. If the answer is a topic rather than a moment, the artifact will never
@@ -85,7 +66,48 @@ rows failed. Re-asking all nine there is the failure mode this section prevents.
 9. **Irreversible steps.** Which steps touch something outside this machine that cannot be taken
    back: sending mail, charging a card, publishing, deleting?
 
-## The spec file
+### Done when
+
+Check this the way you opened — row by row against the file as written, not against your memory of
+what you fixed. Every one of the nine headings exists with an answer or an explicit `Declined`
+under it, question 1's answer is a moment, every proof under 3 is either something a command or a
+file check can settle or a declared human go/no-go gate, and every artifact read under 4 names the
+step that produces it.
+
+## Rules
+
+### How to ask
+
+- Write each answer into the spec as you get it, not at the end. An interview that dies halfway
+  should leave eight answers on disk, not zero.
+- Batch enumerable choices through `AskUserQuestion`; ask the open-ended ones plainly.
+- **Never answer for the user, least of all when the answer looks obvious.** This applies to each of
+  the nine separately, not just the two that read as risky. An unanswered question is recorded as
+  unanswered: not as "none", not as what the procedure plainly implies, and not as an assumption of
+  your own. Reading step 4, seeing that it mails finance, and writing that under 9 is the loud
+  version, and relabelling it "partial" or "assumed" does not make it theirs — they may know the
+  address is a dead alias. Deriving question 4's data flow from the steps listed under 2 is the
+  quiet version, and the one that gets through, because the chain reads plausibly and nobody
+  re-checks whether step 3's input has a producer at all. Silence on 8 becomes a workflow with no
+  re-run guard, silence on 9 becomes one that publishes without pausing, and a guessed 4 becomes one
+  whose steps hand each other data the user never said they hand.
+- **A decline is not a gap.** When the user says they do not know or will not answer — most often
+  on 8 or 9 — write `Declined` under that heading with their words, and stop asking. Re-asking a
+  declined question is how the interview and the builder's intake gate bounce off each other
+  forever. The builder has a conservative fallback for a declined row; it has none for a missing
+  one, which is why the two are recorded differently.
+- Push back on an answer that fails its own check above, then re-ask. A recorded answer that cannot
+  be checked is worse than a gap, because the next skill trusts it.
+
+## Output
+
+### Where the spec goes
+
+`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.md`, defaulting to `.agents_workspace/`. Use a
+provisional slug until the name is settled, then rename the file — otherwise a second interview
+overwrites the first one's spec.
+
+### The spec file
 
 Fixed headings, in this order, one per question. The consumer gates on them by name, so do not
 add, rename, reorder, or drop one — an unanswered question keeps its heading and says so underneath.
@@ -119,12 +141,7 @@ another silently attaches a gate to the wrong step.
 
 Never write a credential into the spec. Record where it lives: a secret-manager key, an env var name.
 
-## Done when
+## Hands off to
 
-Check this the way you opened — row by row against the file as written, not against your memory of
-what you fixed. Every one of the nine headings exists with an answer or an explicit `Declined`
-under it, question 1's answer is a moment, every proof under 3 is either something a command or a
-file check can settle or a declared human go/no-go gate, and every artifact read under 4 names the
-step that produces it. Then hand the spec path to
-`ceh-workflow-builder:build-agentic-workflow`, or tell the user that is the next step if they did
-not arrive from there.
+- Hand the spec path to `ceh-workflow-builder:build-agentic-workflow`, or tell the user that is the
+  next step if they did not arrive from there.

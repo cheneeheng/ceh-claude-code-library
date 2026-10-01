@@ -10,8 +10,11 @@ description: >-
   pipeline + gate table, per-step data-contract schemas for handoffs, and leaf-first emission.
   An intake gate delegates to ceh-workflow-builder:interview-workflow-task when the task is not
   yet described, so this stays the entry point even with nothing written down. Not for
-  evaluating a skill that already exists, not for adding a
-  component to this plugin repo, and not for running a workflow that has already been built.
+  evaluating a skill that already exists, not for adding a component to this plugin repo, and not
+  for running a workflow that has already been built.
+disable-model-invocation: false
+user-invocable: true
+license: Apache-2.0
 ---
 
 # Build an Agentic Workflow
@@ -26,55 +29,20 @@ between them is the main decision this skill makes:
 Target runtime is **Claude Code**. Other agent runtimes are out of scope; do not water the output
 down for portability.
 
-## Assumed capabilities
+## Procedure
 
-The emitted artifact may rely on these and nothing else. Do not list them in the artifact — they are
-always present in Claude Code, so declaring them is noise. `compatibility` is for the software the
-_machine_ may lack, which is a different question.
+Assumed capabilities and Directories under Rules apply from step 1.
 
-| Capability                         | Tool                      | Watch out                                                                     |
-| ---------------------------------- | ------------------------- | ----------------------------------------------------------------------------- |
-| Read, write, edit files            | `Read` / `Write` / `Edit` | —                                                                             |
-| Run commands                       | `Bash`                    | Any CLI a step invokes belongs in the artifact's `compatibility`              |
-| Search                             | `Glob` / `Grep`           | —                                                                             |
-| Call another skill                 | `Skill`                   | Loads into the **caller's** context — it does not get its own                 |
-| Give a step its own context window | `Agent`                   | The only way to isolate a step; a subagent cannot see the caller's transcript |
-| Ask the user                       | `AskUserQuestion`         | Stripped from every subagent, so only the flow itself can ask                 |
+1. **Intake.** Confirm all nine spec answers exist, filling any gap through the interview skill
+   (Phase 1).
+2. **One skill or a workflow.** Default to one skill, and name it from the moment (Phase 2).
+3. **What each step becomes.** Workflow only: pick an existing skill, a script, a step skill, or
+   inline prose per step (Phase 3).
+4. **Data contracts.** Workflow only: give every cross-step handoff a file and a schema (Phase 4).
+5. **Emit.** Write leaf-first, check resolution, dependency and schema coverage, and write only after
+   the user agrees to the file list (Phase 5).
 
-`Skill` and `Agent` are not interchangeable, and the difference decides two things later: whether a
-step can be isolated (Phase 3) and whether it can pause for confirmation (Resumption, re-runs and irreversible steps).
-
-## Directories
-
-Two directories, two variables, two lifetimes. Do not conflate them.
-
-|            | Variable                  | Default              | Holds                                                 |
-| ---------- | ------------------------- | -------------------- | ----------------------------------------------------- |
-| Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/` | the workflow spec and build notes                     |
-| Run time   | `$CEH_WORKFLOW_RUN_DIR`   | `.agents_workspace/` | the generated workflow's step artifacts and run state |
-
-Both default to the same place, so both namespace by name: the workflow spec is
-`<build-dir>/<name>-workflow-spec.md` and run-time paths are under `<run-dir>/<name>/`. Use a
-provisional slug for the spec until the name is settled, then rename it — otherwise building a second
-workflow overwrites the first one's spec.
-
-**One directory per run, not per flow.** Each run writes to `<run-dir>/<name>/<run-id>/`, with
-`<run-id>` the start time (`20260913-0930`), and creating it is the flow's first instruction —
-unless no step writes a run artifact, in which case the flow has no run directory at all. Below,
-`<run>` means that directory. A flow that runs every week into a fixed `<run-dir>/<name>/` finds last
-week's artifacts in place: a consumer's exists-check passes on a stale file, and a finished
-`run-state.md` makes the new run skip every step. State that must outlive a run, such as a
-last-processed watermark, sits one level up in `<run-dir>/<name>/` and is written only after every
-step it summarises has succeeded.
-
-The generated flow **names the run-time variable and its default in its own body** — the agent that
-runs it is not the agent that built it and has none of this context.
-
-Run artifacts are never committed. When the flow has a run directory, before finishing check the target repo actually ignores the run
-directory and append it to `.gitignore` if it does not; stating the requirement in prose is not the
-same as meeting it.
-
-## Phase 1 — Intake
+### Phase 1 — Intake
 
 This skill designs from a spec; it does not conduct the interview. Before anything else, establish
 that the nine answers exist — in `<build-dir>/<name>-workflow-spec.md`, or given directly in this
@@ -130,7 +98,7 @@ that contract. Build notes belong in the reply.
 
 Do not start designing until every row passes or carries a recorded assumption.
 
-## Phase 2 — One skill or a workflow
+### Phase 2 — One skill or a workflow
 
 **Default to one skill.** Emit a workflow only if at least one of these holds:
 
@@ -154,7 +122,7 @@ immediately before a step from question 9. It runs in the main context, so it ca
 (`prepublish`, `onboard-tenant`, `rotate-keys`), never from the domain noun. Confirm it with the user
 before emitting, because every filename depends on it.
 
-## Phase 3 — What each step becomes
+### Phase 3 — What each step becomes
 
 Decide per step, in this order — stop at the first that fits:
 
@@ -185,7 +153,7 @@ a workflow.
 **A step skill cannot be hidden.** `disable-model-invocation: true` would block the flow's own call
 to it. Instead, its `description` must name the owning flow and route away from direct use.
 
-## Phase 4 — Data contracts
+### Phase 4 — Data contracts
 
 The failure this prevents: a later step gets no declared shape, infers one from whatever artifact it
 finds, infers it wrong, and the run keeps producing garbage past a green gate.
@@ -229,7 +197,89 @@ runs a script — never add a dependency for this.
 exists and carries every required field in `plan-schema.md`". Phrase gates that way wherever a schema
 exists.
 
-## What a gate does when it fails
+### Phase 5 — Emit
+
+Leaf-first, so every reference resolves the moment it is written:
+
+1. Schema docs → `references/`
+2. Scripts → `.claude/skills/<name>-flow/scripts/`
+3. Step skills → `.claude/skills/<name>-<step>/SKILL.md`
+4. The flow skill → `.claude/skills/<name>-flow/SKILL.md`
+
+Reference a script through `${CLAUDE_SKILL_DIR}`, which Claude Code substitutes with the calling
+skill's own directory: the flow reaches `scripts/<x>.sh` beneath it, a step skill goes up one level to
+`<name>-flow/scripts/<x>.sh`. A bare `scripts/<x>.sh` resolves against the repo root, where `Bash`
+runs, and finds a different file or none.
+
+Then run these checks:
+
+- **Resolution.** A generated step skill must have a directory that now exists under
+  `.claude/skills/`. A pre-existing skill delegated to is a different check: it must be installed in
+  the session and model-invocable, since a call to a skill with `disable-model-invocation: true`
+  fails silently.
+- **Dependency.** Every `Reads` entry names an artifact some _earlier_ step `Writes`. This is the
+  likeliest generation bug once handoffs stop being adjacent.
+- **Schema coverage.** Every `Reads` entry that names another step has a schema, and that schema file
+  exists. A `—` in the Schema column is only legal when the artifact came from outside the flow, and
+  a repo file with an established format names its owner instead.
+
+Show the user the file list and the step/gate table before writing, and write only after they agree.
+Emission creates several files in their repo; a wrong `<name>` means cleaning all of them up.
+
+Default destination is `.claude/skills/` in the target repo — no install step, picked up immediately.
+Offer plugin packaging only when the user says the workflow is shared across repos.
+
+## Rules
+
+### Assumed capabilities
+
+The emitted artifact may rely on these and nothing else. Do not list them in the artifact — they are
+always present in Claude Code, so declaring them is noise. `compatibility` is for the software the
+_machine_ may lack, which is a different question.
+
+| Capability                         | Tool                      | Watch out                                                                     |
+| ---------------------------------- | ------------------------- | ----------------------------------------------------------------------------- |
+| Read, write, edit files            | `Read` / `Write` / `Edit` | —                                                                             |
+| Run commands                       | `Bash`                    | Any CLI a step invokes belongs in the artifact's `compatibility`              |
+| Search                             | `Glob` / `Grep`           | —                                                                             |
+| Call another skill                 | `Skill`                   | Loads into the **caller's** context — it does not get its own                 |
+| Give a step its own context window | `Agent`                   | The only way to isolate a step; a subagent cannot see the caller's transcript |
+| Ask the user                       | `AskUserQuestion`         | Stripped from every subagent, so only the flow itself can ask                 |
+
+`Skill` and `Agent` are not interchangeable, and the difference decides two things later: whether a
+step can be isolated (Phase 3) and whether it can pause for confirmation (Resumption, re-runs and irreversible steps).
+
+### Directories
+
+Two directories, two variables, two lifetimes. Do not conflate them.
+
+|            | Variable                  | Default              | Holds                                                 |
+| ---------- | ------------------------- | -------------------- | ----------------------------------------------------- |
+| Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/` | the workflow spec and build notes                     |
+| Run time   | `$CEH_WORKFLOW_RUN_DIR`   | `.agents_workspace/` | the generated workflow's step artifacts and run state |
+
+Both default to the same place, so both namespace by name: the workflow spec is
+`<build-dir>/<name>-workflow-spec.md` and run-time paths are under `<run-dir>/<name>/`. Use a
+provisional slug for the spec until the name is settled, then rename it — otherwise building a second
+workflow overwrites the first one's spec.
+
+**One directory per run, not per flow.** Each run writes to `<run-dir>/<name>/<run-id>/`, with
+`<run-id>` the start time (`20260913-0930`), and creating it is the flow's first instruction —
+unless no step writes a run artifact, in which case the flow has no run directory at all. Below,
+`<run>` means that directory. A flow that runs every week into a fixed `<run-dir>/<name>/` finds last
+week's artifacts in place: a consumer's exists-check passes on a stale file, and a finished
+`run-state.md` makes the new run skip every step. State that must outlive a run, such as a
+last-processed watermark, sits one level up in `<run-dir>/<name>/` and is written only after every
+step it summarises has succeeded.
+
+The generated flow **names the run-time variable and its default in its own body** — the agent that
+runs it is not the agent that built it and has none of this context.
+
+Run artifacts are never committed. When the flow has a run directory, before finishing check the target repo actually ignores the run
+directory and append it to `.gitignore` if it does not; stating the requirement in prose is not the
+same as meeting it.
+
+### What a gate does when it fails
 
 "Do not proceed past a red gate" is a prohibition, not a behaviour, and a generated flow that stops
 there leaves the agent inventing one at the worst possible moment. Every gate resolves into exactly
@@ -247,7 +297,7 @@ one of two shapes, and the flow says which:
 Mark a retrying gate in the pipeline table as `<condition> — retry up to N, then stop`, so the bound
 is visible where the gate is rather than buried in prose.
 
-## Resumption, re-runs and irreversible steps
+### Resumption, re-runs and irreversible steps
 
 Emit a run-state file only when spec question 7 said the run can stop partway — otherwise skip this,
 since a flow that finishes in one sitting does not need one. Emit it even when most steps leave a
@@ -281,39 +331,19 @@ subagent, so a step dispatched with `Agent` cannot ask and would proceed straigh
 Put the prompt in the flow, immediately before the dispatch, and never inside a step that might run
 isolated.
 
-## Phase 5 — Emit
+### Frontmatter rules for everything emitted
 
-Leaf-first, so every reference resolves the moment it is written:
+`description` is always a folded block scalar (`>-`), with a uniform 2-space indent and no blank
+lines — it is the only style with no escaping burden for colons, quotes, or backslashes. The
+description carries the trigger moment _and_ negative routing to the nearest neighbour. Any other key
+containing `: ` gets single quotes.
 
-1. Schema docs → `references/`
-2. Scripts → `.claude/skills/<name>-flow/scripts/`
-3. Step skills → `.claude/skills/<name>-<step>/SKILL.md`
-4. The flow skill → `.claude/skills/<name>-flow/SKILL.md`
+If `skill-creator` is installed in the session, use it for the mechanical `SKILL.md` authoring. It is
+optional and this skill does not depend on it.
 
-Reference a script through `${CLAUDE_SKILL_DIR}`, which Claude Code substitutes with the calling
-skill's own directory: the flow reaches `scripts/<x>.sh` beneath it, a step skill goes up one level to
-`<name>-flow/scripts/<x>.sh`. A bare `scripts/<x>.sh` resolves against the repo root, where `Bash`
-runs, and finds a different file or none.
+## Output
 
-Then run these checks:
-
-- **Resolution.** A generated step skill must have a directory that now exists under
-  `.claude/skills/`. A pre-existing skill delegated to is a different check: it must be installed in
-  the session and model-invocable, since a call to a skill with `disable-model-invocation: true`
-  fails silently.
-- **Dependency.** Every `Reads` entry names an artifact some _earlier_ step `Writes`. This is the
-  likeliest generation bug once handoffs stop being adjacent.
-- **Schema coverage.** Every `Reads` entry that names another step has a schema, and that schema file
-  exists. A `—` in the Schema column is only legal when the artifact came from outside the flow, and
-  a repo file with an established format names its owner instead.
-
-Show the user the file list and the step/gate table before writing, and write only after they agree.
-Emission creates several files in their repo; a wrong `<name>` means cleaning all of them up.
-
-Default destination is `.claude/skills/` in the target repo — no install step, picked up immediately.
-Offer plugin packaging only when the user says the workflow is shared across repos.
-
-## The single-skill template
+### The single-skill template
 
 The Phase 2 default, and the path most tasks end on.
 
@@ -345,7 +375,7 @@ compatibility: >-
 No pipeline table, no run directory, no schemas: a single skill runs in one context and hands nothing
 off. Adding those is the over-engineering Phase 2 exists to prevent.
 
-## The flow skill template
+### The flow skill template
 
 ```markdown
 ---
@@ -393,7 +423,7 @@ backticks and the schema path as an angle-bracket placeholder on purpose: _this_
 `validate.py` resolves every literal skill invocation and every literal `references/…` path it
 finds, so a concrete example here would fail the repo's own gate. Do not "fix" either one.
 
-## The step skill template
+### The step skill template
 
 ```markdown
 ---
@@ -417,17 +447,7 @@ passes in; writes `<artifact>` to `<run>/<file>`. <Omit whichever half does not 
 <The falsifiable condition the flow's gate checks.>
 ```
 
-## Frontmatter rules for everything emitted
-
-`description` is always a folded block scalar (`>-`), with a uniform 2-space indent and no blank
-lines — it is the only style with no escaping burden for colons, quotes, or backslashes. The
-description carries the trigger moment _and_ negative routing to the nearest neighbour. Any other key
-containing `: ` gets single quotes.
-
-If `skill-creator` is installed in the session, use it for the mechanical `SKILL.md` authoring. It is
-optional and this skill does not depend on it.
-
-## Final checklist
+### Final checklist
 
 - [ ] All nine intake rows answered — by the spec or by the interview skill, never by silent
       assumption; a declined row carries its conservative reading written into the spec.
@@ -452,3 +472,14 @@ optional and this skill does not depend on it.
       tool it names carries a minimum version and what fails without it. "Runnable through `uv run`"
       is neither.
 - [ ] Run directory, if any, declared, defaulted, and actually present in the target repo's `.gitignore`.
+
+## Stop conditions
+
+- An intake row is unanswered and not declined → name every row that blocked the build and stop.
+- A declined row other than 8 or 9 → stop and say which row blocked the build.
+- The user has not agreed to the file list and the step/gate table → write nothing.
+
+## Hands off to
+
+- Invoke the Skill tool with skill="ceh-workflow-builder:interview-workflow-task" to fill any
+  intake row the spec leaves open (Phase 1).
