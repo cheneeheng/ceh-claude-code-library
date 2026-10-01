@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graph explorer</title>
+<style>
+  :root {
+    --text-primary: #1a1a1a;
+    --text-secondary: #5f5e5a;
+    --surface-0: #faf9f5;
+    --surface-1: #ffffff;
+    --border: #d3d1c7;
+    --border-strong: #b4b2a9;
+    --accent: #d85a30;
+  }
+  [data-theme="dark"] {
+    --text-primary: #ececec;
+    --text-secondary: #b4b2a9;
+    --surface-0: #1a1a19;
+    --surface-1: #242422;
+    --border: #3a3a37;
+    --border-strong: #5f5e5a;
+    --accent: #f0997b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 16px;
+    font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--surface-0); color: var(--text-primary);
+  }
+  .app { max-width: 1100px; margin: 0 auto; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .bar input[type="search"] {
+    flex: 1 1 180px; min-width: 140px; height: 34px; padding: 0 10px;
+    border: 1px solid var(--border-strong); border-radius: 8px;
+    background: var(--surface-1); color: inherit; font: inherit;
+  }
+  button {
+    height: 34px; padding: 0 12px; font: inherit;
+    border: 1px solid var(--border-strong); border-radius: 8px;
+    background: var(--surface-1); color: inherit; cursor: pointer;
+  }
+  button:hover { border-color: var(--text-secondary); }
+  button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .stage { position: relative; }
+  #cy {
+    width: 100%; height: 560px; display: block;
+    background: var(--surface-1);
+    border: 1px solid var(--border); border-radius: 12px;
+  }
+  #tooltip {
+    position: fixed; z-index: 10; pointer-events: none;
+    transform: translate(-50%, -100%);
+    padding: 4px 8px; border-radius: 6px; font-size: 12px; white-space: nowrap;
+    background: var(--text-primary); color: var(--surface-1);
+  }
+  #status { margin-top: 10px; min-height: 20px; color: var(--text-secondary); font-size: 13px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; font-size: 12px; color: var(--text-secondary); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="bar">
+    <input type="search" id="search" placeholder="Search nodes" aria-label="Search nodes">
+    <button id="btn-force" aria-pressed="true">Force</button>
+    <button id="btn-tree">Tree</button>
+    <button id="btn-circle">Circle</button>
+    <button id="btn-fit">Fit</button>
+    <button id="btn-theme">Theme</button>
+    <button id="btn-png">PNG</button>
+  </div>
+
+  <div class="stage">
+    <div id="cy" role="img" aria-label="Service dependency graph"></div>
+    <div id="tooltip" hidden></div>
+  </div>
+
+  <p id="status" role="status" aria-live="polite"></p>
+  <div class="legend" id="legend"></div>
+  <p class="sr-only" id="summary"></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.34.2/dist/cytoscape.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // ---------------------------------------------------------------- data
+  const RAW = [
+    { data: { id: 'web',    label: 'Web app',   type: 'client' } },
+    { data: { id: 'mobile', label: 'Mobile',    type: 'client' } },
+    { data: { id: 'gw',     label: 'Gateway',   type: 'service' } },
+    { data: { id: 'auth',   label: 'Auth',      type: 'service' } },
+    { data: { id: 'orders', label: 'Orders',    type: 'service' } },
+    { data: { id: 'billing',label: 'Billing',   type: 'service' } },
+    { data: { id: 'notify', label: 'Notifier',  type: 'service' } },
+    { data: { id: 'pg',     label: 'Postgres',  type: 'datastore' } },
+    { data: { id: 'redis',  label: 'Redis',     type: 'datastore' } },
+    { data: { id: 'queue',  label: 'Queue',     type: 'datastore' } },
+    { data: { source: 'web',    target: 'gw' } },
+    { data: { source: 'mobile', target: 'gw' } },
+    { data: { source: 'gw',     target: 'auth' } },
+    { data: { source: 'gw',     target: 'orders' } },
+    { data: { source: 'gw',     target: 'billing' } },
+    { data: { source: 'auth',   target: 'redis' } },
+    { data: { source: 'orders', target: 'pg' } },
+    { data: { source: 'orders', target: 'queue' } },
+    { data: { source: 'billing',target: 'pg' } },
+    { data: { source: 'queue',  target: 'notify' } },
+    { data: { source: 'notify', target: 'redis' } }
+  ];
+
+  // ------------------------------------------------------------ validate
+  function sanitize(raw) {
+    const nodes = [], edges = [], ids = new Set(), warnings = [];
+    for (const el of raw) {
+      const d = el.data || {};
+      if (d.source != null && d.target != null) continue;
+      const id = String(d.id ?? '');
+      if (!id) { warnings.push('node without id dropped'); continue; }
+      if (ids.has(id)) { warnings.push('duplicate node id "' + id + '" dropped'); continue; }
+      ids.add(id);
+      nodes.push({ group: 'nodes', data: Object.assign({}, d, { id: id }) });
+    }
+    for (const el of raw) {
+      const d = el.data || {};
+      if (d.source == null || d.target == null) continue;
+      const s = String(d.source), t = String(d.target);
+      if (!ids.has(s) || !ids.has(t)) { warnings.push('edge ' + s + '->' + t + ' dropped'); continue; }
+      edges.push({ group: 'edges', data: Object.assign({}, d, { id: String(d.id ?? s + '__' + t), source: s, target: t }) });
+    }
+    return { elements: nodes.concat(edges), warnings: warnings };
+  }
+
+  // -------------------------------------------------------------- theme
+  const RAMPS = {
+    client:    { light: { fill: '#EEEDFE', stroke: '#534AB7' }, dark: { fill: '#3C3489', stroke: '#AFA9EC' } },
+    service:   { light: { fill: '#E1F5EE', stroke: '#0F6E56' }, dark: { fill: '#085041', stroke: '#5DCAA5' } },
+    datastore: { light: { fill: '#F1EFE8', stroke: '#5F5E5A' }, dark: { fill: '#444441', stroke: '#B4B2A9' } }
+  };
+
+  function isDark() {
+    const attr = document.documentElement.getAttribute('data-theme');
+    if (attr) return attr === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
+  function palette() {
+    const cs = getComputedStyle(document.documentElement);
+    const v = (n, f) => (cs.getPropertyValue(n).trim() || f);
+    const mode = isDark() ? 'dark' : 'light';
+    const ramps = {};
+    for (const k in RAMPS) ramps[k] = RAMPS[k][mode];
+    return {
+      mode: mode,
+      text: v('--text-primary', '#1a1a1a'),
+      bg: v('--surface-1', '#ffffff'),
+      edge: v('--border-strong', '#b4b2a9'),
+      accent: v('--accent', '#d85a30'),
+      ramps: ramps
+    };
+  }
+
+  function stylesheet(P) {
+    const sheet = [
+      { selector: 'node', style: {
+          width: 36, height: 36,
+          'background-color': P.ramps.service.fill,
+          'border-width': 1.5,
+          'border-color': P.ramps.service.stroke,
+          label: 'data(label)',
+          'font-family': 'inherit',
+          'font-size': 11,
+          color: P.text,
+          'text-valign': 'bottom',
+          'text-margin-y': 5,
+          'text-wrap': 'ellipsis',
+          'text-max-width': '90px',
+          'text-outline-width': 2,
+          'text-outline-color': P.bg,
+          'min-zoomed-font-size': 7
+      }},
+      { selector: 'edge', style: {
+          'curve-style': 'bezier',
+          width: 1.5,
+          'line-color': P.edge,
+          'target-arrow-shape': 'triangle',
+          'target-arrow-color': P.edge,
+          'arrow-scale': 0.9
+      }},
+      { selector: 'node:selected', style: { 'border-color': P.accent, 'border-width': 3 } },
+      { selector: '.dimmed', style: { opacity: 0.15 } },
+      { selector: '.hidden', style: { display: 'none' } },
+      { selector: 'node.hot', style: {
+          'border-color': P.accent, 'border-width': 3,
+          'transition-property': 'border-width, border-color',
+          'transition-duration': '0.15s'
+      }},
+      { selector: 'edge.hot', style: {
+          'line-color': P.accent, 'target-arrow-color': P.accent, width: 3, opacity: 1
+      }},
+      { selector: 'core', style: {
+          'selection-box-color': P.accent,
+          'selection-box-opacity': 0.12,
+          'active-bg-opacity': 0
+      }}
+    ];
+    for (const type in P.ramps) {
+      sheet.push({ selector: 'node[type = "' + type + '"]', style: {
+        'background-color': P.ramps[type].fill,
+        'border-color': P.ramps[type].stroke
+      }});
+    }
+    sheet.push({ selector: 'node[type = "datastore"]', style: { shape: 'round-rectangle' } });
+    return sheet;
+  }
+
+  // --------------------------------------------------------------- init
+  const clean = sanitize(RAW);
+  const statusEl = document.getElementById('status');
+  const setStatus = t => { statusEl.textContent = t; };
+
+  const LAYOUTS = {
+    force:  { name: 'cose', animate: false, padding: 34, nodeRepulsion: function () { return 9000; }, idealEdgeLength: function () { return 60; } },
+    tree:   { name: 'breadthfirst', directed: true, roots: '#web, #mobile', spacingFactor: 1.15, padding: 34, animate: true, animationDuration: 400 },
+    circle: { name: 'circle', padding: 34, animate: true, animationDuration: 400 }
+  };
+
+  // Legibility is zoom x font-size in pixels, not a zoom constant. Keep these two in
+  // step with 'font-size' and 'min-zoomed-font-size' in stylesheet() above.
+  const FONT_PX = 11, MIN_LABEL_PX = 7;
+
+  const cy = cytoscape({
+    container: document.getElementById('cy'),
+    elements: clean.elements,
+    style: stylesheet(palette()),
+    layout: LAYOUTS.force,
+    minZoom: MIN_LABEL_PX / FONT_PX,
+    maxZoom: 3,
+    wheelSensitivity: 0.3
+  });
+
+  // The constructor layout above runs before this file can bind a 'layoutstop' handler,
+  // so the readability check hangs off cy.ready() instead. Layouts started later by
+  // runLayout() get their own layoutstop.
+  cy.ready(function () { fitIfReadable(); });
+
+  function fitIfReadable() {
+    const bb = cy.elements().boundingBox();
+    const fitZoom = Math.min(cy.width() / bb.w, cy.height() / bb.h);
+    if (fitZoom * FONT_PX >= MIN_LABEL_PX) {
+      cy.fit(34);
+    } else {
+      cy.zoom(MIN_LABEL_PX / FONT_PX);
+      cy.center(cy.nodes().roots().nonempty() ? cy.nodes().roots() : cy.nodes());
+      setStatus('Large graph — labels would vanish if fitted. Drag to pan, or search.');
+    }
+  }
+
+  if (clean.warnings.length) setStatus(clean.warnings.length + ' element(s) dropped: ' + clean.warnings.join('; '));
+
+  document.getElementById('summary').textContent =
+    'Graph with ' + cy.nodes().length + ' nodes and ' + cy.edges().length + ' edges.';
+
+  const legend = document.getElementById('legend');
+  const P0 = palette();
+  legend.innerHTML = Object.keys(P0.ramps).map(function (t) {
+    return '<span><i style="background:' + P0.ramps[t].fill + ';border:1px solid ' + P0.ramps[t].stroke + '"></i>' + t + '</span>';
+  }).join('');
+
+  // ------------------------------------------------------- interactions
+  function clearHighlight() { cy.elements().removeClass('dimmed hot'); }
+
+  cy.on('tap', 'node', function (evt) {
+    const node = evt.target;
+    const hood = node.closedNeighborhood();
+    cy.batch(function () {
+      cy.elements().addClass('dimmed').removeClass('hot');
+      hood.removeClass('dimmed').addClass('hot');
+    });
+    setStatus(node.data('label') + ' — ' + node.outgoers('node').length + ' downstream, ' +
+              node.incomers('node').length + ' upstream, degree ' + node.degree() + '.');
+  });
+
+  cy.on('tap', function (evt) {
+    if (evt.target === cy) { clearHighlight(); setStatus(''); }
+  });
+
+  const tip = document.getElementById('tooltip');
+  cy.on('mouseover', 'node', function (evt) {
+    const p = evt.target.renderedPosition();
+    const box = cy.container().getBoundingClientRect();
+    tip.textContent = evt.target.data('label') + ' · ' + evt.target.data('type');
+    tip.style.left = (box.left + p.x) + 'px';
+    tip.style.top = (box.top + p.y - 26) + 'px';
+    tip.hidden = false;
+  });
+  cy.on('mouseout', 'node', function () { tip.hidden = true; });
+  cy.on('pan zoom', function () { tip.hidden = true; });
+
+  // ------------------------------------------------------------ layouts
+  let running = null;
+  const buttons = { force: 'btn-force', tree: 'btn-tree', circle: 'btn-circle' };
+
+  function runLayout(key) {
+    if (running) running.stop();
+    running = cy.layout(LAYOUTS[key]);
+    running.one('layoutstop', fitIfReadable);
+    running.run();
+    for (const k in buttons) {
+      document.getElementById(buttons[k]).setAttribute('aria-pressed', String(k === key));
+    }
+  }
+  for (const k in buttons) {
+    (function (key) {
+      document.getElementById(buttons[key]).addEventListener('click', function () { runLayout(key); });
+    })(k);
+  }
+
+  // ------------------------------------------------------------- search
+  document.getElementById('search').addEventListener('input', function (e) {
+    const q = e.target.value.trim().toLowerCase();
+    clearHighlight();
+    if (!q) { setStatus(''); return; }
+    const hits = cy.nodes().filter(function (n) {
+      return String(n.data('label') || '').toLowerCase().indexOf(q) !== -1;
+    });
+    if (hits.empty()) { setStatus('No matches'); return; }
+    cy.batch(function () {
+      cy.elements().addClass('dimmed');
+      hits.union(hits.connectedEdges()).removeClass('dimmed').addClass('hot');
+    });
+    setStatus(hits.length + ' match' + (hits.length === 1 ? '' : 'es'));
+  });
+
+  // ----------------------------------------------------------- controls
+  document.getElementById('btn-fit').addEventListener('click', function () {
+    clearHighlight();
+    cy.animate({ fit: { eles: cy.elements(), padding: 34 } }, { duration: 300 });
+  });
+
+  document.getElementById('btn-theme').addEventListener('click', function () {
+    const next = isDark() ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    const P = palette();
+    cy.style().fromJson(stylesheet(P)).update();
+    legend.innerHTML = Object.keys(P.ramps).map(function (t) {
+      return '<span><i style="background:' + P.ramps[t].fill + ';border:1px solid ' + P.ramps[t].stroke + '"></i>' + t + '</span>';
+    }).join('');
+  });
+
+  document.getElementById('btn-png').addEventListener('click', function () {
+    cy.png({ output: 'blob-promise', full: true, scale: 2, bg: palette().bg })
+      .then(function (blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'graph.png'; a.click();
+        URL.revokeObjectURL(url);
+      });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target.matches('input, textarea')) return;
+    if (e.key === 'f') cy.fit(34);
+    if (e.key === 'Escape') { clearHighlight(); setStatus(''); }
+  });
+
+  // ------------------------------------------------------------- resize
+  const ro = new ResizeObserver(function () { cy.resize(); });
+  ro.observe(document.getElementById('cy'));
+
+  window.addEventListener('beforeunload', function () { ro.disconnect(); cy.destroy(); });
+
+  window.__cy = cy;   // handy for console debugging; remove in production
+})();
+</script>
+</body>
+</html>

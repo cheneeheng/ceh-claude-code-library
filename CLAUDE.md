@@ -18,12 +18,12 @@ they live:
 
 Plugins fall into four tiers:
 
-| Tier                  | Loaded            | Plugins                                            |
-| --------------------- | ----------------- | -------------------------------------------------- |
-| **Scenario bundle**   | one per situation | —                                                  |
-| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity      | `ceh-architecture`, `ceh-seo`, `ceh-blog`          |
-| **Stack / build**     | per project type  | —                                                  |
+| Tier                  | Loaded            | Plugins                                                           |
+| --------------------- | ----------------- | ----------------------------------------------------------------- |
+| **Scenario bundle**   | one per situation | —                                                                 |
+| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing` |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`                                             |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`    |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
@@ -78,27 +78,20 @@ tools/
 
 ## Plugins
 
-| Plugin directory   | Domain                                                                                                                                                                                                                        |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ceh-core`         | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                |
-| `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation                                                                                                                                |
-| `ceh-git-workflow` | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, releases including hotfixes (`release`, which also runs the full ship sequence), code review |
-| `ceh-architecture` | Living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log), domain modeling (IDs, status enums, layer boundaries)                                                                                                        |
+| Plugin directory     | Domain                                                                                                                                                                                                                        |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ceh-core`           | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                |
+| `ceh-coding-agent`   | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation, the living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log)                                                           |
+| `ceh-git-workflow`   | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, releases including hotfixes (`release`, which also runs the full ship sequence), code review |
+| `ceh-testing`        | Stack-agnostic testing technique: reproduce-first bug fixes, test-case design, suite audit (`test-suite-auditor` agent), behavior-preservation checks, test risk gaps                                                         |
+| `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv/ruff/mypy, pytest, observability, security, and domain modeling for web services; unit/integration/system tester agents                                                             |
+| `ceh-python-library` | Packaging and publishing, public API surface and semver, uv/ruff/mypy, and pytest for distributable libraries with no web dependencies                                                                                        |
+| `ceh-web-frontend`   | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, UI visual design and theming, Cytoscape.js graph visualization; unit/integration/system tester agents              |
+| `ceh-seo`            | Discoverability for anything internet-exposed: crawlable public web pages, the `llms.txt` agent index, findability of README, package, and landing text                                                                       |
+| `ceh-blog`           | Blog posts in a personal, series-first voice: draft (interviewing when material is thin), edit, repurpose for X, LinkedIn, TL;DR, and newsletters                                                                             |
 
-| `ceh-seo` | Discoverability for anything internet-exposed: crawlable public web pages, the `llms.txt` agent index, findability of README, package, and landing text |
-| `ceh-blog` | Blog posts in a personal, series-first voice: draft (interviewing when material is thin), edit, repurpose for X, LinkedIn, TL;DR, and newsletters |
-
-**TODO: break up `ceh-architecture`.** It is two unrelated moments in one plugin, and the
-destinations are decided:
-
-- `document-architecture` moves to `ceh-coding-agent`, beside `explain-codebase`.
-- `domain-modeling` moves to the service-side plugin (`ceh-python-service`, once it migrates): its
-  snippets are Python/TS and its layer rules assume a route/service/db backend.
-
-Then retire `ceh-architecture` and repoint the `ceh-architecture:document-architecture` mentions in
-`explain-codebase` and `explain-until-understood` to `ceh-coding-agent`. Removing a plugin is a
-MAJOR bump. A concept-map skill for markdown-only knowledge bases is a separate sibling, not part
-of this move.
+A concept-map skill for markdown-only knowledge bases would be a separate sibling of
+`document-architecture`, not part of it.
 
 ## Skills
 
@@ -116,9 +109,16 @@ Each skill is self-contained with inline content. `references/` is for two cases
 
 Never for general reference material a model already knows.
 
-**Name skills with a verb phrase and agents with a noun.** A skill is something you do at a moment
-(`commit`, `shrink-diff`, `draft-post`, `make-page-crawlable`), an agent is something you delegate
-to (`bulk-reader`). Pick the word you would say out loud, not a generic one like `optimize`. Two
+Two `ceh-web-frontend` skills migrated whole and carry bundled files that predate this rule:
+`design-ui` (two themes under `references/`) and `visualize-graph-cytoscape` (eight reference
+files, an `assets/template.html`, and a `scripts/to-elements.js` converter). Trim the Cytoscape
+references to the repo-opinionated delta before adding more.
+
+**Name skills with a verb phrase and agents with a noun, and put the framework or library in the
+name when a skill is specific to one** (`write-fastapi-endpoints`, `write-alembic-migration`,
+`write-pytest-service-tests`), so the name says what the skill applies to. A skill is something you
+do at a moment (`commit`, `shrink-diff`, `draft-post`, `make-page-crawlable`), an agent is something
+you delegate to (`bulk-reader`). Pick the word you would say out loud, not a generic one like `optimize`. Two
 exemptions: model-only standards named for what they carry (`agent-coding-contract`,
 `usage-limit-handoff`, `branch`), and established terms of art (`pull-request`, `release`).
 `validate.py` cannot check part of speech, so this is a review rule.

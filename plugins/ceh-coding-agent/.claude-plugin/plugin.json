@@ -1,7 +1,7 @@
 {
   "name": "ceh-coding-agent",
   "version": "1.0.0",
-  "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, and whole-repo explanation.",
+  "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, whole-repo explanation, and the living architecture document.",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/ceh-claude-code-library",
   "license": "Apache-2.0",

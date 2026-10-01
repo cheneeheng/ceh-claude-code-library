@@ -6,23 +6,26 @@
 
 ## Plugins
 
-| Plugin                | Install as         | Contents                                                                                                                                                                                                                                                                                                                                 |
-| --------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Core                  | `ceh-core`         | Standards that hold however Claude Code is used: usage-limit guard + handoff (`usage-limit-handoff`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards)                                                                                                                                                         |
-| Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); explaining code until it lands; whole-repo orientation (`explain-codebase`); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
-| Git Workflow          | `ceh-git-workflow` | Branching, commits, pull requests from open to merge, changelog entries, releases including hotfixes, code review; a hook that blocks file edits on the default branch                                                                                                                                                                   |
-| Architecture          | `ceh-architecture` | Stack-agnostic design moments: the living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log) and domain modeling (IDs, status enums, layer boundaries)                                                                                                                                                                             |
-| SEO                   | `ceh-seo`          | Discoverability for anything exposed to the internet: crawlable public web pages (head tags, structured data, sitemap, rendering), the `llms.txt` agent index, and the findability of README, package, and landing text                                                                                                                  |
-| Blog                  | `ceh-blog`         | Blog posts in a personal, series-first voice: draft from a topic, repo, or notes (interviewing when material is thin), edit an existing draft, repurpose a finished post for X, LinkedIn, TL;DR, and newsletters                                                                                                                         |
+| Plugin                | Install as           | Contents                                                                                                                                                                                                                                                                                                                                 |
+| --------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Core                  | `ceh-core`           | Standards that hold however Claude Code is used: usage-limit guard + handoff (`usage-limit-handoff`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards)                                                                                                                                                         |
+| Agent Coding Contract | `ceh-coding-agent`   | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); explaining code until it lands; whole-repo orientation (`explain-codebase`); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
+| Git Workflow          | `ceh-git-workflow`   | Branching, commits, pull requests from open to merge, changelog entries, releases including hotfixes, code review; a hook that blocks file edits on the default branch                                                                                                                                                                   |
+| Testing               | `ceh-testing`        | Stack-agnostic testing technique: reproduce-first bug fixes (`test-a-bug-fix`), test-case design, suite audit (`audit-test-suite`, `test-suite-auditor`), behavior-preservation checks, and the risk gaps a green suite misses                                                                                                           |
+| Python Service        | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL schema, Alembic, uv/ruff/mypy, pytest, observability, security, and domain modeling for web services; unit, integration, and system tester agents                                                                                                                                                           |
+| Python Library        | `ceh-python-library` | Packaging and publishing, public API surface and semver, uv/ruff/mypy, and pytest for distributable libraries with no web dependencies                                                                                                                                                                                                   |
+| Web Frontend          | `ceh-web-frontend`   | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, UI visual design and themes, Cytoscape.js graphs; unit, integration, and system tester agents                                                                                                                                 |
+| SEO                   | `ceh-seo`            | Discoverability for anything exposed to the internet: crawlable public web pages (head tags, structured data, sitemap, rendering), the `llms.txt` agent index, and the findability of README, package, and landing text                                                                                                                  |
+| Blog                  | `ceh-blog`           | Blog posts in a personal, series-first voice: draft from a topic, repo, or notes (interviewing when material is thin), edit an existing draft, repurpose a finished post for X, LinkedIn, TL;DR, and newsletters                                                                                                                         |
 
 ### Categorization
 
-| Tier                  | Loaded            | Plugins                                            |
-| --------------------- | ----------------- | -------------------------------------------------- |
-| **Scenario bundle**   | one per situation | —                                                  |
-| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity      | `ceh-architecture`, `ceh-seo`, `ceh-blog`          |
-| **Stack / build**     | per project type  | —                                                  |
+| Tier                  | Loaded            | Plugins                                                           |
+| --------------------- | ----------------- | ----------------------------------------------------------------- |
+| **Scenario bundle**   | one per situation | —                                                                 |
+| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing` |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`                                             |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`    |
 
 ---
 
@@ -45,6 +48,7 @@
 | Refactor Repo            | `/ceh-coding-agent:refactor-repo`            | Manual only — propose-then-apply refactor campaign over the whole repo or a named module                                                                                                                      |
 | Explain Until Understood | `/ceh-coding-agent:explain-until-understood` | Explaining a subsystem, design, or diff to the person in the session: stated floor, foundations first, verified claims, ASCII pictures, one walked case, and the escalation ladder when an explanation misses |
 | Explain Codebase         | `/ceh-coding-agent:explain-codebase`         | Go through a whole repo and write what each component does, how they connect, and key flows into the ignored `.agents_workspace/CODEBASE_EXPLAINED.md`                                                        |
+| Document Architecture    | `/ceh-coding-agent:document-architecture`    | Writing or updating the living `.agents_workspace/ARCHITECTURE.md`: 3-second Overview, Mermaid diagrams, Key Decisions log; also when a re-plan changes system shape                                          |
 
 ### Git Workflow (`ceh-git-workflow`)
 
@@ -57,12 +61,50 @@
 | Code Review      | `/ceh-git-workflow:code-review`      | Reviewing a PR or leaving review comments                                                                                                                                 |
 | Update Changelog | `/ceh-git-workflow:update-changelog` | Generate or update CHANGELOG.md, write release notes, or log a change under `[Unreleased]`                                                                                |
 
-### Architecture (`ceh-architecture`)
+### Testing (`ceh-testing`)
 
-| Skill                 | Invoke                                    | When                                                                                                                                                                 |
-| --------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Document Architecture | `/ceh-architecture:document-architecture` | Writing or updating the living `.agents_workspace/ARCHITECTURE.md`: 3-second Overview, Mermaid diagrams, Key Decisions log; also when a re-plan changes system shape |
-| Domain Modeling       | `/ceh-architecture:domain-modeling`       | Defining entities, prefixed IDs, status enums, state transitions, or route/service/db layer boundaries                                                               |
+| Skill                     | Invoke                                   | When                                                                                                                            |
+| ------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Test a Bug Fix            | `/ceh-testing:test-a-bug-fix`            | A bug, crash, or regression is being fixed: failing test first, prove it goes red without the fix, bisect on it                 |
+| Design Test Cases         | `/ceh-testing:design-test-cases`         | Deciding which inputs and scenarios to cover: partitions, boundaries, decision tables, state transitions, properties, fuzzing   |
+| Audit Test Suite          | `/ceh-testing:audit-test-suite`          | Finding out whether a passing suite would catch a defect: assertion quality, mutation testing on the diff, flakiness            |
+| Verify Behavior Preserved | `/ceh-testing:verify-behavior-preserved` | Before a refactor, extraction, dependency or runtime upgrade, or port: characterization tests, golden files, a differential run |
+| Close Test Risk Gaps      | `/ceh-testing:close-test-risk-gaps`      | Pre-completion gate: concurrency, contract drift, performance, authorization, and migration/rollout gaps                        |
+
+### Python Service (`ceh-python-service`)
+
+| Skill                        | Invoke                                             | When                                                                                                   |
+| ---------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Write FastAPI Endpoints      | `/ceh-python-service:write-fastapi-endpoints`      | Route handlers, dependencies, lifespan, exception handlers, REST API design                            |
+| Write asyncpg Queries        | `/ceh-python-service:write-asyncpg-queries`        | Database queries, transactions, tenant isolation, connection pool config                               |
+| Design PostgreSQL Schema     | `/ceh-python-service:design-postgresql-schema`     | Designing a schema, choosing column types, adding indexes                                              |
+| Write Alembic Migration      | `/ceh-python-service:write-alembic-migration`      | Creating or running database migrations, migration deploy safety                                       |
+| Configure Python Service Env | `/ceh-python-service:configure-python-service-env` | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config                                    |
+| Write pytest Service Tests   | `/ceh-python-service:write-pytest-service-tests`   | Creating or modifying test files, fixtures, or mocks                                                   |
+| Add Observability            | `/ceh-python-service:add-observability`            | structlog logging, metrics, health checks, correlation IDs                                             |
+| Secure Service Code          | `/ceh-python-service:secure-service-code`          | Secrets management, CORS, rate limiting, input validation                                              |
+| Model Domain                 | `/ceh-python-service:model-domain`                 | Defining entities, prefixed IDs, status enums, state transitions, or route/service/db layer boundaries |
+
+### Python Library (`ceh-python-library`)
+
+| Skill                        | Invoke                                             | When                                                                                       |
+| ---------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Configure Python Library Env | `/ceh-python-library:configure-python-library-env` | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config                        |
+| Write pytest Library Tests   | `/ceh-python-library:write-pytest-library-tests`   | Creating or modifying test files, fixtures, or mocks                                       |
+| Package Library              | `/ceh-python-library:package-library`              | Build backend, src layout, building wheels, publishing to PyPI                             |
+| Define Public API            | `/ceh-python-library:define-public-api`            | Editing `__init__.py` or `__all__`, changing a public signature, classifying a semver bump |
+
+### Web Frontend (`ceh-web-frontend`)
+
+| Skill                           | Invoke                                            | When                                                                                                                         |
+| ------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Configure Bun + Vite Env        | `/ceh-web-frontend:configure-bun-vite-env`        | Bun/Vite setup, scripts, deps, TypeScript style, ESLint/Prettier                                                             |
+| Write SvelteKit Code            | `/ceh-web-frontend:write-sveltekit-code`          | Editing Svelte routes, stores, components, or the API client                                                                 |
+| Write React + Vite Code         | `/ceh-web-frontend:write-react-vite-code`         | Editing React components, hooks, routing, or `vite.config.ts`                                                                |
+| Write Vitest + Playwright Tests | `/ceh-web-frontend:write-vitest-playwright-tests` | Writing `.test.ts`, `.test.tsx`, or `.spec.ts` files, or MSW handlers                                                        |
+| Make UI Accessible              | `/ceh-web-frontend:make-ui-accessible`            | Writing component markup (Svelte or React)                                                                                   |
+| Design UI                       | `/ceh-web-frontend:design-ui`                     | Any frontend visual design decision: layout, hierarchy, navigation, states, finishing recipes, Meridian and Tidewater themes |
+| Visualize Graph (Cytoscape)     | `/ceh-web-frontend:visualize-graph-cytoscape`     | A network, dependency map, org chart, or any clickable node-link diagram with Cytoscape.js                                   |
 
 ### SEO (`ceh-seo`)
 
@@ -90,6 +132,28 @@
 | ----------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Bulk Reader | `/ceh-core:bulk-reader` | Read large or numerous files on Haiku and return a compressed, line-anchored answer to one question, keeping the file contents out of the caller's context |
 
+### Testing (`ceh-testing`)
+
+| Agent              | Invoke                                      | When                                                                                                                         |
+| ------------------ | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Test Suite Auditor | `@"ceh-testing:test-suite-auditor (agent)"` | A large or slow suite: run the mutation, flakiness, and isolation checks in a subagent and return a ranked, read-only report |
+
+### Python Service (`ceh-python-service`)
+
+| Agent                     | Invoke                                                    | When                                                                     |
+| ------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Python Unit Tester        | `@"ceh-python-service:python-unit-tester (agent)"`        | Isolated, mocked unit tests for a function, class, or module             |
+| Python Integration Tester | `@"ceh-python-service:python-integration-tester (agent)"` | Tests for module boundaries and real-database interactions               |
+| Python System Tester      | `@"ceh-python-service:python-system-tester (agent)"`      | Full end-to-end scenarios against the real stack (explicit request only) |
+
+### Web Frontend (`ceh-web-frontend`)
+
+| Agent                 | Invoke                                              | When                                                       |
+| --------------------- | --------------------------------------------------- | ---------------------------------------------------------- |
+| TS Unit Tester        | `@"ceh-web-frontend:ts-unit-tester (agent)"`        | Isolated unit tests for TypeScript functions or modules    |
+| TS Integration Tester | `@"ceh-web-frontend:ts-integration-tester (agent)"` | Components wired with real stores and MSW network handlers |
+| TS System Tester      | `@"ceh-web-frontend:ts-system-tester (agent)"`      | Playwright E2E or smoke tests against a running stack      |
+
 ---
 
 ## Installing in Claude Code
@@ -106,7 +170,10 @@
 /plugin install ceh-core@ceh-claude-code-library --scope user
 /plugin install ceh-coding-agent@ceh-claude-code-library --scope user
 /plugin install ceh-git-workflow@ceh-claude-code-library --scope user
-/plugin install ceh-architecture@ceh-claude-code-library --scope user
+/plugin install ceh-testing@ceh-claude-code-library --scope user
+/plugin install ceh-python-service@ceh-claude-code-library --scope user
+/plugin install ceh-python-library@ceh-claude-code-library --scope user
+/plugin install ceh-web-frontend@ceh-claude-code-library --scope user
 /plugin install ceh-seo@ceh-claude-code-library --scope user
 /plugin install ceh-blog@ceh-claude-code-library --scope user
 ```
@@ -125,7 +192,10 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/ceh-claude-code-library/plugins/ceh-core" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-coding-agent" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-git-workflow" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-architecture" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-testing" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-python-service" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-python-library" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-web-frontend" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-seo" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-blog" }
   ]

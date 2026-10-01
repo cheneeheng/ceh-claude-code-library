@@ -126,6 +126,87 @@ Thought Leadership, Personal Story), each ending on **The Open Thread**.
 
 **Shared:** extractable standalone claims with numbers over adjectives, and question-shaped headings.
 
+## Python environment foundation (uv / ruff / mypy + style)
+
+**Canonical:** `plugins/ceh-python-service/skills/configure-python-service-env/SKILL.md` — entire file
+
+| Copy                                                                      | Section     | Diverges                                                                                                                                                                                   |
+| ------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `plugins/ceh-python-library/skills/configure-python-library-env/SKILL.md` | entire file | drops `fastapi`/`uvicorn[standard]`/`asyncpg` from the deps example and the uvicorn dev-server command; `dependencies = []`; `known-first-party` is the library; library docstring example |
+
+**Shared:** Python 3.12 + uv + `pyproject.toml`/`uv.lock` workflow, the uv command table, the ruff
+(line-length 88, `select = [E,F,I,UP,N,B]`) + mypy (`strict = true`) + pytest
+(`asyncio_mode = "auto"`) config, the coding-style rules (type hints, built-in generics, no `Any`
+without a comment), the naming table, three-group imports, and the "ruff only, no `# type: ignore`
+without a comment" linting rules.
+
+## Python testing foundation (pytest core)
+
+**Canonical:** `plugins/ceh-python-service/skills/write-pytest-service-tests/SKILL.md` — entire file
+
+| Copy                                                                    | Section     | Diverges                                                                                                                                  |
+| ----------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/ceh-python-library/skills/write-pytest-library-tests/SKILL.md` | entire file | replaces the real-database integration tier and the system tier with an `api/` tier that imports the package as a consumer; no DB or HTTP |
+
+**Shared:** pytest + pytest-asyncio (`asyncio_mode = "auto"`), `tests/unit/` structure,
+`test_<what>_<expected_behavior>.py` naming, the one-behavior-per-test rule, the mocking rules (mock
+external boundaries, `unittest.mock` or `pytest-mock`), and the Coverage targets block — two rows,
+word for word: `Python application package | 80%` and `Core business logic / domain services | 95%`.
+The service copy adds the `--cov=app` command, the library copy `--cov=your_library`.
+
+## Choosing what to test (hand-off to design-test-cases)
+
+**Canonical:** `plugins/ceh-python-service/skills/write-pytest-service-tests/SKILL.md` — § Choosing what to test
+
+| Copy                                                                     | Section                 | Diverges |
+| ------------------------------------------------------------------------ | ----------------------- | -------- |
+| `plugins/ceh-python-library/skills/write-pytest-library-tests/SKILL.md`  | § Choosing what to test | none     |
+| `plugins/ceh-web-frontend/skills/write-vitest-playwright-tests/SKILL.md` | § Choosing what to test | none     |
+
+**Shared:** the section word for word — the tooling-versus-inputs boundary, the
+`Invoke the Skill tool with skill="ceh-testing:design-test-cases"` call, and the list of what it
+supplies. The call is why all three stack plugins declare `ceh-testing` as a dependency.
+
+## asyncpg connection pool and transaction code
+
+**Canonical:** `plugins/ceh-python-service/skills/write-asyncpg-queries/SKILL.md` — § Atomic transactions + § Connection pool
+
+| Copy                                                                 | Section                             | Diverges                                              |
+| -------------------------------------------------------------------- | ----------------------------------- | ----------------------------------------------------- |
+| `plugins/ceh-python-service/skills/write-fastapi-endpoints/SKILL.md` | § Lifespan for startup and shutdown | the same `create_pool(...)` call, no transaction code |
+
+**Shared:** `asyncpg.create_pool(min_size=5, max_size=20, command_timeout=30)` and the pool-in-lifespan
+rule.
+
+## Layer boundaries (route → service → db)
+
+**Canonical:** `plugins/ceh-python-service/skills/model-domain/SKILL.md` — § Layer boundaries
+
+| Copy                                   | Section | Diverges |
+| -------------------------------------- | ------- | -------- |
+| none yet in this repo — see note below |         |          |
+
+**Shared:** route handlers contain no business logic (they call services), services contain no SQL
+(they call the db layer), the db layer contains no business logic, and each aggregate has one
+mutation path. In agent-skills `ceh-scaffolding:scaffold-python-service` restates the rules next to
+the initial backend directory tree. Add it here as a copy when `ceh-scaffolding` migrates.
+`write-fastapi-endpoints` § Route handlers are thin states the first rule in its own words.
+
+## Test-suite audit findings report
+
+**Canonical:** `plugins/ceh-testing/skills/audit-test-suite/SKILL.md` — § Output
+
+| Copy                                               | Section                    | Diverges                                                                                                                                                                              |
+| -------------------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/ceh-testing/agents/test-suite-auditor.md` | § Output to parent session | caps the list at ~15 findings and adds the commands-run ledger, the zero-coverage list, and a "bugs found in source, reported not fixed" section, since the report has to stand alone |
+
+**Shared:** the worst-first `SEVERITY  file:line  what` format and the five example rows: an
+assertion-free test, an expectation computed with the code's own formula, surviving mutants at a
+boundary, an order-dependent failure under `--random-order`, and a slow unit test doing real I/O.
+`ceh-testing` deliberately shares no content with the three stack testing skills: those own runner,
+fixtures, and mocking, `ceh-testing` owns technique. A technique block appearing in a stack skill is
+the signal that this boundary has slipped.
+
 ---
 
 Entry shape:
