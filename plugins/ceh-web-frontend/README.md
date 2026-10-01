@@ -44,7 +44,7 @@ Called by the tester agents via `bash "${CLAUDE_PLUGIN_ROOT}/scripts/<name>.sh"`
 | ---------------------------------------------- | ---------------------------------------------------- |
 | `detect-test-framework.sh [root]`              | Detects Jest / Vitest / Mocha + Playwright / Cypress |
 | `run-unit-tests.sh [file]`                     | Runs unit tests with the detected runner             |
-| `check-coverage.sh <file>`                     | Prints coverage delta for a specific source file     |
+| `check-coverage.sh <file>`                     | Prints the coverage line for a specific source file  |
 | `run-integration-tests.sh [pattern]`           | Runs integration tests with `NODE_ENV=test`          |
 | `run-e2e.sh {up\|down\|test\|smoke} [pattern]` | Manages the E2E stack and runs Playwright / Cypress  |
 

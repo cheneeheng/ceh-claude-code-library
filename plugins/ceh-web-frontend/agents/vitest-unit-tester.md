@@ -63,8 +63,9 @@ If a request crosses that boundary, say so and stop.
    - Assert on error _messages_ or custom error _types_, not just that something threw
 
 5. **Run and verify.** Execute `bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-unit-tests.sh" <test_file>` and iterate
-   until green. Then run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-coverage.sh" <source_file>` to confirm
-   the new tests moved coverage up for the target file.
+   until green. Then run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-coverage.sh" <source_file>` to find
+   the lines and branches of the target file that are still untested. The percentage is not a goal:
+   never add a test only to raise it.
 
 ## Output to parent session
 
@@ -72,7 +73,7 @@ When done, report:
 
 - Path(s) of test files created or modified
 - Number of new test cases added
-- Coverage delta for the target file (before → after)
+- Regions of the target file still untested (uncovered lines and branches), and why each was left
 - Any behavior you found untestable without refactoring, with a one-line suggestion
 
 ## Hard rules

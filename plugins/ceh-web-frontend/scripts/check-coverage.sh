@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # check-coverage.sh
 # Runs the test suite with coverage enabled and prints the coverage line
-# for a specific source file. Used by the unit tester to confirm that new
-# tests actually moved the needle on the target file.
+# for a specific source file. Used by the unit tester to find the lines
+# and branches of the target file that are still untested.
 #
 # Usage: bash check-coverage.sh <source_file>
 # Example: bash check-coverage.sh src/lib/pricing.ts
