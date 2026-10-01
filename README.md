@@ -279,27 +279,53 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 ```json
 {
   "plugins": [
-    { "path": "~/ceh-claude-code-library/plugins/ceh-scenario-service" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-scenario-library" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-scenario-webapp" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-scenario-ideation" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-scenario-editorial" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-core" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-coding-agent" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-git-workflow" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-testing" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-python-service" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-python-library" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-web-frontend" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-seo" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-blog" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-plan-build-review" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-documentation" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-ag-ui" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-usability-audit" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-business-plan" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-git-datastore" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-workflow-builder" }
+    {
+      "path": "~/ceh-claude-code-library/plugins/scenarios/ceh-scenario-service"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/scenarios/ceh-scenario-library"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/scenarios/ceh-scenario-webapp"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/scenarios/ceh-scenario-ideation"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/scenarios/ceh-scenario-editorial"
+    },
+    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-core" },
+    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-coding-agent" },
+    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-git-workflow" },
+    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-testing" },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-python-service"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-python-library"
+    },
+    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-web-frontend" },
+    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-seo" },
+    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-blog" },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-plan-build-review"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-documentation"
+    },
+    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-ag-ui" },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-usability-audit"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-business-plan"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-git-datastore"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-workflow-builder"
+    }
   ]
 }
 ```

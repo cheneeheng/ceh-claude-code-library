@@ -104,7 +104,7 @@ def rel(p: Path) -> str:
 
 
 def plugin_dirs() -> list[Path]:
-    return sorted(p for p in REPO.glob("plugins/ceh-*") if p.is_dir())
+    return sorted(p for p in REPO.glob("plugins/*/ceh-*") if p.is_dir())
 
 
 def parse_frontmatter(path: Path) -> dict[str, str] | None:
@@ -325,7 +325,7 @@ def check_references() -> None:
     skill_dir_pat = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/([A-Za-z0-9_./-]+)")
     for doc in doc_files():
         where = rel(doc)
-        # SKILL.md -> plugins/ceh-<plugin>/skills/<name>/SKILL.md ; agent -> plugins/ceh-<plugin>/agents/<name>.md
+        # SKILL.md -> plugins/standalone/ceh-<plugin>/skills/<name>/SKILL.md ; agent -> plugins/standalone/ceh-<plugin>/agents/<name>.md
         plugin_root = (
             doc.parents[2] if doc.parent.parent.name == "skills" else doc.parents[1]
         )
@@ -419,8 +419,9 @@ def plugin_deps() -> dict[str, list[str]]:
 def check_dependencies() -> None:
     """Deps resolve, the graph is acyclic, and ceh-scenario-* dirs hold a manifest only."""
     deps = plugin_deps()
+    dirs = {d.name: d for d in plugin_dirs()}
     for name, targets in deps.items():
-        where = rel(REPO / f"plugins/{name}/.claude-plugin/plugin.json")
+        where = rel(dirs[name] / ".claude-plugin/plugin.json")
         for t in targets:
             if t not in deps:
                 fail(where, f"dependency '{t}' is not a plugin in this repo")
@@ -485,7 +486,7 @@ def check_invocations() -> None:
 
     for doc in doc_files():
         where = rel(doc)
-        source = doc.relative_to(REPO / "plugins").parts[0]
+        source = doc.relative_to(REPO / "plugins").parts[1]
         allowed = reachable(source)
         for ref in dict.fromkeys(INVOKE_PAT.findall(doc.read_text(encoding="utf-8"))):
             if ref not in comps:

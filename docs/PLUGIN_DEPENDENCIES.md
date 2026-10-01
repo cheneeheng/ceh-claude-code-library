@@ -51,7 +51,7 @@ listed by each stack bundle directly as well as through its stack plugin.
 
 ```bash
 # Every declared edge
-grep -H '"dependencies"' plugins/*/.claude-plugin/plugin.json
+grep -H '"dependencies"' plugins/*/*/.claude-plugin/plugin.json
 
 # Resolution, acyclicity, and bundle shape
 python tools/validate-plugins/validate.py
