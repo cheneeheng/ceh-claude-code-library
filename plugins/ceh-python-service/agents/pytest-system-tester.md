@@ -1,5 +1,5 @@
 ---
-name: python-system-tester
+name: pytest-system-tester
 description: >-
   Use this agent only when the user explicitly asks for full end-to-end or system-level pytest tests
   that exercise the entire application stack as a real user or external caller would, in a subagent
@@ -7,8 +7,8 @@ description: >-
   tests", "write system tests", "test the full flow", "test the whole pipeline", "simulate a real
   user scenario", "write smoke tests", "write acceptance tests", "test the deployed app". Spins up
   the real application, uses real external infrastructure (or close approximations via Docker), and
-  validates complete user journeys. Not for unit or component-level tests (use python-unit-tester or
-  python-integration-tester).
+  validates complete user journeys. Not for unit or component-level tests (use pytest-unit-tester or
+  pytest-integration-tester).
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:

@@ -1,5 +1,5 @@
 ---
-name: ts-integration-tester
+name: vitest-integration-tester
 description: >-
   Use this agent to write frontend integration tests in a subagent, to build out an integration
   suite across many flows or run integration tests and report results in isolation. Use proactively
@@ -10,7 +10,7 @@ description: >-
   stores, real MSW network handlers, and multiple components together in a single jsdom/happy-dom
   environment. Not for one or two tests written inline (use
   ceh-web-frontend:write-vitest-playwright-tests), isolated single-component or pure-function tests
-  (use ts-unit-tester), or full browser E2E tests against a running server (use ts-system-tester).
+  (use vitest-unit-tester), or full browser E2E tests against a running server (use playwright-system-tester).
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
@@ -35,8 +35,8 @@ layer via MSW.
 
 **You do NOT test:**
 
-- Single functions or isolated components with mocked props → `ts-unit-tester`
-- Full browser journeys against a running server → `ts-system-tester`
+- Single functions or isolated components with mocked props → `vitest-unit-tester`
+- Full browser journeys against a running server → `playwright-system-tester`
 
 ## Workflow
 

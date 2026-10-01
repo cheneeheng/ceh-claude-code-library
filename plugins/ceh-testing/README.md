@@ -19,14 +19,9 @@ passing functional suite structurally miss. Load it alongside a stack plugin, no
 | `verify-behavior-preserved` | `/ceh-testing:verify-behavior-preserved` | Before a change meant to alter no observable behavior: refactor, extraction, dependency or runtime upgrade, port. Pins current behavior with characterization tests, golden files, a differential run |
 | `close-test-risk-gaps`      | `/ceh-testing:close-test-risk-gaps`      | Pre-completion gate: triage concurrency, contract drift, performance, authorization, and migration/rollout gaps. A class whose trigger does not fire is skipped explicitly                            |
 
-## Agents
-
-| Agent                | Invoke                                      | Use when                                                                                                                                                                            |
-| -------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `test-suite-auditor` | `@"ceh-testing:test-suite-auditor (agent)"` | The suite is large, the run is slow, or the output would flood the session: runs the slow half of `audit-test-suite` in an isolated subagent and returns a ranked report. Read-only |
-
-The agent never edits source, tests, or config, and never installs a tool. Writing the missing
-tests is delegated to the stack's own tester agents.
+The plugin ships no agents. `audit-test-suite` has a report-only mode for a large or slow suite: hand
+the audit to a background subagent with the skill loaded and it returns a ranked report without
+editing anything. Writing the missing tests belongs to the stack's own tester agents.
 
 ## Relation to the stack testing skills
 
@@ -34,7 +29,7 @@ tests is delegated to the stack's own tester agents.
 | ---------------------------------------- | --------------------------------------------------------------------- |
 | Which runner, fixtures, mocks, CI wiring | The stack plugin's testing skill (`ceh-python-*`, `ceh-web-frontend`) |
 | Which inputs and scenarios               | `design-test-cases`                                                   |
-| Is this suite trustworthy                | `audit-test-suite` + `test-suite-auditor`                             |
+| Is this suite trustworthy                | `audit-test-suite`                                                    |
 | Did this bug get a test                  | `test-a-bug-fix`                                                      |
 | Did this refactor change behavior        | `verify-behavior-preserved`                                           |
 | What does a passing suite still miss     | `close-test-risk-gaps`                                                |

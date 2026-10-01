@@ -27,11 +27,11 @@ implicit mid-turn decisions, sharpen its description rather than add a hook.
 
 ## Agents
 
-| Agent                   | Use when                                                            |
-| ----------------------- | ------------------------------------------------------------------- |
-| `ts-unit-tester`        | Writing isolated unit tests for TypeScript functions or modules     |
-| `ts-integration-tester` | Testing components wired with real stores and MSW network handlers  |
-| `ts-system-tester`      | Writing Playwright E2E tests or smoke tests against a running stack |
+| Agent                       | Use when                                                            |
+| --------------------------- | ------------------------------------------------------------------- |
+| `vitest-unit-tester`        | Writing isolated unit tests for TypeScript functions or modules     |
+| `vitest-integration-tester` | Testing components wired with real stores and MSW network handlers  |
+| `playwright-system-tester`  | Writing Playwright E2E tests or smoke tests against a running stack |
 
 All three preload `ceh-web-frontend:write-vitest-playwright-tests` and
 `ceh-testing:design-test-cases`.

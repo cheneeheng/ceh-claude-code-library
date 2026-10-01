@@ -1,5 +1,5 @@
 ---
-name: python-integration-tester
+name: pytest-integration-tester
 description: >-
   Use this agent to write pytest integration tests for how multiple Python modules, services, or
   components work together, in a subagent, to build out an integration suite across many boundaries
@@ -9,8 +9,8 @@ description: >-
   integration coverage". Covers real component interactions (actual DB connections, real HTTP calls
   to internal services, filesystem operations) with external third-party services still mocked. Not
   for one or two tests written inline (use ceh-python-service:write-pytest-service-tests), isolated
-  function/class tests (use python-unit-tester), or full end-to-end user journeys (use
-  python-system-tester).
+  function/class tests (use pytest-unit-tester), or full end-to-end user journeys (use
+  pytest-system-tester).
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:

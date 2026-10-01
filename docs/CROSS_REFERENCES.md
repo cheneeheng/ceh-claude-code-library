@@ -192,21 +192,6 @@ mutation path. In agent-skills `ceh-scaffolding:scaffold-python-service` restate
 the initial backend directory tree. Add it here as a copy when `ceh-scaffolding` migrates.
 `write-fastapi-endpoints` § Route handlers are thin states the first rule in its own words.
 
-## Test-suite audit findings report
-
-**Canonical:** `plugins/ceh-testing/skills/audit-test-suite/SKILL.md` — § Output
-
-| Copy                                               | Section                    | Diverges                                                                                                                                                                              |
-| -------------------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/ceh-testing/agents/test-suite-auditor.md` | § Output to parent session | caps the list at ~15 findings and adds the commands-run ledger, the zero-coverage list, and a "bugs found in source, reported not fixed" section, since the report has to stand alone |
-
-**Shared:** the worst-first `SEVERITY  file:line  what` format and the five example rows: an
-assertion-free test, an expectation computed with the code's own formula, surviving mutants at a
-boundary, an order-dependent failure under `--random-order`, and a slow unit test doing real I/O.
-`ceh-testing` deliberately shares no content with the three stack testing skills: those own runner,
-fixtures, and mocking, `ceh-testing` owns technique. A technique block appearing in a stack skill is
-the signal that this boundary has slipped.
-
 ---
 
 Entry shape:

@@ -25,9 +25,9 @@ hook.
 
 | Agent                       | When to use                                                 |
 | --------------------------- | ----------------------------------------------------------- |
-| `python-unit-tester`        | Write isolated unit tests for a function or class           |
-| `python-integration-tester` | Write tests for module boundaries and DB interactions       |
-| `python-system-tester`      | Write full E2E scenario tests (explicit request only, slow) |
+| `pytest-unit-tester`        | Write isolated unit tests for a function or class           |
+| `pytest-integration-tester` | Write tests for module boundaries and DB interactions       |
+| `pytest-system-tester`      | Write full E2E scenario tests (explicit request only, slow) |
 
 All three preload `ceh-python-service:write-pytest-service-tests` and `ceh-testing:design-test-cases`.
 

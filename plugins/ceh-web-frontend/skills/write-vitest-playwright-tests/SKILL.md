@@ -25,7 +25,7 @@ license: Apache-2.0
 
 Frameworks: **Vitest** (unit + component), **@testing-library/svelte**, **MSW** (API mocking), **Playwright** (E2E)
 
-> The examples below use Vitest APIs. If the project already uses Jest or Mocha instead, adapt the equivalent calls and match the runner in the repo — the `ceh-web-frontend:ts-unit-tester` agent detects which one applies.
+> The examples below use Vitest APIs. If the project already uses Jest or Mocha instead, adapt the equivalent calls and match the runner in the repo — the `ceh-web-frontend:vitest-unit-tester` agent detects which one applies.
 
 | Folder             | Contents                                           |
 | ------------------ | -------------------------------------------------- |

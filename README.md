@@ -11,7 +11,7 @@
 | Core                  | `ceh-core`           | Standards that hold however Claude Code is used: usage-limit guard + handoff (`usage-limit-handoff`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards)                                                                                                                                                         |
 | Agent Coding Contract | `ceh-coding-agent`   | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); explaining code until it lands; whole-repo orientation (`explain-codebase`); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
 | Git Workflow          | `ceh-git-workflow`   | Branching, commits, pull requests from open to merge, changelog entries, releases including hotfixes, code review; a hook that blocks file edits on the default branch                                                                                                                                                                   |
-| Testing               | `ceh-testing`        | Stack-agnostic testing technique: reproduce-first bug fixes (`test-a-bug-fix`), test-case design, suite audit (`audit-test-suite`, `test-suite-auditor`), behavior-preservation checks, and the risk gaps a green suite misses                                                                                                           |
+| Testing               | `ceh-testing`        | Stack-agnostic testing technique: reproduce-first bug fixes (`test-a-bug-fix`), test-case design, suite audit (`audit-test-suite`), behavior-preservation checks, and the risk gaps a green suite misses                                                                                                                                 |
 | Python Service        | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL schema, Alembic, uv/ruff/mypy, pytest, observability, security, and domain modeling for web services; unit, integration, and system tester agents                                                                                                                                                           |
 | Python Library        | `ceh-python-library` | Packaging and publishing, public API surface and semver, uv/ruff/mypy, and pytest for distributable libraries with no web dependencies                                                                                                                                                                                                   |
 | Web Frontend          | `ceh-web-frontend`   | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, UI visual design and themes, Cytoscape.js graphs; unit, integration, and system tester agents                                                                                                                                 |
@@ -129,27 +129,21 @@
 | ----------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Bulk Reader | `/ceh-core:bulk-reader` | Read large or numerous files on Haiku and return a compressed, line-anchored answer to one question, keeping the file contents out of the caller's context |
 
-### Testing (`ceh-testing`)
-
-| Agent              | Invoke                                      | When                                                                                                                         |
-| ------------------ | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Test Suite Auditor | `@"ceh-testing:test-suite-auditor (agent)"` | A large or slow suite: run the mutation, flakiness, and isolation checks in a subagent and return a ranked, read-only report |
-
 ### Python Service (`ceh-python-service`)
 
 | Agent                     | Invoke                                                    | When                                                                     |
 | ------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
-| Python Unit Tester        | `@"ceh-python-service:python-unit-tester (agent)"`        | Isolated, mocked unit tests for a function, class, or module             |
-| Python Integration Tester | `@"ceh-python-service:python-integration-tester (agent)"` | Tests for module boundaries and real-database interactions               |
-| Python System Tester      | `@"ceh-python-service:python-system-tester (agent)"`      | Full end-to-end scenarios against the real stack (explicit request only) |
+| Pytest Unit Tester        | `@"ceh-python-service:pytest-unit-tester (agent)"`        | Isolated, mocked unit tests for a function, class, or module             |
+| Pytest Integration Tester | `@"ceh-python-service:pytest-integration-tester (agent)"` | Tests for module boundaries and real-database interactions               |
+| Pytest System Tester      | `@"ceh-python-service:pytest-system-tester (agent)"`      | Full end-to-end scenarios against the real stack (explicit request only) |
 
 ### Web Frontend (`ceh-web-frontend`)
 
-| Agent                 | Invoke                                              | When                                                       |
-| --------------------- | --------------------------------------------------- | ---------------------------------------------------------- |
-| TS Unit Tester        | `@"ceh-web-frontend:ts-unit-tester (agent)"`        | Isolated unit tests for TypeScript functions or modules    |
-| TS Integration Tester | `@"ceh-web-frontend:ts-integration-tester (agent)"` | Components wired with real stores and MSW network handlers |
-| TS System Tester      | `@"ceh-web-frontend:ts-system-tester (agent)"`      | Playwright E2E or smoke tests against a running stack      |
+| Agent                     | Invoke                                                  | When                                                       |
+| ------------------------- | ------------------------------------------------------- | ---------------------------------------------------------- |
+| Vitest Unit Tester        | `@"ceh-web-frontend:vitest-unit-tester (agent)"`        | Isolated unit tests for TypeScript functions or modules    |
+| Vitest Integration Tester | `@"ceh-web-frontend:vitest-integration-tester (agent)"` | Components wired with real stores and MSW network handlers |
+| Playwright System Tester  | `@"ceh-web-frontend:playwright-system-tester (agent)"`  | Playwright E2E or smoke tests against a running stack      |
 
 ---
 

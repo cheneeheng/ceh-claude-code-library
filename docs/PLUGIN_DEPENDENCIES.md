@@ -17,11 +17,11 @@ plugins. The cross-cutting rule holds: `ceh-testing` is cross-cutting and depend
 
 ## Edge evidence
 
-| From                                   | To        | Forcing reference                                                                                                                                             |
-| -------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ceh-python-service` ──► `ceh-testing` | every run | `skills:` preload of `ceh-testing:design-test-cases` in `python-{unit,integration,system}-tester`, and an explicit invocation in `write-pytest-service-tests` |
-| `ceh-python-library` ──► `ceh-testing` | every run | Explicit invocation of `ceh-testing:design-test-cases` in `write-pytest-library-tests`                                                                        |
-| `ceh-web-frontend` ──► `ceh-testing`   | every run | `skills:` preload of `ceh-testing:design-test-cases` in `ts-{unit,integration,system}-tester`, and an explicit invocation in `write-vitest-playwright-tests`  |
+| From                                   | To        | Forcing reference                                                                                                                                                                        |
+| -------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ceh-python-service` ──► `ceh-testing` | every run | `skills:` preload of `ceh-testing:design-test-cases` in `pytest-{unit,integration,system}-tester`, and an explicit invocation in `write-pytest-service-tests`                            |
+| `ceh-python-library` ──► `ceh-testing` | every run | Explicit invocation of `ceh-testing:design-test-cases` in `write-pytest-library-tests`                                                                                                   |
+| `ceh-web-frontend` ──► `ceh-testing`   | every run | `skills:` preload of `ceh-testing:design-test-cases` in `vitest-{unit,integration}-tester` and `playwright-system-tester`, and an explicit invocation in `write-vitest-playwright-tests` |
 
 ## What each scenario installs
 

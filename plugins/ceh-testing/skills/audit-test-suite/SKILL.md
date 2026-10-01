@@ -110,8 +110,13 @@ survivors is the deliverable.
 If the tool is not installed, do not install it unprompted: report the one-line command
 (`uv add --dev mutmut`, `bun add -d @stryker-mutator/core`) and continue with the other checks.
 
-For a large or slow suite, delegate the run to the `ceh-testing:test-suite-auditor` agent — it is long-running
-and high-output, which is exactly what a background subagent is for.
+Cap the run, for example `timeout 900 mutmut run ...`. Run it last so a timeout still leaves the
+cheap findings intact, and if it does not finish, report partial results and say the run was
+truncated.
+
+For a large or slow suite, delegate the whole audit to a background subagent with this skill loaded
+and tell it to use report-only mode (below) — the run is long and high-output, which is exactly what
+a background subagent is for.
 
 ## 4. Flakiness and order dependence
 
@@ -173,6 +178,20 @@ HIGH      src/discount.py               3 surviving mutants (boundary `>=` → `
 MEDIUM    tests/integration/test_orders.py  fails under --random-order (shared session fixture)
 LOW       tests/unit/test_parse.py:12   1.4s in tests/unit — real filesystem I/O
 ```
+
+### Report-only mode
+
+Use it when the audit is delegated to a subagent, or the user asks for findings without fixes. A
+subagent cannot ask the parent anything, so the report has to stand alone.
+
+- Skip check 2 (it breaks source on purpose), never edit any file, and never install a package or
+  change a lockfile or CI config.
+- Cap the list at about 15 findings and cut the tail rather than listing everything.
+- After the list, add: the commands run and their verdicts, including checks skipped and why (tool
+  missing, timed out, not run); the zero-coverage files the diff touches; the 2–3 fixes worth making
+  first, as concrete suggestions; and any bug found in source, reported and never fixed.
+- Confirm the suite is green first. If it is already failing, stop and report that: an audit of a
+  red suite is meaningless.
 
 ## Rules
 
