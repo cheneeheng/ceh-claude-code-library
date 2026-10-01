@@ -37,7 +37,9 @@ Body
   re-read the file on later turns.
 - Imperative voice, concise. Give a reason only where a rule looks arbitrary without one.
 - Keep content inline. Use references/ only for a schema or template shared by several skills, or
-  a standard too large to inline. Reference bundled files as ${CLAUDE_SKILL_DIR}/<path>.
+  a standard too large to inline. A file used by one skill lives in its references/ and is
+  cited as ${CLAUDE_SKILL_DIR}/<path>. A file shared by skills of the same plugin lives once in
+  the plugin's references/ and is cited as ${CLAUDE_PLUGIN_ROOT}/references/<file>.
 - Keep SKILL.md under 500 lines.
 -->
 

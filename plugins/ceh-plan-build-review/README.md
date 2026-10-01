@@ -47,12 +47,13 @@ Do not set `"defaultMode": "plan"` in a repo where these skills are the main wor
 
 ## Shared reference files
 
-The plan document schema is defined in `references/plan-schema.md`, shipped word-for-word in
-`implement-from-plan`, `review-against-plan`, and `patch-built-version`. The two planning skills
-each carry a `references/section-specs.md` describing the same artifact format from the producer
-side, and inline the same pre-delivery audit checklist and implementation gotchas.
+Two files live once in `references/` at the plugin root and are read through
+`${CLAUDE_PLUGIN_ROOT}`:
 
-> **Intentional duplication.** The skills are also used standalone in other tools outside this
-> plugin, so each skill folder carries its own copy of the shared material instead of pointing at a
-> common file. The copies are registered in the repo's `docs/CROSS_REFERENCES.md` and must be kept
-> in sync.
+- `plan-schema.md`, the plan document schema, read by `implement-from-plan`,
+  `review-against-plan`, and `patch-built-version`.
+- `implementation-gotchas.md`, the technical traps to address while writing §04, §05, and §06,
+  read by both planning skills.
+
+The two planning skills each carry a `references/section-specs.md` describing the same artifact
+format from the producer side, and inline the pre-delivery audit checklist.

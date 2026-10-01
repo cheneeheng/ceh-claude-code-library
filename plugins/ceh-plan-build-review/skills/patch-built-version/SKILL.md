@@ -21,7 +21,7 @@ Make a small change to a version that is already implemented, without inventing 
 worth of scope and without letting the plan artifacts drift from the code. Done means a patch
 `ITER_NN.md` exists, only its `sections_changed` are implemented, and the release is handed off.
 
-Read `${CLAUDE_SKILL_DIR}/references/plan-schema.md` for the full schema before starting. File
+Read `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md` for the full schema before starting. File
 naming, version families, `depends_on` resolution, and the `patch` marker rules there are
 authoritative.
 

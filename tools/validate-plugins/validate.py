@@ -17,7 +17,7 @@ Checks:
                TEMPLATE-GUIDANCE comment left over from a template.
   scalars    - `description` uses the folded block scalar `>-`; no other frontmatter key is a
                plain scalar containing ': ' (which strict YAML rejects).
-  references - `references/...`, `${CLAUDE_PLUGIN_ROOT}/scripts/...` and `${CLAUDE_SKILL_DIR}/...`
+  references - `references/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references}/...` and `${CLAUDE_SKILL_DIR}/...`
                mentions in SKILL.md/agent files resolve to a real file.
   skill-refs - `plugin:component` references resolve to a real skill or agent.
   deps       - every `dependencies` entry names a plugin in this repo, the graph is acyclic,
@@ -317,7 +317,9 @@ def check_references() -> None:
     # Anchor on a top-level `references/` token (not preceded by another path
     # segment) so example paths like `docs/references/...` are not matched.
     ref_pat = re.compile(r"(?<![\w./-])references/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+")
-    script_pat = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}/(scripts/[A-Za-z0-9_./-]+)")
+    script_pat = re.compile(
+        r"\$\{CLAUDE_PLUGIN_ROOT\}/((?:scripts|references)/[A-Za-z0-9_./-]+)"
+    )
     # ${CLAUDE_SKILL_DIR} is substituted by Claude Code with the skill's own directory,
     # so these resolve relative to the SKILL.md, not the plugin root.
     skill_dir_pat = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/([A-Za-z0-9_./-]+)")
@@ -334,7 +336,7 @@ def check_references() -> None:
                 fail(where, f"reference '{rec}' not found")
         for rec in dict.fromkeys(script_pat.findall(text)):
             if not (plugin_root / rec).exists():
-                fail(where, f"script reference '{rec}' not found")
+                fail(where, f"plugin-root reference '{rec}' not found")
         for rec in dict.fromkeys(skill_dir_pat.findall(text)):
             if not (base_dir / rec).resolve().exists():
                 fail(where, f"skill-dir reference '{rec}' not found")

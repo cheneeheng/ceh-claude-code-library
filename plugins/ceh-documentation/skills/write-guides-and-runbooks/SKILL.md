@@ -60,7 +60,7 @@ Most guides combine a getting-started front and a how-to body.
 
 ### 3. Structure the pages
 
-Read `${CLAUDE_SKILL_DIR}/references/docs-standard.md` ("the standard" below) before writing. It
+Read `${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` ("the standard" below) before writing. It
 fixes the layout, file naming, page anatomy (H1, breadcrumb, summary, footer), Markdown rules, link
 rules, markers, and the report format. Everything below is what is specific to guides.
 
@@ -201,7 +201,7 @@ Step standards:
 - [ ] Destructive ops state blast radius and recovery.
 - [ ] Spine is tasks, not a feature dump.
 - [ ] Terminology is consistent throughout.
-- [ ] Every page passes `${CLAUDE_SKILL_DIR}/references/docs-standard.md`: file names and prefixes
+- [ ] Every page passes `${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md`: file names and prefixes
       (§3), H1 + breadcrumb + summary + footer (§4), Markdown rules (§5), every link and anchor
       resolves (§6), markers verbatim (§7).
 - [ ] Each section's `index.md` lists every page of that section, grouped, in reading order.
@@ -225,5 +225,5 @@ Step standards:
 ## Output
 
 Files under `<root>/docs/guide/` and `<root>/docs/operations/` in the layout of step 3. End the
-reply with the report of `${CLAUDE_SKILL_DIR}/references/docs-standard.md` §10. When
+reply with the report of `${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` §10. When
 `write-project-docs` called this skill, return only the rows and open items for it to merge.

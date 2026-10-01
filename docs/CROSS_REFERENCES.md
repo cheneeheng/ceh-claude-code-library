@@ -228,9 +228,7 @@ the initial backend directory tree. Add it here as a copy when `ceh-scaffolding`
 | Copy                                                                                              | Section                                                   | Diverges                                                                                                    |
 | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | § File Naming and Version Variants + § Output Frontmatter | producer copy that emits one artifact per session, so it does not describe the terminator block             |
-| `plugins/ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md`              | entire file                                               | consumer copy: adds pointer rules, resolution order, the absent-terminator fallback, and the `patch` marker |
-| `plugins/ceh-plan-build-review/skills/review-against-plan/references/plan-schema.md`              | entire file                                               | none against the `implement-from-plan` copy                                                                 |
-| `plugins/ceh-plan-build-review/skills/patch-built-version/references/plan-schema.md`              | entire file                                               | none against the `implement-from-plan` copy                                                                 |
+| `plugins/ceh-plan-build-review/references/plan-schema.md`                                         | entire file                                               | consumer copy: adds pointer rules, resolution order, the absent-terminator fallback, and the `patch` marker |
 | `plugins/ceh-plan-build-review/skills/patch-built-version/SKILL.md`                               | § Procedure, 3. Write the patch ITER                      | the patch ITER frontmatter block only                                                                       |
 
 **Shared:** file naming and version-tag rules (`SKELETON.md` / `ITER_NN.md`, `NN` two digits,
@@ -240,60 +238,41 @@ per-family `NN` counter); SKELETON frontmatter (`artifact`, `status`, `created`,
 `scope`, `sections_changed`, `sections_unchanged`, `depends_on` by stem, backward-only); the MVP
 terminator convention (`mvp: true` + `mvp_target` + `## Out of MVP scope` on the final iteration
 only); and the patch convention (`patch: true` ITER continuing the family counter, allowed past the
-terminator, never carrying `mvp`, `sections_changed` within §04/§05). The three `plan-schema.md`
-files are word-for-word identical: verify with
-`md5sum plugins/ceh-plan-build-review/skills/*/references/plan-schema.md`. The duplication is
-intentional, because the skills are also used standalone outside the plugin. In agent-skills
-`ceh-business-plan:develop-business-plan` carries a fourth `plan-schema.md`. Add it here as a copy
-when `ceh-business-plan` migrates.
+terminator, never carrying `mvp`, `sections_changed` within §04/§05). `plan-schema.md` lives once
+at the plugin root and `implement-from-plan`, `review-against-plan` and `patch-built-version` all
+read it through `${CLAUDE_PLUGIN_ROOT}`. In agent-skills `ceh-business-plan:develop-business-plan`
+carries a separate `plan-schema.md`. Add it here as a copy when `ceh-business-plan` migrates.
 
 ## §02 Architecture diagram requirement (Mermaid, iterations visualize the change)
 
 **Canonical:** `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` — § §02 · Architecture
 
-| Copy                                                                                              | Section                                            | Diverges                                                                 |
-| ------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------ |
-| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | § §02 · Architecture                               | none                                                                     |
-| `plugins/ceh-plan-build-review/skills/implement-from-plan/references/plan-schema.md`              | § Sections, §02 row                                | condensed table-cell form, identical in all three `plan-schema.md` files |
-| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/SKILL.md`                         | § Pre-delivery audit checklist, Architecture (§02) | one checklist bullet                                                     |
-| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/SKILL.md`                    | § Pre-delivery audit checklist, Architecture (§02) | the same checklist bullet                                                |
-| `plugins/ceh-plan-build-review/skills/review-against-plan/SKILL.md`                               | § Procedure, 2. Audit section by section, §02 row  | post-implementation review check                                         |
+| Copy                                                                                              | Section                                            | Diverges                         |
+| ------------------------------------------------------------------------------------------------- | -------------------------------------------------- | -------------------------------- |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | § §02 · Architecture                               | none                             |
+| `plugins/ceh-plan-build-review/references/plan-schema.md`                                         | § Sections, §02 row                                | condensed table-cell form        |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/SKILL.md`                         | § Pre-delivery audit checklist, Architecture (§02) | one checklist bullet             |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/SKILL.md`                    | § Pre-delivery audit checklist, Architecture (§02) | the same checklist bullet        |
+| `plugins/ceh-plan-build-review/skills/review-against-plan/SKILL.md`                               | § Procedure, 2. Audit section by section, §02 row  | post-implementation review check |
 
 **Shared:** the component diagram is Mermaid, not ASCII art. At skeleton level it shows what exists
 and how the pieces connect. At iteration level it also visualizes what changed, with new or
 modified pieces marked distinctly.
 
-## Planner audit checklist and implementation gotchas
+## Planner audit checklist
 
-**Canonical:** `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/SKILL.md` — § Pre-delivery audit checklist + § Implementation gotchas
+**Canonical:** `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/SKILL.md` — § Pre-delivery audit checklist
 
-| Copy                                                                           | Section                                                   | Diverges                                                                                                                            |
-| ------------------------------------------------------------------------------ | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/SKILL.md` | § Pre-delivery audit checklist + § Implementation gotchas | one checklist bullet: the "(Version family)" check drops the `mvp: true` clause, because a one-artifact session emits no terminator |
+| Copy                                                                           | Section                        | Diverges                                                                                                                            |
+| ------------------------------------------------------------------------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/SKILL.md` | § Pre-delivery audit checklist | one checklist bullet: the "(Version family)" check drops the `mvp: true` clause, because a one-artifact session emits no terminator |
 
-**Shared:** both sections word for word apart from that bullet: the seven checklist groups (Scope,
-Architecture, Tech Stack, Backend, Frontend, LLM, Completeness scan) and the sixteen gotchas under
-Backend, Frontend, Auth and sessions, and LLM integration. The two planners also carry a
+**Shared:** the section word for word apart from that bullet: the seven checklist groups (Scope,
+Architecture, Tech Stack, Backend, Frontend, LLM, Completeness scan). The sixteen implementation
+gotchas are not duplicated: they live once in `references/implementation-gotchas.md` at the plugin
+root and both planners read them through `${CLAUDE_PLUGIN_ROOT}`. The two planners also carry a
 "Plan families and versions" section that states the same rules in different words. A change to
 the family or `depends_on` rules goes to both, and to the plan document schema above.
-
-## Documentation standard (`references/docs-standard.md`)
-
-**Canonical:** `plugins/ceh-documentation/skills/write-project-docs/references/docs-standard.md` — entire file
-
-| Copy                                                                                     | Section     | Diverges |
-| ---------------------------------------------------------------------------------------- | ----------- | -------- |
-| `plugins/ceh-documentation/skills/write-guides-and-runbooks/references/docs-standard.md` | entire file | none     |
-| `plugins/ceh-documentation/skills/write-api-reference/references/docs-standard.md`       | entire file | none     |
-| `plugins/ceh-documentation/skills/write-concept-docs/references/docs-standard.md`        | entire file | none     |
-
-**Shared:** the whole file: docs layout, page modes, file naming and the fixed prefix table, page
-anatomy (H1, breadcrumb, summary, footer, hubs), Markdown and link rules, marker literals, voice,
-frontmatter, and the report shape. Each skill ships its own copy so it works when loaded alone.
-`write-examples` does not use it. The skills cite the file by section number (`§3`, `§4`, `§10`),
-so renumbering a section means grepping `standard §` and `docs-standard.md` across the four
-`SKILL.md` files. Verify identity with
-`md5sum plugins/ceh-documentation/skills/*/references/docs-standard.md`.
 
 ---
 

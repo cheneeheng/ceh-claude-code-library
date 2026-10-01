@@ -29,7 +29,7 @@ re-explained on each.
 
 Work against `<root>`: the project path handed over by the caller, or the current working
 directory. Write under `<root>/docs/concepts/`. Read
-`${CLAUDE_SKILL_DIR}/references/docs-standard.md` ("the standard" below) before writing: it fixes
+`${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` ("the standard" below) before writing: it fixes
 the file naming, page anatomy, Markdown and link rules, markers, and report format that every page
 here follows.
 
@@ -124,7 +124,7 @@ docs/concepts/
 - [ ] Every "Why it works this way" section cites a source, or carries `[VERIFY: …]`.
 - [ ] No rationale reads as fact without a source; inferred reasons say "inferred from the code".
 - [ ] No procedures; exact values linked to the reference, not restated.
-- [ ] Every page passes `${CLAUDE_SKILL_DIR}/references/docs-standard.md` §3–§7: naming, anatomy,
+- [ ] Every page passes `${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` §3–§7: naming, anatomy,
       Markdown, links, markers.
 
 ## Rules
@@ -144,6 +144,6 @@ docs/concepts/
 ## Output
 
 Pages under `<root>/docs/concepts/`. End the reply with the report of
-`${CLAUDE_SKILL_DIR}/references/docs-standard.md` §10. When `write-project-docs` called this skill,
+`${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` §10. When `write-project-docs` called this skill,
 return only the rows and open items for it to merge. Append each concept page's "Why" source to its
 Status (`written — why: ADR 0001`, `written — why: none found`).

@@ -22,7 +22,7 @@ Translate a SKELETON.md or ITER_NN.md into working code, section by section, wit
 scope beyond what is written. Done means every in-scope section is implemented and the completion
 summary is reported.
 
-Read `${CLAUDE_SKILL_DIR}/references/plan-schema.md` for the full schema before starting. The
+Read `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md` for the full schema before starting. The
 section table, pointer rules, and resolution order there are authoritative.
 
 ## Procedure
@@ -33,7 +33,7 @@ section table, pointer rules, and resolution order there are authoritative.
    files (`.md`) under `.agents_workspace/planning/` (where the planning skills write them) or any
    subfolder within it. Filenames may carry a version tag as a prefix or suffix, e.g.
    `SKELETON_v2.md`, `v2_ITER_03.md`. See "File Naming and Version Variants" in
-   `${CLAUDE_SKILL_DIR}/references/plan-schema.md` for the matching rules.
+   `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md` for the matching rules.
 2. Group the discovered files by version tag into plan families (untagged files are the default
    family). If more than one family exists, confirm with the user which version is the target.
    Within a version, the iteration whose frontmatter has `mvp: true` is the sequence terminator:

@@ -32,7 +32,7 @@ as short as possible, the reference as complete as possible, the concepts as dee
 
 This skill owns the target, the survey, the page plan, the front pages, and the final link pass.
 Every other page type is delegated to the skill that owns it. Every page, whoever writes it,
-follows `${CLAUDE_SKILL_DIR}/references/docs-standard.md` ("the standard" below). Read it before
+follows `${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` ("the standard" below). Read it before
 step 3. Each delegated skill ships the same file.
 
 ## Procedure
@@ -242,7 +242,7 @@ which fits a docs-only change. The README stays the storefront, the docs are the
 
 ## Output
 
-End with the report of `${CLAUDE_SKILL_DIR}/references/docs-standard.md` §10, covering every page
+End with the report of `${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` §10, covering every page
 in the set, the delegated skills' rows merged in: one report for the whole run. Put three lines
 above the table: pages written / updated / cut, the reference coverage line in the form of standard
 §10, and a generator recommendation when no reference generator is wired into the docs build.

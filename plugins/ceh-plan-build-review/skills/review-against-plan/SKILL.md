@@ -22,7 +22,7 @@ Audit the codebase against a SKELETON.md or ITER_NN.md: find gaps, deviations, a
 what the plan specifies and what is implemented, then fix them. Done means every in-scope section
 is audited and the compliance report is delivered.
 
-Read `${CLAUDE_SKILL_DIR}/references/plan-schema.md` before starting. It defines the planning
+Read `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md` before starting. It defines the planning
 document schema, and its section table and pointer resolution rules are authoritative.
 
 ## Procedure
@@ -33,7 +33,7 @@ document schema, and its section table and pointer resolution rules are authorit
    files (`.md`) under `.agents_workspace/planning/` (where the planning skills write them) or any
    subfolder within it. Filenames may carry a version tag as a prefix or suffix, e.g.
    `SKELETON_v2.md`, `v2_ITER_03.md`. See "File Naming and Version Variants" in
-   `${CLAUDE_SKILL_DIR}/references/plan-schema.md` for the matching rules.
+   `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md` for the matching rules.
 2. Group the discovered files by version tag into plan families (untagged files are the default
    family). If more than one family exists, confirm with the user which version to review. The
    iteration with `mvp: true` is that version's terminator. Read each target artifact's

@@ -28,7 +28,7 @@ entry that teaches crowds out the lookup.
 
 Work against `<root>`: the project path handed over by the caller, or the current working
 directory. Write under `<root>/docs/reference/`. Read
-`${CLAUDE_SKILL_DIR}/references/docs-standard.md` ("the standard" below) before writing: it fixes
+`${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` ("the standard" below) before writing: it fixes
 the page anatomy, Markdown and link rules, markers (`_Added in <version>._`, the deprecation
 blockquote, `[VERIFY: …]`), and report format used here.
 
@@ -193,7 +193,7 @@ version as its heading does. With neither tags nor a changelog, omit the markers
 - [ ] Entries sorted alphabetically within kind groups.
 - [ ] No rationale inlined: it lives behind a "Why" link.
 - [ ] Every error a user can hit has an `errors.md` entry.
-- [ ] Every page passes `${CLAUDE_SKILL_DIR}/references/docs-standard.md` §4–§7: anatomy,
+- [ ] Every page passes `${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` §4–§7: anatomy,
       Markdown, links, markers.
 
 ## Rules
@@ -206,7 +206,7 @@ version as its heading does. With neither tags nor a changelog, omit the markers
 ## Output
 
 Pages under `<root>/docs/reference/`. End the reply with the report of
-`${CLAUDE_SKILL_DIR}/references/docs-standard.md` §10. When `write-project-docs` called this skill,
+`${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` §10. When `write-project-docs` called this skill,
 return only the rows, open items, and coverage line for it to merge. Put the coverage line above
 the table in the form of standard §10, and the generator recommendation when no reference generator
 is wired into the docs build. Open items include every undocumented surface item.

@@ -115,7 +115,7 @@ Expected contents for each section, at both skeleton and iteration level.
 
 - New modules or files added
 - Implementation detail for the endpoints/services introduced in this iteration
-- Apply the "Implementation gotchas" section of `SKILL.md` before writing this section
+- Apply `${CLAUDE_PLUGIN_ROOT}/references/implementation-gotchas.md` before writing this section
 
 ---
 
@@ -132,7 +132,7 @@ Expected contents for each section, at both skeleton and iteration level.
 
 - New screens or components introduced
 - State changes, new API calls wired up
-- Apply the "Implementation gotchas" section of `SKILL.md` before writing this section
+- Apply `${CLAUDE_PLUGIN_ROOT}/references/implementation-gotchas.md` before writing this section
 
 ---
 
