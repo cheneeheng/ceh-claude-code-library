@@ -15,7 +15,7 @@ argument-hint: "[plan-or-idea]"
 
 Produce a **validated business plan** — one whose product-market fit has been pressure-tested,
 not asserted. The deliverable is a single living `BUSINESS_PLAN.md` (schema and PMF gate in
-`references/business-plan-schema.md`), revised in place across an interview loop until it passes
+`${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`), revised in place across an interview loop until it passes
 the 8-point PMF readiness gate and the user confirms.
 
 The reason this skill exists: a business plan written in one pass is a wish list. Real
@@ -169,6 +169,12 @@ satisfied:
 - Point onward: if the validation surfaced product changes, the app plan
   (`ceh-plan-build-review`) should absorb them; the §13 milestones become the build/validation
   backlog.
+- Name the specialist skill for the plan's softest remaining area. The gate proves a fit exists,
+  not that the business is sound: `ceh-business-plan:sharpen-strategy` for the edge,
+  `ceh-business-plan:stress-test-unit-economics` for the numbers,
+  `ceh-business-plan:plan-go-to-market` for the first customers, `ceh-business-plan:run-premortem`
+  before any hard-to-undo commitment, `ceh-business-plan:set-operating-plan` for the next 90 days,
+  and `ceh-business-plan:review-business-plan` for an outside verdict on the whole.
 
 **Do not flip to validated to end the loop early.** If the user wants to stop before the gate
 passes, leave `status: draft`, record the open criteria honestly, and say plainly which
