@@ -9,7 +9,7 @@ description: >-
   README accurate after code changes (the ceh-readme plugin owns that) and not for HTML page markup
   (use ceh-seo:make-page-crawlable).
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 license: Apache-2.0
 ---
 

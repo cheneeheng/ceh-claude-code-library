@@ -9,7 +9,7 @@ description: >-
   ceh-seo:make-page-crawlable) and not for README or package-listing text (use
   ceh-seo:pitch-project).
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 license: Apache-2.0
 ---
 

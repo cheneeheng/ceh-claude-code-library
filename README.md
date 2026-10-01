@@ -66,11 +66,11 @@
 
 ### SEO (`ceh-seo`)
 
-| Skill               | Invoke                         | When                                                                                                                                          |
-| ------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Make Page Crawlable | `/ceh-seo:make-page-crawlable` | Shipping or creating a public web page: per-page head checklist, sitemap and robots, JSON-LD, content in the initial HTML, GEO citation rules |
-| Write llms.txt      | `/ceh-seo:write-llms-txt`      | Creating or updating the `llms.txt` reading list for AI agents: positional format, link curation, `## Optional`, markdown over HTML           |
-| Pitch Project       | `/ceh-seo:pitch-project`       | Writing the README first screen, package description and keywords, GitHub topics, marketplace listings, or landing copy                       |
+| Skill               | Invoke                       | When                                                                                                                                          |
+| ------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Make Page Crawlable | Model-only, no slash command | Shipping or creating a public web page: per-page head checklist, sitemap and robots, JSON-LD, content in the initial HTML, GEO citation rules |
+| Write llms.txt      | Model-only, no slash command | Creating or updating the `llms.txt` reading list for AI agents: positional format, link curation, `## Optional`, markdown over HTML           |
+| Pitch Project       | Model-only, no slash command | Writing the README first screen, package description and keywords, GitHub topics, marketplace listings, or landing copy                       |
 
 ### Blog (`ceh-blog`)
 
