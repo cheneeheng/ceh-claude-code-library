@@ -18,12 +18,12 @@ they live:
 
 Plugins fall into four tiers:
 
-| Tier                  | Loaded            | Plugins                                                                                    |
-| --------------------- | ----------------- | ------------------------------------------------------------------------------------------ |
-| **Scenario bundle**   | one per situation | —                                                                                          |
-| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                          |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit` |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                |
+| Tier                  | Loaded            | Plugins                                                                                                                                                      |
+| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Scenario bundle**   | one per situation | —                                                                                                                                                            |
+| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                                                                                            |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder` |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                  |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
@@ -95,6 +95,9 @@ tools/
 | `ceh-documentation`     | User-facing docs in one fixed format (`docs-standard.md`): full docs set, guides and runbooks, API reference, concept pages, runnable examples                                                                                                                                            |
 | `ceh-ag-ui`             | Generative-UI canvases for AG-UI agents: a fixed, themed component catalogue the agent places but cannot restyle, a Claude-backed FastAPI server, shared state, human approval. Depends on `ceh-web-frontend` for the `design-ui` theme                                                   |
 | `ceh-usability-audit`   | Whether a non-expert can use the thing: cold persona walkthroughs of first-run and of an entered interface, the three-part error-message rule, a plain-language pass, and the `novice-walker` agent. Owns _comprehension_ only — WCAG stays in `ceh-web-frontend:make-ui-accessible`      |
+| `ceh-business-plan`     | A validated business plan: a product-market-fit interview loop that drafts from any plan or pitch, interrogates the weakest assumption, and revises until a readiness gate passes                                                                                                         |
+| `ceh-git-datastore`     | A git-backed datastore in place of a database while that still fits: the fit gate, a plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite                                                                                                                         |
+| `ceh-workflow-builder`  | Turning a repetitive task into a runnable artifact: interview it into a spec, then emit one skill or a gated workflow skill with handoff schemas                                                                                                                                          |
 
 A concept-map skill for markdown-only knowledge bases would be a separate sibling of
 `document-architecture`, not part of it.

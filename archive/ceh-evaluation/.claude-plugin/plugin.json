@@ -1,0 +1,18 @@
+{
+  "name": "ceh-evaluation",
+  "version": "1.1.8",
+  "description": "CEH evaluation: evaluate a Claude Code skill or plugin you just wrote against derived, evidence-based criteria — structural integrity, triggering accuracy, content quality, and behavioral lift — then loop fix/re-run until a readiness gate passes. Includes a lite dev-loop variant that skips behavioral lift for a cheap sanity check. Self-contained; treats skill-creator and plugin-dev as optional cross-checks, not authorities.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/agent-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent",
+    "evaluation",
+    "skill",
+    "plugin",
+    "quality-gate",
+    "triggering",
+    "simulation",
+    "rubric"
+  ]
+}

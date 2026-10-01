@@ -1,0 +1,18 @@
+{
+  "name": "ceh-git-datastore",
+  "version": "1.0.1",
+  "description": "CEH git-backed datastore: run an app on a bare git repo instead of a database while that still fits — a gate that talks you out of it when it does not, a working plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite when a trigger fires.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/ceh-claude-code-library",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent",
+    "datastore",
+    "git",
+    "database",
+    "migration",
+    "postgres",
+    "sqlite",
+    "prototype"
+  ]
+}

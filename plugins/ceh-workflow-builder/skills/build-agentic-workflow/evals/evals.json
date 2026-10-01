@@ -1,0 +1,125 @@
+{
+  "skill_name": "build-agentic-workflow",
+  "evals": [
+    {
+      "id": 1,
+      "name": "single-skill-not-workflow",
+      "prompt": "the spec for the ticket survey thing is in .agents_workspace/. build it, call it whatever fits, no need to run the name or file list past me",
+      "expected_output": "One SKILL.md under .claude/skills/, named as a kebab verb phrase from the moment, with a world-check and a confirmation pause on the send step. No flow skill, no step skills, no schemas, no run directory.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            ".gitignore": "node_modules/\n.env\n*.pyc\n",
+            "README.md": "# Support desk\n\nTicket notes live under `support/tickets/`, one Markdown file per ticket. Templates for the mail we\nsend customers live under `support/templates/`.\n",
+            ".agents_workspace/ticket-survey-workflow-spec.md": "# ticket-survey workflow spec\n\n## 1. Moment\nRight after I mark a support ticket resolved in the tracker.\n\n## 2. Manual procedure\n1. Open `support/tickets/<id>.md` and read the `## Resolution` section.\n2. Fill the template at `support/templates/survey.md` with the customer's first name and a one-line\n   summary of the resolution.\n3. Send the filled draft on stdin to `mailer-cli send --to <customer> --subject \"How did we do?\"`, then\n   append `survey-sent: <ISO timestamp>` to the ticket file.\n\n## 3. Preconditions and proof\n1. Precondition: `support/tickets/<id>.md` exists. Proof: it has a `## Resolution` heading with at\n   least one line under it.\n2. Precondition: `support/templates/survey.md` exists. Proof: the filled draft has no `{{`\n   placeholders left in it.\n3. Precondition: the ticket file carries no `survey-sent:` line yet. Proof: `mailer-cli` exits 0 and\n   the ticket file now carries a `survey-sent:` line.\n\n## 4. Data flow\nA run starts from the ticket id, passed at invocation. Step 1 reads the ticket file. Step 2 holds the\nfilled draft in the session and writes nothing to disk. Step 3 uses that draft directly and appends\none line to the ticket file. No step leaves an artifact behind for a later step to read.\n\n## 5. Tooling\n`mailer-cli` 3.0 or newer, which reads its credential from the `MAILER_TOKEN` environment variable,\nand network access to the mail provider. No database, no other service.\n\n## 6. Done\nThe ticket file carries a `survey-sent:` line and the customer has the mail.\n\n## 7. Interruption\nOne sitting. It takes about two minutes.\n\n## 8. Unsafe to re-run\nStep 3. Sending the survey a second time mails the customer twice, which is the complaint that got me\ndoing this by hand in the first place.\n\n## 9. Irreversible steps\nStep 3. Once the mail is out it cannot be recalled.\n",
+            "support/tickets/T-4417.md": "# T-4417 - export CSV is empty for accounts with no orders\n\nReporter: Dana Okafor <dana@westbrookco.example>\n\n## Resolution\nThe export ran before the order index finished rebuilding. We now block the export until the index\nreports ready, and Dana re-ran hers successfully on 2026-09-14.\n",
+            "support/templates/survey.md": "Hi {{first_name}},\n\nYou recently had a ticket resolved: {{resolution_summary}}\n\nWould you tell us how we did? It is one question and takes ten seconds: https://survey.example.com/support\n\nThanks,\nSupport\n"
+          },
+          "commit": "chore(support): record the ticket survey spec"
+        }
+      ],
+      "expectations": [
+        "Exactly one skill directory is created under .claude/skills/ holding one SKILL.md: there is no `-flow` skill, no separate step skills, no references/ schema file and no scripts/ directory",
+        "The emitted skill carries no pipeline table, no data-contracts table and no run-directory paragraph, and .gitignore is unchanged: a three-step two-minute task that hands nothing between steps on disk meets no Phase 2 condition, so a flow plus step skills, schemas and a run directory here is the over-engineering this case tests",
+        "The skill name is a short kebab verb phrase a user would recognise from the moment (send-ticket-survey, send-survey), not a domain noun such as support-tickets, survey or mailer",
+        "The frontmatter description is a folded block scalar (`>-`) with a uniform 2-space indent and no blank line inside it, and it carries the trigger moment as a verb plus at least one negative-routing clause naming what the skill is not for",
+        "compatibility is present and names mailer-cli with its minimum version and what fails without it, because a step invokes a CLI the machine may lack",
+        "The send step, which spec question 8 names as unsafe to run twice, opens by checking the world: it reads the ticket file for an existing `survey-sent:` line before sending, rather than trusting a ledger or assuming a fresh run",
+        "The send step, which spec question 9 names as irreversible, pauses for explicit user confirmation immediately before the mail goes out, and that confirmation shows the recipient and the draft that will be sent",
+        "The skill ends with a falsifiable done condition taken from spec question 6 (the ticket file carries a `survey-sent:` line), not a soft one such as 'the survey has been sent successfully'",
+        "No emitted file contains a credential value: MAILER_TOKEN appears as an environment variable name only",
+        "The run names the derived skill name and the exact files it will create before creating them; a non-interactive session cannot collect agreement, so stating them or stopping to ask both pass, but writing an unannounced set of files does not"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "intake-gap-blocks-build",
+      "prompt": "spec's at .agents_workspace/payout-reconcile-workflow-spec.md, go ahead and build the workflow from it",
+      "expected_output": "No artifact emitted. The run names question 9 as unanswered and question 4's report as an artifact with no producing step, and refuses to read the empty heading as 'no irreversible steps' even though step 4 obviously qualifies.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            ".gitignore": "node_modules/\n.env\n*.pyc\n",
+            "README.md": "# Ledger\n\nWeekly payout reconciliation lives under `finance/`. The ledger itself is Postgres; nothing in this\nrepo talks to it directly yet.\n",
+            ".agents_workspace/payout-reconcile-workflow-spec.md": "# payout-reconcile workflow spec\n\n## 1. Moment\nFriday afternoon, once the week's payouts have settled and before I leave.\n\n## 2. Manual procedure\n1. Pull the week's payouts with `stripe payouts list --limit 100`.\n2. Match each payout against the `ledger_entries` rows in Postgres.\n3. Write every mismatch into `finance/mismatches-<week>.csv`.\n4. Attach the reconciliation report and send it to finance.\n\n## 3. Preconditions and proof\n1. Precondition: the Stripe CLI is authenticated. Proof: the command exits 0 and returns at least one\n   payout.\n2. Precondition: `DATABASE_URL` points at the read replica. Proof: every payout id resolves to zero or\n   one ledger row, never more.\n3. Precondition: step 2 finished. Proof: the CSV exists and its row count equals the number of\n   unmatched payouts step 2 counted.\n4. Precondition: the reconciliation report exists. Proof: the send command exits 0.\n\n## 4. Data flow\nStep 2 reads the payout list from step 1. Step 3 reads step 2's match results and writes\n`finance/mismatches-<week>.csv`. Step 4 reads the reconciliation report.\n\n## 5. Tooling\nStripe CLI, `psql`, and our mail relay. The Stripe key lives in `STRIPE_API_KEY`, the database URL in\n`DATABASE_URL`.\n\n## 6. Done\n`finance/mismatches-<week>.csv` exists for the week and finance has the report.\n\n## 7. Interruption\nOne sitting, maybe twenty minutes.\n\n## 8. Unsafe to re-run\nStep 4. Finance gets two reports and asks which one is real.\n\n## 9. Irreversible steps\n",
+            "finance/.gitkeep": ""
+          },
+          "commit": "chore(finance): record the payout reconcile spec"
+        }
+      ],
+      "expectations": [
+        "No file is created under .claude/skills/: the design phases never start, because two intake rows are gaps rather than answers",
+        "The run names question 9 as unanswered in those terms; it does not write 'none', 'no irreversible steps' or an equivalent under that heading",
+        "The run does not fill question 9 on its own authority even though step 4 sends mail and obviously qualifies: it either asks the user, or invokes the interview skill, or reports the build as blocked on that row. Supplying the obvious answer itself is the failure this case tests",
+        "The run names question 4's defect specifically: step 4 reads a reconciliation report that no earlier step produces, so the artifact has no producing step",
+        "Question 8's answer is left intact and is not re-asked: it is answered, neither declined nor missing",
+        "If the spec file is touched at all, it is amended under its existing headings: no heading is added, renamed, reordered or dropped, and the answered sections 1 through 8 keep their text. A new heading appended to hold the run's own build notes fails this",
+        "The run does not treat the two gaps as a reason to design a smaller workflow or a single skill instead: the output is a blocked build or a request for the missing answers, not a reduced artifact"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "declined-rows-conservative-fallback",
+      "prompt": "build the docs publish workflow from the spec in .agents_workspace/",
+      "expected_output": "Questions 8 and 9 are not re-interviewed. Their conservative readings are written into the spec as assumptions, their cost is stated to the user, and the emitted artifact checks the world at every step and pauses before the sync and the invalidation. This case does not test the one-skill-versus-workflow call: a single skill and a flow are both acceptable shapes here.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            ".gitignore": "node_modules/\n.env\n*.pyc\n",
+            "mkdocs.yml": "site_name: Example Docs\nsite_url: https://docs.example.com/\ndocs_dir: docs\ntheme:\n  name: material\nnav:\n  - Home: index.md\n  - Quickstart: quickstart.md\n",
+            "docs/index.md": "# Example\n\nWhat this is and who it is for.\n",
+            "docs/quickstart.md": "# Quickstart\n\nInstall it, point it at a URL, done in two minutes.\n",
+            ".agents_workspace/docs-publish-workflow-spec.md": "# docs-publish workflow spec\n\n## 1. Moment\nWhen I have finished editing a docs page and want it live.\n\n## 2. Manual procedure\n1. Build the site with `mkdocs build --strict`.\n2. Sync `site/` to the bucket with `aws s3 sync site/ s3://docs-example-com --delete`.\n3. Invalidate the changed paths with `aws cloudfront create-invalidation`.\n\n## 3. Preconditions and proof\n1. Precondition: nothing under `docs/` is half-edited. Proof: `mkdocs build --strict` exits 0 and\n   `site/index.html` is newer than the newest file under `docs/`.\n2. Precondition: step 1 produced `site/`. Proof: the sync prints the uploaded keys and exits 0.\n3. Precondition: step 2 finished. Proof: the invalidation id comes back and the page fetched over\n   HTTPS shows the new text.\n\n## 4. Data flow\nA run starts from nothing but the working tree. Step 2 reads the `site/` directory step 1 wrote.\nStep 3 reads the key list step 2 printed. Nothing outlives the run.\n\n## 5. Tooling\n`mkdocs` 1.6 or newer and AWS CLI v2, which reads the profile named in `AWS_PROFILE`. Network access\nto S3 and CloudFront.\n\n## 6. Done\nThe published page at https://docs.example.com/ serves the edited text.\n\n## 7. Interruption\nOne sitting, about a minute.\n\n## 8. Unsafe to re-run\nDeclined - \"I have honestly never had it fail halfway, I just run the whole thing again. I don't\nknow.\"\n\n## 9. Irreversible steps\nDeclined - \"no idea, ask me something I can answer.\"\n"
+          },
+          "commit": "docs: record the publish workflow spec"
+        }
+      ],
+      "expectations": [
+        "Neither question 8 nor question 9 is re-asked and the interview skill is not invoked for them: the word Declined and the user's own words survive under both headings. Re-asking a declined row is the loop this case exists to catch",
+        "The spec gains a recorded assumption under heading 8 that every step is unsafe to run twice, and under heading 9 that every step with an effect outside this machine is irreversible. Both are written into the spec file, not only mentioned in the reply",
+        "The run tells the user what each assumption costs: every step opens by checking the world, and the run pauses for confirmation before each step with an outside effect",
+        "Every step of the emitted artifact opens by checking the world before doing its work, for example whether site/ is already built and current, whether the keys are already uploaded, or whether an invalidation is already in flight",
+        "Neither the S3 sync nor the CloudFront invalidation is reached without an explicit user confirmation showing what will change: one confirmation covering both adjacent steps passes, one before each passes, zero fails",
+        "compatibility is present and names mkdocs and AWS CLI v2 with minimum versions and what fails without each",
+        "No credential value appears anywhere: AWS_PROFILE is named as an environment variable and resolved at run time, never inlined"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "workflow-shape-and-contracts",
+      "prompt": "here's the spec for the quarterly dependency sweep: .agents_workspace/dependency-sweep-workflow-spec.md. design it and emit it into this repo",
+      "expected_output": "A flow skill plus step skills and schemas: fan-out writing one verdict file per candidate, gates stated against those schemas with a bounded retry on the test loop, a per-run directory that is git-ignored, a run-state file, and the PR confirmation living in the flow immediately before the last step.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            ".gitignore": "node_modules/\n.env\n*.pyc\n",
+            "pyproject.toml": "[project]\nname = \"orchard\"\nversion = \"0.9.2\"\nrequires-python = \">=3.12\"\ndependencies = [\n  \"fastapi>=0.110\",\n  \"httpx>=0.27\",\n  \"pydantic>=2.6\",\n  \"sqlalchemy>=2.0\",\n  \"structlog>=24.1\",\n]\n\n[dependency-groups]\ndev = [\"pytest>=8.0\", \"pytest-asyncio>=0.23\", \"ruff>=0.4\"]\n",
+            "README.md": "# Orchard\n\nScheduling service. Dependencies are swept once a quarter.\n",
+            "src/orchard/__init__.py": "",
+            "src/orchard/app.py": "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.get(\"/healthz\")\nasync def healthz():\n    return {\"ok\": True}\n",
+            "tests/test_app.py": "from orchard.app import app\n\n\ndef test_app_has_healthz():\n    assert any(r.path == \"/healthz\" for r in app.routes)\n",
+            ".agents_workspace/dependency-sweep-workflow-spec.md": "# dependency-sweep workflow spec\n\n## 1. Moment\nThe first Monday of the quarter, when I sit down to bring the dependencies forward.\n\n## 2. Manual procedure\n1. List the outdated direct dependencies with `uv pip list --outdated`.\n2. For each candidate, on its own throwaway branch: bump it, run `pytest -q`, and write down whether\n   it is clean, broken, or needs work. There are usually about twenty, and a broken one takes a lot of\n   reading before I can say why.\n3. Collect the per-candidate verdicts into one report.\n4. Read the report and decide which upgrades ship this quarter. That is my call, not a command's.\n5. Apply the approved bumps together, run the full suite, fix what breaks, run it again.\n6. Open a PR carrying the approved bumps, with the report as the PR body.\n\n## 3. Preconditions and proof\n1. Precondition: the working tree is clean. Proof: the command exits 0 and the candidate list is not\n   empty.\n2. Precondition: step 1's candidate list exists. Proof: every candidate on that list has a verdict\n   recorded.\n3. Precondition: every candidate has a verdict. Proof: the report names every candidate from step 1's\n   list, with none missing.\n4. Human go/no-go: I am shown the report and pick which upgrades ship. A no-go stops the run.\n5. Precondition: step 4 left an approved list. Proof: `pytest -q` exits 0 with every approved bump\n   applied.\n6. Precondition: the suite is green. Proof: `gh pr view` returns an open PR whose body is the report.\n\n## 4. Data flow\nA run starts from nothing. Step 1 writes the candidate list. Step 2 reads step 1's candidate list and\nwrites one verdict per candidate. Step 3 reads step 2's verdicts and writes the report. Step 4 reads\nstep 3's report and writes the approved list. Step 5 reads step 4's approved list. Step 6 reads step\n4's approved list and step 3's report.\n\n## 5. Tooling\n`uv` 0.5 or newer, `pytest`, and `gh` 2.40 or newer authenticated against this repo. `gh` reads its\ntoken from `GH_TOKEN`. Network access to PyPI and GitHub.\n\n## 6. Done\nAn open PR carries the approved bumps with the report as its body, and the suite is green on it.\n\n## 7. Interruption\nIt takes an afternoon and I regularly stop partway and pick it up the next day.\n\n## 8. Unsafe to re-run\nStep 6. Running it a second time opens a second PR for the same sweep. Step 5 is fine twice, it just\nredoes the same edits.\n\n## 9. Irreversible steps\nStep 6. The PR is visible to the whole team the moment it opens.\n"
+          },
+          "commit": "chore: record the dependency sweep spec"
+        }
+      ],
+      "expectations": [
+        "A flow skill exists at .claude/skills/<name>-flow/SKILL.md with a pipeline table and a data-contracts table, and the per-candidate work of step 2 is dispatched with the Agent tool rather than run inline in the flow's own context: about twenty candidates, each needing a lot of reading when it breaks, is the isolation case",
+        "Emission is leaf-first and complete: every references/<artifact>-schema.md path and every scripts/ path the flow or a step skill names actually exists on disk, and every step skill named in the pipeline has a directory under .claude/skills/",
+        "The fan-out gives each candidate its own output file under the run directory rather than appending every worker's verdict to one shared artifact, and the merge step's gate counts those files against step 1's candidate list instead of trusting that the workers reported success",
+        "Every Reads entry in the data-contracts table names an artifact that an earlier step Writes, including step 6 reading step 3's report four steps back, and the report has exactly one schema file listing both of its consumers rather than each consumer restating its fields",
+        "The step 5 test-fix-retest loop is marked in the pipeline table itself as a retry with a specific bound (for example 'retry up to 3, then stop'), and the flow states what changes between attempts; every other gate stops the run and reports which gate failed, with no degraded-mode continuation and no skipping ahead",
+        "The flow names $CEH_WORKFLOW_RUN_DIR and its .agents_workspace/ default in its own body, gives each run its own <run-id> subdirectory, makes creating it the first instruction, and the repo's .gitignore actually gains that run directory: stating the requirement in prose is not the same as meeting it",
+        "A run-state.md is emitted because question 7 says the run stops partway, and the flow opens by finding the newest run and offering to resume it at the first step that is not done",
+        "Step 6, which question 8 names as unsafe to run twice, opens by checking the world for an already-open PR for this sweep, not by reading run-state.md",
+        "The confirmation before step 6 sits in the flow immediately before the dispatch rather than inside a step skill, shows what will be opened, and a decline stops the run with step 6 still pending; the step 4 human go/no-go likewise lives in the flow, since AskUserQuestion is stripped from every subagent",
+        "Step 6 sits last in the pipeline, as late as the data flow allows",
+        "compatibility on the flow names uv, pytest and gh with minimum versions plus network access and what fails without each, and GH_TOKEN appears only as an environment variable name: no run artifact holds a credential"
+      ]
+    }
+  ]
+}

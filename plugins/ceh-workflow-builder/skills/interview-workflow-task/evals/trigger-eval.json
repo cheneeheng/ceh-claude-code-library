@@ -1,0 +1,79 @@
+[
+  {
+    "query": "interview me about this task, I do it every month and it's all in my head",
+    "should_trigger": true
+  },
+  {
+    "query": "ask me what you need to know before we can automate the invoice reconciliation",
+    "should_trigger": true
+  },
+  {
+    "query": "help me spec out this workflow, I don't have anything written down yet",
+    "should_trigger": true
+  },
+  {
+    "query": "I'm not sure what you need from me before you can build this. what do you need?",
+    "should_trigger": true
+  },
+  {
+    "query": "I do the release digest by hand every month. what questions do I have to answer first?",
+    "should_trigger": true
+  },
+  {
+    "query": "write down what I tell you about this process into a spec file, we'll build from it later",
+    "should_trigger": true
+  },
+  {
+    "query": "the workflow spec is half done - finish asking me the questions I haven't answered yet",
+    "should_trigger": true
+  },
+  {
+    "query": "capture our onboarding process properly before anyone writes a single skill for it",
+    "should_trigger": true
+  },
+  {
+    "query": "what do you still need to know about my deploy process? the spec's at .agents_workspace/deploy-workflow-spec.md",
+    "should_trigger": true
+  },
+  {
+    "query": "I keep forgetting to tell you the bits that matter. walk me through what a workflow artifact needs answered",
+    "should_trigger": true
+  },
+  { "query": "turn this into a skill", "should_trigger": false },
+  {
+    "query": "the spec is complete, build the workflow from it and emit it into .claude/skills/",
+    "should_trigger": false
+  },
+  {
+    "query": "should this be one skill or a workflow with gated steps?",
+    "should_trigger": false
+  },
+  {
+    "query": "generate the flow skill and its step skills plus the handoff schemas",
+    "should_trigger": false
+  },
+  {
+    "query": "interview me for a blog post about how we scaled the job queue",
+    "should_trigger": false
+  },
+  {
+    "query": "run a retrospective on this session, what should we do differently next time?",
+    "should_trigger": false
+  },
+  {
+    "query": "ask me questions to shape a business plan for this tool, I want to sell it",
+    "should_trigger": false
+  },
+  {
+    "query": "review the skill I wrote and tell me whether the description triggers reliably",
+    "should_trigger": false
+  },
+  {
+    "query": "document our deploy process as an operator runbook for the on-call rota",
+    "should_trigger": false
+  },
+  {
+    "query": "plan the next version of this app - interview me about what's in scope",
+    "should_trigger": false
+  }
+]

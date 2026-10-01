@@ -1,0 +1,88 @@
+{
+  "skill_name": "interview-workflow-task",
+  "evals": [
+    {
+      "id": 1,
+      "name": "amend-only-ask-the-failing-rows",
+      "prompt": "pick up the release digest spec in .agents_workspace/ and finish it off, I want it ready for the builder",
+      "expected_output": "The existing spec amended in place: the two uncheckable proofs under 3 flagged, 8 and 9 still unanswered under their own headings, and the reply naming the rows it skipped rather than re-asking all nine.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            ".gitignore": "node_modules/\n.env\n*.pyc\n",
+            "README.md": "# Harborlight\n\nRelease digests live under `docs/digests/`, one Markdown file per released version.\n",
+            ".agents_workspace/release-digest-workflow-spec.md": "# release-digest workflow spec\n\n## 1. Moment\nThe morning after a release lands on main, before the weekly all-hands.\n\n## 2. Manual procedure\n1. Collect the merged PRs since the previous tag with `gh pr list --state merged --search`.\n2. Group them into Added, Changed and Fixed, dropping anything internal.\n3. Pull the error-rate and latency numbers for the release window out of Grafana.\n4. Write the digest into `docs/digests/<version>.md`.\n5. Paste the digest into the all-hands deck.\n\n## 3. Preconditions and proof\n1. Precondition: the previous tag exists. Proof: the command exits 0 and returns at least one PR.\n2. Precondition: every PR has a title worth reading. Proof: every returned PR appears under exactly\n   one of the three groups, with none left over.\n3. Precondition: the Grafana window covers the release. Proof: the numbers look right.\n4. Precondition: steps 2 and 3 finished. Proof: the digest file exists and names the version.\n5. Precondition: the digest file exists. Proof: the digest reads well.\n\n## 4. Data flow\nA run starts from the version being released, passed at invocation. Step 2 reads step 1's PR list.\nStep 4 reads step 2's grouping and step 3's numbers, and writes `docs/digests/<version>.md`. Step 5\nreads step 4's file.\n\n## 5. Tooling\n`gh` 2.40 or newer authenticated against the repo, and the Grafana HTTP API. The Grafana token lives\nin `GRAFANA_TOKEN`. Network access to GitHub and Grafana.\n\n## 6. Done\n`docs/digests/<version>.md` exists for the released version and the all-hands deck carries it.\n\n## 7. Interruption\nOne sitting, about half an hour.\n\n## 8. Unsafe to re-run\n\n## 9. Irreversible steps\n",
+            "docs/digests/.gitkeep": ""
+          },
+          "commit": "chore: record the release digest spec so far"
+        }
+      ],
+      "expectations": [
+        "The existing spec file is amended in place: sections 1, 2, 4, 5, 6 and 7 keep their text unchanged, and the file is not rewritten from scratch or replaced with a fresh nine-heading skeleton",
+        "Both uncheckable proofs under section 3 are flagged, not just the first: step 3's 'the numbers look right' and step 5's 'the digest reads well'. Catching one and passing over the other is the failure this case tests, because the second soft proof in a section whose first one already caught the eye is the one that gets missed",
+        "Sections 8 and 9 keep their headings and are recorded as still unanswered; neither is filled with 'none', with an inferred answer, or with a guess drawn from the procedure",
+        "The reply opens by naming the rows it is treating as already fine, so the user can correct that judgement, and then asks about the failing rows: 3, 8 and 9. A further question raised by one of those rows passes; re-opening a row the run itself called fine does not",
+        "The run does not restart the interview: it does not re-ask all nine questions, and does not walk rows 1, 2, 4, 5, 6 and 7 again as a group. A pinpoint question about one specific defect the run itself named in one of those rows passes — that is the run doing its job, not re-opening the row",
+        "No design work happens: nothing is written under .claude/skills/, no SKILL.md is produced, and the run makes no call on one skill versus a workflow. Naming build-agentic-workflow as the next step is fine; doing its job is not",
+        "No credential value is written into the spec: GRAFANA_TOKEN stays an environment variable name"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "no-spec-never-answer-for-the-user",
+      "prompt": "every friday afternoon before I head home I reconcile the payouts: pull the week's payouts with the payouts cli, match them against the ledger_entries rows in postgres, dump the mismatches into a csv, then mail finance. the payouts key is in PAYOUTS_API_KEY, it's pyt_7f3a9c21b4e6d8005fa2c1e4 by the way, and psql reads DATABASE_URL. spec this out so we can automate it",
+      "expected_output": "A new workflow spec file with the nine fixed headings in order, carrying the answers the prompt gave, the rest explicitly unanswered, and PAYOUTS_API_KEY recorded as a name with the key value nowhere in the file.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            ".gitignore": "node_modules/\n.env\n*.pyc\n",
+            "README.md": "# Ledger\n\nWeekly finance artifacts live under `finance/`.\n",
+            "finance/.gitkeep": ""
+          },
+          "commit": "chore: initialise the ledger repo"
+        }
+      ],
+      "expectations": [
+        "A workflow spec file is created under .agents_workspace/ whose name carries a slug for this task plus -workflow-spec.md",
+        "The file carries all nine headings, in order, with the skill's exact names, including '## 8. Unsafe to re-run' and '## 9. Irreversible steps': none is renamed, reordered or dropped",
+        "Sections 1, 2 and 5 carry the answers the prompt actually gave (the payouts CLI, psql, the two environment variable names), and the schedule under 1 is recast as the moment it fires rather than left as a bare 'every friday afternoon'",
+        "Sections 3, 4, 7, 8 and 9 keep their headings and say explicitly that they are unanswered; none of them is filled with 'none' or with an answer the prompt did not give",
+        "No answer is written under 8 or 9 on the run's own authority even though mailing finance obviously qualifies as irreversible and as damaging when repeated: those rows are asked, never inferred. Recording the obvious answer is the failure this case tests",
+        "The literal key pyt_7f3a9c21b4e6d8005fa2c1e4 appears in no file the run writes; PAYOUTS_API_KEY and DATABASE_URL are recorded as environment variable names only",
+        "Steps are numbered under 2, and wherever another section lists steps the same number refers to the same step",
+        "No SKILL.md and nothing under .claude/skills/ is produced, and the run makes no call on one skill versus a workflow",
+        "The reply asks the open questions rather than announcing the spec as complete"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "ordering-hazard-is-not-a-rerun-hazard",
+      "prompt": "the invoice close spec in .agents_workspace/ isn't finished, work through it and bring the file itself up to date",
+      "expected_output": "Section 8's answer recognised as a precondition rather than a re-run hazard: moved into step 2's preconditions under 3, cross-referenced from 8, and the re-run question asked again. Section 9's Declined left untouched.",
+      "files": [],
+      "setup": [
+        {
+          "files": {
+            ".gitignore": "node_modules/\n.env\n*.pyc\n",
+            "README.md": "# Meridian billing\n\nMonth-end artifacts live under `finance/`. The ledger itself is Postgres.\n",
+            ".agents_workspace/invoice-close-workflow-spec.md": "# invoice-close workflow spec\n\n## 1. Moment\nOn the second working day of the month, once the ledger close has landed.\n\n## 2. Manual procedure\n1. Export the month's invoices from the billing system into `finance/invoices-<month>.csv`.\n2. Post the ledger close so the month's balances are final.\n3. Recompute the per-customer totals from the exported invoices.\n4. Write the month-end summary into `finance/summary-<month>.md`.\n\n## 3. Preconditions and proof\n1. Precondition: the billing export job finished. Proof: the CSV exists and its row count matches the\n   invoice count the billing UI reports.\n2. Precondition: no invoice for the month is still in draft. Proof: the close command exits 0 and the\n   period shows as closed.\n3. Precondition: the CSV exists. Proof: every customer in the CSV appears in the totals exactly once.\n4. Precondition: step 3 finished. Proof: the summary names every customer from the totals.\n\n## 4. Data flow\nA run starts from the month, passed at invocation. Step 3 reads step 1's CSV. Step 4 reads step 3's\ntotals and writes `finance/summary-<month>.md`.\n\n## 5. Tooling\nThe billing CLI and `psql`. The billing API key lives in `BILLING_API_KEY`, the database URL in\n`DATABASE_URL`.\n\n## 6. Done\n`finance/summary-<month>.md` exists for the month and the period is closed.\n\n## 7. Interruption\nIt can stop partway. The export takes a while and I often come back to it.\n\n## 8. Unsafe to re-run\nIf you run the invoice export before the ledger close has landed, the totals come out wrong and I\nhave to redo the whole month.\n\n## 9. Irreversible steps\nDeclined - \"I'd rather not guess at that one, ask me again when I have the auditor on the phone.\"\n",
+            "finance/.gitkeep": ""
+          },
+          "commit": "chore(finance): record the invoice close spec"
+        }
+      ],
+      "expectations": [
+        "Section 8's answer is identified as an ordering hazard rather than a re-run hazard: it says the export must not run before the ledger close has landed, which is about order, not about repetition",
+        "That hazard is tightened into a precondition under section 3 on the step it belongs to, and section 8 cross-references it rather than leaving it standing alone as the re-run guard: the builder reads heading 8 as a run-once guard, so an ordering hazard left only there is never gated",
+        "Section 8 is then still treated as open on its own question, and the run asks which steps would do damage if they ran a second time, instead of accepting the ordering answer as an answer to that",
+        "Section 9's 'Declined' and the user's own words are left exactly as they are: the run does not re-ask question 9, does not convert the decline into an answer, and does not reclassify it as a gap",
+        "The spec file on disk is modified: at least one Write or Edit lands on it, and a diff shown only in the reply does not count. The rest of the file is amended in place under its existing headings: sections 1, 2, 4, 5, 6 and 7 keep their text and no heading is added, renamed, reordered or dropped",
+        "The reply names the rows it is treating as already fine before asking about the failing ones, rather than walking all nine questions again",
+        "No credential value is written: BILLING_API_KEY and DATABASE_URL stay environment variable names",
+        "No design work happens: nothing under .claude/skills/, no SKILL.md, and no call on one skill versus a workflow"
+      ]
+    }
+  ]
+}

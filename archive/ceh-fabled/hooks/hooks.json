@@ -1,0 +1,16 @@
+{
+  "description": "ceh-fabled: load the fabled-voice response style at session start so every response is delivered in fable's form.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/load-voice.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}

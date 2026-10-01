@@ -1,0 +1,16 @@
+{
+  "name": "ceh-fabled",
+  "version": "1.3.7",
+  "description": "EXPERIMENTAL. CEH fabled: apply frontier-grade reasoning discipline — deliberate thinking, alternative generation, adversarial self-review, verification, and calibrated conviction — to any non-trivial task.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/agent-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent",
+    "reasoning",
+    "thinking",
+    "self-review",
+    "verification",
+    "calibration"
+  ]
+}
