@@ -17,6 +17,10 @@ ceh-ag-ui           ──► ceh-web-frontend
 `ceh-web-frontend`, so the worst-case closure is three plugins (`ceh-ag-ui` → `ceh-web-frontend` →
 `ceh-testing`). The cross-cutting rule holds: `ceh-testing` is cross-cutting and depends on nothing.
 
+The five `ceh-scenario-*` bundles sit above all of this. Each is a manifest that lists plugins and
+adds no edge between them, so the worst-case closure of a bundle is its own list plus the stack
+plugin's closure. See "What each scenario installs" below.
+
 `ceh-usability-audit` declares no dependency. Its references to `ceh-web-frontend`,
 `ceh-documentation`, `ceh-seo`, `ceh-python-service` and `ceh-python-library` skills are all
 conditional hand-offs or negative routing, which stay prose.
@@ -32,15 +36,23 @@ conditional hand-offs or negative routing, which stay prose.
 
 ## What each scenario installs
 
-| Bundle | Installs |
-| ------ | -------- |
+| Bundle                   | Installs                                                                                                                                                                          |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ceh-scenario-service`   | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-service`, `ceh-usability-audit`, `ceh-plan-build-review`, `ceh-git-datastore` |
+| `ceh-scenario-library`   | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-library`, `ceh-usability-audit`, `ceh-plan-build-review`                      |
+| `ceh-scenario-webapp`    | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-web-frontend`, `ceh-usability-audit`, `ceh-plan-build-review`, `ceh-ag-ui`           |
+| `ceh-scenario-ideation`  | `ceh-core`, `ceh-git-workflow`, `ceh-business-plan`, `ceh-plan-build-review`                                                                                                      |
+| `ceh-scenario-editorial` | `ceh-core`, `ceh-git-workflow`, `ceh-blog`, `ceh-documentation`, `ceh-seo`                                                                                                        |
+
+`ceh-web-frontend` reaches the webapp bundle directly and through `ceh-ag-ui`, and `ceh-testing` is
+listed by each stack bundle directly as well as through its stack plugin.
 
 ## Checking the graph
 
 ```bash
 # Every declared edge
-grep -H '"dependencies"' plugins/*/.claude-plugin/plugin.json
+grep -H '"dependencies"' plugins/*/*/.claude-plugin/plugin.json
 
-# Resolution, acyclicity, bundle shape, and that every bundle reaches ceh-scenario-core
+# Resolution, acyclicity, and bundle shape
 python tools/validate-plugins/validate.py
 ```

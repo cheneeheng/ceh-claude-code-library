@@ -97,6 +97,8 @@ Or manually in `~/.claude/settings.json`:
 
 ```json
 {
-  "plugins": [{ "path": "~/ceh-claude-code-library/plugins/ceh-git-datastore" }]
+  "plugins": [
+    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-git-datastore" }
+  ]
 }
 ```

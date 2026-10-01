@@ -9,7 +9,7 @@
 .claude/worktrees/
 
 # claude plugin eval run output
-plugins/*/evals/results/
+plugins/*/*/evals/results/
 
 # Ruff
 .ruff_cache/

@@ -73,26 +73,26 @@ authoring skill. Where that skill's advice conflicts with this repo, this skill 
 | MCP server | Invoke the Skill tool with skill="plugin-dev:mcp-integration"                                                                                                                                                 |
 
 **Skill** — copy `${CLAUDE_SKILL_DIR}/assets/SKILL.template.md` to
-`plugins/ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. Fill every
+`plugins/standalone/ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. Fill every
 placeholder, then delete the `TEMPLATE-GUIDANCE` comment. Content stays inline. `references/` is
 for two cases only: a schema or template shared by several skills, or a standard too large to
-inline. A file shared by skills of the same plugin goes once in `plugins/ceh-<plugin>/references/`,
+inline. A file shared by skills of the same plugin goes once in `plugins/standalone/ceh-<plugin>/references/`,
 cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`. A file used by one skill goes in that skill's
 own `references/`, cited as `${CLAUDE_SKILL_DIR}/references/<file>`.
 
 **Agent** — copy `${CLAUDE_SKILL_DIR}/assets/agent.template.md` to
-`plugins/ceh-<plugin>/agents/<name>.md`, `name` matching the file name. Auto-delegation is driven
+`plugins/standalone/ceh-<plugin>/agents/<name>.md`, `name` matching the file name. Auto-delegation is driven
 entirely by `description` (include "use proactively" to encourage it).
 
 **Migrating from agent-skills** — still start from the template: move the old frontmatter and
 sections into the template's order and headings rather than copying the old file whole. Old files
 mix heading case and section names, and the templates exist to end that.
 
-**Hook or script** — hook wiring goes in `plugins/ceh-<plugin>/hooks/hooks.json`, scripts in
-`plugins/ceh-<plugin>/scripts/`, referenced as `${CLAUDE_PLUGIN_ROOT}/scripts/<file>`. Keep
+**Hook or script** — hook wiring goes in `plugins/standalone/ceh-<plugin>/hooks/hooks.json`, scripts in
+`plugins/standalone/ceh-<plugin>/scripts/`, referenced as `${CLAUDE_PLUGIN_ROOT}/scripts/<file>`. Keep
 `*.sh` LF-only: a CRLF checkout breaks bash with `$'\r'`.
 
-**MCP server** — config goes in `plugins/ceh-<plugin>/.mcp.json` with `${CLAUDE_PLUGIN_ROOT}`
+**MCP server** — config goes in `plugins/standalone/ceh-<plugin>/.mcp.json` with `${CLAUDE_PLUGIN_ROOT}`
 paths.
 
 **Configuration** — environment variables only, never a `.claude/*.local.md` settings file or
@@ -165,7 +165,7 @@ work, so no agent sets it.
 
 - Root `README.md` — add a row under the correct plugin group in **Skills** or **Agents**. If the
   plugin has no group there yet, add a `### <Plugin> (\`ceh-<plugin>\`)` subsection.
-- `plugins/ceh-<plugin>/README.md` — add a row to that plugin's own table. The plugin README also
+- `plugins/standalone/ceh-<plugin>/README.md` — add a row to that plugin's own table. The plugin README also
   carries anything a user must do before the component works: prerequisites, when a hook fires,
   and every environment variable the plugin reads, with its default and whether it is required.
   A new variable also gets a row in `docs/ENVIRONMENT_VARIABLES.md`, the index across plugins.
@@ -183,7 +183,7 @@ across plugins.
 
 Same commit, both files, or CI fails:
 
-- `plugins/ceh-<plugin>/.claude-plugin/plugin.json`
+- `plugins/standalone/ceh-<plugin>/.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
 
 **PATCH** for content/description updates, **MINOR** for a new skill or agent or for adding or
@@ -210,10 +210,10 @@ Same gate CI runs via `.github/workflows/validate.yml`. It checks:
 - bundled `*.sh` / `*.py` scripts parse
 
 `validate.py` does not parse YAML strictly. For a YAML syntax check, also run
-`claude plugin validate plugins/ceh-<plugin>`.
+`claude plugin validate plugins/standalone/ceh-<plugin>`.
 
 A green validator proves the files are well-formed, not that the component works. Load the plugin
-in a fresh session with `claude --plugin-dir plugins/ceh-<plugin>` and check what you added:
+in a fresh session with `claude --plugin-dir plugins/standalone/ceh-<plugin>` and check what you added:
 
 - Skill: a prompt using a description trigger phrase loads it; `/ceh-<plugin>:<skill>` runs it
 - Agent: a prompt matching its description delegates to it
@@ -229,7 +229,7 @@ the Structure section of `CLAUDE.md`, so do not load `plugin-dev:plugin-structur
 tier (scenario bundle, cross-cutting, use-case workflow, stack/build — see `CLAUDE.md`) and plan
 every component with the step 1 table before creating anything, then:
 
-1. `plugins/ceh-<name>/.claude-plugin/plugin.json`, flat under `plugins/` with no tier folder:
+1. `plugins/standalone/ceh-<name>/.claude-plugin/plugin.json`, under `plugins/standalone/` with no tier folder (a scenario bundle goes in `plugins/scenarios/`):
 
    ```json
    {
@@ -245,8 +245,8 @@ every component with the step 1 table before creating anything, then:
 
    Add `"dependencies": ["ceh-<other>"]` only per the cross-plugin rule in step 2.
 
-2. `plugins/ceh-<name>/README.md` with the plugin's own skill/agent table.
-3. `.claude-plugin/marketplace.json` — a new entry whose `source` (`./plugins/ceh-<name>`),
+2. `plugins/standalone/ceh-<name>/README.md` with the plugin's own skill/agent table.
+3. `.claude-plugin/marketplace.json` — a new entry whose `source` (`./plugins/standalone/ceh-<name>`),
    `version`, and `description` mirror `plugin.json`. `validate.py` fails on a plugin missing from
    the marketplace or a version mismatch.
 4. Root `README.md` — a row in the **Plugins** table, the plugin in the **Categorization** tier
@@ -280,7 +280,7 @@ Where it conflicts with this repo, this skill wins:
 | `plugin-validator` / `skill-reviewer` agents, `validate-agent.sh`, `validate-hook-schema.sh` | `python tools/validate-plugins/validate.py` is the gate, then the live checks in step 6 |
 | Agent `<example>` blocks and `color`                                                         | Prose `description`, no `<example>` blocks; `color` optional                            |
 | Eval workspace next to the skill directory                                                   | `.agents_workspace/skill-evals/<skill>/`, git-ignored, never inside `plugins/`          |
-| Wait for user confirmation at each phase, ask where to create, `git init`                    | Autonomous mode, flat `plugins/`, existing repo                                         |
+| Wait for user confirmation at each phase, ask where to create, `git init`                    | Autonomous mode, `plugins/standalone/`, existing repo                                   |
 
 Everything else in those skills applies — hook event payloads, prompt-based hooks, MCP server
 types, agent system-prompt design, skill-creator's drafting guidance.

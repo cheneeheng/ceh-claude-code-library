@@ -20,17 +20,14 @@ Plugins fall into four tiers:
 
 | Tier                  | Loaded            | Plugins                                                                                                                                                      |
 | --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Scenario bundle**   | one per situation | —                                                                                                                                                            |
+| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                     |
 | **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                                                                                            |
 | **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder` |
 | **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                  |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
-`dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
-`-iterate` twin plus the planning delta, so the phase transition is a no-op. Every other bundle
-depends on `ceh-scenario-core` instead of listing the cross-cutting base itself. Experimental
-plugins never enter a bundle. **Name the phase halves `-greenfield` / `-iterate`, never
-`-maintenance`** — "maintenance" reads as bugfix-only.
+`dependencies` and nothing else — no skills, agents, or hooks. Experimental plugins never enter a
+bundle.
 
 Categorization rules of thumb:
 
@@ -38,8 +35,9 @@ Categorization rules of thumb:
   file types. Splitting duplicates the shared standards and reintroduces drift.
 - **A foundational standard needed by more than one use-case plugin is duplicated into each**, not
   extracted into a shared base plugin — see the Shared-Standards Duplication Policy below.
-- **Scenario bundles live in `plugins/`** like everything else. The `ceh-scenario-` prefix carries
-  the distinction and `validate.py` enforces the structural invariant (manifest + README only).
+- **Scenario bundles live in `plugins/scenarios/`**, every other plugin in `plugins/standalone/`.
+  The `ceh-scenario-` prefix carries the distinction and `validate.py` enforces the structural
+  invariant (manifest + README only).
 - **App-specific patterns are not standards.** Anything bound to one application's schema or design
   is removed rather than kept as a niche plugin.
 - **`ceh-core` admits only what holds however Claude Code is used** — coding, writing, research,
@@ -61,19 +59,21 @@ archive/                      # Retired plugins or plugin contents — unpublish
 .github/workflows/            # validate.yml — runs validate.py on push and PR
 docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md
 examples/                     # Worked usage examples, one ceh-<plugin>/README.md each — not validated
-plugins/                      # All plugins — flat, one directory per plugin, no tier subfolders
-├── ceh-scenario-<name>/      # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY
-└── ceh-<plugin-name>/
-    ├── .claude-plugin/           # plugin.json — version and dependencies live here
-    ├── agents/                   # Optional — subagents, one <name>.md each
-    ├── hooks/                    # Optional — hooks.json wiring scripts via ${CLAUDE_PLUGIN_ROOT}
-    ├── output-styles/            # Optional — output style .md files
-    ├── references/               # Optional — files shared by several skills of this plugin, read via ${CLAUDE_PLUGIN_ROOT}
-    ├── scripts/                  # Optional — hook scripts and shell helpers
-    └── skills/
-        └── <skill-name>/
-            ├── SKILL.md               # Required — frontmatter + full body, all content inline
-            └── references/            # Sparingly — see Skills below
+plugins/                      # All plugins — two folders, one directory per plugin, no tier subfolders
+├── scenarios/
+│   └── ceh-scenario-<name>/  # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY
+└── standalone/
+    └── ceh-<plugin-name>/
+        ├── .claude-plugin/           # plugin.json — version and dependencies live here
+        ├── agents/                   # Optional — subagents, one <name>.md each
+        ├── hooks/                    # Optional — hooks.json wiring scripts via ${CLAUDE_PLUGIN_ROOT}
+        ├── output-styles/            # Optional — output style .md files
+        ├── references/               # Optional — files shared by several skills of this plugin, read via ${CLAUDE_PLUGIN_ROOT}
+        ├── scripts/                  # Optional — hook scripts and shell helpers
+        └── skills/
+            └── <skill-name>/
+                ├── SKILL.md               # Required — frontmatter + full body, all content inline
+                └── references/            # Sparingly — see Skills below
 tools/
 └── validate-plugins/          # The CI gate — stdlib-only Python, own README.md
 ```
@@ -204,8 +204,8 @@ changing a skill, agent, hook, script, or a whole new plugin. It auto-loads when
 Whatever else gets skipped, these four land in the **same commit** or CI fails:
 
 1. A row in the root `README.md` table (Skills or Agents).
-2. A row in `plugins/ceh-<plugin>/README.md`.
-3. A version bump in **both** `plugins/ceh-<plugin>/.claude-plugin/plugin.json` and
+2. A row in `plugins/standalone/ceh-<plugin>/README.md`.
+3. A version bump in **both** `plugins/standalone/ceh-<plugin>/.claude-plugin/plugin.json` and
    `.claude-plugin/marketplace.json` — level per the Versioning section below.
 4. `python tools/validate-plugins/validate.py` green.
 
@@ -216,13 +216,13 @@ Whatever else gets skipped, these four land in the **same commit** or CI fails:
 find plugins -path '*skills/<name>/SKILL.md'
 
 # Show every declared dependency edge
-grep -H '"dependencies"' plugins/*/.claude-plugin/plugin.json
+grep -H '"dependencies"' plugins/*/*/.claude-plugin/plugin.json
 
 # Validate the whole repo — CI runs this too
 python tools/validate-plugins/validate.py
 
 # Strict YAML parse check of one plugin's skills and agents
-claude plugin validate plugins/ceh-<plugin>
+claude plugin validate plugins/standalone/ceh-<plugin>
 ```
 
 `validate.py` fails on any `ceh-<plugin>:<name>` mention, prose included, that no longer resolves,
@@ -271,17 +271,17 @@ on what changed and why, a `### Plugin versions` table listing every plugin bump
 
 ## Key Files
 
-| File                                              | Purpose                                                                        |
-| ------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `plugins/ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version, metadata, dependencies                                         |
-| `.claude-plugin/marketplace.json`                 | Marketplace listing (all plugins)                                              |
-| `README.md`                                       | User-facing docs — plugin, skill, and agent tables live here                   |
-| `docs/CROSS_REFERENCES.md`                        | Content duplicated across skills: canonical source and every copy              |
-| `docs/PLUGIN_DEPENDENCIES.md`                     | Current dependency graph: every edge with its evidence                         |
-| `docs/ENVIRONMENT_VARIABLES.md`                   | Every environment variable any plugin reads: plugin, reader, default, effect   |
-| `CHANGELOG.md`                                    | Release notes per repo tag, each with a `### Plugin versions` table            |
-| `.claude/skills/add-plugin-component/assets/`     | `SKILL.template.md` and `agent.template.md` — the base for every new component |
-| `.agents_workspace/DECISION_LOG.md`               | Agent decision log — **git-ignored, local only**, append-only                  |
+| File                                                         | Purpose                                                                        |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version, metadata, dependencies                                         |
+| `.claude-plugin/marketplace.json`                            | Marketplace listing (all plugins)                                              |
+| `README.md`                                                  | User-facing docs — plugin, skill, and agent tables live here                   |
+| `docs/CROSS_REFERENCES.md`                                   | Content duplicated across skills: canonical source and every copy              |
+| `docs/PLUGIN_DEPENDENCIES.md`                                | Current dependency graph: every edge with its evidence                         |
+| `docs/ENVIRONMENT_VARIABLES.md`                              | Every environment variable any plugin reads: plugin, reader, default, effect   |
+| `CHANGELOG.md`                                               | Release notes per repo tag, each with a `### Plugin versions` table            |
+| `.claude/skills/add-plugin-component/assets/`                | `SKILL.template.md` and `agent.template.md` — the base for every new component |
+| `.agents_workspace/DECISION_LOG.md`                          | Agent decision log — **git-ignored, local only**, append-only                  |
 
 ## Cross-Reference Rule
 

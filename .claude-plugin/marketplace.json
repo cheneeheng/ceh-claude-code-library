@@ -10,99 +10,129 @@
   "plugins": [
     {
       "name": "ceh-core",
-      "source": "./plugins/ceh-core",
+      "source": "./plugins/standalone/ceh-core",
       "version": "1.0.0",
       "description": "CEH core: standards that hold however Claude Code is used — usage-limit handoff and context economy via delegated bulk reads."
     },
     {
       "name": "ceh-coding-agent",
-      "source": "./plugins/ceh-coding-agent",
+      "source": "./plugins/standalone/ceh-coding-agent",
       "version": "1.0.0",
       "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, whole-repo explanation, and the living architecture document."
     },
     {
       "name": "ceh-git-workflow",
-      "source": "./plugins/ceh-git-workflow",
+      "source": "./plugins/standalone/ceh-git-workflow",
       "version": "1.0.0",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, and code review. Stack-agnostic."
     },
     {
       "name": "ceh-testing",
-      "source": "./plugins/ceh-testing",
+      "source": "./plugins/standalone/ceh-testing",
       "version": "1.0.0",
       "description": "CEH testing techniques: stack-agnostic test design and verification moments — reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, and close the risk gaps functional tests structurally miss."
     },
     {
       "name": "ceh-python-service",
-      "source": "./plugins/ceh-python-service",
+      "source": "./plugins/standalone/ceh-python-service",
       "version": "1.0.0",
       "description": "CEH Python service: FastAPI, asyncpg, PostgreSQL schema, Alembic migrations, uv, testing (unit/integration/system), observability, security, and domain modeling standards for web services."
     },
     {
       "name": "ceh-python-library",
-      "source": "./plugins/ceh-python-library",
+      "source": "./plugins/standalone/ceh-python-library",
       "version": "1.0.0",
       "description": "CEH Python library: packaging and publishing, public API surface discipline, semantic versioning, uv environment, and pytest testing standards for distributable libraries (no web dependencies)."
     },
     {
       "name": "ceh-web-frontend",
-      "source": "./plugins/ceh-web-frontend",
+      "source": "./plugins/standalone/ceh-web-frontend",
       "version": "1.0.0",
       "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, accessibility, UI visual design and theming, Cytoscape.js graph visualization, and testing agents (unit/integration/system)."
     },
     {
       "name": "ceh-seo",
-      "source": "./plugins/ceh-seo",
+      "source": "./plugins/standalone/ceh-seo",
       "version": "1.0.0",
       "description": "CEH SEO: discoverability standards for anything exposed to the internet — technical SEO/GEO for public web pages (meta tags, structured data, sitemap, rendering strategy), authoring the llms.txt agent index, and findability of public-facing text (README first screen, package descriptions and keywords, repo topics, landing copy)."
     },
     {
       "name": "ceh-blog",
-      "source": "./plugins/ceh-blog",
+      "source": "./plugins/standalone/ceh-blog",
       "version": "1.0.0",
       "description": "CEH blog: turn a half-formed idea into a compelling, publishable blog post in a personal, series-first voice via structured interview; repurpose finished posts for Twitter/X, LinkedIn, TL;DR, and newsletters."
     },
     {
       "name": "ceh-plan-build-review",
-      "source": "./plugins/ceh-plan-build-review",
+      "source": "./plugins/standalone/ceh-plan-build-review",
       "version": "1.0.0",
       "description": "CEH plan-build-review: the plan-driven development loop — plan a fullstack app (iteratively or all the way to MVP), implement from the plan, review the implementation against it, and patch a shipped version with small non-feature changes."
     },
     {
       "name": "ceh-documentation",
-      "source": "./plugins/ceh-documentation",
+      "source": "./plugins/standalone/ceh-documentation",
       "version": "1.0.0",
       "description": "CEH documentation: write user-facing documentation for a project — a full docs set, user guides and operator runbooks, an exhaustive API reference, concept pages with sourced design rationale, and runnable examples."
     },
     {
       "name": "ceh-ag-ui",
-      "source": "./plugins/ceh-ag-ui",
+      "source": "./plugins/standalone/ceh-ag-ui",
       "version": "1.0.0",
       "description": "CEH AG-UI: generative-UI canvases for agents that speak the AG-UI protocol — a React + Vite canvas where the agent places components from a fixed, themed catalogue (Tidewater by default), adding catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps."
     },
     {
       "name": "ceh-usability-audit",
-      "source": "./plugins/ceh-usability-audit",
+      "source": "./plugins/standalone/ceh-usability-audit",
       "version": "1.0.0",
       "description": "CEH usability audit: measure whether a non-expert can actually use what you built — cold zero-context walkthroughs by persona-constrained subagents that report where they stalled and how many steps each milestone cost against a budget set before the walk, a five-question interface audit across web UI/CLI/library/app surfaces, a three-part rewrite pass over every user-reachable error message, and a plain-language pass over labels and copy. Findings are ranked by observed outcome, not by how bad they look."
     },
     {
       "name": "ceh-business-plan",
-      "source": "./plugins/ceh-business-plan",
+      "source": "./plugins/standalone/ceh-business-plan",
       "version": "1.0.5",
       "description": "CEH business plan: turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop — draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes."
     },
     {
       "name": "ceh-git-datastore",
-      "source": "./plugins/ceh-git-datastore",
+      "source": "./plugins/standalone/ceh-git-datastore",
       "version": "1.0.1",
       "description": "CEH git-backed datastore: run an app on a bare git repo instead of a database while that still fits — a gate that talks you out of it when it does not, a working plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite when a trigger fires."
     },
     {
       "name": "ceh-workflow-builder",
-      "source": "./plugins/ceh-workflow-builder",
+      "source": "./plugins/standalone/ceh-workflow-builder",
       "version": "1.1.2",
       "description": "CEH workflow builder: interview a repetitive multi-step task into a runnable artifact — one skill when it is simple, or a gated workflow skill that delegates each step and declares its handoff schemas — emitted into the target repo's .claude/skills/."
+    },
+    {
+      "name": "ceh-scenario-service",
+      "source": "./plugins/scenarios/ceh-scenario-service",
+      "version": "1.0.0",
+      "description": "CEH scenario bundle: working on a Python backend service — features, fixes, tests, docs, releases."
+    },
+    {
+      "name": "ceh-scenario-library",
+      "source": "./plugins/scenarios/ceh-scenario-library",
+      "version": "1.0.0",
+      "description": "CEH scenario bundle: working on a Python library — features, fixes, tests, docs, releases."
+    },
+    {
+      "name": "ceh-scenario-webapp",
+      "source": "./plugins/scenarios/ceh-scenario-webapp",
+      "version": "1.0.0",
+      "description": "CEH scenario bundle: working on a web frontend — features, fixes, tests, docs, releases."
+    },
+    {
+      "name": "ceh-scenario-ideation",
+      "source": "./plugins/scenarios/ceh-scenario-ideation",
+      "version": "1.0.0",
+      "description": "CEH scenario bundle: shaping an idea before a stack is chosen — testing it for product-market fit and planning the build."
+    },
+    {
+      "name": "ceh-scenario-editorial",
+      "source": "./plugins/scenarios/ceh-scenario-editorial",
+      "version": "1.0.0",
+      "description": "CEH scenario bundle: writing and publishing what readers see — blog posts, user and operator docs, discoverability."
     }
   ]
 }
