@@ -8,7 +8,7 @@ description: >-
   status enum is added or changed, an ID field is defined, or a service/route/db responsibility
   split is decided.
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 license: Apache-2.0
 ---
 

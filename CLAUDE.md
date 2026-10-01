@@ -83,7 +83,14 @@ tools/
 | `ceh-core`         | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                |
 | `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation                                                                                                                                |
 | `ceh-git-workflow` | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, releases including hotfixes (`release`, which also runs the full ship sequence), code review |
-| `ceh-architecture` | Living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log), domain modeling (IDs, status enums, layer boundaries), invariants injected by a SessionStart hook                                                            |
+| `ceh-architecture` | Living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log), domain modeling (IDs, status enums, layer boundaries)                                                                                                        |
+
+**TODO: break up `ceh-architecture`.** It is two unrelated moments in one plugin. Once
+`ceh-python-service` (or the matching stack plugin) migrates, move `domain-modeling` there: its
+snippets are Python/TS and its layer rules assume a route/service/db backend. Decide a home for
+`document-architecture` (beside `explain-codebase` in `ceh-coding-agent` is the candidate), then
+retire `ceh-architecture` and repoint the `ceh-architecture:document-architecture` mentions in
+`explain-codebase` and `explain-until-understood`. Removing a plugin is a MAJOR bump.
 
 ## Skills
 

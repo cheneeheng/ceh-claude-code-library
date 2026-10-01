@@ -10,7 +10,7 @@ description: >-
   flow, reversed design choice) and the current picture or decision log must be brought back in
   sync.
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 license: Apache-2.0
 ---
 

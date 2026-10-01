@@ -11,7 +11,7 @@
 | Core                  | `ceh-core`         | Standards that hold however Claude Code is used: usage-limit guard + handoff (`usage-limit-handoff`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards)                                                                                                                                                         |
 | Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); explaining code until it lands; whole-repo orientation (`explain-codebase`); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
 | Git Workflow          | `ceh-git-workflow` | Branching, commits, pull requests from open to merge, changelog entries, releases including hotfixes, code review; a hook that blocks file edits on the default branch                                                                                                                                                                   |
-| Architecture          | `ceh-architecture` | Stack-agnostic design moments: the living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log) and domain modeling (IDs, status enums, layer boundaries); a SessionStart hook injects the invariants                                                                                                                                 |
+| Architecture          | `ceh-architecture` | Stack-agnostic design moments: the living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log) and domain modeling (IDs, status enums, layer boundaries)                                                                                                                                                                             |
 
 ### Categorization
 
@@ -57,10 +57,10 @@
 
 ### Architecture (`ceh-architecture`)
 
-| Skill                 | Invoke                       | When                                                                                                                                                                 |
-| --------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Document Architecture | Model-only, no slash command | Writing or updating the living `.agents_workspace/ARCHITECTURE.md`: 3-second Overview, Mermaid diagrams, Key Decisions log; also when a re-plan changes system shape |
-| Domain Modeling       | Model-only, no slash command | Defining entities, prefixed IDs, status enums, state transitions, or route/service/db layer boundaries (invariants also injected by a SessionStart hook)             |
+| Skill                 | Invoke                                    | When                                                                                                                                                                 |
+| --------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Document Architecture | `/ceh-architecture:document-architecture` | Writing or updating the living `.agents_workspace/ARCHITECTURE.md`: 3-second Overview, Mermaid diagrams, Key Decisions log; also when a re-plan changes system shape |
+| Domain Modeling       | `/ceh-architecture:domain-modeling`       | Defining entities, prefixed IDs, status enums, state transitions, or route/service/db layer boundaries                                                               |
 
 ---
 
