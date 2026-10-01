@@ -36,7 +36,7 @@
       "name": "ceh-python-service",
       "source": "./plugins/standalone/ceh-python-service",
       "version": "1.0.0",
-      "description": "CEH Python service: FastAPI, asyncpg, PostgreSQL schema, Alembic migrations, uv, testing (unit/integration/system), observability, security, and domain modeling standards for web services."
+      "description": "CEH Python service: FastAPI, asyncpg, PostgreSQL schema, Alembic migrations, uv, and testing (unit/integration/system) standards for web services."
     },
     {
       "name": "ceh-python-library",
