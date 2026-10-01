@@ -233,6 +233,24 @@ The pre-commit hook runs prettier and **aborts the commit when it reformats a fi
 Markdown table edit can trigger. Re-stage and commit again, and chain the push with `&&`, never
 `;`, so a failed commit does not push.
 
+## Evaluation
+
+Evals use Anthropic's own tools, nothing bespoke. Two options, by scope:
+
+- **One skill:** the `skill-creator:skill-creator` plugin, which runs a with/without comparison
+  inside a session from a skill's own `evals/evals.json`. Keep its workspace in
+  `.agents_workspace/skill-evals/<skill>/`, never under `plugins/`.
+- **A whole plugin:** `claude plugin eval` run from the plugin root, per
+  [Test plugins with evals](https://code.claude.com/docs/en/plugin-evals). `claude plugin eval init`
+  writes the cases to `evals/` (one directory per case: `prompt.md` plus `graders/`), and
+  `claude plugin eval .` runs each case three times with and without the plugin and reports the
+  difference. It needs Claude Code v2.1.269+ and git 2.31+, and every run and judge grader is a
+  real model call on your account. Pass `--no-publish` to keep the report local. In CI, add
+  `--threshold`, `--json` and `--trust-plugin`.
+
+The two tools do not read each other's case files. Eval only when asked, because the cost is real.
+Do not run the archived `ceh-evaluation` plugin (`archive/ceh-evaluation/`): these two replace it.
+
 ## Versioning
 
 Two independent layers.
