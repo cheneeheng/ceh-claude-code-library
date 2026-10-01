@@ -13,6 +13,9 @@ description: >-
   with this repo. Not for building a skill into another project's .claude/skills/ (use
   ceh-workflow-builder:build-agentic-workflow).
 argument-hint: "[skill-or-agent-name]"
+disable-model-invocation: false
+user-invocable: true
+license: Apache-2.0
 ---
 
 # Adding a Component to This Repo

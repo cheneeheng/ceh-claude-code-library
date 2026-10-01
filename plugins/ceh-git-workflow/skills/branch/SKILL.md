@@ -5,9 +5,12 @@ description: >-
   chore/, docs/, test/, refactor/), formatting the short description, or starting new work from
   main. Auto-load whenever a new git branch is being created, a branch name is being chosen, or work
   is being started from the main branch.
+disable-model-invocation: false
+user-invocable: true
 compatibility: >-
   Requires the git CLI on PATH and a git working tree. No network access, GitHub CLI, or language
   runtime is needed.
+license: Apache-2.0
 ---
 
 # Branch

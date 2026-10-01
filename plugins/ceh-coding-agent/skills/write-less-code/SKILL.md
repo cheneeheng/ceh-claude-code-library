@@ -7,6 +7,8 @@ description: >-
   implementing a feature, and whenever the user says "write less code", "be lazy", "lazy mode",
   "simplest solution", "minimal solution", "yagni", "do less", "shortest path", or complains about
   over-engineering, bloat, boilerplate, or unnecessary dependencies.
+disable-model-invocation: false
+user-invocable: true
 license: MIT
 ---
 

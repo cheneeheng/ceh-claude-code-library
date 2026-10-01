@@ -5,7 +5,10 @@ description: >-
   comment is blocking or advisory, prioritizing what to review first, or structuring review
   feedback. Auto-load whenever a PR review is being written, review comments are being left, or a PR
   is being assessed for approval.
+disable-model-invocation: false
+user-invocable: true
 disallowed-tools: Edit Write
+license: Apache-2.0
 ---
 
 # Code review

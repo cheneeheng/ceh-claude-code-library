@@ -8,6 +8,9 @@ description: >-
   finish only the current atomic step, start nothing new, write a durable handoff artifact recording
   completed vs open work, and end the turn. Not for ordinary end-of-task summaries (the contract's
   Summarize step covers those) or general session summaries without a limit trigger.
+disable-model-invocation: false
+user-invocable: true
+license: Apache-2.0
 ---
 
 # Usage limit handoff

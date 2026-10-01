@@ -10,6 +10,9 @@ description: >-
   the user based on lines nobody here has read is the failure mode this exists to prevent. Not for
   a file you are about to edit, debug or review: that wants a direct Read with offset/limit, since
   a summary cannot give an edit the exact text it needs.
+disable-model-invocation: false
+user-invocable: false
+license: Apache-2.0
 ---
 
 # Delegate bulk reads

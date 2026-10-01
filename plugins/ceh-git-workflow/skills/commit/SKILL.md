@@ -6,10 +6,13 @@ description: >-
   or adding footers for breaking changes and issue references. Auto-load whenever a git commit is
   being made, a commit message is being composed, or staged changes are being reviewed before
   committing.
+disable-model-invocation: false
+user-invocable: true
 compatibility: >-
   Requires the git CLI on PATH, a git working tree, and a configured `user.name` / `user.email`.
   If the repo installs commit hooks, their interpreters (e.g. Python for pre-commit) must also be
   present - none is assumed by this skill itself.
+license: Apache-2.0
 ---
 
 # Commit

@@ -4,6 +4,9 @@ description: >-
   Load this skill when <the moment, as a verb phrase: "opening a PR", "writing a migration">:
   <what it makes Claude do, key use case first>. Trigger on "<user phrase>", "<user phrase>",
   "<user phrase>". Not for <near-miss task> (use ceh-<plugin>:<other-skill>).
+disable-model-invocation: false
+user-invocable: true
+license: Apache-2.0
 ---
 
 <!-- TEMPLATE-GUIDANCE: delete this whole comment before committing. validate.py fails while it remains.
@@ -12,6 +15,10 @@ Frontmatter
 - Keys in this order, only the ones that change behavior: name, description, argument-hint,
   arguments, disable-model-invocation, user-invocable, allowed-tools, disallowed-tools, model,
   effort, context, agent, background, paths, hooks, shell, compatibility, license, metadata.
+  Exception: disable-model-invocation, user-invocable, and license are always present, even at
+  their defaults, so every skill states who invokes it. Model-only (hook-loaded):
+  user-invocable: false. User-only (side effects): disable-model-invocation: true.
+  license is Apache-2.0 unless the skill came from another repo under its own license.
 - name: lowercase letters, digits, single hyphens, max 64 chars, equal to the directory name.
 - description: always `>-`, 2-space indent, no blank lines, max 1024 chars. Triggers live here,
   not in `when_to_use` and not in the body.

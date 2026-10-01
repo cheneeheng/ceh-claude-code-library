@@ -10,9 +10,12 @@ description: >-
   *.csproj, build.gradle) or a git tag is being created. Not for landing a branch with no version
   (use ceh-git-workflow:pull-request).
 argument-hint: "[version]"
+disable-model-invocation: false
+user-invocable: true
 compatibility: >-
   Requires the git CLI on PATH, the GitHub CLI (`gh`) authenticated via `gh auth login`, a git
   repository with a GitHub remote, permission to push branches and tags, and network access.
+license: Apache-2.0
 ---
 
 # Release
