@@ -78,11 +78,11 @@ tools/
 
 ## Plugins
 
-| Plugin directory   | Domain                                                                                                                                                                                                                                                                   |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ceh-core`         | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                                                           |
-| `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation                                                                                                                                                                           |
-| `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management; plus the two orchestrated flows — `merge-flow` (lands a branch, no version) and `release-flow` (ships a release) — which sequence those skills and own only the gates |
+| Plugin directory   | Domain                                                                                                                                                                                                                        |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ceh-core`         | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                |
+| `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation                                                                                                                                |
+| `ceh-git-workflow` | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, releases including hotfixes (`release`, which also runs the full ship sequence), code review |
 
 ## Skills
 

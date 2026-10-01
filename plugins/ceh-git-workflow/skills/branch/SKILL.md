@@ -10,7 +10,7 @@ compatibility: >-
   runtime is needed.
 ---
 
-# Branching
+# Branch
 
 Trunk-based development. `main` is always deployable. Branch from `main` only — never from
 another feature branch. Delete branches after merge.
@@ -36,7 +36,7 @@ another feature branch. Delete branches after merge.
 
    Do this before opening the PR and again if `main` moves ahead while the PR is in review.
 
-## Branch naming
+### Naming
 
 ```
 <type>/<short-description>

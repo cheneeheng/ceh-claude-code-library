@@ -10,7 +10,7 @@
 | --------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Core                  | `ceh-core`         | Standards that hold however Claude Code is used: usage-limit guard + handoff (`usage-limit-handoff`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards)                                                                                                                                                         |
 | Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); explaining code until it lands; whole-repo orientation (`explain-codebase`); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
-| Git Workflow          | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management, plus the `merge-flow` and `release-flow` orchestrations                                                                                                                                                                               |
+| Git Workflow          | `ceh-git-workflow` | Branching, commits, pull requests from open to merge, changelog entries, releases including hotfixes, code review                                                                                                                                                                                                                        |
 
 ### Categorization
 
@@ -45,19 +45,14 @@
 
 ### Git Workflow (`ceh-git-workflow`)
 
-| Skill                 | Invoke                                    | Auto-loads when                                                                                                                                            |
-| --------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Branch                | `/ceh-git-workflow:branch`                | Creating or naming a branch                                                                                                                                |
-| Commit                | `/ceh-git-workflow:commit`                | Writing a commit message or staging changes                                                                                                                |
-| Open PR               | `/ceh-git-workflow:open-pr`               | Opening a pull request, writing a PR description, checking the definition of done, or enabling auto-merge on repos that allow it                           |
-| Merge                 | `/ceh-git-workflow:merge`                 | Merging a PR (immediate or auto-merge) or a local branch into `main`, then cleaning up the branch afterward                                                |
-| Hotfix                | `/ceh-git-workflow:hotfix`                | Executing a critical production fix                                                                                                                        |
-| Release               | `/ceh-git-workflow:release`               | Tagging a release or bumping a version                                                                                                                     |
-| Code Review           | `/ceh-git-workflow:code-review`           | Reviewing a PR or leaving review comments                                                                                                                  |
-| Dependency Management | `/ceh-git-workflow:dependency-management` | Adding, removing, or upgrading a package                                                                                                                   |
-| Update Changelog      | `/ceh-git-workflow:update-changelog`      | Generate or update CHANGELOG.md, write release notes, or log a change under `[Unreleased]`                                                                 |
-| Merge Flow            | `/ceh-git-workflow:merge-flow`            | Land the branch you are on in one pass — changelog under `[Unreleased]` → README → commit → PR → merge → cleanup, with no version bump and no tag          |
-| Release Flow          | `/ceh-git-workflow:release-flow`          | Ship a complete release in one pass — version bump → changelog → README → CLAUDE.md → PR → merge → tag → release, sequencing the skill that owns each step |
+| Skill            | Invoke                               | Auto-loads when                                                                                                                                                           |
+| ---------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Branch           | `/ceh-git-workflow:branch`           | Creating or naming a branch                                                                                                                                               |
+| Commit           | `/ceh-git-workflow:commit`           | Writing a commit message or staging changes                                                                                                                               |
+| Pull Request     | `/ceh-git-workflow:pull-request`     | A branch is heading into `main`: open a PR, merge it (or a local branch), or land the branch in one pass — changelog under `[Unreleased]` → commit → PR → merge → cleanup |
+| Release          | `/ceh-git-workflow:release`          | Ship a version: bump → changelog → PR → merge → tag → GitHub release; also tag-only and the hotfix variant                                                                |
+| Code Review      | `/ceh-git-workflow:code-review`      | Reviewing a PR or leaving review comments                                                                                                                                 |
+| Update Changelog | `/ceh-git-workflow:update-changelog` | Generate or update CHANGELOG.md, write release notes, or log a change under `[Unreleased]`                                                                                |
 
 ---
 

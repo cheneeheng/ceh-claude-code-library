@@ -65,7 +65,7 @@ Deliver a ranked candidate table:
 | --- | ------------ | ---------------------------------------- | ---- | -------------- | -------- |
 
 Group candidates into clusters sized so each cluster makes one reviewable PR (the size limits in
-`ceh-git-workflow:open-pr`). Then **stop and wait for the user to select clusters**. Invoking
+`ceh-git-workflow:pull-request`). Then **stop and wait for the user to select clusters**. Invoking
 this skill approved the campaign, not any specific candidate — never proceed past this point
 unprompted.
 

@@ -12,7 +12,9 @@ compatibility: >-
   present - none is assumed by this skill itself.
 ---
 
-# Commit Messages — Conventional Commits
+# Commit
+
+Every commit is one logical change with a Conventional Commits message:
 
 ```
 <type>(<scope>): <short summary>
@@ -48,7 +50,9 @@ compatibility: >-
    here-string: the temp-file path avoids all shell quoting and behaves identically in PowerShell
    and Bash.
 
-## Types
+## Rules
+
+### Types
 
 | Type       | When to use                                              |
 | ---------- | -------------------------------------------------------- |
@@ -64,14 +68,14 @@ compatibility: >-
 | `chore`    | Maintenance, tooling; anything not covered above         |
 | `revert`   | Reverts a previous commit (body: `Reverts <sha>`)        |
 
-## Scope
+### Scope
 
 The optional `(<scope>)` names the area of the codebase touched — a module, package, or
 component (`auth`, `orders`, `api`). Pick the narrowest noun that covers the change. Omit the
 parentheses entirely for repo-wide changes (`chore: bump all dev dependencies`). Keep it
 lowercase and consistent with scopes already used in the log (`git log --oneline`).
 
-## Rules
+### Message
 
 - One logical change per commit. Don't mix a refactor with a feature, or two unrelated fixes —
   split them so each can be reviewed and reverted on its own.
