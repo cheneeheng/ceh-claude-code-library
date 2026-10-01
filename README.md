@@ -10,7 +10,7 @@
 | --------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Core                  | `ceh-core`         | Standards that hold however Claude Code is used: usage-limit guard + handoff (`usage-limit-handoff`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards)                                                                                                                                                         |
 | Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); explaining code until it lands; whole-repo orientation (`explain-codebase`); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
-| Git Workflow          | `ceh-git-workflow` | Branching, commits, pull requests from open to merge, changelog entries, releases including hotfixes, code review                                                                                                                                                                                                                        |
+| Git Workflow          | `ceh-git-workflow` | Branching, commits, pull requests from open to merge, changelog entries, releases including hotfixes, code review; a hook that blocks file edits on the default branch                                                                                                                                                                   |
 
 ### Categorization
 
@@ -47,7 +47,7 @@
 
 | Skill            | Invoke                               | Auto-loads when                                                                                                                                                           |
 | ---------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Branch           | `/ceh-git-workflow:branch`           | Creating or naming a branch                                                                                                                                               |
+| Branch           | `/ceh-git-workflow:branch`           | Creating or naming a branch; a PreToolUse hook denies file edits on the default branch until one exists                                                                   |
 | Commit           | `/ceh-git-workflow:commit`           | Writing a commit message or staging changes                                                                                                                               |
 | Pull Request     | `/ceh-git-workflow:pull-request`     | A branch is heading into `main`: open a PR, merge it (or a local branch), or land the branch in one pass — changelog under `[Unreleased]` → commit → PR → merge → cleanup |
 | Release          | `/ceh-git-workflow:release`          | Ship a version: bump → changelog → PR → merge → tag → GitHub release; also tag-only and the hotfix variant                                                                |

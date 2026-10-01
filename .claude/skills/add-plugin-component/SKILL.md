@@ -163,6 +163,7 @@ work, so no agent sets it.
 - `plugins/ceh-<plugin>/README.md` — add a row to that plugin's own table. The plugin README also
   carries anything a user must do before the component works: prerequisites, when a hook fires,
   and every environment variable the plugin reads, with its default and whether it is required.
+  A new variable also gets a row in `docs/ENVIRONMENT_VARIABLES.md`, the index across plugins.
 
 ## 4. Register any duplication
 

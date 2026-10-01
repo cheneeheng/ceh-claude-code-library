@@ -11,8 +11,8 @@ Tier: **cross-cutting**. No plugin dependencies.
 
 Each skill declares what it needs in its `compatibility` frontmatter. In short: the `git` CLI for
 every skill, the GitHub CLI (`gh`, authenticated via `gh auth login`) for `pull-request` and
-`release`, and Python 3 for the `update-changelog` validator. The plugin reads no environment
-variables.
+`release`, and `python3` on PATH (stdlib only) for the `update-changelog` validator and the
+branch guard hook.
 
 ## Skills
 
@@ -35,10 +35,35 @@ skills rather than fanning out into one per step.
 > change is user-facing, so it is not a declared dependency. `update-changelog` lives here because
 > every input it reads is git (`git describe --tags`, `git log`, `git tag`, `git remote`).
 
+## Hooks
+
+The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled.
+
+| Guard                         | Event                                                       | Script            | Default |
+| ----------------------------- | ----------------------------------------------------------- | ----------------- | ------- |
+| [Branch guard](#branch-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`) | `branch-guard.py` | on      |
+
+### Branch guard
+
+Denies a file edit when the file sits in a git work tree whose checked-out branch is the default
+branch (`origin/HEAD`, or `main` / `master`), and tells the agent to create a feature branch per
+`branch` first. Uncommitted work carries over with `git checkout -b`. This turns "branch before
+implementing" from an instruction the model can forget into one it cannot skip.
+
+Files outside a git work tree pass, as do detached and unborn `HEAD`s. The guard covers the file
+tools only: a `Bash` write (`sed -i`, `>`) on the default branch still goes through, so it is a
+nudge with teeth rather than a sandbox. It fails open: unparseable input, a missing `git`, or a
+crashed interpreter allows the edit.
+
+| Variable           | Default          | Effect                                                                                |
+| ------------------ | ---------------- | ------------------------------------------------------------------------------------- |
+| `CEH_BRANCH_GUARD` | unset (guard on) | `off` allows edits on the default branch, for when the user asked to edit it in place |
+
 ## Scripts
 
 | Script                    | Purpose                                                                                                                             |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/branch-guard.py` | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                        |
 | `scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`) |
 
 ```bash
