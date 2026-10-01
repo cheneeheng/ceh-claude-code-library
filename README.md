@@ -12,6 +12,8 @@
 | Agent Coding Contract | `ceh-coding-agent` | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); explaining code until it lands; whole-repo orientation (`explain-codebase`); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
 | Git Workflow          | `ceh-git-workflow` | Branching, commits, pull requests from open to merge, changelog entries, releases including hotfixes, code review; a hook that blocks file edits on the default branch                                                                                                                                                                   |
 | Architecture          | `ceh-architecture` | Stack-agnostic design moments: the living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log) and domain modeling (IDs, status enums, layer boundaries)                                                                                                                                                                             |
+| SEO                   | `ceh-seo`          | Discoverability for anything exposed to the internet: crawlable public web pages (head tags, structured data, sitemap, rendering), the `llms.txt` agent index, and the findability of README, package, and landing text                                                                                                                  |
+| Blog                  | `ceh-blog`         | Blog posts in a personal, series-first voice: draft from a topic, repo, or notes (interviewing when material is thin), edit an existing draft, repurpose a finished post for X, LinkedIn, TL;DR, and newsletters                                                                                                                         |
 
 ### Categorization
 
@@ -19,7 +21,7 @@
 | --------------------- | ----------------- | -------------------------------------------------- |
 | **Scenario bundle**   | one per situation | —                                                  |
 | **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity      | `ceh-architecture`                                 |
+| **Use-case workflow** | per activity      | `ceh-architecture`, `ceh-seo`, `ceh-blog`          |
 | **Stack / build**     | per project type  | —                                                  |
 
 ---
@@ -62,6 +64,22 @@
 | Document Architecture | `/ceh-architecture:document-architecture` | Writing or updating the living `.agents_workspace/ARCHITECTURE.md`: 3-second Overview, Mermaid diagrams, Key Decisions log; also when a re-plan changes system shape |
 | Domain Modeling       | `/ceh-architecture:domain-modeling`       | Defining entities, prefixed IDs, status enums, state transitions, or route/service/db layer boundaries                                                               |
 
+### SEO (`ceh-seo`)
+
+| Skill               | Invoke                       | When                                                                                                                                          |
+| ------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Make Page Crawlable | Model-only, no slash command | Shipping or creating a public web page: per-page head checklist, sitemap and robots, JSON-LD, content in the initial HTML, GEO citation rules |
+| Write llms.txt      | Model-only, no slash command | Creating or updating the `llms.txt` reading list for AI agents: positional format, link curation, `## Optional`, markdown over HTML           |
+| Pitch Project       | Model-only, no slash command | Writing the README first screen, package description and keywords, GitHub topics, marketplace listings, or landing copy                       |
+
+### Blog (`ceh-blog`)
+
+| Skill          | Invoke                     | When                                                                                                                        |
+| -------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Draft Post     | `/ceh-blog:draft-post`     | A new post from a topic, idea, repo, or experience (interview first) or from notes, bullets, or an outline (draft directly) |
+| Edit Post      | `/ceh-blog:edit-post`      | An existing draft: diagnosis first, then a full revision that keeps the author's voice                                      |
+| Repurpose Post | `/ceh-blog:repurpose-post` | A finished post to adapt into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb                                 |
+
 ---
 
 ## Agents
@@ -89,6 +107,8 @@
 /plugin install ceh-coding-agent@ceh-claude-code-library --scope user
 /plugin install ceh-git-workflow@ceh-claude-code-library --scope user
 /plugin install ceh-architecture@ceh-claude-code-library --scope user
+/plugin install ceh-seo@ceh-claude-code-library --scope user
+/plugin install ceh-blog@ceh-claude-code-library --scope user
 ```
 
 ### Manual installation (alternative)
@@ -105,7 +125,9 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/ceh-claude-code-library/plugins/ceh-core" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-coding-agent" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-git-workflow" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-architecture" }
+    { "path": "~/ceh-claude-code-library/plugins/ceh-architecture" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-seo" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-blog" }
   ]
 }
 ```

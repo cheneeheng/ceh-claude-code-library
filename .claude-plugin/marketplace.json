@@ -31,6 +31,18 @@
       "source": "./plugins/ceh-architecture",
       "version": "1.0.0",
       "description": "CEH architecture: stack-agnostic design moments — living architecture documentation (Mermaid diagrams + a Key Decisions log) and domain modeling."
+    },
+    {
+      "name": "ceh-seo",
+      "source": "./plugins/ceh-seo",
+      "version": "1.0.0",
+      "description": "CEH SEO: discoverability standards for anything exposed to the internet — technical SEO/GEO for public web pages (meta tags, structured data, sitemap, rendering strategy), authoring the llms.txt agent index, and findability of public-facing text (README first screen, package descriptions and keywords, repo topics, landing copy)."
+    },
+    {
+      "name": "ceh-blog",
+      "source": "./plugins/ceh-blog",
+      "version": "1.0.0",
+      "description": "CEH blog: turn a half-formed idea into a compelling, publishable blog post in a personal, series-first voice via structured interview; repurpose finished posts for Twitter/X, LinkedIn, TL;DR, and newsletters."
     }
   ]
 }

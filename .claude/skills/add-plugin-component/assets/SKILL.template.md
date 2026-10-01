@@ -19,7 +19,9 @@ Frontmatter
   their defaults, so every skill states who invokes it. Model-only (hook-loaded):
   user-invocable: false. User-only (side effects): disable-model-invocation: true.
   license is Apache-2.0 unless the skill came from another repo under its own license.
-- name: lowercase letters, digits, single hyphens, max 64 chars, equal to the directory name.
+- name: lowercase letters, digits, single hyphens, max 64 chars, equal to the directory name. Use a
+  verb phrase (`draft-post`, `make-page-crawlable`): a skill is something you do at a moment.
+  Agents are nouns (`bulk-reader`). Exempt: model-only standards and established terms of art.
 - description: always `>-`, 2-space indent, no blank lines, max 1024 chars. Triggers live here,
   not in `when_to_use` and not in the body.
 - Any other value containing ": " gets single quotes: argument-hint: '[plan-file]'.
