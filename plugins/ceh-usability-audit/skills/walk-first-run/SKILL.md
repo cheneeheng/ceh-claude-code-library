@@ -307,8 +307,8 @@ Keep raw walker transcripts in that run folder — a finding without its transcr
 - They got in — is the interface itself usable? `ceh-usability-audit:audit-interface`.
 - The stall was an error message: `ceh-usability-audit:audit-error-messages`.
 - The stall was wording: `ceh-usability-audit:write-plain-language`.
-- The stall was a missing or incorrect doc: `ceh-documentation:write-guides-and-runbooks`, or the
-  ceh-readme plugin for the README.
+- The stall was a missing or incorrect doc: `ceh-documentation:write-guides-and-runbooks`, or
+  `ceh-git-workflow:update-readme` for the README.
 - The project has no docs set at all: `ceh-documentation:write-project-docs`.
 - The stall was keyboard, contrast, or screen-reader: `ceh-web-frontend:make-ui-accessible`.
 - The README's first screen does not say what this is: `ceh-seo:pitch-project`.

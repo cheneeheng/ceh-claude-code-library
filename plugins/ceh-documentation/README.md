@@ -79,8 +79,8 @@ metadata are expressed in frontmatter or nav config, never by renaming a file ou
 
 ## Boundaries
 
-- README maintenance belongs to the `ceh-readme` plugin: every repo has a README, but only a
-  software project needs a `docs/` set.
+- README maintenance belongs to `ceh-git-workflow:update-readme`: every repo has a README, but only
+  a software project needs a `docs/` set.
 - Changelog maintenance belongs to `ceh-git-workflow:update-changelog`: every input it reads is
   git, so it fires on a git moment, not a documentation one.
 - A maintainer architecture document belongs to `ceh-coding-agent:document-architecture`, and a

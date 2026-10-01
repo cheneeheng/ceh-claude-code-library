@@ -6,8 +6,8 @@ description: >-
   pyproject.toml or package.json, marketplace listings, landing-page copy. Trigger on "make this
   repo findable", "improve the pitch", "package description", "GitHub topics", "keywords", "SEO for
   the README", or when publishing a repo, library, or plugin for the first time. Not for keeping the
-  README accurate after code changes (the ceh-readme plugin owns that) and not for HTML page markup
-  (use ceh-seo:make-page-crawlable).
+  README accurate after code changes (use ceh-git-workflow:update-readme) and not for HTML page
+  markup (use ceh-seo:make-page-crawlable).
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0
@@ -62,5 +62,5 @@ and zero external dependencies.`
 - No marketing adjectives without a verifiable fact attached.
 - No keyword-stuffed descriptions — package indexes and engines both derank them.
 - No different pitches on different surfaces (see step 2).
-- Post-change accuracy of the README belongs to the `ceh-readme` plugin. Head tags, sitemaps, and
-  structured data on HTML pages belong to `ceh-seo:make-page-crawlable`.
+- Post-change accuracy of the README belongs to `ceh-git-workflow:update-readme`. Head tags,
+  sitemaps, and structured data on HTML pages belong to `ceh-seo:make-page-crawlable`.

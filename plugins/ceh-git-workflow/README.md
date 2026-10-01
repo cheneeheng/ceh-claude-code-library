@@ -2,7 +2,7 @@
 
 Claude Code plugin delivering git workflow standards as skills. Covers trunk-based branching,
 Conventional Commits, pull requests from opening to merge, code review conventions, changelog
-entries, and releases. Everything here is stack-agnostic: language toolchains, coverage targets,
+entries, README upkeep, and releases. Everything here is stack-agnostic: language toolchains, coverage targets,
 and package management belong in stack plugins.
 
 Tier: **cross-cutting**. No plugin dependencies.
@@ -26,14 +26,16 @@ Auto-trigger on context; each loads only the relevant content.
 | `release`          | Shipping a version: bump → changelog → PR → merge → tag → GitHub release. Also covers tag-only and the hotfix variant                                                              |
 | `code-review`      | Writing PR review comments                                                                                                                                                         |
 | `update-changelog` | Writing a `CHANGELOG.md` entry — a versioned section, or bullets under `[Unreleased]`                                                                                              |
+| `update-readme`    | Keeping `README.md` accurate after a significant change: surgical edits behind a gate that does nothing when nothing material changed                                              |
 
 `pull-request` and `release` each carry their full sequence inline and call only
-`update-changelog`, so a compound request ("commit, PR and merge", "ship a release") loads two
-skills rather than fanning out into one per step.
+`update-changelog` on every run, plus `update-readme` when the change is user-facing, so a compound
+request ("commit, PR and merge", "ship a release") loads two or three skills rather than fanning
+out into one per step.
 
-> README maintenance lives in the `ceh-readme` plugin, which both sequences use only when the
-> change is user-facing, so it is not a declared dependency. `update-changelog` lives here because
-> every input it reads is git (`git describe --tags`, `git log`, `git tag`, `git remote`).
+> `update-changelog` and `update-readme` live here because both fire at the same git moment, a
+> change about to land, and read git to do it (`git describe --tags`, `git log`, `git diff`).
+> `update-readme` was the standalone `ceh-readme` plugin in agent-skills.
 
 ## Hooks
 

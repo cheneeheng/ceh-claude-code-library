@@ -9,7 +9,7 @@ description: >-
   "document the config options", or when ceh-documentation:write-project-docs delegates its
   reference step. Counts the public surface first and reports coverage against it. Not for guides
   or tutorials (use write-guides-and-runbooks), explanations of design (use write-concept-docs), or
-  the README (the ceh-readme plugin owns that).
+  the README (use ceh-git-workflow:update-readme).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

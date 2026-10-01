@@ -9,7 +9,7 @@ description: >-
   how to use this", "give users something to copy into their app", "write integration snippets", or
   "the examples are missing or broken, redo them". Not for documenting examples that already exist
   as docs pages (use ceh-documentation:write-project-docs), task-by-task how-to prose (use
-  write-guides-and-runbooks), or a README refresh (the ceh-readme plugin owns that).
+  write-guides-and-runbooks), or a README refresh (use ceh-git-workflow:update-readme).
 argument-hint: "[project-path]"
 disable-model-invocation: false
 user-invocable: true

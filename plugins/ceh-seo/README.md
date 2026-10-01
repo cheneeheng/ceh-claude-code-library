@@ -19,8 +19,8 @@ answer-first sections, standalone quotable facts, question-shaped headings.
 
 ## Boundaries
 
-- README **accuracy** after a code change belongs to the `ceh-readme` plugin. This plugin owns
-  README **findability**.
+- README **accuracy** after a code change belongs to `ceh-git-workflow:update-readme`. This plugin
+  owns README **findability**.
 - Writing the content itself (blog posts, docs) belongs to `ceh-blog` and `ceh-documentation`. This
   plugin governs how that content is found and cited.
 - Accessibility always wins conflicts with SEO.
