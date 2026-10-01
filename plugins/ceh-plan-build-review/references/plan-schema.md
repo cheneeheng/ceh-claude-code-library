@@ -9,7 +9,7 @@ The base filenames are `SKELETON.md` and `ITER_NN.md`. A planning set may carry 
 location. The tag attaches as a prefix or suffix, bound by a `_`, `-`, or `.` separator:
 
 - `SKELETON_v2.md`, `v2_SKELETON.md`, `SKELETON-v2.md`
-- `ITER_03_v2.md`, `v2_ITER_03.md`, `ITER_03-v3.md`
+- `ITER_03_v2.md`, `v2_ITER_03.md`, `ITER_03-v2.md`
 
 The canonical emit form is a `_vN` suffix (`SKELETON_v2.md`, `ITER_03_v2.md`), though a `v2_`
 prefix is also read.
@@ -29,7 +29,7 @@ Versions are linked, not isolated. A later version builds on an earlier one thro
 on and inherits every section it does not re-specify. Because `depends_on` names artifacts by
 **stem** (filename without `.md`, which carries the version tag), one mechanism covers both
 same-sequence iteration chaining (`[SKELETON, ITER_01]`) and cross-version inheritance
-(`[SKELETON_v1, ITER_03_v1]`). A version's SKELETON is optional — a version may be ITER files
+(`[SKELETON, ITER_03]`, from a `v2` file into the untagged default family). A version's SKELETON is optional — a version may be ITER files
 alone that depend on the previous version's SKELETON.
 
 ## Frontmatter
