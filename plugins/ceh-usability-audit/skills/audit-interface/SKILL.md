@@ -13,7 +13,7 @@ description: >-
   ceh-web-frontend:make-ui-accessible).
 disable-model-invocation: false
 user-invocable: true
-effort: xhigh
+effort: high
 compatibility: >-
   Probing a live web UI needs the Claude in Chrome browser tools in the main session, and probing a
   CLI needs it installed and runnable. Without them the audit falls back to screenshots, page text

@@ -14,7 +14,7 @@ description: >-
   ceh-usability-audit:audit-interface) or WCAG (use ceh-web-frontend:make-ui-accessible).
 disable-model-invocation: false
 user-invocable: true
-effort: xhigh
+effort: high
 compatibility: >-
   Requires whatever the target project's own first-run steps need - `uv`, `npm`, `docker`, a
   database - none of which this skill assumes is installed; a missing prerequisite is itself an
