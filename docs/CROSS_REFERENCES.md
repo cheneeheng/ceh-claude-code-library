@@ -124,11 +124,11 @@ verbatim-literal exception), and "Describe what exists today".
 
 ## Bulk-read guard exemption list (`ALWAYS_ALLOW`)
 
-**Canonical:** `plugins/ceh-coding-agent/scripts/bulk-read-guard.py` — `ALWAYS_ALLOW` tuple
+**Canonical:** `plugins/ceh-core/scripts/bulk-read-guard.py` — `ALWAYS_ALLOW` tuple
 
-| Copy                                                       | Section              | Diverges |
-| ---------------------------------------------------------- | -------------------- | -------- |
-| `plugins/ceh-coding-agent/scripts/bulk-read-bash-guard.py` | `ALWAYS_ALLOW` tuple | none     |
+| Copy                                               | Section              | Diverges |
+| -------------------------------------------------- | -------------------- | -------- |
+| `plugins/ceh-core/scripts/bulk-read-bash-guard.py` | `ALWAYS_ALLOW` tuple | none     |
 
 **Shared:** the glob tuple, verbatim. The two guards cover the same files by two routes (`Read` and
 `cat`/`head`), so a pattern in one and not the other denies a file on one route and allows it on
@@ -136,11 +136,11 @@ the other. Each hook is a standalone script with no shared module, so the list i
 
 ## Bulk-reader answer format (Answer / Not found / Coverage)
 
-**Canonical:** `plugins/ceh-coding-agent/agents/bulk-reader.md` — § Output to parent session
+**Canonical:** `plugins/ceh-core/agents/bulk-reader.md` — § Output to parent session
 
-| Copy                                                           | Section                            | Diverges                                                                            |
-| -------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------- |
-| `plugins/ceh-coding-agent/skills/delegate-bulk-reads/SKILL.md` | § Trust the anchors, not the prose | names the sections only and carries the caller-side verification rules, no template |
+| Copy                                                   | Section                            | Diverges                                                                            |
+| ------------------------------------------------------ | ---------------------------------- | ----------------------------------------------------------------------------------- |
+| `plugins/ceh-core/skills/delegate-bulk-reads/SKILL.md` | § Trust the anchors, not the prose | names the sections only and carries the caller-side verification rules, no template |
 
 **Shared:** the three fixed sections and their order — `## Answer` (every claim anchored
 `path:line`), `## Not found / uncertain` (never omitted, `- Nothing outstanding.` when clean),
