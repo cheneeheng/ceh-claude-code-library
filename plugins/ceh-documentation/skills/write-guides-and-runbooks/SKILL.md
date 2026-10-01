@@ -8,7 +8,7 @@ description: >-
   runbook", "getting-started guide", "installation guide", "document how to use this", "document
   how to operate this", or when ceh-documentation:write-project-docs delegates its guide step. Not
   for API reference docs (use write-api-reference), a whole docs set (use write-project-docs), blog
-  posts (the ceh-blog plugin owns those), or README files (the ceh-readme plugin owns those).
+  posts (the ceh-blog plugin owns those), or README files (use ceh-git-workflow:update-readme).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

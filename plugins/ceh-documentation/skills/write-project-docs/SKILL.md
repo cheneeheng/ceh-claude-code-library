@@ -9,7 +9,7 @@ description: >-
   docs folder", or "our docs are missing or out of date, redo them". Surveys, plans the page set,
   and sequences it: the reference goes to write-api-reference, concept pages to write-concept-docs,
   guides to write-guides-and-runbooks. Not for one guide or runbook alone (use
-  write-guides-and-runbooks), a README refresh (the ceh-readme plugin owns that), or a maintainer
+  write-guides-and-runbooks), a README refresh (use ceh-git-workflow:update-readme), or a maintainer
   architecture doc (use ceh-coding-agent:document-architecture).
 argument-hint: "[project-path]"
 disable-model-invocation: false

@@ -1,0 +1,26 @@
+/* The theme loads first; everything below uses its tokens only, so swapping brand.css re-themes
+   the whole canvas. Theme files come from ceh-web-frontend:design-ui (Tidewater by default). */
+@import "./brand.css";
+
+.shell { display: grid; grid-template-columns: 1fr 24rem; height: 100vh; background: var(--bg); }
+.canvas { overflow: auto; padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-4); }
+.canvas-empty { margin: auto; max-width: 32rem; text-align: center; }
+.starters { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; margin-top: var(--space-4); }
+
+.chat { display: flex; flex-direction: column; background: var(--surface); border-left: 1px solid var(--border); }
+.messages { flex: 1; overflow: auto; margin: 0; padding: var(--space-4); list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
+.messages .user { align-self: flex-end; background: var(--secondary-wash); padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); }
+.messages .assistant { align-self: flex-start; white-space: pre-wrap; }
+.chat-error { padding: 0 var(--space-4); }
+.chat form { display: flex; gap: var(--space-2); padding: var(--space-4); border-top: 1px solid var(--border); }
+.chat .input { flex: 1; }
+
+.stat-value { font-family: var(--font-display); font-size: var(--fs-600); margin: 0; }
+.key-values { display: grid; grid-template-columns: max-content 1fr; gap: var(--space-2) var(--space-6); margin: 0; }
+.key-values div { display: contents; }
+.key-values dd { margin: 0; }
+.card ol, .card ul:not(.bar-chart) { padding-left: var(--space-5); }
+.bar-chart { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: max-content max-content 1fr; gap: var(--space-2) var(--space-4); align-items: center; }
+.bar-chart li { display: contents; }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }

@@ -97,7 +97,8 @@ the next.
 2. Log the change under `## [Unreleased]`: invoke the Skill tool with
    skill="ceh-git-workflow:update-changelog" in **Unreleased mode**. A genuinely invisible change
    (typo, test-only tweak) is the one exception; record the skip.
-3. Refresh the README if the change is user-facing, or record "no update needed".
+3. Refresh the README per `ceh-git-workflow:update-readme` if the change is user-facing, or record
+   "no update needed".
 4. Commit the work and docs following `ceh-git-workflow:commit`. Tree clean before the next step.
 5. Run [Open](#open), then [Merge](#merge). If Open queued auto-merge, Merge only waits for it to
    land and cleans up. Wait on CI with `gh run watch`, never by polling by hand.
