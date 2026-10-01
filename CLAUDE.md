@@ -18,12 +18,12 @@ they live:
 
 Plugins fall into four tiers:
 
-| Tier                  | Loaded            | Plugins                                                           |
-| --------------------- | ----------------- | ----------------------------------------------------------------- |
-| **Scenario bundle**   | one per situation | —                                                                 |
-| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing` |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`                                             |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`    |
+| Tier                  | Loaded            | Plugins                                                             |
+| --------------------- | ----------------- | ------------------------------------------------------------------- |
+| **Scenario bundle**   | one per situation | —                                                                   |
+| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`   |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation` |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`      |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
@@ -67,6 +67,7 @@ plugins/                      # All plugins — flat, one directory per plugin, 
     ├── agents/                   # Optional — subagents, one <name>.md each
     ├── hooks/                    # Optional — hooks.json wiring scripts via ${CLAUDE_PLUGIN_ROOT}
     ├── output-styles/            # Optional — output style .md files
+    ├── references/               # Optional — files shared by several skills of this plugin, read via ${CLAUDE_PLUGIN_ROOT}
     ├── scripts/                  # Optional — hook scripts and shell helpers
     └── skills/
         └── <skill-name>/
@@ -78,17 +79,19 @@ tools/
 
 ## Plugins
 
-| Plugin directory     | Domain                                                                                                                                                                                                                        |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ceh-core`           | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                |
-| `ceh-coding-agent`   | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation, the living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log)                                                           |
-| `ceh-git-workflow`   | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, releases including hotfixes (`release`, which also runs the full ship sequence), code review |
-| `ceh-testing`        | Stack-agnostic testing technique: reproduce-first bug fixes, test-case design, suite audit (with a report-only mode), behavior-preservation checks, test risk gaps                                                            |
-| `ceh-python-service` | FastAPI, asyncpg, PostgreSQL, Alembic, uv/ruff/mypy, pytest, observability, security, and domain modeling for web services; unit/integration/system tester agents                                                             |
-| `ceh-python-library` | Packaging and publishing, public API surface and semver, uv/ruff/mypy, and pytest for distributable libraries with no web dependencies                                                                                        |
-| `ceh-web-frontend`   | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, UI visual design and theming, Cytoscape.js graph visualization; unit/integration/system tester agents              |
-| `ceh-seo`            | Discoverability for anything internet-exposed: crawlable public web pages, the `llms.txt` agent index, findability of README, package, and landing text                                                                       |
-| `ceh-blog`           | Blog posts in a personal, series-first voice: draft (interviewing when material is thin), edit, repurpose for X, LinkedIn, TL;DR, and newsletters                                                                             |
+| Plugin directory        | Domain                                                                                                                                                                                                                        |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ceh-core`              | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                |
+| `ceh-coding-agent`      | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation, the living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log)                                                           |
+| `ceh-git-workflow`      | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, releases including hotfixes (`release`, which also runs the full ship sequence), code review |
+| `ceh-testing`           | Stack-agnostic testing technique: reproduce-first bug fixes, test-case design, suite audit (with a report-only mode), behavior-preservation checks, test risk gaps                                                            |
+| `ceh-python-service`    | FastAPI, asyncpg, PostgreSQL, Alembic, uv/ruff/mypy, pytest, observability, security, and domain modeling for web services; unit/integration/system tester agents                                                             |
+| `ceh-python-library`    | Packaging and publishing, public API surface and semver, uv/ruff/mypy, and pytest for distributable libraries with no web dependencies                                                                                        |
+| `ceh-web-frontend`      | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, UI visual design and theming, Cytoscape.js graph visualization; unit/integration/system tester agents              |
+| `ceh-seo`               | Discoverability for anything internet-exposed: crawlable public web pages, the `llms.txt` agent index, findability of README, package, and landing text                                                                       |
+| `ceh-blog`              | Blog posts in a personal, series-first voice: draft (interviewing when material is thin), edit, repurpose for X, LinkedIn, TL;DR, and newsletters                                                                             |
+| `ceh-plan-build-review` | The plan-driven loop on one shared plan schema (`SKELETON.md` / `ITER_NN.md`): plan iteratively or to MVP, implement from the plan, review against it, patch a built version                                                  |
+| `ceh-documentation`     | User-facing docs in one fixed format (`docs-standard.md`): full docs set, guides and runbooks, API reference, concept pages, runnable examples                                                                                |
 
 A concept-map skill for markdown-only knowledge bases would be a separate sibling of
 `document-architecture`, not part of it.
@@ -103,8 +106,11 @@ one heading set, and one voice. Frontmatter uses only the fields in the official
 
 Each skill is self-contained with inline content. `references/` is for two cases only:
 
-- **A schema or template used by several skills**, copied word-for-word into each consumer and
-  registered in `docs/CROSS_REFERENCES.md`.
+- **A schema or template used by several skills.** Skills of one plugin share a single copy in the
+  plugin's own `references/`, cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`, so it needs no
+  `docs/CROSS_REFERENCES.md` entry. A file used by one skill lives in that skill's `references/`.
+  Only a file needed by skills of different plugins is copied word-for-word into each and
+  registered in `docs/CROSS_REFERENCES.md` (see the Shared-Standards Duplication Policy).
 - **A standards set too large to inline.**
 
 Never for general reference material a model already knows.

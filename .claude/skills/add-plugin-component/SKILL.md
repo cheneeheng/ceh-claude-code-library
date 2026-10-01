@@ -76,7 +76,9 @@ authoring skill. Where that skill's advice conflicts with this repo, this skill 
 `plugins/ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. Fill every
 placeholder, then delete the `TEMPLATE-GUIDANCE` comment. Content stays inline. `references/` is
 for two cases only: a schema or template shared by several skills, or a standard too large to
-inline.
+inline. A file shared by skills of the same plugin goes once in `plugins/ceh-<plugin>/references/`,
+cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`. A file used by one skill goes in that skill's
+own `references/`, cited as `${CLAUDE_SKILL_DIR}/references/<file>`.
 
 **Agent** — copy `${CLAUDE_SKILL_DIR}/assets/agent.template.md` to
 `plugins/ceh-<plugin>/agents/<name>.md`, `name` matching the file name. Auto-delegation is driven
@@ -128,7 +130,7 @@ the same job:
 | `context: fork`            | Heavy, self-contained task skills                                                            | The subagent does **not** see the conversation and runs in the background with the reduced tool set below. Set `background: false` if a step needs a tool outside it |
 | `argument-hint`            | Skills the user invokes as `/name <arg>`                                                     | Cosmetic but free                                                                                                                                                    |
 | `${CLAUDE_SKILL_DIR}`      | Referencing a file bundled with the skill                                                    | Substituted in the body _and_ in `allowed-tools` Bash rules                                                                                                          |
-| `${CLAUDE_PLUGIN_ROOT}`    | Referencing a plugin-level script shared by several skills                                   | Substituted in plugin skill bodies and `allowed-tools`, not in project skills                                                                                        |
+| `${CLAUDE_PLUGIN_ROOT}`    | Referencing a plugin-level script or `references/` file shared by several skills             | Substituted in plugin skill bodies and `allowed-tools`, not in project skills                                                                                        |
 | `memory`                   | Agents that should learn across sessions                                                     | Auto-enables Read/Write/Edit on that agent                                                                                                                           |
 | `compatibility`            | Skills that need software the machine may lack (`git`, `gh`, `uv`, `bun`, a server, network) | `>-` scalar, max 500 chars. Name runtime + minimum version and what fails without it. Omit for read-files-emit-Markdown skills                                       |
 
@@ -173,7 +175,9 @@ work, so no agent sets it.
 Before editing an existing skill, check `docs/CROSS_REFERENCES.md`. If the section appears there,
 propagate the edit to **every** listed file in the same session — canonical file first, then the
 copies. If you introduce new duplication, add an entry naming the canonical source, every copy,
-what is shared, and what deliberately diverges.
+what is shared, and what deliberately diverges. Skills of one plugin share a file once in the
+plugin's `references/`, so that needs no entry. Duplication plus an entry is for content shared
+across plugins.
 
 ## 5. Bump the version in both manifests
 
@@ -199,7 +203,7 @@ Same gate CI runs via `.github/workflows/validate.yml`. It checks:
 - frontmatter: `name` format and match, `description` present, `>-`, ≤ 1024 chars;
   `compatibility` ≤ 500 chars; only documented keys; no plugin-agent keys Claude Code ignores
 - no `TEMPLATE-GUIDANCE` comment left from a template
-- `references/...`, `${CLAUDE_PLUGIN_ROOT}/scripts/...`, and `${CLAUDE_SKILL_DIR}/...` mentions
+- `references/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references}/...`, and `${CLAUDE_SKILL_DIR}/...` mentions
   resolve to real files, and `ceh-<plugin>:<component>` mentions resolve
 - `dependencies` resolve, the graph is acyclic, scenario bundles hold only a manifest and README
 - every `Invoke the Skill tool with skill="..."` call is resolvable, declared, and invocable

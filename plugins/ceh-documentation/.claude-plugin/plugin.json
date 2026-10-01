@@ -1,0 +1,17 @@
+{
+  "name": "ceh-documentation",
+  "version": "1.0.0",
+  "description": "CEH documentation: write user-facing documentation for a project — a full docs set, user guides and operator runbooks, an exhaustive API reference, concept pages with sourced design rationale, and runnable examples.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/ceh-claude-code-library",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent",
+    "documentation",
+    "user-guide",
+    "operator-guide",
+    "manual",
+    "runbook",
+    "technical-writing"
+  ]
+}
