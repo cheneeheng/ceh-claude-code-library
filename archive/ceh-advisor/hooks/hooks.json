@@ -1,0 +1,29 @@
+{
+  "description": "ceh-advisor hard triggers: deny destructive bash commands until the advisor is consulted (PreToolUse) and nudge a consult after N consecutive failed bash calls (PostToolUse).",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/ceh-advisor-guard.py\" || exit 2",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/ceh-advisor-failure-watch.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

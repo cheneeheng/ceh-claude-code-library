@@ -1,0 +1,15 @@
+{
+  "name": "ceh-scaffolding",
+  "version": "1.0.6",
+  "description": "CEH scaffolding: per-project-type project setup — directory layout, initial config, and required .gitignore entries for Python libraries, Python services, web frontends, and fullstack web apps.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/agent-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent",
+    "scaffolding",
+    "project-setup",
+    "structure",
+    "gitignore"
+  ]
+}

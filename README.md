@@ -21,15 +21,18 @@
 | Documentation         | `ceh-documentation`     | User-facing documentation: a full docs set under `docs/`, user guides and operator runbooks, an exhaustive API reference, concept pages with sourced design rationale, and runnable examples                                                                                                                                             |
 | AG-UI                 | `ceh-ag-ui`             | Generative-UI canvases for AG-UI agents: the agent places components from a fixed, Tidewater-styled catalogue and can never restyle them; catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps. Worked examples: [`examples/ceh-ag-ui/`](examples/ceh-ag-ui/)                         |
 | Usability Audit       | `ceh-usability-audit`   | Measure whether a non-expert can actually use what you built: cold persona-constrained walkthroughs (`novice-walker`), a five-question interface audit across web UI/CLI/library/app surfaces, error-message rewrites, and a plain-language pass                                                                                         |
+| Business Plan         | `ceh-business-plan`     | Turn a product idea or an existing app plan into a validated business plan: a product-market-fit interview loop that interrogates the weakest assumption until a readiness gate passes                                                                                                                                                   |
+| Git Datastore         | `ceh-git-datastore`     | Run an app on a bare git repo instead of a database while that still fits: a gate that talks you out of it when it does not, a plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite                                                                                                                              |
+| Workflow Builder      | `ceh-workflow-builder`  | Turn a repetitive multi-step task into a runnable artifact: interview it into a spec, then emit one skill or a gated workflow skill with handoff schemas into the target repo                                                                                                                                                            |
 
 ### Categorization
 
-| Tier                  | Loaded            | Plugins                                                                                    |
-| --------------------- | ----------------- | ------------------------------------------------------------------------------------------ |
-| **Scenario bundle**   | one per situation | —                                                                                          |
-| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                          |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit` |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                |
+| Tier                  | Loaded            | Plugins                                                                                                                                                      |
+| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Scenario bundle**   | one per situation | —                                                                                                                                                            |
+| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                                                                                            |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder` |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                  |
 
 ---
 
@@ -160,6 +163,26 @@
 | Audit Error Messages | `/ceh-usability-audit:audit-error-messages` | Anything a user reads when something goes wrong: the three-part rule (what happened, what was wrong, what to do next) over every user-reachable string         |
 | Write Plain Language | `/ceh-usability-audit:write-plain-language` | Labels, help text, empty states, confirmation dialogs, onboarding copy: vocabulary floor, sentence rules, and an explicit never-simplify list                  |
 
+### Business Plan (`ceh-business-plan`)
+
+| Skill                 | Invoke                                     | When                                                                                                                                                |
+| --------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Develop Business Plan | `/ceh-business-plan:develop-business-plan` | A product idea or an existing plan needs product-market fit: drafts from any plan, PRD, or pitch, or interviews, then loops until a PMF gate passes |
+
+### Git Datastore (`ceh-git-datastore`)
+
+| Skill                 | Invoke                                     | When                                                                                                                                                       |
+| --------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Build Git Datastore   | `/ceh-git-datastore:build-git-datastore`   | An app needs persistence but not a database yet: a gate that often says no, then a plumbing-only store on a bare git repo                                  |
+| Migrate Git Datastore | `/ceh-git-datastore:migrate-git-datastore` | The store has to become a real database, or you need to know whether it is time: schema inference, pinned-snapshot export, backfill, verification, cutover |
+
+### Workflow Builder (`ceh-workflow-builder`)
+
+| Skill                   | Invoke                                          | When                                                                                                                                      |
+| ----------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Build Agentic Workflow  | `/ceh-workflow-builder:build-agentic-workflow`  | Turning a repetitive multi-step task into a skill or gated workflow: the one-skill-vs-workflow gate, handoff schemas, leaf-first emission |
+| Interview Workflow Task | `/ceh-workflow-builder:interview-workflow-task` | The task is not yet described: nine questions answered into a workflow spec file, nothing built                                           |
+
 ---
 
 ## Agents
@@ -218,6 +241,9 @@
 /plugin install ceh-documentation@ceh-claude-code-library --scope user
 /plugin install ceh-ag-ui@ceh-claude-code-library --scope user
 /plugin install ceh-usability-audit@ceh-claude-code-library --scope user
+/plugin install ceh-business-plan@ceh-claude-code-library --scope user
+/plugin install ceh-git-datastore@ceh-claude-code-library --scope user
+/plugin install ceh-workflow-builder@ceh-claude-code-library --scope user
 ```
 
 Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-ag-ui` brings
@@ -246,7 +272,10 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/ceh-claude-code-library/plugins/ceh-plan-build-review" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-documentation" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-ag-ui" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-usability-audit" }
+    { "path": "~/ceh-claude-code-library/plugins/ceh-usability-audit" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-business-plan" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-git-datastore" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-workflow-builder" }
   ]
 }
 ```

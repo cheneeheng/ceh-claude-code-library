@@ -85,6 +85,24 @@
       "source": "./plugins/ceh-usability-audit",
       "version": "1.0.0",
       "description": "CEH usability audit: measure whether a non-expert can actually use what you built — cold zero-context walkthroughs by persona-constrained subagents that report where they stalled and how many steps each milestone cost against a budget set before the walk, a five-question interface audit across web UI/CLI/library/app surfaces, a three-part rewrite pass over every user-reachable error message, and a plain-language pass over labels and copy. Findings are ranked by observed outcome, not by how bad they look."
+    },
+    {
+      "name": "ceh-business-plan",
+      "source": "./plugins/ceh-business-plan",
+      "version": "1.0.5",
+      "description": "CEH business plan: turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop — draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes."
+    },
+    {
+      "name": "ceh-git-datastore",
+      "source": "./plugins/ceh-git-datastore",
+      "version": "1.0.1",
+      "description": "CEH git-backed datastore: run an app on a bare git repo instead of a database while that still fits — a gate that talks you out of it when it does not, a working plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite when a trigger fires."
+    },
+    {
+      "name": "ceh-workflow-builder",
+      "source": "./plugins/ceh-workflow-builder",
+      "version": "1.1.2",
+      "description": "CEH workflow builder: interview a repetitive multi-step task into a runnable artifact — one skill when it is simple, or a gated workflow skill that delegates each step and declares its handoff schemas — emitted into the target repo's .claude/skills/."
     }
   ]
 }

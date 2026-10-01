@@ -1,0 +1,18 @@
+{
+  "name": "ceh-business-plan",
+  "version": "1.0.5",
+  "description": "CEH business plan: turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop — draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/ceh-claude-code-library",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent",
+    "business-plan",
+    "product-market-fit",
+    "pmf",
+    "interview",
+    "validation",
+    "strategy",
+    "go-to-market"
+  ]
+}

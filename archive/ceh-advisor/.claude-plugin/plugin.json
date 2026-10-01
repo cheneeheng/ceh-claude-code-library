@@ -1,0 +1,16 @@
+{
+  "name": "ceh-advisor",
+  "version": "1.0.7",
+  "description": "EXPERIMENTAL, and installs always-on session hooks. CEH advisor: a stronger-model second-opinion subagent consulted at decision points, failure loops, irreversible actions, and pre-completion gates — with deterministic hook backstops (destructive-command guard, consecutive-failure watch).",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/agent-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent",
+    "advisor",
+    "second-opinion",
+    "review",
+    "hooks",
+    "guardrail"
+  ]
+}

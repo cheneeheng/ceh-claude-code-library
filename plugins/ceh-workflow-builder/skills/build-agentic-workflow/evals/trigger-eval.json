@@ -1,0 +1,82 @@
+[
+  {
+    "query": "I do the exact same six-step dance every time we cut a release. turn it into something claude can just run",
+    "should_trigger": true
+  },
+  {
+    "query": "our tenant onboarding runbook lives in confluence. make it a skill in this repo so nobody has to read it again",
+    "should_trigger": true
+  },
+  {
+    "query": "should this be one skill or a workflow with separate steps? there's a test gate in the middle that has to block the rest",
+    "should_trigger": true
+  },
+  {
+    "query": "automate this process: pull the open PRs, triage them, post a summary. I want it repeatable",
+    "should_trigger": true
+  },
+  {
+    "query": "build an agentic workflow for the quarterly dependency sweep, it fans out over about twenty packages",
+    "should_trigger": true
+  },
+  {
+    "query": "I need a skill that calls other skills - the changelog one then the release one, in order, with a gate between them",
+    "should_trigger": true
+  },
+  {
+    "query": "the spec's finished at .agents_workspace/prepublish-workflow-spec.md. design it and emit it into .claude/skills/",
+    "should_trigger": true
+  },
+  {
+    "query": "in a generated workflow, how do I hand data from step 2 to step 5 without the later step guessing the shape?",
+    "should_trigger": true
+  },
+  {
+    "query": "make this repeatable so the next person doesn't have to come and ask me how it works",
+    "should_trigger": true
+  },
+  {
+    "query": "the offboarding process is five steps and two of them need their own context window. generate the flow skill and the step skills",
+    "should_trigger": true
+  },
+  {
+    "query": "interview me about this task, I'm not sure what you need to know before you can build anything",
+    "should_trigger": false
+  },
+  {
+    "query": "ask me the questions you need answered to spec out our deploy process",
+    "should_trigger": false
+  },
+  {
+    "query": "evaluate the skill I wrote last week - does it actually trigger, and does it help when it does?",
+    "should_trigger": false
+  },
+  {
+    "query": "I want to add a skill to this plugin repo. which plugin does it belong in and what do I have to update?",
+    "should_trigger": false
+  },
+  {
+    "query": "run the prepublish workflow we built last month against this branch",
+    "should_trigger": false
+  },
+  {
+    "query": "write a github actions workflow that runs the tests and ruff on every push to main",
+    "should_trigger": false
+  },
+  {
+    "query": "set up a cron job that runs this reconciliation script every friday at 5pm",
+    "should_trigger": false
+  },
+  {
+    "query": "my skill's description is too vague and it never auto-triggers. rewrite it so it fires on the right prompts",
+    "should_trigger": false
+  },
+  {
+    "query": "plan this app from an empty repo to a working MVP, I want the whole build laid out",
+    "should_trigger": false
+  },
+  {
+    "query": "document the release process in the README so the team can follow it by hand",
+    "should_trigger": false
+  }
+]
