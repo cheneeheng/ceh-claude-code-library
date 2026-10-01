@@ -1,0 +1,21 @@
+{
+  "name": "ceh-scenario-service",
+  "version": "1.0.0",
+  "description": "CEH scenario bundle: working on a Python backend service — features, fixes, tests, docs, releases.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/ceh-claude-code-library",
+  "dependencies": [
+    "ceh-core",
+    "ceh-coding-agent",
+    "ceh-git-workflow",
+    "ceh-testing",
+    "ceh-documentation",
+    "ceh-python-service",
+    "ceh-usability-audit",
+    "ceh-plan-build-review",
+    "ceh-git-datastore",
+    "ceh-ag-ui"
+  ],
+  "license": "Apache-2.0",
+  "keywords": ["agent", "scenario", "bundle", "service"]
+}

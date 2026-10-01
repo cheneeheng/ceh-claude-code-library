@@ -103,6 +103,36 @@
       "source": "./plugins/ceh-workflow-builder",
       "version": "1.1.2",
       "description": "CEH workflow builder: interview a repetitive multi-step task into a runnable artifact — one skill when it is simple, or a gated workflow skill that delegates each step and declares its handoff schemas — emitted into the target repo's .claude/skills/."
+    },
+    {
+      "name": "ceh-scenario-service",
+      "source": "./plugins/ceh-scenario-service",
+      "version": "1.0.0",
+      "description": "CEH scenario bundle: working on a Python backend service — features, fixes, tests, docs, releases."
+    },
+    {
+      "name": "ceh-scenario-library",
+      "source": "./plugins/ceh-scenario-library",
+      "version": "1.0.0",
+      "description": "CEH scenario bundle: working on a Python library — features, fixes, tests, docs, releases."
+    },
+    {
+      "name": "ceh-scenario-webapp",
+      "source": "./plugins/ceh-scenario-webapp",
+      "version": "1.0.0",
+      "description": "CEH scenario bundle: working on a web frontend — features, fixes, tests, docs, releases."
+    },
+    {
+      "name": "ceh-scenario-ideation",
+      "source": "./plugins/ceh-scenario-ideation",
+      "version": "1.0.0",
+      "description": "CEH scenario bundle: shaping an idea before a stack is chosen — testing it for product-market fit and planning the build."
+    },
+    {
+      "name": "ceh-scenario-editorial",
+      "source": "./plugins/ceh-scenario-editorial",
+      "version": "1.0.0",
+      "description": "CEH scenario bundle: writing and publishing what readers see — blog posts, user and operator docs, discoverability."
     }
   ]
 }
