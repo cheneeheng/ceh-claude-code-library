@@ -57,7 +57,7 @@ Categorization rules of thumb:
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
 .github/workflows/            # validate.yml — runs validate.py on push and PR
-docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md
+docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md
 examples/                     # Worked usage examples, one ceh-<plugin>/README.md each — not validated
 plugins/                      # All plugins — two folders, one directory per plugin, no tier subfolders
 ├── scenarios/
@@ -287,6 +287,7 @@ on what changed and why, a `### Plugin versions` table listing every plugin bump
 | `docs/CROSS_REFERENCES.md`                                   | Content duplicated across skills: canonical source and every copy              |
 | `docs/PLUGIN_DEPENDENCIES.md`                                | Current dependency graph: every edge with its evidence                         |
 | `docs/ENVIRONMENT_VARIABLES.md`                              | Every environment variable any plugin reads: plugin, reader, default, effect   |
+| `docs/TESTING_WORKFLOW.md`                                   | How `ceh-testing`, the stack testing skills, and the tester agents route       |
 | `CHANGELOG.md`                                               | Release notes per repo tag, each with a `### Plugin versions` table            |
 | `.claude/skills/add-plugin-component/assets/`                | `SKILL.template.md` and `agent.template.md` — the base for every new component |
 | `.agents_workspace/DECISION_LOG.md`                          | Agent decision log — **git-ignored, local only**, append-only                  |

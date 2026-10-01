@@ -31,6 +31,21 @@ when `ceh-ops` migrates.
 **Shared:** breaking change → MAJOR, new backward-compatible feature → MINOR,
 fixes/chores/docs/refactors → PATCH, and "when in doubt, PATCH".
 
+## Auto-merge probe and remote-branch check (`gh pr merge --auto`)
+
+**Canonical:** `plugins/standalone/ceh-git-workflow/skills/pull-request/SKILL.md` — § Merge, step 2 (the probe with the direct-merge fallback)
+
+| Copy                                                               | Section                       | Diverges                                                                                       |
+| ------------------------------------------------------------------ | ----------------------------- | ---------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-git-workflow/skills/pull-request/SKILL.md` | § Open, step 2                | probe-and-enable half only, right after `gh pr create`, with no fallback and no `--subject`    |
+| `plugins/standalone/ceh-git-workflow/skills/pull-request/SKILL.md` | § Reporting the remote branch | the `delete_branch_on_merge` check that § Open also runs, here with the wording for the report |
+
+**Shared:** the `allow_auto_merge` probe (`gh api repos/{owner}/{repo} --jq .allow_auto_merge`)
+guarding `gh pr merge --merge --auto`, and the `delete_branch_on_merge` check that tells the user
+whether the remote branch survives the merge. All three sites are in one file, so a change to the
+probe means editing it twice. `ceh-git-workflow:release` reaches the same behavior through the
+`pull-request` procedure and carries no copy.
+
 ## Write-less-code ladder (skill + per-turn digest)
 
 **Canonical:** `plugins/standalone/ceh-coding-agent/skills/write-less-code/SKILL.md` — § Procedure + § When not to be lazy
@@ -115,6 +130,31 @@ ending, and "the target repo's `CLAUDE.md` blog voice overrides".
 
 **Shared:** the six post-type templates (Lessons Learned, How-To, Opinion / Take, Project / Launch,
 Thought Leadership, Personal Story), each ending on **The Open Thread**.
+
+## Blog location and draft destination ("Finding the blog", "Where it goes")
+
+**Canonical:** `plugins/standalone/ceh-blog/skills/draft-post/SKILL.md` — § Procedure, 1. Read the blog first ("Finding the blog") + § Output ("Where it goes")
+
+| Copy                                                    | Section                                                                 | Diverges                                                                                                                                                       |
+| ------------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-blog/skills/edit-post/SKILL.md` | § Procedure, 3. Edit ("Series continuity") + § Output ("Where it goes") | looks for earlier posts in the draft's own directory first, and writes the revision back to the draft's file instead of a new one; the diagnosis stays in chat |
+
+**Shared:** the lookup order for the blog (a path or URL the user gave, then a posts directory in the
+current repo: `content/`, `posts/`, `_posts/`, `src/content/`, `blog/`), and the destination rule:
+inside a blog repo the post is a file matching the existing posts' filename pattern and front matter,
+with the title and meta description in the front matter, and chat output otherwise.
+
+## Blog repurpose handoff line
+
+**Canonical:** `plugins/standalone/ceh-blog/skills/draft-post/SKILL.md` — § Hands off to
+
+| Copy                                                    | Section        | Diverges |
+| ------------------------------------------------------- | -------------- | -------- |
+| `plugins/standalone/ceh-blog/skills/edit-post/SKILL.md` | § Hands off to | none     |
+
+**Shared:** the single sentence pointing a satisfied user at `/ceh-blog:repurpose-post` (Twitter/X
+thread, LinkedIn post, TL;DR, newsletter blurb). Renaming the skill or adding a channel means
+editing both.
 
 ## GEO writing rules
 
@@ -305,9 +345,60 @@ their own form because a reader and a walker each need a different one.
 
 **Shared:** schemas carry content only (no `style`/`className`/`color`/`size`/`variant`…), a needed
 visual choice is a semantic enum mapped to a theme class, agent output is rendered only after
-`safeParse`, and components use theme tokens and classes only.
+`safeParse`, and components use theme tokens and classes only. `add-live-state-panel` and
+`add-human-approval` also inline code that edits the template's `useAgent.ts` and the mock's
+`respond`, so a change to the shape of the template's hook or mock goes to both skills' snippets.
+
+## Git datastore hard stops (serverless / right to erasure)
+
+**Canonical:** `plugins/standalone/ceh-git-datastore/skills/build-git-datastore/SKILL.md` — § Procedure, Start with the gate
+
+| Copy                                                         | Section            | Diverges                                                                                                                       |
+| ------------------------------------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-git-datastore/docs/git-datastore.md` | § Before you start | human-facing copy of the two hard stops only; points at the skill for the rest of the gate and links to its deployment section |
+
+**Shared:** serverless or multi-node hosting is disqualifying, because the store is a directory on a
+disk and two nodes with two disks are two databases. A right-to-erasure obligation is disqualifying,
+because git history is append-only and erasure means rewriting every commit and invalidating every
+clone and backup. The skill runs the gate as a step with a verdict and refuses to build when a row
+fails. The doc carries the two stops as reading material.
+
+## Workflow spec: the nine questions
+
+**Canonical:** `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/SKILL.md` — § The nine questions, § How to ask, § The spec file
+
+| Copy                                                                             | Section            | Diverges                                                                                                                 |
+| -------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/SKILL.md` | § Phase 1 — Intake | compact gate: one label per question plus what does not satisfy it, because it checks answers rather than eliciting them |
+
+**Shared:** the nine questions, their numbering, and that numbering carrying through to the spec's
+`## 1.` to `## 9.` headings. Later sections of `build-agentic-workflow` cite them as "spec question
+6/7/8/9", so renumbering means editing both files plus those citations. Four more things must change
+in both files together:
+
+- **Never answer for the user.** The interview must not record an obvious answer as the user's, and
+  the builder must not turn an unanswered row into an assumption. Both wordings cover all nine rows
+  and name the quiet row-4 case next to the loud 8/9 one.
+- **The human go/no-go gate** is the one proof question 3 accepts that no command can settle. The
+  interview records it and the builder's intake row 3 exempts it. Tightening one alone deadlocks a
+  task with a real judgement step, because question 3 has no `Declined` escape.
+- **The `Declined` marker.** The interview writes it under a heading the user refuses to answer and
+  stops asking. The builder reads it as "take the conservative reading and stop delegating". The
+  pair loops forever if only one of them knows the convention.
+- **The closed heading set and `$CEH_WORKFLOW_BUILD_DIR`.** Neither skill may add a heading to the
+  spec, and both name the variable and its `.agents_workspace/` default, because the interview has
+  to work without the builder loaded.
 
 ---
+
+## Update protocol
+
+When changing a shared block:
+
+1. Find the canonical file (named at the top of the entry).
+2. Edit it first. It is the source of truth for the rule.
+3. Propagate the change to every listed copy in the same commit.
+4. Update this file if the scope of sharing changes.
 
 Entry shape:
 
