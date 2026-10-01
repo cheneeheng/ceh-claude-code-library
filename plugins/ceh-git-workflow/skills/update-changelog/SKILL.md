@@ -7,10 +7,13 @@ description: >-
   unreleased", "what changed since the last release". Follows Semantic Versioning and the Keep a
   Changelog format, and writes either a versioned section or an Unreleased entry. Not for tagging or
   publishing the release itself (use ceh-git-workflow:release).
+disable-model-invocation: false
+user-invocable: true
 allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/scripts/check-semver.py *)
 compatibility: >-
   Requires the git CLI on PATH and a git working tree, to read history since the last tag. The
   validator step needs Python 3 (stdlib only); without it, the changelog is checked by hand.
+license: Apache-2.0
 ---
 
 # Update changelog

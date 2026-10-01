@@ -5,6 +5,9 @@ description: >-
   stop conditions, decision logging. Loaded automatically at session start and preloaded into
   implementation subagents; also load when the user says "load the contract", "agent contract", or
   "coding contract".
+disable-model-invocation: false
+user-invocable: false
+license: Apache-2.0
 ---
 
 # Agent coding contract

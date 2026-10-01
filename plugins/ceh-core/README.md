@@ -17,7 +17,7 @@ agent pushes I/O-heavy reading onto a small model so file contents never reach t
 **Manual triggers**
 
 - `usage-limit-handoff` — `/usage-limit-handoff`, or say `"wrap up the session"` / `"usage limit handoff"` / `"stop and summarize"`.
-- `delegate-bulk-reads` — `/delegate-bulk-reads`, or say `"read these files and tell me..."` / `"where is X handled"` / `"I'm running low on context"`.
+- `delegate-bulk-reads` — no slash command (hidden from the `/` menu), say `"read these files and tell me..."` / `"where is X handled"` / `"I'm running low on context"`.
 
 ## Agents
 

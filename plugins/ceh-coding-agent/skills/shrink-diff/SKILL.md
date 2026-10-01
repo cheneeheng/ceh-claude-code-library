@@ -12,10 +12,13 @@ description: >-
   refactor-repo), write-time minimalism (use write-less-code), or reviewing a PR (use
   ceh-git-workflow:code-review).
 argument-hint: "[base-branch]"
+disable-model-invocation: false
+user-invocable: true
 compatibility: >-
   Requires the git CLI on PATH and a feature branch in a git working tree, since the whole skill
   reads `git diff main...HEAD`. Verifying the shrunk diff additionally needs whatever runtime and
   test runner the target repo already uses - none is assumed.
+license: Apache-2.0
 ---
 
 # Shrink diff

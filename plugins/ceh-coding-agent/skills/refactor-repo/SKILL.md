@@ -10,10 +10,12 @@ description: >-
   or write-time minimalism (use write-less-code).
 argument-hint: "[module-or-path]"
 disable-model-invocation: true
+user-invocable: true
 compatibility: >-
   Requires the git CLI on PATH and a git working tree, for the before/after `git diff --stat`
   totals the report is built on. Applying and verifying a refactor additionally needs whatever
   runtime, package manager, and test runner the target repo already uses - none is assumed.
+license: Apache-2.0
 ---
 
 # Refactor repo

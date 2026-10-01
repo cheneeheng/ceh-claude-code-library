@@ -26,7 +26,7 @@ and `refactor-repo`.
 
 **Manual triggers**
 
-- `agent-coding-contract` — `/agent-coding-contract`, or say `"load the contract"` / `"agent contract"` / `"coding contract"`.
+- `agent-coding-contract` — no slash command (hidden from the `/` menu), say `"load the contract"` / `"agent contract"` / `"coding contract"`.
 - `write-less-code` — `/write-less-code`, or say `"write less code"` / `"be lazy"` / `"simplest solution"` / `"yagni"`.
 - `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).

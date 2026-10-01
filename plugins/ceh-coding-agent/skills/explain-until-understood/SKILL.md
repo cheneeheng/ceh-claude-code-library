@@ -12,6 +12,9 @@ description: >-
   reviewing code, a repo-wide orientation file (ceh-coding-agent:explain-codebase), or user-facing
   documentation (ceh-documentation).
 argument-hint: "[what to explain]"
+disable-model-invocation: false
+user-invocable: true
+license: Apache-2.0
 ---
 
 # Explain until understood

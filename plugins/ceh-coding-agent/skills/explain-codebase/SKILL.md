@@ -11,10 +11,13 @@ description: >-
   load before making the first change to an unfamiliar codebase. Not for design diagrams and
   decision records (ceh-architecture:document-architecture), and not for end-user or operator
   documentation (ceh-documentation).
+disable-model-invocation: false
+user-invocable: true
 compatibility: >-
   Requires the git CLI on PATH and a git working tree (it checks tracking with `git ls-files` and
   untracks with `git rm --cached`). No language runtime or package manager is needed - the output
   is a Markdown file.
+license: Apache-2.0
 ---
 
 # Explain codebase

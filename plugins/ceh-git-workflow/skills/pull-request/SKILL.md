@@ -10,10 +10,13 @@ description: >-
   Unreleased in the changelog before committing. No version bump, no tag. Not for shipping a
   version (use ceh-git-workflow:release) or reviewing someone else's PR (use
   ceh-git-workflow:code-review).
+disable-model-invocation: false
+user-invocable: true
 compatibility: >-
   Requires the git CLI on PATH and a git working tree. Opening or merging a PR additionally
   requires the GitHub CLI (`gh`) authenticated via `gh auth login`, a GitHub remote, push
   permission, and network access. The local no-PR merge needs git alone.
+license: Apache-2.0
 ---
 
 # Pull request
