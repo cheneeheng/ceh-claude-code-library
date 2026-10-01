@@ -66,7 +66,9 @@ Work through in-scope sections in numerical order. For each section, check, cate
 - **Deviation**: something that exists but differs from the spec (wrong method, wrong field name,
   wrong route path, wrong model, etc.).
 - **Error**: something that is broken independent of the spec (import error, missing env var
-  causing a crash, etc.).
+  causing a crash, etc.). For §04 and §05, a trap from
+  `${CLAUDE_PLUGIN_ROOT}/references/implementation-gotchas.md` present in the code is also an
+  Error.
 
 **Fix.** Fix each finding immediately after categorizing it. Do not batch auditing before fixing.
 

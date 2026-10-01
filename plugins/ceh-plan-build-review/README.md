@@ -47,13 +47,14 @@ Do not set `"defaultMode": "plan"` in a repo where these skills are the main wor
 
 ## Shared reference files
 
-Two files live once in `references/` at the plugin root and are read through
+Four files live once in `references/` at the plugin root and are read through
 `${CLAUDE_PLUGIN_ROOT}`:
 
-- `plan-schema.md`, the plan document schema, read by `implement-from-plan`,
-  `review-against-plan`, and `patch-built-version`.
-- `implementation-gotchas.md`, the technical traps to address while writing §04, §05, and §06,
-  read by both planning skills.
-
-The two planning skills each carry a `references/section-specs.md` describing the same artifact
-format from the producer side, and inline the pre-delivery audit checklist.
+- `plan-schema.md`, the plan document schema (file naming, version families, frontmatter, pointers,
+  resolution order), read by all five skills.
+- `section-specs.md`, the expected contents of §01–§06 at skeleton and iteration level, read by
+  both planning skills.
+- `audit-checklist.md`, the pre-delivery audit checklist, read by both planning skills.
+- `implementation-gotchas.md`, the technical traps in §04, §05, and §06, read by both planning
+  skills (to address them in the plan), by `implement-from-plan` and `patch-built-version` (to avoid
+  them in code), and by `review-against-plan` (a trap present in §04 or §05 code is an Error).

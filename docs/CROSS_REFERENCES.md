@@ -221,58 +221,60 @@ method shape (`response.ok` check, then `throw new ApiRequestError(response.stat
 mutation path. In agent-skills `ceh-scaffolding:scaffold-python-service` restates the rules next to
 the initial backend directory tree. Add it here as a copy when `ceh-scaffolding` migrates.
 
-## Plan document schema (SKELETON / ITER frontmatter, file naming, version families)
+## Patch ITER frontmatter
 
-**Canonical:** `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` — § File Naming and Version Variants + § Output Frontmatter + § Terminator iteration body
+**Canonical:** `plugins/ceh-plan-build-review/references/plan-schema.md` — § Frontmatter (the `patch` field rules)
 
-| Copy                                                                                              | Section                                                   | Diverges                                                                                                    |
-| ------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | § File Naming and Version Variants + § Output Frontmatter | producer copy that emits one artifact per session, so it does not describe the terminator block             |
-| `plugins/ceh-plan-build-review/references/plan-schema.md`                                         | entire file                                               | consumer copy: adds pointer rules, resolution order, the absent-terminator fallback, and the `patch` marker |
-| `plugins/ceh-plan-build-review/skills/patch-built-version/SKILL.md`                               | § Procedure, 3. Write the patch ITER                      | the patch ITER frontmatter block only                                                                       |
+| Copy                                                                | Section                              | Diverges                                                           |
+| ------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------ |
+| `plugins/ceh-plan-build-review/skills/patch-built-version/SKILL.md` | § Procedure, 3. Write the patch ITER | the patch ITER frontmatter block only, with per-field placeholders |
 
-**Shared:** file naming and version-tag rules (`SKELETON.md` / `ITER_NN.md`, `NN` two digits,
-canonical `_vN` suffix, `vN_` prefix also read, tag-sharing files form a plan family with a
-per-family `NN` counter); SKELETON frontmatter (`artifact`, `status`, `created`, `app`, `stack`,
-`sections`, no `depends_on`, no MVP fields); ITER frontmatter (`artifact`, `status`, `created`,
-`scope`, `sections_changed`, `sections_unchanged`, `depends_on` by stem, backward-only); the MVP
-terminator convention (`mvp: true` + `mvp_target` + `## Out of MVP scope` on the final iteration
-only); and the patch convention (`patch: true` ITER continuing the family counter, allowed past the
-terminator, never carrying `mvp`, `sections_changed` within §04/§05). `plan-schema.md` lives once
-at the plugin root and `implement-from-plan`, `review-against-plan` and `patch-built-version` all
-read it through `${CLAUDE_PLUGIN_ROOT}`. In agent-skills `ceh-business-plan:develop-business-plan`
-carries a separate `plan-schema.md`. Add it here as a copy when `ceh-business-plan` migrates.
+**Shared:** the ITER frontmatter keys with `patch: true`, no `mvp`, `depends_on` the terminator or the
+prior patch, and `sections_changed` within §04/§05. The rest of the plan schema (file naming, version
+families, SKELETON and ITER frontmatter, terminator, pointers, resolution order) lives once in
+`plan-schema.md` at the plugin root, read through `${CLAUDE_PLUGIN_ROOT}` by all five skills. In
+agent-skills `ceh-business-plan:develop-business-plan` carries a separate `plan-schema.md`. Add it
+here as a copy when `ceh-business-plan` migrates.
+
+## Section contents (§01-§06 specs and the schema's Sections table)
+
+**Canonical:** `plugins/ceh-plan-build-review/references/section-specs.md` — all sections
+
+| Copy                                                      | Section             | Diverges                                                                   |
+| --------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------- |
+| `plugins/ceh-plan-build-review/references/plan-schema.md` | § Sections, a table | condensed into table cells for the three consumer skills that read only it |
+
+**Shared:** what each of §01-§06 holds at skeleton and iteration level, including the
+`implementation-gotchas.md` note on §04 and §05 (the specs tell the planners to apply it, the table
+tells the build skills to). A change to one goes to the other.
 
 ## §02 Architecture diagram requirement (Mermaid, iterations visualize the change)
 
-**Canonical:** `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/references/section-specs.md` — § §02 · Architecture
+**Canonical:** `plugins/ceh-plan-build-review/references/section-specs.md` — § §02 · Architecture
 
-| Copy                                                                                              | Section                                            | Diverges                         |
-| ------------------------------------------------------------------------------------------------- | -------------------------------------------------- | -------------------------------- |
-| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/references/section-specs.md` | § §02 · Architecture                               | none                             |
-| `plugins/ceh-plan-build-review/references/plan-schema.md`                                         | § Sections, §02 row                                | condensed table-cell form        |
-| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/SKILL.md`                         | § Pre-delivery audit checklist, Architecture (§02) | one checklist bullet             |
-| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/SKILL.md`                    | § Pre-delivery audit checklist, Architecture (§02) | the same checklist bullet        |
-| `plugins/ceh-plan-build-review/skills/review-against-plan/SKILL.md`                               | § Procedure, 2. Audit section by section, §02 row  | post-implementation review check |
+| Copy                                                                | Section                                           | Diverges                         |
+| ------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------- |
+| `plugins/ceh-plan-build-review/references/plan-schema.md`           | § Sections, §02 row                               | condensed table-cell form        |
+| `plugins/ceh-plan-build-review/references/audit-checklist.md`       | Architecture (§02)                                | one checklist bullet             |
+| `plugins/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | § Procedure, 2. Audit section by section, §02 row | post-implementation review check |
 
 **Shared:** the component diagram is Mermaid, not ASCII art. At skeleton level it shows what exists
 and how the pieces connect. At iteration level it also visualizes what changed, with new or
 modified pieces marked distinctly.
 
-## Planner audit checklist
+## Planner "Plan families and versions" prose
 
-**Canonical:** `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/SKILL.md` — § Pre-delivery audit checklist
+**Canonical:** `plugins/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/SKILL.md` — § Plan families and versions
 
-| Copy                                                                           | Section                        | Diverges                                                                                                                            |
-| ------------------------------------------------------------------------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/SKILL.md` | § Pre-delivery audit checklist | one checklist bullet: the "(Version family)" check drops the `mvp: true` clause, because a one-artifact session emits no terminator |
+| Copy                                                                           | Section                      | Diverges                                                                                                       |
+| ------------------------------------------------------------------------------ | ---------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `plugins/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/SKILL.md` | § Plan families and versions | different words for the same rules, no `mvp: true` terminator, and no section on continuing an existing family |
 
-**Shared:** the section word for word apart from that bullet: the seven checklist groups (Scope,
-Architecture, Tech Stack, Backend, Frontend, LLM, Completeness scan). The sixteen implementation
-gotchas are not duplicated: they live once in `references/implementation-gotchas.md` at the plugin
-root and both planners read them through `${CLAUDE_PLUGIN_ROOT}`. The two planners also carry a
-"Plan families and versions" section that states the same rules in different words. A change to
-the family or `depends_on` rules goes to both, and to the plan document schema above.
+**Shared:** the family and `depends_on` rules: the default family is untagged, a new major version
+is a fresh family with the `NN` counter restarting at 01, a version with its own skeleton is
+self-contained, an iterations-only version depends on the prior family's terminal artifacts, and
+`depends_on` names artifacts by stem and points only backward. The shared rules also live in
+`plan-schema.md`, so a change goes to both planners and to that file.
 
 ---
 

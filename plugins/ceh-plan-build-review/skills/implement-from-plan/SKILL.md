@@ -74,11 +74,12 @@ Section-specific notes:
   classes/types, and stub route handlers. Do not fill in logic yet unless the spec includes it.
 - **§03 Tech Stack**: install and configure the specified stack. Pin versions only if the spec
   specifies them.
-- **§04 Backend**: check whether an `implementation-gotchas.md` file exists in the project (e.g.
-  `docs/references/implementation-gotchas.md`). If it does, read it before implementing any backend
-  code. Implement the endpoints and services described for this section only.
-- **§05 Frontend**: same as §04, check for `implementation-gotchas.md` first. Implement only the
-  screens and components listed in this section's spec.
+- **§04 Backend**: read `${CLAUDE_PLUGIN_ROOT}/references/implementation-gotchas.md` before
+  implementing any backend code and avoid the applicable traps. If the project has its own
+  `implementation-gotchas.md`, read it as well. Implement the endpoints and services described for
+  this section only.
+- **§05 Frontend**: same as §04, read the shared `implementation-gotchas.md` first. Implement only
+  the screens and components listed in this section's spec.
 - **§06 LLM/Prompts**: only present if the app has LLM integration. Implement the model wiring,
   system prompt, and input/output handling as specified.
 

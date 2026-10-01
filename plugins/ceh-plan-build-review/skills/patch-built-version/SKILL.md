@@ -95,8 +95,10 @@ stays a pointer.
 
 Implement only `sections_changed`, resolving pointers through `depends_on` for context. Because a
 patch is small, implement it inline following the same discipline as `implement-from-plan`
-(§04/§05 notes, `implementation-gotchas.md` check, stay within scope). If the change is large
-enough to warrant it, invoke `implement-from-plan` targeting the patch file by name instead.
+(§04/§05 notes, stay within scope). Before implementing any backend or frontend code, read
+`${CLAUDE_PLUGIN_ROOT}/references/implementation-gotchas.md` and avoid the applicable traps. If the
+project has its own `implementation-gotchas.md`, read it as well. If the change is large enough to
+warrant it, invoke `implement-from-plan` targeting the patch file by name instead.
 
 ### 5. Summarize and hand off
 
