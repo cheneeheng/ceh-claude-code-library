@@ -29,7 +29,9 @@ in trees under that branch.
 The design is sound but narrow. Most of the value of this skill is in applying
 the gate honestly first, and in never touching a working tree second.
 
-## Start with the gate
+## Procedure
+
+### Start with the gate
 
 Run this before writing code. Answer honestly — talking someone out of this is
 a good outcome, and much cheaper than a migration in three months.
@@ -60,10 +62,9 @@ under GDPR/CCPA-style erasure obligations, either keep personal data out of the
 git store entirely (store an opaque id and keep the PII in something you can
 actually DELETE from) or do not use this pattern.
 
-If the gate passes, say so and build. If it fails on one row, say which row and
-what you would use instead. Do not build it anyway with a warning comment.
+If the gate passes, say so and build. If it fails, see Stop conditions.
 
-## What you get that plain JSON files do not
+### What you get that plain JSON files do not
 
 Worth stating explicitly, because "just write JSON files to disk" is the obvious
 alternative and this has to beat it:
@@ -78,7 +79,7 @@ alternative and this has to beat it:
   to read any record as it was at any past moment.
 - **Backup is `git push`.** Restore is `git clone`. Both are boring and proven.
 
-## Architecture
+### Architecture
 
 ```
 data.git/                         bare repo -- ONE per deployed instance
@@ -105,7 +106,70 @@ Orphan branches cost nothing in storage. Git objects are content-addressed and
 shared across the whole object database regardless of commit ancestry — "orphan"
 severs history, not deduplication.
 
-## The rules that make it work
+### Measured behaviour
+
+From `scripts/gitstore.py` on an ordinary container, ~300-byte records:
+
+| Operation                                    | Result                                 |
+| -------------------------------------------- | -------------------------------------- |
+| Single write (own commit)                    | ~17 ms → ~58 writes/sec on one project |
+| Batched write in a transaction               | ~3.4 ms/record                         |
+| Point read by id                             | ~1.8 ms (mostly process spawn)         |
+| List 700 records                             | ~220 ms via one `cat-file --batch`     |
+| List 64 projects                             | ~9 ms via one `cat-file --batch`       |
+| 8 processes hammering one project            | 80 writes in ~4 s, zero lost           |
+| Repo after 700 writes, before/after `git gc` | 7.5 MB → 0.4 MB                        |
+
+Two things to take from this. Writes are milliseconds, not microseconds — fine
+for a CRUD app, wrong for anything write-heavy. And `git gc` matters enormously;
+without it you accumulate loose objects until the store is 20x its real size.
+
+If point reads at ~1.8 ms are too slow, keep a long-lived `git cat-file --batch`
+process and stream requests to it. That removes the spawn cost and takes reads
+into the tens of microseconds. Do this only when measurement says to.
+
+### Build order
+
+1. **Apply the gate.** Report the verdict before writing anything.
+2. **Copy `scripts/gitstore.py` into the project** and initialise the repo:
+   `python gitstore.py init ./data.git`. No third-party packages are needed; it
+   shells out to the `git` binary, so `git` on `PATH` is the one dependency.
+3. **Put every data access behind the store interface.** No git command appears
+   in a route handler, a template, or a background job — only calls to the store.
+   This is what makes the later migration a swap rather than a rewrite; see
+   `references/porting.md` for the contract and how to port it to another
+   language.
+4. **Define collections and record shapes** in `schema/<collection>.json`, and
+   stamp `schema_version` on every record. Read `references/data-model.md` for
+   record layout, id choice, sharding large collections, and derived indexes.
+5. **Wire up backup with `scripts/sync.py`** before launch, not after. It pushes
+   to a remote on a background worker, coalescing bursts and backing off on
+   failure, so nothing network-shaped ends up in the request path. Then `git gc`
+   scheduling, nightly bundles, and a rehearsed restore. See
+   `references/operations.md`.
+6. **Write the migration trigger down now**, while the reasoning is fresh: the
+   record count, write rate, or feature that will mean it is time to move. Put it
+   in the README. The `ceh-git-datastore:migrate-git-datastore` skill handles the move itself.
+
+### Files
+
+- `scripts/gitstore.py` — working store implementation and CLI. No third-party
+  packages; requires the `git` binary. Tested for concurrency, atomicity, and
+  lost updates.
+- `scripts/sync.py` — background push to a remote, bundle rotation, restore, and
+  a status dict for health checks. Includes a mass-deletion guard.
+- `references/plumbing.md` — the exact git command sequences and why each is
+  shaped that way. Read when implementing or debugging the storage layer.
+- `references/data-model.md` — records, ids, collections, schema versioning,
+  sharding, derived indexes. Read when designing the data.
+- `references/operations.md` — gc, backup, restore, deployment topology,
+  monitoring. Read before shipping to production.
+- `references/porting.md` — the store contract, a TypeScript sketch, and the
+  rules that keep migration cheap. Read when the app is not Python.
+
+## Rules
+
+### The rules that make it work
 
 **1. Bare repo. No working tree. Ever.**
 If any code path runs `git checkout`, `git add`, or `git commit`, the design is
@@ -139,52 +203,7 @@ sortable ids give you "most recent N" without an index, and they survive the
 move to SQL unchanged — unlike an auto-increment integer, which you would have
 to invent during migration.
 
-## Measured behaviour
-
-From `scripts/gitstore.py` on an ordinary container, ~300-byte records:
-
-| Operation                                    | Result                                 |
-| -------------------------------------------- | -------------------------------------- |
-| Single write (own commit)                    | ~17 ms → ~58 writes/sec on one project |
-| Batched write in a transaction               | ~3.4 ms/record                         |
-| Point read by id                             | ~1.8 ms (mostly process spawn)         |
-| List 700 records                             | ~220 ms via one `cat-file --batch`     |
-| List 64 projects                             | ~9 ms via one `cat-file --batch`       |
-| 8 processes hammering one project            | 80 writes in ~4 s, zero lost           |
-| Repo after 700 writes, before/after `git gc` | 7.5 MB → 0.4 MB                        |
-
-Two things to take from this. Writes are milliseconds, not microseconds — fine
-for a CRUD app, wrong for anything write-heavy. And `git gc` matters enormously;
-without it you accumulate loose objects until the store is 20x its real size.
-
-If point reads at ~1.8 ms are too slow, keep a long-lived `git cat-file --batch`
-process and stream requests to it. That removes the spawn cost and takes reads
-into the tens of microseconds. Do this only when measurement says to.
-
-## Build order
-
-1. **Apply the gate.** Report the verdict before writing anything.
-2. **Copy `scripts/gitstore.py` into the project** and initialise the repo:
-   `python gitstore.py init ./data.git`. No third-party packages are needed; it
-   shells out to the `git` binary, so `git` on `PATH` is the one dependency.
-3. **Put every data access behind the store interface.** No git command appears
-   in a route handler, a template, or a background job — only calls to the store.
-   This is what makes the later migration a swap rather than a rewrite; see
-   `references/porting.md` for the contract and how to port it to another
-   language.
-4. **Define collections and record shapes** in `schema/<collection>.json`, and
-   stamp `schema_version` on every record. Read `references/data-model.md` for
-   record layout, id choice, sharding large collections, and derived indexes.
-5. **Wire up backup with `scripts/sync.py`** before launch, not after. It pushes
-   to a remote on a background worker, coalescing bursts and backing off on
-   failure, so nothing network-shaped ends up in the request path. Then `git gc`
-   scheduling, nightly bundles, and a rehearsed restore. See
-   `references/operations.md`.
-6. **Write the migration trigger down now**, while the reasoning is fresh: the
-   record count, write rate, or feature that will mean it is time to move. Put it
-   in the README. The `ceh-git-datastore:migrate-git-datastore` skill handles the move itself.
-
-## Anti-patterns
+### Anti-patterns
 
 - **Breaking rules 1, 3, or 4 above.** Checking out a branch to serve a request
   (the most common way to wreck this), `git add`/`git commit` against a shared
@@ -207,23 +226,7 @@ into the tens of microseconds. Do this only when measurement says to.
 - **Skipping the gate because the prototype is small.** The gate is about where
   the app is going, not where it is.
 
-## Files
-
-- `scripts/gitstore.py` — working store implementation and CLI. No third-party
-  packages; requires the `git` binary. Tested for concurrency, atomicity, and
-  lost updates.
-- `scripts/sync.py` — background push to a remote, bundle rotation, restore, and
-  a status dict for health checks. Includes a mass-deletion guard.
-- `references/plumbing.md` — the exact git command sequences and why each is
-  shaped that way. Read when implementing or debugging the storage layer.
-- `references/data-model.md` — records, ids, collections, schema versioning,
-  sharding, derived indexes. Read when designing the data.
-- `references/operations.md` — gc, backup, restore, deployment topology,
-  monitoring. Read before shipping to production.
-- `references/porting.md` — the store contract, a TypeScript sketch, and the
-  rules that keep migration cheap. Read when the app is not Python.
-
-## This is not your code repository
+### This is not your code repository
 
 `data.git` is a bare repo holding application data. It is not the repo your
 source lives in, and it must not be handled by the tooling you use for source
@@ -241,3 +244,13 @@ uses the `git add` that rule 1 forbids; exclude `data.git` from repo-scanning an
 changelog tooling, which will otherwise try to make sense of 40,000
 machine-written commits; and keep it outside the source tree — `/srv/data.git`,
 not `./data.git` inside the checkout. If it must live alongside, `.gitignore` it.
+
+## Stop conditions
+
+- The gate fails on one row → say which row and what you would use instead. Do not build it anyway
+  with a warning comment.
+
+## Hands off to
+
+- `ceh-git-datastore:migrate-git-datastore` when the migration trigger from Build order step 6
+  fires. That skill handles the move itself.

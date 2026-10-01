@@ -38,7 +38,9 @@ A folder-of-JSON-files store works too — commit it to a git repo in this shape
 first, then follow the same path. That is a real shortcut, not a detour: it buys
 you the pinned snapshots that make the rest of this safe.
 
-## First: is it actually time?
+## Procedure
+
+### First: is it actually time?
 
 Migrating is a week of work and a permanent increase in operational surface. Run
 `scripts/gitexport.py inventory <repo>` and check it against the triggers.
@@ -63,7 +65,7 @@ Migrating is a week of work and a permanent increase in operational surface. Run
 Say the verdict plainly before planning anything. Telling someone to keep the
 git store for another quarter is frequently the correct output of this skill.
 
-## Choosing the target
+### Choosing the target
 
 **SQLite** if the app runs on one node with a persistent disk. It is a file, so
 the operational model does not change at all, and it buys real SQL: indexes,
@@ -83,7 +85,7 @@ that more cheaply.
 Going git → SQLite → Postgres later is a legitimate path. The interface work is
 done once and the second hop is much easier than the first.
 
-## Why this is tractable: pinned snapshots
+### Why this is tractable: pinned snapshots
 
 The property that makes a git source better than any other file store: **a commit
 sha is an immutable snapshot of an entire project.**
@@ -105,7 +107,7 @@ all.
 `scripts/gitexport.py export` writes the pins to `manifest.json`; `changed`
 turns them into the catch-up set. Keep that manifest — it is the contract.
 
-## The sequence
+### The sequence
 
 **1. Inventory.** `gitexport.py inventory <repo>` — projects, collections,
 record counts, bytes, commit depth, plus a read on what the shape implies.
@@ -146,7 +148,22 @@ a few first, verify, then continue. Full detail in `references/cutover.md`.
 single file with all data and all history. Keep it. It has settled more "was it
 always like that?" arguments than any log.
 
-## What actually breaks
+### Files
+
+- `scripts/gitexport.py` — `inventory`, `infer`, `export`, `changed`. Stdlib
+  only, no database driver needed.
+- `scripts/verify.py` — compares the git export against a database dump; exits
+  non-zero on mismatch so it can gate a deploy.
+- `references/schema-design.md` — column vs JSONB, keys, indexes, tenancy,
+  what to do with history.
+- `references/cutover.md` — dual-write, per-project cutover, verification gates,
+  rollback, and how to decide it is done.
+- `references/postgres.md` and `references/sqlite.md` — engine-specific loading,
+  types, and gotchas.
+
+## Rules
+
+### What actually breaks
 
 Each of these was observed on a realistic test store, not hypothesised:
 
@@ -174,20 +191,7 @@ Each of these was observed on a realistic test store, not hypothesised:
   foreign keys will surface data that has been quietly broken for months. Better
   now than later.
 
-## Files
-
-- `scripts/gitexport.py` — `inventory`, `infer`, `export`, `changed`. Stdlib
-  only, no database driver needed.
-- `scripts/verify.py` — compares the git export against a database dump; exits
-  non-zero on mismatch so it can gate a deploy.
-- `references/schema-design.md` — column vs JSONB, keys, indexes, tenancy,
-  what to do with history.
-- `references/cutover.md` — dual-write, per-project cutover, verification gates,
-  rollback, and how to decide it is done.
-- `references/postgres.md` and `references/sqlite.md` — engine-specific loading,
-  types, and gotchas.
-
-## Working style
+### Working style
 
 Not a batch job that ends with "migrated". Report at each phase what was found,
 what it implies, and what needs a decision — the inventory and profile outputs
@@ -195,3 +199,8 @@ frequently change the plan, because a store that is 90% one project, or has a
 field carrying three types, wants a different sequence. And keep saying the
 unwelcome thing when it is true: that the data needs cleaning first, that SQLite
 is the better target, or that the migration should wait.
+
+## Stop conditions
+
+- No migration trigger has fired → say the verdict plainly and keep the git store. Do not plan the
+  migration.
