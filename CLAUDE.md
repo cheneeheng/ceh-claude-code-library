@@ -67,6 +67,7 @@ plugins/                      # All plugins — flat, one directory per plugin, 
     ├── agents/                   # Optional — subagents, one <name>.md each
     ├── hooks/                    # Optional — hooks.json wiring scripts via ${CLAUDE_PLUGIN_ROOT}
     ├── output-styles/            # Optional — output style .md files
+    ├── references/               # Optional — files shared by several skills of this plugin, read via ${CLAUDE_PLUGIN_ROOT}
     ├── scripts/                  # Optional — hook scripts and shell helpers
     └── skills/
         └── <skill-name>/
@@ -105,8 +106,11 @@ one heading set, and one voice. Frontmatter uses only the fields in the official
 
 Each skill is self-contained with inline content. `references/` is for two cases only:
 
-- **A schema or template used by several skills**, copied word-for-word into each consumer and
-  registered in `docs/CROSS_REFERENCES.md`.
+- **A schema or template used by several skills.** Skills of one plugin share a single copy in the
+  plugin's own `references/`, cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`, so it needs no
+  `docs/CROSS_REFERENCES.md` entry. A file used by one skill lives in that skill's `references/`.
+  Only a file needed by skills of different plugins is copied word-for-word into each and
+  registered in `docs/CROSS_REFERENCES.md` (see the Shared-Standards Duplication Policy).
 - **A standards set too large to inline.**
 
 Never for general reference material a model already knows.
