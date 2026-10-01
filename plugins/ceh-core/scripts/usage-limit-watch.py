@@ -128,7 +128,7 @@ def main() -> None:
         warn_once(
             state_dir / f"ceh-usage-nosensor-{session_id}",
             "ceh usage-limit guard: no statusline quota export found - the usage-limit guard "
-            "is INACTIVE this session. See the ceh-coding-agent README to enable it.",
+            "is INACTIVE this session. See the ceh-core README to enable it.",
         )
         return
 
@@ -185,7 +185,7 @@ def main() -> None:
     else:
         msg = head + (
             "Do not start new subtasks, tool-call chains, or subagents. Finish only the current "
-            "atomic step, then load and follow the ceh-coding-agent:usage-limit-handoff "
+            "atomic step, then load and follow the ceh-core:usage-limit-handoff "
             "skill: write the handoff artifact, then end the turn. "
             f"Session id prefix for the handoff filename: {session_id[:8]}."
         )

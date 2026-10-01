@@ -125,7 +125,7 @@ def main():
         f"summary cannot give you the exact text an edit needs, and you would have to take "
         f"this read anyway. Use Grep first if you do not know the line.\n\n"
         f"2. An understanding of the file: invoke the Skill tool with "
-        f'skill="ceh-coding-agent:delegate-bulk-reads", then delegate to the `bulk-reader` '
+        f'skill="ceh-core:delegate-bulk-reads", then delegate to the `bulk-reader` '
         f"subagent with your question and this path. It returns a line-anchored answer "
         f"without the contents entering this context.\n\n"
         f"Do not chunk the whole file into many offset reads; that costs more than one "

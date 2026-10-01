@@ -18,12 +18,12 @@ they live:
 
 Plugins fall into four tiers:
 
-| Tier                  | Loaded            | Plugins                                |
-| --------------------- | ----------------- | -------------------------------------- |
-| **Scenario bundle**   | one per situation | —                                      |
-| **Cross-cutting**     | most sessions     | `ceh-coding-agent`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity      | —                                      |
-| **Stack / build**     | per project type  | —                                      |
+| Tier                  | Loaded            | Plugins                                            |
+| --------------------- | ----------------- | -------------------------------------------------- |
+| **Scenario bundle**   | one per situation | —                                                  |
+| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow` |
+| **Use-case workflow** | per activity      | —                                                  |
+| **Stack / build**     | per project type  | —                                                  |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. `-greenfield` depends on its own
@@ -42,6 +42,9 @@ Categorization rules of thumb:
   the distinction and `validate.py` enforces the structural invariant (manifest + README only).
 - **App-specific patterns are not standards.** Anything bound to one application's schema or design
   is removed rather than kept as a niche plugin.
+- **`ceh-core` admits only what holds however Claude Code is used** — coding, writing, research,
+  or ops. If a component assumes a repository, code, or a specific activity, it belongs elsewhere.
+  "Useful almost everywhere" is not the test; that is how a core plugin becomes a dumping ground.
 - **The cross-cutting tier is orthogonal by construction.** It holds a discipline that applies
   whatever you are building, so it loads _alongside_ a use-case plugin, never instead of one.
 - **Technique splits from tooling when the technique is genuinely stack-agnostic.** The test:
@@ -54,6 +57,7 @@ Categorization rules of thumb:
 .agents_workspace/            # Session artifacts, git-ignored in full: DECISION_LOG.md, skill-evals/
 .claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
+archive/                      # Retired plugins or plugin contents — unpublished, not validated
 .github/workflows/            # validate.yml — runs validate.py on push and PR
 docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md
 plugins/                      # All plugins — flat, one directory per plugin, no tier subfolders
@@ -76,7 +80,8 @@ tools/
 
 | Plugin directory   | Domain                                                                                                                                                                                                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation and mapping, usage-limit handoff, context economy via delegated bulk reads                                                                                                |
+| `ceh-core`         | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                                                           |
+| `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation                                                                                                                                                                           |
 | `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management; plus the two orchestrated flows — `merge-flow` (lands a branch, no version) and `release-flow` (ships a release) — which sequence those skills and own only the gates |
 
 ## Skills

@@ -4,3 +4,12 @@
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Claude Code worktrees
+.claude/worktrees/
+
+# Ruff
+.ruff_cache/
+
+# Python bytecode
+__pycache__/

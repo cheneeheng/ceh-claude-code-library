@@ -284,7 +284,6 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
 | Want                                                      | Use                                                                                                                      |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | A repo-wide orientation file, component by component      | `ceh-coding-agent:explain-codebase`                                                                                      |
-| One line per path, fast structure map                     | `ceh-coding-agent:repo-tree-mapper` agent                                                                                |
 | Diagrams and decision records that live in the repo       | `ceh-architecture:document-architecture`                                                                                 |
 | Docs for people who _use_ or _operate_ the product        | `ceh-documentation:write-guides-and-runbooks` for the tasks, `ceh-documentation:write-project-docs` for a whole docs set |
 | Someone in this session needs to understand something now | **this skill**                                                                                                           |

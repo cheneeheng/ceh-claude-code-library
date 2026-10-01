@@ -234,7 +234,7 @@ def main():
                 f"This is the right branch if you are about to edit, debug, or review this "
                 f"file, since a summary cannot give you the exact text an edit needs.\n\n"
                 f"2. An understanding of the file: invoke the Skill tool with "
-                f'skill="ceh-coding-agent:delegate-bulk-reads", then delegate to the '
+                f'skill="ceh-core:delegate-bulk-reads", then delegate to the '
                 f"`bulk-reader` subagent with your question and this path."
             )
     sys.exit(0)
