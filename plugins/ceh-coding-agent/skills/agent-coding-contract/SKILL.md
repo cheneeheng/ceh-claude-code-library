@@ -1,10 +1,7 @@
 ---
 name: agent-coding-contract
 description: >-
-  Core behavioral contract for coding sessions — agent role, core rules, five-step task workflow,
-  stop conditions, decision logging. Loaded automatically at session start and preloaded into
-  implementation subagents; also load when the user says "load the contract", "agent contract", or
-  "coding contract".
+  Core behavioral contract for coding sessions.
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0

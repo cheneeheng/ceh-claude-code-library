@@ -1,15 +1,7 @@
 ---
 name: delegate-bulk-reads
 description: >-
-  How to delegate a read to the bulk-reader subagent and what to do with its answer. Load this
-  before dispatching bulk-reader, or when a PreToolUse guard has denied a Read or a bash
-  cat/head/tail, or when about to answer one question by reading several large files. Covers
-  writing the delegation prompt so the answer is usable, and the verification rules that apply
-  afterwards: the files were never seen in this context, so the summary is a lead, not evidence.
-  Load it before acting on a subagent's summary — editing, refactoring, or reporting a claim to
-  the user based on lines nobody here has read is the failure mode this exists to prevent. Not for
-  a file you are about to edit, debug or review: that wants a direct Read with offset/limit, since
-  a summary cannot give an edit the exact text it needs.
+  Load before dispatching the bulk-reader subagent: how to write the prompt and verify its answer.
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0

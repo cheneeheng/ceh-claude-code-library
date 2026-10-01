@@ -1,15 +1,9 @@
 ---
 name: usage-limit-handoff
 description: >-
-  Stop-and-summarize protocol for when the account usage limit is nearly exhausted. Load immediately
-  when a hook or system message reports that usage crossed the wrap-up threshold ("ceh usage-limit
-  guard"), and whenever the user says "usage limit handoff", "wrap up the session", "we're near the
-  usage limit", "stop and summarize", or "hand off before the limit". Defines how to stop cleanly:
-  finish only the current atomic step, start nothing new, write a durable handoff artifact recording
-  completed vs open work, and end the turn. Not for ordinary end-of-task summaries (the contract's
-  Summarize step covers those) or general session summaries without a limit trigger.
+  Stop-and-summarize protocol for when the account usage limit is nearly exhausted.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 license: Apache-2.0
 ---
 

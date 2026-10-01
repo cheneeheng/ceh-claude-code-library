@@ -26,7 +26,8 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 - Point the `ceh-coding-agent` less-code hook at the full `write-less-code` skill so it loads before implementing, and gate the skill's runnable-check rule on tests being in scope
 - Consolidate `ceh-git-workflow` from 11 skills to 6: `open-pr`, `merge` and `merge-flow` become `pull-request`, and `release-flow` and `hotfix` fold into `release`, so a compound request loads two skills instead of one per step
 - Make `ceh-git-workflow` stack-agnostic: Python and TypeScript checks, the coverage table, and `ARCHITECTURE.md` references are replaced by stack-neutral rules
-- State `disable-model-invocation`, `user-invocable`, and `license` in every skill's frontmatter and in the `SKILL.md` template; `agent-coding-contract` and `delegate-bulk-reads` become model-only, so they no longer appear as slash commands
+- State `disable-model-invocation`, `user-invocable`, and `license` in every skill's frontmatter and in the `SKILL.md` template; `agent-coding-contract`, `write-less-code`, `usage-limit-handoff`, `delegate-bulk-reads` and `branch` become model-only, so they no longer appear as slash commands
+- Trim the descriptions of the hook-loaded skills `agent-coding-contract`, `usage-limit-handoff` and `delegate-bulk-reads` to one line each, since their hooks name them explicitly and no trigger phrases are needed
 - Require `model` in every agent's frontmatter, enforced by `validate.py`
 
 ### Removed
