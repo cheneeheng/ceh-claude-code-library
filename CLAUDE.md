@@ -73,7 +73,7 @@ plugins/                      # All plugins — two folders, one directory per p
         └── skills/
             └── <skill-name>/
                 ├── SKILL.md               # Required — frontmatter + full body, all content inline
-                └── references/            # Sparingly — see Skills below
+                └── references/            # Sparingly — see Skills below (same for assets/, scripts/)
 tools/
 └── validate-plugins/          # The CI gate — stdlib-only Python, own README.md
 ```
@@ -86,7 +86,7 @@ tools/
 | `ceh-coding-agent`      | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation, the living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log)                                                                                                                       |
 | `ceh-git-workflow`      | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, README upkeep after a significant change (`update-readme`), releases including hotfixes (`release`, which also runs the full ship sequence), code review |
 | `ceh-testing`           | Stack-agnostic testing technique: reproduce-first bug fixes, test-case design, suite audit (with a report-only mode), behavior-preservation checks, test risk gaps                                                                                                                        |
-| `ceh-python-service`    | FastAPI, asyncpg, PostgreSQL, Alembic, uv/ruff/mypy, pytest, observability, security, and domain modeling for web services; unit/integration/system tester agents                                                                                                                         |
+| `ceh-python-service`    | FastAPI, asyncpg, PostgreSQL, Alembic, uv/ruff/mypy, and pytest for web services; unit/integration/system tester agents                                                                                                                                                                   |
 | `ceh-python-library`    | Packaging and publishing, public API surface and semver, uv/ruff/mypy, and pytest for distributable libraries with no web dependencies                                                                                                                                                    |
 | `ceh-web-frontend`      | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, UI visual design and theming, Cytoscape.js graph visualization; unit/integration/system tester agents                                                                          |
 | `ceh-seo`               | Discoverability for anything internet-exposed: crawlable public web pages, the `llms.txt` agent index, findability of README, package, and landing text                                                                                                                                   |
@@ -125,6 +125,10 @@ Two `ceh-web-frontend` skills migrated whole and carry bundled files that predat
 `design-ui` (two themes under `references/`) and `visualize-graph-cytoscape` (eight reference
 files, an `assets/template.html`, and a `scripts/to-elements.js` converter). Trim the Cytoscape
 references to the repo-opinionated delta before adding more.
+
+Scaffold or script bundles a skill executes or copies are not reference material and are allowed:
+`ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent` `assets/`) and `ceh-git-datastore`
+(`build-git-datastore`, `migrate-git-datastore` `references/` + `scripts/`).
 
 **Name skills with a verb phrase and agents with a noun, and put the framework or library in the
 name when a skill is specific to one** (`write-fastapi-endpoints`, `write-postgresql-code`,
@@ -168,6 +172,9 @@ what fails without it. A skill that only reads files and emits Markdown gets no 
 
 ### `user-invocable` and hook-loaded skills
 
+Every skill states `disable-model-invocation`, `user-invocable`, and `license` explicitly, even at
+their defaults, so the frontmatter says who invokes it. This is a review rule, not a validator check.
+
 `user-invocable: false` on any skill the user will not call by name, which includes every skill a
 hook names (`agent-coding-contract`, `write-less-code`, `usage-limit-handoff`,
 `delegate-bulk-reads`, `branch`). Its root `README.md` Invoke cell reads
@@ -206,7 +213,8 @@ Whatever else gets skipped, these four land in the **same commit** or CI fails:
 1. A row in the root `README.md` table (Skills or Agents).
 2. A row in `plugins/standalone/ceh-<plugin>/README.md`.
 3. A version bump in **both** `plugins/standalone/ceh-<plugin>/.claude-plugin/plugin.json` and
-   `.claude-plugin/marketplace.json` — level per the Versioning section below.
+   `.claude-plugin/marketplace.json` — level per the Versioning section below. CI checks only that
+   the two match. Until the first repo tag exists, skip the bump.
 4. `python tools/validate-plugins/validate.py` green.
 
 ## Commands
@@ -229,9 +237,9 @@ claude plugin validate plugins/standalone/ceh-<plugin>
 so renaming a skill means grepping for its old name. It shellchecks `scripts/*.sh` only when
 `shellcheck` is installed. CI has it, so a local green run on Windows can still fail CI.
 
-The pre-commit hook runs prettier and **aborts the commit when it reformats a file**, which any
-Markdown table edit can trigger. Re-stage and commit again, and chain the push with `&&`, never
-`;`, so a failed commit does not push.
+The pre-commit hook (`pre-commit install` once per clone) runs ruff-format, prettier, and shfmt and
+**aborts the commit when it reformats a file**, which any Markdown table edit can trigger. Re-stage
+and commit again, and chain the push with `&&`, never `;`, so a failed commit does not push.
 
 ## Evaluation
 
