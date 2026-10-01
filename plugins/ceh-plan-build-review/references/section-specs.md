@@ -62,7 +62,7 @@ frontmatter live in `plan-schema.md`.
 
 - New modules or files added
 - Implementation detail for the endpoints/services introduced in this iteration
-- Apply `${CLAUDE_PLUGIN_ROOT}/references/implementation-gotchas.md` before writing this section
+- Apply `implementation-gotchas.md` (the file beside this one) before writing this section
 
 ---
 
@@ -79,7 +79,7 @@ frontmatter live in `plan-schema.md`.
 
 - New screens or components introduced
 - State changes, new API calls wired up
-- Apply `${CLAUDE_PLUGIN_ROOT}/references/implementation-gotchas.md` before writing this section
+- Apply `implementation-gotchas.md` (the file beside this one) before writing this section
 
 ---
 
