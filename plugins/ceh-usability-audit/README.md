@@ -145,6 +145,8 @@ in the main session, or the agent is handed screenshots and page text instead of
   `walk-first-run` assumes none of them. A missing prerequisite is itself an audit finding.
 - **git CLI or a container runtime**: only to give each walker its own copy of the target when a
   walk writes to the working tree and the personas run in parallel.
+- **Claude in Chrome browser tools, or the CLI under audit installed**: only for `audit-interface`
+  on a live web UI or a CLI. Without them it audits screenshots, page text and static artifacts.
 
 The plugin reads no environment variables.
 

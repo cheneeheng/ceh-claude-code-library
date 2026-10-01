@@ -14,6 +14,10 @@ description: >-
 disable-model-invocation: false
 user-invocable: true
 effort: xhigh
+compatibility: >-
+  Probing a live web UI needs the Claude in Chrome browser tools in the main session, and probing a
+  CLI needs it installed and runnable. Without them the audit falls back to screenshots, page text
+  and static artifacts, and reports those findings as unwalked.
 license: Apache-2.0
 ---
 
@@ -125,28 +129,17 @@ live web UI, either hold each persona yourself in the main session (accepting th
 too much) or hand the walker screenshots and page text instead of a URL. Say in the report which you
 did.
 
-| Persona               | Holds this constraint the whole way                                                                                                                                                                                           | Catches                                                                                                  |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| **Blank Slate**       | Knows the audience baseline and nothing beyond it — no domain vocabulary, no prior knowledge of this product. Reads only what is on the screen or page. Assumes nothing is safe to click until told. _(the 5-year-old proxy)_ | Undefined jargon, invisible affordances, "obvious" next steps that are not, assumed prerequisites        |
-| **Cautious Returner** | Will not take any action whose outcome is not stated in advance. Needs to see what happened after every action. Afraid of losing work. _(the 95-year-old proxy)_                                                              | Missing confirmation, silent success, irreversible actions, no undo, no way to check state               |
-| **Interrupted**       | Leaves for ten minutes mid-task and may close the tab or terminal. Comes back and must resume.                                                                                                                                | Lost state, expired sessions/tokens, multi-step flows with no progress marker or resume path             |
-| **Wrong Turn**        | Does the wrong thing first — wrong button, wrong value, skips a required step — then tries to recover.                                                                                                                        | Dead ends, unrecoverable errors, blame copy, no back, validation that fires too late                     |
-| **Small Screen**      | 360px viewport, slow link, or an 80-column terminal. Keyboard only.                                                                                                                                                           | Offscreen primary action, layout collapse, hover-only affordances, no loading feedback, truncated output |
-
-`Small Screen` covers the _environment_, not conformance. Contrast ratios, ARIA, and focus traps
-belong to `ceh-web-frontend:make-ui-accessible` — delegate, and record in the report that you did.
+Read `${CLAUDE_PLUGIN_ROOT}/references/personas-and-severity.md` before dispatching. It holds the
+five personas, each a constraint catching a distinct failure class, and the severity scale step 6
+ranks with. Run all five unless a surface makes one meaningless (`Small Screen` on a library API),
+and record a skipped persona as a skip.
 
 ### 6. Rank by observed outcome
 
 **Severity comes from what happened to a walker, never from how bad something looks to you.** This
-is what keeps the report from becoming a list of preferences.
-
-| Severity     | Assigned when                                                                                                |
-| ------------ | ------------------------------------------------------------------------------------------------------------ |
-| **Blocker**  | A persona could not complete the goal — or completed it wrongly believing it was right                       |
-| **Detour**   | Completed it, but only after backtracking, guessing between options, or looking outside what they were given |
-| **Friction** | Completed it, but with avoidable doubt — "did that work?"                                                    |
-| **Polish**   | No effect on any walker's completion                                                                         |
+is what keeps the report from becoming a list of preferences. Assign each stall one of the four
+severities (Blocker, Detour, Friction, Polish) by the conditions in
+`${CLAUDE_PLUGIN_ROOT}/references/personas-and-severity.md`.
 
 A walker that ran out of turns produced no result at all — re-dispatch it over a narrower goal, and
 never read turn exhaustion as a failure to complete. Overrunning the action budget is a **Detour**
@@ -202,7 +195,8 @@ in that folder.
 ### <ID> — <Blocker|Detour|Friction|Polish> — <title>
 
 - **Where:** <screen, command, or file:line>
-- **Persona:** <who stalled> - **Expected / got:** <…>
+- **Persona:** <who stalled>
+- **Expected / got:** <what they thought would happen / what happened>
 - **Fix:** <the concrete change>
 
 ## Hypotheses (no walker stalled — unranked)

@@ -278,20 +278,19 @@ self-contained, an iterations-only version depends on the prior family's termina
 
 ## Usability persona set and severity scale
 
-**Canonical:** `plugins/ceh-usability-audit/skills/walk-first-run/SKILL.md` — § The personas, § 5. Score by observed outcome, not by appearance
+**Canonical:** `plugins/ceh-usability-audit/references/personas-and-severity.md` — § The personas, § Severity
 
-| Copy                                                          | Section                                                             | Diverges                                                                                       |
-| ------------------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `plugins/ceh-usability-audit/skills/audit-interface/SKILL.md` | § 5. Run the persona battery, § 6. Rank by observed outcome         | none: both tables are verbatim                                                                 |
-| `plugins/ceh-usability-audit/README.md`                       | § The personas, § Severity — assigned by outcome, not by appearance | condensed for the reader: column wording differs, the five personas and four severities do not |
-| `plugins/ceh-usability-audit/agents/novice-walker.md`         | § Holding the persona                                               | the same five personas as second-person instructions to the walker, not a table                |
+| Copy                                                  | Section                                                             | Diverges                                                                                       |
+| ----------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `plugins/ceh-usability-audit/README.md`               | § The personas, § Severity — assigned by outcome, not by appearance | condensed for the reader: column wording differs, the five personas and four severities do not |
+| `plugins/ceh-usability-audit/agents/novice-walker.md` | § Holding the persona                                               | the same five personas as second-person instructions to the walker, not a table                |
 
 **Shared:** the five personas (Blank Slate, Cautious Returner, Interrupted, Wrong Turn, Small
 Screen) with their constraints and the failure class each catches, the four severities (Blocker,
 Detour, Friction, Polish) with their assignment conditions, and the rule that severity comes from
 an observed walker outcome, with anything unobserved demoted to an unranked `Hypotheses` list. The
-tables are inlined in both skills rather than shared through the plugin's `references/` because
-each is the core of its skill's procedure and the agent needs a different form.
+two audit skills read the canonical file, so they are not copies. The README and the agent keep
+their own form because a reader and a walker each need a different one.
 
 ## AG-UI styling lock and canvas extensions
 
