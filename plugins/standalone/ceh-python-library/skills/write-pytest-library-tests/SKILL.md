@@ -6,7 +6,7 @@ description: >-
   pytest fixture is written, or a decision is made about what to mock vs what to test for real. Not
   for web service testing with a real DB or HTTP (use ceh-python-service:write-pytest-service-tests).
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 paths:
   - "**/test_*.py"
   - "**/*_test.py"

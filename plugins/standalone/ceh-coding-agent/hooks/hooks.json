@@ -11,6 +11,21 @@
         ]
       }
     ],
+    "SubagentStart": [
+      {
+        "matcher": "^(?!(Explore|Plan|.*bulk-reader)$)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/load-contract.sh\" SubagentStart"
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/less-code-payload.sh\" SubagentStart"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [

@@ -7,10 +7,9 @@ description: >-
   Trigger on "go through the repo and explain what is happening", "explain this codebase",
   "document what each module does", "walk me through this project", "write an onboarding doc for
   this repo", or "I inherited this repo — what is going on". Explains at component/module level by
-  default; drops to one entry per file only when the user explicitly asks for per-file detail. Also
-  load before making the first change to an unfamiliar codebase. Not for design diagrams and
-  decision records (ceh-coding-agent:document-architecture), and not for end-user or operator
-  documentation (ceh-documentation).
+  default; drops to one entry per file only when the user explicitly asks for per-file detail. Not
+  for design diagrams and decision records (ceh-coding-agent:document-architecture), and not for
+  end-user or operator documentation (ceh-documentation).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

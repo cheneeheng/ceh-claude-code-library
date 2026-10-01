@@ -7,11 +7,11 @@ Load this plugin for library and SDK projects. Use `ceh-python-service` for Fast
 
 ## Skills
 
-| Skill                          | Invoke                                             | Triggers when                                                                                                              |
-| ------------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `configure-python-library-env` | `/ceh-python-library:configure-python-library-env` | Editing `pyproject.toml`, running uv commands, writing type hints, or configuring ruff/mypy                                |
-| `write-pytest-library-tests`   | `/ceh-python-library:write-pytest-library-tests`   | Creating or modifying test files, fixtures, or mocks                                                                       |
-| `publish-python-library`       | `/ceh-python-library:publish-python-library`       | Build backend, src layout, wheels and PyPI publishing, `__init__.py`/`__all__`, deprecations, or classifying a semver bump |
+| Skill                          | Invoke                                       | Triggers when                                                                                                              |
+| ------------------------------ | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `configure-python-library-env` | Model-only, no slash command                 | Editing `pyproject.toml`, running uv commands, writing type hints, or configuring ruff/mypy                                |
+| `write-pytest-library-tests`   | Model-only, no slash command                 | Creating or modifying test files, fixtures, or mocks                                                                       |
+| `publish-python-library`       | `/ceh-python-library:publish-python-library` | Build backend, src layout, wheels and PyPI publishing, `__init__.py`/`__all__`, deprecations, or classifying a semver bump |
 
 The plugin ships no hooks. The skills load from their descriptions alone, so nothing is injected into
 a session that does not touch these moments.

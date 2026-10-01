@@ -9,7 +9,7 @@ description: >-
   README accurate after code changes (use ceh-git-workflow:update-readme) and not for HTML page
   markup (use ceh-seo:make-page-crawlable).
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 license: Apache-2.0
 ---
 

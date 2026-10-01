@@ -7,7 +7,7 @@ description: >-
   .ts/.tsx/.svelte file is written, or eslint.config.js / .prettierrc / tsconfig.json is created or
   modified.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 compatibility: >-
   Requires `bun` on PATH (the repo's package manager and script runner; Node.js 20+ with npm works
   as a fallback) and network access to the npm registry. TypeScript, Vite, ESLint, and Prettier

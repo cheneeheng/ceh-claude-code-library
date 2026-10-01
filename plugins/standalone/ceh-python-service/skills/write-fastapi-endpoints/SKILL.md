@@ -11,7 +11,7 @@ description: >-
   shape is defined, a FastAPI dependency is defined, a domain exception is added, a log call or
   metric is written, or CORS, rate limiting, or /health is touched. Not for frontend or browser code.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 compatibility: >-
   Requires Python 3.12+ with `fastapi`, `pydantic`, `structlog`, and an ASGI server (`uvicorn`)
   installed as project dependencies via `uv sync` - none is assumed to be present globally. Running

@@ -7,7 +7,7 @@ description: >-
   is run, or a question arises about code style, type annotations, or import ordering. Not for web
   service environments with uvicorn or asyncpg (use ceh-python-service:configure-python-service-env).
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 compatibility: >-
   Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI for `uv
   sync` / `uv add`. `ruff`, `mypy`, and `pytest` are not assumed to be installed globally - `uv`

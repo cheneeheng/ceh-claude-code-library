@@ -5,6 +5,8 @@
 # skill loads on demand when non-trivial code is actually being written. Runs unconditionally
 # whenever the plugin is enabled. Pure-shell (bash), no Node required. Inspired by ponytail
 # (MIT, DietrichGebert). The payload below is static text, JSON-escaped at runtime.
+# Also wired to SubagentStart, which passes the event name as $1: UserPromptSubmit never
+# fires inside a subagent.
 
 read -r -d '' CONTEXT <<'EOF'
 WRITE LESS CODE — the best code is the code never written. Before writing any code, stop at the first rung that holds:
@@ -27,7 +29,7 @@ CONTEXT=${CONTEXT//$'\n'/\\n}
 cat <<JSON_EOF
 {
   "hookSpecificOutput": {
-    "hookEventName": "UserPromptSubmit",
+    "hookEventName": "${1:-UserPromptSubmit}",
     "additionalContext": "${CONTEXT}"
   }
 }
