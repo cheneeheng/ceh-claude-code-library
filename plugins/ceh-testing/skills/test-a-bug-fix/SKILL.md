@@ -1,0 +1,149 @@
+---
+name: test-a-bug-fix
+description: >-
+  Load this skill when a bug, defect, crash, regression, or incident is being fixed — before writing
+  the fix. Enforces reproduce-first: write the smallest failing test, confirm it fails for the real
+  reason, fix, then prove the test goes red again without the fix; and bisect on that reproducer
+  when the behavior used to be correct. Trigger on "fix this bug", "this is broken", "getting an
+  error", "this returns the wrong value", "regression", "this worked last week", "which commit broke
+  this", "git bisect", "hotfix", "postmortem action item", or a pasted stack trace or failing
+  output. Also load when reviewing a bug-fix PR that ships no test. Not for choosing inputs for new
+  feature tests (use ceh-testing:design-test-cases) or for judging an existing suite (use
+  ceh-testing:audit-test-suite).
+disable-model-invocation: false
+user-invocable: true
+compatibility: >-
+  Requires the git CLI on PATH and a git working tree, since bisection runs `git bisect run`, plus
+  the target project's own test runner (`pytest` via `uv run`, or `vitest` via `bun`) as the
+  reproducer must be runnable at every commit in the range. Neither runner is assumed installed.
+license: Apache-2.0
+---
+
+# Test a Bug Fix
+
+A bug is proof that a test was missing. The fix is the cheap half; the test that would have caught
+it is the deliverable. Write it **first** — a test written after the fix is written against the new
+code, not against the bug, and routinely passes on the broken version too.
+
+## When tests were not requested
+
+Writing tests and running a suite happen only when the user asked for them. If the request was only
+to fix the bug, write no test and run nothing: no reproducer, no stash check, no bisect. Instead,
+name the test you would write (what it asserts and which file it would live in) and state what stays
+unverified, so the user can ask for it. When tests were requested, the procedure below applies in
+full.
+
+## Procedure
+
+### 1. Reproduce in a test before touching source
+
+Smallest input that triggers it. No fix on disk yet.
+
+```python
+def test_parse_duration_rejects_bare_number():
+    with pytest.raises(ValueError):
+        parse_duration("30")  # bug: silently returned timedelta(seconds=30)
+```
+
+Put it at the **lowest level that reproduces it** — unit if a unit reproduces it, integration only
+if the bug lives in the interaction. If it only reproduces end-to-end, say so: that usually means
+the unit boundary is in the wrong place, and it is worth reporting even if you do not move it.
+
+### 2. Run it and read the failure
+
+It must fail, **and fail with the bug's actual symptom**. A test that errors on a typo, a missing
+fixture, or an import is not a reproduction — it is a broken test that happens to be red.
+
+If it passes: you have not reproduced the bug. Do not proceed. Your model of the cause is wrong,
+the input is not the triggering one, or the bug needs state the test does not set up.
+
+### 3. Fix the source
+
+Minimal change that turns the test green. Resist fixing anything the reproducer does not cover.
+
+### 4. Prove the test is coupled to the fix
+
+The step that gets skipped, and the only one that proves the test has value:
+
+```bash
+git stash              # remove the fix, keep the test
+<run the test>         # MUST fail
+git stash pop
+```
+
+Green with the fix removed means the test does not actually detect the bug — it asserts something
+that was already true. Rewrite it.
+
+### 5. Generalize one step, then stop
+
+The reported input is one member of a class. Add the siblings from the same class — if `"30"`
+failed, so will `""`, `"abc"`, `"30x"`, `"-5m"`. One test per distinct class, not per value; see
+`design-test-cases` for how to draw the classes.
+
+Stop there. A bug fix is not a licence to test the whole module.
+
+### 6. Ship the test with the fix
+
+Same commit. A bug-fix commit with no test is incomplete — flag it in review.
+
+### When it used to work — bisect on the reproducer
+
+A reproducer is not only a test; it is a decision procedure. If the behavior was correct at some
+earlier point, do not read the diff hoping to spot the cause — let git find the commit:
+
+```bash
+git bisect start HEAD <last-known-good-tag-or-sha>
+git bisect run pytest tests/unit/test_parse_duration.py::test_rejects_bare_number
+git bisect reset
+```
+
+`git bisect run` needs an exit code, so the reproducer must be runnable at every commit in the
+range — keep it in a file the bisect does not check out, or pass it via `--rootdir` / a stash-free
+copy. Bisecting on a manual "does it look wrong" judgement instead of a scripted test is where this
+technique goes wrong: dozens of steps, each one a chance to mark a commit incorrectly.
+
+The commit it names is where the behavior changed, which is not always where the bug is — a commit
+can expose a latent defect written months earlier. Fix the defect, not the commit.
+
+Two cases that need care: if the range spans a dependency or lockfile change, add `uv sync` (or the
+equivalent) to the run command, otherwise every commit is tested against today's dependencies; and
+mark commits that cannot build with `git bisect skip` rather than guessing good or bad.
+
+### When it will not reproduce deterministically
+
+Timing, ordering, concurrency, and environment bugs often will not fail on demand. Do not give up
+and ship untested — instead:
+
+- Run the candidate reproducer in a loop (`pytest --count=50`, `vitest --repeat 50`) or under
+  randomized order/seed. Intermittent red is still a reproduction.
+- Force the race directly rather than waiting for it: inject the delay, fire the two calls in
+  parallel, or call the operation twice. See `close-test-risk-gaps` for the concurrency and
+  idempotency recipes.
+- If it still will not reproduce, say so explicitly in the summary, ship the fix with the assertion
+  you _can_ make, and name what remains unverified. Never claim a fix is tested when it is not.
+
+## Rules
+
+### Naming
+
+Name the test after the **behavior that was wrong**, not the ticket or the fix.
+
+| Bad                   | Good                                           |
+| --------------------- | ---------------------------------------------- |
+| `test_fix_1234`       | `test_parse_duration_rejects_bare_number`      |
+| `test_bug_regression` | `test_refund_of_zero_leaves_balance_unchanged` |
+| `test_null_check`     | `test_lookup_returns_none_for_unknown_key`     |
+
+The name is what a future reader sees when the test breaks. `test_fix_1234` tells them nothing and
+invites deletion.
+
+### Anti-patterns to refuse
+
+- **Fix first, test after.** The test gets shaped by the code in front of you. If the fix is already
+  written, stash it and run the new test against the broken version before you trust it.
+- **Asserting on the fix's internals.** Assert the wrong behavior is gone, not that a specific guard
+  clause or new helper ran. The fix should be replaceable without touching the test.
+- **Deleting the reproducer once green.** It is now the regression test. It stays.
+- **Widening an existing test instead of adding one.** The new case gets buried and the failure
+  message stops naming the bug.
+- **Asserting only that no exception was raised.** Assert the value.

@@ -277,7 +277,7 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
   Hand off to the skill that owns it (see _Hands off to_) rather than writing it here.
 - **One case has no owner:** a developer-facing explainer of a single subsystem, written into
   `docs/`. It is neither a whole-repo orientation file, nor product documentation, nor a decision
-  record. Say that plainly instead of forcing a fit — `ceh-architecture:document-architecture` is
+  record. Say that plainly instead of forcing a fit — `ceh-coding-agent:document-architecture` is
   the nearest, and it will reshape the material into diagrams plus Key Decisions rather than
   preserve the explanation you just gave. Having named the gap, write the file yourself if the user
   still wants it, keeping the explanation's shape. This is the one repo path this skill may write.
@@ -287,6 +287,6 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
 | Want                                                      | Use                                                                                                                      |
 | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | A repo-wide orientation file, component by component      | `ceh-coding-agent:explain-codebase`                                                                                      |
-| Diagrams and decision records that live in the repo       | `ceh-architecture:document-architecture`                                                                                 |
+| Diagrams and decision records that live in the repo       | `ceh-coding-agent:document-architecture`                                                                                 |
 | Docs for people who _use_ or _operate_ the product        | `ceh-documentation:write-guides-and-runbooks` for the tasks, `ceh-documentation:write-project-docs` for a whole docs set |
 | Someone in this session needs to understand something now | **this skill**                                                                                                           |

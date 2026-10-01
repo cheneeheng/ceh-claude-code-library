@@ -1,0 +1,158 @@
+---
+name: verify-behavior-preserved
+description: >-
+  Load this skill before a change that is supposed to alter no observable behavior — refactoring,
+  extracting or renaming, deleting duplication, swapping an implementation, upgrading a dependency
+  or runtime, or porting code. Establishes a baseline first: characterization tests that pin current
+  behavior, golden files, and a differential run of old versus new over the same inputs. Trigger on
+  "refactor this", "clean this up", "extract this", "simplify without changing behavior", "upgrade
+  this dependency", "rewrite this module", "shrink the diff", or "make sure nothing broke". Not for
+  changes that intentionally change behavior — those need new tests (use
+  ceh-testing:design-test-cases).
+disable-model-invocation: false
+user-invocable: true
+compatibility: >-
+  Requires the git CLI on PATH and a git working tree, to compare before and after the refactor,
+  plus the target project's own test runner (`pytest` via `uv run`, or `vitest` via `bun`) since
+  the whole method is running the same suite on both sides. Neither is assumed installed.
+license: Apache-2.0
+---
+
+# Verify Behavior Was Preserved
+
+A refactor has a property no feature has: you know the correct answer before you start — it is
+whatever the code does today. That makes the strongest oracle in testing available for free, and
+almost nobody uses it.
+
+The failure mode is refactoring against a thin suite, watching it stay green, and shipping a silent
+behavior change. Green on a suite that never covered the region proves nothing.
+
+## When tests were not requested
+
+Writing tests and running a suite happen only when the user asked for them. If the request was only
+the refactor, write no characterization tests or golden files, run no coverage or suite, and make no
+separate commit of the pins. Instead, name the tests you would write (what they assert and which file
+they would live in) and state what stays unverified, so the user can ask for them. When tests were
+requested, the steps below apply in full.
+
+## Procedure
+
+### 1. Check the baseline before touching anything
+
+```bash
+pytest --cov=app.pricing --cov-report=term-missing     # the region you are about to change
+```
+
+**If coverage of that region is at or near zero, writing tests is the first task**, not the
+refactor. Refactoring uncovered code is editing blind.
+
+### 2. Pin current behavior with characterization tests
+
+Where the suite is thin, capture what the code does **right now** — feed it realistic inputs, record
+the actual outputs, assert them.
+
+You are pinning, not judging. If current behavior looks wrong, pin it anyway and note it: a refactor
+is not the place to fix it, and if it turns out to be load-bearing for a caller you will be glad the
+test caught the change.
+
+```python
+# characterization — asserts today's behavior, including the odd rounding
+@pytest.mark.parametrize(
+    "total,tier,expected",
+    [
+        (100.00, "gold", Decimal("85.00")),
+        (100.005, "gold", Decimal("85.01")),  # banker's rounding — pinned deliberately
+        (0.00, "gold", Decimal("0.00")),
+        (
+            -5.00,
+            "gold",
+            Decimal("-5.00"),
+        ),  # negative passes through today; pinned, not endorsed
+    ],
+)
+def test_discount_current_behavior(total, tier, expected):
+    assert discount(total, tier) == expected
+```
+
+Generate the input list from real data where you have it — production samples, fixtures, a log
+replay — because hand-picked inputs cluster on the paths you already have in mind.
+
+### 3. Golden files for large or structured output
+
+When the output is a document, a rendered page, a query plan, or a large object, assert against a
+recorded file rather than inline literals.
+
+```bash
+python -m app.render sample_input.json > tests/golden/report.expected.json   # BEFORE the change
+git add tests/golden/report.expected.json && git commit -m "test: pin render output"
+```
+
+Commit the golden file **before** the refactor, on its own. Then the refactor's diff shows whether
+the output moved, and the review sees it.
+
+### 4. Differential run — the strongest check
+
+Run the old and new implementations over the same inputs and compare. No expectations to write, no
+oracle to invent.
+
+```bash
+git worktree add /tmp/before HEAD              # pristine pre-change copy
+# ... do the refactor in the working tree ...
+
+python - <<'PY'
+import json, subprocess
+cases = [json.loads(l) for l in open("tests/fixtures/replay.jsonl")]
+for c in cases:
+    before = subprocess.run(["python","-m","app.cli"], cwd="/tmp/before",
+                            input=json.dumps(c), capture_output=True, text=True).stdout
+    after  = subprocess.run(["python","-m","app.cli"],
+                            input=json.dumps(c), capture_output=True, text=True).stdout
+    if before != after:
+        print("DIVERGED:", c); print(" before:", before); print(" after:", after)
+PY
+
+git worktree remove /tmp/before
+```
+
+For an in-process version, import both implementations and compare directly — keep the old one under
+a temporary name until the diff run passes, then delete it.
+
+Feed it generated inputs if you have no corpus: a property-based generator comparing old against new
+is the cheapest high-coverage differential test there is (see `ceh-testing:design-test-cases`, rung 6, "oracle").
+
+### 5. The rule that makes all of it worth something
+
+**If you had to edit a characterization test or update a golden file to get green, behavior
+changed.**
+
+That is the entire signal. When it fires, exactly two responses are legitimate:
+
+1. Revert — the change was supposed to preserve behavior and did not.
+2. Declare it — the change is intentional. Say so explicitly, in the commit body and the PR, showing
+   the before/after values and why the new one is correct.
+
+Silently regenerating the golden file because the new output "looks fine" throws away the only
+protection the process gave you. Treat an unexplained snapshot update in review as blocking.
+
+### Dependency and runtime upgrades
+
+Same protocol, and the divergences are subtler: serialization format, float formatting, default
+timezone, sort stability, regex engine behavior, error types and messages, default timeouts.
+
+Run the differential (step 4) with the lockfile as the only difference between the two worktrees.
+Pay attention to anything you serialize, persist, or hash — a changed representation of the same
+logical value still breaks stored data and cache keys.
+
+## Rules
+
+### Sequencing
+
+Baseline first, always: (1) coverage check → (2) characterization tests / golden files → (3) **commit
+those on their own** → (4) refactor → (5) suite green with **no test edits** → (6) differential run
+for anything risky.
+
+Committing the tests separately is what lets a reviewer see that the pins predate the change. Tests
+written in the same commit as the refactor cannot prove they were not shaped by it.
+
+Pairs with `ceh-coding-agent:shrink-diff` and `ceh-coding-agent:refactor-repo` — both change
+working code with no behavior change intended, and neither carries a verification step of its own.

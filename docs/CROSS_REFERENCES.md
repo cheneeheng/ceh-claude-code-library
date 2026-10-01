@@ -126,6 +126,101 @@ Thought Leadership, Personal Story), each ending on **The Open Thread**.
 
 **Shared:** extractable standalone claims with numbers over adjectives, and question-shaped headings.
 
+## Python environment foundation (uv / ruff / mypy + style)
+
+**Canonical:** `plugins/ceh-python-service/skills/configure-python-service-env/SKILL.md` — entire file
+
+| Copy                                                                      | Section     | Diverges                                                                                                                                                                                                                                |
+| ------------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/ceh-python-library/skills/configure-python-library-env/SKILL.md` | entire file | drops `fastapi`/`uvicorn[standard]`/`asyncpg` from the deps example and the uvicorn dev-server command; `dependencies = []`; `known-first-party` is the library; library docstring example; omits the service-only § Secrets management |
+
+**Shared:** Python 3.12 + uv + `pyproject.toml`/`uv.lock` workflow, the uv command table, the ruff
+(line-length 88, `select = [E,F,I,UP,N,B]`) + mypy (`strict = true`) + pytest
+(`asyncio_mode = "auto"`) config, the coding-style rules (type hints, built-in generics, no `Any`
+without a comment), the naming table, three-group imports, and the "ruff only, no `# type: ignore`
+without a comment" linting rules.
+
+## Python testing foundation (pytest core)
+
+**Canonical:** `plugins/ceh-python-service/skills/write-pytest-service-tests/SKILL.md` — entire file
+
+| Copy                                                                    | Section     | Diverges                                                                                                                                  |
+| ----------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/ceh-python-library/skills/write-pytest-library-tests/SKILL.md` | entire file | replaces the real-database integration tier and the system tier with an `api/` tier that imports the package as a consumer; no DB or HTTP |
+
+**Shared:** pytest + pytest-asyncio (`asyncio_mode = "auto"`), `tests/unit/` structure,
+`test_<what>_<expected_behavior>.py` naming, the one-behavior-per-test rule, the mocking rules (mock
+external boundaries, `unittest.mock` or `pytest-mock`), and the Coverage floor block — the
+two-sentence floor-not-goal intro and two rows, word for word: `Python application package | 80%`
+and `Core business logic / domain services | 95%`.
+The service copy adds the `--cov=app` command, the library copy `--cov=your_library`.
+
+## Tests not requested (write and run nothing)
+
+**Canonical:** `plugins/ceh-testing/skills/test-a-bug-fix/SKILL.md` — § When tests were not requested
+
+| Copy                                                            | Section                              | Diverges                                                                                                         |
+| --------------------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `plugins/ceh-testing/skills/verify-behavior-preserved/SKILL.md` | § When tests were not requested      | the request is "only the refactor"; adds no separate commit of the pins; names "the tests" and "the steps below" |
+| `plugins/ceh-testing/skills/close-test-risk-gaps/SKILL.md`      | § When tests were not requested      | the request is "only a readiness check"; still triages all five classes and names a test per class that fires    |
+| `plugins/ceh-testing/skills/audit-test-suite/SKILL.md`          | § When a suite run was not requested | the unrequested action is running the suite, not writing tests; check 1 only reads files and still applies       |
+
+**Shared:** the rule, stated in prose with no reference to `ceh-coding-agent:agent-coding-contract`
+so `ceh-testing` keeps no dependency: writing tests and running a suite happen only when asked,
+otherwise write and run nothing, name the test or check (what it asserts or reveals, where it would
+live), state what stays unverified so the user can ask for it, and apply the skill in full when tests
+were requested.
+
+## Choosing what to test (hand-off to design-test-cases)
+
+**Canonical:** `plugins/ceh-python-service/skills/write-pytest-service-tests/SKILL.md` — § Hands off to
+
+| Copy                                                                     | Section        | Diverges |
+| ------------------------------------------------------------------------ | -------------- | -------- |
+| `plugins/ceh-python-library/skills/write-pytest-library-tests/SKILL.md`  | § Hands off to | none     |
+| `plugins/ceh-web-frontend/skills/write-vitest-playwright-tests/SKILL.md` | § Hands off to | none     |
+
+**Shared:** the section word for word — the tooling-versus-inputs boundary, the
+`Invoke the Skill tool with skill="ceh-testing:design-test-cases"` call, and the list of what it
+supplies. The call is why all three stack plugins declare `ceh-testing` as a dependency.
+
+## asyncpg connection pool and transaction code
+
+**Canonical:** `plugins/ceh-python-service/skills/write-postgresql-code/SKILL.md` — § Atomic transactions + § Connection pool
+
+| Copy                                                                 | Section                             | Diverges                                              |
+| -------------------------------------------------------------------- | ----------------------------------- | ----------------------------------------------------- |
+| `plugins/ceh-python-service/skills/write-fastapi-endpoints/SKILL.md` | § Lifespan for startup and shutdown | the same `create_pool(...)` call, no transaction code |
+
+**Shared:** `asyncpg.create_pool(min_size=5, max_size=20, command_timeout=30)` and the pool-in-lifespan
+rule.
+
+## Frontend API client and ApiRequestError
+
+**Canonical:** `plugins/ceh-web-frontend/skills/write-sveltekit-code/SKILL.md` — § Centralized API client + § Error handling
+
+| Copy                                                             | Section                                     | Diverges                                                                                                                                                                                                                                         |
+| ---------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `plugins/ceh-web-frontend/skills/write-react-vite-code/SKILL.md` | § Centralized API client + § Error handling | env access is `import.meta.env.VITE_API_BASE_URL` instead of `PUBLIC_API_BASE_URL` from `$env/static/public`; "components and hooks" instead of "components and shared-state modules"; no Svelte component pattern; adds the error-boundary rule |
+
+**Shared:** the `src/lib/api/client.ts` rule (all `fetch` calls go through it), the `apiClient`
+method shape (`response.ok` check, then `throw new ApiRequestError(response.status, err.error)`), the
+`ApiRequestError` class, and the three error rules: never expose internal codes or stack traces, map
+`error.code` to friendly messages in one central map, and always surface the `correlation_id`.
+
+## Layer boundaries (route → service → db)
+
+**Canonical:** `plugins/ceh-python-service/skills/write-fastapi-endpoints/SKILL.md` — § Layer boundaries
+
+| Copy                                   | Section | Diverges |
+| -------------------------------------- | ------- | -------- |
+| none yet in this repo — see note below |         |          |
+
+**Shared:** route handlers contain no business logic (they call services), services contain no SQL
+(they call the db layer), the db layer contains no business logic, and each aggregate has one
+mutation path. In agent-skills `ceh-scaffolding:scaffold-python-service` restates the rules next to
+the initial backend directory tree. Add it here as a copy when `ceh-scaffolding` migrates.
+
 ---
 
 Entry shape:

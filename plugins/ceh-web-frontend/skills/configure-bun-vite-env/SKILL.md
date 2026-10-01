@@ -1,0 +1,138 @@
+---
+name: configure-bun-vite-env
+description: >-
+  Load this skill when setting up a web frontend project, running scripts, managing dependencies,
+  writing TypeScript, or configuring linting and formatting in a Bun + Vite project (SvelteKit or
+  React). Auto-load whenever bun install/add/run or package.json scripts are used, a
+  .ts/.tsx/.svelte file is written, or eslint.config.js / .prettierrc / tsconfig.json is created or
+  modified.
+disable-model-invocation: false
+user-invocable: true
+compatibility: >-
+  Requires `bun` on PATH (the repo's package manager and script runner; Node.js 20+ with npm works
+  as a fallback) and network access to the npm registry. TypeScript, Vite, ESLint, and Prettier
+  are project dev dependencies installed by `bun install`, not assumed to be global.
+license: Apache-2.0
+---
+
+# Configure the Bun + Vite Environment
+
+Keep a frontend project on Bun and Vite with strict TypeScript and one lint and format config. Done
+when `lint`, `format:check`, `typecheck`, and (SvelteKit) `check` all pass.
+
+## Procedure
+
+1. Run scripts and change dependencies only through `bun`, and leave `bun.lock` alone.
+2. Read browser-safe env vars through the framework's static env module, and keep secrets server-side.
+3. Write TypeScript to the style below.
+4. Before opening a PR, run the four checks under Linting and quality checks.
+
+## Rules
+
+### Environment
+
+- Runtime and package manager: **Bun** | Build tool: **Vite** | Framework: **SvelteKit** or **React**
+- Lockfile: `bun.lock` — authoritative, never edit manually
+- Never commit `.env`; keep a `.env.example` with placeholder values
+- Browser-safe env vars are prefixed and read via the framework's static env module (`$env/static/public` in SvelteKit, `import.meta.env.VITE_*` in React+Vite). Server-only secrets never reach the client.
+
+### Commands
+
+| Action                                 | Command                |
+| -------------------------------------- | ---------------------- |
+| Install all dependencies               | `bun install`          |
+| Add a production dependency            | `bun add <package>`    |
+| Add a dev dependency                   | `bun add -d <package>` |
+| Start dev server                       | `bun run dev`          |
+| Production build                       | `bun run build`        |
+| Run unit + component tests             | `bun run test`         |
+| Type check (tsc)                       | `bun run typecheck`    |
+| Svelte template check (SvelteKit only) | `bun run check`        |
+| Lint                                   | `bun run lint`         |
+| Format check                           | `bun run format:check` |
+
+### TypeScript style
+
+- Line length: **100 characters** (Prettier: `printWidth` 100, single quotes, `prettier-plugin-svelte`)
+- Local imports use the path alias (`$lib` in SvelteKit, the configured alias in React), never deep relative paths
+- Never use `any` — use `unknown` with type narrowing if the type is truly unknown
+- Prefer `undefined` over `null` for optional values
+- Use `?.` and `??`; do not use `||` for defaults on falsy inputs (it collapses `0`, `''`, `false`)
+- `strict: true` in `tsconfig.json` is non-negotiable. Never use `// @ts-ignore` — fix the type error.
+
+#### `type` is the default, `interface` is the exception
+
+```ts
+// Good — use type for data shapes, unions, and aliases
+type Status = "active" | "archived" | "deleted";
+type SessionState = { sessionId: string; items: Item[] };
+
+// Only use interface when you intentionally need declaration merging (rare)
+interface PluginExtension {
+  onLoad(): void;
+}
+```
+
+#### No TypeScript `enum`: use `const` assertions
+
+```ts
+const ItemStatus = {
+  Open: "open",
+  Resolved: "resolved",
+  Archived: "archived",
+} as const;
+type ItemStatus = (typeof ItemStatus)[keyof typeof ItemStatus];
+```
+
+#### JSDoc (required on all exported symbols)
+
+```ts
+/**
+ * Sends a user message and returns the updated session state.
+ * @param sessionId - Active session identifier.
+ * @param content - User's message text.
+ * @returns Updated state snapshot.
+ * @throws {ApiRequestError} On non-2xx response.
+ */
+export async function sendMessage(
+  sessionId: string,
+  content: string,
+): Promise<SessionState>;
+```
+
+### Linting and quality checks
+
+All checks must pass before a PR is opened:
+
+```bash
+bun run lint          # ESLint (typescript-eslint recommended-type-checked + framework plugin)
+bun run format:check  # Prettier (does not modify files)
+bun run check         # svelte-check — SvelteKit only; catches template errors ESLint cannot see
+bun run typecheck     # tsc --noEmit
+```
+
+`svelte-check` is not optional in SvelteKit projects — it catches prop type mismatches, missing required props, and a11y warnings ESLint cannot see.
+
+#### ESLint configuration
+
+```js
+// eslint.config.js
+import ts from "@typescript-eslint/eslint-plugin";
+import svelte from "eslint-plugin-svelte"; // SvelteKit projects
+// import react from 'eslint-plugin-react';   // React projects
+// import reactHooks from 'eslint-plugin-react-hooks';
+
+export default [
+  ...ts.configs["recommended-type-checked"],
+  ...svelte.configs["flat/recommended"], // or react / react-hooks configs
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_" },
+      ],
+    },
+  },
+];
+```

@@ -72,13 +72,13 @@ Include the diagrams that apply; omit ones the system doesn't have. Order them o
 **System context earns a separate diagram only when the externals are too many to sit legibly on
 Components.** Otherwise draw them on Components, outside the boundary, as the example below does.
 
-| Diagram        | Mermaid type      | Shows                                                                                           |
-| -------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
-| System context | `flowchart`       | External actors and systems around the boundary — who/what talks to it                          |
-| Components     | `flowchart`       | **The expanded Overview** — every internal piece and what crosses each connection (rules below) |
-| Key flows      | `sequenceDiagram` | 1–3 critical request/lifecycle paths end to end                                                 |
-| Data model     | `erDiagram`       | Core entities and relationships (mirrors `domain-modeling` entities)                            |
-| State machines | `stateDiagram-v2` | Legal status transitions for key entities (mirrors `domain-modeling` status rules)              |
+| Diagram        | Mermaid type      | Shows                                                                                                           |
+| -------------- | ----------------- | --------------------------------------------------------------------------------------------------------------- |
+| System context | `flowchart`       | External actors and systems around the boundary — who/what talks to it                                          |
+| Components     | `flowchart`       | **The expanded Overview** — every internal piece and what crosses each connection (rules below)                 |
+| Key flows      | `sequenceDiagram` | 1–3 critical request/lifecycle paths end to end                                                                 |
+| Data model     | `erDiagram`       | Core entities and relationships (mirrors the `ceh-python-service:write-postgresql-code` entities)               |
+| State machines | `stateDiagram-v2` | Legal status transitions for key entities (mirrors the `ceh-python-service:write-postgresql-code` status rules) |
 
 **Components is the Overview with the detail put back** — same system, no longer a line. The
 Overview is a spine _by rule_; Components branches, fans out, and loops back wherever the real
@@ -110,8 +110,8 @@ flowchart LR
     worker -->|book label| carrier([Carrier API])
 ```
 
-State-machine diagrams must match the `domain-modeling` rule that not all transitions are legal —
-draw only the legal edges:
+State-machine diagrams must match the `ceh-python-service:write-postgresql-code` rule that not all
+transitions are legal — draw only the legal edges:
 
 ```mermaid
 stateDiagram-v2

@@ -18,7 +18,7 @@
       "name": "ceh-coding-agent",
       "source": "./plugins/ceh-coding-agent",
       "version": "1.0.0",
-      "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, and whole-repo explanation."
+      "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, whole-repo explanation, and the living architecture document."
     },
     {
       "name": "ceh-git-workflow",
@@ -27,10 +27,28 @@
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, releases including hotfixes, and code review. Stack-agnostic."
     },
     {
-      "name": "ceh-architecture",
-      "source": "./plugins/ceh-architecture",
+      "name": "ceh-testing",
+      "source": "./plugins/ceh-testing",
       "version": "1.0.0",
-      "description": "CEH architecture: stack-agnostic design moments — living architecture documentation (Mermaid diagrams + a Key Decisions log) and domain modeling."
+      "description": "CEH testing techniques: stack-agnostic test design and verification moments — reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, and close the risk gaps functional tests structurally miss."
+    },
+    {
+      "name": "ceh-python-service",
+      "source": "./plugins/ceh-python-service",
+      "version": "1.0.0",
+      "description": "CEH Python service: FastAPI, asyncpg, PostgreSQL schema, Alembic migrations, uv, testing (unit/integration/system), observability, security, and domain modeling standards for web services."
+    },
+    {
+      "name": "ceh-python-library",
+      "source": "./plugins/ceh-python-library",
+      "version": "1.0.0",
+      "description": "CEH Python library: packaging and publishing, public API surface discipline, semantic versioning, uv environment, and pytest testing standards for distributable libraries (no web dependencies)."
+    },
+    {
+      "name": "ceh-web-frontend",
+      "source": "./plugins/ceh-web-frontend",
+      "version": "1.0.0",
+      "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, accessibility, UI visual design and theming, Cytoscape.js graph visualization, and testing agents (unit/integration/system)."
     },
     {
       "name": "ceh-seo",
