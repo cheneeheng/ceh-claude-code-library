@@ -8,7 +8,7 @@ description: >-
   entity ID or status enum is defined, asyncpg is imported, a SQL query or database transaction is
   written, or alembic commands are run or migration files are created or edited.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 compatibility: >-
   Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI.
   `asyncpg` and `alembic` are project dependencies installed by `uv sync`, not assumed globally;

@@ -5,7 +5,7 @@ description: >-
   mocks. Auto-load whenever a test file is created or modified, a pytest fixture is written, or a
   decision is made about what to mock vs what to test against a real dependency.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 paths:
   - "**/test_*.py"
   - "**/*_test.py"

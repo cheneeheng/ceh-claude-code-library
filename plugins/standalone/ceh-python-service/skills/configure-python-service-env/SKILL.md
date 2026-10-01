@@ -8,7 +8,7 @@ description: >-
   edited, a uv command is run, a secret or API key is added, a BaseSettings class is written, or a
   question arises about code style, type annotations, or import ordering. Not for frontend secrets.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 compatibility: >-
   Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI for `uv
   sync` / `uv add`. `ruff`, `mypy`, `pytest`, `uvicorn`, `alembic`, `pydantic-settings`, and

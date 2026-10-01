@@ -86,40 +86,40 @@
 
 ### Python Service (`ceh-python-service`)
 
-| Skill                        | Invoke                                             | When                                                                                                                                                              |
-| ---------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Write FastAPI Endpoints      | `/ceh-python-service:write-fastapi-endpoints`      | Route handlers, dependencies, lifespan, exception handlers, layer boundaries, logging, metrics, `/health`, correlation IDs, CORS, rate limiting, input validation |
-| Write PostgreSQL Code        | `/ceh-python-service:write-postgresql-code`        | Schema design, entity IDs, status enums, asyncpg queries, transactions, tenant isolation, pool config, Alembic migrations                                         |
-| Configure Python Service Env | `/ceh-python-service:configure-python-service-env` | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config, secrets and `.env` files                                                                     |
-| Write pytest Service Tests   | `/ceh-python-service:write-pytest-service-tests`   | Creating or modifying test files, fixtures, or mocks                                                                                                              |
+| Skill                        | Invoke                       | When                                                                                                                                                              |
+| ---------------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Write FastAPI Endpoints      | Model-only, no slash command | Route handlers, dependencies, lifespan, exception handlers, layer boundaries, logging, metrics, `/health`, correlation IDs, CORS, rate limiting, input validation |
+| Write PostgreSQL Code        | Model-only, no slash command | Schema design, entity IDs, status enums, asyncpg queries, transactions, tenant isolation, pool config, Alembic migrations                                         |
+| Configure Python Service Env | Model-only, no slash command | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config, secrets and `.env` files                                                                     |
+| Write pytest Service Tests   | Model-only, no slash command | Creating or modifying test files, fixtures, or mocks                                                                                                              |
 
 ### Python Library (`ceh-python-library`)
 
-| Skill                        | Invoke                                             | When                                                                                            |
-| ---------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Configure Python Library Env | `/ceh-python-library:configure-python-library-env` | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config                             |
-| Write pytest Library Tests   | `/ceh-python-library:write-pytest-library-tests`   | Creating or modifying test files, fixtures, or mocks                                            |
-| Publish Python Library       | `/ceh-python-library:publish-python-library`       | Build backend, src layout, PyPI publishing, `__init__.py`/`__all__`, deprecations, semver bumps |
+| Skill                        | Invoke                                       | When                                                                                            |
+| ---------------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Configure Python Library Env | Model-only, no slash command                 | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config                             |
+| Write pytest Library Tests   | Model-only, no slash command                 | Creating or modifying test files, fixtures, or mocks                                            |
+| Publish Python Library       | `/ceh-python-library:publish-python-library` | Build backend, src layout, PyPI publishing, `__init__.py`/`__all__`, deprecations, semver bumps |
 
 ### Web Frontend (`ceh-web-frontend`)
 
-| Skill                           | Invoke                                            | When                                                                                                                         |
-| ------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Configure Bun + Vite Env        | `/ceh-web-frontend:configure-bun-vite-env`        | Bun/Vite setup, scripts, deps, TypeScript style, ESLint/Prettier                                                             |
-| Write SvelteKit Code            | `/ceh-web-frontend:write-sveltekit-code`          | Editing Svelte routes, shared `.svelte.ts` state, components, or the API client                                              |
-| Write React + Vite Code         | `/ceh-web-frontend:write-react-vite-code`         | Editing React components, hooks, routing, or `vite.config.ts`                                                                |
-| Write Vitest + Playwright Tests | `/ceh-web-frontend:write-vitest-playwright-tests` | Writing `.test.ts`, `.test.tsx`, or `.spec.ts` files, or MSW handlers                                                        |
-| Make UI Accessible              | `/ceh-web-frontend:make-ui-accessible`            | Writing component markup (Svelte or React)                                                                                   |
-| Design UI                       | `/ceh-web-frontend:design-ui`                     | Any frontend visual design decision: layout, hierarchy, navigation, states, finishing recipes, Meridian and Tidewater themes |
-| Visualize Graph (Cytoscape)     | `/ceh-web-frontend:visualize-graph-cytoscape`     | A network, dependency map, org chart, or any clickable node-link diagram with Cytoscape.js                                   |
+| Skill                           | Invoke                                        | When                                                                                                                         |
+| ------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Configure Bun + Vite Env        | Model-only, no slash command                  | Bun/Vite setup, scripts, deps, TypeScript style, ESLint/Prettier                                                             |
+| Write SvelteKit Code            | Model-only, no slash command                  | Editing Svelte routes, shared `.svelte.ts` state, components, or the API client                                              |
+| Write React + Vite Code         | Model-only, no slash command                  | Editing React components, hooks, routing, or `vite.config.ts`                                                                |
+| Write Vitest + Playwright Tests | Model-only, no slash command                  | Writing `.test.ts`, `.test.tsx`, or `.spec.ts` files, or MSW handlers                                                        |
+| Make UI Accessible              | Model-only, no slash command                  | Writing component markup (Svelte or React)                                                                                   |
+| Design UI                       | `/ceh-web-frontend:design-ui`                 | Any frontend visual design decision: layout, hierarchy, navigation, states, finishing recipes, Meridian and Tidewater themes |
+| Visualize Graph (Cytoscape)     | `/ceh-web-frontend:visualize-graph-cytoscape` | A network, dependency map, org chart, or any clickable node-link diagram with Cytoscape.js                                   |
 
 ### SEO (`ceh-seo`)
 
-| Skill               | Invoke                       | When                                                                                                                                          |
-| ------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Make Page Crawlable | Model-only, no slash command | Shipping or creating a public web page: per-page head checklist, sitemap and robots, JSON-LD, content in the initial HTML, GEO citation rules |
-| Write llms.txt      | Model-only, no slash command | Creating or updating the `llms.txt` reading list for AI agents: positional format, link curation, `## Optional`, markdown over HTML           |
-| Pitch Project       | Model-only, no slash command | Writing the README first screen, package description and keywords, GitHub topics, marketplace listings, or landing copy                       |
+| Skill               | Invoke                         | When                                                                                                                                          |
+| ------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Make Page Crawlable | `/ceh-seo:make-page-crawlable` | Shipping or creating a public web page: per-page head checklist, sitemap and robots, JSON-LD, content in the initial HTML, GEO citation rules |
+| Write llms.txt      | `/ceh-seo:write-llms-txt`      | Creating or updating the `llms.txt` reading list for AI agents: positional format, link curation, `## Optional`, markdown over HTML           |
+| Pitch Project       | `/ceh-seo:pitch-project`       | Writing the README first screen, package description and keywords, GitHub topics, marketplace listings, or landing copy                       |
 
 ### Blog (`ceh-blog`)
 

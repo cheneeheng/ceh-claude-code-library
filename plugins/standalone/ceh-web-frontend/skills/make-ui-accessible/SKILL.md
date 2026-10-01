@@ -6,7 +6,7 @@ description: >-
   and HTML structure is being written or reviewed. Accessibility rules are framework-agnostic — they
   apply to SvelteKit and React alike.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 paths:
   - "**/*.svelte"
   - "**/*.tsx"

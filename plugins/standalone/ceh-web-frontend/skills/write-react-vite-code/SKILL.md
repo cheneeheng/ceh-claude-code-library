@@ -6,7 +6,7 @@ description: >-
   configuring Vite env vars. Auto-load whenever a .tsx file or vite.config.ts is created or
   modified. Not for SvelteKit projects (use ceh-web-frontend:write-sveltekit-code).
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 paths:
   - "**/*.tsx"
   - "**/vite.config.ts"

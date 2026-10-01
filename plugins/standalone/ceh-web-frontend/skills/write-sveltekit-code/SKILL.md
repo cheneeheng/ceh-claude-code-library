@@ -6,7 +6,7 @@ description: >-
   +page.server.ts, +page.ts, shared-state .svelte.ts module, or component file is created or
   modified.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 paths:
   - "**/*.svelte"
   - "**/*.svelte.ts"

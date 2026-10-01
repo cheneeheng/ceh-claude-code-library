@@ -9,9 +9,9 @@ description: >-
   budget up front, so "far too many steps" is a finding rather than a pass, and estimates
   time-to-first-success from a fixed cost model. Trigger on "can a new user figure this out", "is
   the setup clear", "test the onboarding", "try this with fresh eyes", "would a beginner get stuck",
-  "nobody can install this", "how long does setup take", "time to first success", or before
-  shipping a README or sign-up flow. Not for an interface already entered (use
-  ceh-usability-audit:audit-interface) or WCAG (use ceh-web-frontend:make-ui-accessible).
+  "nobody can install this", "how long does setup take", or "time to first success". Not for an
+  interface already entered (use ceh-usability-audit:audit-interface) or WCAG (use
+  ceh-web-frontend:make-ui-accessible).
 disable-model-invocation: false
 user-invocable: true
 effort: high

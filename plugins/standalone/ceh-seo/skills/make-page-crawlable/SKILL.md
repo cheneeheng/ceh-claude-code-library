@@ -9,7 +9,7 @@ description: >-
   the llms.txt file itself (use ceh-seo:write-llms-txt), and not for writing the page's content
   itself (use ceh-blog).
 disable-model-invocation: false
-user-invocable: false
+user-invocable: true
 license: Apache-2.0
 ---
 

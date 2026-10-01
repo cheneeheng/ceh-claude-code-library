@@ -6,7 +6,7 @@ description: >-
   file is created or modified, or MSW handlers are being written. Framework-agnostic — Vitest,
   Testing Library, MSW, and Playwright serve SvelteKit and React alike.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 paths:
   - "**/*.test.{ts,tsx}"
   - "**/*.spec.{ts,tsx}"
