@@ -73,15 +73,12 @@
 
 ### Python Service (`ceh-python-service`)
 
-| Skill                        | Invoke                                             | When                                                                                                   |
-| ---------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Write FastAPI Endpoints      | `/ceh-python-service:write-fastapi-endpoints`      | Route handlers, dependencies, lifespan, exception handlers, REST API design                            |
-| Write PostgreSQL Code        | `/ceh-python-service:write-postgresql-code`        | Schema design, asyncpg queries, transactions, tenant isolation, pool config, Alembic migrations        |
-| Configure Python Service Env | `/ceh-python-service:configure-python-service-env` | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config                                    |
-| Write pytest Service Tests   | `/ceh-python-service:write-pytest-service-tests`   | Creating or modifying test files, fixtures, or mocks                                                   |
-| Add Observability            | `/ceh-python-service:add-observability`            | structlog logging, metrics, health checks, correlation IDs                                             |
-| Secure Service Code          | `/ceh-python-service:secure-service-code`          | Secrets management, CORS, rate limiting, input validation                                              |
-| Model Domain                 | `/ceh-python-service:model-domain`                 | Defining entities, prefixed IDs, status enums, state transitions, or route/service/db layer boundaries |
+| Skill                        | Invoke                                             | When                                                                                                                                                              |
+| ---------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Write FastAPI Endpoints      | `/ceh-python-service:write-fastapi-endpoints`      | Route handlers, dependencies, lifespan, exception handlers, layer boundaries, logging, metrics, `/health`, correlation IDs, CORS, rate limiting, input validation |
+| Write PostgreSQL Code        | `/ceh-python-service:write-postgresql-code`        | Schema design, entity IDs, status enums, asyncpg queries, transactions, tenant isolation, pool config, Alembic migrations                                         |
+| Configure Python Service Env | `/ceh-python-service:configure-python-service-env` | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config, secrets and `.env` files                                                                     |
+| Write pytest Service Tests   | `/ceh-python-service:write-pytest-service-tests`   | Creating or modifying test files, fixtures, or mocks                                                                                                              |
 
 ### Python Library (`ceh-python-library`)
 

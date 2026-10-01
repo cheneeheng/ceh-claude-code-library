@@ -6,20 +6,18 @@ For distributable libraries (packaging, public API, semver, no web deps) use `ce
 
 ## Skills
 
-| Skill                          | Invoke                                             | Triggers when                                                                                                   |
-| ------------------------------ | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `write-fastapi-endpoints`      | `/ceh-python-service:write-fastapi-endpoints`      | Writing route handlers, dependencies, lifespan, exception handlers, or REST API design                          |
-| `write-postgresql-code`        | `/ceh-python-service:write-postgresql-code`        | Designing a schema, writing asyncpg queries, transactions, tenant isolation, pool config, or Alembic migrations |
-| `configure-python-service-env` | `/ceh-python-service:configure-python-service-env` | Editing `pyproject.toml`, running uv commands, writing type hints, or configuring ruff/mypy                     |
-| `write-pytest-service-tests`   | `/ceh-python-service:write-pytest-service-tests`   | Creating or modifying test files, fixtures, or mocks                                                            |
-| `add-observability`            | `/ceh-python-service:add-observability`            | Adding structlog logging, metrics, health checks, or correlation IDs                                            |
-| `secure-service-code`          | `/ceh-python-service:secure-service-code`          | Secrets management, CORS, rate limiting, or input validation                                                    |
-| `model-domain`                 | `/ceh-python-service:model-domain`                 | Designing entities, identifier formats, status enums, state transitions, or route/service/db layer boundaries   |
+| Skill                          | Invoke                                             | Triggers when                                                                                                                                                                                           |
+| ------------------------------ | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `write-fastapi-endpoints`      | `/ceh-python-service:write-fastapi-endpoints`      | Writing route handlers, dependencies, lifespan, exception handlers, layer boundaries, REST API design, structlog logging, metrics, `/health`, correlation IDs, CORS, rate limiting, or input validation |
+| `write-postgresql-code`        | `/ceh-python-service:write-postgresql-code`        | Designing a schema, entity IDs, status enums, writing asyncpg queries, transactions, tenant isolation, pool config, or Alembic migrations                                                               |
+| `configure-python-service-env` | `/ceh-python-service:configure-python-service-env` | Editing `pyproject.toml`, running uv commands, writing type hints, configuring ruff/mypy, or handling secrets and `.env` files                                                                          |
+| `write-pytest-service-tests`   | `/ceh-python-service:write-pytest-service-tests`   | Creating or modifying test files, fixtures, or mocks                                                                                                                                                    |
 
 The plugin ships no hooks. The skills load from their descriptions alone, so nothing is injected into
-a session that does not touch these moments. If `secure-service-code` or `add-observability` is
-observed to under-trigger on implicit mid-turn decisions, sharpen its description rather than add a
-hook.
+a session that does not touch these moments. The cross-cutting rules (logging, metrics, CORS, rate
+limiting, secrets, entity IDs) ride on the skills that load on most service work, because their own
+moments occur too rarely to load a skill of their own. If one is observed to under-trigger on
+implicit mid-turn decisions, sharpen the host skill's description rather than add a hook.
 
 ## Agents
 

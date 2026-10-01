@@ -2,10 +2,11 @@
 name: write-postgresql-code
 description: >-
   Load this skill when writing PostgreSQL database code in a Python service: designing tables,
-  columns, and indexes, writing asyncpg queries and transactions, tenant isolation, connection pool
-  configuration, or creating and running Alembic migrations with their deploy-safety rules.
-  Auto-load whenever a table or column is added, asyncpg is imported, a SQL query or database
-  transaction is written, or alembic commands are run or migration files are created or edited.
+  columns, and indexes, choosing entity ID formats and status enums, writing asyncpg queries and
+  transactions, tenant isolation, connection pool configuration, or creating and running Alembic
+  migrations with their deploy-safety rules. Auto-load whenever a table or column is added, a new
+  entity ID or status enum is defined, asyncpg is imported, a SQL query or database transaction is
+  written, or alembic commands are run or migration files are created or edited.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
@@ -46,6 +47,43 @@ CREATE INDEX idx_entities_status ON entities(status) WHERE status != 'deleted';
   Tenant isolation below).
 - Schema changes are Alembic-managed, backward-compatible, and destructive changes are two-step (see
   Migrations below).
+
+### Immutable identifiers
+
+Every entity has an application-generated, prefixed, URL-safe identifier. Never use database auto-increment as the public ID — leaks row counts and is meaningless in logs.
+
+```python
+import secrets
+
+
+def generate_id(prefix: str) -> str:
+    return f"{prefix}_{secrets.token_urlsafe(12)}"
+
+
+session_id = generate_id("sess")  # sess_abc123...
+resource_id = generate_id("res")  # res_xyz456...
+```
+
+### Bounded status enums
+
+Status values must come from an explicit, closed set. Never trust free-form strings from external callers for status fields.
+
+```python
+from enum import StrEnum
+
+
+class ResourceStatus(StrEnum):
+    ACTIVE = "active"
+    ARCHIVED = "archived"
+    DELETED = "deleted"
+```
+
+### Immutability rules
+
+- IDs are set once at creation, never changed
+- `created_at` timestamps are set once, never updated
+- Status transitions must be validated — not all transitions are legal
+- Document all legal and illegal transitions explicitly
 
 ## Queries
 

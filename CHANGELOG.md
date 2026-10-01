@@ -31,6 +31,7 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 
 ### Changed
 
+- Merge `ceh-python-service` from seven skills to four: `add-observability`, `secure-service-code` and `model-domain` fire once per project, so their rules now ride on skills that load on most service work. `write-fastapi-endpoints` absorbs logging, metrics, `/health`, correlation IDs, CORS, rate limiting, input validation and layer boundaries, `write-postgresql-code` absorbs entity IDs, status enums and immutability rules, and `configure-python-service-env` absorbs secrets management. The unused `argon2-cffi` and `pyjwt` requirement, the TypeScript enum snippet and the `ceh-scaffolding` pointer are dropped, and the HTTP status table is cut to the service's own choices
 - Retire `ceh-architecture` before its first release: `document-architecture` moves into `ceh-coding-agent` beside `explain-codebase`, and `domain-modeling` moves into `ceh-python-service` as `model-domain`. The stack plugins ship no SessionStart invariants hooks, matching the `ceh-architecture` decision, so their skills load from descriptions alone
 - Route component authoring through `skill-creator` (no eval loop unless asked) and the plugin-dev agent, hook, and MCP skills; configure plugins through environment variables only
 - Point the `ceh-coding-agent` less-code hook at the full `write-less-code` skill so it loads before implementing, and gate the skill's runnable-check rule on tests being in scope

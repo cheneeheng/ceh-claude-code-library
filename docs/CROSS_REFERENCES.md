@@ -130,9 +130,9 @@ Thought Leadership, Personal Story), each ending on **The Open Thread**.
 
 **Canonical:** `plugins/ceh-python-service/skills/configure-python-service-env/SKILL.md` — entire file
 
-| Copy                                                                      | Section     | Diverges                                                                                                                                                                                   |
-| ------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `plugins/ceh-python-library/skills/configure-python-library-env/SKILL.md` | entire file | drops `fastapi`/`uvicorn[standard]`/`asyncpg` from the deps example and the uvicorn dev-server command; `dependencies = []`; `known-first-party` is the library; library docstring example |
+| Copy                                                                      | Section     | Diverges                                                                                                                                                                                                                                |
+| ------------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/ceh-python-library/skills/configure-python-library-env/SKILL.md` | entire file | drops `fastapi`/`uvicorn[standard]`/`asyncpg` from the deps example and the uvicorn dev-server command; `dependencies = []`; `known-first-party` is the library; library docstring example; omits the service-only § Secrets management |
 
 **Shared:** Python 3.12 + uv + `pyproject.toml`/`uv.lock` workflow, the uv command table, the ruff
 (line-length 88, `select = [E,F,I,UP,N,B]`) + mypy (`strict = true`) + pytest
@@ -180,7 +180,7 @@ rule.
 
 ## Layer boundaries (route → service → db)
 
-**Canonical:** `plugins/ceh-python-service/skills/model-domain/SKILL.md` — § Layer boundaries
+**Canonical:** `plugins/ceh-python-service/skills/write-fastapi-endpoints/SKILL.md` — § Layer boundaries
 
 | Copy                                   | Section | Diverges |
 | -------------------------------------- | ------- | -------- |
@@ -190,7 +190,6 @@ rule.
 (they call the db layer), the db layer contains no business logic, and each aggregate has one
 mutation path. In agent-skills `ceh-scaffolding:scaffold-python-service` restates the rules next to
 the initial backend directory tree. Add it here as a copy when `ceh-scaffolding` migrates.
-`write-fastapi-endpoints` § Route handlers are thin states the first rule in its own words.
 
 ---
 

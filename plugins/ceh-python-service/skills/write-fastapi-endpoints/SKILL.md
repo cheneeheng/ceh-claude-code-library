@@ -4,15 +4,19 @@ description: >-
   Load this skill when designing or writing FastAPI endpoints, services, or middleware: defining URL
   paths, choosing HTTP methods and status codes, shaping error responses, adding a new endpoint,
   wiring up dependency injection, configuring lifespan startup/shutdown, registering exception
-  handlers, or defining the custom exception hierarchy. Auto-load whenever a route handler is
-  written, an HTTP status code is chosen, an error response shape is defined, a FastAPI dependency
-  is defined, or a domain exception is added.
+  handlers, defining the custom exception hierarchy, or setting route/service/database layer
+  boundaries. Also covers the service's cross-cutting concerns: structured log calls, metrics, the
+  /health endpoint, correlation ID middleware, CORS, rate limiting, and request input validation.
+  Auto-load whenever a route handler is written, an HTTP status code is chosen, an error response
+  shape is defined, a FastAPI dependency is defined, a domain exception is added, a log call or
+  metric is written, or CORS, rate limiting, or /health is touched. Not for frontend or browser code.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
-  Requires Python 3.12+ with `fastapi`, `pydantic`, and an ASGI server (`uvicorn`) installed as
-  project dependencies via `uv sync` - none is assumed to be present globally. Running the app
-  needs `uv` on PATH and a free local port.
+  Requires Python 3.12+ with `fastapi`, `pydantic`, `structlog`, and an ASGI server (`uvicorn`)
+  installed as project dependencies via `uv sync` - none is assumed to be present globally. Running
+  the app needs `uv` on PATH and a free local port. Exporting traces additionally needs a reachable
+  OTLP collector endpoint; without one, logging still works and tracing is a no-op.
 license: Apache-2.0
 ---
 
@@ -25,33 +29,17 @@ license: Apache-2.0
 - Lowercase, hyphen-separated path segments: `/user-profiles`
 - Plural nouns for collections: `/sessions`
 - Nested resources for ownership: `/sessions/{id}/messages`
-- No verbs in URLs — HTTP methods express the action
-
-```
-POST   /resources              Create
-GET    /resources              List
-GET    /resources/{id}         Get one
-PATCH  /resources/{id}         Partial update
-DELETE /resources/{id}         Delete
-POST   /resources/{id}/archive Non-CRUD action as sub-resource
-```
+- No verbs in URLs — HTTP methods express the action. A non-CRUD action is a sub-resource:
+  `POST /resources/{id}/archive`
 
 ### HTTP status codes
 
-| Code                        | When to use                                                        |
-| --------------------------- | ------------------------------------------------------------------ |
-| `200 OK`                    | Successful GET, PATCH, or DELETE returning data                    |
-| `201 Created`               | Successful POST that creates a resource                            |
-| `204 No Content`            | Successful operation with no response body                         |
-| `400 Bad Request`           | Malformed request syntax or type mismatch                          |
-| `401 Unauthorized`          | Authentication required but missing or invalid                     |
-| `403 Forbidden`             | Authenticated but not authorized                                   |
-| `404 Not Found`             | Resource does not exist                                            |
-| `409 Conflict`              | Resource already exists, or illegal state transition               |
-| `422 Unprocessable Entity`  | Syntactically valid but semantically invalid (Pydantic validation) |
-| `429 Too Many Requests`     | Rate limit exceeded                                                |
-| `500 Internal Server Error` | Unexpected server-side failure                                     |
-| `503 Service Unavailable`   | Dependency unavailable (DB down, upstream timeout)                 |
+Standard semantics apply. The choices this service makes explicitly:
+
+- `409 Conflict` for an existing resource or an illegal state transition
+- `422 Unprocessable Entity` for Pydantic validation failures
+- `429 Too Many Requests` when a rate limit is exceeded
+- `503 Service Unavailable` when a dependency is down (DB, upstream timeout)
 
 Do not return `200` for errors. Do not return `500` for user input errors.
 
@@ -84,9 +72,13 @@ Prefer backward-compatible additions (new optional fields, new endpoints). Only 
 | `X-Correlation-ID`               | Request + Response | Request tracing                |
 | `Content-Type: application/json` | Both               | Required on all JSON endpoints |
 
-## Route handlers are thin
+## Layer boundaries
 
-Validate input, call a service, return output. No business logic.
+Each layer has one job. Route handlers are thin: validate input, call a service, return output.
+
+- Route handlers contain no business logic — they call services.
+- Services contain no SQL — they call the database layer. The database layer contains no business logic.
+- One mutation path per aggregate — if multiple services could write the same entity, route them through a single state manager.
 
 ```python
 router = APIRouter(prefix="/sessions", tags=["sessions"])
@@ -148,6 +140,51 @@ Register in this order (FastAPI processes in reverse registration order):
 3. Rate limiting middleware
 4. Request logging middleware (innermost)
 
+## Correlation IDs
+
+Every request carries a `correlation_id`:
+
+- Generated at the API boundary if absent from request headers
+- Bound to every log entry via `structlog.contextvars`
+- Returned in the `X-Correlation-ID` response header
+- Included in API error response bodies
+
+```python
+@app.middleware("http")
+async def correlation_id_middleware(request: Request, call_next):
+    # generate_id: prefixed ID helper, see ceh-python-service:write-postgresql-code
+    correlation_id = request.headers.get("X-Correlation-ID", generate_id("req"))
+    request.state.correlation_id = correlation_id
+    with structlog.contextvars.bound_contextvars(correlation_id=correlation_id):
+        response = await call_next(request)
+    response.headers["X-Correlation-ID"] = correlation_id
+    return response
+```
+
+## CORS configuration
+
+```python
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.allowed_origins,  # from config — never wildcard in production
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PATCH", "DELETE"],
+    allow_headers=["Content-Type", "Authorization", "X-Correlation-ID"],
+)
+```
+
+Never use `allow_origins=["*"]` in production.
+
+## Rate limiting
+
+Apply to all mutating endpoints and expensive read endpoints. Return `429 Too Many Requests` with a `Retry-After` header when exceeded. Apply per session on mutation endpoints (e.g. 10 req/min).
+
+## Input validation
+
+- All request bodies validated through Pydantic models — reject with `422` on failure
+- Use `ConfigDict(extra='forbid')` on models receiving externally-sourced input (API requests, LLM output)
+- All LLM output must pass schema validation before any state mutation
+
 ## Global exception handlers
 
 Register domain-to-HTTP mappings once in `app/core/middleware.py`:
@@ -191,3 +228,60 @@ class DomainValidationError(AppError):
 - Services raise domain exceptions; global handlers map them to HTTP — never per-route
 - Never raise `HTTPException` inside a service layer
 - Never swallow exceptions silently with bare `except:`
+
+## Structured logging
+
+All log output is structured JSON. Never use `print()` or unstructured interpolation.
+
+```python
+import structlog
+
+log = structlog.get_logger()
+
+log.info("request_completed", endpoint="/resources", status=200, duration_ms=42)
+log.warning("upstream_timeout", service="payment-api", attempt=2)
+log.error("database_connection_failed", host=settings.db_host, error=str(e))
+```
+
+| Level     | Use for                                       |
+| --------- | --------------------------------------------- |
+| `DEBUG`   | Detailed diagnostics (disabled in production) |
+| `INFO`    | Normal operations                             |
+| `WARNING` | Unexpected but recoverable                    |
+| `ERROR`   | Failures requiring attention                  |
+
+Do not log at `INFO` on every request — use `DEBUG` for high-frequency events.
+
+**Never log:** secrets, tokens, passwords, PII, raw user-provided content, or full external API responses.
+
+## Required metrics
+
+| Metric                      | Type      | Labels                              |
+| --------------------------- | --------- | ----------------------------------- |
+| `requests_total`            | Counter   | `endpoint`, `method`, `status_code` |
+| `request_duration_ms`       | Histogram | `endpoint`, `method`                |
+| `errors_total`              | Counter   | `error_type`, `endpoint`            |
+| `external_calls_total`      | Counter   | `service`, `status`                 |
+| `external_call_duration_ms` | Histogram | `service`                           |
+
+Use Prometheus-compatible instrumentation (`prometheus-fastapi-instrumentator` or equivalent).
+
+## Health check endpoint
+
+```
+GET /health
+```
+
+Returns `200` when healthy:
+
+```json
+{ "status": "ok", "database": "ok", "version": "1.4.2" }
+```
+
+Returns `503` when any critical dependency is unavailable:
+
+```json
+{ "status": "degraded", "database": "error", "version": "1.4.2" }
+```
+
+Must verify actual database connectivity — not just process liveness. Used by load balancers, deployment pipelines, and rollback automation.

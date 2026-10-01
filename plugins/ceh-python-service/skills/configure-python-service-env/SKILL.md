@@ -2,16 +2,19 @@
 name: configure-python-service-env
 description: >-
   Load this skill when setting up or configuring the Python environment: installing dependencies
-  with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming conventions, or
-  configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command is run, or a
-  question arises about code style, type annotations, or import ordering.
+  with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming conventions,
+  configuring ruff/mypy, or handling secrets: loading settings from environment variables, .env and
+  .env.example, generating tokens, or auditing dependencies. Auto-load whenever a pyproject.toml is
+  edited, a uv command is run, a secret or API key is added, a BaseSettings class is written, or a
+  question arises about code style, type annotations, or import ordering. Not for frontend secrets.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
   Requires Python 3.12+ and the `uv` package manager on PATH, plus network access to PyPI for `uv
-  sync` / `uv add`. `ruff`, `mypy`, `pytest`, `uvicorn`, and `alembic` are not assumed to be
-  installed globally - `uv` installs them into the project environment and commands run via `uv
-  run`. Running the service also needs a reachable PostgreSQL instance.
+  sync` / `uv add`. `ruff`, `mypy`, `pytest`, `uvicorn`, `alembic`, `pydantic-settings`, and
+  `pip-audit` are not assumed to be installed globally - `uv` installs them into the project
+  environment and commands run via `uv run`; `pip-audit` also fetches the vulnerability database
+  over the network. Running the service also needs a reachable PostgreSQL instance.
 license: Apache-2.0
 ---
 
@@ -62,6 +65,15 @@ ignore_missing_imports = false
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 ```
+
+## Secrets management
+
+- Never hard-code secrets, API keys, or passwords in source code
+- Load secrets via `pydantic-settings` (`BaseSettings`) from environment variables / `.env`
+- Never commit `.env`; always maintain `.env.example` with placeholder values
+- Generate cryptographic secrets: `python -c "import secrets; print(secrets.token_hex(32))"`
+- Run `uv run pip-audit` before every release
+- Session tokens: `secrets.token_urlsafe(32)`, never logged, never in URLs
 
 ## Coding style
 
