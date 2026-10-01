@@ -19,7 +19,8 @@ license: Apache-2.0
 - All interactive elements must be keyboard-accessible
 - Images must have `alt` attributes (empty `alt=""` for decorative images)
 - Use semantic HTML (`<button>`, `<nav>`, `<main>`, `<section>`, `<header>`) — not `<div>` for everything
-- `svelte-check` runs a11y checks — fix all warnings before opening a PR
+- Fix all a11y lint warnings before opening a PR: `svelte-check` (SvelteKit) or `eslint-plugin-jsx-a11y` (React)
+- Only the attribute and event syntax differs by framework: `onclick` / `bind:value` / `for` in Svelte, `onClick` / `value` + `onChange` / `htmlFor` in React. The ARIA attributes are identical.
 
 ## Keyboard navigation
 
@@ -32,24 +33,28 @@ license: Apache-2.0
 
 Use native HTML semantics first. Add ARIA only when no native element fits:
 
-```svelte
-<button onclick={handleAction}>Submit</button>
-<button aria-label="Close dialog" onclick={close}>✕</button>
-<p aria-live="polite" aria-atomic="true">{statusMessage}</p>
-<button aria-expanded={open} onclick={toggle}>Details</button>
+```html
+<button>Submit</button>
+<button aria-label="Close dialog">✕</button>
+<p aria-live="polite" aria-atomic="true">Saved</p>
+<button aria-expanded="false" aria-controls="details">Details</button>
 ```
+
+Bind dynamic values with the framework's expression syntax: `aria-expanded={open}` in both Svelte and JSX.
 
 Do not add `role="button"` to a `<div>` — use `<button>`. Never use `aria-hidden="true"` on a focusable element.
 
 ## Forms
 
-```svelte
+```html
 <label for="topic">Topic</label>
-<input id="topic" type="text" bind:value={topic} />
+<input id="topic" type="text" />
 
-<input id="email" aria-describedby="email-error" aria-invalid={!!emailError} />
-<span id="email-error" role="alert">{emailError}</span>
+<input id="email" aria-describedby="email-error" aria-invalid="true" />
+<span id="email-error" role="alert">Enter a valid email address</span>
 ```
+
+In JSX the label attribute is `htmlFor`. Set `aria-invalid` from the validation state, and render the error element only while it is set.
 
 ## Color and contrast
 

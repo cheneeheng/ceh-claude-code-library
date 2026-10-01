@@ -178,6 +178,19 @@ supplies. The call is why all three stack plugins declare `ceh-testing` as a dep
 **Shared:** `asyncpg.create_pool(min_size=5, max_size=20, command_timeout=30)` and the pool-in-lifespan
 rule.
 
+## Frontend API client and ApiRequestError
+
+**Canonical:** `plugins/ceh-web-frontend/skills/write-sveltekit-code/SKILL.md` — § Centralized API client + § Error handling
+
+| Copy                                                             | Section                                     | Diverges                                                                                                                                                                                                                                         |
+| ---------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `plugins/ceh-web-frontend/skills/write-react-vite-code/SKILL.md` | § Centralized API client + § Error handling | env access is `import.meta.env.VITE_API_BASE_URL` instead of `PUBLIC_API_BASE_URL` from `$env/static/public`; "components and hooks" instead of "components and shared-state modules"; no Svelte component pattern; adds the error-boundary rule |
+
+**Shared:** the `src/lib/api/client.ts` rule (all `fetch` calls go through it), the `apiClient`
+method shape (`response.ok` check, then `throw new ApiRequestError(response.status, err.error)`), the
+`ApiRequestError` class, and the three error rules: never expose internal codes or stack traces, map
+`error.code` to friendly messages in one central map, and always surface the `correlation_id`.
+
 ## Layer boundaries (route → service → db)
 
 **Canonical:** `plugins/ceh-python-service/skills/write-fastapi-endpoints/SKILL.md` — § Layer boundaries

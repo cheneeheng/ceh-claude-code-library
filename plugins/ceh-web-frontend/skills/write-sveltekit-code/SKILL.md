@@ -1,13 +1,15 @@
 ---
 name: write-sveltekit-code
 description: >-
-  Load this skill when adding or modifying SvelteKit routes, writing load functions, managing Svelte
-  stores, or building components. Auto-load whenever a +page.svelte, +page.server.ts, +page.ts,
-  store, or component file is created or modified.
+  Load this skill when adding or modifying SvelteKit routes, writing load functions, managing shared
+  state with Svelte 5 runes, or building components. Auto-load whenever a +page.svelte,
+  +page.server.ts, +page.ts, shared-state .svelte.ts module, or component file is created or
+  modified.
 disable-model-invocation: false
 user-invocable: true
 paths:
   - "**/*.svelte"
+  - "**/*.svelte.ts"
   - "**/+page*.ts"
   - "**/+layout*.ts"
   - "**/+server.ts"
@@ -47,36 +49,47 @@ export const load: PageServerLoad = async ({ params }) => {
 - Use `redirect()` from `@sveltejs/kit` for redirects — do not call `goto()` inside load functions
 - Load functions return data; they do not directly mutate state
 
-## Svelte stores
+## Shared state: runes in `.svelte.ts` modules
 
-Stores live in `src/lib/stores/`. Updated **only** from API responses — never mutated directly by components.
+Svelte 5 is the standard: use runes, not `svelte/store` (`writable` / `derived`). Shared state lives
+in one `.svelte.ts` module under `src/lib/state/`. It is updated **only** from API responses, through
+the module's exported functions — never mutated directly by components.
 
 ```ts
-export const sessionStore = writable<SessionState | null>(null);
-export const openChallenges = derived(
-  sessionStore,
-  ($session) => $session?.challenges.filter((c) => c.status === "open") ?? [],
-);
+// src/lib/state/session.svelte.ts
+// Reassigned $state cannot be exported, so export an object and mutate its property.
+export const sessionState = $state<{ current: SessionState | null }>({
+  current: null,
+});
+
+export function setSession(next: SessionState | null) {
+  sessionState.current = next;
+}
+
+// Derived state cannot be exported either, so export a function that computes it.
+export function getOpenItems() {
+  return sessionState.current?.items.filter((i) => i.status === "open") ?? [];
+}
 ```
 
-- Derived stores are preferred over computed values inside components
-- Do not define stores inside components — they live in `$lib/stores/`
+- Do not define shared state inside components — it lives in `$lib/state/`
+- Call `getOpenItems()` inside a template or a `$derived` so the read stays reactive
 
-## Components: props only, no direct store writes
+## Components: props only, no direct state writes
 
 ```svelte
 <script lang="ts">
   type Props = {
-    challenges: Challenge[];
-    onChallengeClick: (id: string) => void;  // callback, not direct store write
+    items: Item[];
+    onItemClick: (id: string) => void;  // callback, not a direct state write
   };
-  let { challenges, onChallengeClick }: Props = $props();
+  let { items, onItemClick }: Props = $props();
 </script>
 ```
 
 ## Centralized API client
 
-All `fetch` calls go through `src/lib/api/client.ts`. Components and stores never call `fetch` directly.
+All `fetch` calls go through `src/lib/api/client.ts`. Components and shared-state modules never call `fetch` directly.
 
 ```ts
 export const apiClient = {
@@ -150,12 +163,12 @@ Component pattern:
 - Map `error.code` values to user-friendly messages in a centralized map
 - Always show the `correlation_id` so users can report it
 
-## Reactive declarations
+## Derived values: `$derived` and `$derived.by`
 
 ```svelte
 <script lang="ts">
-  let { challenges }: { challenges: Challenge[] } = $props();
-  const openCount = $derived(challenges.filter((c) => c.status === 'open').length);
+  let { items }: { items: Item[] } = $props();
+  const openCount = $derived(items.filter((i) => i.status === 'open').length);
 </script>
 ```
 

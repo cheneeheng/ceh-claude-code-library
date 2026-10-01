@@ -23,14 +23,14 @@ license: Apache-2.0
 
 # Write Vitest and Playwright Tests
 
-Frameworks: **Vitest** (unit + component), **@testing-library/svelte**, **MSW** (API mocking), **Playwright** (E2E)
+Frameworks: **Vitest** (unit + component), **Testing Library** (`@testing-library/svelte` or `@testing-library/react`), **MSW** (API mocking), **Playwright** (E2E)
 
 > The examples below use Vitest APIs. If the project already uses Jest or Mocha instead, adapt the equivalent calls and match the runner in the repo — the `ceh-web-frontend:vitest-unit-tester` agent detects which one applies.
 
 | Folder             | Contents                                           |
 | ------------------ | -------------------------------------------------- |
 | `tests/unit/`      | Pure function tests — no DOM, no fetch             |
-| `tests/component/` | Svelte component render and interaction tests      |
+| `tests/component/` | Component render and interaction tests             |
 | `tests/e2e/`       | Full browser tests against the running application |
 
 Naming: `<subject>.test.ts` for unit/component, `<scenario>.spec.ts` for E2E. One behavior per test.
@@ -50,13 +50,12 @@ has already been applied.
 
 ```ts
 import { describe, it, expect } from "vitest";
-import { deriveGraphFromState } from "$lib/reasoning/graph";
+import { summarizeItems } from "$lib/items/summary";
 
-describe("deriveGraphFromState", () => {
-  it("creates a node for each challenge", () => {
-    const state = buildTestState({ challenges: [mockChallenge()] });
-    const graph = deriveGraphFromState(state);
-    expect(graph.nodes).toHaveLength(1);
+describe("summarizeItems", () => {
+  it("counts each open item", () => {
+    const state = buildTestState({ items: [mockOpenItem()] });
+    expect(summarizeItems(state).open).toBe(1);
   });
 });
 ```
@@ -67,15 +66,17 @@ Use `@testing-library/svelte` (SvelteKit) or `@testing-library/react` (React). D
 
 ```ts
 import { render, screen } from "@testing-library/svelte";
-import ReasoningPanel from "$lib/components/ReasoningPanel.svelte";
+import ItemPanel from "$lib/components/ItemPanel.svelte";
 
-it("renders open challenges", () => {
-  render(ReasoningPanel, {
-    props: { state: buildTestState({ challenges: [mockOpenChallenge()] }) },
+it("renders open items", () => {
+  render(ItemPanel, {
+    props: { state: buildTestState({ items: [mockOpenItem()] }) },
   });
   expect(screen.getByRole("status", { name: /open/i })).toBeInTheDocument();
 });
 ```
+
+The React form differs only in the render call, `render(<ItemPanel state={buildTestState({ items: [mockOpenItem()] })} />)`, imported from `@testing-library/react`. The queries and assertions are the same.
 
 ## API mocking with MSW: do not mock `fetch` directly
 
@@ -85,7 +86,7 @@ import { http, HttpResponse } from "msw";
 
 const server = setupServer(
   http.post("/sessions/:id/message", () =>
-    HttpResponse.json({ chat_message: "...", reasoning_events: [] }),
+    HttpResponse.json({ message: "...", items: [] }),
   ),
 );
 
@@ -99,11 +100,11 @@ afterAll(() => server.close());
 ```ts
 import { test, expect } from "@playwright/test";
 
-test("user can start a session and receive a challenge", async ({ page }) => {
+test("user can start a session and see the item list", async ({ page }) => {
   await page.goto("/");
-  await page.fill('[data-testid="topic-input"]', "We should rewrite in Rust");
+  await page.fill('[data-testid="topic-input"]', "Weekly planning");
   await page.click('[data-testid="start-session"]');
-  await expect(page.locator('[data-testid="reasoning-panel"]')).toBeVisible();
+  await expect(page.locator('[data-testid="item-panel"]')).toBeVisible();
 });
 ```
 

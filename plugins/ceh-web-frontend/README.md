@@ -10,7 +10,7 @@ accessibility, testing, tooling) stay single-sourced.
 | Skill                           | Invoke                                            | Triggers when                                                                                                                                                                                                                                                                              |
 | ------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `configure-bun-vite-env`        | `/ceh-web-frontend:configure-bun-vite-env`        | Bun/Vite setup, scripts, deps, TypeScript style, ESLint/Prettier, type config                                                                                                                                                                                                              |
-| `write-sveltekit-code`          | `/ceh-web-frontend:write-sveltekit-code`          | Editing Svelte routes, stores, components, or the API client                                                                                                                                                                                                                               |
+| `write-sveltekit-code`          | `/ceh-web-frontend:write-sveltekit-code`          | Editing Svelte routes, shared `.svelte.ts` state, components, or the API client                                                                                                                                                                                                            |
 | `write-react-vite-code`         | `/ceh-web-frontend:write-react-vite-code`         | Editing React components, hooks, routing, or `vite.config.ts`                                                                                                                                                                                                                              |
 | `write-vitest-playwright-tests` | `/ceh-web-frontend:write-vitest-playwright-tests` | Writing `.test.ts`, `.test.tsx`, or `.spec.ts` files, or MSW handlers                                                                                                                                                                                                                      |
 | `make-ui-accessible`            | `/ceh-web-frontend:make-ui-accessible`            | Writing component markup (Svelte or React)                                                                                                                                                                                                                                                 |
@@ -27,11 +27,11 @@ implicit mid-turn decisions, sharpen its description rather than add a hook.
 
 ## Agents
 
-| Agent                       | Use when                                                            |
-| --------------------------- | ------------------------------------------------------------------- |
-| `vitest-unit-tester`        | Writing isolated unit tests for TypeScript functions or modules     |
-| `vitest-integration-tester` | Testing components wired with real stores and MSW network handlers  |
-| `playwright-system-tester`  | Writing Playwright E2E tests or smoke tests against a running stack |
+| Agent                       | Use when                                                                 |
+| --------------------------- | ------------------------------------------------------------------------ |
+| `vitest-unit-tester`        | Writing isolated unit tests for TypeScript functions or modules          |
+| `vitest-integration-tester` | Testing components wired with real shared state and MSW network handlers |
+| `playwright-system-tester`  | Writing Playwright E2E tests or smoke tests against a running stack      |
 
 All three preload `ceh-web-frontend:write-vitest-playwright-tests` and
 `ceh-testing:design-test-cases`.

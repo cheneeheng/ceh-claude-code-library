@@ -93,7 +93,7 @@
 | Skill                           | Invoke                                            | When                                                                                                                         |
 | ------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | Configure Bun + Vite Env        | `/ceh-web-frontend:configure-bun-vite-env`        | Bun/Vite setup, scripts, deps, TypeScript style, ESLint/Prettier                                                             |
-| Write SvelteKit Code            | `/ceh-web-frontend:write-sveltekit-code`          | Editing Svelte routes, stores, components, or the API client                                                                 |
+| Write SvelteKit Code            | `/ceh-web-frontend:write-sveltekit-code`          | Editing Svelte routes, shared `.svelte.ts` state, components, or the API client                                              |
 | Write React + Vite Code         | `/ceh-web-frontend:write-react-vite-code`         | Editing React components, hooks, routing, or `vite.config.ts`                                                                |
 | Write Vitest + Playwright Tests | `/ceh-web-frontend:write-vitest-playwright-tests` | Writing `.test.ts`, `.test.tsx`, or `.spec.ts` files, or MSW handlers                                                        |
 | Make UI Accessible              | `/ceh-web-frontend:make-ui-accessible`            | Writing component markup (Svelte or React)                                                                                   |
@@ -136,11 +136,11 @@
 
 ### Web Frontend (`ceh-web-frontend`)
 
-| Agent                     | Invoke                                                  | When                                                       |
-| ------------------------- | ------------------------------------------------------- | ---------------------------------------------------------- |
-| Vitest Unit Tester        | `@"ceh-web-frontend:vitest-unit-tester (agent)"`        | Isolated unit tests for TypeScript functions or modules    |
-| Vitest Integration Tester | `@"ceh-web-frontend:vitest-integration-tester (agent)"` | Components wired with real stores and MSW network handlers |
-| Playwright System Tester  | `@"ceh-web-frontend:playwright-system-tester (agent)"`  | Playwright E2E or smoke tests against a running stack      |
+| Agent                     | Invoke                                                  | When                                                             |
+| ------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------- |
+| Vitest Unit Tester        | `@"ceh-web-frontend:vitest-unit-tester (agent)"`        | Isolated unit tests for TypeScript functions or modules          |
+| Vitest Integration Tester | `@"ceh-web-frontend:vitest-integration-tester (agent)"` | Components wired with real shared state and MSW network handlers |
+| Playwright System Tester  | `@"ceh-web-frontend:playwright-system-tester (agent)"`  | Playwright E2E or smoke tests against a running stack            |
 
 ---
 

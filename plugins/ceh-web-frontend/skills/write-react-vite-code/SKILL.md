@@ -43,7 +43,7 @@ export function ItemPanel({ items, onItemClick }: Props) {
 ```
 
 - One component per file; filename `PascalCase.tsx` matching the component name.
-- No business logic in components — extract it into hooks or `$lib`/`src/lib` modules.
+- No business logic in components — extract it into hooks or `src/lib` modules.
 - Always type props explicitly; never use `any` (see `ceh-web-frontend:configure-bun-vite-env`).
 
 ## Hooks

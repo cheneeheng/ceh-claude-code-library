@@ -39,7 +39,8 @@ license: Apache-2.0
 
 ## TypeScript style
 
-- Line length: **100 characters**
+- Line length: **100 characters** (Prettier: `printWidth` 100, single quotes, `prettier-plugin-svelte`)
+- Local imports use the path alias (`$lib` in SvelteKit, the configured alias in React), never deep relative paths
 - Never use `any` — use `unknown` with type narrowing if the type is truly unknown
 - Prefer `undefined` over `null` for optional values
 - Use `?.` and `??`; do not use `||` for defaults on falsy inputs (it collapses `0`, `''`, `false`)
@@ -67,30 +68,6 @@ const ItemStatus = {
   Archived: "archived",
 } as const;
 type ItemStatus = (typeof ItemStatus)[keyof typeof ItemStatus];
-```
-
-### Naming conventions
-
-| Kind                  | Convention                   | Example                             |
-| --------------------- | ---------------------------- | ----------------------------------- |
-| Variables, functions  | `camelCase`                  | `sessionId`, `sendMessage`          |
-| Types, interfaces     | `PascalCase`                 | `SessionState`                      |
-| Components (filename) | `PascalCase`                 | `ItemPanel.svelte`, `ItemPanel.tsx` |
-| Svelte stores         | `camelCase` + `Store` suffix | `sessionStore`                      |
-| Constants             | `UPPER_SNAKE_CASE`           | `MAX_RETRIES`                       |
-
-### Imports (three groups, separated by blank lines)
-
-```ts
-// 1. Third-party packages
-import { useState } from "react";
-
-// 2. Framework built-ins ($app/* in SvelteKit, react-router etc. in React)
-import { goto } from "$app/navigation";
-
-// 3. Local (alias — always, never deep relative paths)
-import type { SessionState } from "$lib/types";
-import { apiClient } from "$lib/api/client";
 ```
 
 ### JSDoc (required on all exported symbols)
@@ -144,16 +121,4 @@ export default [
     },
   },
 ];
-```
-
-### Prettier configuration
-
-```json
-{
-  "semi": true,
-  "singleQuote": true,
-  "printWidth": 100,
-  "trailingComma": "all",
-  "plugins": ["prettier-plugin-svelte"]
-}
 ```
