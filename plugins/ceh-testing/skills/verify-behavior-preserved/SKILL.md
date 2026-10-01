@@ -27,6 +27,14 @@ almost nobody uses it.
 The failure mode is refactoring against a thin suite, watching it stay green, and shipping a silent
 behavior change. Green on a suite that never covered the region proves nothing.
 
+## When tests were not requested
+
+Writing tests and running a suite happen only when the user asked for them. If the request was only
+the refactor, write no characterization tests or golden files, run no coverage or suite, and make no
+separate commit of the pins. Instead, name the tests you would write (what they assert and which file
+they would live in) and state what stays unverified, so the user can ask for them. When tests were
+requested, the steps below apply in full.
+
 ## 1. Check the baseline before touching anything
 
 ```bash
@@ -135,10 +143,9 @@ logical value still breaks stored data and cache keys.
 
 ## Sequencing
 
-Baseline first, always:
-
-1. Coverage check → 2. characterization tests / golden files → 3. **commit those on their own** →
-2. refactor → 5. suite green with **no test edits** → 6. differential run for anything risky.
+Baseline first, always: (1) coverage check → (2) characterization tests / golden files → (3) **commit
+those on their own** → (4) refactor → (5) suite green with **no test edits** → (6) differential run
+for anything risky.
 
 Committing the tests separately is what lets a reviewer see that the pins predate the change. Tests
 written in the same commit as the refactor cannot prove they were not shaped by it.

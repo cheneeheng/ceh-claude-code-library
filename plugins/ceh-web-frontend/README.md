@@ -48,9 +48,10 @@ Called by the tester agents via `bash "${CLAUDE_PLUGIN_ROOT}/scripts/<name>.sh"`
 | `run-integration-tests.sh [pattern]`           | Runs integration tests with `NODE_ENV=test`          |
 | `run-e2e.sh {up\|down\|test\|smoke} [pattern]` | Manages the E2E stack and runs Playwright / Cypress  |
 
-## Coverage target
+## Coverage floor
 
-70% for `src/lib/`. Verified by `check-coverage.sh` after each unit test session.
+70% for `src/lib/`, a floor for finding blind spots rather than a goal. Below it, run
+`check-coverage.sh` and look for the untested regions.
 
 ## Dependencies
 

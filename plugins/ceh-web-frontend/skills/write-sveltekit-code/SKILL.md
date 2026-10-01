@@ -55,14 +55,23 @@ Svelte 5 is the standard: use runes, not `svelte/store` (`writable` / `derived`)
 in one `.svelte.ts` module under `src/lib/state/`. It is updated **only** from API responses, through
 the module's exported functions — never mutated directly by components.
 
+**Browser-only.** Module-level state lives once per server process, so during server rendering it is
+shared across every user's request and can leak one user's data to another. Never write a
+shared-state module on the server. Per-user data on the server goes through `load` data or context
+(`setContext` in a layout, `getContext` in components). Load functions stay pure and never set
+shared state.
+
 ```ts
 // src/lib/state/session.svelte.ts
+import { browser } from "$app/environment";
+
 // Reassigned $state cannot be exported, so export an object and mutate its property.
 export const sessionState = $state<{ current: SessionState | null }>({
   current: null,
 });
 
 export function setSession(next: SessionState | null) {
+  if (!browser) return; // never write per-user state on the server: the module is shared across requests
   sessionState.current = next;
 }
 

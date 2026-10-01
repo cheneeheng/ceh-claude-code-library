@@ -32,6 +32,14 @@ This is a triage gate, not a checklist to complete. Run it when a feature is wor
 called done. **For each class: does the trigger fire? If no, skip it and say so.** Adding tests
 whose trigger did not fire is ritual, and it is how a suite becomes slow and ignored.
 
+## When tests were not requested
+
+Writing tests and running a suite happen only when the user asked for them. If the request was only
+a readiness check, still triage all five classes, but write no test and run nothing. For each class
+that fires, name the test you would write (what it asserts and which file it would live in) and state
+what stays unverified, so the user can ask for it. When tests were requested, the classes below apply
+in full.
+
 ---
 
 ## 1. Concurrency and idempotency

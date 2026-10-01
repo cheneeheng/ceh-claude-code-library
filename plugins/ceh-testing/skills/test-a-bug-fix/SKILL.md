@@ -25,6 +25,14 @@ A bug is proof that a test was missing. The fix is the cheap half; the test that
 it is the deliverable. Write it **first** — a test written after the fix is written against the new
 code, not against the bug, and routinely passes on the broken version too.
 
+## When tests were not requested
+
+Writing tests and running a suite happen only when the user asked for them. If the request was only
+to fix the bug, write no test and run nothing: no reproducer, no stash check, no bisect. Instead,
+name the test you would write (what it asserts and which file it would live in) and state what stays
+unverified, so the user can ask for it. When tests were requested, the procedure below applies in
+full.
+
 ## Procedure
 
 ### 1. Reproduce in a test before touching source

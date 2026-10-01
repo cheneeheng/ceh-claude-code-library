@@ -110,4 +110,5 @@ test("user can start a session and see the item list", async ({ page }) => {
 
 Do not duplicate unit or component test coverage in E2E tests.
 
-**Coverage target:** 70% for `src/lib/`
+**Coverage floor:** 70% for `src/lib/`. A floor for finding blind spots, not a goal. Below it, look
+for the untested regions. Reaching it proves nothing and is never a reason to add tests.

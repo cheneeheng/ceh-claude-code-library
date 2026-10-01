@@ -75,12 +75,15 @@ def test_public_entry_point_is_importable():
 - Use `unittest.mock` or `pytest-mock`.
 - Prefer real objects over mocks when construction is cheap.
 
-## Coverage targets
+## Coverage floor
 
-| Area                                  | Minimum |
-| ------------------------------------- | ------- |
-| Python application package            | 80%     |
-| Core business logic / domain services | 95%     |
+A floor for finding blind spots, not a goal. Below the number, look for the untested regions.
+Reaching it proves nothing and is never a reason to add tests.
+
+| Area                                  | Floor |
+| ------------------------------------- | ----- |
+| Python application package            | 80%   |
+| Core business logic / domain services | 95%   |
 
 ```bash
 uv run pytest --cov=your_library --cov-report=term-missing

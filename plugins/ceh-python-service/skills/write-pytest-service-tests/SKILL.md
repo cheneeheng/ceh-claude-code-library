@@ -86,12 +86,15 @@ Each test that writes data must run in a transaction that rolls back after the t
 - Do **not** mock PostgreSQL in integration tests
 - Use `unittest.mock` or `pytest-mock`
 
-## Coverage targets
+## Coverage floor
 
-| Area                                  | Minimum |
-| ------------------------------------- | ------- |
-| Python application package            | 80%     |
-| Core business logic / domain services | 95%     |
+A floor for finding blind spots, not a goal. Below the number, look for the untested regions.
+Reaching it proves nothing and is never a reason to add tests.
+
+| Area                                  | Floor |
+| ------------------------------------- | ----- |
+| Python application package            | 80%   |
+| Core business logic / domain services | 95%   |
 
 ```bash
 uv run pytest --cov=app --cov-report=term-missing

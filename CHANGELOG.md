@@ -44,6 +44,14 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 
 - Name skills with a verb phrase and agents with a noun, with two exemptions (model-only standards, established terms of art). The rule lives in `CLAUDE.md` and the `SKILL.md` template guidance
 
+- Make four `ceh-testing` skills (`test-a-bug-fix`, `verify-behavior-preserved`, `close-test-risk-gaps`, `audit-test-suite`) write no tests and run no suite unless the user asked for them: each names the test or check it would run and what stays unverified. This follows the agent coding contract without depending on it. The shared section is registered in `docs/CROSS_REFERENCES.md`
+- Reword the coverage percentages in `write-pytest-service-tests`, `write-pytest-library-tests`, `write-vitest-playwright-tests` and the `ceh-web-frontend` README as a floor for finding blind spots, not a goal, so they no longer contradict `design-test-cases` and `audit-test-suite`
+- Warn in `write-sveltekit-code` that shared-state modules are browser-only, because module-level state is shared across every user's request during server rendering, and guard `setSession` with `browser`
+
+### Fixed
+
+- Fix a renumbered Sequencing line in `verify-behavior-preserved` that read "3. ... 2. refactor → 5."
+
 ### Removed
 
 - Archive the `repo-tree-mapper` agent and its `walk-repo.sh` script to `archive/ceh-coding-agent/`

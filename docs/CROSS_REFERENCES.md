@@ -150,9 +150,26 @@ without a comment" linting rules.
 
 **Shared:** pytest + pytest-asyncio (`asyncio_mode = "auto"`), `tests/unit/` structure,
 `test_<what>_<expected_behavior>.py` naming, the one-behavior-per-test rule, the mocking rules (mock
-external boundaries, `unittest.mock` or `pytest-mock`), and the Coverage targets block — two rows,
-word for word: `Python application package | 80%` and `Core business logic / domain services | 95%`.
+external boundaries, `unittest.mock` or `pytest-mock`), and the Coverage floor block — the
+two-sentence floor-not-goal intro and two rows, word for word: `Python application package | 80%`
+and `Core business logic / domain services | 95%`.
 The service copy adds the `--cov=app` command, the library copy `--cov=your_library`.
+
+## Tests not requested (write and run nothing)
+
+**Canonical:** `plugins/ceh-testing/skills/test-a-bug-fix/SKILL.md` — § When tests were not requested
+
+| Copy                                                            | Section                              | Diverges                                                                                                         |
+| --------------------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `plugins/ceh-testing/skills/verify-behavior-preserved/SKILL.md` | § When tests were not requested      | the request is "only the refactor"; adds no separate commit of the pins; names "the tests" and "the steps below" |
+| `plugins/ceh-testing/skills/close-test-risk-gaps/SKILL.md`      | § When tests were not requested      | the request is "only a readiness check"; still triages all five classes and names a test per class that fires    |
+| `plugins/ceh-testing/skills/audit-test-suite/SKILL.md`          | § When a suite run was not requested | the unrequested action is running the suite, not writing tests; check 1 only reads files and still applies       |
+
+**Shared:** the rule, stated in prose with no reference to `ceh-coding-agent:agent-coding-contract`
+so `ceh-testing` keeps no dependency: writing tests and running a suite happen only when asked,
+otherwise write and run nothing, name the test or check (what it asserts or reveals, where it would
+live), state what stays unverified so the user can ask for it, and apply the skill in full when tests
+were requested.
 
 ## Choosing what to test (hand-off to design-test-cases)
 
