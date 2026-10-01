@@ -91,6 +91,41 @@ the other. Each hook is a standalone script with no shared module, so the list i
 `path:line`), `## Not found / uncertain` (never omitted, `- Nothing outstanding.` when clean),
 `## Coverage` (lines read per file, then the sum).
 
+## Blog voice (Voice block)
+
+**Canonical:** `plugins/ceh-blog/skills/draft-post/SKILL.md` — § Rules, Voice
+
+| Copy                                              | Section        | Diverges                                                                         |
+| ------------------------------------------------- | -------------- | -------------------------------------------------------------------------------- |
+| `plugins/ceh-blog/skills/edit-post/SKILL.md`      | § Rules        | restated as diagnose-and-quiet rules: banned tells are flagged, never introduced |
+| `plugins/ceh-blog/skills/repurpose-post/SKILL.md` | § Rules, Voice | applied to channel formats; adds "never invent" and the plain-link ending        |
+
+**Shared:** the personal-voice rule (first person, reflective, no influencer style), the banned-tells
+list (punchy one-liner paragraphs, aphoristic closers, imperative lessons, "If you're building X"
+prescriptions, bold pseudo-headers, tidy meta-takeaway sign-offs, CTA endings), the open-thread
+ending, and "the target repo's `CLAUDE.md` blog voice overrides".
+
+## Blog post-type structures
+
+**Canonical:** `plugins/ceh-blog/skills/draft-post/SKILL.md` — § Procedure, 4. Draft the post
+
+| Copy                                         | Section                           | Diverges                                                                        |
+| -------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------- |
+| `plugins/ceh-blog/skills/edit-post/SKILL.md` | § Procedure, 3. Edit (structures) | shorter Project/Launch Origin and Thought Leadership lines, used for reordering |
+
+**Shared:** the six post-type templates (Lessons Learned, How-To, Opinion / Take, Project / Launch,
+Thought Leadership, Personal Story), each ending on **The Open Thread**.
+
+## GEO writing rules
+
+**Canonical:** `plugins/ceh-seo/skills/make-page-crawlable/SKILL.md` — § Procedure, 5. Write the page text for citation
+
+| Copy                                            | Section                             | Diverges                                                                 |
+| ----------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------ |
+| `plugins/ceh-seo/skills/pitch-project/SKILL.md` | § Procedure, 4. Apply the GEO rules | adds "state scope facts explicitly"; drops the answer-first-section rule |
+
+**Shared:** extractable standalone claims with numbers over adjectives, and question-shaped headings.
+
 ---
 
 Entry shape:

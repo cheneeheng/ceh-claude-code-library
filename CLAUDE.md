@@ -22,7 +22,7 @@ Plugins fall into four tiers:
 | --------------------- | ----------------- | -------------------------------------------------- |
 | **Scenario bundle**   | one per situation | —                                                  |
 | **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity      | `ceh-architecture`                                 |
+| **Use-case workflow** | per activity      | `ceh-architecture`, `ceh-seo`, `ceh-blog`          |
 | **Stack / build**     | per project type  | —                                                  |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
@@ -85,6 +85,9 @@ tools/
 | `ceh-git-workflow` | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, releases including hotfixes (`release`, which also runs the full ship sequence), code review |
 | `ceh-architecture` | Living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log), domain modeling (IDs, status enums, layer boundaries)                                                                                                        |
 
+| `ceh-seo` | Discoverability for anything internet-exposed: crawlable public web pages, the `llms.txt` agent index, findability of README, package, and landing text |
+| `ceh-blog` | Blog posts in a personal, series-first voice: draft (interviewing when material is thin), edit, repurpose for X, LinkedIn, TL;DR, and newsletters |
+
 **TODO: break up `ceh-architecture`.** It is two unrelated moments in one plugin, and the
 destinations are decided:
 
@@ -112,6 +115,13 @@ Each skill is self-contained with inline content. `references/` is for two cases
 - **A standards set too large to inline.**
 
 Never for general reference material a model already knows.
+
+**Name skills with a verb phrase and agents with a noun.** A skill is something you do at a moment
+(`commit`, `shrink-diff`, `draft-post`, `make-page-crawlable`), an agent is something you delegate
+to (`bulk-reader`). Pick the word you would say out loud, not a generic one like `optimize`. Two
+exemptions: model-only standards named for what they carry (`agent-coding-contract`,
+`usage-limit-handoff`, `branch`), and established terms of art (`pull-request`, `release`).
+`validate.py` cannot check part of speech, so this is a review rule.
 
 ## Frontmatter Conventions
 
