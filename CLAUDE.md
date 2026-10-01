@@ -85,12 +85,17 @@ tools/
 | `ceh-git-workflow` | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, releases including hotfixes (`release`, which also runs the full ship sequence), code review |
 | `ceh-architecture` | Living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log), domain modeling (IDs, status enums, layer boundaries)                                                                                                        |
 
-**TODO: break up `ceh-architecture`.** It is two unrelated moments in one plugin. Once
-`ceh-python-service` (or the matching stack plugin) migrates, move `domain-modeling` there: its
-snippets are Python/TS and its layer rules assume a route/service/db backend. Decide a home for
-`document-architecture` (beside `explain-codebase` in `ceh-coding-agent` is the candidate), then
-retire `ceh-architecture` and repoint the `ceh-architecture:document-architecture` mentions in
-`explain-codebase` and `explain-until-understood`. Removing a plugin is a MAJOR bump.
+**TODO: break up `ceh-architecture`.** It is two unrelated moments in one plugin, and the
+destinations are decided:
+
+- `document-architecture` moves to `ceh-coding-agent`, beside `explain-codebase`.
+- `domain-modeling` moves to the service-side plugin (`ceh-python-service`, once it migrates): its
+  snippets are Python/TS and its layer rules assume a route/service/db backend.
+
+Then retire `ceh-architecture` and repoint the `ceh-architecture:document-architecture` mentions in
+`explain-codebase` and `explain-until-understood` to `ceh-coding-agent`. Removing a plugin is a
+MAJOR bump. A concept-map skill for markdown-only knowledge bases is a separate sibling, not part
+of this move.
 
 ## Skills
 
