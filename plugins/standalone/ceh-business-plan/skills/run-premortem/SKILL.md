@@ -1,15 +1,8 @@
 ---
 name: run-premortem
 description: >-
-  Load this skill when a business plan is about to receive a real commitment (money, a resignation,
-  a hire, a lease, a launch date) and nobody has worked out how it fails: assume the business is
-  dead in 18 months, write the specific stories of how, rank them, and attach to each an early
-  warning signal, a kill criterion set in advance, and a cap on the loss. Trigger on "what could go
-  wrong", "run a premortem", "what are the risks", "should I quit my job for this", "am I missing
-  something", "play devil's advocate", "stress-test this plan", "when should we give up", "what if
-  a big competitor does this", or before any decision that is hard to undo. Not for a general
-  review of plan quality (use ceh-business-plan:review-business-plan) and not for the numeric
-  sensitivity table (use ceh-business-plan:stress-test-unit-economics).
+  Premortem on a business plan that writes how it fails and gives each top risk a warning signal, a
+  kill criterion set in advance, and a loss cap, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0
@@ -51,8 +44,11 @@ written as a number.
    was that someone is already working on it.
 8. State the cap: the most money and the most months this can consume before it stops, and what
    remains if it fails (skills, customers, code, relationships, reputation).
-9. Ask about the weakest guard, one question per turn. Write §12, schedule the tests and kill
-   dates in §13, and re-score criterion 8 of the PMF gate.
+9. Write §12 now, and schedule each test and kill date in §13 as one line ending
+   `(run-premortem)`. Writing before asking keeps the guards if the session is interrupted.
+10. Ask about the weakest guard, one question per turn, three questions at most. Revise §12 in
+    place after each answer. A guard still open stays tagged `[assumption]`. Then re-score
+    criterion 8 of the PMF gate.
 
 ## What a good guard looks like
 
@@ -84,24 +80,27 @@ honoured.
 
 ## Output
 
-Written into §12 of `BUSINESS_PLAN.md`:
+Written into §12 of `BUSINESS_PLAN.md` as one subsection. A re-run replaces it, except that a kill
+criterion whose date has passed is kept as written (see Stop conditions):
 
 ```markdown
-### Premortem — <date>
+### Premortem
+
+Run on <date>.
 
 | #   | Failure story | Likelihood | Survivable | Warning signal | Kill criterion | Cheapest test |
 | --- | ------------- | ---------- | ---------- | -------------- | -------------- | ------------- |
 
-### Commitments
+#### Commitments
 
 | Commitment | Door | How to make it reversible |
 | ---------- | ---- | ------------------------- |
 
-### Incumbent reply
+#### Incumbent reply
 
 <rival> would <countermove>, costing them <what>. Our answer: <answer>.
 
-### Cap
+#### Cap
 
 Most this can cost: <money> and <months>. If it fails, what remains: <list>.
 ```

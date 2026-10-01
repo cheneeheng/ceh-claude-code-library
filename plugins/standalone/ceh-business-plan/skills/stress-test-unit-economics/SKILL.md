@@ -1,14 +1,8 @@
 ---
 name: stress-test-unit-economics
 description: >-
-  Load this skill when a business plan's numbers need to be believed before money is spent: build
-  the per-unit model with the arithmetic shown, find the cost floor, date the cash low point, and
-  flex each input to find the one that turns the business unprofitable. Trigger on "do the numbers
-  work", "check my unit economics", "is this profitable", "what should I charge", "how much runway
-  do I need", "when do we break even", "LTV and CAC", "build the financial model", "will this make
-  money", or when a plan states revenue with no arithmetic behind it. Not for sizing the market
-  top-down, not for a multi-year investor spreadsheet, and not for testing whether customers want
-  the product at all (use ceh-business-plan:develop-business-plan).
+  Builds a business plan's per-unit model with the arithmetic shown, dates the cash low point, and
+  finds the one input that kills the business, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0
@@ -44,9 +38,12 @@ are sold. Done is a unit model, a cash timeline, and a sensitivity table in §08
    break-even, is the kill input.
 8. Apply the margin of safety: the plan must still work with the two weakest inputs at their bad
    case together. (Benjamin Graham's principle, Buffett's first rule: do not lose the money.)
-9. Show the user the three tables and ask about the kill input first, one question per turn.
-10. Write §08 and §11, add the kill input to §12 with its cheapest test, and re-score criteria 5
-    and 6 of the PMF gate.
+9. Write §08 and §11 now, and add the kill input to §12 as one line with its cheapest test, ending
+   `(stress-test-unit-economics)`. Writing before asking keeps the model if the session is
+   interrupted.
+10. Show the user the three tables and ask about the kill input first, one question per turn,
+    three questions at most. Revise the tables in place after each answer. An input still open
+    stays tagged `[assumption]`. Then re-score criteria 5 and 6 of the PMF gate.
 
 ## Checks on the model
 
@@ -81,10 +78,12 @@ before applying one.
 
 ## Output
 
-Written into §08 (unit model, checks) and §11 (cash, sensitivity):
+`### Unit model` goes into §08 and `### Cash and sensitivity` into §11. A re-run replaces both:
 
 ```markdown
-### Unit model — unit: <one customer per month>
+### Unit model
+
+Unit: <one customer per month>
 
 | Line                  | Value | Arithmetic or source    | Tag |
 | --------------------- | ----- | ----------------------- | --- |
@@ -96,13 +95,15 @@ Written into §08 (unit model, checks) and §11 (cash, sensitivity):
 | Expected lifetime     |       |                         |     |
 | Lifetime value        |       | contribution x lifetime |     |
 
-### Cash
+### Cash and sensitivity
+
+#### Cash
 
 - Cash conversion cycle: <days>, <collect before or after paying>
 - Lowest balance: <amount> in <month>
 - Default alive: <yes | no>, break-even in <month> against cash-out in <month>
 
-### Sensitivity
+#### Sensitivity
 
 | Input | Base | Bad case | Why that bad case | Unit result | Cash-out month |
 | ----- | ---- | -------- | ----------------- | ----------- | -------------- |
@@ -115,7 +116,7 @@ Written into §08 (unit model, checks) and §11 (cash, sensitivity):
 - The unit loses money at the base case and no price or cost change the user accepts fixes it →
   report that the business does not work as planned, with the gap in money per unit.
 - There is no price and no customer signal to anchor one → stop and name
-  `ceh-business-plan:develop-business-plan`. A model on a guessed price tests nothing.
+  `ceh-business-plan:find-product-market-fit`. A model on a guessed price tests nothing.
 
 ## Hands off to
 

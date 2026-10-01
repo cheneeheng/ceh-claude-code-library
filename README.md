@@ -172,7 +172,8 @@
 
 | Skill                      | Invoke                                     | When                                                                                                                                                |
 | -------------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Develop Business Plan      | `/ceh-business-plan:develop-business-plan` | A product idea or an existing plan needs product-market fit: drafts from any plan, PRD, or pitch, or interviews, then loops until a PMF gate passes |
+| Develop Business Plan      | `/ceh-business-plan:develop-business-plan` | Anything about a business plan: the single entry point, which finds the plan, works out the moment, and routes to the specialist below that owns it |
+| Find Product-Market Fit    | Model-only, no slash command               | A product idea or an existing plan needs product-market fit: drafts from any plan, PRD, or pitch, or interviews, then loops until a PMF gate passes |
 | Review Business Plan       | Model-only, no slash command               | A plan needs a verdict before time or money goes in: report-only score on seven lenses, one headline finding, and the skill to run next             |
 | Sharpen Strategy           | Model-only, no slash command               | The plan cannot say why it wins or what it refuses: where to play, how to win, what to decline, checked against nine tests                          |
 | Stress-Test Unit Economics | Model-only, no slash command               | The numbers must be believed before spending: per-unit model with arithmetic, cash low point, and the input that kills the business                 |

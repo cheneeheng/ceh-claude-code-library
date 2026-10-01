@@ -1,15 +1,8 @@
 ---
 name: sharpen-strategy
 description: >-
-  Load this skill when a business plan has a product and a customer but no real answer to "why you,
-  and why can't it be copied": turn it into an explicit strategy of where to play, how to win, and
-  what to refuse, then run nine tests on it (trade-off, copy cost, ten-year, pricing power, small
-  pond, activity fit, why now, competence, fresh owner). Trigger on "what's our moat", "how do we
-  differentiate", "what's our strategy", "we're trying to do too much", "what should we say no to",
-  "a competitor could just copy this", "position this against X", or when a plan lists features
-  where a strategy should be. Not for finding out whether anyone wants the product (use
-  ceh-business-plan:develop-business-plan) and not for the cost and price model (use
-  ceh-business-plan:stress-test-unit-economics).
+  Turns a business plan's strengths into a strategy of where to play, how to win, and what to
+  refuse, checked against nine tests, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0
@@ -34,12 +27,17 @@ a rival cannot copy cheaply, and that visibly give something up. Done is a §04 
      cannot give.
    - **What we refuse:** at least three things a reasonable competitor does and this plan will not.
 4. Run the nine tests. Mark each pass, fail, or untested, with the reason in one line.
-5. Show the draft and the test results. Then ask about the worst failure, one question per turn,
-   offering your own hypothesis for the user to correct.
-6. Fold each answer into the statement, re-run the tests it touches, and repeat until every test
-   passes or has a cheap dated test attached.
-7. Write the block into §04, update §06 with the copy-cost finding for each named competitor, and
-   move anything now refused out of §05, §09, and §13.
+5. Write the block into §04 now, then show it with the test results. Writing before asking keeps
+   the draft if the session is interrupted.
+6. Ask about the worst failure, one question per turn, offering your own hypothesis for the user
+   to correct. Fold each answer into §04 in place and re-run the tests it touches. Stop when
+   every test passes or has a cheap dated test attached, or after five questions, whichever comes
+   first. A test still failing then stays in the table as a failure.
+7. Update §06 with one copy-cost line per named competitor, ending `(sharpen-strategy)`, and
+   re-score criterion 3 of the PMF gate.
+8. List what §05, §09, and §13 now contain that the strategy refuses, and ask the user to confirm
+   the list before removing anything. Never touch another skill's subsection: report a conflict
+   with it instead.
 
 ## The nine tests
 
@@ -104,7 +102,7 @@ Written into §04 of `BUSINESS_PLAN.md`:
 ## Stop conditions
 
 - The plan has no named customer or no stated problem → strategy has nothing to stand on. Report
-  that and name `ceh-business-plan:develop-business-plan`.
+  that and name `ceh-business-plan:find-product-market-fit`.
 - Every candidate advantage fails the copy-cost test and the user has no further material → write
   the block with the failures showing and say plainly that the plan has no defensible edge yet.
 
