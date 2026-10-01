@@ -1,14 +1,8 @@
 ---
 name: review-business-plan
 description: >-
-  Load this skill when a business plan exists and someone wants a verdict on it before committing
-  time or money: read the plan the way a board of seasoned operators would, score it on seven
-  lenses (customer, edge, focus, money, reach, survival, execution), and name the one finding that
-  most changes the plan. Report-only, it edits nothing. Trigger on "review my business plan",
-  "is this plan any good", "what would an investor say", "poke holes in this plan", "board review",
-  "second opinion on the plan", or when a plan is about to be pitched, funded, or built on. Not for
-  writing the plan or finding product-market fit (use ceh-business-plan:develop-business-plan), and
-  not for fixing a weak lens, which each has its own skill named in the report.
+  Report-only board review of a business plan that scores seven lenses and names the one finding
+  that most changes it, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0
@@ -87,7 +81,7 @@ test.
 ## Stop conditions
 
 - No plan exists, only an idea → say there is nothing to review yet and name
-  `ceh-business-plan:develop-business-plan` as the place to start.
+  `ceh-business-plan:find-product-market-fit` as the place to start.
 - The plan describes a different product than the app plan or repository it sits beside → report
   the mismatch as the headline finding. Every other score is unreliable until it is settled.
 
@@ -95,7 +89,7 @@ test.
 
 Each handoff is conditional on the lens scoring below 2, so the user chooses which to run.
 
-- Customer → `ceh-business-plan:develop-business-plan`
+- Customer → `ceh-business-plan:find-product-market-fit`
 - Edge or Focus → `ceh-business-plan:sharpen-strategy`
 - Money → `ceh-business-plan:stress-test-unit-economics`
 - Reach → `ceh-business-plan:plan-go-to-market`

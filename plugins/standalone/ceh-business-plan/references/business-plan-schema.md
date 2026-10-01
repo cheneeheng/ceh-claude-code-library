@@ -5,7 +5,7 @@ the repo root (or alongside the app plans it derives from). It is a **living doc
 interview loop revises it in place, not a fresh copy. When it derives from app plans, it carries a
 `derived_from` field naming the plan stems it was built on.
 
-`develop-business-plan` creates the file and owns all 13 sections. The specialist skills each
+`find-product-market-fit` creates the file and owns all 13 sections. The specialist skills each
 deepen named sections with one subsection, listed under [Specialist subsections](#specialist-subsections).
 
 ## Frontmatter

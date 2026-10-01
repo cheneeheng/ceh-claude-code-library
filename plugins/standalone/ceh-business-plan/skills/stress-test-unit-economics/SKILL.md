@@ -1,14 +1,8 @@
 ---
 name: stress-test-unit-economics
 description: >-
-  Load this skill when a business plan's numbers need to be believed before money is spent: build
-  the per-unit model with the arithmetic shown, find the cost floor, date the cash low point, and
-  flex each input to find the one that turns the business unprofitable. Trigger on "do the numbers
-  work", "check my unit economics", "is this profitable", "what should I charge", "how much runway
-  do I need", "when do we break even", "LTV and CAC", "build the financial model", "will this make
-  money", or when a plan states revenue with no arithmetic behind it. Not for sizing the market
-  top-down, not for a multi-year investor spreadsheet, and not for testing whether customers want
-  the product at all (use ceh-business-plan:develop-business-plan).
+  Builds a business plan's per-unit model with the arithmetic shown, dates the cash low point, and
+  finds the one input that kills the business, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0
@@ -115,7 +109,7 @@ Written into §08 (unit model, checks) and §11 (cash, sensitivity):
 - The unit loses money at the base case and no price or cost change the user accepts fixes it →
   report that the business does not work as planned, with the gap in money per unit.
 - There is no price and no customer signal to anchor one → stop and name
-  `ceh-business-plan:develop-business-plan`. A model on a guessed price tests nothing.
+  `ceh-business-plan:find-product-market-fit`. A model on a guessed price tests nothing.
 
 ## Hands off to
 

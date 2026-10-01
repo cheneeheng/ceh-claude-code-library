@@ -232,9 +232,9 @@ the initial backend directory tree. Add it here as a copy when `ceh-scaffolding`
 **Shared:** the ITER frontmatter keys with `patch: true`, no `mvp`, `depends_on` the terminator or the
 prior patch, and `sections_changed` within §04/§05. The rest of the plan schema (file naming, version
 families, SKELETON and ITER frontmatter, terminator, pointers, resolution order) lives once in
-`plan-schema.md` at the plugin root, read through `${CLAUDE_PLUGIN_ROOT}` by all five skills. In
-agent-skills `ceh-business-plan:develop-business-plan` carries a separate `plan-schema.md`. Add it
-here as a copy when `ceh-business-plan` migrates.
+`plan-schema.md` at the plugin root, read through `${CLAUDE_PLUGIN_ROOT}` by all five skills.
+`ceh-business-plan:find-product-market-fit` reads plan files too, but carries no copy: it inlines
+the three rules it uses (the file glob, the backward `depends_on` walk, and pointers).
 
 ## Section contents (§01-§06 specs and the schema's Sections table)
 

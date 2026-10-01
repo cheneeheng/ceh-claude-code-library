@@ -1,15 +1,8 @@
 ---
 name: sharpen-strategy
 description: >-
-  Load this skill when a business plan has a product and a customer but no real answer to "why you,
-  and why can't it be copied": turn it into an explicit strategy of where to play, how to win, and
-  what to refuse, then run nine tests on it (trade-off, copy cost, ten-year, pricing power, small
-  pond, activity fit, why now, competence, fresh owner). Trigger on "what's our moat", "how do we
-  differentiate", "what's our strategy", "we're trying to do too much", "what should we say no to",
-  "a competitor could just copy this", "position this against X", or when a plan lists features
-  where a strategy should be. Not for finding out whether anyone wants the product (use
-  ceh-business-plan:develop-business-plan) and not for the cost and price model (use
-  ceh-business-plan:stress-test-unit-economics).
+  Turns a business plan's strengths into a strategy of where to play, how to win, and what to
+  refuse, checked against nine tests, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0
@@ -104,7 +97,7 @@ Written into §04 of `BUSINESS_PLAN.md`:
 ## Stop conditions
 
 - The plan has no named customer or no stated problem → strategy has nothing to stand on. Report
-  that and name `ceh-business-plan:develop-business-plan`.
+  that and name `ceh-business-plan:find-product-market-fit`.
 - Every candidate advantage fails the copy-cost test and the user has no further material → write
   the block with the failures showing and say plainly that the plan has no defensible edge yet.
 

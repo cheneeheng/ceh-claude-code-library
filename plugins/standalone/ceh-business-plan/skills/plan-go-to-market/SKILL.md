@@ -1,15 +1,8 @@
 ---
 name: plan-go-to-market
 description: >-
-  Load this skill when a business plan must say how the first customers are actually won: name the
-  first ten, choose one channel, write the customer-facing press release and hard questions, design
-  the first taste of value, do the channel arithmetic, and set a short pass-or-fail channel test.
-  Trigger on "how do I get my first customers", "go-to-market plan", "launch plan", "how do we sell
-  this", "which channel should we use", "nobody is signing up", "plan the launch", "customer
-  acquisition", "where do I find customers", or when a plan lists five marketing channels and
-  commits to none. Not for search visibility (use ceh-seo), not for writing the launch post (use
-  ceh-blog:draft-post), and not for deciding which segment to serve (use
-  ceh-business-plan:sharpen-strategy).
+  Writes a business plan's go-to-market section, with the first ten customers, one channel, its
+  arithmetic, and a pass-or-fail channel test, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0
@@ -124,7 +117,7 @@ Written into §09 of `BUSINESS_PLAN.md`:
 ## Stop conditions
 
 - The user cannot name a single candidate customer or the list they come from → stop. The segment
-  is not yet real. Name `ceh-business-plan:develop-business-plan`.
+  is not yet real. Name `ceh-business-plan:find-product-market-fit`.
 - Every plausible channel costs more than the §08 ceiling → report that the business cannot reach
   its customers at this price, with the gap in money per customer.
 

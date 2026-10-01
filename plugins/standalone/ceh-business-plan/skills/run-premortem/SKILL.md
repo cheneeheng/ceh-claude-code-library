@@ -1,15 +1,8 @@
 ---
 name: run-premortem
 description: >-
-  Load this skill when a business plan is about to receive a real commitment (money, a resignation,
-  a hire, a lease, a launch date) and nobody has worked out how it fails: assume the business is
-  dead in 18 months, write the specific stories of how, rank them, and attach to each an early
-  warning signal, a kill criterion set in advance, and a cap on the loss. Trigger on "what could go
-  wrong", "run a premortem", "what are the risks", "should I quit my job for this", "am I missing
-  something", "play devil's advocate", "stress-test this plan", "when should we give up", "what if
-  a big competitor does this", or before any decision that is hard to undo. Not for a general
-  review of plan quality (use ceh-business-plan:review-business-plan) and not for the numeric
-  sensitivity table (use ceh-business-plan:stress-test-unit-economics).
+  Premortem on a business plan that writes how it fails and gives each top risk a warning signal, a
+  kill criterion set in advance, and a loss cap, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 license: Apache-2.0
