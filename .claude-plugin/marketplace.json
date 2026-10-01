@@ -73,6 +73,18 @@
       "source": "./plugins/ceh-documentation",
       "version": "1.0.0",
       "description": "CEH documentation: write user-facing documentation for a project — a full docs set, user guides and operator runbooks, an exhaustive API reference, concept pages with sourced design rationale, and runnable examples."
+    },
+    {
+      "name": "ceh-ag-ui",
+      "source": "./plugins/ceh-ag-ui",
+      "version": "1.0.0",
+      "description": "CEH AG-UI: generative-UI canvases for agents that speak the AG-UI protocol — a React + Vite canvas where the agent places components from a fixed, themed catalogue (Tidewater by default), adding catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps."
+    },
+    {
+      "name": "ceh-usability-audit",
+      "source": "./plugins/ceh-usability-audit",
+      "version": "1.0.0",
+      "description": "CEH usability audit: measure whether a non-expert can actually use what you built — cold zero-context walkthroughs by persona-constrained subagents that report where they stalled and how many steps each milestone cost against a budget set before the walk, a five-question interface audit across web UI/CLI/library/app surfaces, a three-part rewrite pass over every user-reachable error message, and a plain-language pass over labels and copy. Findings are ranked by observed outcome, not by how bad they look."
     }
   ]
 }

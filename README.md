@@ -19,15 +19,17 @@
 | Blog                  | `ceh-blog`              | Blog posts in a personal, series-first voice: draft from a topic, repo, or notes (interviewing when material is thin), edit an existing draft, repurpose a finished post for X, LinkedIn, TL;DR, and newsletters                                                                                                                         |
 | Plan Build Review     | `ceh-plan-build-review` | The plan-driven development loop: plan a fullstack app one release at a time or all the way to MVP, implement from the plan, review the implementation against it, and patch a built version with small non-feature changes                                                                                                              |
 | Documentation         | `ceh-documentation`     | User-facing documentation: a full docs set under `docs/`, user guides and operator runbooks, an exhaustive API reference, concept pages with sourced design rationale, and runnable examples                                                                                                                                             |
+| AG-UI                 | `ceh-ag-ui`             | Generative-UI canvases for AG-UI agents: the agent places components from a fixed, Tidewater-styled catalogue and can never restyle them; catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps. Worked examples: [`examples/ceh-ag-ui/`](examples/ceh-ag-ui/)                         |
+| Usability Audit       | `ceh-usability-audit`   | Measure whether a non-expert can actually use what you built: cold persona-constrained walkthroughs (`novice-walker`), a five-question interface audit across web UI/CLI/library/app surfaces, error-message rewrites, and a plain-language pass                                                                                         |
 
 ### Categorization
 
-| Tier                  | Loaded            | Plugins                                                             |
-| --------------------- | ----------------- | ------------------------------------------------------------------- |
-| **Scenario bundle**   | one per situation | —                                                                   |
-| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`   |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation` |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`      |
+| Tier                  | Loaded            | Plugins                                                                                    |
+| --------------------- | ----------------- | ------------------------------------------------------------------------------------------ |
+| **Scenario bundle**   | one per situation | —                                                                                          |
+| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                          |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit` |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                |
 
 ---
 
@@ -138,6 +140,25 @@
 | Write Concept Docs        | `/ceh-documentation:write-concept-docs`        | Concept pages: the mental model and the design rationale, each traced to a source, never invented                           |
 | Write Examples            | `/ceh-documentation:write-examples`            | New runnable programs under `examples/`: a numbered feature tour and copy-paste recipes, each run before it is kept         |
 
+### AG-UI (`ceh-ag-ui`)
+
+| Skill                | Invoke                            | When                                                                                                                                                                       |
+| -------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Build AG-UI          | `/ceh-ag-ui:build-ag-ui`          | Starting a generative-UI canvas for an AG-UI agent: own template or the bundled one (React + Vite + `@ag-ui/client`, seven catalogue components, mock agent), styling lock |
+| Add Canvas Component | `/ceh-ag-ui:add-canvas-component` | Adding a component the agent can place: agent-facing description, content-only zod schema, example fixture, theme-only markup, mock verification                           |
+| Build AG-UI Agent    | `/ceh-ag-ui:build-ag-ui-agent`    | Building the Claude-backed AG-UI server: append-only transcript per thread, end the run on a frontend tool call, held backend results, `RUN_ERROR` on every failure        |
+| Add Live State Panel | `/ceh-ag-ui:add-live-state-panel` | A live value the agent keeps updating: `STATE_SNAPSHOT` / `STATE_DELTA`, one writer per key, a fixed validated panel                                                       |
+| Add Human Approval   | `/ceh-ag-ui:add-human-approval`   | The agent must ask before acting: AG-UI interrupts, a fixed approval card, one resume for every open interrupt                                                             |
+
+### Usability Audit (`ceh-usability-audit`)
+
+| Skill                | Invoke                                      | When                                                                                                                                                           |
+| -------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Walk First Run       | `/ceh-usability-audit:walk-first-run`       | Can a stranger reach first success: install, sign-up, setup, onboarding; cold persona walkers, milestones capped by an action budget, looped to a 5-point gate |
+| Audit Interface      | `/ceh-usability-audit:audit-interface`      | They are already in: the five questions every web UI/CLI/API/screen must answer unasked, an anti-pattern sweep, the naming test, and the persona battery       |
+| Audit Error Messages | `/ceh-usability-audit:audit-error-messages` | Anything a user reads when something goes wrong: the three-part rule (what happened, what was wrong, what to do next) over every user-reachable string         |
+| Write Plain Language | `/ceh-usability-audit:write-plain-language` | Labels, help text, empty states, confirmation dialogs, onboarding copy: vocabulary floor, sentence rules, and an explicit never-simplify list                  |
+
 ---
 
 ## Agents
@@ -164,6 +185,12 @@
 | Vitest Integration Tester | `@"ceh-web-frontend:vitest-integration-tester (agent)"` | Components wired with real shared state and MSW network handlers |
 | Playwright System Tester  | `@"ceh-web-frontend:playwright-system-tester (agent)"`  | Playwright E2E or smoke tests against a running stack            |
 
+### Usability Audit (`ceh-usability-audit`)
+
+| Agent         | Invoke                                         | When                                                                                                                                               |
+| ------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Novice Walker | `@"ceh-usability-audit:novice-walker (agent)"` | Walk a target cold under one persona toward one goal and report where it stalled, without using what it knows about such tools (Sonnet, read-only) |
+
 ---
 
 ## Installing in Claude Code
@@ -188,7 +215,12 @@
 /plugin install ceh-blog@ceh-claude-code-library --scope user
 /plugin install ceh-plan-build-review@ceh-claude-code-library --scope user
 /plugin install ceh-documentation@ceh-claude-code-library --scope user
+/plugin install ceh-ag-ui@ceh-claude-code-library --scope user
+/plugin install ceh-usability-audit@ceh-claude-code-library --scope user
 ```
+
+Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-ag-ui` brings
+`ceh-web-frontend`.
 
 ### Manual installation (alternative)
 
@@ -211,7 +243,9 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/ceh-claude-code-library/plugins/ceh-seo" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-blog" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-plan-build-review" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-documentation" }
+    { "path": "~/ceh-claude-code-library/plugins/ceh-documentation" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-ag-ui" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-usability-audit" }
   ]
 }
 ```

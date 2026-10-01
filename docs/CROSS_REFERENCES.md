@@ -276,6 +276,38 @@ self-contained, an iterations-only version depends on the prior family's termina
 `depends_on` names artifacts by stem and points only backward. The shared rules also live in
 `plan-schema.md`, so a change goes to both planners and to that file.
 
+## Usability persona set and severity scale
+
+**Canonical:** `plugins/ceh-usability-audit/skills/walk-first-run/SKILL.md` — § The personas, § 5. Score by observed outcome, not by appearance
+
+| Copy                                                          | Section                                                             | Diverges                                                                                       |
+| ------------------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `plugins/ceh-usability-audit/skills/audit-interface/SKILL.md` | § 5. Run the persona battery, § 6. Rank by observed outcome         | none: both tables are verbatim                                                                 |
+| `plugins/ceh-usability-audit/README.md`                       | § The personas, § Severity — assigned by outcome, not by appearance | condensed for the reader: column wording differs, the five personas and four severities do not |
+| `plugins/ceh-usability-audit/agents/novice-walker.md`         | § Holding the persona                                               | the same five personas as second-person instructions to the walker, not a table                |
+
+**Shared:** the five personas (Blank Slate, Cautious Returner, Interrupted, Wrong Turn, Small
+Screen) with their constraints and the failure class each catches, the four severities (Blocker,
+Detour, Friction, Polish) with their assignment conditions, and the rule that severity comes from
+an observed walker outcome, with anything unobserved demoted to an unranked `Hypotheses` list. The
+tables are inlined in both skills rather than shared through the plugin's `references/` because
+each is the core of its skill's procedure and the agent needs a different form.
+
+## AG-UI styling lock and canvas extensions
+
+**Canonical:** `plugins/ceh-ag-ui/skills/build-ag-ui/assets/canvas-template/web/src/catalogue/define.ts` and `web/src/useAgent.ts` — `STYLE_KEY`, `defineComponent`, `render` (the enforced code)
+
+| Copy                                                     | Section                                         | Diverges                                   |
+| -------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------ |
+| `plugins/ceh-ag-ui/skills/build-ag-ui/SKILL.md`          | § The styling lock                              | the three layers, described                |
+| `plugins/ceh-ag-ui/skills/add-canvas-component/SKILL.md` | § Schema, content only, § Component, theme only | the same rules at authoring time           |
+| `plugins/ceh-ag-ui/skills/add-live-state-panel/SKILL.md` | § 3. Canvas side, § Rules                       | state is validated and styled the same way |
+| `plugins/ceh-ag-ui/skills/add-human-approval/SKILL.md`   | § 2. Canvas side, § The approval card           | the approval card's fixed look             |
+
+**Shared:** schemas carry content only (no `style`/`className`/`color`/`size`/`variant`…), a needed
+visual choice is a semantic enum mapped to a theme class, agent output is rendered only after
+`safeParse`, and components use theme tokens and classes only.
+
 ---
 
 Entry shape:
