@@ -12,6 +12,9 @@ description: >-
   yet described, so this stays the entry point even with nothing written down. Not for
   evaluating a skill that already exists, not for adding a
   component to this plugin repo, and not for running a workflow that has already been built.
+disable-model-invocation: false
+user-invocable: true
+license: Apache-2.0
 ---
 
 # Build an Agentic Workflow

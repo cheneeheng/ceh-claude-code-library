@@ -8,6 +8,9 @@ description: >-
   `build-agentic-workflow` finds its inputs incomplete. Produces the spec only. Not for deciding one
   skill vs a workflow, designing steps and gates, or writing any `SKILL.md` — that is
   ceh-workflow-builder:build-agentic-workflow, which reads this spec.
+disable-model-invocation: false
+user-invocable: true
+license: Apache-2.0
 ---
 
 # Interview a Workflow Task

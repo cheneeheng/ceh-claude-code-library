@@ -10,11 +10,14 @@ description: >-
   time at all - telling someone to keep the git store another quarter is a normal outcome. Covers
   schema inference, pinned-snapshot export, backfill, dual-write, verification and per-project
   cutover. Not for building the store (use ceh-git-datastore:build-git-datastore).
+disable-model-invocation: false
+user-invocable: true
 compatibility: >-
   Requires the git CLI (2.x) on PATH and Python 3.9+ for the bundled `scripts/gitexport.py` and
   `scripts/verify.py`, which are standard library only and connect to no database. Loading the
   export additionally needs the target engine and its client: PostgreSQL with `psql`, or SQLite
   with `sqlite3`. Neither is assumed installed.
+license: Apache-2.0
 ---
 
 # Migrating a git-backed datastore to a database

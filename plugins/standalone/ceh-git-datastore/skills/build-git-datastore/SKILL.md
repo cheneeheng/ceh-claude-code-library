@@ -10,11 +10,14 @@ description: >-
   evaluate, and the first thing it does is run a gate that often says no. Not for leaving the store
   once it stops fitting (use ceh-git-datastore:migrate-git-datastore), and not for schema design in
   a real database.
+disable-model-invocation: false
+user-invocable: true
 compatibility: >-
   Requires the git CLI (2.x) on PATH and Python 3.9+ to run the bundled `scripts/gitstore.py` and
   `scripts/sync.py`, which use the standard library only - no pip install, no database, no
   database driver. Deployment also needs a persistent local disk; `sync.py` needs network access
   and push permission on the backup remote.
+license: Apache-2.0
 ---
 
 # Git-backed datastore
