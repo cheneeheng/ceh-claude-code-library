@@ -4,8 +4,8 @@ description: >-
   Load this skill when setting up or configuring the Python environment for a library: installing
   dependencies with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming
   conventions, or configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command
-  is run, or a question arises about code style, type annotations, or import ordering. For web
-  service environment (uvicorn/asyncpg) use ceh-python-service instead.
+  is run, or a question arises about code style, type annotations, or import ordering. Not for web
+  service environments with uvicorn or asyncpg (use ceh-python-service:configure-python-service-env).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
@@ -17,7 +17,20 @@ license: Apache-2.0
 
 # Configure the Python Library Environment
 
-## Environment
+Keep a library's environment on uv, with a minimal runtime dependency set and one lint and type
+config. Done when `ruff` and `mypy` pass and `pyproject.toml` matches the config below.
+
+## Procedure
+
+1. Run every command through `uv run`, and change dependencies only with `uv add` / `uv sync`.
+2. Before adding a runtime dependency, check that every consumer should inherit it. If not, make it
+   a dev dependency or an optional extra.
+3. Write code to the coding style below.
+4. Before every PR, run the three checks under Linting and type checking.
+
+## Rules
+
+### Environment
 
 - Python: **3.12** | Package manager: **uv** | Virtual env: `.venv/` (managed by uv)
 - Project manifest: `pyproject.toml` | Lockfile: `uv.lock` (never edit manually)
@@ -65,7 +78,7 @@ ignore_missing_imports = false
 asyncio_mode = "auto"
 ```
 
-## Coding style
+### Coding style
 
 - Line length: **88 characters** — follow Google Python Style Guide
 - Type hints required on all function signatures and class attributes
@@ -113,7 +126,7 @@ from your_library.core import RetryPolicy
 
 Never use `time.sleep()` in async code — use `await asyncio.sleep()`.
 
-## Linting and type checking
+### Linting and type checking
 
 **ruff** for linting and formatting (do not add flake8, pylint, isort, or Black). **mypy** for type checking.
 

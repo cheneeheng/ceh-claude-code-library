@@ -22,9 +22,23 @@ license: Apache-2.0
 
 # Write FastAPI Endpoints
 
-## REST API design
+Write each endpoint as a thin route over a service, with one error contract and the service's
+cross-cutting concerns wired in. Done when the route follows the layer boundaries and every error
+leaves in the response shape below.
 
-### URL conventions
+## Procedure
+
+1. Pick the URL, method, and status code, and declare a `response_model`.
+2. Keep the route handler thin: validate through a Pydantic model, call a service injected with
+   `Depends`, return the result.
+3. Raise a domain exception from the service and map it to HTTP once, in a global handler.
+4. Log with structlog, carry the `correlation_id`, and keep the metrics and `/health` current.
+
+## Rules
+
+### REST API design
+
+#### URL conventions
 
 - Lowercase, hyphen-separated path segments: `/user-profiles`
 - Plural nouns for collections: `/sessions`
@@ -32,7 +46,7 @@ license: Apache-2.0
 - No verbs in URLs — HTTP methods express the action. A non-CRUD action is a sub-resource:
   `POST /resources/{id}/archive`
 
-### HTTP status codes
+#### HTTP status codes
 
 Standard semantics apply. The choices this service makes explicitly:
 
@@ -43,7 +57,7 @@ Standard semantics apply. The choices this service makes explicitly:
 
 Do not return `200` for errors. Do not return `500` for user input errors.
 
-### Error response shape
+#### Error response shape
 
 ```json
 {
@@ -61,18 +75,18 @@ Do not return `200` for errors. Do not return `500` for user input errors.
 | `message`        | Human-readable, safe to display                      |
 | `correlation_id` | Propagated from the request for log tracing          |
 
-### API versioning
+#### API versioning
 
 Prefer backward-compatible additions (new optional fields, new endpoints). Only version when a breaking change cannot be avoided. When required: use a URL prefix (`/v2/resources`), maintain `/v1/` for a documented deprecation period, and record the timeline in `ARCHITECTURE.md` Key Decisions.
 
-### Headers
+#### Headers
 
 | Header                           | Direction          | Purpose                        |
 | -------------------------------- | ------------------ | ------------------------------ |
 | `X-Correlation-ID`               | Request + Response | Request tracing                |
 | `Content-Type: application/json` | Both               | Required on all JSON endpoints |
 
-## Layer boundaries
+### Layer boundaries
 
 Each layer has one job. Route handlers are thin: validate input, call a service, return output.
 
@@ -92,7 +106,7 @@ async def create_session(
     return await service.create(body.topic)
 ```
 
-## Dependency injection
+### Dependency injection
 
 All dependencies in `app/core/dependencies.py`. Never instantiate services inside route handlers.
 
@@ -109,7 +123,7 @@ async def get_session_service(
     return SessionService(pool=pool, settings=settings)
 ```
 
-## Lifespan for startup and shutdown
+### Lifespan for startup and shutdown
 
 ```python
 @asynccontextmanager
@@ -127,11 +141,11 @@ app = FastAPI(lifespan=lifespan)
 
 Do not use the deprecated `@app.on_event("startup")`.
 
-## Response model
+### Response model
 
 Always declare `response_model=SomePydanticModel`. Never return raw dicts.
 
-## Middleware order
+### Middleware order
 
 Register in this order (FastAPI processes in reverse registration order):
 
@@ -140,7 +154,7 @@ Register in this order (FastAPI processes in reverse registration order):
 3. Rate limiting middleware
 4. Request logging middleware (innermost)
 
-## Correlation IDs
+### Correlation IDs
 
 Every request carries a `correlation_id`:
 
@@ -161,7 +175,7 @@ async def correlation_id_middleware(request: Request, call_next):
     return response
 ```
 
-## CORS configuration
+### CORS configuration
 
 ```python
 app.add_middleware(
@@ -175,17 +189,17 @@ app.add_middleware(
 
 Never use `allow_origins=["*"]` in production.
 
-## Rate limiting
+### Rate limiting
 
 Apply to all mutating endpoints and expensive read endpoints. Return `429 Too Many Requests` with a `Retry-After` header when exceeded. Apply per session on mutation endpoints (e.g. 10 req/min).
 
-## Input validation
+### Input validation
 
 - All request bodies validated through Pydantic models — reject with `422` on failure
 - Use `ConfigDict(extra='forbid')` on models receiving externally-sourced input (API requests, LLM output)
 - All LLM output must pass schema validation before any state mutation
 
-## Global exception handlers
+### Global exception handlers
 
 Register domain-to-HTTP mappings once in `app/core/middleware.py`:
 
@@ -207,7 +221,7 @@ async def handler(request: Request, exc: SessionNotFoundError):
 The `correlation_id` comes from the correlation-ID middleware (registered outermost). Include it so
 the body matches the error contract above (`code` / `message` / `correlation_id`).
 
-## Exception hierarchy
+### Exception hierarchy
 
 Define in `app/core/exceptions.py`:
 
@@ -229,7 +243,7 @@ class DomainValidationError(AppError):
 - Never raise `HTTPException` inside a service layer
 - Never swallow exceptions silently with bare `except:`
 
-## Structured logging
+### Structured logging
 
 All log output is structured JSON. Never use `print()` or unstructured interpolation.
 
@@ -254,7 +268,7 @@ Do not log at `INFO` on every request — use `DEBUG` for high-frequency events.
 
 **Never log:** secrets, tokens, passwords, PII, raw user-provided content, or full external API responses.
 
-## Required metrics
+### Required metrics
 
 | Metric                      | Type      | Labels                              |
 | --------------------------- | --------- | ----------------------------------- |
@@ -266,7 +280,7 @@ Do not log at `INFO` on every request — use `DEBUG` for high-frequency events.
 
 Use Prometheus-compatible instrumentation (`prometheus-fastapi-instrumentator` or equivalent).
 
-## Health check endpoint
+### Health check endpoint
 
 ```
 GET /health

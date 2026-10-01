@@ -35,7 +35,9 @@ separate commit of the pins. Instead, name the tests you would write (what they 
 they would live in) and state what stays unverified, so the user can ask for them. When tests were
 requested, the steps below apply in full.
 
-## 1. Check the baseline before touching anything
+## Procedure
+
+### 1. Check the baseline before touching anything
 
 ```bash
 pytest --cov=app.pricing --cov-report=term-missing     # the region you are about to change
@@ -44,7 +46,7 @@ pytest --cov=app.pricing --cov-report=term-missing     # the region you are abou
 **If coverage of that region is at or near zero, writing tests is the first task**, not the
 refactor. Refactoring uncovered code is editing blind.
 
-## 2. Pin current behavior with characterization tests
+### 2. Pin current behavior with characterization tests
 
 Where the suite is thin, capture what the code does **right now** — feed it realistic inputs, record
 the actual outputs, assert them.
@@ -75,7 +77,7 @@ def test_discount_current_behavior(total, tier, expected):
 Generate the input list from real data where you have it — production samples, fixtures, a log
 replay — because hand-picked inputs cluster on the paths you already have in mind.
 
-## 3. Golden files for large or structured output
+### 3. Golden files for large or structured output
 
 When the output is a document, a rendered page, a query plan, or a large object, assert against a
 recorded file rather than inline literals.
@@ -88,7 +90,7 @@ git add tests/golden/report.expected.json && git commit -m "test: pin render out
 Commit the golden file **before** the refactor, on its own. Then the refactor's diff shows whether
 the output moved, and the review sees it.
 
-## 4. Differential run — the strongest check
+### 4. Differential run — the strongest check
 
 Run the old and new implementations over the same inputs and compare. No expectations to write, no
 oracle to invent.
@@ -118,7 +120,7 @@ a temporary name until the diff run passes, then delete it.
 Feed it generated inputs if you have no corpus: a property-based generator comparing old against new
 is the cheapest high-coverage differential test there is (see `ceh-testing:design-test-cases`, rung 6, "oracle").
 
-## 5. The rule that makes all of it worth something
+### 5. The rule that makes all of it worth something
 
 **If you had to edit a characterization test or update a golden file to get green, behavior
 changed.**
@@ -132,7 +134,7 @@ That is the entire signal. When it fires, exactly two responses are legitimate:
 Silently regenerating the golden file because the new output "looks fine" throws away the only
 protection the process gave you. Treat an unexplained snapshot update in review as blocking.
 
-## Dependency and runtime upgrades
+### Dependency and runtime upgrades
 
 Same protocol, and the divergences are subtler: serialization format, float formatting, default
 timezone, sort stability, regex engine behavior, error types and messages, default timeouts.
@@ -141,7 +143,9 @@ Run the differential (step 4) with the lockfile as the only difference between t
 Pay attention to anything you serialize, persist, or hash — a changed representation of the same
 logical value still breaks stored data and cache keys.
 
-## Sequencing
+## Rules
+
+### Sequencing
 
 Baseline first, always: (1) coverage check → (2) characterization tests / golden files → (3) **commit
 those on their own** → (4) refactor → (5) suite green with **no test edits** → (6) differential run

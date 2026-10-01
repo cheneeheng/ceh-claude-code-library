@@ -86,7 +86,7 @@ Stop there. A bug fix is not a licence to test the whole module.
 
 Same commit. A bug-fix commit with no test is incomplete — flag it in review.
 
-## When it used to work — bisect on the reproducer
+### When it used to work — bisect on the reproducer
 
 A reproducer is not only a test; it is a decision procedure. If the behavior was correct at some
 earlier point, do not read the diff hoping to spot the cause — let git find the commit:
@@ -109,7 +109,22 @@ Two cases that need care: if the range spans a dependency or lockfile change, ad
 equivalent) to the run command, otherwise every commit is tested against today's dependencies; and
 mark commits that cannot build with `git bisect skip` rather than guessing good or bad.
 
-## Naming
+### When it will not reproduce deterministically
+
+Timing, ordering, concurrency, and environment bugs often will not fail on demand. Do not give up
+and ship untested — instead:
+
+- Run the candidate reproducer in a loop (`pytest --count=50`, `vitest --repeat 50`) or under
+  randomized order/seed. Intermittent red is still a reproduction.
+- Force the race directly rather than waiting for it: inject the delay, fire the two calls in
+  parallel, or call the operation twice. See `close-test-risk-gaps` for the concurrency and
+  idempotency recipes.
+- If it still will not reproduce, say so explicitly in the summary, ship the fix with the assertion
+  you _can_ make, and name what remains unverified. Never claim a fix is tested when it is not.
+
+## Rules
+
+### Naming
 
 Name the test after the **behavior that was wrong**, not the ticket or the fix.
 
@@ -122,9 +137,7 @@ Name the test after the **behavior that was wrong**, not the ticket or the fix.
 The name is what a future reader sees when the test breaks. `test_fix_1234` tells them nothing and
 invites deletion.
 
-## Rules
-
-Anti-patterns to refuse:
+### Anti-patterns to refuse
 
 - **Fix first, test after.** The test gets shaped by the code in front of you. If the fix is already
   written, stash it and run the new test against the broken version before you trust it.
@@ -134,16 +147,3 @@ Anti-patterns to refuse:
 - **Widening an existing test instead of adding one.** The new case gets buried and the failure
   message stops naming the bug.
 - **Asserting only that no exception was raised.** Assert the value.
-
-## When it will not reproduce deterministically
-
-Timing, ordering, concurrency, and environment bugs often will not fail on demand. Do not give up
-and ship untested — instead:
-
-- Run the candidate reproducer in a loop (`pytest --count=50`, `vitest --repeat 50`) or under
-  randomized order/seed. Intermittent red is still a reproduction.
-- Force the race directly rather than waiting for it: inject the delay, fire the two calls in
-  parallel, or call the operation twice. See `close-test-risk-gaps` for the concurrency and
-  idempotency recipes.
-- If it still will not reproduce, say so explicitly in the summary, ship the fix with the assertion
-  you _can_ make, and name what remains unverified. Never claim a fix is tested when it is not.

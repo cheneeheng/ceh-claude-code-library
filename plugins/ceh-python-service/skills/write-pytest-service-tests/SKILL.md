@@ -25,7 +25,20 @@ Framework: **pytest** with **pytest-asyncio** (`asyncio_mode = "auto"` in `pypro
 
 HTTP testing: `httpx.AsyncClient` (async, preferred) or FastAPI `TestClient` (sync)
 
-## Test structure
+Write service tests at the lowest tier that can show the behavior, with real PostgreSQL and mocked
+external APIs. Done when each test asserts one behavior and the suite leaves no database state behind.
+
+## Procedure
+
+1. Choose the inputs and scenarios first (see Hands off to).
+2. Put each test in `tests/unit/`, `tests/integration/`, or `tests/system/` by what it needs.
+3. Mock external APIs only. Never mock PostgreSQL in an integration test.
+4. Roll back every database write after the test.
+5. Run coverage and read the untested regions. Never add a test just to reach the floor.
+
+## Rules
+
+### Test structure
 
 ```
 backend/
@@ -38,18 +51,7 @@ backend/
 
 Test files mirror source structure. Naming: `test_<what>_<expected_behavior>.py`. One logical behavior per test.
 
-## Choosing what to test
-
-This skill covers the **tooling** — runner, fixtures, mocking, coverage. It does not decide
-_which_ inputs and cases a test should cover. Before writing the cases, run:
-
-> Invoke the Skill tool with skill="ceh-testing:design-test-cases"
-
-It supplies equivalence partitions, boundary values, decision tables, pairwise combinations,
-properties, and metamorphic relations — stack-agnostic technique that the sections below assume
-has already been applied.
-
-## Unit tests: no I/O
+### Unit tests: no I/O
 
 ```python
 class TestReasoningEngine:
@@ -61,7 +63,7 @@ class TestReasoningEngine:
         assert "invalid event type" in result.reason
 ```
 
-## Integration tests: real database, never mocked
+### Integration tests: real database, never mocked
 
 ```python
 class TestSessionsAPI:
@@ -79,14 +81,14 @@ class TestSessionsAPI:
 
 Each test that writes data must run in a transaction that rolls back after the test.
 
-## Mocking rules
+### Mocking rules
 
 - Mock the LLM API client in all tests (no real API calls)
 - Mock external HTTP services
 - Do **not** mock PostgreSQL in integration tests
 - Use `unittest.mock` or `pytest-mock`
 
-## Coverage floor
+### Coverage floor
 
 A floor for finding blind spots, not a goal. Below the number, look for the untested regions.
 Reaching it proves nothing and is never a reason to add tests.
@@ -99,3 +101,13 @@ Reaching it proves nothing and is never a reason to add tests.
 ```bash
 uv run pytest --cov=app --cov-report=term-missing
 ```
+
+## Hands off to
+
+This skill covers the **tooling** — runner, fixtures, mocking, coverage. It does not decide
+_which_ inputs and cases a test should cover. Before writing the cases:
+
+- Invoke the Skill tool with skill="ceh-testing:design-test-cases" to choose them. It supplies
+  equivalence partitions, boundary values, decision tables, pairwise combinations, properties, and
+  metamorphic relations — stack-agnostic technique that the sections above assume has already been
+  applied.

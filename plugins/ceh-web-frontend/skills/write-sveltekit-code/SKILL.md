@@ -22,7 +22,23 @@ license: Apache-2.0
 
 # Write SvelteKit Code
 
-## Route file naming
+Write SvelteKit routes and components on Svelte 5 runes, with data loaded in `load` functions and
+every network call going through one API client. Done when no component writes shared state directly
+and no server code touches a shared-state module.
+
+## Procedure
+
+1. Pick the route file by where the load runs: `+page.server.ts` for credentials or DB, `+page.ts`
+   otherwise.
+2. Return data from `load` and throw `error()` or `redirect()` from `@sveltejs/kit`.
+3. Keep shared state in a `.svelte.ts` module under `$lib/state/`, written from API responses only
+   and only in the browser.
+4. Pass components props and callbacks, and send every request through `apiClient`.
+5. Show errors through the central message map with the `correlation_id`.
+
+## Rules
+
+### Route file naming
 
 | File                | Purpose                                                                        |
 | ------------------- | ------------------------------------------------------------------------------ |
@@ -35,7 +51,7 @@ license: Apache-2.0
 
 Use `+page.server.ts` when the load requires server-side credentials or direct database access.
 
-## Load functions
+### Load functions
 
 ```ts
 export const load: PageServerLoad = async ({ params }) => {
@@ -49,7 +65,7 @@ export const load: PageServerLoad = async ({ params }) => {
 - Use `redirect()` from `@sveltejs/kit` for redirects — do not call `goto()` inside load functions
 - Load functions return data; they do not directly mutate state
 
-## Shared state: runes in `.svelte.ts` modules
+### Shared state: runes in `.svelte.ts` modules
 
 Svelte 5 is the standard: use runes, not `svelte/store` (`writable` / `derived`). Shared state lives
 in one `.svelte.ts` module under `src/lib/state/`. It is updated **only** from API responses, through
@@ -84,7 +100,7 @@ export function getOpenItems() {
 - Do not define shared state inside components — it lives in `$lib/state/`
 - Call `getOpenItems()` inside a template or a `$derived` so the read stays reactive
 
-## Components: props only, no direct state writes
+### Components: props only, no direct state writes
 
 ```svelte
 <script lang="ts">
@@ -96,7 +112,7 @@ export function getOpenItems() {
 </script>
 ```
 
-## Centralized API client
+### Centralized API client
 
 All `fetch` calls go through `src/lib/api/client.ts`. Components and shared-state modules never call `fetch` directly.
 
@@ -123,7 +139,7 @@ export const apiClient = {
 };
 ```
 
-## Environment variables
+### Environment variables
 
 ```ts
 import { PUBLIC_API_BASE_URL } from "$env/static/public"; // safe for browser
@@ -132,7 +148,7 @@ import { DATABASE_URL } from "$env/static/private"; // server-only
 
 Never use `import.meta.env.VITE_*`.
 
-## Error handling
+### Error handling
 
 ```ts
 class ApiRequestError extends Error {
@@ -172,7 +188,7 @@ Component pattern:
 - Map `error.code` values to user-friendly messages in a centralized map
 - Always show the `correlation_id` so users can report it
 
-## Derived values: `$derived` and `$derived.by`
+### Derived values: `$derived` and `$derived.by`
 
 ```svelte
 <script lang="ts">

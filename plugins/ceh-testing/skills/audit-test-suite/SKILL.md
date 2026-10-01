@@ -33,7 +33,9 @@ pass, timing, or coverage run. Check 1 only reads the test files, so it still ap
 each other check you would run (the command and what it would reveal) and state what stays
 unverified, so the user can ask for it. When a run was requested, the checks below apply in full.
 
-## 1. Assertion audit (seconds, no tooling)
+## Procedure
+
+### 1. Assertion audit (seconds, no tooling)
 
 Grep the suite for the four shapes that pass on almost any bug:
 
@@ -83,7 +85,7 @@ rg -tts -tjs 'toBeDefined\(\)|toBeTruthy\(\)|not\.toBeNull\(\)|toHaveBeenCalled\
 That last one is the signature defect of generated tests, and grep will not find it — read the
 assertions in any file you did not write by hand.
 
-## 2. Delete-the-code check (minutes, no tooling)
+### 2. Delete-the-code check (minutes, no tooling)
 
 Pick the three most important behaviors. For each, break the source deliberately — invert a
 comparison, return a constant, delete a line — and re-run.
@@ -93,7 +95,7 @@ comparison, return a constant, delete a line — and re-run.
 Do this by hand before reaching for mutation tooling; it takes two minutes and usually finds
 something.
 
-## 3. Mutation testing — on the diff only
+### 3. Mutation testing — on the diff only
 
 The automated form of check 2: mutate the source, re-run the tests, report which mutations survived.
 A surviving mutant is a change to production code that no test noticed.
@@ -126,7 +128,7 @@ For a large or slow suite, delegate the whole audit to a background subagent wit
 and tell it to use report-only mode (below) — the run is long and high-output, which is exactly what
 a background subagent is for.
 
-## 4. Flakiness and order dependence
+### 4. Flakiness and order dependence
 
 ```bash
 pytest -p randomly --count=3          # random order + seed, three passes
@@ -142,7 +144,7 @@ an unseeded RNG. Fix the sharing — never fix it by pinning the order or adding
 A flaky test is worse than no test: it trains everyone to re-run until green, which is how a real
 failure gets ignored.
 
-## 5. Level and speed
+### 5. Level and speed
 
 ```bash
 pytest --durations=10
@@ -155,7 +157,7 @@ the file.
 Also check the shape of the pyramid: if E2E tests outnumber unit tests, failures will be slow and
 will not localize.
 
-## 6. Coverage — used correctly
+### 6. Coverage — used correctly
 
 ```bash
 pytest --cov=app --cov-branch --cov-report=term-missing     # branch, not line
@@ -173,6 +175,16 @@ actively rewards worthless tests. Mutation survivors (check 3) are the metric wi
 Stronger structural criteria exist — condition coverage, MC/DC, def-use path coverage — and they are
 not worth reaching for here: they cost far more to satisfy than diff-scoped mutation testing and
 find less. Use them only under an external mandate (DO-178C, IEC 61508 and similar).
+
+## Rules
+
+- **Never delete or skip a failing test to get the suite green.** A red test is information; deleting
+  it destroys the information and keeps the bug. If a test is genuinely wrong, fix its assertion and
+  say why in the commit.
+- **Never weaken an assertion to make it pass.** Widening `== 42` to `is not None` converts a real
+  failure into a permanent blind spot.
+- **Never mark a test as expected-to-fail (`xfail` / `.skip`) without an issue reference and a
+  reason.** Unexplained skips accumulate until nobody knows what the suite covers.
 
 ## Output
 
@@ -198,15 +210,7 @@ subagent cannot ask the parent anything, so the report has to stand alone.
 - After the list, add: the commands run and their verdicts, including checks skipped and why (tool
   missing, timed out, not run); the zero-coverage files the diff touches; the 2–3 fixes worth making
   first, as concrete suggestions; and any bug found in source, reported and never fixed.
-- Confirm the suite is green first. If it is already failing, stop and report that: an audit of a
-  red suite is meaningless.
 
-## Rules
+## Stop conditions
 
-- **Never delete or skip a failing test to get the suite green.** A red test is information; deleting
-  it destroys the information and keeps the bug. If a test is genuinely wrong, fix its assertion and
-  say why in the commit.
-- **Never weaken an assertion to make it pass.** Widening `== 42` to `is not None` converts a real
-  failure into a permanent blind spot.
-- **Never mark a test as expected-to-fail (`xfail` / `.skip`) without an issue reference and a
-  reason.** Unexplained skips accumulate until nobody knows what the suite covers.
+- The suite is already failing → report that and stop. An audit of a red suite is meaningless.

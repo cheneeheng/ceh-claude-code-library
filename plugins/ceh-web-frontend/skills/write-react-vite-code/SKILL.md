@@ -19,7 +19,21 @@ license: Apache-2.0
 
 # Write React + Vite Code
 
-## Components: presentational by default
+Write React components that render props, with effects and data fetching in hooks and every network
+call going through one API client. Done when no component fetches directly and no secret reaches the
+bundle.
+
+## Procedure
+
+1. Write the component presentational: props in, callbacks out, one component per file.
+2. Put effects and data fetching in a `use*` hook that owns one concern.
+3. Keep state local until it is genuinely shared across distant components.
+4. Send every request through `apiClient`, and read config from `VITE_`-prefixed vars only.
+5. Show errors through the central message map with the `correlation_id`, under an error boundary.
+
+## Rules
+
+### Components: presentational by default
 
 Components render props and call callbacks. Side effects and data fetching live in hooks, not in render.
 
@@ -46,7 +60,7 @@ export function ItemPanel({ items, onItemClick }: Props) {
 - No business logic in components — extract it into hooks or `src/lib` modules.
 - Always type props explicitly; never use `any` (see `ceh-web-frontend:configure-bun-vite-env`).
 
-## Hooks
+### Hooks
 
 - Follow the Rules of Hooks: call hooks at the top level only, never conditionally.
 - Custom hooks are named `use*` and own one concern (data fetching, subscription, derived state).
@@ -73,13 +87,13 @@ export function useSession(sessionId: string) {
 }
 ```
 
-## State management
+### State management
 
 - Local UI state: `useState` / `useReducer`.
 - Shared server state: a data-fetching library (TanStack Query) or a small store — not prop drilling through many layers.
 - Do not reach for a global store until state is genuinely shared across distant components.
 
-## Routing
+### Routing
 
 Use **React Router**. Define routes in one place; keep route components thin (they compose hooks + presentational components).
 
@@ -92,7 +106,7 @@ const router = createBrowserRouter([
 
 - Read route params with `useParams`, navigate with `useNavigate` — never mutate `window.location`.
 
-## Centralized API client
+### Centralized API client
 
 All `fetch` calls go through `src/lib/api/client.ts`. Components and hooks never call `fetch` directly.
 
@@ -119,7 +133,7 @@ export const apiClient = {
 };
 ```
 
-## Environment variables
+### Environment variables
 
 ```ts
 const apiBase = import.meta.env.VITE_API_BASE_URL; // exposed to the browser — VITE_ prefix required
@@ -128,7 +142,7 @@ const apiBase = import.meta.env.VITE_API_BASE_URL; // exposed to the browser —
 - Only `VITE_`-prefixed vars are exposed to client code. Never put secrets in them.
 - Server-only secrets belong in a backend, never in a Vite frontend bundle.
 
-## Error handling
+### Error handling
 
 ```tsx
 class ApiRequestError extends Error {

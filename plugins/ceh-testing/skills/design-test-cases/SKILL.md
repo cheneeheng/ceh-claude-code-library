@@ -35,9 +35,9 @@ and which scenarios.**
 The second is the one you are more likely to produce. The ladder below exists as much to tell you
 **where to stop** as where to start.
 
-## The ladder
+## Procedure
 
-Walk it in order. **Each rung has a trigger; if the trigger is absent, skip the rung and say so.**
+Walk the ladder in order. **Each rung has a trigger; if the trigger is absent, skip the rung and say so.**
 Most functions need 1, 2, and 6 — reaching rung 7 or 9 on a pure helper is over-testing, not thoroughness.
 
 | Rung                 | Trigger — reach for it only when                    |
@@ -185,7 +185,9 @@ For each external dependency, make it fail once: raises the library's real excep
 missing, and fails **after** a partial write. In every case assert the state left behind, not only
 that the call raised — `order.status == "pending"` is the assertion that catches the real bug.
 
-## Assertion rules
+## Rules
+
+### Assertion rules
 
 - **Assert the value, not its existence.** `assert result is not None` and
   `expect(x).toBeDefined()` pass on almost every bug. Assert the actual expected value.
@@ -195,7 +197,7 @@ that the call raised — `order.status == "pending"` is the assertion that catch
 - **One behavior per test.** The failure message should name the bug without a debugger.
 - **Assert the state change too**, not only the return value — what got written, what got emitted.
 
-## How many tests is enough
+### How many tests is enough
 
 Not a coverage percentage. Coverage tells you which lines ran, never whether an assertion would
 have noticed them being wrong.

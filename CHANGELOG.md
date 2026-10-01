@@ -47,6 +47,7 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 - Make four `ceh-testing` skills (`test-a-bug-fix`, `verify-behavior-preserved`, `close-test-risk-gaps`, `audit-test-suite`) write no tests and run no suite unless the user asked for them: each names the test or check it would run and what stays unverified. This follows the agent coding contract without depending on it. The shared section is registered in `docs/CROSS_REFERENCES.md`
 - Reword the coverage percentages in `write-pytest-service-tests`, `write-pytest-library-tests`, `write-vitest-playwright-tests` and the `ceh-web-frontend` README as a floor for finding blind spots, not a goal, so they no longer contradict `design-test-cases` and `audit-test-suite`. The `vitest-unit-tester` agent reports the regions still untested instead of a coverage delta
 - Warn in `write-sveltekit-code` that shared-state modules are browser-only, because module-level state is shared across every user's request during server rendering, and guard `setSession` with `browser`
+- Align the skills and agents of `ceh-testing`, `ceh-python-service`, `ceh-python-library` and `ceh-web-frontend` with the `SKILL.md` and agent templates: every skill gets an intro, `## Procedure`, and `## Rules` (existing topic sections nested under it), with `## Output`, `## Stop conditions`, and `## Hands off to` where the content already existed. The three `design-test-cases` hand-offs move to `## Hands off to`, and every tester agent gains a `Report` step, an output example, and the "not run" rule
 
 ### Fixed
 

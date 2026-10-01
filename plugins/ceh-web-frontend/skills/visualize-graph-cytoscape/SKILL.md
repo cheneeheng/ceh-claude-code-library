@@ -30,9 +30,16 @@ Everything else — panels, search boxes, legends, detail views — is your own 
 
 The API below is based on version **v3.34.2**
 
-## Rule zero: read the checklist before writing code
+Done when the graph renders with readable labels and passes `references/checklist.md`.
 
-Most broken Cytoscape.js builds fail for one of eight reasons. Check every one of these
+## Procedure
+
+Follow these steps in order. Do not skip step 1 — picking the wrong layout is the difference between
+a legible diagram and a hairball. Read the checklist in step 0 before writing any code.
+
+### 0. Rule zero: read the checklist before writing code
+
+Most broken Cytoscape.js builds fail for one of ten reasons. Check every one of these
 before you consider a visualizer finished. They are listed in the order they usually bite.
 
 1. **The container must have a non-zero height before `cytoscape()` is called.**
@@ -98,11 +105,6 @@ l.one('layoutstop', fn); l.run();`. Use the second whenever the handler must als
     user's zoom, pan, and selection on every refresh. Diff into the existing instance
     with `syncGraph` (`references/integration.md`) and re-run the layout only when the
     topology actually changed.
-
-## Workflow
-
-Follow these steps in order. Do not skip step 1 — picking the wrong layout is the
-difference between a legible diagram and a hairball.
 
 ### 1. Classify the graph, then pick the layout
 
@@ -200,7 +202,7 @@ Copy-paste-ready implementations are in `references/recipes.md`.
 Run through `references/checklist.md` before declaring done. It is short and catches the
 failures that only appear at runtime.
 
-## Minimal working skeleton
+### Minimal working skeleton
 
 This runs as-is. Use it as the starting point rather than writing init from memory.
 
@@ -276,7 +278,7 @@ This runs as-is. Use it as the starting point rather than writing init from memo
 </script>
 ```
 
-## Loading the library
+### Loading the library
 
 - **npm**: `npm install cytoscape`, then `import cytoscape from 'cytoscape'`.
   `import * as cytoscape from 'cytoscape'` does **not** work — the default export is
@@ -290,7 +292,7 @@ This runs as-is. Use it as the starting point rather than writing init from memo
   cytoscape.use(fcose);
   ```
 
-### Extensions from a CDN
+#### Extensions from a CDN
 
 Guessing the UMD global name is the usual failure here, and a wrong guess fails silently
 until layout time. You do not have to guess: **the global is the package name in
@@ -348,7 +350,9 @@ Published npm versions are immutable, so a pinned jsDelivr URL keeps resolving �
 goes stale, it does not break. Do not spend effort verifying the URLs; spend it on the
 guard above, which is what actually catches a script tag that did not load.
 
-## Sizing and readable defaults
+## Rules
+
+### Sizing and readable defaults
 
 The most common way a technically-correct graph fails its user is being rendered at a
 zoom nobody can read. Work out the zoom _before_ deciding to fit.
@@ -401,7 +405,7 @@ the top two levels with expand on demand, or `circle: true` plus a starting zoom
 trees. Any of these is better than a fitted view of unreadable specks. Set `minZoom` to
 `MIN_LABEL_PX / FONT_PX` too, so users cannot hand-zoom into that state either.
 
-## Reference files (`${CLAUDE_SKILL_DIR}`)
+### Reference files (`${CLAUDE_SKILL_DIR}`)
 
 Load these as needed; do not read all of them upfront.
 
@@ -417,9 +421,9 @@ Load these as needed; do not read all of them upfront.
 - `scripts/to-elements.js` — data-shape converters and the `sanitize()` guard; require it
   rather than rewriting the conversion, and surface its `warnings`
 
-## When Cytoscape.js is the wrong tool
+## Stop conditions
 
-Say so rather than forcing it.
+Cytoscape.js is the wrong tool in the cases below. Say so rather than forcing it.
 
 - **Above ~5,000 elements** interaction gets sluggish even tuned; above ~10,000 it is the
   wrong library. Reach for Sigma.js, regl-based renderers, or server-side layout with a

@@ -40,9 +40,9 @@ that fires, name the test you would write (what it asserts and which file it wou
 what stays unverified, so the user can ask for it. When tests were requested, the classes below apply
 in full.
 
----
+## Procedure
 
-## 1. Concurrency and idempotency
+### 1. Concurrency and idempotency
 
 **Trigger fires if any of:** two requests can touch the same row; a read-modify-write happens outside
 a transaction; there is a retry, webhook, queue consumer, or cron; a counter, balance, or sequence is
@@ -80,7 +80,7 @@ in ten is still a race.
 
 ---
 
-## 2. Contract drift
+### 2. Contract drift
 
 **Trigger fires if:** you changed a shape that crosses a process boundary — an HTTP response body, an
 event or message payload, a stored JSON column, a public function signature in a library, or a
@@ -113,7 +113,7 @@ silently.
 
 ---
 
-## 3. Performance regression
+### 3. Performance regression
 
 **Trigger fires if:** the change is on a request-serving hot path; a loop iterates something
 unbounded or caller-supplied; a query runs inside a loop (the N+1 shape); a new `await`, network
@@ -139,7 +139,7 @@ The highest-value single assertion here is the N+1 count check. Add it once per 
 
 ---
 
-## 4. Authorization
+### 4. Authorization
 
 **Trigger fires if:** an endpoint accepts a user-supplied identifier; a response contains data owned
 by someone; there are roles, tenants, teams, or permissions; anything is admin-only.
@@ -174,7 +174,7 @@ Add one matrix per resource type, not per endpoint.
 
 ---
 
-## 5. Migration and rollout compatibility
+### 5. Migration and rollout compatibility
 
 **Trigger fires if:** the change ships a schema migration or a data backfill; a column is renamed,
 dropped, or made `NOT NULL`; a stored format or enum gains or loses a value; a cache key or

@@ -173,12 +173,12 @@ were requested.
 
 ## Choosing what to test (hand-off to design-test-cases)
 
-**Canonical:** `plugins/ceh-python-service/skills/write-pytest-service-tests/SKILL.md` — § Choosing what to test
+**Canonical:** `plugins/ceh-python-service/skills/write-pytest-service-tests/SKILL.md` — § Hands off to
 
-| Copy                                                                     | Section                 | Diverges |
-| ------------------------------------------------------------------------ | ----------------------- | -------- |
-| `plugins/ceh-python-library/skills/write-pytest-library-tests/SKILL.md`  | § Choosing what to test | none     |
-| `plugins/ceh-web-frontend/skills/write-vitest-playwright-tests/SKILL.md` | § Choosing what to test | none     |
+| Copy                                                                     | Section        | Diverges |
+| ------------------------------------------------------------------------ | -------------- | -------- |
+| `plugins/ceh-python-library/skills/write-pytest-library-tests/SKILL.md`  | § Hands off to | none     |
+| `plugins/ceh-web-frontend/skills/write-vitest-playwright-tests/SKILL.md` | § Hands off to | none     |
 
 **Shared:** the section word for word — the tooling-versus-inputs boundary, the
 `Invoke the Skill tool with skill="ceh-testing:design-test-cases"` call, and the list of what it

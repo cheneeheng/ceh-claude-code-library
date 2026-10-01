@@ -35,18 +35,19 @@ Frameworks: **Vitest** (unit + component), **Testing Library** (`@testing-librar
 
 Naming: `<subject>.test.ts` for unit/component, `<scenario>.spec.ts` for E2E. One behavior per test.
 
-## Choosing what to test
+Write each test at the lowest tier that can show the behavior. Done when each test asserts one
+behavior and nothing reaches the real network outside E2E.
 
-This skill covers the **tooling** — runner, fixtures, mocking, coverage. It does not decide
-_which_ inputs and cases a test should cover. Before writing the cases, run:
+## Procedure
 
-> Invoke the Skill tool with skill="ceh-testing:design-test-cases"
+1. Choose the inputs and scenarios first (see Hands off to).
+2. Put each test in `tests/unit/`, `tests/component/`, or `tests/e2e/` by what it needs.
+3. Intercept the network with MSW, never by mocking `fetch`.
+4. Run coverage and read the untested regions. Never add a test just to reach the floor.
 
-It supplies equivalence partitions, boundary values, decision tables, pairwise combinations,
-properties, and metamorphic relations — stack-agnostic technique that the sections below assume
-has already been applied.
+## Rules
 
-## Unit tests: no DOM, no network
+### Unit tests: no DOM, no network
 
 ```ts
 import { describe, it, expect } from "vitest";
@@ -60,7 +61,7 @@ describe("summarizeItems", () => {
 });
 ```
 
-## Component tests: test what the user sees
+### Component tests: test what the user sees
 
 Use `@testing-library/svelte` (SvelteKit) or `@testing-library/react` (React). Do not test implementation details. No snapshot tests — explicit assertions only.
 
@@ -78,7 +79,7 @@ it("renders open items", () => {
 
 The React form differs only in the render call, `render(<ItemPanel state={buildTestState({ items: [mockOpenItem()] })} />)`, imported from `@testing-library/react`. The queries and assertions are the same.
 
-## API mocking with MSW: do not mock `fetch` directly
+### API mocking with MSW: do not mock `fetch` directly
 
 ```ts
 import { setupServer } from "msw/node";
@@ -95,7 +96,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 ```
 
-## E2E with Playwright: critical paths only
+### E2E with Playwright: critical paths only
 
 ```ts
 import { test, expect } from "@playwright/test";
@@ -110,5 +111,17 @@ test("user can start a session and see the item list", async ({ page }) => {
 
 Do not duplicate unit or component test coverage in E2E tests.
 
-**Coverage floor:** 70% for `src/lib/`. A floor for finding blind spots, not a goal. Below it, look
-for the untested regions. Reaching it proves nothing and is never a reason to add tests.
+### Coverage floor
+
+70% for `src/lib/`. A floor for finding blind spots, not a goal. Below it, look for the untested
+regions. Reaching it proves nothing and is never a reason to add tests.
+
+## Hands off to
+
+This skill covers the **tooling** — runner, fixtures, mocking, coverage. It does not decide
+_which_ inputs and cases a test should cover. Before writing the cases:
+
+- Invoke the Skill tool with skill="ceh-testing:design-test-cases" to choose them. It supplies
+  equivalence partitions, boundary values, decision tables, pairwise combinations, properties, and
+  metamorphic relations — stack-agnostic technique that the sections above assume has already been
+  applied.

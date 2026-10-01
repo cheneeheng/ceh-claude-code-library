@@ -20,7 +20,19 @@ license: Apache-2.0
 
 # Configure the Python Service Environment
 
-## Environment
+Keep a service's environment on uv, with secrets loaded from the environment and one lint and type
+config. Done when `ruff` and `mypy` pass and `pyproject.toml` matches the config below.
+
+## Procedure
+
+1. Run every command through `uv run`, and change dependencies only with `uv add` / `uv sync`.
+2. Load every secret through `pydantic-settings` from the environment, and keep `.env.example` current.
+3. Write code to the coding style below.
+4. Before every PR, run the three checks under Linting and type checking.
+
+## Rules
+
+### Environment
 
 - Python: **3.12** | Package manager: **uv** | Virtual env: `.venv/` (managed by uv)
 - Project manifest: `pyproject.toml` | Lockfile: `uv.lock` (never edit manually)
@@ -66,7 +78,7 @@ ignore_missing_imports = false
 asyncio_mode = "auto"
 ```
 
-## Secrets management
+### Secrets management
 
 - Never hard-code secrets, API keys, or passwords in source code
 - Load secrets via `pydantic-settings` (`BaseSettings`) from environment variables / `.env`
@@ -75,7 +87,7 @@ asyncio_mode = "auto"
 - Run `uv run pip-audit` before every release
 - Session tokens: `secrets.token_urlsafe(32)`, never logged, never in URLs
 
-## Coding style
+### Coding style
 
 - Line length: **88 characters** — follow Google Python Style Guide
 - Type hints required on all function signatures and class attributes
@@ -126,7 +138,7 @@ from app.models.session import SessionState
 
 **Pydantic v2:** Use `BaseModel` for all API request/response types and domain entities. Never use `time.sleep()` — use `await asyncio.sleep()`.
 
-## Linting and type checking
+### Linting and type checking
 
 **ruff** for linting and formatting (do not add flake8, pylint, isort, or Black). **mypy** for type checking.
 

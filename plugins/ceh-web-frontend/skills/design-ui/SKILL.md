@@ -19,12 +19,17 @@ license: Apache-2.0
 
 # Design the Frontend UI
 
-Deliver a UI that is modern, intuitive, and coherent. Work in this order:
+Deliver a UI that is modern, intuitive, and coherent. Done when the review pass at the end of the
+Rules passes.
+
+## Procedure
+
+Work in this order:
 
 1. **Design pass** — answer the five questions below _before_ writing any markup.
 2. **Theme** — install one of the bundled token-driven templates (_Theme layer_, end of this file).
    Never hand-roll colors, type, or spacing.
-3. **Build** — apply the _Core rules_ and _Finishing recipes_ below, consulting
+3. **Build** — apply the _Rules_ below, core rules then _Finishing recipes_, consulting
    `references/examples.md` (worked good/bad markup per section) and the chosen theme's
    `brand-guide.html`.
 4. **Review pass** — run the checklist before calling the UI done.
@@ -37,7 +42,7 @@ Two failure modes produce almost all bad UI, and this file targets both:
   symbols for data, status as plain text, buttons floating in space. The finishing recipes close
   that gap on the first build, not after review.
 
-## The design pass
+### The design pass
 
 Answer these five questions and state the answers (one line each) so the choices are reviewable:
 
@@ -48,13 +53,11 @@ Answer these five questions and state the answers (one line each) so the choices
 4. **Which theme template?** (Theme layer below)
 5. **What do empty, loading, and error look like?** Designed now, not retrofitted.
 
----
+## Rules
 
-# Core rules
+### Layout
 
-## Layout
-
-### Pick one archetype per surface
+#### Pick one archetype per surface
 
 | Archetype          | Use for                                               | Structure                                                                            |
 | ------------------ | ----------------------------------------------------- | ------------------------------------------------------------------------------------ |
@@ -66,7 +69,7 @@ Answer these five questions and state the answers (one line each) so the choices
 Do not mix archetypes on one surface. An app does not get a marketing hero; a login page does not
 get a sidebar.
 
-### Content width
+#### Content width
 
 - Prose: 65–75 characters per line (`max-width: 65ch`). Never let body text span a wide viewport.
 - Forms: 480–640px column, labels above inputs. Full-width forms read as broken.
@@ -74,7 +77,7 @@ get a sidebar.
 - Page content in an app shell: cap around 1200–1400px and left-align within the pane; do not
   stretch to fill a 4K monitor.
 
-### Alignment and spacing rhythm
+#### Alignment and spacing rhythm
 
 - Pick one alignment axis and keep it: **left-align** text-heavy and app UIs. Center only focused
   flows and marketing heroes. Centered body text is the single most common generic-AI tell.
@@ -84,14 +87,14 @@ get a sidebar.
 - Use only the theme's spacing tokens (4px grid). No off-scale values.
 - One gutter width per page. Elements that are conceptually aligned must be pixel-aligned.
 
-### Responsive behavior
+#### Responsive behavior
 
 Decide the mobile form of the archetype up front: sidebar collapses to a drawer or bottom tab bar
 (pick one, not both); top-nav collapses to a menu button; dashboard grids stack to one column in
 card-importance order; tables either scroll horizontally in their own container or reflow to
 key-value cards — never squash columns.
 
-## Hierarchy
+### Hierarchy
 
 - **One primary action per view.** Exactly one filled/primary button; everything else outline,
   ghost, or link. Two primary buttons means no decision was made.
@@ -104,7 +107,7 @@ key-value cards — never squash columns.
   last. A card groups a set of _peer_ items that need separation from other sets — it is not a
   default wrapper. **Never nest cards in cards.** If everything is in a box, nothing is grouped.
 
-### When a page title appears — and when it doesn't
+#### When a page title appears — and when it doesn't
 
 - Show a title (`h1`) when the page has an identity beyond its nav label: an entity name
   ("Invoice #1042"), a scope ("Settings — Billing"), or content the user navigated into.
@@ -118,7 +121,7 @@ key-value cards — never squash columns.
   category/context) → title → one-line description → header-level actions right-aligned on the same
   row. One `h1` per page, always.
 
-## Navigation
+### Navigation
 
 - **Placement follows the archetype:** sidebar for app shells (vertical scan, scales past 5 items),
   top bar for content sites, **tabs** only for peer views of the _same_ object or section (they
@@ -133,7 +136,7 @@ key-value cards — never squash columns.
 - Icons in nav are optional; if used, every item gets one (no partial icon rows) and each icon is
   paired with its text label. Icon-only nav requires an established, unambiguous icon set.
 
-## Color and depth
+### Color and depth
 
 - **Neutral-dominant:** roughly 90% of any view is surface + ink + border tokens. Brand color is
   reserved for the primary action, active/selected states, and focus — that scarcity is what makes
@@ -149,7 +152,7 @@ key-value cards — never squash columns.
   and content all share one background they blend into a single slab.
 - Data-viz uses the `--data-*` ramp in order; do not invent chart colors.
 
-## States: design the unhappy paths first
+### States: design the unhappy paths first
 
 Every list, table, and detail view ships with all four states designed:
 
@@ -163,23 +166,21 @@ Every list, table, and detail view ships with all four states designed:
 - **Overflow:** long names truncate with ellipsis + title/tooltip; tables cap visible rows and
   paginate; numbers use tabular figures (`.numeric`) so columns align.
 
-## Density
+### Density
 
 Match density to usage frequency: tools someone uses all day run dense (32–36px table rows,
 `--fs-50/-100` in tables, compact `--space-2/-3` padding); occasional consumer flows run airy
 (generous `--space-8+` sections, larger type). Choose once per surface and apply consistently —
 mixed density inside one view reads as broken.
 
----
-
-# Finishing recipes
+### Finishing recipes
 
 The core rules make a UI _correct_; these recipes make it _finished_. Apply them on the first
 build. In page order: the command dock (global state), section headers, then how data is displayed
 (tables, lifecycle colors, monograms, stat blocks), then controls and motion. Worked markup for
 each lives in `references/examples.md`.
 
-## Command dock — global state and its action
+#### Command dock — global state and its action
 
 When app-wide state exists (a current run, round, or selection) with one primary action on it, do
 not cram it into the topbar and do not repeat it per page. The topbar stays brand + nav; the state
@@ -202,7 +203,7 @@ content column so its edges share the cards' gutter.
 - **State lives once:** anything the dock shows disappears from individual views — no second
   primary button, no repeated status heading, no duplicate cost readout anywhere in the app.
 
-## Section headers — eyebrow above the panel
+#### Section headers — eyebrow above the panel
 
 - Label every list, table, and grid section with an uppercase eyebrow plus count (`PROJECTS · 2`)
   and a one-line muted caption explaining what the section is.
@@ -210,7 +211,7 @@ content column so its edges share the cards' gutter.
 - Use the same vocabulary on every view (`PROJECTS`, `QUEUED ORDERS`, `ROUND HISTORY`) so the
   pages read as one system. This replaces the redundant page title.
 
-## Humanized tables
+#### Humanized tables
 
 Default table styling is the strongest primitive tell. Every data table gets this treatment:
 
@@ -228,7 +229,7 @@ Default table styling is the strongest primitive tell. Every data table gets thi
 - Any table containing form fields uses `table-layout: fixed` so content cannot renegotiate
   column widths.
 
-## Lifecycle colors and flow
+#### Lifecycle colors and flow
 
 For any domain state machine (draft → running → review → done):
 
@@ -240,21 +241,21 @@ For any domain state machine (draft → running → review → done):
   actively running; future stages ghosted. The rail fills through the current node so a transition
   visibly flows forward.
 
-## Identity monograms
+#### Identity monograms
 
 - Entity cards and rows lead with a small rounded monogram tile: the entity's initial on a wash
   tint picked from the `--data-*` ramp by a stable name hash, with a matching hairline border —
   every entity keeps its color everywhere it appears.
 - On hover or keyboard focus, slide in a `→` at the card's corner so "this opens" is unmistakable.
 
-## Stat blocks
+#### Stat blocks
 
 - Summary numbers are stats, not sentences: the value at stat size (`--fs-500`, tabular figures)
   over a tiny muted label, an eyebrow above the group.
 - Semantic color on the value only when it carries state, and only when nonzero.
 - A stat block that navigates is one quiet link — no underline; tint the eyebrow on hover.
 
-## Inputs on dense surfaces
+#### Inputs on dense surfaces
 
 - A field inside a card is a **recessed well**: `--bg` fill one rung below its card, hairline
   border, brightening on hover, brand border on focus — visible at rest, never a ghost that only
@@ -267,18 +268,14 @@ For any domain state machine (draft → running → review → done):
 - Theme scrollbars app-wide: `scrollbar-width: thin` with a `--border-strong` thumb on
   transparent — the OS-default chunky scrollbar breaks any polished surface it appears on.
 
-## Micro-interactions
+#### Micro-interactions
 
 Exactly one small motion per interactive element, using the theme's motion tokens: the primary
 action may lift with a deeper shadow or rotate its glyph on hover; affordances (the monogram `→`)
 slide in on hover/focus; state changes transition color rather than snapping. Never animate more
 than one property group per element, and never decorate static content with motion.
 
----
-
-# Quality gates
-
-## Anti-patterns — reject on sight
+### Anti-patterns — reject on sight
 
 Structure tells (a design pass never happened):
 
@@ -302,7 +299,7 @@ Finish tells (the primitive draft shipped):
 - Global state or its primary action repeated on individual views (two "End turn" buttons).
 - OS-default scrollbars inside a themed surface.
 
-## Review pass
+### Review pass
 
 Before calling the UI done, verify:
 
@@ -317,15 +314,13 @@ Before calling the UI done, verify:
    cells read as words with lifecycle colors consistent across every representation; section
    eyebrows share one vocabulary; global state and its action appear exactly once.
 
----
-
-# Theme layer
+### Theme layer
 
 Colors, type, spacing values, and component styles come from a bundled template. Do not hand-roll
 them — every value is a CSS custom property so the whole app re-themes from one file. Prefer this
 bundled style over a generic component library (shadcn/ui, MUI, Mantine) for one coherent look.
 
-## Choose and install
+#### Choose and install
 
 | Template      | Feel                                                      | Type                                       | Palette                               |
 | ------------- | --------------------------------------------------------- | ------------------------------------------ | ------------------------------------- |
@@ -344,12 +339,12 @@ bundled style over a generic component library (shadcn/ui, MUI, Mantine) for one
 - **Light/dark:** `data-theme="light"` or `"dark"` on `<html>` forces a theme; omit it to follow
   `prefers-color-scheme`.
 
-## Build UI against the contract
+#### Build UI against the contract
 
 Use the tokens and classes below — never hardcode a hex, px size, or shadow. Anything the template
 does not cover, build with `var(--token)` values so it re-themes with the rest.
 
-### Tokens (CSS custom properties)
+##### Tokens (CSS custom properties)
 
 - **Type:** `--font-display`, `--font-ui`, `--font-mono`; scale `--fs-50 … --fs-700`; `--lh-*`,
   `--tracking-*`, `--weight-light … --weight-bold` (Meridian adds `--weight-heavy`).
@@ -362,7 +357,7 @@ does not cover, build with `var(--token)` values so it re-themes with the rest.
 - **Elevation:** `--shadow-sm`, `--shadow-md` (Meridian adds `--shadow-lg`, used for overlays only).
 - **Motion:** `--ease-out`, `--ease-standard`, `--dur-fast|base|slow`.
 
-### Component classes
+##### Component classes
 
 - **Surface:** `.card`.
 - **Buttons:** `.btn` + `.btn-primary` (one per view), `.btn-outline`, `.btn-ghost`, `.btn-danger`,

@@ -37,6 +37,7 @@ touching a real (test) database, services calling internal APIs.
 4. **Write tests** — see below
 5. **Run & fix** — execute tests, check env vars and test DB if connection errors appear;
    run full suite to confirm no regressions
+6. **Report.** Return the output below as your final message.
 
 ## Fixtures
 
@@ -95,16 +96,25 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-integration-tests.sh"  # full suite
 
 ## Output to parent session
 
+Lead with the pass/fail result, then list:
+
 - Integration boundary tested
 - How many tests written and where
-- Pass/fail result
 - Infrastructure requirements (env vars, test DB setup)
 - Bugs found in source (report, do NOT fix silently)
+
+```
+PASS — 9 tests added in tests/integration/test_user_service_integration.py.
+Boundary: POST /users -> UserService -> users table.
+Needs: TEST_DATABASE_URL pointing at a migrated test database.
+Bugs: none.
+```
 
 ## Hard rules
 
 - You cannot ask questions. When blocked, stop and make the blocker your final message: what you
   finished, what stopped you, what the parent should decide.
+- Report a check you could not run as "not run" with the reason. Never imply it passed.
 - NEVER use the production database — always require `TEST_DATABASE_URL`
 - NEVER leave DB state between tests — rollback via transaction fixture
 - NEVER mock internal components (that's unit testing)

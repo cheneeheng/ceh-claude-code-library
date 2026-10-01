@@ -3,8 +3,8 @@ name: write-pytest-library-tests
 description: >-
   Load this skill when writing Python tests for a library: adding unit tests, tests that exercise
   the public API, fixtures, or mocks. Auto-load whenever a test file is created or modified, a
-  pytest fixture is written, or a decision is made about what to mock vs what to test for real. For
-  web service testing (real DB / HTTP) use ceh-python-service instead.
+  pytest fixture is written, or a decision is made about what to mock vs what to test for real. Not
+  for web service testing with a real DB or HTTP (use ceh-python-service:write-pytest-service-tests).
 disable-model-invocation: false
 user-invocable: true
 paths:
@@ -23,7 +23,20 @@ license: Apache-2.0
 
 Framework: **pytest** with **pytest-asyncio** (`asyncio_mode = "auto"` in `pyproject.toml`)
 
-## Test structure
+Write library tests against the public API at the lowest tier that can show the behavior, with no
+I/O. Done when each test asserts one behavior and the suite touches no network or filesystem.
+
+## Procedure
+
+1. Choose the inputs and scenarios first (see Hands off to).
+2. Put each test in `tests/unit/` or `tests/api/` by whether it reaches private modules or imports the
+   package as a consumer would.
+3. Mock external boundaries only, never the code under test.
+4. Run coverage and read the untested regions. Never add a test just to reach the floor.
+
+## Rules
+
+### Test structure
 
 ```
 your_library/
@@ -38,18 +51,7 @@ Test files mirror source structure. Naming: `test_<what>_<expected_behavior>.py`
 Test against the public API surface (`import your_library`), not private modules — tests that reach
 into `_private` internals lock in implementation details and break on every refactor.
 
-## Choosing what to test
-
-This skill covers the **tooling** — runner, fixtures, mocking, coverage. It does not decide
-_which_ inputs and cases a test should cover. Before writing the cases, run:
-
-> Invoke the Skill tool with skill="ceh-testing:design-test-cases"
-
-It supplies equivalence partitions, boundary values, decision tables, pairwise combinations,
-properties, and metamorphic relations — stack-agnostic technique that the sections below assume
-has already been applied.
-
-## Unit tests: no I/O
+### Unit tests: no I/O
 
 ```python
 class TestRetryPolicy:
@@ -58,7 +60,7 @@ class TestRetryPolicy:
         assert [policy.delay(n) for n in range(3)] == [1.0, 2.0, 4.0]
 ```
 
-## Public API tests: import as a consumer
+### Public API tests: import as a consumer
 
 ```python
 import your_library
@@ -69,13 +71,13 @@ def test_public_entry_point_is_importable():
     assert your_library.parse_duration("1h") == timedelta(hours=1)
 ```
 
-## Mocking rules
+### Mocking rules
 
 - Mock external HTTP services and clock/filesystem at the boundary; never mock the code under test.
 - Use `unittest.mock` or `pytest-mock`.
 - Prefer real objects over mocks when construction is cheap.
 
-## Coverage floor
+### Coverage floor
 
 A floor for finding blind spots, not a goal. Below the number, look for the untested regions.
 Reaching it proves nothing and is never a reason to add tests.
@@ -88,3 +90,13 @@ Reaching it proves nothing and is never a reason to add tests.
 ```bash
 uv run pytest --cov=your_library --cov-report=term-missing
 ```
+
+## Hands off to
+
+This skill covers the **tooling** — runner, fixtures, mocking, coverage. It does not decide
+_which_ inputs and cases a test should cover. Before writing the cases:
+
+- Invoke the Skill tool with skill="ceh-testing:design-test-cases" to choose them. It supplies
+  equivalence partitions, boundary values, decision tables, pairwise combinations, properties, and
+  metamorphic relations — stack-agnostic technique that the sections above assume has already been
+  applied.

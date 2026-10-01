@@ -23,7 +23,17 @@ A library's outward surface is three things that change together: what the packa
 version number that earns, and how it is built and uploaded. The public API decides the version,
 and the version decides the release.
 
-## Define the public surface explicitly
+## Procedure
+
+1. Define the public surface in `__init__.py` / `__all__` and decide the semver level the change
+   earns.
+2. Deprecate a public symbol before removing it.
+3. Build with an explicit backend in the `src/` layout, a wheel and an sdist, with `py.typed`.
+4. Publish to TestPyPI, install from it once, then publish to PyPI.
+
+## Rules
+
+### Define the public surface explicitly
 
 The public API is exactly what `__init__.py` exports — nothing else is a contract.
 
@@ -38,7 +48,7 @@ __all__ = ["RetryPolicy", "parse_duration"]
 - Keep the surface small. Every public symbol is a maintenance commitment.
 - Re-export from a stable top-level path so internal module moves don't break consumers.
 
-## Semantic versioning (driven by the public API)
+### Semantic versioning (driven by the public API)
 
 For a library, the version contract is about the public API, not internal changes.
 
@@ -50,7 +60,7 @@ For a library, the version contract is about the public API, not internal change
 
 When in doubt, bump the higher level — a surprise break is worse than a cautious bump. Never re-use or lower a version.
 
-## Deprecation before removal
+### Deprecation before removal
 
 Never remove or change a public symbol without a deprecation period.
 
@@ -71,7 +81,7 @@ def old_name(*args, **kwargs):
 - Keep the deprecated path working for at least one MINOR release.
 - Remove it only in a MAJOR release, and document it in the changelog.
 
-## Build system
+### Build system
 
 Declare an explicit build backend in `pyproject.toml`. Default to **hatchling**; `uv_build` is fine if the project is uv-native.
 
@@ -94,7 +104,7 @@ dependencies = []  # minimal — every dependency is imposed on consumers
 Homepage = "https://github.com/owner/your-library"
 ```
 
-## src layout (mandatory)
+### src layout (mandatory)
 
 ```
 your-library/
@@ -112,7 +122,7 @@ tests run against the built/installed library, catching missing-data and packagi
 
 Always ship `py.typed` so consumers get your type hints.
 
-## Build and publish
+### Build and publish
 
 ```bash
 uv build                      # produces dist/*.whl and dist/*.tar.gz (wheel + sdist)
@@ -125,7 +135,7 @@ uv publish                    # then the real PyPI
 - Publish to **TestPyPI** and install from it once before publishing to real PyPI.
 - A version is published exactly once — PyPI rejects re-uploads. Bump the version to fix a bad release.
 
-## No web dependencies
+### No web dependencies
 
 A library must not pull in application/web-server dependencies (`fastapi`, `uvicorn`, `asyncpg`, web
 frameworks). If web behavior is needed, expose a clean API and let the consuming application wire the

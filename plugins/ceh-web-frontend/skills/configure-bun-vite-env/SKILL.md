@@ -17,12 +17,26 @@ license: Apache-2.0
 
 # Configure the Bun + Vite Environment
 
+Keep a frontend project on Bun and Vite with strict TypeScript and one lint and format config. Done
+when `lint`, `format:check`, `typecheck`, and (SvelteKit) `check` all pass.
+
+## Procedure
+
+1. Run scripts and change dependencies only through `bun`, and leave `bun.lock` alone.
+2. Read browser-safe env vars through the framework's static env module, and keep secrets server-side.
+3. Write TypeScript to the style below.
+4. Before opening a PR, run the four checks under Linting and quality checks.
+
+## Rules
+
+### Environment
+
 - Runtime and package manager: **Bun** | Build tool: **Vite** | Framework: **SvelteKit** or **React**
 - Lockfile: `bun.lock` — authoritative, never edit manually
 - Never commit `.env`; keep a `.env.example` with placeholder values
 - Browser-safe env vars are prefixed and read via the framework's static env module (`$env/static/public` in SvelteKit, `import.meta.env.VITE_*` in React+Vite). Server-only secrets never reach the client.
 
-## Commands
+### Commands
 
 | Action                                 | Command                |
 | -------------------------------------- | ---------------------- |
@@ -37,7 +51,7 @@ license: Apache-2.0
 | Lint                                   | `bun run lint`         |
 | Format check                           | `bun run format:check` |
 
-## TypeScript style
+### TypeScript style
 
 - Line length: **100 characters** (Prettier: `printWidth` 100, single quotes, `prettier-plugin-svelte`)
 - Local imports use the path alias (`$lib` in SvelteKit, the configured alias in React), never deep relative paths
@@ -46,7 +60,7 @@ license: Apache-2.0
 - Use `?.` and `??`; do not use `||` for defaults on falsy inputs (it collapses `0`, `''`, `false`)
 - `strict: true` in `tsconfig.json` is non-negotiable. Never use `// @ts-ignore` — fix the type error.
 
-### `type` is the default, `interface` is the exception
+#### `type` is the default, `interface` is the exception
 
 ```ts
 // Good — use type for data shapes, unions, and aliases
@@ -59,7 +73,7 @@ interface PluginExtension {
 }
 ```
 
-### No TypeScript `enum`: use `const` assertions
+#### No TypeScript `enum`: use `const` assertions
 
 ```ts
 const ItemStatus = {
@@ -70,7 +84,7 @@ const ItemStatus = {
 type ItemStatus = (typeof ItemStatus)[keyof typeof ItemStatus];
 ```
 
-### JSDoc (required on all exported symbols)
+#### JSDoc (required on all exported symbols)
 
 ```ts
 /**
@@ -86,7 +100,7 @@ export async function sendMessage(
 ): Promise<SessionState>;
 ```
 
-## Linting and quality checks
+### Linting and quality checks
 
 All checks must pass before a PR is opened:
 
@@ -99,7 +113,7 @@ bun run typecheck     # tsc --noEmit
 
 `svelte-check` is not optional in SvelteKit projects — it catches prop type mismatches, missing required props, and a11y warnings ESLint cannot see.
 
-### ESLint configuration
+#### ESLint configuration
 
 ```js
 // eslint.config.js
