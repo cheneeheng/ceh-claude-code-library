@@ -6,26 +6,28 @@
 
 ## Plugins
 
-| Plugin                | Install as           | Contents                                                                                                                                                                                                                                                                                                                                 |
-| --------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Core                  | `ceh-core`           | Standards that hold however Claude Code is used: usage-limit guard + handoff (`usage-limit-handoff`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards)                                                                                                                                                         |
-| Agent Coding Contract | `ceh-coding-agent`   | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); explaining code until it lands; whole-repo orientation (`explain-codebase`); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
-| Git Workflow          | `ceh-git-workflow`   | Branching, commits, pull requests from open to merge, changelog entries, releases including hotfixes, code review; a hook that blocks file edits on the default branch                                                                                                                                                                   |
-| Testing               | `ceh-testing`        | Stack-agnostic testing technique: reproduce-first bug fixes (`test-a-bug-fix`), test-case design, suite audit (`audit-test-suite`), behavior-preservation checks, and the risk gaps a green suite misses                                                                                                                                 |
-| Python Service        | `ceh-python-service` | FastAPI, asyncpg, PostgreSQL schema, Alembic, uv/ruff/mypy, pytest, observability, security, and domain modeling for web services; unit, integration, and system tester agents                                                                                                                                                           |
-| Python Library        | `ceh-python-library` | Packaging and publishing, public API surface and semver, uv/ruff/mypy, and pytest for distributable libraries with no web dependencies                                                                                                                                                                                                   |
-| Web Frontend          | `ceh-web-frontend`   | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, UI visual design and themes, Cytoscape.js graphs; unit, integration, and system tester agents                                                                                                                                 |
-| SEO                   | `ceh-seo`            | Discoverability for anything exposed to the internet: crawlable public web pages (head tags, structured data, sitemap, rendering), the `llms.txt` agent index, and the findability of README, package, and landing text                                                                                                                  |
-| Blog                  | `ceh-blog`           | Blog posts in a personal, series-first voice: draft from a topic, repo, or notes (interviewing when material is thin), edit an existing draft, repurpose a finished post for X, LinkedIn, TL;DR, and newsletters                                                                                                                         |
+| Plugin                | Install as              | Contents                                                                                                                                                                                                                                                                                                                                 |
+| --------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Core                  | `ceh-core`              | Standards that hold however Claude Code is used: usage-limit guard + handoff (`usage-limit-handoff`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards)                                                                                                                                                         |
+| Agent Coding Contract | `ceh-coding-agent`      | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); explaining code until it lands; whole-repo orientation (`explain-codebase`); the `CEH Coding Agent` output style (always-on via `force-for-plugin`) |
+| Git Workflow          | `ceh-git-workflow`      | Branching, commits, pull requests from open to merge, changelog entries, releases including hotfixes, code review; a hook that blocks file edits on the default branch                                                                                                                                                                   |
+| Testing               | `ceh-testing`           | Stack-agnostic testing technique: reproduce-first bug fixes (`test-a-bug-fix`), test-case design, suite audit (`audit-test-suite`), behavior-preservation checks, and the risk gaps a green suite misses                                                                                                                                 |
+| Python Service        | `ceh-python-service`    | FastAPI, asyncpg, PostgreSQL schema, Alembic, uv/ruff/mypy, pytest, observability, security, and domain modeling for web services; unit, integration, and system tester agents                                                                                                                                                           |
+| Python Library        | `ceh-python-library`    | Packaging and publishing, public API surface and semver, uv/ruff/mypy, and pytest for distributable libraries with no web dependencies                                                                                                                                                                                                   |
+| Web Frontend          | `ceh-web-frontend`      | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, UI visual design and themes, Cytoscape.js graphs; unit, integration, and system tester agents                                                                                                                                 |
+| SEO                   | `ceh-seo`               | Discoverability for anything exposed to the internet: crawlable public web pages (head tags, structured data, sitemap, rendering), the `llms.txt` agent index, and the findability of README, package, and landing text                                                                                                                  |
+| Blog                  | `ceh-blog`              | Blog posts in a personal, series-first voice: draft from a topic, repo, or notes (interviewing when material is thin), edit an existing draft, repurpose a finished post for X, LinkedIn, TL;DR, and newsletters                                                                                                                         |
+| Plan Build Review     | `ceh-plan-build-review` | The plan-driven development loop: plan a fullstack app one release at a time or all the way to MVP, implement from the plan, review the implementation against it, and patch a built version with small non-feature changes                                                                                                              |
+| Documentation         | `ceh-documentation`     | User-facing documentation: a full docs set under `docs/`, user guides and operator runbooks, an exhaustive API reference, concept pages with sourced design rationale, and runnable examples                                                                                                                                             |
 
 ### Categorization
 
-| Tier                  | Loaded            | Plugins                                                           |
-| --------------------- | ----------------- | ----------------------------------------------------------------- |
-| **Scenario bundle**   | one per situation | —                                                                 |
-| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing` |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`                                             |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`    |
+| Tier                  | Loaded            | Plugins                                                             |
+| --------------------- | ----------------- | ------------------------------------------------------------------- |
+| **Scenario bundle**   | one per situation | —                                                                   |
+| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`   |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation` |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`      |
 
 ---
 
@@ -116,6 +118,26 @@
 | Edit Post      | `/ceh-blog:edit-post`      | An existing draft: diagnosis first, then a full revision that keeps the author's voice                                      |
 | Repurpose Post | `/ceh-blog:repurpose-post` | A finished post to adapt into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb                                 |
 
+### Plan Build Review (`ceh-plan-build-review`)
+
+| Skill                          | Invoke                                                  | When                                                                                                                             |
+| ------------------------------ | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Plan Fullstack App Iteratively | `/ceh-plan-build-review:plan-fullstack-app-iteratively` | Planning the next release, feature, or a greenfield skeleton: one scoped `SKELETON.md` or `ITER_NN.md` per session               |
+| Plan Fullstack App to MVP      | `/ceh-plan-build-review:plan-fullstack-app-to-mvp`      | Planning the complete build to a working MVP in one session, behind a complexity gate that falls back to the iterative planner   |
+| Implement From Plan            | `/ceh-plan-build-review:implement-from-plan`            | Building a `SKELETON.md` or `ITER_NN.md` section by section, resolving iteration pointers to the authoritative spec              |
+| Review Against Plan            | `/ceh-plan-build-review:review-against-plan`            | Auditing the code against a plan: gaps, deviations, and errors per section, fixed and reported                                   |
+| Patch Built Version            | `/ceh-plan-build-review:patch-built-version`            | A small non-feature change to a built version, recorded as a `patch: true` `ITER_NN.md`; features route to the iterative planner |
+
+### Documentation (`ceh-documentation`)
+
+| Skill                     | Invoke                                         | When                                                                                                                        |
+| ------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Write Project Docs        | `/ceh-documentation:write-project-docs`        | A full docs set under `docs/` for the workspace or a given project path, one job per page; sequences the three skills below |
+| Write Guides and Runbooks | `/ceh-documentation:write-guides-and-runbooks` | User guides and operator runbooks: one section per audience, task-oriented verifiable procedures                            |
+| Write API Reference       | `/ceh-documentation:write-api-reference`       | The exhaustive reference: every public item counted against the surface, with "Added in" markers                            |
+| Write Concept Docs        | `/ceh-documentation:write-concept-docs`        | Concept pages: the mental model and the design rationale, each traced to a source, never invented                           |
+| Write Examples            | `/ceh-documentation:write-examples`            | New runnable programs under `examples/`: a numbered feature tour and copy-paste recipes, each run before it is kept         |
+
 ---
 
 ## Agents
@@ -164,6 +186,8 @@
 /plugin install ceh-web-frontend@ceh-claude-code-library --scope user
 /plugin install ceh-seo@ceh-claude-code-library --scope user
 /plugin install ceh-blog@ceh-claude-code-library --scope user
+/plugin install ceh-plan-build-review@ceh-claude-code-library --scope user
+/plugin install ceh-documentation@ceh-claude-code-library --scope user
 ```
 
 ### Manual installation (alternative)
@@ -185,7 +209,9 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     { "path": "~/ceh-claude-code-library/plugins/ceh-python-library" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-web-frontend" },
     { "path": "~/ceh-claude-code-library/plugins/ceh-seo" },
-    { "path": "~/ceh-claude-code-library/plugins/ceh-blog" }
+    { "path": "~/ceh-claude-code-library/plugins/ceh-blog" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-plan-build-review" },
+    { "path": "~/ceh-claude-code-library/plugins/ceh-documentation" }
   ]
 }
 ```

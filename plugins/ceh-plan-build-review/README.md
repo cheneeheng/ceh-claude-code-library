@@ -1,0 +1,58 @@
+# ceh-plan-build-review
+
+The plan-driven development loop as one plugin: **plan** a fullstack app (one release at a time, or
+all the way to MVP in a single session), **build** it by implementing the plan section by section,
+and **review** the implementation against the plan.
+
+All five skills share the same plan document schema (`SKELETON.md` / `ITER_NN.md`, including
+version-tagged families like `SKELETON_v2.md`), so artifacts produced by the planning skills are
+directly consumable by the implement, review, and patch skills. Plan artifacts are written to
+`.agents_workspace/planning/`.
+
+## Skills
+
+| Skill                            | Invoke                                                  | Triggers when                                                                                                                                                                                                |
+| -------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `plan-fullstack-app-iteratively` | `/ceh-plan-build-review:plan-fullstack-app-iteratively` | Planning the next release, feature, or a greenfield skeleton: one scoped artifact per session, a `SKELETON.md` or the next `ITER_NN.md`, never the finished product                                          |
+| `plan-fullstack-app-to-mvp`      | `/ceh-plan-build-review:plan-fullstack-app-to-mvp`      | Planning the complete build to a working MVP in one session: the skeleton plus every iteration upfront, behind a complexity gate that hands off to the iterative planner when upfront planning is unsafe     |
+| `implement-from-plan`            | `/ceh-plan-build-review:implement-from-plan`            | Pointing at a plan and asking to build it: implements a `SKELETON.md` / `ITER_NN.md` section by section (§01–§06), resolving iteration pointers to the authoritative spec                                    |
+| `review-against-plan`            | `/ceh-plan-build-review:review-against-plan`            | Auditing the code against a plan: checks each in-scope section against the spec, finds gaps, deviations, and errors, then fixes them                                                                         |
+| `patch-built-version`            | `/ceh-plan-build-review:patch-built-version`            | Making a small, non-feature change to a version that is already built: routes features out to the iterative planner, otherwise records a `patch: true` `ITER_NN.md` and implements only the touched sections |
+
+## The loop
+
+```text
+plan-fullstack-app-iteratively ──┐
+                                 ├──► SKELETON.md / ITER_NN.md ──► implement-from-plan ──► review-against-plan
+plan-fullstack-app-to-mvp ───────┘                                                              │
+                                          small non-feature change after a version ships ──► patch-built-version
+                                          (feature? → back to plan-fullstack-app-iteratively)
+```
+
+`patch-built-version` does not bump versions or tag. It hands the SemVer PATCH bump to
+`ceh-git-workflow:release`, which is a prose handoff, not a dependency.
+
+## Plan mode is for the research before these skills, not for running them
+
+Claude Code's built-in plan mode (`Shift+Tab`, or `/plan` on a single prompt) allows reads and
+classifier-approved commands only: **file writes are blocked until you approve a plan**. Every
+skill here except the audit half of `review-against-plan` produces or edits a file: a
+`SKELETON.md`, an `ITER_NN.md`, or the implementation itself. Running them inside plan mode blocks
+the deliverable.
+
+Use plan mode for the step _before_: exploring an unfamiliar codebase to decide what to plan. Then
+leave plan mode and invoke the planning skill, which needs write access to emit its artifact.
+
+Do not set `"defaultMode": "plan"` in a repo where these skills are the main workflow.
+
+## Shared reference files
+
+The plan document schema is defined in `references/plan-schema.md`, shipped word-for-word in
+`implement-from-plan`, `review-against-plan`, and `patch-built-version`. The two planning skills
+each carry a `references/section-specs.md` describing the same artifact format from the producer
+side, and inline the same pre-delivery audit checklist and implementation gotchas.
+
+> **Intentional duplication.** The skills are also used standalone in other tools outside this
+> plugin, so each skill folder carries its own copy of the shared material instead of pointing at a
+> common file. The copies are registered in the repo's `docs/CROSS_REFERENCES.md` and must be kept
+> in sync.
