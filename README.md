@@ -76,9 +76,7 @@
 | Skill                        | Invoke                                             | When                                                                                                   |
 | ---------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Write FastAPI Endpoints      | `/ceh-python-service:write-fastapi-endpoints`      | Route handlers, dependencies, lifespan, exception handlers, REST API design                            |
-| Write asyncpg Queries        | `/ceh-python-service:write-asyncpg-queries`        | Database queries, transactions, tenant isolation, connection pool config                               |
-| Design PostgreSQL Schema     | `/ceh-python-service:design-postgresql-schema`     | Designing a schema, choosing column types, adding indexes                                              |
-| Write Alembic Migration      | `/ceh-python-service:write-alembic-migration`      | Creating or running database migrations, migration deploy safety                                       |
+| Write PostgreSQL Code        | `/ceh-python-service:write-postgresql-code`        | Schema design, asyncpg queries, transactions, tenant isolation, pool config, Alembic migrations        |
 | Configure Python Service Env | `/ceh-python-service:configure-python-service-env` | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config                                    |
 | Write pytest Service Tests   | `/ceh-python-service:write-pytest-service-tests`   | Creating or modifying test files, fixtures, or mocks                                                   |
 | Add Observability            | `/ceh-python-service:add-observability`            | structlog logging, metrics, health checks, correlation IDs                                             |
@@ -87,12 +85,11 @@
 
 ### Python Library (`ceh-python-library`)
 
-| Skill                        | Invoke                                             | When                                                                                       |
-| ---------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Configure Python Library Env | `/ceh-python-library:configure-python-library-env` | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config                        |
-| Write pytest Library Tests   | `/ceh-python-library:write-pytest-library-tests`   | Creating or modifying test files, fixtures, or mocks                                       |
-| Package Library              | `/ceh-python-library:package-library`              | Build backend, src layout, building wheels, publishing to PyPI                             |
-| Define Public API            | `/ceh-python-library:define-public-api`            | Editing `__init__.py` or `__all__`, changing a public signature, classifying a semver bump |
+| Skill                        | Invoke                                             | When                                                                                            |
+| ---------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Configure Python Library Env | `/ceh-python-library:configure-python-library-env` | Editing `pyproject.toml`, uv commands, type hints, ruff/mypy config                             |
+| Write pytest Library Tests   | `/ceh-python-library:write-pytest-library-tests`   | Creating or modifying test files, fixtures, or mocks                                            |
+| Publish Python Library       | `/ceh-python-library:publish-python-library`       | Build backend, src layout, PyPI publishing, `__init__.py`/`__all__`, deprecations, semver bumps |
 
 ### Web Frontend (`ceh-web-frontend`)
 

@@ -115,7 +115,7 @@ files, an `assets/template.html`, and a `scripts/to-elements.js` converter). Tri
 references to the repo-opinionated delta before adding more.
 
 **Name skills with a verb phrase and agents with a noun, and put the framework or library in the
-name when a skill is specific to one** (`write-fastapi-endpoints`, `write-alembic-migration`,
+name when a skill is specific to one** (`write-fastapi-endpoints`, `write-postgresql-code`,
 `write-pytest-service-tests`), so the name says what the skill applies to. A skill is something you
 do at a moment (`commit`, `shrink-diff`, `draft-post`, `make-page-crawlable`), an agent is something
 you delegate to (`bulk-reader`). Pick the word you would say out loud, not a generic one like `optimize`. Two

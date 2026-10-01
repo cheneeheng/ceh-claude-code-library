@@ -122,7 +122,7 @@ async def get_session_service(
 ```python
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Pool sizing per ceh-python-service:write-asyncpg-queries (min_size=5, max_size=20, command_timeout=30)
+    # Pool sizing per ceh-python-service:write-postgresql-code (min_size=5, max_size=20, command_timeout=30)
     app.state.db_pool = await asyncpg.create_pool(
         settings.database_url, min_size=5, max_size=20, command_timeout=30
     )

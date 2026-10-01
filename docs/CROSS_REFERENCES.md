@@ -169,7 +169,7 @@ supplies. The call is why all three stack plugins declare `ceh-testing` as a dep
 
 ## asyncpg connection pool and transaction code
 
-**Canonical:** `plugins/ceh-python-service/skills/write-asyncpg-queries/SKILL.md` — § Atomic transactions + § Connection pool
+**Canonical:** `plugins/ceh-python-service/skills/write-postgresql-code/SKILL.md` — § Atomic transactions + § Connection pool
 
 | Copy                                                                 | Section                             | Diverges                                              |
 | -------------------------------------------------------------------- | ----------------------------------- | ----------------------------------------------------- |

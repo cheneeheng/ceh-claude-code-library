@@ -6,17 +6,15 @@ For distributable libraries (packaging, public API, semver, no web deps) use `ce
 
 ## Skills
 
-| Skill                          | Invoke                                             | Triggers when                                                                                                 |
-| ------------------------------ | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `write-fastapi-endpoints`      | `/ceh-python-service:write-fastapi-endpoints`      | Writing route handlers, dependencies, lifespan, exception handlers, or REST API design                        |
-| `write-asyncpg-queries`        | `/ceh-python-service:write-asyncpg-queries`        | Writing database queries, transactions, tenant isolation, or connection pool config                           |
-| `design-postgresql-schema`     | `/ceh-python-service:design-postgresql-schema`     | Designing a schema, choosing column types, or adding indexes                                                  |
-| `write-alembic-migration`      | `/ceh-python-service:write-alembic-migration`      | Creating or running database migrations; migration deploy safety                                              |
-| `configure-python-service-env` | `/ceh-python-service:configure-python-service-env` | Editing `pyproject.toml`, running uv commands, writing type hints, or configuring ruff/mypy                   |
-| `write-pytest-service-tests`   | `/ceh-python-service:write-pytest-service-tests`   | Creating or modifying test files, fixtures, or mocks                                                          |
-| `add-observability`            | `/ceh-python-service:add-observability`            | Adding structlog logging, metrics, health checks, or correlation IDs                                          |
-| `secure-service-code`          | `/ceh-python-service:secure-service-code`          | Secrets management, CORS, rate limiting, or input validation                                                  |
-| `model-domain`                 | `/ceh-python-service:model-domain`                 | Designing entities, identifier formats, status enums, state transitions, or route/service/db layer boundaries |
+| Skill                          | Invoke                                             | Triggers when                                                                                                   |
+| ------------------------------ | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `write-fastapi-endpoints`      | `/ceh-python-service:write-fastapi-endpoints`      | Writing route handlers, dependencies, lifespan, exception handlers, or REST API design                          |
+| `write-postgresql-code`        | `/ceh-python-service:write-postgresql-code`        | Designing a schema, writing asyncpg queries, transactions, tenant isolation, pool config, or Alembic migrations |
+| `configure-python-service-env` | `/ceh-python-service:configure-python-service-env` | Editing `pyproject.toml`, running uv commands, writing type hints, or configuring ruff/mypy                     |
+| `write-pytest-service-tests`   | `/ceh-python-service:write-pytest-service-tests`   | Creating or modifying test files, fixtures, or mocks                                                            |
+| `add-observability`            | `/ceh-python-service:add-observability`            | Adding structlog logging, metrics, health checks, or correlation IDs                                            |
+| `secure-service-code`          | `/ceh-python-service:secure-service-code`          | Secrets management, CORS, rate limiting, or input validation                                                    |
+| `model-domain`                 | `/ceh-python-service:model-domain`                 | Designing entities, identifier formats, status enums, state transitions, or route/service/db layer boundaries   |
 
 The plugin ships no hooks. The skills load from their descriptions alone, so nothing is injected into
 a session that does not touch these moments. If `secure-service-code` or `add-observability` is
