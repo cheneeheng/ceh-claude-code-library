@@ -61,6 +61,11 @@ of the `write-less-code` ladder before each prompt. This carries the minimalism 
 reliably from turn one; the full `write-less-code` skill loads on demand when non-trivial code is
 actually being written.
 
+**When a subagent starts** — a `SubagentStart` hook runs the same two scripts, because neither
+`SessionStart` nor `UserPromptSubmit` fires inside a subagent. An agent with a restricted tool list
+has no Skill tool, so the directive points it at the contract's `SKILL.md` to read instead. The
+read-only agents `Explore`, `Plan`, and `bulk-reader` are skipped.
+
 ## What the contract enforces
 
 The `agent-coding-contract` skill is the single source of truth. In short, it requires the agent to:
