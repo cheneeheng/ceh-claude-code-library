@@ -26,7 +26,7 @@
 | Documentation         | `ceh-documentation`      | User-facing documentation: a full docs set under `docs/`, user guides and operator runbooks, an exhaustive API reference, concept pages with sourced design rationale, and runnable examples                                                                                                                                             |
 | AG-UI                 | `ceh-ag-ui`              | Generative-UI canvases for AG-UI agents: the agent places components from a fixed, Tidewater-styled catalogue and can never restyle them; catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps. Worked examples: [`examples/ceh-ag-ui/`](examples/ceh-ag-ui/)                         |
 | Usability Audit       | `ceh-usability-audit`    | Measure whether a non-expert can actually use what you built: cold persona-constrained walkthroughs (`novice-walker`), a five-question interface audit across web UI/CLI/library/app surfaces, error-message rewrites, and a plain-language pass                                                                                         |
-| Business Plan         | `ceh-business-plan`      | Turn a product idea or an existing app plan into a validated business plan: a product-market-fit interview loop that interrogates the weakest assumption until a readiness gate passes                                                                                                                                                   |
+| Business Plan         | `ceh-business-plan`      | Turn a product idea or an existing app plan into a validated business plan: a product-market-fit interview loop that interrogates the weakest assumption until a readiness gate passes, then a board-style review and five specialist passes on strategy, unit economics, go-to-market, premortem, and the 90-day operating plan         |
 | Git Datastore         | `ceh-git-datastore`      | Run an app on a bare git repo instead of a database while that still fits: a gate that talks you out of it when it does not, a plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite                                                                                                                              |
 | Workflow Builder      | `ceh-workflow-builder`   | Turn a repetitive multi-step task into a runnable artifact: interview it into a spec, then emit one skill or a gated workflow skill with handoff schemas into the target repo                                                                                                                                                            |
 
@@ -170,9 +170,15 @@
 
 ### Business Plan (`ceh-business-plan`)
 
-| Skill                 | Invoke                                     | When                                                                                                                                                |
-| --------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Develop Business Plan | `/ceh-business-plan:develop-business-plan` | A product idea or an existing plan needs product-market fit: drafts from any plan, PRD, or pitch, or interviews, then loops until a PMF gate passes |
+| Skill                      | Invoke                                     | When                                                                                                                                                |
+| -------------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Develop Business Plan      | `/ceh-business-plan:develop-business-plan` | A product idea or an existing plan needs product-market fit: drafts from any plan, PRD, or pitch, or interviews, then loops until a PMF gate passes |
+| Review Business Plan       | Model-only, no slash command               | A plan needs a verdict before time or money goes in: report-only score on seven lenses, one headline finding, and the skill to run next             |
+| Sharpen Strategy           | Model-only, no slash command               | The plan cannot say why it wins or what it refuses: where to play, how to win, what to decline, checked against nine tests                          |
+| Stress-Test Unit Economics | Model-only, no slash command               | The numbers must be believed before spending: per-unit model with arithmetic, cash low point, and the input that kills the business                 |
+| Plan Go-to-Market          | Model-only, no slash command               | The plan must say how the first customers are won: the first ten by name, one channel, its arithmetic, a pass-or-fail test                          |
+| Run Premortem              | Model-only, no slash command               | A hard-to-undo commitment is near: failure stories, each with a warning signal, a kill criterion set in advance, and a loss cap                     |
+| Set Operating Plan         | Model-only, no slash command               | The plan is agreed and work must start: 90 days of at most three objectives, owned key results, weekly inputs, a stop-doing list                    |
 
 ### Git Datastore (`ceh-git-datastore`)
 

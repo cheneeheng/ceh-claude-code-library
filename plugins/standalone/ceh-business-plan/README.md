@@ -28,15 +28,33 @@ is to convert each into evidence or a cheap, scheduled test.
 
 ## Skills
 
-| Skill                   | Description                                                                                       |
-| ----------------------- | ------------------------------------------------------------------------------------------------- |
-| `develop-business-plan` | Draft a business plan proactively, then loop interview→revise until the PMF readiness gate passes |
+| Skill                        | Description                                                                                            |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `develop-business-plan`      | Draft a business plan proactively, then loop interview→revise until the PMF readiness gate passes      |
+| `review-business-plan`       | Report-only board review: score the plan on seven lenses and name the one finding that most changes it |
+| `sharpen-strategy`           | Where to play, how to win, what to refuse, checked against nine tests of a defensible edge             |
+| `stress-test-unit-economics` | Per-unit model with arithmetic shown, cash low point, and the one input that kills the business        |
+| `plan-go-to-market`          | The first ten customers by name, one channel, its arithmetic, and a pass-or-fail channel test          |
+| `run-premortem`              | Assume the business failed, write how, and attach a warning signal, kill criterion, and loss cap       |
+| `set-operating-plan`         | A 90-day plan: at most three objectives, owned key results, weekly inputs, a stop-doing list           |
+
+`develop-business-plan` is the only skill you invoke. The other six are model-only, with no slash
+command: Claude loads them when the conversation reaches their moment, and `develop-business-plan`
+names the right one once the gate passes.
 
 Invoke manually:
 
 ```
 /ceh-business-plan:develop-business-plan
 ```
+
+## Where the specialist skills come from
+
+The six specialist skills turn widely published operating principles into checks an agent can
+run. Each test names the leader it is associated with (Drucker, Grove, Buffett, Munger, Bezos,
+Walton, Jobs, Dell, Kamprad, Ohno, and others) so the reasoning can be traced. The attributions
+are paraphrases of well-known ideas, not quotations, and the skills use them as tests to apply,
+never as authority that settles a question.
 
 **develop-business-plan** loads automatically when you say:
 
@@ -52,7 +70,7 @@ Invoke manually:
 A single living `BUSINESS_PLAN.md` (13 sections: problem, target customer, value prop, solution,
 competition, market math, business model, go-to-market, traction, financials, risks, milestones),
 revised in place across the loop, with a `pmf_gate: N/8` score in its frontmatter. The schema and
-the 8-point gate live in `skills/develop-business-plan/references/business-plan-schema.md`.
+the 8-point gate live in `references/business-plan-schema.md`, shared by all seven skills.
 
 ## The PMF readiness gate
 

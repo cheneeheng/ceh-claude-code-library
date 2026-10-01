@@ -1,9 +1,12 @@
 # Business Plan Document Schema
 
-The artifact this skill produces. One file, `BUSINESS_PLAN.md`, written to the repo root (or
-alongside the app plans it derives from). It is a **living document**: each interview loop revises
-it in place, not a fresh copy. When it derives from app plans, it carries a `derived_from` field
-naming the plan stems it was built on.
+The artifact every skill of this plugin reads and writes. One file, `BUSINESS_PLAN.md`, written to
+the repo root (or alongside the app plans it derives from). It is a **living document**: each
+interview loop revises it in place, not a fresh copy. When it derives from app plans, it carries a
+`derived_from` field naming the plan stems it was built on.
+
+`develop-business-plan` creates the file and owns all 13 sections. The specialist skills each
+deepen named sections with one subsection, listed under [Specialist subsections](#specialist-subsections).
 
 ## Frontmatter
 
@@ -49,6 +52,21 @@ A plan full of `[assumption]` tags has not found product-market fit yet — it h
 §05 deliberately defers product detail to the app plan when one exists — the business plan owns
 the _why it sells_, the app plan owns the _how it is built_. Do not duplicate architecture, data
 models, or API surface here.
+
+## Specialist subsections
+
+Each specialist skill adds one `###` subsection inside an existing section and replaces it in place
+on a re-run. The section's original content stays above it. Every claim keeps a confidence tag.
+
+| Section  | Subsection                                                   | Written by                   |
+| -------- | ------------------------------------------------------------ | ---------------------------- |
+| §04      | Strategy: where we play, how we win, what we refuse          | `sharpen-strategy`           |
+| §08, §11 | Unit model, Cash, Sensitivity with the kill input            | `stress-test-unit-economics` |
+| §09      | First ten, press release, first taste, channel, channel test | `plan-go-to-market`          |
+| §12      | Premortem: failure stories, guards, commitments, cap         | `run-premortem`              |
+| §13      | Operating plan: objectives, key results, owners, cadence     | `set-operating-plan`         |
+
+`review-business-plan` reads every section and writes none.
 
 ## PMF Readiness Gate
 

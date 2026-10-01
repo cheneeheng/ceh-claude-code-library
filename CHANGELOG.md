@@ -38,6 +38,7 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 - Document in `CLAUDE.md` that evals use Anthropic's tools: `skill-creator` for one skill and `claude plugin eval` for a whole plugin, and that the archived `ceh-evaluation` plugin is not to be run. `plugins/*/evals/results/` is git-ignored
 - Migrate `ceh-readme` from agent-skills into `ceh-git-workflow` as the `update-readme` skill instead of a one-skill plugin: it fires at the same moment as `update-changelog`, reads the same git diff, and the `pull-request` and `release` sequences already carry a README step, which now names it. Every "the ceh-readme plugin" pointer in `ceh-documentation`, `ceh-seo`, and `ceh-usability-audit` becomes `ceh-git-workflow:update-readme`
 - Add the usability persona set and severity scale and the AG-UI styling lock to `docs/CROSS_REFERENCES.md`, and the `ceh-ag-ui` → `ceh-web-frontend` edge to `docs/PLUGIN_DEPENDENCIES.md`
+- Add six model-only specialist skills to `ceh-business-plan`, for use once the PMF gate passes: `review-business-plan` (report-only board review on seven lenses), `sharpen-strategy`, `stress-test-unit-economics`, `plan-go-to-market`, `run-premortem`, and `set-operating-plan`. Each writes one subsection into the existing 13-section schema, and `develop-business-plan` stays the only slash command and names the specialist to run next. `business-plan-schema.md` moves to the plugin `references/` because seven skills now share it. No version bump, since no release tag exists yet
 
 ### Changed
 
