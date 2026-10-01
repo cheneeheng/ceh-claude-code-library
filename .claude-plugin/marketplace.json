@@ -25,6 +25,12 @@
       "source": "./plugins/ceh-git-workflow",
       "version": "1.0.0",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, releases including hotfixes, and code review. Stack-agnostic."
+    },
+    {
+      "name": "ceh-architecture",
+      "source": "./plugins/ceh-architecture",
+      "version": "1.0.0",
+      "description": "CEH architecture: stack-agnostic design moments — living architecture documentation (Mermaid diagrams + a Key Decisions log) and domain modeling."
     }
   ]
 }

@@ -22,7 +22,7 @@ Plugins fall into four tiers:
 | --------------------- | ----------------- | -------------------------------------------------- |
 | **Scenario bundle**   | one per situation | —                                                  |
 | **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow` |
-| **Use-case workflow** | per activity      | —                                                  |
+| **Use-case workflow** | per activity      | `ceh-architecture`                                 |
 | **Stack / build**     | per project type  | —                                                  |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
@@ -83,6 +83,7 @@ tools/
 | `ceh-core`         | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                |
 | `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation                                                                                                                                |
 | `ceh-git-workflow` | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, releases including hotfixes (`release`, which also runs the full ship sequence), code review |
+| `ceh-architecture` | Living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log), domain modeling (IDs, status enums, layer boundaries), invariants injected by a SessionStart hook                                                            |
 
 ## Skills
 

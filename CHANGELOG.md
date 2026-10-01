@@ -19,6 +19,7 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 - Add the cross-cutting `ceh-core` plugin for standards that hold however Claude Code is used, seeded with `usage-limit-handoff`, `delegate-bulk-reads`, the `bulk-reader` agent, and their hooks moved out of `ceh-coding-agent`
 - Add a `ceh-git-workflow` PreToolUse branch guard that denies file edits on the default branch until a feature branch exists, disabled with `CEH_BRANCH_GUARD=off`
 - Add `docs/ENVIRONMENT_VARIABLES.md`, the index of every environment variable any plugin reads
+- Migrate `ceh-architecture` from agent-skills at `1.0.0` as a standalone use-case workflow plugin: `document-architecture`, `domain-modeling`, and the SessionStart invariants hook, both skills model-only. The README no longer points at plugins that have not migrated
 
 ### Changed
 
