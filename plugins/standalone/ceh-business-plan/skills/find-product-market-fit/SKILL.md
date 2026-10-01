@@ -138,6 +138,8 @@ After each answer (or a small batch), fold it into `BUSINESS_PLAN.md`:
 
 - Update the affected sections; **re-tag** the confidence on every claim the answer touched.
 - Regenerate §01 Executive Summary and §12 Risks ranking — they shift as the plan firms up.
+  Leave every specialist subsection and tagged line as it is (see "Specialist subsections" in the
+  schema): the premortem's kill criteria in §12 are fixed in advance on purpose.
 - Re-score `pmf_gate: N/8` in frontmatter and bump `updated`.
 - Tell the user, in one or two lines, what just moved (e.g. _"Criterion 4 went from assumption to
   evidence — you have two LOIs at $49. Lowest now is criterion 5: the market math is still

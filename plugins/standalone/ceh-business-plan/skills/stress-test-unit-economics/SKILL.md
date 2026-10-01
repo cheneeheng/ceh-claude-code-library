@@ -38,9 +38,12 @@ are sold. Done is a unit model, a cash timeline, and a sensitivity table in §08
    break-even, is the kill input.
 8. Apply the margin of safety: the plan must still work with the two weakest inputs at their bad
    case together. (Benjamin Graham's principle, Buffett's first rule: do not lose the money.)
-9. Show the user the three tables and ask about the kill input first, one question per turn.
-10. Write §08 and §11, add the kill input to §12 with its cheapest test, and re-score criteria 5
-    and 6 of the PMF gate.
+9. Write §08 and §11 now, and add the kill input to §12 as one line with its cheapest test, ending
+   `(stress-test-unit-economics)`. Writing before asking keeps the model if the session is
+   interrupted.
+10. Show the user the three tables and ask about the kill input first, one question per turn,
+    three questions at most. Revise the tables in place after each answer. An input still open
+    stays tagged `[assumption]`. Then re-score criteria 5 and 6 of the PMF gate.
 
 ## Checks on the model
 
@@ -75,10 +78,12 @@ before applying one.
 
 ## Output
 
-Written into §08 (unit model, checks) and §11 (cash, sensitivity):
+`### Unit model` goes into §08 and `### Cash and sensitivity` into §11. A re-run replaces both:
 
 ```markdown
-### Unit model — unit: <one customer per month>
+### Unit model
+
+Unit: <one customer per month>
 
 | Line                  | Value | Arithmetic or source    | Tag |
 | --------------------- | ----- | ----------------------- | --- |
@@ -90,13 +95,15 @@ Written into §08 (unit model, checks) and §11 (cash, sensitivity):
 | Expected lifetime     |       |                         |     |
 | Lifetime value        |       | contribution x lifetime |     |
 
-### Cash
+### Cash and sensitivity
+
+#### Cash
 
 - Cash conversion cycle: <days>, <collect before or after paying>
 - Lowest balance: <amount> in <month>
 - Default alive: <yes | no>, break-even in <month> against cash-out in <month>
 
-### Sensitivity
+#### Sensitivity
 
 | Input | Base | Bad case | Why that bad case | Unit result | Cash-out month |
 | ----- | ---- | -------- | ----------------- | ----------- | -------------- |

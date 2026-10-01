@@ -11,8 +11,8 @@ license: Apache-2.0
 # Plan go-to-market
 
 Turn "we will market it" into a named list of first customers, one channel, and a test with a
-number that decides whether to continue. Done is a §09 in `BUSINESS_PLAN.md` a founder could start
-executing tomorrow morning, and a channel test scheduled in §13.
+number that decides whether to continue. Done is a §09 in `BUSINESS_PLAN.md` with every part of
+the Output block filled, and the channel test scheduled in §13 with its dates and pass number.
 
 ## Procedure
 
@@ -43,8 +43,11 @@ executing tomorrow morning, and a channel test scheduled in §13.
    try on a fail.
 10. Name the one adjacent segment that follows the beachhead and what must be true before moving
     to it. Do not plan beyond that.
-11. Ask about the weakest step, one question per turn. Then write §09, put the test in §10 and
-    §13, and re-score criteria 2 and 7 of the PMF gate.
+11. Write §09 now, and put the channel test in §10 and §13 as one line each, ending
+    `(plan-go-to-market)`. Writing before asking keeps the plan if the session is interrupted.
+12. Ask about the weakest step, one question per turn, three questions at most. Revise §09 in
+    place after each answer. Whatever is still open stays tagged `[assumption]`. Then re-score
+    criteria 2 and 7 of the PMF gate.
 
 ## Choosing the channel
 
@@ -76,40 +79,43 @@ Pick the one that passes both, and write down why the others were declined.
 
 ## Output
 
-Written into §09 of `BUSINESS_PLAN.md`:
+Written into §09 of `BUSINESS_PLAN.md` as one subsection, replaced whole on a re-run:
 
 ```markdown
-### First ten
+### Go-to-market plan
+
+#### First ten
 
 | #   | Name or source list | Why them | How reached | Status |
 | --- | ------------------- | -------- | ----------- | ------ |
 
-### Press release and questions
+#### Press release and questions
 
 <one paragraph, customer's words>
 
 1. <hardest customer question> — <answer>
 
-### First taste
+#### First taste
 
 <what the customer gets before paying, and what it costs to give>
 
-### Channel: <one>
+#### Channel
 
+- Chosen: <one channel>
 - Why this one: <customer is already there because ...>
 - Arithmetic: <reached> x <respond %> x <buy %> = <customers>, cost <amount> = <per customer>
 - Ceiling from §08: <amount> — <under | over>
 - Declined: <channel> because <reason>
 
-### Loop
+#### Loop
 
 <what each customer makes easier about the next, or "none, growth is linear">
 
-### Channel test
+#### Channel test
 
 <dates>, pass at <number>, on fail try <next channel>
 
-### Next segment
+#### Next segment
 
 <segment>, only after <condition>
 ```
@@ -120,10 +126,10 @@ Written into §09 of `BUSINESS_PLAN.md`:
   is not yet real. Name `ceh-business-plan:find-product-market-fit`.
 - Every plausible channel costs more than the §08 ceiling → report that the business cannot reach
   its customers at this price, with the gap in money per customer.
+- §08 has no price or no acquisition ceiling → stop before step 6, because no channel can be
+  judged without one. Name `ceh-business-plan:stress-test-unit-economics`.
 
 ## Hands off to
 
-- When §08 has no acquisition ceiling, suggest `ceh-business-plan:stress-test-unit-economics`
-  first.
 - When the channel test is set, suggest `ceh-business-plan:set-operating-plan` to give it an owner
   and a weekly number.

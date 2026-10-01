@@ -44,8 +44,11 @@ written as a number.
    was that someone is already working on it.
 8. State the cap: the most money and the most months this can consume before it stops, and what
    remains if it fails (skills, customers, code, relationships, reputation).
-9. Ask about the weakest guard, one question per turn. Write §12, schedule the tests and kill
-   dates in §13, and re-score criterion 8 of the PMF gate.
+9. Write §12 now, and schedule each test and kill date in §13 as one line ending
+   `(run-premortem)`. Writing before asking keeps the guards if the session is interrupted.
+10. Ask about the weakest guard, one question per turn, three questions at most. Revise §12 in
+    place after each answer. A guard still open stays tagged `[assumption]`. Then re-score
+    criterion 8 of the PMF gate.
 
 ## What a good guard looks like
 
@@ -77,24 +80,27 @@ honoured.
 
 ## Output
 
-Written into §12 of `BUSINESS_PLAN.md`:
+Written into §12 of `BUSINESS_PLAN.md` as one subsection. A re-run replaces it, except that a kill
+criterion whose date has passed is kept as written (see Stop conditions):
 
 ```markdown
-### Premortem — <date>
+### Premortem
+
+Run on <date>.
 
 | #   | Failure story | Likelihood | Survivable | Warning signal | Kill criterion | Cheapest test |
 | --- | ------------- | ---------- | ---------- | -------------- | -------------- | ------------- |
 
-### Commitments
+#### Commitments
 
 | Commitment | Door | How to make it reversible |
 | ---------- | ---- | ------------------------- |
 
-### Incumbent reply
+#### Incumbent reply
 
 <rival> would <countermove>, costing them <what>. Our answer: <answer>.
 
-### Cap
+#### Cap
 
 Most this can cost: <money> and <months>. If it fails, what remains: <list>.
 ```

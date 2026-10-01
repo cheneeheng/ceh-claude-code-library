@@ -42,7 +42,10 @@ which number to look at each week.
    and say what is deliberately unfunded. Keep a buffer of about a fifth unallocated.
 10. Set the cadence: a weekly input review of 30 minutes, a monthly re-score of the PMF gate and
     the kill criteria, a re-plan at 90 days.
-11. Show the draft, ask about the weakest line one question per turn, then write §13.
+11. Write §13 now, then show it. Writing before asking keeps the plan if the session is
+    interrupted.
+12. Ask about the weakest line, one question per turn, three questions at most. Revise §13 in
+    place after each answer. An owner or date still open is marked `[assumption]`.
 
 ## Checks on the plan
 
@@ -75,10 +78,13 @@ that touches their money, safety, or data.
 
 ## Output
 
-Written into §13 of `BUSINESS_PLAN.md`:
+Written into §13 of `BUSINESS_PLAN.md` as one subsection, replaced whole on a re-run. The
+milestone lines above it, including those other skills tagged, stay:
 
 ```markdown
-### Operating plan — <start date> to <end date>
+### Operating plan
+
+Period: <start date> to <end date>
 
 **Objective 1:** <outcome> — retires §12 risk <#>
 
@@ -105,3 +111,4 @@ Written into §13 of `BUSINESS_PLAN.md`:
 - When an objective is a product build, suggest `ceh-plan-build-review` for the technical plan.
   This skill owns the business objective, not the architecture.
 - When §11 has no cash-out month, suggest `ceh-business-plan:stress-test-unit-economics` first.
+- When §09 has no channel test, suggest `ceh-business-plan:plan-go-to-market` first.

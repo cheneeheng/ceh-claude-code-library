@@ -1,7 +1,7 @@
 # Business Plan Document Schema
 
 The artifact every skill of this plugin reads and writes. One file, `BUSINESS_PLAN.md`, written to
-the repo root (or alongside the app plans it derives from). It is a **living document**: each
+the repo root. It is a **living document**: each
 interview loop revises it in place, not a fresh copy. When it derives from app plans, it carries a
 `derived_from` field naming the plan stems it was built on.
 
@@ -33,6 +33,10 @@ data point, quote, or transaction), `[assumption]` (believed but untested — th
 hunting ground), or `[hypothesis-to-test]` (an assumption with a named, cheap test attached).
 A plan full of `[assumption]` tags has not found product-market fit yet — it has a to-do list.
 
+Each section is a level-2 heading in the literal form `## §NN Title`, for example
+`## §09 Go-to-Market`, so a skill can check a section exists by searching for `^## §09`. See the
+[Worked example](#worked-example).
+
 | ID  | Title                      | Content                                                                                                                                                                                        |
 | --- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | §01 | Executive Summary          | Three sentences: what it is, who it's for, why now. Written **last**, regenerated each loop.                                                                                                   |
@@ -55,18 +59,28 @@ models, or API surface here.
 
 ## Specialist subsections
 
-Each specialist skill adds one `###` subsection inside an existing section and replaces it in place
-on a re-run. The section's original content stays above it. Every claim keeps a confidence tag.
+Each specialist skill owns one `###` subsection per section, under the literal heading below, and
+replaces it in place on a re-run. Its parts are `####` headings inside it. The section's original
+content stays above it. Every claim keeps a confidence tag.
 
-| Section  | Subsection                                                   | Written by                   |
-| -------- | ------------------------------------------------------------ | ---------------------------- |
-| §04      | Strategy: where we play, how we win, what we refuse          | `sharpen-strategy`           |
-| §08, §11 | Unit model, Cash, Sensitivity with the kill input            | `stress-test-unit-economics` |
-| §09      | First ten, press release, first taste, channel, channel test | `plan-go-to-market`          |
-| §12      | Premortem: failure stories, guards, commitments, cap         | `run-premortem`              |
-| §13      | Operating plan: objectives, key results, owners, cadence     | `set-operating-plan`         |
+| Skill                        | Owns                                                 | Also writes                                                                                                                                |
+| ---------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `sharpen-strategy`           | §04 `### Strategy`                                   | §06: one copy-cost line per named competitor. Gate criterion 3. Removes refused items from §05, §09, §13 only after the user confirms them |
+| `stress-test-unit-economics` | §08 `### Unit model`, §11 `### Cash and sensitivity` | §12: one kill-input line. Gate criteria 5 and 6                                                                                            |
+| `plan-go-to-market`          | §09 `### Go-to-market plan`                          | §10 and §13: one line each for the channel test. Gate criteria 2 and 7                                                                     |
+| `run-premortem`              | §12 `### Premortem`                                  | §13: one line per scheduled test and kill date. Gate criterion 8                                                                           |
+| `set-operating-plan`         | §13 `### Operating plan`                             | Nothing                                                                                                                                    |
 
 `review-business-plan` reads every section and writes none.
+
+Three rules keep the writers apart:
+
+- A line a specialist writes outside its own subsection ends with the skill name in parentheses,
+  for example `(run-premortem)`. A re-run replaces its own tagged lines and no others.
+- No skill edits another skill's subsection or tagged lines. `find-product-market-fit` revises
+  the section content above the subsections and leaves them as they are.
+- A skill that re-scores a gate criterion updates `pmf_gate`. Whenever `pmf_gate` is below `8/8`,
+  `status` is `draft`.
 
 ## PMF Readiness Gate
 
@@ -97,3 +111,83 @@ A criterion is "met" when its claim is either backed by `[evidence]` **or** redu
 
 When fewer than 8 are met, the open criteria **are the agenda** for the next interview loop —
 attack the lowest-scoring, highest-leverage one first.
+
+## Worked example
+
+An idea-stage plan after one loop and a premortem, cut to one line per section. The heading lines
+and frontmatter keys are literal.
+
+```markdown
+---
+artifact: BUSINESS_PLAN
+status: draft
+created: 2026-03-02
+updated: 2026-03-09
+product: Ledgerline
+stage: idea
+derived_from: [SKELETON, ITER_02]
+pmf_gate: 5/8
+---
+
+## §01 Executive Summary
+
+Ledgerline reconciles supplier invoices for independent dental practices, because the practice
+manager loses a day a month to it.
+
+## §02 Problem
+
+Practice managers match about 120 invoices a month by hand. "I lose the last Friday of every
+month to this" (manager, 3-chair practice) [evidence]
+
+## §03 Target Customer
+
+Independent dental practices with 2 to 5 chairs in one metro area [assumption]
+
+## §04 Value Proposition
+
+The month-end match done in ten minutes instead of a day [hypothesis-to-test]
+
+## §05 Solution / Product
+
+Upload the statement, get the mismatches. Technical detail: see SKELETON.
+
+## §06 Alternatives & Competition
+
+A spreadsheet and a highlighter. No named competitor serves practices this small [assumption]
+
+## §07 Market
+
+400 practices x $79 x 12 = $379,200 a year in the metro area [assumption]
+
+## §08 Business Model & Pricing
+
+$79 a month per practice, anchored to one day of a manager's pay [assumption]
+
+## §09 Go-to-Market
+
+The regional dental managers' association list, contacted by hand [hypothesis-to-test]
+
+## §10 Traction & Validation
+
+Three interviews, one quote. Next experiment: ten more calls from the association list.
+
+## §11 Financials
+
+Break-even at 60 practices, with 9 months of runway [assumption]
+
+## §12 Risks & Unknowns
+
+1. Managers will not pay from their own budget [hypothesis-to-test]
+
+### Premortem
+
+Run on 2026-03-09.
+
+| #   | Failure story | Likelihood | Survivable | Warning signal | Kill criterion | Cheapest test |
+| --- | ------------- | ---------- | ---------- | -------------- | -------------- | ------------- |
+
+## §13 Milestones
+
+- 2026-03-23: ten calls made, three say they would pay $79
+- 2026-04-30: under 5 paid practices, stop (run-premortem)
+```

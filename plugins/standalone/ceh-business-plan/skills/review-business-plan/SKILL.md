@@ -11,8 +11,8 @@ license: Apache-2.0
 # Review business plan
 
 Judge a business plan on the seven things experienced operators check first, and return a scored
-report with one headline finding. Done is a report the reader can act on in one sitting: a score per
-lens, the evidence for each score quoted from the plan, and the next skill to run.
+report with one headline finding. Done is the report in the Output format with all seven lenses
+scored, each score backed by a quote or "nothing found", and the next skill named.
 
 ## Procedure
 
@@ -27,7 +27,11 @@ lens, the evidence for each score quoted from the plan, and the next skill to ru
 4. Pick the headline finding: the single lens whose failure makes the other scores irrelevant.
    Order of precedence when several score 0: customer, then survival, then money, then edge, reach,
    focus, execution. A plan nobody wants needs no cost model.
-5. Write the report in the Output format and stop. Do not edit the plan.
+5. Set the verdict from the scores, not from impression:
+   - **do not build:** Customer scores 0 and the plan offers no path to a test.
+   - **build:** no lens scores 0 and the total is 10 or more.
+   - **fix first:** everything else.
+6. Write the report in the Output format and stop. Do not edit the plan.
 
 ## The seven lenses
 

@@ -27,12 +27,17 @@ a rival cannot copy cheaply, and that visibly give something up. Done is a §04 
      cannot give.
    - **What we refuse:** at least three things a reasonable competitor does and this plan will not.
 4. Run the nine tests. Mark each pass, fail, or untested, with the reason in one line.
-5. Show the draft and the test results. Then ask about the worst failure, one question per turn,
-   offering your own hypothesis for the user to correct.
-6. Fold each answer into the statement, re-run the tests it touches, and repeat until every test
-   passes or has a cheap dated test attached.
-7. Write the block into §04, update §06 with the copy-cost finding for each named competitor, and
-   move anything now refused out of §05, §09, and §13.
+5. Write the block into §04 now, then show it with the test results. Writing before asking keeps
+   the draft if the session is interrupted.
+6. Ask about the worst failure, one question per turn, offering your own hypothesis for the user
+   to correct. Fold each answer into §04 in place and re-run the tests it touches. Stop when
+   every test passes or has a cheap dated test attached, or after five questions, whichever comes
+   first. A test still failing then stays in the table as a failure.
+7. Update §06 with one copy-cost line per named competitor, ending `(sharpen-strategy)`, and
+   re-score criterion 3 of the PMF gate.
+8. List what §05, §09, and §13 now contain that the strategy refuses, and ask the user to confirm
+   the list before removing anything. Never touch another skill's subsection: report a conflict
+   with it instead.
 
 ## The nine tests
 
