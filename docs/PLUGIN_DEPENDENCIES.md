@@ -36,15 +36,15 @@ conditional hand-offs or negative routing, which stay prose.
 
 ## What each scenario installs
 
-| Bundle                   | Installs                                                                                                                                                                                                           |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ceh-scenario-service`   | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-service`, `ceh-usability-audit`, `ceh-plan-build-review`, `ceh-git-datastore`, `ceh-ag-ui`, `ceh-web-frontend` |
-| `ceh-scenario-library`   | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-library`, `ceh-usability-audit`, `ceh-plan-build-review`                                                       |
-| `ceh-scenario-webapp`    | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-web-frontend`, `ceh-usability-audit`, `ceh-plan-build-review`, `ceh-ag-ui`                                            |
-| `ceh-scenario-ideation`  | `ceh-core`, `ceh-git-workflow`, `ceh-business-plan`, `ceh-plan-build-review`                                                                                                                                       |
-| `ceh-scenario-editorial` | `ceh-core`, `ceh-git-workflow`, `ceh-blog`, `ceh-documentation`, `ceh-seo`                                                                                                                                         |
+| Bundle                   | Installs                                                                                                                                                                          |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ceh-scenario-service`   | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-service`, `ceh-usability-audit`, `ceh-plan-build-review`, `ceh-git-datastore` |
+| `ceh-scenario-library`   | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-library`, `ceh-usability-audit`, `ceh-plan-build-review`                      |
+| `ceh-scenario-webapp`    | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-web-frontend`, `ceh-usability-audit`, `ceh-plan-build-review`, `ceh-ag-ui`           |
+| `ceh-scenario-ideation`  | `ceh-core`, `ceh-git-workflow`, `ceh-business-plan`, `ceh-plan-build-review`                                                                                                      |
+| `ceh-scenario-editorial` | `ceh-core`, `ceh-git-workflow`, `ceh-blog`, `ceh-documentation`, `ceh-seo`                                                                                                        |
 
-`ceh-web-frontend` reaches the service bundle only through `ceh-ag-ui`, and `ceh-testing` is
+`ceh-web-frontend` reaches the webapp bundle directly and through `ceh-ag-ui`, and `ceh-testing` is
 listed by each stack bundle directly as well as through its stack plugin.
 
 ## Checking the graph

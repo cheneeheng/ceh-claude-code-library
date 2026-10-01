@@ -13,8 +13,7 @@
     "ceh-python-service",
     "ceh-usability-audit",
     "ceh-plan-build-review",
-    "ceh-git-datastore",
-    "ceh-ag-ui"
+    "ceh-git-datastore"
   ],
   "license": "Apache-2.0",
   "keywords": ["agent", "scenario", "bundle", "service"]

@@ -28,9 +28,6 @@ them at the same scope.
 | `ceh-usability-audit`   |
 | `ceh-plan-build-review` |
 | `ceh-git-datastore`     |
-| `ceh-ag-ui`             |
-
-`ceh-ag-ui` depends on `ceh-web-frontend`, so that plugin is installed too.
 
 ## Notes
 
