@@ -70,6 +70,9 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 ### Fixed
 
 - Fix a renumbered Sequencing line in `verify-behavior-preserved` that read "3. ... 2. refactor → 5."
+- Fix the `ceh-python-service` description in `CLAUDE.md`, `README.md`, `plugin.json` and `marketplace.json`, which still advertised observability, security and domain modeling after those skills were removed
+- Fix `CLAUDE.md` statements that had drifted from the repo: the bundled-files exemption now covers `ceh-ag-ui` and `ceh-git-datastore`, the version-bump rule says CI only checks that `plugin.json` and `marketplace.json` match, the pre-commit note names the install step and all three formatters, and the always-present frontmatter keys are stated
+- Add `CEH_WORKFLOW_BUILD_DIR` and `CEH_WORKFLOW_RUN_DIR` to `docs/ENVIRONMENT_VARIABLES.md`
 
 ### Removed
 
