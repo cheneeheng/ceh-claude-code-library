@@ -4,6 +4,12 @@
 
 2026.09.30 - Migrating from [agent-skills](https://github.com/cheneeheng/agent-skills) repo.
 
+A collection of Claude Code plugins providing engineering standards for AI coding agents. Plugins
+are organized around **use cases**: load the ones that match what you are building.
+
+**Guides:** [`docs/TESTING_WORKFLOW.md`](docs/TESTING_WORKFLOW.md) — how `ceh-testing` and the three
+stack testing skills route between each other, with the trigger phrases and sequence for each moment.
+
 ## Plugins
 
 | Plugin                | Install as               | Contents                                                                                                                                                                                                                                                                                                                                 |
@@ -38,6 +44,11 @@
 | **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                                                                                            |
 | **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder` |
 | **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                  |
+
+Each plugin is self-contained: a foundational standard needed by more than one plugin is duplicated
+into each instead of extracted into a shared base, so one plugin per use case is all you load.
+Cross-cutting plugins are the orthogonal tier. They hold a discipline that applies whatever you are
+building, so they load _alongside_ a use-case plugin, not instead of one.
 
 ---
 
@@ -199,6 +210,23 @@
 
 ## Agents
 
+Agents run autonomously for a defined task and hand results back to the parent session.
+
+> **Plugin-agent limitation:** every agent here ships inside a plugin. Claude Code **ignores** the
+> `permissionMode`, `hooks`, `mcpServers`, and `initialPrompt` frontmatter fields on plugin
+> subagents (for security reasons), so no agent in this repo sets them. These agents inherit the
+> permission context of your session and prompt for edit/write permissions accordingly. To avoid
+> the prompts, put the session in `acceptEdits` (`Shift+Tab`) before dispatching, or add
+> `permissions.allow` rules in `settings.json`. See the
+> [subagents docs](https://code.claude.com/docs/en/sub-agents#choose-the-subagent-scope).
+>
+> **Background tool filter:** subagents run in the background by default, and a background
+> subagent keeps only `Read`, `Grep`, `Glob`, `LSP`, `Bash`, `PowerShell`, `Edit`, `Write`,
+> `NotebookEdit`, `WebFetch`, `WebSearch`, `TodoWrite`, `Skill`, `ToolSearch`, `EnterWorktree`,
+> `ExitWorktree`, `Monitor`, `TaskStop`, `SendMessage`, and `Artifact`. Anything else is stripped
+> silently, even when named in `tools:`. `AskUserQuestion` is removed from every subagent, so no
+> agent here can stop to ask you a question.
+
 ### Core (`ceh-core`)
 
 | Agent       | Invoke                  | When                                                                                                                                                       |
@@ -230,6 +258,24 @@
 ---
 
 ## Installing in Claude Code
+
+### Prerequisites
+
+`python3` on `PATH` (stdlib only, no packages) for the hooks in `ceh-core` and `ceh-git-workflow`,
+and `bash` for the hooks in `ceh-coding-agent`. No other plugin ships a hook. The Python hooks fail
+open: without `python3` the usage-limit guard, the bulk-read guards, and the branch guard do
+nothing instead of blocking you. Install with `winget install Python.Python.3.12` /
+`brew install python` / `apt install python3`.
+
+Individual **skills** have their own prerequisites, stated in each `SKILL.md`'s `compatibility`
+frontmatter and surfaced when the skill loads: the git and GitHub CLIs for `ceh-git-workflow`,
+Python 3.12 with `uv` for the two Python plugins, Bun or Node for `ceh-web-frontend`. Installing a
+plugin never installs these. A skill whose prerequisite is missing says so instead of guessing.
+Skills that only read files and write Markdown (planning, blog, review) declare nothing and need
+nothing.
+
+Environment variables the plugins read are indexed in
+[`docs/ENVIRONMENT_VARIABLES.md`](docs/ENVIRONMENT_VARIABLES.md).
 
 ### Step 1 — Add the marketplace
 
@@ -273,7 +319,16 @@ What each bundle installs is listed in [`docs/PLUGIN_DEPENDENCIES.md`](docs/PLUG
 ```
 
 Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-ag-ui` brings
-`ceh-web-frontend`.
+`ceh-web-frontend`. `ceh-workflow-builder` is in no bundle, so install it on its own when you want
+it. Add `--scope project` instead of `--scope user` for a project-specific install.
+
+### Step 3 — Verify
+
+```
+/help
+```
+
+The `ceh-*:` skills should appear in the skills list.
 
 ### Manual installation (alternative)
 
