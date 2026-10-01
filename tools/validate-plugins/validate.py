@@ -10,8 +10,8 @@ Checks:
                lists every plugin with a matching version and an existing source path.
   skills     - every skills/<name>/SKILL.md has name + description frontmatter, name == dir,
                description <= 1024 chars, optional compatibility <= 500 chars.
-  agents     - every agents/<name>.md has name + description frontmatter, name == file stem,
-               description <= 1024 chars.
+  agents     - every agents/<name>.md has name + description + model frontmatter, name == file
+               stem, description <= 1024 chars.
   keys       - skill/agent names are lowercase-hyphenated (<= 64 chars); every frontmatter key is
                one Claude Code documents; no plugin-agent key Claude Code ignores; no
                TEMPLATE-GUIDANCE comment left over from a template.
@@ -294,6 +294,12 @@ def check_agents() -> None:
     for d in plugin_dirs():
         for agent in sorted((d / "agents").glob("*.md")):
             check_frontmatter_doc(agent, agent.stem, AGENT_KEYS)
+            fm = parse_frontmatter(agent)
+            if fm is not None and not fm.get("model"):
+                fail(
+                    rel(agent),
+                    "frontmatter missing 'model' - set it, even as 'inherit'",
+                )
 
 
 # --- references ------------------------------------------------------------
