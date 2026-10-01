@@ -8,7 +8,7 @@ description: >-
 disallowed-tools: Edit Write
 ---
 
-# Code Review
+# Code review
 
 Every comment must be clearly marked as **blocking** or **advisory**, and every review ends with
 an explicit verdict.
@@ -27,7 +27,7 @@ an explicit verdict.
    the exact line, stating the problem and (for blocking) what would resolve it.
 4. End with an explicit verdict (see Output).
 
-## Comment prefixes
+### Comment prefixes
 
 | Prefix       | Meaning                                     | Author must                       |
 | ------------ | ------------------------------------------- | --------------------------------- |
@@ -48,12 +48,12 @@ Examples:
 ## Rules
 
 - Do not comment on style a linter would catch.
-- Do not re-litigate decisions recorded in `ARCHITECTURE.md` Key Decisions unless new risk is
-  identified.
+- Do not re-litigate decisions already recorded in the repo's decision records unless new risk
+  is identified.
 - Do not review from memory — verify against current file contents.
 - Approve with non-blocking nits rather than withholding approval to force trivial changes.
 
-## Responding as the author
+### Responding as the author
 
 - `[blocking]`: fix it, or reply with the reasoning and reach agreement before merge.
 - `[advisory]`: address it or acknowledge why you're not ("good idea, out of scope for this PR").

@@ -1,75 +1,134 @@
 ---
 name: release
 description: >-
-  Load this skill when cutting a release, bumping a version, tagging, or publishing a release:
-  following semantic versioning, committing the version bump, tagging main, pushing the tag, and
-  creating the release. Trigger when the user says "cut a release", "create a release", "tag a
-  release", "create a tag and a release", "bump the version", "bump the versions", "bump and
-  release", "ship a release", or "publish a release". Auto-load whenever a version field changes in
-  any project manifest (e.g. pyproject.toml, package.json, plugin.json, marketplace.json,
-  Cargo.toml, *.csproj, build.gradle), a git tag is being created, or a release is being created.
+  Load this skill when shipping a version: bump it, write the changelog section, land the bump
+  through a PR, then tag the merge commit on main and publish the GitHub release. Trigger on "cut a
+  release", "ship a release", "bump the version", "bump and release", "tag a release", "publish a
+  release", "run the release flow", "do the full release", and on an urgent production fix that
+  must ship now ("hotfix", "critical fix"). Auto-load whenever a version field changes in any
+  project manifest (pyproject.toml, package.json, plugin.json, marketplace.json, Cargo.toml,
+  *.csproj, build.gradle) or a git tag is being created. Not for landing a branch with no version
+  (use ceh-git-workflow:pull-request).
+argument-hint: "[version]"
 compatibility: >-
-  Requires the git CLI on PATH, the GitHub CLI (`gh`) installed and authenticated via `gh auth
-  login`, a git repository with a GitHub remote, permission to push tags, and network access.
+  Requires the git CLI on PATH, the GitHub CLI (`gh`) authenticated via `gh auth login`, a git
+  repository with a GitHub remote, permission to push branches and tags, and network access.
 ---
 
-# Release Tagging
+# Release
 
-Tags follow semver: `v<major>.<minor>.<patch>`. Apply only to commits on `main` after all CI passes.
+Ships vX.Y.Z: the bump lands on `main` through a reviewed PR, and the tag and GitHub release
+happen only after the merge, pointing at the merge commit, never at the feature branch.
 
-| Change type                                             | Bump  |
+## Procedure
+
+Pick the path, then run it top to bottom. Each step gates the next.
+
+| Situation                                           | Path                                |
+| --------------------------------------------------- | ----------------------------------- |
+| Ship a version (default)                            | [Full release](#full-release)       |
+| The bump already merged to `main`, only tag + notes | [Tag and publish](#tag-and-publish) |
+| P1/P2 production issue that cannot wait             | [Hotfix](#hotfix)                   |
+
+### Full release
+
+1. **Decide the bump** per the [bump table](#versioning). Never below the current version.
+2. **Branch** `chore/release-vX.Y.Z` from up-to-date `main`.
+3. **Bump** the version in every manifest the project ships. All must read the same vX.Y.Z.
+4. **Changelog:** invoke the Skill tool with skill="ceh-git-workflow:update-changelog" to write
+   the vX.Y.Z section. Gate: section written and semver-validated.
+5. **Docs:** refresh the README if the release is user-facing, and CLAUDE.md if project facts
+   changed. Otherwise record "no update needed".
+6. **Commit** with the [release commit message](#release-commit-message). Tree clean.
+7. **Land** the branch: open the PR and merge it per `ceh-git-workflow:pull-request`. Gate: CI
+   green, approvals met, merged to `main`.
+8. **Tag and publish** per [Tag and publish](#tag-and-publish).
+
+### Tag and publish
+
+On `main`, after the merge:
+
+```bash
+git checkout main && git pull origin main   # the merge commit is now HEAD
+git tag -a vX.Y.Z -m "vX.Y.Z — <summary>"   # annotated: some repos reject lightweight tags
+git push origin vX.Y.Z
+gh release create vX.Y.Z --title "vX.Y.Z" --notes-file notes.md && rm notes.md
+```
+
+`notes.md` is the vX.Y.Z changelog section plus the attribution footer (see
+[Attribution](#attribution)).
+
+### Hotfix
+
+The [Full release](#full-release) with these differences:
+
+1. Branch `fix/critical-<description>` from `main`, and commit the fix itself as
+   `fix(<scope>): <description>`. Minimal scope: nothing unrelated rides along.
+2. The bump is PATCH. It may commit on the same branch after the fix.
+3. Review is fast-tracked to 1 approval, but CI must pass. A broken hotfix is worse than a delayed
+   one.
+4. The PR body links the incident and names the symptom, so the merge commit explains itself.
+5. After publishing, deploy staging then production (both, however abbreviated). Confirm the
+   symptom is gone and error rates are back to baseline before declaring the incident resolved,
+   and be ready to roll back. A P1/P2 gets a post-mortem within 48 hours.
+
+## Rules
+
+### Versioning
+
+Tags are `v<major>.<minor>.<patch>`.
+
+| Change                                                  | Bump  |
 | ------------------------------------------------------- | ----- |
 | Breaking change (`BREAKING CHANGE:` footer or `!` type) | MAJOR |
 | New backward-compatible feature                         | MINOR |
 | Fixes, chores, docs, refactors                          | PATCH |
 
-When in doubt, bump PATCH. Never lower a version.
+When in doubt, PATCH. Versions only increase. Pre-releases take a suffix (`v1.4.0-rc.1`,
+`v1.4.0-beta.1`) and sort below the final `v1.4.0`.
 
-Pre-release versions use a suffix: `v1.4.0-rc.1`, `v1.4.0-beta.1`. They sort below the final
-`v1.4.0`, so they're safe for staged rollouts.
+### Gates
 
-## Procedure
+- One version everywhere: every manifest reads the same vX.Y.Z before the commit.
+- Tag the merge commit on `main`, never the feature branch: `git pull origin main` first.
+- Never tag or release on a red gate. Surface it and wait.
 
-Before bumping the version, **update the changelog** for this release so the new version section
-and release notes are ready to reference — saying "update the changelog" loads the Keep a Changelog
-format and what belongs in a release-notes entry. The GitHub release notes (`--notes-file` below)
-reuse that version's changelog section.
+### Attribution
 
-```bash
-# 1. Bump the version in this project's manifest(s) — whatever the project uses
-#    (pyproject.toml, package.json, plugin.json, marketplace.json, Cargo.toml, ...), commit.
-#    Always multi-line — the subject alone does not say what shipped or why the bump is
-#    that level, and the diff only shows version strings. Write msg.txt, use -F, never -m.
-#      chore: bump version to v<X.Y.Z>
-#
-#      <what this release ships, 1-3 sentences, matching the changelog entry>
-#      <bump level and the change that forces it; which manifests moved>
-#
-#      <attribution footer exactly as configured in settings>
-git add <manifest files>
-git commit -F msg.txt && rm msg.txt
-git push origin main
+| Artifact             | Setting              | Where the footer goes           |
+| -------------------- | -------------------- | ------------------------------- |
+| Release commit       | `attribution.commit` | Last line of the commit message |
+| GitHub release notes | `attribution.pr`     | Last line of the notes file     |
 
-# 2. Tag and push. Use an annotated tag (-a -m): some repos enforce it,
-#    and `git tag v<X.Y.Z>` then fails with "no tag message".
-git tag -a v<X.Y.Z> -m "v<X.Y.Z> — <summary>"
-git push origin v<X.Y.Z>
+Reproduce the line the session's Git instructions supply, verbatim. Never substitute a literal
+from this skill or from memory. If the setting is empty, omit it. The tag message takes none.
 
-# 3. (Optional) Publish a GitHub release for the tag. Append the attribution footer to the
-#    notes file after the changelog section, then delete the file.
-gh release create v<X.Y.Z> --title "v<X.Y.Z>" --notes-file <notes file>
+## Output
+
+### Release commit message
+
+The release commit is where the diff explains least: it shows version strings and changelog prose,
+not what shipped or why the bump is that level. Always multi-line, written to a temp file and
+committed with `git commit -F`, never `-m`:
+
+```
+chore: release vX.Y.Z
+
+<1-3 sentences: what this release ships, in the changelog's terms>
+
+- Bump: <PATCH|MINOR|MAJOR>: <the change that forces this level>
+- Manifests: <which moved, old -> new>
+- Docs: <changelog / README / CLAUDE.md updated, or "no update needed" and why>
+
+<attribution footer>
 ```
 
-## Rules
+## Stop conditions
 
-Both artifacts this skill produces carry the attribution footer the environment supplies —
-surfaced verbatim in the session's Git instructions. Reproduce the line exactly; never substitute
-a literal from this skill or from memory. If the relevant setting is `false`/empty, or no
-attribution line is supplied, omit the footer.
+- Bump level unclear between MINOR and MAJOR → state the breaking candidate and ask.
+- CI red or approvals missing at step 7 → surface it and wait. Never tag around it.
 
-| Artifact                      | Setting              | Where the footer goes           |
-| ----------------------------- | -------------------- | ------------------------------- |
-| Version-bump commit (step 1)  | `attribution.commit` | Last line of the commit message |
-| GitHub release notes (step 3) | `attribution.pr`     | Last line of the notes file     |
+## Hands off to
 
-The annotated tag message (step 2) takes no attribution — keep it to `v<X.Y.Z> — <summary>`.
+- Invoke the Skill tool with skill="ceh-git-workflow:update-changelog" to write the vX.Y.Z
+  section at step 4 of [Full release](#full-release).

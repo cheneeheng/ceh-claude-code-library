@@ -59,7 +59,7 @@ Categorization rules of thumb:
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
 .github/workflows/            # validate.yml — runs validate.py on push and PR
-docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md
+docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md
 plugins/                      # All plugins — flat, one directory per plugin, no tier subfolders
 ├── ceh-scenario-<name>/      # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY
 └── ceh-<plugin-name>/
@@ -78,11 +78,11 @@ tools/
 
 ## Plugins
 
-| Plugin directory   | Domain                                                                                                                                                                                                                                                                   |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ceh-core`         | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                                                           |
-| `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation                                                                                                                                                                           |
-| `ceh-git-workflow` | Commits, branching, PRs, merging, changelog entries, releases, code review, dependency management; plus the two orchestrated flows — `merge-flow` (lands a branch, no version) and `release-flow` (ships a release) — which sequence those skills and own only the gates |
+| Plugin directory   | Domain                                                                                                                                                                                                                        |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ceh-core`         | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                |
+| `ceh-coding-agent` | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation                                                                                                                                |
+| `ceh-git-workflow` | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, releases including hotfixes (`release`, which also runs the full ship sequence), code review |
 
 ## Skills
 
@@ -210,6 +210,7 @@ on what changed and why, a `### Plugin versions` table listing every plugin bump
 | `README.md`                                       | User-facing docs — plugin, skill, and agent tables live here                   |
 | `docs/CROSS_REFERENCES.md`                        | Content duplicated across skills: canonical source and every copy              |
 | `docs/PLUGIN_DEPENDENCIES.md`                     | Current dependency graph: every edge with its evidence                         |
+| `docs/ENVIRONMENT_VARIABLES.md`                   | Every environment variable any plugin reads: plugin, reader, default, effect   |
 | `CHANGELOG.md`                                    | Release notes per repo tag, each with a `### Plugin versions` table            |
 | `.claude/skills/add-plugin-component/assets/`     | `SKILL.template.md` and `agent.template.md` — the base for every new component |
 | `.agents_workspace/DECISION_LOG.md`               | Agent decision log — **git-ignored, local only**, append-only                  |

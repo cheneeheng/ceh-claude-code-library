@@ -80,7 +80,7 @@ For each seed symbol, in order of payoff:
 
 Rank candidates by payoff (lines removed, readability gained) over risk; apply top-down. A
 candidate whose own diff would blow past reviewability (the size limits in
-`ceh-git-workflow:open-pr`) gets flagged, not applied.
+`ceh-git-workflow:pull-request`) gets flagged, not applied.
 
 ## Rules
 
