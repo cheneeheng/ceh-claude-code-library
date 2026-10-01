@@ -131,6 +131,17 @@ needs software the machine may not have** — a script interpreter, a CLI (`git`
 `docker`), a reachable server, or network access. Name the runtime _and_ its minimum version and
 what fails without it. A skill that only reads files and emits Markdown gets no `compatibility`.
 
+### `user-invocable` and hook-loaded skills
+
+`user-invocable: false` on any skill the user will not call by name, which includes every skill a
+hook names (`agent-coding-contract`, `write-less-code`, `usage-limit-handoff`,
+`delegate-bulk-reads`, `branch`). Its root `README.md` Invoke cell reads
+`Model-only, no slash command`.
+
+When a hook names the skill on every firing, the description is **one line**: what the skill is,
+with no trigger phrases and no mention of the hook. Keep the full description when the model also
+loads the skill unprompted (`write-less-code`, `branch`).
+
 ## Plugin Dependencies
 
 **Declare `dependencies` in `plugin.json` only, never in the `marketplace.json` entry.** Bare
@@ -182,6 +193,10 @@ claude plugin validate plugins/ceh-<plugin>
 `validate.py` fails on any `ceh-<plugin>:<name>` mention, prose included, that no longer resolves,
 so renaming a skill means grepping for its old name. It shellchecks `scripts/*.sh` only when
 `shellcheck` is installed. CI has it, so a local green run on Windows can still fail CI.
+
+The pre-commit hook runs prettier and **aborts the commit when it reformats a file**, which any
+Markdown table edit can trigger. Re-stage and commit again, and chain the push with `&&`, never
+`;`, so a failed commit does not push.
 
 ## Versioning
 

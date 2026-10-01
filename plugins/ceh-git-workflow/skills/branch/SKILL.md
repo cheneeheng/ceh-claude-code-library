@@ -6,7 +6,7 @@ description: >-
   main. Auto-load whenever a new git branch is being created, a branch name is being chosen, or work
   is being started from the main branch.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 compatibility: >-
   Requires the git CLI on PATH and a git working tree. No network access, GitHub CLI, or language
   runtime is needed.

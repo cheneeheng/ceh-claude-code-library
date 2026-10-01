@@ -26,8 +26,8 @@ and `refactor-repo`.
 
 **Manual triggers**
 
-- `agent-coding-contract` — no slash command (hidden from the `/` menu), say `"load the contract"` / `"agent contract"` / `"coding contract"`.
-- `write-less-code` — `/write-less-code`, or say `"write less code"` / `"be lazy"` / `"simplest solution"` / `"yagni"`.
+- `agent-coding-contract` — no slash command (hidden from the `/` menu), loaded by the SessionStart hook.
+- `write-less-code` — no slash command (hidden from the `/` menu), say `"write less code"` / `"be lazy"` / `"simplest solution"` / `"yagni"`.
 - `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
 - `explain-until-understood` — `/explain-until-understood [what to explain]`, or ask for something to be explained until it makes sense.

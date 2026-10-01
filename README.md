@@ -27,17 +27,17 @@
 
 ### Core (`ceh-core`)
 
-| Skill               | Invoke                          | When                                                                                                                                               |
-| ------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Usage Limit Handoff | `/ceh-core:usage-limit-handoff` | Auto via PostToolUse guard hook when 5h or weekly usage crosses the threshold (default 90%) — stop cleanly, write a handoff artifact, end the turn |
-| Delegate Bulk Reads | `/ceh-core:delegate-bulk-reads` | Before dispatching the `bulk-reader` agent, and before acting on its summary — the delegation prompt and the verification rules                    |
+| Skill               | Invoke                       | When                                                                                                                                               |
+| ------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Usage Limit Handoff | Model-only, no slash command | Auto via PostToolUse guard hook when 5h or weekly usage crosses the threshold (default 90%) — stop cleanly, write a handoff artifact, end the turn |
+| Delegate Bulk Reads | Model-only, no slash command | Before dispatching the `bulk-reader` agent, and before acting on its summary — the delegation prompt and the verification rules                    |
 
 ### Agent Coding Contract (`ceh-coding-agent`)
 
 | Skill                    | Invoke                                       | When                                                                                                                                                                                                          |
 | ------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Agent Coding Contract    | `/ceh-coding-agent:agent-coding-contract`    | Start of any coding session (auto via SessionStart hook) — core rules, five-step workflow, stop conditions, non-goals                                                                                         |
-| Write Less Code          | `/ceh-coding-agent:write-less-code`          | Every coding session (auto — per-turn digest via hook) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line)                                                                           |
+| Agent Coding Contract    | Model-only, no slash command                 | Start of any coding session (auto via SessionStart hook) — core rules, five-step workflow, stop conditions, non-goals                                                                                         |
+| Write Less Code          | Model-only, no slash command                 | Every coding session (auto — per-turn digest via hook) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line)                                                                           |
 | Shrink Diff              | `/ceh-coding-agent:shrink-diff`              | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main`                                                                                               |
 | Refactor Repo            | `/ceh-coding-agent:refactor-repo`            | Manual only — propose-then-apply refactor campaign over the whole repo or a named module                                                                                                                      |
 | Explain Until Understood | `/ceh-coding-agent:explain-until-understood` | Explaining a subsystem, design, or diff to the person in the session: stated floor, foundations first, verified claims, ASCII pictures, one walked case, and the escalation ladder when an explanation misses |
@@ -47,7 +47,7 @@
 
 | Skill            | Invoke                               | Auto-loads when                                                                                                                                                           |
 | ---------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Branch           | `/ceh-git-workflow:branch`           | Creating or naming a branch; a PreToolUse hook denies file edits on the default branch until one exists                                                                   |
+| Branch           | Model-only, no slash command         | Creating or naming a branch; a PreToolUse hook denies file edits on the default branch until one exists                                                                   |
 | Commit           | `/ceh-git-workflow:commit`           | Writing a commit message or staging changes                                                                                                                               |
 | Pull Request     | `/ceh-git-workflow:pull-request`     | A branch is heading into `main`: open a PR, merge it (or a local branch), or land the branch in one pass — changelog under `[Unreleased]` → commit → PR → merge → cleanup |
 | Release          | `/ceh-git-workflow:release`          | Ship a version: bump → changelog → PR → merge → tag → GitHub release; also tag-only and the hotfix variant                                                                |
