@@ -10,6 +10,10 @@ are organized around **use cases**: load the ones that match what you are buildi
 **Guides:** [`docs/TESTING_WORKFLOW.md`](docs/TESTING_WORKFLOW.md) — how `ceh-testing` and the three
 stack testing skills route between each other, with the trigger phrases and sequence for each moment.
 
+**Versions:** releases are named by date (`vYYYY.MM.DD`), and each plugin keeps its own semantic
+version. [`docs/PLUGIN_VERSIONS.md`](docs/PLUGIN_VERSIONS.md) lists every plugin's version as of the
+latest release.
+
 ## Plugins
 
 | Plugin                | Install as               | Contents                                                                                                                                                                                                                                                                                                                                 |
