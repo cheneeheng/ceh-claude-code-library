@@ -396,9 +396,10 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 
 ## Tools
 
-| Tool             | Path                      | Purpose                                                                                                                                                                                         |
-| ---------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| validate-plugins | `tools/validate-plugins/` | Repo-integrity checker run by CI (`.github/workflows/validate.yml`): plugin manifests, skill/agent frontmatter, file and skill references, dependencies, and script syntax. Stdlib-only Python. |
+| Tool             | Path                      | Purpose                                                                                                                                                                                                  |
+| ---------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| skills-sync      | `tools/skills-sync/`      | Copy individual skills (from this repo or any other) into a project's `.claude/skills/` directory: install, update, add, remove, list. Python, bash, PowerShell, and browser-based HTML implementations. |
+| validate-plugins | `tools/validate-plugins/` | Repo-integrity checker run by CI (`.github/workflows/validate.yml`): plugin manifests, skill/agent frontmatter, file and skill references, dependencies, and script syntax. Stdlib-only Python.          |
 
 ### Formatting
 

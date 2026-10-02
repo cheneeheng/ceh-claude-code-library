@@ -75,6 +75,7 @@ plugins/                      # All plugins — two folders, one directory per p
                 ├── SKILL.md               # Required — frontmatter + full body, all content inline
                 └── references/            # Sparingly — see Skills below (same for assets/, scripts/)
 tools/
+├── skills-sync/               # Copies skills into a project's .claude/skills/ — py/sh/ps1/html, own README.md
 └── validate-plugins/          # The CI gate — stdlib-only Python, own README.md
 ```
 

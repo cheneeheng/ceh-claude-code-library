@@ -11,6 +11,7 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 ### Added
 
 - Add five scenario bundles as the install entry point, each a manifest and README with no skills, agents, or hooks: `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, and `ceh-scenario-editorial`, all at `1.0.0`. They replace the agent-skills `-iterate` bundles under shorter names. `ceh-scenario-core`, the `-greenfield` bundles, and `ceh-scenario-agent-tooling` are not migrated: the stack bundles list the cross-cutting plugins directly, `ceh-scenario-ideation` covers the greenfield delta, and `ceh-evaluation` is archived
+- Migrate `tools/skills-sync` from agent-skills unchanged apart from a stale decision-log pointer in its README: the py, sh, ps1 and html implementations that copy skills into a project's `.claude/skills/`. `tools/skill-evals` stays behind, since the Evaluation section of `CLAUDE.md` replaces it with Anthropic's own eval tools
 - Add the `add-plugin-component` repo skill with `SKILL.md` and agent templates as the base for every new component
 - Add `tools/validate-plugins/validate.py` and its CI workflow, ported from agent-skills, now also rejecting undocumented frontmatter keys, malformed names, and leftover template guidance
 - Add the empty `ceh-claude-code-library` marketplace and skeleton `CLAUDE.md`, `docs/CROSS_REFERENCES.md`, and `docs/PLUGIN_DEPENDENCIES.md` for migrated plugins to land into
