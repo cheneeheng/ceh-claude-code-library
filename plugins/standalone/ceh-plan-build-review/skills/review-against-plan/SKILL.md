@@ -8,8 +8,7 @@ description: >-
   against plan", "verify the plan is implemented", "audit the code against the plan", "does the
   build match the skeleton", or when the user points at a plan file and asks to audit it. Not for
   building the plan in the first place (use implement-from-plan), writing the plan (use
-  plan-fullstack-app-iteratively or plan-fullstack-app-to-mvp), or reviewing a pull request (use
-  ceh-git-workflow:code-review).
+  plan-fullstack-app), or reviewing a pull request (use ceh-git-workflow:code-review).
 argument-hint: "[plan-file]"
 disable-model-invocation: false
 user-invocable: true
@@ -29,14 +28,9 @@ document schema, and its section table and pointer resolution rules are authorit
 
 ### 1. Locate and parse the plan docs
 
-1. Find the target plan files. If the user did not specify, look for `SKELETON` and `ITER_NN`
-   files (`.md`) under `.agents_workspace/planning/` (where the planning skills write them) or any
-   subfolder within it. Filenames may carry a version tag as a prefix or suffix, e.g.
-   `SKELETON_v2.md`, `v2_ITER_03.md`. See "File Naming and Version Variants" in
-   `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md` for the matching rules.
-2. Group the discovered files by version tag into plan families (untagged files are the default
-   family). If more than one family exists, confirm with the user which version to review. The
-   iteration with `mvp: true` is that version's terminator. Read each target artifact's
+1. Find the target plan files and the target family by "Locating plan files" in
+   `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md`.
+2. The iteration with `mvp: true` is that version's terminator. Read each target artifact's
    `depends_on` and resolve inherited (`sections_unchanged`) sections through that chain for
    context. Audit only each artifact's own `sections_changed`. Treat inherited sections as context,
    not audit scope.

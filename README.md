@@ -142,13 +142,12 @@ building, so they load _alongside_ a use-case plugin, not instead of one.
 
 ### Plan Build Review (`ceh-plan-build-review`)
 
-| Skill                          | Invoke                                                  | When                                                                                                                             |
-| ------------------------------ | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Plan Fullstack App Iteratively | `/ceh-plan-build-review:plan-fullstack-app-iteratively` | Planning the next release, feature, or a greenfield skeleton: one scoped `SKELETON.md` or `ITER_NN.md` per session               |
-| Plan Fullstack App to MVP      | `/ceh-plan-build-review:plan-fullstack-app-to-mvp`      | Planning the complete build to a working MVP in one session, behind a complexity gate that falls back to the iterative planner   |
-| Implement From Plan            | `/ceh-plan-build-review:implement-from-plan`            | Building a `SKELETON.md` or `ITER_NN.md` section by section, resolving iteration pointers to the authoritative spec              |
-| Review Against Plan            | `/ceh-plan-build-review:review-against-plan`            | Auditing the code against a plan: gaps, deviations, and errors per section, fixed and reported                                   |
-| Patch Built Version            | `/ceh-plan-build-review:patch-built-version`            | A small non-feature change to a built version, recorded as a `patch: true` `ITER_NN.md`; features route to the iterative planner |
+| Skill               | Invoke                                       | When                                                                                                                         |
+| ------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Plan Fullstack App  | `/ceh-plan-build-review:plan-fullstack-app`  | Planning a project: one scoped `SKELETON.md` or `ITER_NN.md` per session, or the whole build to MVP behind a complexity gate |
+| Implement From Plan | `/ceh-plan-build-review:implement-from-plan` | Building a `SKELETON.md` or `ITER_NN.md` section by section, resolving iteration pointers to the authoritative spec          |
+| Review Against Plan | `/ceh-plan-build-review:review-against-plan` | Auditing the code against a plan: gaps, deviations, and errors per section, fixed and reported                               |
+| Patch Built Version | `/ceh-plan-build-review:patch-built-version` | A small non-feature change to a built version, recorded as a `patch: true` `ITER_NN.md`; features route to the planner skill |
 
 ### Documentation (`ceh-documentation`)
 

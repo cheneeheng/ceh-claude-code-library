@@ -7,7 +7,7 @@ description: >-
   change as a patch ITER_NN.md (frontmatter patch: true) so the plan stays truthful, then
   implements only the touched sections. Trigger on "patch this version", "small change to the
   shipped version", "non-feature fix", "fix this in the built app and keep the plan in sync". Not
-  for anything that adds or changes a feature (use plan-fullstack-app-iteratively), and not for
+  for anything that adds or changes a feature (use plan-fullstack-app), and not for
   the version bump or release (use ceh-git-workflow:release).
 argument-hint: "[what-to-patch]"
 disable-model-invocation: false
@@ -33,9 +33,8 @@ artifact allowed to.
 
 ### 1. Locate the plan family and its latest artifact
 
-1. Find the plan files, following the `implement-from-plan` step 1 conventions: default location
-   `.agents_workspace/planning/`, version-tagged names allowed. Group into families. If more than
-   one family exists, confirm which version is being patched.
+1. Find the plan files and the family being patched by "Locating plan files" in
+   `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md`.
 2. Identify the family's latest artifact: the `mvp: true` terminator if present, otherwise the
    highest `ITER_NN` reachable through `depends_on`. Any existing `patch: true` ITERs count: the
    latest one becomes the new patch's `depends_on` target.
@@ -54,8 +53,7 @@ Classify the requested change **before writing anything**. This gate is the poin
   above. Post-MVP _features_ are the iterative planner's job, not a patch.
 
 The reliable tell: **if §02 changes, it is an iteration, not a patch.** Do not force a feature
-through this skill. Stop, say so in one line, and point the user at
-`plan-fullstack-app-iteratively`.
+through this skill. Stop, say so in one line, and point the user at `plan-fullstack-app`.
 
 **It is a patch** if the change stays within the existing architecture. Continue here for:
 
@@ -123,7 +121,7 @@ Report per Output, then hand off the release per Hands off to.
 ## Stop conditions
 
 - The routing gate classifies the change as a feature → stop, say so in one line, and point the
-  user at `plan-fullstack-app-iteratively`.
+  user at `plan-fullstack-app`.
 - More than one plan family exists and the user named none → ask which version is being patched.
 
 ## Hands off to
