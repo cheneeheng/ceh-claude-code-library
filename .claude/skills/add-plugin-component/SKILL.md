@@ -257,7 +257,8 @@ every component with the step 1 table before creating anything, then:
    holds `plugin.json` (with `dependencies`) and `README.md` and nothing else — `validate.py`
    enforces it. Record any new edge in `docs/PLUGIN_DEPENDENCIES.md`.
 
-The repo tag bumps MINOR and `CHANGELOG.md` lists the plugin at `1.0.0` under `### Added`.
+At the next release, `CHANGELOG.md` lists the plugin at `1.0.0` under `### Added` and
+`docs/PLUGIN_VERSIONS.md` gains its row.
 
 ## When plugin-dev or skill-creator skills are also loaded
 

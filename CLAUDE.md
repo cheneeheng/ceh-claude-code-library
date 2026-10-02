@@ -57,7 +57,7 @@ Categorization rules of thumb:
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
 .github/workflows/            # validate.yml — runs validate.py on push and PR
-docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md
+docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md
 examples/                     # Worked usage examples, one ceh-<plugin>/README.md each — not validated
 plugins/                      # All plugins — two folders, one directory per plugin, no tier subfolders
 ├── scenarios/
@@ -215,7 +215,7 @@ Whatever else gets skipped, these four land in the **same commit** or CI fails:
 2. A row in `plugins/standalone/ceh-<plugin>/README.md`.
 3. A version bump in **both** `plugins/standalone/ceh-<plugin>/.claude-plugin/plugin.json` and
    `.claude-plugin/marketplace.json` — level per the Versioning section below. CI checks only that
-   the two match. Until the first repo tag exists, skip the bump.
+   the two match.
 4. `python tools/validate-plugins/validate.py` green.
 
 ## Commands
@@ -272,11 +272,13 @@ iterative edits.
 - **MINOR** — a new skill or agent, or adding/removing a `dependencies` entry.
 - **MAJOR** — the plugin is renamed or removed.
 
-**The repo git tag** (e.g. `v1.2.0`) marks a consistent state of all plugins together and is a
-changelog anchor only — it does not drive auto-update. MINOR when any plugin adds a skill or agent,
-PATCH for content-only. Cut it after bumping plugin versions, and add a `CHANGELOG.md` entry: prose
-on what changed and why, a `### Plugin versions` table listing every plugin bumped, then
-`### Added` / `### Changed` / `### Fixed`.
+**The repo release** is named by its release date, `vYYYY.MM.DD` (e.g. `v2026.10.02`), not a
+semantic version. The git tag marks a consistent state of all plugins together and is a changelog
+anchor only — it does not drive auto-update. A second release on the same day appends a counter
+(`v2026.10.02.1`). Cut it after bumping plugin versions, and add a `CHANGELOG.md` entry: prose on
+what changed and why, a `### Plugin versions` table listing every plugin bumped, then `### Added` /
+`### Changed` / `### Fixed`. In the same commit, update `docs/PLUGIN_VERSIONS.md`: the new version
+and the release name on every bumped plugin's row.
 
 ## Key Files
 
@@ -289,6 +291,7 @@ on what changed and why, a `### Plugin versions` table listing every plugin bump
 | `docs/PLUGIN_DEPENDENCIES.md`                                | Current dependency graph: every edge with its evidence                         |
 | `docs/ENVIRONMENT_VARIABLES.md`                              | Every environment variable any plugin reads: plugin, reader, default, effect   |
 | `docs/TESTING_WORKFLOW.md`                                   | How `ceh-testing`, the stack testing skills, and the tester agents route       |
+| `docs/PLUGIN_VERSIONS.md`                                    | Every plugin's version as of the latest release, and the release that set it   |
 | `CHANGELOG.md`                                               | Release notes per repo tag, each with a `### Plugin versions` table            |
 | `.claude/skills/add-plugin-component/assets/`                | `SKILL.template.md` and `agent.template.md` — the base for every new component |
 | `.agents_workspace/DECISION_LOG.md`                          | Agent decision log — **git-ignored, local only**, append-only                  |

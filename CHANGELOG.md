@@ -1,14 +1,52 @@
 # Changelog
 
-Versions follow [Semantic Versioning](https://semver.org/).
-Versions refer to the Marketplace versions. Release notes before this repo live in
+Releases are named by their release date, `vYYYY.MM.DD`, and mark one consistent state of all
+plugins together. Each plugin keeps its own [Semantic Versioning](https://semver.org/) version,
+listed per release under `### Plugin versions` and tracked in
+[`docs/PLUGIN_VERSIONS.md`](docs/PLUGIN_VERSIONS.md). Release notes before this repo live in
 [agent-skills](https://github.com/cheneeheng/agent-skills/blob/main/CHANGELOG.md).
 
 ---
 
 ## [Unreleased]
 
+## [v2026.10.02]
+
+First release of this repo. It completes the migration from agent-skills: 16 standalone plugins
+restructured onto one `SKILL.md` and agent template, five scenario bundles as the install entry
+point, the `validate.py` CI gate, and the maintainer docs. Plugins keep the version they migrated
+at, so nothing is bumped. Releases are named by date from here on, and `docs/PLUGIN_VERSIONS.md`
+maps each plugin version to the release that last changed it.
+
+### Plugin versions
+
+| Plugin                   | Version |
+| ------------------------ | ------- |
+| `ceh-ag-ui`              | 1.0.0   |
+| `ceh-blog`               | 1.0.0   |
+| `ceh-business-plan`      | 1.0.5   |
+| `ceh-coding-agent`       | 1.0.0   |
+| `ceh-core`               | 1.0.0   |
+| `ceh-documentation`      | 1.0.0   |
+| `ceh-git-datastore`      | 1.0.1   |
+| `ceh-git-workflow`       | 1.0.0   |
+| `ceh-plan-build-review`  | 1.0.0   |
+| `ceh-python-library`     | 1.0.0   |
+| `ceh-python-service`     | 1.0.0   |
+| `ceh-seo`                | 1.0.0   |
+| `ceh-testing`            | 1.0.0   |
+| `ceh-usability-audit`    | 1.0.0   |
+| `ceh-web-frontend`       | 1.0.0   |
+| `ceh-workflow-builder`   | 1.1.2   |
+| `ceh-scenario-editorial` | 1.0.0   |
+| `ceh-scenario-ideation`  | 1.0.0   |
+| `ceh-scenario-library`   | 1.0.0   |
+| `ceh-scenario-service`   | 1.0.0   |
+| `ceh-scenario-webapp`    | 1.0.0   |
+
 ### Added
+
+- Add `docs/PLUGIN_VERSIONS.md`, the version of every plugin as of the latest release and the release that last changed it
 
 - Add five scenario bundles as the install entry point, each a manifest and README with no skills, agents, or hooks: `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, and `ceh-scenario-editorial`, all at `1.0.0`. They replace the agent-skills `-iterate` bundles under shorter names. `ceh-scenario-core`, the `-greenfield` bundles, and `ceh-scenario-agent-tooling` are not migrated: the stack bundles list the cross-cutting plugins directly, `ceh-scenario-ideation` covers the greenfield delta, and `ceh-evaluation` is archived
 - Migrate `tools/skills-sync` from agent-skills unchanged apart from a stale decision-log pointer in its README: the py, sh, ps1 and html implementations that copy skills into a project's `.claude/skills/`. `tools/skill-evals` stays behind, since the Evaluation section of `CLAUDE.md` replaces it with Anthropic's own eval tools
@@ -57,6 +95,7 @@ Versions refer to the Marketplace versions. Release notes before this repo live 
 - Trim the descriptions of the hook-loaded skills `agent-coding-contract`, `usage-limit-handoff` and `delegate-bulk-reads` to one line each, since their hooks name them explicitly and no trigger phrases are needed
 - Make `ceh-business-plan:develop-business-plan` a thin entry point that finds the plan, routes to the specialist that owns the moment, and resets `status: draft` when the gate drops below 8/8. The product-market-fit loop moves whole into a new model-only skill, `find-product-market-fit`, and every specialist description shrinks to one sentence because only the entry point triggers. The duplicated `plan-schema.md` is deleted in favour of three inlined rules
 - Tighten the `ceh-business-plan` schema and specialists: `business-plan-schema.md` fixes the heading form (`## §NN Title`) and the file location, lists every section each skill writes, and gains a worked example. Each specialist now writes one named subsection before it asks anything, asks at most three questions (five for `sharpen-strategy`), and tags any line it writes outside its subsection. `sharpen-strategy` confirms before removing refused items, `plan-go-to-market` stops on a missing acquisition ceiling, and `review-business-plan` derives its verdict from the scores
+- Name repo releases by release date (`vYYYY.MM.DD`) instead of a semantic version. Plugin versions stay semantic
 - Require `model` in every agent's frontmatter, enforced by `validate.py`
 
 - Name skills with a verb phrase and agents with a noun, with two exemptions (model-only standards, established terms of art). The rule lives in `CLAUDE.md` and the `SKILL.md` template guidance
