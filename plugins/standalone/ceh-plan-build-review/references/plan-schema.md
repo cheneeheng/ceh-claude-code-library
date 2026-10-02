@@ -22,6 +22,14 @@ Files that share a version tag form one **plan family**. The `NN` iteration coun
 within each family — `ITER_01_v2.md` is the first iteration of the `v2` family, independent of
 `ITER_01.md`.
 
+### Locating plan files
+
+When the user did not name the plan files, look for `SKELETON` and `ITER_NN` files (`.md`) under
+`.agents_workspace/planning/` (where the planning skills write them) or any subfolder within it.
+Group the discovered files by version tag into plan families (untagged files are the default
+family). If more than one family exists and the user named none, confirm with the user which
+version is the target.
+
 ### Cross-version dependencies
 
 Versions are linked, not isolated. A later version builds on an earlier one through the standard

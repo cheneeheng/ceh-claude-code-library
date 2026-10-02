@@ -304,17 +304,17 @@ modified pieces marked distinctly.
 
 ## Planner "Plan families and versions" prose
 
-**Canonical:** `plugins/standalone/ceh-plan-build-review/skills/plan-fullstack-app-to-mvp/SKILL.md` — § Plan families and versions
+**Canonical:** `plugins/standalone/ceh-plan-build-review/skills/plan-fullstack-app/SKILL.md` — § Plan families and versions
 
-| Copy                                                                                      | Section                      | Diverges                                                                                                       |
-| ----------------------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-plan-build-review/skills/plan-fullstack-app-iteratively/SKILL.md` | § Plan families and versions | different words for the same rules, no `mvp: true` terminator, and no section on continuing an existing family |
+| Copy                                                                 | Section                                                          | Diverges                                                                        |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-plan-build-review/references/plan-schema.md` | § File Naming and Version Variants, § Cross-version dependencies | reader-side wording: the matching rules for tags, no emit rules for the planner |
 
 **Shared:** the family and `depends_on` rules: the default family is untagged, a new major version
 is a fresh family with the `NN` counter restarting at 01, a version with its own skeleton is
 self-contained, an iterations-only version depends on the prior family's terminal artifacts, and
-`depends_on` names artifacts by stem and points only backward. The shared rules also live in
-`plan-schema.md`, so a change goes to both planners and to that file.
+`depends_on` names artifacts by stem and points only backward. A change goes to the planner skill
+and to `plan-schema.md`.
 
 ## Usability persona set and severity scale
 

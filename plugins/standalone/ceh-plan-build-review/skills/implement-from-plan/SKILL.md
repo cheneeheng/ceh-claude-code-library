@@ -7,9 +7,8 @@ description: >-
   (§01–§06), resolving iteration pointers and depends_on chains to find the authoritative spec.
   Trigger on "implement from plan", "build from the plan", "implement the skeleton", "build
   ITER_02", or when the user points at a plan file and asks to build it. Not for writing the plan
-  (use plan-fullstack-app-iteratively or plan-fullstack-app-to-mvp), auditing built code against a
-  plan (use review-against-plan), or a small non-feature change to a built version (use
-  patch-built-version).
+  (use plan-fullstack-app), auditing built code against a plan (use review-against-plan), or a
+  small non-feature change to a built version (use patch-built-version).
 argument-hint: "[plan-file]"
 disable-model-invocation: false
 user-invocable: true
@@ -29,15 +28,10 @@ section table, pointer rules, and resolution order there are authoritative.
 
 ### 1. Locate and parse the plan docs
 
-1. Find the target plan files. If the user did not specify, look for `SKELETON` and `ITER_NN`
-   files (`.md`) under `.agents_workspace/planning/` (where the planning skills write them) or any
-   subfolder within it. Filenames may carry a version tag as a prefix or suffix, e.g.
-   `SKELETON_v2.md`, `v2_ITER_03.md`. See "File Naming and Version Variants" in
-   `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md` for the matching rules.
-2. Group the discovered files by version tag into plan families (untagged files are the default
-   family). If more than one family exists, confirm with the user which version is the target.
-   Within a version, the iteration whose frontmatter has `mvp: true` is the sequence terminator:
-   the plan runs SKELETON → ITER_01 → … → that terminator.
+1. Find the target plan files and the target family by "Locating plan files" in
+   `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md`.
+2. Within the target version, the iteration whose frontmatter has `mvp: true` is the sequence
+   terminator: the plan runs SKELETON → ITER_01 → … → that terminator.
 3. Read the YAML frontmatter to determine:
    - `artifact`: is this SKELETON or ITER?
    - For ITER: `sections_changed` (implement these), `sections_unchanged` (resolve via pointer),
