@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>skills-sync</title>
+<link rel="stylesheet" href="skills-sync.css">
+</head>
+<body>
+
+<h1>skills-sync</h1>
+<p class="subtitle">
+  Serverless GUI for installing, updating, adding, and removing Claude Code skills
+  in <code>.claude/skills/</code>. Uses the File System Access API and the GitHub
+  REST API. No data leaves your browser except requests to
+  <code>api.github.com</code> when using a GitHub source.
+</p>
+
+<div id="banner" hidden>
+  Requires a Chromium-based browser — File System Access API not available.
+  This page cannot continue.
+</div>
+
+<section id="step-project">
+  <h2>1. Project folder</h2>
+  <p class="hint">
+    Pick the root of the project that should receive
+    <code>.claude/skills/</code>. Read/write access is requested.
+  </p>
+  <div class="row">
+    <button id="btn-pick-project" class="primary">Choose project folder&hellip;</button>
+    <span id="project-name" class="small"></span>
+  </div>
+  <div id="current-state-wrap" hidden>
+    <h2>Current state</h2>
+    <div id="current-state"></div>
+  </div>
+</section>
+
+<section id="step-source" hidden>
+  <h2>2. Source</h2>
+  <fieldset>
+    <legend>Source type</legend>
+    <div class="row">
+      <label><input type="radio" name="source-type" value="github" checked> GitHub repo</label>
+      <label><input type="radio" name="source-type" value="local"> Local folder</label>
+    </div>
+  </fieldset>
+
+  <div id="github-fields">
+    <div class="row">
+      <label for="gh-repo">owner/repo</label>
+      <input type="text" id="gh-repo" placeholder="e.g. anthropics/skills">
+    </div>
+    <div class="row">
+      <label for="gh-ref">ref</label>
+      <input type="text" id="gh-ref" placeholder="main" value="main">
+    </div>
+    <div class="row">
+      <label for="gh-token">token (optional)</label>
+      <input type="password" id="gh-token" placeholder="GitHub token, kept in memory only">
+    </div>
+    <p class="hint">
+      Token is kept only in a JS variable for this page load — never written to
+      localStorage, sessionStorage, or cookies. Unauthenticated GitHub API limit
+      is 60 requests/hour. Private repos return 404 without a valid token.
+    </p>
+    <div class="row">
+      <button id="btn-load-github">Load skills from repo</button>
+    </div>
+  </div>
+
+  <div id="local-fields" hidden>
+    <p class="hint">
+      No network, no token. Pick the folder containing the skills you want to copy
+      (read-only access).
+    </p>
+    <div class="row">
+      <button id="btn-pick-source">Choose source folder&hellip;</button>
+      <span id="source-name" class="small"></span>
+    </div>
+  </div>
+</section>
+
+<section id="step-skills" hidden>
+  <h2>3. Skills</h2>
+  <p class="hint">
+    Checked skills will be (re)installed on sync. Checkboxes start checked for
+    skills already in the manifest ("installed") and unchecked for new skills
+    found in the source. Use the <strong>&times;</strong> button to remove an
+    installed skill immediately (no source needed).
+  </p>
+  <ul id="skill-list"></ul>
+  <div class="row">
+    <button id="btn-sync" class="primary" disabled>Sync selected skills</button>
+  </div>
+</section>
+
+<section id="step-log">
+  <h2>Status / log</h2>
+  <pre id="log">(no activity yet)</pre>
+</section>
+
+<script src="js/state.js"></script>
+<script src="js/log.js"></script>
+<script src="js/manifest.js"></script>
+<script src="js/fs.js"></script>
+<script src="js/github.js"></script>
+<script src="js/render.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
