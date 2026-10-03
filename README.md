@@ -208,6 +208,7 @@ building, so they load _alongside_ a use-case plugin, not instead of one.
 | ----------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | Build Agentic Workflow  | `/ceh-workflow-builder:build-agentic-workflow`  | Turning a repetitive multi-step task into a skill or gated workflow: the one-skill-vs-workflow gate, handoff schemas, leaf-first emission |
 | Interview Workflow Task | `/ceh-workflow-builder:interview-workflow-task` | The task is not yet described: nine questions answered into a workflow spec file, nothing built                                           |
+| Run Agentic Workflow    | `/ceh-workflow-builder:run-agentic-workflow`    | Running a built workflow from its `flow.yaml`, interactive or headless: stages, approvals, gates, run state, resume, a final status line  |
 
 ---
 
