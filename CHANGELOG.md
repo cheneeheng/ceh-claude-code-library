@@ -10,6 +10,17 @@ listed per release under `### Plugin versions` and tracked in
 
 ## [Unreleased]
 
+### Added
+
+- Add the `ceh-workflow-builder:run-agentic-workflow` skill, a generic runner that executes a built workflow from its `flow.yaml`, interactively or headless (`claude -p`): stages, approvals between stages, gates, run state and resume, ending on a `FLOW STATUS:` line. Stages run as a skill, agent, script, inline instructions, or a saved Claude Code dynamic workflow, which is never assumed: a missing Workflow tool runs the declared fallback or fails, never imitates
+- Add `ceh-workflow-builder/references/flow-config-schema.md`, the `flow.yaml` contract shared by the builder and the runner
+- Add `ceh-workflow-builder/docs/ARCHITECTURE.md` and `docs/TEST_RESULTS.md`: how build and run fit together, and the empirical dynamic-workflow tests (F1-F14) the design rests on, with the full re-run procedure
+
+### Changed
+
+- `ceh-workflow-builder:build-agentic-workflow` emits a `flow.yaml` plus a thin trigger skill and an invocation guide instead of a pipeline-table flow skill, and its emitted `SKILL.md` templates move to the skill's `references/emitted-templates.md` to keep it under 500 lines
+- Align the three `ceh-workflow-builder` skills with the component template: sentence-case titles, "Load this skill when" descriptions, and the runner's sections in template order
+
 ## [v2026.10.02]
 
 First release of this repo. It completes the migration from agent-skills: 16 standalone plugins
