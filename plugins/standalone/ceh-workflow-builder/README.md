@@ -11,16 +11,27 @@ shape from whatever artifact it finds, infers it wrong, and the run keeps
 producing garbage past a green gate.
 
 Target runtime is **Claude Code**. The emitted artifact lands in the target
-repo's `.claude/skills/`, so there is no install step.
+repo's `.claude/skills/`, so there is no install step. A multi-step workflow
+is emitted as a `flow.yaml` config plus a thin trigger skill, and runs through
+the generic runner in this plugin, so the plugin must be installed wherever
+the flow runs.
+
+Building is interactive only. Running works interactively and headless
+(`claude -p`).
+
+How the pieces fit together, with diagrams, is in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). The tests behind the headless
+and dynamic-workflow design are in [docs/TEST_RESULTS.md](docs/TEST_RESULTS.md).
 
 ## Skills
 
-| Skill                     | Invoke                                          | Does                                              |
-| ------------------------- | ----------------------------------------------- | ------------------------------------------------- |
-| `interview-workflow-task` | `/ceh-workflow-builder:interview-workflow-task` | Asks the nine questions, writes the workflow spec |
-| `build-agentic-workflow`  | `/ceh-workflow-builder:build-agentic-workflow`  | Designs and emits the artifact from that spec     |
+| Skill                     | Invoke                                          | Does                                                                                |
+| ------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `interview-workflow-task` | `/ceh-workflow-builder:interview-workflow-task` | Asks the nine questions, writes the workflow spec                                   |
+| `build-agentic-workflow`  | `/ceh-workflow-builder:build-agentic-workflow`  | Designs and emits the artifact from that spec                                       |
+| `run-agentic-workflow`    | `/ceh-workflow-builder:run-agentic-workflow`    | Runs a built workflow from its `flow.yaml`: stages, approvals, gates, state, resume |
 
-Either one is a valid entry point. `build-agentic-workflow` opens with an
+Either of the first two is a valid entry point. `build-agentic-workflow` opens with an
 intake gate and calls the interview itself when the task is not yet described,
 so a user who has nothing written down can still start there.
 
@@ -50,15 +61,62 @@ is written.
 "I do this by hand every time", or "I need a skill that calls other skills".
 
 Covers the assumed-capability contract, the six-condition workflow gate, the
-step-earns-a-skill test, data-contract schemas for non-adjacent handoffs
-(step N to step N+m), the falsifiable-gate rule, and the two run directories.
+step-earns-a-skill test, saved dynamic workflows as an optional stage backend,
+data-contract schemas for non-adjacent handoffs (step N to step N+m), the
+falsifiable-gate rule, and the two run directories. A workflow comes out as
+`flow.yaml` (format: `references/flow-config-schema.md`), a thin
+`<name>-flow` trigger skill and an invocation guide with the interactive and
+headless commands.
+
+### `run-agentic-workflow`
+
+The generic runner. Reads a `flow.yaml`, checks it, then walks its stages in
+order. Each stage runs as a skill, an `Agent` dispatch, a script, inline
+instructions, or a saved dynamic workflow. The runner owns ordering, approvals,
+gates, run state and resume, and ends every run with one line:
+
+```
+FLOW STATUS: done
+FLOW STATUS: awaiting-approval <stage-id>
+FLOW STATUS: failed <stage-id> <reason>
+```
+
+Generated `<name>-flow` skills call it; you can also call it directly with
+`config=<path>`. Launch arguments:
+
+| Argument  | Meaning                                                        |
+| --------- | -------------------------------------------------------------- |
+| `config`  | Path to `flow.yaml`. Required                                  |
+| `mode`    | `interactive` (default) or `headless`. Explicit, never guessed |
+| `resume`  | `latest` or `new`. Default: ask interactively, `new` headless  |
+| `approve` | Stage ids approved in advance, comma-separated                 |
+| other     | The flow's own `inputs`, as `name=value`                       |
+
+**Approvals.** Interactive asks. Headless follows each approval's `headless`
+setting: `stop` (default) ends the session at `awaiting-approval` so a later
+launch can approve, `preapproved-only` proceeds only for an `approve=` id, and
+`fail` ends the run. Resume with `claude -p --resume <session-id> 'APPROVED
+<stage-id>'`, or in a fresh session with `resume=latest approve=<stage-id>`;
+the state file is the record, `--resume` only keeps context.
+
+**Headless needs explicit permissions.** Nobody is there to prompt, so pass
+every tool a stage needs in `--allowedTools` (the builder derives the list into
+the flow's guide). Pass `--output-format json` and branch on the status line in
+`result`.
+
+**Saved dynamic workflows are optional.** The Workflow tool is off by default.
+Interactive: turn on Dynamic workflows in `/config`. Headless: pass `--settings
+'{"enableWorkflows": true, "disableWorkflows": false}'` (the `enableWorkflows`
+key is undocumented and may change) plus `--allowedTools 'Workflow(<name>)'`.
+Without the tool a workflow stage runs its declared fallback or fails; the
+runner never imitates it by hand. Workflow `.js` files need LF line endings.
 
 ## Directories
 
-|            | Variable                  | Default              | Holds                                               |
-| ---------- | ------------------------- | -------------------- | --------------------------------------------------- |
-| Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/` | the interview spec while authoring                  |
-| Run time   | `$CEH_WORKFLOW_RUN_DIR`   | `.agents_workspace/` | a generated workflow's step artifacts and run state |
+|            | Variable                  | Default              | Holds                                                                                |
+| ---------- | ------------------------- | -------------------- | ------------------------------------------------------------------------------------ |
+| Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/` | the interview spec while authoring                                                   |
+| Run time   | `$CEH_WORKFLOW_RUN_DIR`   | `.agents_workspace/` | a generated workflow's step artifacts and run state (read by `run-agentic-workflow`) |
 
 Two variables on purpose. Building one workflow must not collide with running
 another. Each run gets its own `<run-dir>/<name>/<run-id>/`, so a second run
