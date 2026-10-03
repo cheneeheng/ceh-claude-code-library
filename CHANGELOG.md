@@ -10,6 +10,19 @@ listed per release under `### Plugin versions` and tracked in
 
 ## [Unreleased]
 
+## [v2026.10.03]
+
+Built workflows become runnable without a human driving them. `ceh-workflow-builder` now emits a
+`flow.yaml` config that a new generic runner executes, interactively or headless with `claude -p`,
+with Claude Code dynamic workflows as an optional backend for big fan-out stages. The design rests
+on empirical tests of how dynamic workflows behave headless, now recorded in the plugin's docs.
+
+### Plugin versions
+
+| Plugin                 | Version |
+| ---------------------- | ------- |
+| `ceh-workflow-builder` | 1.2.0   |
+
 ### Added
 
 - Add the `ceh-workflow-builder:run-agentic-workflow` skill, a generic runner that executes a built workflow from its `flow.yaml`, interactively or headless (`claude -p`): stages, approvals between stages, gates, run state and resume, ending on a `FLOW STATUS:` line. Stages run as a skill, agent, script, inline instructions, or a saved Claude Code dynamic workflow, which is never assumed: a missing Workflow tool runs the declared fallback or fails, never imitates

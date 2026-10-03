@@ -12,7 +12,7 @@ here. Update this file in the release commit, never in a plugin commit: set **Ve
 plugin bumped since the last release and set its **Changed in** to the new release. A new plugin
 gains a row, and a removed plugin loses its row.
 
-Latest release: `v2026.10.02`
+Latest release: `v2026.10.03`
 
 ## Scenario bundles
 
@@ -43,4 +43,4 @@ Latest release: `v2026.10.02`
 | `ceh-testing`           | 1.0.0   | `v2026.10.02` |
 | `ceh-usability-audit`   | 1.0.0   | `v2026.10.02` |
 | `ceh-web-frontend`      | 1.0.0   | `v2026.10.02` |
-| `ceh-workflow-builder`  | 1.1.2   | `v2026.10.02` |
+| `ceh-workflow-builder`  | 1.2.0   | `v2026.10.03` |
