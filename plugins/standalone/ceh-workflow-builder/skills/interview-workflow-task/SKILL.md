@@ -1,8 +1,8 @@
 ---
 name: interview-workflow-task
 description: >-
-  Load this skill to pull a repetitive task out of someone's head and onto disk before anything is
-  built: ask the nine questions a workflow artifact needs answered, then write the answers to a
+  Load this skill when a repetitive task must come out of someone's head and onto disk before
+  anything is built: ask the nine questions a workflow artifact needs answered, then write the answers to a
   workflow spec file. Trigger on "interview me about this task", "ask me what you need to automate
   this", "help me spec out this workflow", "I'm not sure what you need to know", or when
   `build-agentic-workflow` finds its inputs incomplete. Produces the spec only. Not for deciding one
@@ -13,7 +13,7 @@ user-invocable: true
 license: Apache-2.0
 ---
 
-# Interview a Workflow Task
+# Interview a workflow task
 
 Turn "I do this by hand every time" into a spec that `build-agentic-workflow` can design from
 without guessing. This skill asks and records. It does not design, and it does not emit an artifact.

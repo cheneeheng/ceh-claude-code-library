@@ -1,7 +1,7 @@
 ---
 name: run-agentic-workflow
 description: >-
-  Load this skill to run a built workflow from its `flow.yaml`: walk the stages in order, pause for
+  Load this skill when running a built workflow from its `flow.yaml`: walk the stages in order, pause for
   approvals, check every gate, keep run state on disk and end with a `FLOW STATUS:` line. Works
   interactively and headless (`claude -p`). Trigger on "run the flow.yaml", "run this workflow
   config", or when a generated `<name>-flow` skill hands over its config. Not for building a
@@ -27,22 +27,6 @@ gates, run state and resume; each stage owns its own work. It ends every run wit
 The config format, the validation rules, the `run-state.md` layout and the status line are in
 `${CLAUDE_PLUGIN_ROOT}/references/flow-config-schema.md`. Read it before step 1; this skill does not
 restate it.
-
-## Launch arguments
-
-The arguments are `key=value` tokens. Quote values that contain spaces.
-
-| Argument  | Meaning                                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `config`  | Required. Path to `flow.yaml`. Unset or unreadable: `FLOW STATUS: failed - config unreadable`.                                                                                                     |
-| `mode`    | `interactive` (default) or `headless`. Explicit, never guessed: a skill cannot tell which it runs in, and a wrong guess either hangs on a question or skips a confirmation. Any other value fails. |
-| `resume`  | `latest` or `new`. Default: ask in interactive mode, `new` in headless.                                                                                                                            |
-| `approve` | Comma-separated stage ids approved in advance. Honoured in both modes and recorded with source `approve=<id>`.                                                                                     |
-| other     | The flow's own `inputs`. An unknown key fails the run, so a typo is not silently ignored.                                                                                                          |
-
-A resumed session may instead carry the message `APPROVED <stage-id>`. Treat it as approval of that
-stage when `run-state.md` shows it `awaiting-approval`, with source `resume-prompt`; otherwise ignore
-it.
 
 ## Procedure
 
@@ -86,9 +70,25 @@ it.
    4. **Dispatch** per `run.kind`, below.
    5. **Gate**, below.
    6. **Record** the stage in `run-state.md` right away, with the gate evidence in its note.
-6. **End** with the status line, below.
+6. **End** with the status line, under Output.
 
-## Dispatch
+### Launch arguments
+
+The arguments are `key=value` tokens. Quote values that contain spaces.
+
+| Argument  | Meaning                                                                                                                                                                                            |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `config`  | Required. Path to `flow.yaml`. Unset or unreadable: `FLOW STATUS: failed - config unreadable`.                                                                                                     |
+| `mode`    | `interactive` (default) or `headless`. Explicit, never guessed: a skill cannot tell which it runs in, and a wrong guess either hangs on a question or skips a confirmation. Any other value fails. |
+| `resume`  | `latest` or `new`. Default: ask in interactive mode, `new` in headless.                                                                                                                            |
+| `approve` | Comma-separated stage ids approved in advance. Honoured in both modes and recorded with source `approve=<id>`.                                                                                     |
+| other     | The flow's own `inputs`. An unknown key fails the run, so a typo is not silently ignored.                                                                                                          |
+
+A resumed session may instead carry the message `APPROVED <stage-id>`. Treat it as approval of that
+stage when `run-state.md` shows it `awaiting-approval`, with source `resume-prompt`; otherwise ignore
+it.
+
+### Dispatch
 
 Pass `{run}`, every input path and the path of every schema the stage reads or writes, since an
 isolated stage sees nothing else. Substitute placeholders in every value first.
@@ -114,7 +114,7 @@ isolated stage sees nothing else. Substitute placeholders in every value first.
   they return, count the files against the item list, which is the first half of the gate: a worker
   that died leaves no file, not a failing one.
 
-## Approvals
+### Approvals
 
 The approval belongs to the runner, never to a stage: `AskUserQuestion` is stripped from every
 subagent, so a dispatched stage cannot ask and would run straight through. Never let a stage ask.
@@ -130,7 +130,7 @@ source. Otherwise:
 A stage named in another stage's `covers` shares that approval and does not ask again. Record each
 approval in `run-state.md` with its source and time. Never proceed on silence.
 
-## Gates
+### Gates
 
 After a stage, evaluate `gate.check` with Read, Grep or Bash, and record one line of evidence in the
 stage's note. Do not accept "looks right".
@@ -143,16 +143,6 @@ stage's note. Do not accept "looks right".
   it, at most `retry.max` more times, recording the attempt in the note. Run `world_check` again
   before each attempt. When the bound is spent, stop as above. Never raise the bound.
 
-## Run state and the status line
-
-When the flow is `resumable`, keep `{run}/run-state.md` in the layout the schema doc gives: stage
-states, approvals, and the status line. Update it after every stage change, not at the end, because
-context that dies mid-run takes anything unwritten with it. A resumed run skips stages marked `done`
-and re-enters the first that is not.
-
-The last line of your reply is the status line, and with `run-state.md` it is the last line of that
-file too. Say nothing after it.
-
 ## Rules
 
 - **Run the config as written.** Do not reorder stages, merge them, add a stage, or tune a bound.
@@ -161,6 +151,18 @@ file too. Say nothing after it.
 - **One level deep.** A stage may not run this skill, and a stage you dispatch is told so.
 - **No secrets on disk.** Run artifacts and `run-state.md` hold references to secrets, never values.
 - **Do not stop to ask in headless mode,** except through the approval path above.
+
+## Output
+
+### Run state and the status line
+
+When the flow is `resumable`, keep `{run}/run-state.md` in the layout the schema doc gives: stage
+states, approvals, and the status line. Update it after every stage change, not at the end, because
+context that dies mid-run takes anything unwritten with it. A resumed run skips stages marked `done`
+and re-enters the first that is not.
+
+The last line of your reply is the status line, and with `run-state.md` it is the last line of that
+file too. Say nothing after it.
 
 ## Stop conditions
 

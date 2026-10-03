@@ -1,14 +1,14 @@
 ---
 name: build-agentic-workflow
 description: >-
-  Load this skill to turn a repetitive multi-step task into something an agent runs instead of
-  something a human drives by hand: design it from a workflow spec, decide whether it is one
+  Load this skill when turning a repetitive multi-step task into something an agent runs instead
+  of something a human drives by hand: design it from a workflow spec, decide whether it is one
   skill or a gated multi-step workflow, and emit the artifact into the target repo's
   `.claude/skills/`. Trigger on "turn this into a skill", "turn this into a workflow", "build an
   agentic workflow", "automate this process", "make this repeatable", "I do this by hand every
   time", or "I need a skill that calls other skills". Covers the one-skill-vs-workflow gate, the
   `flow.yaml` config with its stages and gates, per-step data-contract schemas, and leaf-first
-  emission. Building is interactive only; the built workflow runs interactive or headless. An
+  emission. Building is interactive only; the result runs interactive or headless. An
   intake gate delegates to ceh-workflow-builder:interview-workflow-task when the task is not yet
   described. Not for evaluating a skill that already exists, not for adding a component to this
   plugin repo, and not for running a built workflow (use
@@ -18,7 +18,7 @@ user-invocable: true
 license: Apache-2.0
 ---
 
-# Build an Agentic Workflow
+# Build an agentic workflow
 
 Turn a specified repetitive task into a runnable artifact. Two possible outputs, and choosing
 between them is the main decision this skill makes:
@@ -121,7 +121,7 @@ Do not start designing until every row passes or carries a recorded assumption.
 6. One step's output is another step's input — the handoff needs a declared contract.
 
 "It has several paragraphs" is not a reason. If none hold, write one skill from the single-skill
-template below: skip phases 3 and 4, and from Phase 5 keep only the destination and the
+template (see Templates under Output): skip phases 3 and 4, and from Phase 5 keep only the destination and the
 confirm-before-writing step. A single skill has no schemas, no scripts to order, and no run
 directory to ignore. Three rules from the skipped sections still apply, because they guard the
 world rather than a handoff: never write a secret to disk, only a reference to where it lives; a step
@@ -416,102 +416,12 @@ optional and this skill does not depend on it.
 
 ## Output
 
-### The single-skill template
+### Templates
 
-The Phase 2 default, and the path most tasks end on.
-
-```markdown
----
-name: <name>
-description: >-
-  <The moment, as a verb.> Trigger on "<phrase>", "<phrase>". Not for <nearest neighbour>, use
-  <that> instead.
-compatibility: >-
-  <Only if it needs a CLI, service, credential, or network.>
----
-
-# <Name>
-
-<One paragraph: what this does and the one thing it gets right that doing it ad hoc does not.>
-
-## Procedure
-
-1. <step>
-2. <step> — <how to tell it worked, only where that is not self-evident>
-3. <irreversible step> — <confirm with the user first, showing exactly what will be sent or changed>
-
-## Done when
-
-<The falsifiable end condition from spec question 6.>
-```
-
-No pipeline table, no run directory, no schemas: a single skill runs in one context and hands nothing
-off. Adding those is the over-engineering Phase 2 exists to prevent.
-
-### The thin trigger skill template
-
-The flow's `SKILL.md` carries the trigger and nothing else. Ordering, gates and approvals live in
-`flow.yaml`; the runner executes them.
-
-```markdown
----
-name: <name>-flow
-description: >-
-  <The moment, as a verb.> Trigger on "<phrase>", "<phrase>". Runs the <name> flow from its
-  flow.yaml through ceh-workflow-builder:run-agentic-workflow. Not for <nearest neighbour>, use
-  <that> instead.
-argument-hint: "<Launch args, e.g. [mode=headless] [repo=<path>] [approve=<stage-id>]>"
-compatibility: >-
-  Needs the ceh-workflow-builder plugin installed where the flow runs. <Only if a stage is a saved
-  workflow: Claude Code v2.1.269+ with the Workflow tool on (Dynamic workflows in /config, or
-  headless --settings '{"enableWorkflows": true, "disableWorkflows": false}'). Also name any CLI a
-  stage needs, with its minimum version and what fails without it.>
----
-
-# <Name> Flow
-
-<One paragraph: the stages as an arrow chain, and what this adds over running the steps ad hoc.>
-
-Invoke the Skill tool with skill="ceh-workflow-builder:run-agentic-workflow", passing
-`config=${CLAUDE_SKILL_DIR}/<flow.yaml>` followed by `$ARGUMENTS` unchanged. If that skill cannot be
-called, stop and say the ceh-workflow-builder plugin must be installed. Do not run the stages
-yourself.
-```
-
-Beside it sit `flow.yaml` and the invocation guide `README.md`. `flow.yaml` follows
-`${CLAUDE_PLUGIN_ROOT}/references/flow-config-schema.md`, whose Complete example section is the
-model for it: copy its shape, not its stages.
-
-In the emitted files, spell the delegation out as a literal instruction to invoke the Skill tool
-with the runner's name, and give each schema its real filename and `flow.yaml` its real path. The
-template above keeps `flow.yaml` as an angle-bracket placeholder on purpose: _this_ repo's
-`validate.py` resolves every literal `${CLAUDE_SKILL_DIR}/…` and `references/…` path it finds, so a
-concrete example here would fail the repo's own gate. Do not "fix" it.
-
-### The step skill template
-
-```markdown
----
-name: <name>-<step>
-description: >-
-  <The moment.> Called by `<name>-flow` as stage `<stage-id>`; not for direct use outside that flow.
-compatibility: >-
-  <Only if this step needs a CLI, service, credential, or network. A step is the usual place such a
-  need appears, so check before omitting.>
----
-
-# <Name>: <Step>
-
-Reads `<artifact>` at `<run>/<file>` per `<schema>`, where `<run>` is the run directory the flow
-passes in as `run=<path>`; writes `<artifact>` to `<run>/<file>`. <Omit whichever half does not
-apply.>
-
-<The step's actual instructions.>
-
-## Done when
-
-<The falsifiable condition the flow's gate checks.>
-```
+Every emitted `SKILL.md` starts from a template in
+`${CLAUDE_SKILL_DIR}/references/emitted-templates.md`: the single skill (the Phase 2 default), the
+thin trigger skill that hands `flow.yaml` to the runner, and the step skill. Read it in Phase 5,
+before writing the first `SKILL.md`.
 
 ### Final checklist
 
