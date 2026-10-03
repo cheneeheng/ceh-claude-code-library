@@ -124,7 +124,7 @@ Each skill is self-contained with inline content. `references/` is for two cases
 Never for general reference material a model already knows.
 
 Two `ceh-web-frontend` skills migrated whole and carry bundled files that predate this rule:
-`design-ui` (two themes under `references/`) and `visualize-graph-cytoscape` (eight reference
+`design-ui` (two themes and `examples.md` under `references/`) and `visualize-graph-cytoscape` (eight reference
 files, an `assets/template.html`, and a `scripts/to-elements.js` converter). Trim the Cytoscape
 references to the repo-opinionated delta before adding more.
 
@@ -229,6 +229,7 @@ find plugins -path '*skills/<name>/SKILL.md'
 grep -H '"dependencies"' plugins/*/*/.claude-plugin/plugin.json
 
 # Validate the whole repo — CI runs this too
+# (no arguments, whole repo only; CI uses Python 3.13; the repo has no test suite, this is the gate)
 python tools/validate-plugins/validate.py
 
 # Strict YAML parse check of one plugin's skills and agents
