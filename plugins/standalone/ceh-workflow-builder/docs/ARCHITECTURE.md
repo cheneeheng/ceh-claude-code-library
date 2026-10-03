@@ -25,40 +25,40 @@ part that must work unattended.
 
 ```mermaid
 flowchart LR
-    subgraph plugin["ceh-workflow-builder plugin"]
-        interview["interview-workflow-task<br/>(skill)"]
-        builder["build-agentic-workflow<br/>(skill)"]
-        runner["run-agentic-workflow<br/>(skill)"]
-        schema[("references/<br/>flow-config-schema.md")]
+    subgraph build["Build: interactive only"]
+        interview["interview-workflow-task"]
+        spec[("&lt;name&gt;-workflow-spec.md<br/>in the build dir")]
+        builder["build-agentic-workflow"]
     end
 
-    subgraph target["Target repo"]
-        spec[("&lt;build-dir&gt;/&lt;name&gt;-workflow-spec.md")]
-        subgraph emitted[".claude/ (committed)"]
-            trigger["skills/&lt;name&gt;-flow/SKILL.md<br/>thin trigger"]
-            config[("skills/&lt;name&gt;-flow/flow.yaml")]
-            guide["skills/&lt;name&gt;-flow/README.md<br/>invocation guide"]
-            stepskills["skills/&lt;name&gt;-&lt;step&gt;/<br/>step skills"]
-            scripts["skills/&lt;name&gt;-flow/scripts/"]
-            schemas[("skills/&lt;name&gt;-flow/references/<br/>handoff schemas")]
-            wf["workflows/&lt;name&gt;-&lt;step&gt;.js<br/>optional dynamic workflow"]
-        end
-        rundir[("&lt;run-dir&gt;/&lt;name&gt;/&lt;run-id&gt;/<br/>run-state.md + artifacts<br/>(git-ignored)")]
+    subgraph emitted["Emitted into the target repo's .claude/ (committed)"]
+        trigger["&lt;name&gt;-flow/SKILL.md<br/>thin trigger"]
+        config[("&lt;name&gt;-flow/flow.yaml")]
+        guide["&lt;name&gt;-flow/README.md<br/>invocation guide"]
+        backends["Stage work: step skills, scripts/,<br/>workflows/*.js, handoff schemas"]
     end
+
+    subgraph run["Run: interactive or headless"]
+        runner["run-agentic-workflow"]
+        rundir[("run-state.md + artifacts<br/>in the run dir, git-ignored")]
+    end
+
+    schema[("references/flow-config-schema.md<br/>the flow.yaml contract")]
 
     interview -->|writes| spec
-    builder -->|reads| spec
-    builder -.->|calls when a row is open| interview
-    builder -->|emits| emitted
-    builder -.->|validates against| schema
-    trigger -->|invokes with config=| runner
-    runner -->|reads| config
-    runner -.->|validates against| schema
-    runner -->|dispatches stages| stepskills
-    runner -->|dispatches stages| scripts
-    runner -->|dispatches stages| wf
+    spec -->|read by| builder
+    builder -.->|row open| interview
+    builder -->|emits leaf-first| emitted
+    trigger -->|"hands over config="| runner
+    config -->|loaded by| runner
+    backends -->|dispatched by| runner
     runner -->|writes| rundir
+    schema -.->|writer follows| builder
+    schema -.->|reader checks| runner
 ```
+
+Every edge but the interview call-back points from build towards run, so the picture reads in the
+order things happen. Only the middle column is committed.
 
 | Component                 | Role                                                                                                                                                                                                        |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -97,33 +97,58 @@ Human input happens **only between stages, in the runner**. `AskUserQuestion` is
 subagents, and a dynamic workflow takes no input mid-run, so an approval can never live inside an
 `agent` or `workflow` stage.
 
+### Why the runner and dynamic workflows coexist
+
+They complement each other. The builder and runner are the design-time and orchestration layer:
+intake, gates, re-run safety, irreversible steps, secrets. A dynamic workflow is a runtime for
+large fan-out, cross-checking and loop-until-pass inside one stage. Each does something the other
+cannot:
+
+| Skill-driven flow (the runner)                      | Dynamic workflow (a stage backend)                                   |
+| --------------------------------------------------- | -------------------------------------------------------------------- |
+| Human confirmations and go/no-go gates              | Dozens to hundreds of agents (16 concurrent by default, 1,000 a run) |
+| Re-run safety (spec Q8) and irreversible steps (Q9) | Control flow enforced by the script, not by Claude following prose   |
+| Run state on disk that survives sessions            | Adversarial cross-checks, with results kept out of Claude's context  |
+| Secrets passed by reference                         | Resume of a stopped run (same session, `--resume`, or backgrounded)  |
+
+A workflow's _checks_ are still agents running commands and reporting against a schema. The script
+enforces the order and the loop, not the truth of the check.
+
 ## How a run proceeds
 
 ```mermaid
 flowchart TD
-    start(["/&lt;name&gt;-flow args<br/>mode=interactive|headless"]) --> load["Load flow.yaml, check against<br/>schema, inputs, .js line endings"]
+    start(["/&lt;name&gt;-flow args<br/>mode=interactive|headless"]) --> load["1. Load flow.yaml, check every<br/>schema rule and .js line endings"]
     load -->|invalid| prefail(["FLOW STATUS:<br/>failed - &lt;reason&gt;"])
-    load --> pre["Preflight: Workflow tool and<br/>plugin skills present?"]
-    pre -->|absent, fallback=fail| prefail
-    pre --> state["Create or resume run dir<br/>and run-state.md"]
-    state --> next{"Next pending stage?"}
-    next -->|none| done(["FLOW STATUS: done"])
-    next --> appr{"Stage has approval?"}
-    appr -->|no| world
-    appr -->|yes, interactive| ask["AskUserQuestion,<br/>showing the whole batch"]
-    ask -->|approved| world
+    load --> inputs["2. Resolve inputs"]
+    inputs -->|"missing, headless"| prefail
+    inputs --> pre{"3. Preflight: Workflow tool<br/>and plugin skills present?"}
+    pre -->|"absent, fallback=fail"| prefail
+    pre -->|"present, or fallback<br/>agent / inline"| state["4. Create or resume run dir<br/>and run-state.md"]
+    state --> next{"5. Next stage<br/>not done?"}
+    next -->|none left| done(["FLOW STATUS: done"])
+    next -->|yes| reads{"reads files exist?"}
+    reads -->|missing| failed(["FLOW STATUS:<br/>failed &lt;stage&gt; &lt;reason&gt;"])
+    reads -->|yes| appr{"Approval still needed?<br/>not in approve=, covered or recorded"}
+    appr -->|interactive| ask["AskUserQuestion,<br/>showing the whole batch"]
     ask -->|declined| failed
-    appr -->|yes, headless| hl{"approval.headless"}
-    hl -->|preapproved-only and<br/>approve=&lt;stage&gt; passed| world
-    hl -->|stop, or preapproved-only<br/>without approve=| waiting(["Write approval-&lt;stage&gt;.md<br/>FLOW STATUS:<br/>awaiting-approval &lt;stage&gt;"])
+    appr -->|headless| hl{"approval.headless"}
     hl -->|fail| failed
-    world{"unsafe_to_rerun?<br/>world_check true?"} -->|"no check, or true"| run["Dispatch: inline / skill /<br/>script / agent / workflow"]
-    world -->|false: effect may exist| failed
-    run --> gate{"Gate passes?"}
-    gate -->|yes| mark["Mark stage done<br/>in run-state.md"] --> next
-    gate -->|no, retries left| run
-    gate -->|no, bound spent| failed(["FLOW STATUS:<br/>failed &lt;stage&gt; &lt;reason&gt;"])
+    hl -->|"stop or preapproved-only"| waiting(["Write approval-&lt;stage&gt;.md<br/>FLOW STATUS:<br/>awaiting-approval &lt;stage&gt;"])
+    appr -->|no| world{"unsafe_to_rerun:<br/>world_check passes?"}
+    ask -->|approved| world
+    world -->|"no: effect may exist"| failed
+    world -->|"yes, or no check"| run["Dispatch per kind: inline / skill /<br/>script / agent / workflow"]
+    run -->|workflow call denied| failed
+    run --> gate{"Gate green?"}
+    gate -->|"red, stop or bound spent"| failed
+    gate -->|"red, retries left"| world
+    gate -->|yes| mark["Record done and gate<br/>evidence in run-state.md"] --> next
 ```
+
+The numbers match the steps in the runner's procedure. A retry goes back through the world check,
+because the runner re-runs `world_check` before every attempt. A stage pre-approved with `approve=`
+takes the `no` branch at the approval check, so `preapproved-only` without it stops.
 
 The final `FLOW STATUS:` line is written to `run-state.md` too, so a headless caller can branch on
 either the reply or the file. Failures before any stage runs use `-` as the stage id. A declined
@@ -215,3 +240,19 @@ verified only there.
 | The runner lives in the plugin, not vendored into each target repo                 | One copy, updated with the plugin. Generated flows declare the plugin in `compatibility`.                                                                |
 | Workflow `.js` is written with LF and pinned by `.gitattributes`                   | CRLF makes the launch fail (F2).                                                                                                                         |
 | Building stays interactive-only                                                    | The intake must not infer answers, and emission needs the user's agreement to the file list.                                                             |
+
+## Risks
+
+- **`enableWorkflows` is undocumented** (F8) and may change. The version floor and the runner's
+  preflight catch a missing tool.
+- **Dynamic workflows move fast.** Features arrived across versions: `/workflow-authoring` in
+  v2.1.248, the concurrency environment variable in v2.1.269, waiting out a usage limit in v2.1.271.
+- **Token cost.** On Pro the default workflow size guideline is `small` and the usage limit is reached
+  quickly, so start a `workflow` stage on a small slice.
+- **Generated flows need this plugin** wherever they run, because the runner is not vendored.
+
+## Not yet validated
+
+The design was tested piece by piece (TEST_RESULTS.md), not end to end. Still open: pilot one real
+fan-out task through a built flow, interactively and then headless, and compare an `agent` fan-out
+stage with a `workflow` stage on the same task.

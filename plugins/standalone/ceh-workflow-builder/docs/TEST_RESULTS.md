@@ -42,9 +42,53 @@ const res = await agent(
 return res;
 ```
 
-Two test skills: `run-hello` (writes a file, launches `hello-flow`, writes its returned path) and
-`approval-test` (step 1, then stops at `awaiting-approval` in `run/state.md` until a message
-contains `APPROVED`, then step 2).
+Two test skills, both saved with LF line endings.
+
+`.claude/skills/run-hello/SKILL.md` launches `hello-flow` mid-flow and uses its result (T5). Step 2's
+last sentence tests the F6 guard: does an explicit instruction stop the imitation?
+
+```markdown
+---
+name: run-hello
+description: >-
+  Empirical test of a skill launching a saved workflow. Trigger on "run-hello".
+disable-model-invocation: false
+user-invocable: true
+---
+
+# Run Hello
+
+1. Write `run/t5-before.txt` containing `before`.
+2. Use the Workflow tool to run the saved workflow hello-flow with args `{"word": "t5"}` and wait for
+   its result. If the Workflow tool is not available, stop and reply `T5 FAILED: no Workflow tool`.
+   Do not do the workflow's work yourself.
+3. Write `run/t5-after.txt` containing the `path` field the workflow returned.
+4. Reply `T5 DONE`.
+```
+
+`.claude/skills/approval-test/SKILL.md` pauses for approval across sessions (T6, T7):
+
+```markdown
+---
+name: approval-test
+description: >-
+  Empirical test of pause-for-approval across sessions. Trigger on "approval-test".
+disable-model-invocation: false
+user-invocable: true
+---
+
+# Approval Test
+
+State lives in `run/state.md`. Read it first if it exists.
+
+1. If `run/state.md` does not exist: write `run/step1.txt` containing `step1 done`, then write
+   `run/state.md` with two lines: `step1: done` and `step2: awaiting-approval`.
+2. If `step2` is `awaiting-approval` and the user's message does not contain the word `APPROVED`:
+   reply exactly `AWAITING APPROVAL: step2` and stop. Do nothing else.
+3. If `step2` is `awaiting-approval` and the user's message contains `APPROVED`: write
+   `run/step2.txt` containing `step2 done`, set `step2: done` in `run/state.md`, reply `DONE`.
+4. Never redo a step marked `done`.
+```
 
 **How a launch was detected.** Not by files on disk (see F6). Runs used
 `--output-format stream-json --verbose` and searched the log for `"name":"Workflow"`.
@@ -96,19 +140,114 @@ Recorded so the design does not assume them:
 
 ## Re-running
 
-The full step-by-step procedure (pwsh) is kept with the session notes in
-`.agents_workspace/workflow-empirical-tests.md`, which is git-ignored. The essentials:
+The procedure is in pwsh and needs PowerShell 7.3+ for the quoting (F4). Delete any `out/<word>.txt`
+left by an earlier attempt before each rerun, because a file on disk does not prove a run (F6).
+
+### Setup
 
 ```powershell
-# Is the Workflow tool loaded in -p?
-claude -p 'hi' --settings '{"enableWorkflows": true, "disableWorkflows": false}' `
-  --output-format stream-json --verbose |
+claude --version          # record it; >= 2.1.248 for /workflow-authoring
+New-Item -ItemType Directory -Force ~/wf-test | Out-Null; Set-Location ~/wf-test; git init
+New-Item -ItemType Directory -Force .claude/workflows, .claude/skills, out, run | Out-Null
+# Global settings must not pre-allow what T1 tests (F7)
+Select-String -Path ~/.claude/settings.json -Pattern 'Workflow|Write|Edit|disableWorkflows'
+```
+
+Turn on **Dynamic workflows** in `/config` (F1). Save the fixtures above, then check `hello-flow.js`
+for CRLF and fix it (F2):
+
+```powershell
+$p = '.claude/workflows/hello-flow.js'
+Select-String -Path $p -Pattern "`r" -Quiet     # True = CRLF present
+[IO.File]::WriteAllText((Resolve-Path $p), ((Get-Content $p -Raw) -replace "`r`n", "`n").TrimStart([char]0xFEFF))
+```
+
+Every `-p` command below that launches a workflow also takes
+`--settings '{"enableWorkflows": true, "disableWorkflows": false}'` (F8). It is left out below to
+keep the lines short.
+
+### T-1: Workflow tool loaded in `-p`?
+
+```powershell
+claude -p 'hi' --output-format stream-json --verbose |
   Select-String '"subtype":"init"' | ForEach-Object { $_.Line } > init.json
 Select-String -Path init.json -Pattern 'Workflow' -Quiet
+```
 
-# Did a run actually launch a workflow?
+### T0: interactive load
+
+Run `claude`, type `/` and check `hello-flow` is listed (else `/reload-skills`), run
+`/hello-flow word t0`, approve with **Yes, run it**, check `/workflows` shows the run, then
+`Get-Content out/t0.txt` should print `t0`.
+
+### T1: `-p`, no allow rule
+
+```powershell
+claude -p 'Use the Workflow tool to run the saved workflow hello-flow with args {"word": "t1"}' `
+  --output-format stream-json --verbose > t1.jsonl
+Select-String -Path t1.jsonl -Pattern '"name":"Workflow"'
+Select-String -Path t1.jsonl -Pattern 'permission_denials'
+```
+
+Then add allow rules for the remaining tests in `.claude/settings.json` (throwaway repo, so broad
+file rules are fine):
+
+```json
+{
+  "enableWorkflows": true,
+  "disableWorkflows": false,
+  "permissions": { "allow": ["Workflow(hello-flow)", "Read", "Edit", "Write"] }
+}
+```
+
+### T2 to T4: launch forms in `-p`
+
+```powershell
+# T2: plain language naming the tool. Check the file at once to see whether -p waited.
 claude -p 'Use the Workflow tool to run the saved workflow hello-flow with args {"word": "t2"}' `
-  --settings '{"enableWorkflows": true, "disableWorkflows": false}' `
   --output-format stream-json --verbose > t2.jsonl
-Select-String -Path t2.jsonl -Pattern '"name":"Workflow"'
+Test-Path out/t2.txt
+
+# T3: slash command. Expect "not installed" (F9).
+claude -p '/hello-flow word t3' --output-format stream-json --verbose > t3.jsonl
+
+# T4: own words, unsaved workflow. Change the allow rule to "Workflow" first, then back.
+claude -p 'Use a workflow to create out/t4-a.txt and out/t4-b.txt in parallel, one agent each, each containing its own file name.' `
+  --output-format stream-json --verbose > t4.jsonl
+
+Select-String -Path t2.jsonl, t3.jsonl, t4.jsonl -Pattern '"name":"Workflow"'
+```
+
+### T5: skill launches a saved workflow
+
+```powershell
+claude -p '/run-hello' --output-format stream-json --verbose > t5.jsonl
+Select-String -Path t5.jsonl -Pattern '"name":"Workflow"'
+Get-Content run/t5-after.txt   # expect out/t5.txt
+```
+
+### T6: pause, resume by session id
+
+```powershell
+Remove-Item run/state.md, run/step*.txt -ErrorAction SilentlyContinue
+claude -p '/approval-test' --output-format json > t6a.json
+$a = Get-Content t6a.json -Raw | ConvertFrom-Json
+$a.result                 # expect AWAITING APPROVAL: step2
+$SID = $a.session_id
+$before = (Get-Item run/step1.txt).LastWriteTime
+
+claude -p --resume $SID 'APPROVED' --output-format json > t6b.json
+$b = Get-Content t6b.json -Raw | ConvertFrom-Json
+$b.result                 # expect DONE
+(Get-Item run/step1.txt).LastWriteTime -eq $before   # expect True: step 1 not redone
+$b.session_id -eq $SID    # expect True (F14)
+```
+
+### T7: pause, fresh session from the state file
+
+```powershell
+Remove-Item run/state.md, run/step*.txt -ErrorAction SilentlyContinue
+claude -p '/approval-test' --output-format json > t7a.json
+claude -p '/approval-test APPROVED' --output-format json > t7b.json   # no --resume
+Get-Content run/state.md  # expect step2: done
 ```
