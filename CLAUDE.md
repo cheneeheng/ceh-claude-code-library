@@ -219,6 +219,8 @@ Whatever else gets skipped, these four land in the **same commit** or CI fails:
    the two match.
 4. `python tools/validate-plugins/validate.py` green.
 
+The PR also carries its `CHANGELOG.md` entry and `docs/PLUGIN_VERSIONS.md` rows, per Versioning.
+
 ## Commands
 
 ```bash
@@ -264,8 +266,6 @@ Do not run the archived `ceh-evaluation` plugin (`archive/ceh-evaluation/`): the
 
 ## Versioning
 
-Two independent layers.
-
 **Per-plugin versions** (load-bearing for auto-update) live in `plugin.json`, mirrored in
 `marketplace.json`, and both must be bumped in the same commit. Bump at commit time, not during
 iterative edits.
@@ -274,13 +274,31 @@ iterative edits.
 - **MINOR** — a new skill or agent, or adding/removing a `dependencies` entry.
 - **MAJOR** — the plugin is renamed or removed.
 
-**The repo release** is named by its release date, `vYYYY.MM.DD` (e.g. `v2026.10.02`), not a
-semantic version. The git tag marks a consistent state of all plugins together and is a changelog
-anchor only — it does not drive auto-update. A second release on the same day appends a counter
-(`v2026.10.02.1`). Cut it after bumping plugin versions, and add a `CHANGELOG.md` entry: prose on
-what changed and why, a `### Plugin versions` table listing every plugin bumped, then `### Added` /
-`### Changed` / `### Fixed`. In the same commit, update `docs/PLUGIN_VERSIONS.md`: the new version
-and the release name on every bumped plugin's row.
+**This repo has no releases**: no version tags, no GitHub releases, no release commits. Changes
+reach users through per-plugin version bumps and the dated `CHANGELOG.md` sections each PR adds. If
+the user asks for a release in any form ("cut a release", "ship it", "tag a release", the full ship
+sequence, or `ceh-git-workflow:release`), do not start it. Reply with a warning that releases are
+not intended or used in this repository, and stop.
+
+**Every PR adds its own `CHANGELOG.md` entry**, in the PR's own commit, under a section headed by
+the date the PR is opened, `## YYYY-MM-DD`. PRs opened on the same day share that day's section:
+add to it if it exists, otherwise create it at the top, below the intro. Order is by date opened,
+not merged. A section holds prose on what changed and why, a `### Plugin versions` table listing
+every plugin the PR bumped (merged with any table already in that day's section), then
+`### Added` / `### Changed` / `### Fixed`. In the same commit, update `docs/PLUGIN_VERSIONS.md`: the
+new version and the section date on every bumped plugin's row.
+
+### Landing a branch
+
+Follow `ceh-git-workflow:pull-request` (open, merge, land), with these differences for this repo.
+Where they conflict, this section wins:
+
+- **Changelog step:** do not log under `## [Unreleased]` or run `ceh-git-workflow:update-changelog`
+  in Unreleased mode. Write the entry under today's `## YYYY-MM-DD` section, per the rule above.
+- **Version bumps ride in the PR.** The skill's "needs a version bump or tag → switch to
+  `ceh-git-workflow:release`" does not apply: bump `plugin.json`, `marketplace.json`, and
+  `docs/PLUGIN_VERSIONS.md` in the PR's commit, and never tag or release.
+- **Commit step:** expect the pre-commit hook to abort on reformatted Markdown, see Commands.
 
 ## Key Files
 
@@ -293,8 +311,8 @@ and the release name on every bumped plugin's row.
 | `docs/PLUGIN_DEPENDENCIES.md`                                | Current dependency graph: every edge with its evidence                         |
 | `docs/ENVIRONMENT_VARIABLES.md`                              | Every environment variable any plugin reads: plugin, reader, default, effect   |
 | `docs/TESTING_WORKFLOW.md`                                   | How `ceh-testing`, the stack testing skills, and the tester agents route       |
-| `docs/PLUGIN_VERSIONS.md`                                    | Every plugin's version as of the latest release, and the release that set it   |
-| `CHANGELOG.md`                                               | Release notes per repo tag, each with a `### Plugin versions` table            |
+| `docs/PLUGIN_VERSIONS.md`                                    | Every plugin's current version, and the changelog date that set it             |
+| `CHANGELOG.md`                                               | One section per PR-open date, each with a `### Plugin versions` table          |
 | `.claude/skills/add-plugin-component/assets/`                | `SKILL.template.md` and `agent.template.md` — the base for every new component |
 | `.agents_workspace/DECISION_LOG.md`                          | Agent decision log — **git-ignored, local only**, append-only                  |
 

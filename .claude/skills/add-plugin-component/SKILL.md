@@ -188,8 +188,8 @@ Same commit, both files, or CI fails:
 
 **PATCH** for content/description updates, **MINOR** for a new skill or agent or for adding or
 removing a `dependencies` entry, **MAJOR** for renaming or removing the plugin. Bump at commit
-time, not during iterative edits. The repo git tag and its `CHANGELOG.md` entry are a separate,
-independent layer — cut them after the plugin bumps land.
+time, not during iterative edits. The PR also adds its `CHANGELOG.md` entry under the date it is
+opened and updates `docs/PLUGIN_VERSIONS.md` — see Versioning in `CLAUDE.md`.
 
 ## 6. Validate
 
@@ -257,7 +257,7 @@ every component with the step 1 table before creating anything, then:
    holds `plugin.json` (with `dependencies`) and `README.md` and nothing else — `validate.py`
    enforces it. Record any new edge in `docs/PLUGIN_DEPENDENCIES.md`.
 
-At the next release, `CHANGELOG.md` lists the plugin at `1.0.0` under `### Added` and
+In the same PR, `CHANGELOG.md` lists the plugin at `1.0.0` under `### Added` and
 `docs/PLUGIN_VERSIONS.md` gains its row.
 
 ## When plugin-dev or skill-creator skills are also loaded
