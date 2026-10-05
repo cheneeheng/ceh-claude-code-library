@@ -12,7 +12,7 @@ description: >-
   intake gate delegates to ceh-workflow-builder:interview-workflow-task when the task is not yet
   described. Not for evaluating a skill that already exists, not for adding a component to this
   plugin repo, and not for running a built workflow (use
-  ceh-workflow-builder:run-agentic-workflow).
+  ceh-workflow-runner:run-agentic-workflow).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -25,7 +25,7 @@ between them is the main decision this skill makes:
 
 - **One skill** — the default. A single `SKILL.md` the agent loads and follows.
 - **A workflow** — a `flow.yaml` config that owns _ordering and gates only_, a thin trigger skill
-  that hands it to the generic runner (`ceh-workflow-builder:run-agentic-workflow`), and the step
+  that hands it to the generic runner (`ceh-workflow-runner:run-agentic-workflow`), and the step
   skills, scripts, saved workflows and handoff schemas the stages delegate to. The config format is
   `${CLAUDE_PLUGIN_ROOT}/references/flow-config-schema.md`; read it before Phase 3.
 
@@ -259,7 +259,7 @@ Then run these checks:
   user why.
 
 **The thin trigger skill.** Its body is only the moment and a hand-over to the runner. It declares
-`compatibility` naming the `ceh-workflow-builder` plugin and, when a stage is a saved workflow,
+`compatibility` naming the `ceh-workflow-runner` plugin and, when a stage is a saved workflow,
 Claude Code v2.1.269+ with the Workflow tool on. If the runner cannot be called, the skill stops
 and says the plugin must be installed, and never runs the stages by hand.
 
@@ -434,7 +434,7 @@ before writing the first `SKILL.md`.
 - [ ] Every cross-step handoff is a file under the run directory, with a schema.
 - [ ] Every `reads` has an earlier `writes`, and every cross-step `reads` has an existing schema.
 - [ ] `flow.yaml` passes every rule in `flow-config-schema.md`, and the thin trigger skill only hands
-      it to the runner, with the `ceh-workflow-builder` plugin named in its `compatibility`.
+      it to the runner, with the `ceh-workflow-runner` plugin named in its `compatibility`.
 - [ ] `resumable: true` if and only if the run can stop partway or an approval stops headless; long
       steps resume internally.
 - [ ] Every step that is unsafe to run twice has `unsafe_to_rerun` and a `world_check`, not
