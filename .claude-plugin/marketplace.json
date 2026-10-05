@@ -101,8 +101,14 @@
     {
       "name": "ceh-workflow-builder",
       "source": "./plugins/standalone/ceh-workflow-builder",
-      "version": "1.2.0",
-      "description": "CEH workflow builder: interview a repetitive multi-step task into a runnable artifact — one skill when it is simple, or a flow.yaml config with gates and approvals plus a thin trigger skill — emitted into the target repo's .claude/skills/, and a generic runner that executes it interactively or headless."
+      "version": "1.3.0",
+      "description": "CEH workflow builder: interview a repetitive multi-step task into a runnable artifact — one skill when it is simple, or a flow.yaml config with gates and approvals plus a thin trigger skill — emitted into the target repo's .claude/skills/. Running a flow needs ceh-workflow-runner."
+    },
+    {
+      "name": "ceh-workflow-runner",
+      "source": "./plugins/standalone/ceh-workflow-runner",
+      "version": "1.0.0",
+      "description": "CEH workflow runner: execute a built flow.yaml workflow interactively or headless — stages in order, approvals, gates, run state and resume, ending on a FLOW STATUS line. Install it wherever a flow runs; building one needs ceh-workflow-builder instead."
     },
     {
       "name": "ceh-scenario-service",

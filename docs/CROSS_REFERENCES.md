@@ -363,6 +363,19 @@ because git history is append-only and erasure means rewriting every commit and 
 clone and backup. The skill runs the gate as a step with a verdict and refuses to build when a row
 fails. The doc carries the two stops as reading material.
 
+## flow.yaml schema
+
+**Canonical:** `plugins/standalone/ceh-workflow-builder/references/flow-config-schema.md` — whole file
+
+| Copy                                                                      | Section    | Diverges |
+| ------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-workflow-runner/references/flow-config-schema.md` | whole file | none     |
+
+**Shared:** the entire `flow.yaml` contract: keys, stage kinds, validation rules, the `run-state.md`
+layout and the `FLOW STATUS:` line. The builder writes and checks a config against it, the runner
+checks it again before running, so a rule present in only one copy lets the builder emit a config
+the runner rejects, or the reverse. Keep the two files byte-identical.
+
 ## Workflow spec: the nine questions
 
 **Canonical:** `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/SKILL.md` — § The nine questions, § How to ask, § The spec file

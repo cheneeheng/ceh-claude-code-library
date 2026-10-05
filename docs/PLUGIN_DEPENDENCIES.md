@@ -65,6 +65,7 @@ listed by each stack bundle directly as well as through its stack plugin.
 | Plugin                            | Where it is                             | Note                                                                                                             |
 | --------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `ceh-workflow-builder`            | no bundle, install it on its own        | its agent-skills bundle (`ceh-scenario-agent-tooling`) was not migrated, because `ceh-evaluation` stays archived |
+| `ceh-workflow-runner`             | no bundle, install it on its own        | split from `ceh-workflow-builder` so a flow runs without the builder; neither depends on the other               |
 | `ceh-seo`, `ceh-blog`             | `ceh-scenario-editorial` only           |                                                                                                                  |
 | `ceh-ag-ui`                       | `ceh-scenario-webapp` only              | it depends on `ceh-web-frontend`                                                                                 |
 | `ceh-git-datastore`               | `ceh-scenario-service` only             |                                                                                                                  |

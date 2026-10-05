@@ -14,7 +14,24 @@ before this repo live in
 Releases are retired. The changelog now grows one dated section per PR-open day, written in the
 PR itself, instead of one section per tagged release.
 
+The workflow runner splits out of `ceh-workflow-builder` into its own `ceh-workflow-runner` plugin.
+Building a flow and running it are different moments, and a session that only runs a flow has no
+use for the interview and builder skills.
+
+### Plugin versions
+
+| Plugin                 | Version |
+| ---------------------- | ------- |
+| `ceh-workflow-builder` | 1.3.0   |
+| `ceh-workflow-runner`  | 1.0.0   |
+
+### Added
+
+- Add the `ceh-workflow-runner` plugin at 1.0.0, holding `run-agentic-workflow` and its own word-for-word copy of `flow-config-schema.md`, registered in `docs/CROSS_REFERENCES.md`
+
 ### Changed
+
+- Move `run-agentic-workflow` from `ceh-workflow-builder` to `ceh-workflow-runner`. Generated `<name>-flow` skills now call `ceh-workflow-runner:run-agentic-workflow` and name that plugin in their `compatibility`. Flows emitted before this change still call `ceh-workflow-builder:run-agentic-workflow` and must have that line updated
 
 - Replace the release process with per-PR changelog entries grouped by the date the PR is opened, in `CLAUDE.md`, the `add-plugin-component` checklist, `README.md`, and `docs/PLUGIN_VERSIONS.md`
 - Rename the old release sections `v2026.10.02` and `v2026.10.03` to the date format, here and in `docs/PLUGIN_VERSIONS.md`

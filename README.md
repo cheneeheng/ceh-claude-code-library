@@ -39,15 +39,16 @@ stack testing skills route between each other, with the trigger phrases and sequ
 | Business Plan         | `ceh-business-plan`      | Turn a product idea or an existing app plan into a validated business plan: a product-market-fit interview loop that interrogates the weakest assumption until a readiness gate passes, then a board-style review and five specialist passes on strategy, unit economics, go-to-market, premortem, and the 90-day operating plan         |
 | Git Datastore         | `ceh-git-datastore`      | Run an app on a bare git repo instead of a database while that still fits: a gate that talks you out of it when it does not, a plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite                                                                                                                              |
 | Workflow Builder      | `ceh-workflow-builder`   | Turn a repetitive multi-step task into a runnable artifact: interview it into a spec, then emit one skill or a gated workflow skill with handoff schemas into the target repo                                                                                                                                                            |
+| Workflow Runner       | `ceh-workflow-runner`    | Run a built `flow.yaml` workflow, interactive or headless: stages in order, approvals, gates, run state and resume. Install it wherever a flow runs, without the builder                                                                                                                                                                 |
 
 ### Categorization
 
-| Tier                  | Loaded            | Plugins                                                                                                                                                      |
-| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                     |
-| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                                                                                            |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder` |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                  |
+| Tier                  | Loaded            | Plugins                                                                                                                                                                             |
+| --------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                            |
+| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                                                                                                                   |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner` |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                         |
 
 Each plugin is self-contained: a foundational standard needed by more than one plugin is duplicated
 into each instead of extracted into a shared base, so one plugin per use case is all you load.
@@ -208,7 +209,12 @@ building, so they load _alongside_ a use-case plugin, not instead of one.
 | ----------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | Build Agentic Workflow  | `/ceh-workflow-builder:build-agentic-workflow`  | Turning a repetitive multi-step task into a skill or gated workflow: the one-skill-vs-workflow gate, handoff schemas, leaf-first emission |
 | Interview Workflow Task | `/ceh-workflow-builder:interview-workflow-task` | The task is not yet described: nine questions answered into a workflow spec file, nothing built                                           |
-| Run Agentic Workflow    | `/ceh-workflow-builder:run-agentic-workflow`    | Running a built workflow from its `flow.yaml`, interactive or headless: stages, approvals, gates, run state, resume, a final status line  |
+
+### Workflow Runner (`ceh-workflow-runner`)
+
+| Skill                | Invoke                                      | When                                                                                                                                     |
+| -------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Run Agentic Workflow | `/ceh-workflow-runner:run-agentic-workflow` | Running a built workflow from its `flow.yaml`, interactive or headless: stages, approvals, gates, run state, resume, a final status line |
 
 ---
 
@@ -320,11 +326,12 @@ What each bundle installs is listed in [`docs/PLUGIN_DEPENDENCIES.md`](docs/PLUG
 /plugin install ceh-business-plan@ceh-claude-code-library --scope user
 /plugin install ceh-git-datastore@ceh-claude-code-library --scope user
 /plugin install ceh-workflow-builder@ceh-claude-code-library --scope user
+/plugin install ceh-workflow-runner@ceh-claude-code-library --scope user
 ```
 
 Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-ag-ui` brings
-`ceh-web-frontend`. `ceh-workflow-builder` is in no bundle, so install it on its own when you want
-it. Add `--scope project` instead of `--scope user` for a project-specific install.
+`ceh-web-frontend`. `ceh-workflow-builder` and `ceh-workflow-runner` are in no bundle, so install
+them on their own: the builder where you author a flow, the runner wherever a flow runs. Add `--scope project` instead of `--scope user` for a project-specific install.
 
 ### Step 3 — Verify
 
@@ -391,6 +398,9 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     },
     {
       "path": "~/ceh-claude-code-library/plugins/standalone/ceh-workflow-builder"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-workflow-runner"
     }
   ]
 }

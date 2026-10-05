@@ -45,11 +45,11 @@ The flow's `SKILL.md` carries the trigger and nothing else. Ordering, gates and 
 name: <name>-flow
 description: >-
   <The moment, as a verb.> Trigger on "<phrase>", "<phrase>". Runs the <name> flow from its
-  flow.yaml through ceh-workflow-builder:run-agentic-workflow. Not for <nearest neighbour>, use
+  flow.yaml through ceh-workflow-runner:run-agentic-workflow. Not for <nearest neighbour>, use
   <that> instead.
 argument-hint: "<Launch args, e.g. [mode=headless] [repo=<path>] [approve=<stage-id>]>"
 compatibility: >-
-  Needs the ceh-workflow-builder plugin installed where the flow runs. <Only if a stage is a saved
+  Needs the ceh-workflow-runner plugin installed where the flow runs. <Only if a stage is a saved
   workflow: Claude Code v2.1.269+ with the Workflow tool on (Dynamic workflows in /config, or
   headless --settings '{"enableWorkflows": true, "disableWorkflows": false}'). Also name any CLI a
   stage needs, with its minimum version and what fails without it.>
@@ -59,9 +59,9 @@ compatibility: >-
 
 <One paragraph: the stages as an arrow chain, and what this adds over running the steps ad hoc.>
 
-Invoke the Skill tool with skill="ceh-workflow-builder:run-agentic-workflow", passing
+Invoke the Skill tool with skill="ceh-workflow-runner:run-agentic-workflow", passing
 `config=${CLAUDE_SKILL_DIR}/<flow.yaml>` followed by `$ARGUMENTS` unchanged. If that skill cannot be
-called, stop and say the ceh-workflow-builder plugin must be installed. Do not run the stages
+called, stop and say the ceh-workflow-runner plugin must be installed. Do not run the stages
 yourself.
 ```
 

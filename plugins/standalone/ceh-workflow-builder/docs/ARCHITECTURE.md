@@ -4,18 +4,19 @@ How the plugin turns a repetitive task into a workflow that runs through Claude 
 or headless (`claude -p`), and where Claude Code's dynamic workflows fit in.
 
 The `flow.yaml` format is specified in
-[`references/flow-config-schema.md`](../references/flow-config-schema.md) and the runner in
-[`skills/run-agentic-workflow/SKILL.md`](../skills/run-agentic-workflow/SKILL.md). This page shows how
+[`references/flow-config-schema.md`](../references/flow-config-schema.md) and the runner, which
+ships in the separate `ceh-workflow-runner` plugin, in
+[`skills/run-agentic-workflow/SKILL.md`](../../ceh-workflow-runner/skills/run-agentic-workflow/SKILL.md). This page shows how
 they fit together; those two files are the authority on keys and statuses.
 
 Evidence for every runtime claim marked `Fn` is in [TEST_RESULTS.md](TEST_RESULTS.md).
 
 ## Two phases, two lifetimes
 
-| Phase     | Who drives                                          | Mode                    | Produces                                                             |
-| --------- | --------------------------------------------------- | ----------------------- | -------------------------------------------------------------------- |
-| **Build** | `interview-workflow-task`, `build-agentic-workflow` | Interactive only        | Files committed to the target repo                                   |
-| **Run**   | `run-agentic-workflow`, following `flow.yaml`       | Interactive or headless | Run artifacts and `run-state.md` under the git-ignored run directory |
+| Phase     | Who drives                                                        | Mode                    | Produces                                                             |
+| --------- | ----------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------- |
+| **Build** | `interview-workflow-task`, `build-agentic-workflow`               | Interactive only        | Files committed to the target repo                                   |
+| **Run**   | `ceh-workflow-runner:run-agentic-workflow`, following `flow.yaml` | Interactive or headless | Run artifacts and `run-state.md` under the git-ignored run directory |
 
 Building is interactive by construction: the interview asks the user, the intake gate refuses to
 infer missing answers, and nothing is written until the user agrees to the file list. Running is the
@@ -64,8 +65,8 @@ order things happen. Only the middle column is committed.
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `interview-workflow-task` | Asks the nine questions and writes the spec. Never answers for the user.                                                                                                                                    |
 | `build-agentic-workflow`  | Gates on the spec, decides one skill vs workflow, picks a backend per step, emits leaf-first.                                                                                                               |
-| `flow-config-schema.md`   | The `flow.yaml` contract. One copy, shared by builder (writer) and runner (reader) via `${CLAUDE_PLUGIN_ROOT}`.                                                                                             |
-| `run-agentic-workflow`    | Generic runner: loads `flow.yaml`, preflights, walks stages, enforces gates and approvals, keeps run state.                                                                                                 |
+| `flow-config-schema.md`   | The `flow.yaml` contract. One word-for-word copy in each plugin, builder (writer) and runner (reader), each read via its own `${CLAUDE_PLUGIN_ROOT}`.                                                       |
+| `run-agentic-workflow`    | In `ceh-workflow-runner`. Generic runner: loads `flow.yaml`, preflights, walks stages, enforces gates and approvals, keeps run state.                                                                       |
 | `<name>-flow/SKILL.md`    | Thin trigger in the target repo. Carries the moment in its `description` and `/<name>-flow`; its body only calls the runner with `config=${CLAUDE_SKILL_DIR}/flow.yaml` followed by `$ARGUMENTS` unchanged. |
 | `flow.yaml`               | Stages, gates, approvals, fan-out and retry bounds for one workflow. Replaces the pipeline tables the flow skill used to carry.                                                                             |
 | `<name>-flow/README.md`   | Invocation guide: the interactive and headless commands, with `--allowedTools` collected from each stage's `tools`. A skill directory's README is never loaded as context.                                  |
