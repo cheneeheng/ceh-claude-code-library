@@ -1,16 +1,27 @@
 # Changelog
 
-Releases are named by their release date, `vYYYY.MM.DD`, and mark one consistent state of all
-plugins together. Each plugin keeps its own [Semantic Versioning](https://semver.org/) version,
-listed per release under `### Plugin versions` and tracked in
-[`docs/PLUGIN_VERSIONS.md`](docs/PLUGIN_VERSIONS.md). Release notes before this repo live in
+This repo has no releases. Every pull request adds its entry under a section headed by the date the
+PR was opened, `YYYY-MM-DD`, and PRs opened on the same day share one section. Each plugin keeps its
+own [Semantic Versioning](https://semver.org/) version, listed per section under
+`### Plugin versions` and tracked in [`docs/PLUGIN_VERSIONS.md`](docs/PLUGIN_VERSIONS.md). Notes
+before this repo live in
 [agent-skills](https://github.com/cheneeheng/agent-skills/blob/main/CHANGELOG.md).
 
 ---
 
-## [Unreleased]
+## 2026-10-05
 
-## [v2026.10.03]
+Releases are retired. The changelog now grows one dated section per PR-open day, written in the
+PR itself, instead of one section per tagged release.
+
+### Changed
+
+- Replace the release process with per-PR changelog entries grouped by the date the PR is opened, in `CLAUDE.md`, the `add-plugin-component` checklist, `README.md`, and `docs/PLUGIN_VERSIONS.md`
+- Rename the old release sections `v2026.10.02` and `v2026.10.03` to the date format, here and in `docs/PLUGIN_VERSIONS.md`
+- Document in `CLAUDE.md` how landing a branch in this repo differs from `ceh-git-workflow:pull-request`
+- `CLAUDE.md` now tells an agent to refuse any release request with a warning that releases are not used in this repo
+
+## 2026-10-03
 
 Built workflows become runnable without a human driving them. `ceh-workflow-builder` now emits a
 `flow.yaml` config that a new generic runner executes, interactively or headless with `claude -p`,
@@ -34,7 +45,7 @@ on empirical tests of how dynamic workflows behave headless, now recorded in the
 - `ceh-workflow-builder:build-agentic-workflow` emits a `flow.yaml` plus a thin trigger skill and an invocation guide instead of a pipeline-table flow skill, and its emitted `SKILL.md` templates move to the skill's `references/emitted-templates.md` to keep it under 500 lines
 - Align the three `ceh-workflow-builder` skills with the component template: sentence-case titles, "Load this skill when" descriptions, and the runner's sections in template order
 
-## [v2026.10.02]
+## 2026-10-02
 
 First release of this repo. It completes the migration from agent-skills: 16 standalone plugins
 restructured onto one `SKILL.md` and agent template, five scenario bundles as the install entry
