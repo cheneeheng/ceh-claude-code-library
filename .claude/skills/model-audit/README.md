@@ -91,7 +91,9 @@ are skipped.
 2. The filter pass (unpinned files) starts from that report, adds anything it missed, and keeps a
    change only when the general page backs it, or a model guide says it benefits that model and
    no other in-use guide says it hurts theirs, or it fixes a missing reference or contradiction.
-   Changes written for one model only are dropped. Every dropped finding is listed with a reason.
+   Changes written for one model only are left out. General-page techniques are added only
+   where the file's task needs them, and where a page disagrees with the `/doctor` report on the
+   same instruction, the report wins. The report lists kept changes only.
 3. A tuning pass for each stale pinned file, using the `override` pair. It adapts the file to the
    general page and to its model's guides, and model-specific wording is allowed there.
 4. `claude plugin validate <plugin-dir> --strict`, then `validate.py` once for the repo.
