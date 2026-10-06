@@ -241,7 +241,7 @@ material is technical. Steer it deliberately.
 
 ### Honesty
 
-The contract's honesty rules apply unchanged. One addition specific to explaining:
+The output style's honesty rules apply unchanged. One addition specific to explaining:
 
 **"Not documented" and "I did not check" are different answers.** "Not documented" is a claim, and
 only a grep earns it; with no grep the honest answer is "I did not check". Report which of the two

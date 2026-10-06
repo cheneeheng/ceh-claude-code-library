@@ -32,11 +32,12 @@ standard retroactively — one pass over the finished diff, before it goes to re
 
 ### Scope
 
-The seed set is everything the branch changed relative to main:
+The seed set is everything the branch changed relative to the base branch (the argument, default
+`main`):
 
 ```bash
-git diff --stat main...HEAD          # size baseline (three dots: merge-base, not main's tip)
-git diff --name-only main...HEAD     # seed files
+git diff --stat <base>...HEAD        # size baseline (three dots: merge-base, not the base tip)
+git diff --name-only <base>...HEAD   # seed files
 ```
 
 - Empty diff → report "nothing to shrink" and stop.
@@ -106,5 +107,5 @@ A refactor changes shape, never behavior:
 
 ## Output
 
-End with the before/after `git diff --stat main...HEAD` totals, the candidates applied, the
+End with the before/after `git diff --stat <base>...HEAD` totals, the candidates applied, the
 candidates flagged but not applied (with why), and every out-of-seed edit with its cause.

@@ -66,13 +66,13 @@ specifically requires it.
 
 - **Surgical edits.** Update only sections affected by the change. Never rewrite the whole README
   when a few edits suffice.
-- **Match existing voice.** Preserve tone, heading style, formatting conventions.
+- **Match existing voice.** Preserve tone, heading style, formatting conventions, and keep the prose
+  plain and technical.
 - **Update in place.** No "Recent changes" section: that is `CHANGELOG.md`.
 - **No speculation.** Only document what you can verify from the code.
 - **Keep examples runnable.** Flags, args, and paths must match current code.
 - **Update the table of contents** if one exists and you added or removed a section.
 - Never delete existing content unless it is factually wrong.
-- Never add marketing language or emojis.
 - Never commit or push.
 - In a monorepo, update only the READMEs affected by the change.
 
