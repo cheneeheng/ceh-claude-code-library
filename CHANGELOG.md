@@ -35,6 +35,11 @@ hook against the no-pitch Opening rule, and runbook page numbers left with gaps 
 drafts" rule left one point not covered anywhere else, so `draft-post`'s Length line now says
 length follows the content, not the source material.
 
+The `model-audit` workflow's weekly schedule is off for now, so it runs only on manual dispatch.
+When it runs, it applies the proposed edits by default, since they land on the `audit/<date>`
+branch behind a draft PR. Claude Code now comes from the native installer, because the npm package
+is deprecated. No plugin version changes.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -70,6 +75,7 @@ length follows the content, not the source material.
 - `ceh-blog:draft-post` drops "No fluff drafts" and folds its source-length point into the Length line. `edit-post` drops "Diagnose before editing", "One question after" and "Draft is already good", which its Output, Step 4 and diagnosis sections already state
 - `ceh-documentation:write-guides-and-runbooks`: under `write-project-docs`, the runbook renumbers its remaining pages from `OP-01` instead of leaving gaps
 - `ceh-documentation:write-project-docs` says delegated skills read the shared `docs-standard.md` instead of shipping their own copy
+- `.github/workflows/model-audit.yml`: the weekly schedule is commented out, `apply` defaults to true (scheduled runs always apply), Claude Code installs via `claude.ai/install.sh` instead of npm, `actions/checkout` is `@v6`, and a concurrency group stops runs overlapping
 
 ## 2026-10-05
 
