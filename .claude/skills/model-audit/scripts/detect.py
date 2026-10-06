@@ -74,7 +74,12 @@ def in_use(known: list[str]) -> list[str]:
 
 
 def plugin_dirs() -> list[Path]:
-    return sorted(p for p in (REPO / "plugins/standalone").glob("ceh-*") if p.is_dir())
+    """Every plugin under plugins/ except scenario bundles, which hold no prompts to audit."""
+    return sorted(
+        m.parent.parent
+        for m in (REPO / "plugins").glob("**/.claude-plugin/plugin.json")
+        if not m.parent.parent.name.startswith("ceh-scenario-")
+    )
 
 
 def frontmatter_model(path: Path) -> str | None:
@@ -173,6 +178,7 @@ def plugin_state(
         )
     return {
         "plugin": plugin_dir.name,
+        "path": plugin_dir.relative_to(REPO).as_posix(),
         "missing": missing,
         "guides": sorted(guides, key=version),
         "other-guides": sorted(others, key=version),

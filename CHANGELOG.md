@@ -20,8 +20,14 @@ It detects guides a plugin has not been checked against, runs headless `/doctor 
 pinned-agent tuning passes, and hands the reports over as a draft PR. It never merges or runs evals.
 No plugin version changes.
 
+The first model audit ran on `ceh-core` against the Fable 5.1, Opus 5.5 and Sonnet 5.5 guide
+chains and kept no edits, so only its `tuning.json` state is new. The audit scripts now locate
+plugins by path instead of assuming `plugins/standalone/`. No plugin version changes.
+
 ### Added
 
+- `audits/2026-10-06/`: the `ceh-core` audit reports
+- `plugins/standalone/ceh-core/.claude-plugin/tuning.json`: model-audit state recording the guides `ceh-core` was checked against
 - `.claude/skills/model-audit/`: the `/model-audit` skill, with the stdlib detector and parallel audit runner in `scripts/`, the filter and tuning prompts in `references/`, and the config and guide state in `assets/`
 - `.github/workflows/model-audit.yml`: a weekly (Friday 06:00 UTC) or manual run that opens the audit draft PR
 - `tools/model-audit/README.md`, a pointer to the skill folder
@@ -31,6 +37,7 @@ No plugin version changes.
 - Move the Skills and Frontmatter Conventions sections from `CLAUDE.md` to a new `plugins/CLAUDE.md`, leaving a pointer
 - Drop the plugin domain table from `CLAUDE.md`, which repeated the root `README.md` Plugins table, and the `find`/`grep` one-liners from Commands
 - The `add-plugin-component` new-plugin checklist no longer asks for a `CLAUDE.md` Plugins table row
+- `model-audit`: `--plugins` takes plugin paths from the repo root instead of bare names, and the stale scan finds every plugin under `plugins/` except scenario bundles instead of globbing `plugins/standalone/`
 
 ## 2026-10-05
 

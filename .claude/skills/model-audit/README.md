@@ -25,9 +25,11 @@ Paths are relative to `.claude/skills/model-audit/`.
 
 ```bash
 python .claude/skills/model-audit/scripts/detect.py [--write]
-python .claude/skills/model-audit/scripts/audit.py [--plugins ceh-a ceh-b] [--model M --effort E] \
+python .claude/skills/model-audit/scripts/audit.py [--plugins plugins/standalone/ceh-a ...] [--model M --effort E] \
   [--tune-model M --tune-effort E] [--jobs N] [--apply]
 ```
+
+`--plugins` takes plugin paths from the repo root, not bare names.
 
 `audit.py` needs Claude Code v2.1.283 or later, for `/doctor prompt-audit`, and the bundled
 `/claude-api` skill must stay enabled: do not list it in `skillOverrides` or set
@@ -101,7 +103,7 @@ are skipped.
 Model choice: `default` (Sonnet) for unpinned audits, `override` (Opus) for pinned tuning and for
 any audit triggered by a new generation, meaning an in-use slug with no minor version such as
 `opus-6`. Predecessors pulled in alongside a point release, such as `opus-5`, do not count. To re-run a plugin whose Sonnet report looked weak, use
-`--plugins <plugin> --model opus`. Effort levels are those `claude --help` lists
+`--plugins <plugin-path> --model opus`. Effort levels are those `claude --help` lists
 (`low, medium, high, xhigh, max`). Which levels each model honours is not checked here.
 
 Calibrate before trusting the default. Audit the same 2–3 plugins with both models, using
