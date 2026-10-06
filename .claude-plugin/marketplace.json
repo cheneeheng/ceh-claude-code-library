@@ -59,7 +59,7 @@
     {
       "name": "ceh-blog",
       "source": "./plugins/standalone/ceh-blog",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "CEH blog: turn a half-formed idea into a compelling, publishable blog post in a personal, series-first voice via structured interview; repurpose finished posts for Twitter/X, LinkedIn, TL;DR, and newsletters."
     },
     {
@@ -71,7 +71,7 @@
     {
       "name": "ceh-documentation",
       "source": "./plugins/standalone/ceh-documentation",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "CEH documentation: write user-facing documentation for a project — a full docs set, user guides and operator runbooks, an exhaustive API reference, concept pages with sourced design rationale, and runnable examples."
     },
     {

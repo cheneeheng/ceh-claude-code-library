@@ -28,18 +28,29 @@ A second model audit ran on `ceh-coding-agent` and `ceh-git-workflow` against th
 chains, and every edit it proposed was kept. These edits remove stale wording and references to
 things that do not exist, and make the base branch in `shrink-diff` explicit.
 
+A third model audit ran on `ceh-blog` and `ceh-documentation` against the same guide chains, and
+every edit it proposed was kept. It resolves two contradictions: the Launch template's product-line
+hook against the no-pitch Opening rule, and runbook page numbers left with gaps under
+`write-project-docs`. It also drops rules that other steps already cover. The removed "No fluff
+drafts" rule left one point not covered anywhere else, so `draft-post`'s Length line now says
+length follows the content, not the source material.
+
 ### Plugin versions
 
-| Plugin             | Version |
-| ------------------ | ------- |
-| `ceh-coding-agent` | 1.0.1   |
-| `ceh-git-workflow` | 1.0.1   |
+| Plugin              | Version |
+| ------------------- | ------- |
+| `ceh-blog`          | 1.0.1   |
+| `ceh-coding-agent`  | 1.0.1   |
+| `ceh-documentation` | 1.0.1   |
+| `ceh-git-workflow`  | 1.0.1   |
 
 ### Added
 
 - `audits/2026-10-06/`: the `ceh-core`, `ceh-coding-agent` and `ceh-git-workflow` audit reports
 - `plugins/standalone/ceh-core/.claude-plugin/tuning.json`: model-audit state recording the guides `ceh-core` was checked against
 - `tuning.json` model-audit state for `ceh-coding-agent` and `ceh-git-workflow`
+- `audits/2026-10-06/`: the `ceh-blog` and `ceh-documentation` audit reports, with `SUMMARY.md` covering all five plugins audited that day
+- `tuning.json` model-audit state for `ceh-blog` and `ceh-documentation`
 - `.claude/skills/model-audit/`: the `/model-audit` skill, with the stdlib detector and parallel audit runner in `scripts/`, the filter and tuning prompts in `references/`, and the config and guide state in `assets/`
 - `.github/workflows/model-audit.yml`: a weekly (Friday 06:00 UTC) or manual run that opens the audit draft PR
 - `tools/model-audit/README.md`, a pointer to the skill folder
@@ -55,6 +66,10 @@ things that do not exist, and make the base branch in `shrink-diff` explicit.
 - `ceh-coding-agent:explain-until-understood` points its honesty rules at the output style, not the contract, and `explain-codebase` drops a closing line about a mapper that does not exist
 - `ceh-coding-agent` README: the `agent-coding-contract` row no longer claims a role section, and `explain-codebase` is listed as on demand, matching its model-invocable frontmatter
 - `ceh-git-workflow:update-readme` folds the no-marketing rule into "Match existing voice" as plain, technical prose
+- `ceh-blog:draft-post` and `edit-post`: the Project / Launch hook opens on the moment that led to building it, with what it does and who it's for inside the first paragraph, instead of a one-line product pitch
+- `ceh-blog:draft-post` drops "No fluff drafts" and folds its source-length point into the Length line. `edit-post` drops "Diagnose before editing", "One question after" and "Draft is already good", which its Output, Step 4 and diagnosis sections already state
+- `ceh-documentation:write-guides-and-runbooks`: under `write-project-docs`, the runbook renumbers its remaining pages from `OP-01` instead of leaving gaps
+- `ceh-documentation:write-project-docs` says delegated skills read the shared `docs-standard.md` instead of shipping their own copy
 
 ## 2026-10-05
 

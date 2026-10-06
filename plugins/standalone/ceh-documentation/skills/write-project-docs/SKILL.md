@@ -33,7 +33,7 @@ as short as possible, the reference as complete as possible, the concepts as dee
 This skill owns the target, the survey, the page plan, the front pages, and the final link pass.
 Every other page type is delegated to the skill that owns it. Every page, whoever writes it,
 follows `${CLAUDE_PLUGIN_ROOT}/references/docs-standard.md` ("the standard" below). Read it before
-step 3. Each delegated skill ships the same file.
+step 3. Each delegated skill reads the same file.
 
 ## Procedure
 
