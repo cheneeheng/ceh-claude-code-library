@@ -206,5 +206,3 @@ and what was checked.
 | Docs for people who _use_ or _operate_ the product                                | `ceh-documentation:write-guides-and-runbooks` for the tasks, `ceh-documentation:write-project-docs` for a whole docs set |
 | Explain one subsystem to someone who is in the session and can say "still blurry" | `ceh-coding-agent:explain-until-understood`                                                                              |
 | Explain what is in the repo and how it works, component by component              | **this skill**                                                                                                           |
-
-Running the mapper first is cheap and gives a good inventory to explain against — but never required.

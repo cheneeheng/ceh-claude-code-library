@@ -1,0 +1,16 @@
+{
+  "targets": "general",
+  "checked-against": [
+    "fable-5",
+    "fable-5-1",
+    "opus-5",
+    "opus-5-5",
+    "sonnet-5",
+    "sonnet-5-5"
+  ],
+  "pinned": {},
+  "last-audited": "2026-10-06",
+  "audited-with": "claude-code 2.1.291",
+  "audit-model": "sonnet-5-5",
+  "audit-model-effort": "medium"
+}

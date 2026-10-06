@@ -24,10 +24,22 @@ The first model audit ran on `ceh-core` against the Fable 5.1, Opus 5.5 and Sonn
 chains and kept no edits, so only its `tuning.json` state is new. The audit scripts now locate
 plugins by path instead of assuming `plugins/standalone/`. No plugin version changes.
 
+A second model audit ran on `ceh-coding-agent` and `ceh-git-workflow` against the same guide
+chains, and every edit it proposed was kept. These edits remove stale wording and references to
+things that do not exist, and make the base branch in `shrink-diff` explicit.
+
+### Plugin versions
+
+| Plugin             | Version |
+| ------------------ | ------- |
+| `ceh-coding-agent` | 1.0.1   |
+| `ceh-git-workflow` | 1.0.1   |
+
 ### Added
 
-- `audits/2026-10-06/`: the `ceh-core` audit reports
+- `audits/2026-10-06/`: the `ceh-core`, `ceh-coding-agent` and `ceh-git-workflow` audit reports
 - `plugins/standalone/ceh-core/.claude-plugin/tuning.json`: model-audit state recording the guides `ceh-core` was checked against
+- `tuning.json` model-audit state for `ceh-coding-agent` and `ceh-git-workflow`
 - `.claude/skills/model-audit/`: the `/model-audit` skill, with the stdlib detector and parallel audit runner in `scripts/`, the filter and tuning prompts in `references/`, and the config and guide state in `assets/`
 - `.github/workflows/model-audit.yml`: a weekly (Friday 06:00 UTC) or manual run that opens the audit draft PR
 - `tools/model-audit/README.md`, a pointer to the skill folder
@@ -39,6 +51,10 @@ plugins by path instead of assuming `plugins/standalone/`. No plugin version cha
 - The `add-plugin-component` new-plugin checklist no longer asks for a `CLAUDE.md` Plugins table row
 - `model-audit` `SKILL.md` gains a next-steps section for the reviewer (keep or drop edits, accept or reject pinned tuning, mirror shared content, bump, changelog, re-run failures, merge), and the skill's `README.md` an Arguments table saying what each argument does and its default
 - `model-audit`: `--plugins` takes plugin paths from the repo root instead of bare names, and the stale scan finds every plugin under `plugins/` except scenario bundles instead of globbing `plugins/standalone/`
+- `ceh-coding-agent:shrink-diff` diffs against the base-branch argument (default `main`) instead of a hard-coded `main`
+- `ceh-coding-agent:explain-until-understood` points its honesty rules at the output style, not the contract, and `explain-codebase` drops a closing line about a mapper that does not exist
+- `ceh-coding-agent` README: the `agent-coding-contract` row no longer claims a role section, and `explain-codebase` is listed as on demand, matching its model-invocable frontmatter
+- `ceh-git-workflow:update-readme` folds the no-marketing rule into "Match existing voice" as plain, technical prose
 
 ## 2026-10-05
 
