@@ -82,110 +82,16 @@ tools/
 
 ## Plugins
 
-| Plugin directory        | Domain                                                                                                                                                                                                                                                                                    |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ceh-core`              | Standards that hold however Claude Code is used: usage-limit handoff, context economy via delegated bulk reads                                                                                                                                                                            |
-| `ceh-coding-agent`      | Agent behavior contract, write-less-code minimalism, retroactive refactoring, repo explanation, the living `ARCHITECTURE.md` (Mermaid diagrams + Key Decisions log)                                                                                                                       |
-| `ceh-git-workflow`      | Branching, commits, pull requests from open to merge (`pull-request`, which also lands a branch in one pass), changelog entries, README upkeep after a significant change (`update-readme`), releases including hotfixes (`release`, which also runs the full ship sequence), code review |
-| `ceh-testing`           | Stack-agnostic testing technique: reproduce-first bug fixes, test-case design, suite audit (with a report-only mode), behavior-preservation checks, test risk gaps                                                                                                                        |
-| `ceh-python-service`    | FastAPI, asyncpg, PostgreSQL, Alembic, uv/ruff/mypy, and pytest for web services; unit/integration/system tester agents                                                                                                                                                                   |
-| `ceh-python-library`    | Packaging and publishing, public API surface and semver, uv/ruff/mypy, and pytest for distributable libraries with no web dependencies                                                                                                                                                    |
-| `ceh-web-frontend`      | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, UI visual design and theming, Cytoscape.js graph visualization; unit/integration/system tester agents                                                                          |
-| `ceh-seo`               | Discoverability for anything internet-exposed: crawlable public web pages, the `llms.txt` agent index, findability of README, package, and landing text                                                                                                                                   |
-| `ceh-blog`              | Blog posts in a personal, series-first voice: draft (interviewing when material is thin), edit, repurpose for X, LinkedIn, TL;DR, and newsletters                                                                                                                                         |
-| `ceh-plan-build-review` | The plan-driven loop on one shared plan schema (`SKELETON.md` / `ITER_NN.md`): plan iteratively or to MVP, implement from the plan, review against it, patch a built version                                                                                                              |
-| `ceh-documentation`     | User-facing docs in one fixed format (`docs-standard.md`): full docs set, guides and runbooks, API reference, concept pages, runnable examples                                                                                                                                            |
-| `ceh-ag-ui`             | Generative-UI canvases for AG-UI agents: a fixed, themed component catalogue the agent places but cannot restyle, a Claude-backed FastAPI server, shared state, human approval. Depends on `ceh-web-frontend` for the `design-ui` theme                                                   |
-| `ceh-usability-audit`   | Whether a non-expert can use the thing: cold persona walkthroughs of first-run and of an entered interface, the three-part error-message rule, a plain-language pass, and the `novice-walker` agent. Owns _comprehension_ only — WCAG stays in `ceh-web-frontend:make-ui-accessible`      |
-| `ceh-business-plan`     | A validated business plan behind one entry point (`develop-business-plan`) that routes to model-only specialists: the product-market-fit interview loop, a report-only review, strategy, unit economics, go-to-market, premortem, and the 90-day operating plan                           |
-| `ceh-git-datastore`     | A git-backed datastore in place of a database while that still fits: the fit gate, a plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite                                                                                                                         |
-| `ceh-workflow-builder`  | Turning a repetitive task into a runnable artifact: interview it into a spec, then emit one skill or a `flow.yaml` workflow with handoff schemas, run by `ceh-workflow-runner`                                                                                                            |
-| `ceh-workflow-runner`   | Running a built `flow.yaml` workflow without the builder: the generic `run-agentic-workflow` runner, interactive or headless (`claude -p`), with Claude Code dynamic workflows as an optional stage backend                                                                               |
+Each plugin's domain is in the root `README.md` Plugins table and its own `plugin.json`
+`description`.
 
 A concept-map skill for markdown-only knowledge bases would be a separate sibling of
 `document-architecture`, not part of it.
 
-## Skills
+## Skills and Frontmatter
 
-Every new `SKILL.md` and `agents/*.md` starts as a copy of the templates in
-`.claude/skills/add-plugin-component/assets/`, so every component shares one frontmatter order,
-one heading set, and one voice. Frontmatter uses only the fields in the official Claude Code
-[skills](https://code.claude.com/docs/en/skills#frontmatter-reference) and
-[subagents](https://code.claude.com/docs/en/sub-agents#supported-frontmatter-fields) references.
-
-Each skill is self-contained with inline content. `references/` is for two cases only:
-
-- **A schema or template used by several skills.** Skills of one plugin share a single copy in the
-  plugin's own `references/`, cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`, so it needs no
-  `docs/CROSS_REFERENCES.md` entry. A file used by one skill lives in that skill's `references/`.
-  Only a file needed by skills of different plugins is copied word-for-word into each and
-  registered in `docs/CROSS_REFERENCES.md` (see the Shared-Standards Duplication Policy).
-- **A standards set too large to inline.**
-
-Never for general reference material a model already knows.
-
-Two `ceh-web-frontend` skills migrated whole and carry bundled files that predate this rule:
-`design-ui` (two themes and `examples.md` under `references/`) and `visualize-graph-cytoscape` (eight reference
-files, an `assets/template.html`, and a `scripts/to-elements.js` converter). Trim the Cytoscape
-references to the repo-opinionated delta before adding more.
-
-Scaffold or script bundles a skill executes or copies are not reference material and are allowed:
-`ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent` `assets/`) and `ceh-git-datastore`
-(`build-git-datastore`, `migrate-git-datastore` `references/` + `scripts/`).
-
-**Name skills with a verb phrase and agents with a noun, and put the framework or library in the
-name when a skill is specific to one** (`write-fastapi-endpoints`, `write-postgresql-code`,
-`write-pytest-service-tests`), so the name says what the skill applies to. A skill is something you
-do at a moment (`commit`, `shrink-diff`, `draft-post`, `make-page-crawlable`), an agent is something
-you delegate to (`bulk-reader`). Pick the word you would say out loud, not a generic one like `optimize`. Two
-exemptions: model-only standards named for what they carry (`agent-coding-contract`,
-`usage-limit-handoff`, `branch`), and established terms of art (`pull-request`, `release`).
-`validate.py` cannot check part of speech, so this is a review rule.
-
-## Frontmatter Conventions
-
-**`description` is always a folded block scalar (`>-`), never quoted and never plain.** Enforced by
-`validate.py`.
-
-```yaml
----
-name: my-skill
-description: >-
-  Load this skill when doing X: the colon here is literal, as are "quotes",
-  'apostrophes', backslashes and # hashes. Wrap at ~98 chars, 2-space indent.
----
-```
-
-`>-` is the only style with **no escaping burden**: every character is literal, and `-` strips the
-trailing newline. A plain scalar cannot contain `: `, single-quoted needs `''` doubling,
-double-quoted needs `\` and `"` escaping.
-
-Two mechanical rules keep folding lossless: **uniform 2-space indent** on every continuation line (a
-more-indented line becomes a literal newline instead) and **no blank lines** inside the block.
-
-Every **other** frontmatter key containing `: ` must be quoted — single quotes by default
-(`argument-hint: '[plan-file]'`). Short values that need no quoting stay bare (`effort: max`).
-
-### `compatibility`
-
-Optional, max 500 chars, same `>-` scalar as `description`. Present **only when running the skill
-needs software the machine may not have** — a script interpreter, a CLI (`git`, `gh`, `uv`, `bun`,
-`docker`), a reachable server, or network access. Name the runtime _and_ its minimum version and
-what fails without it. A skill that only reads files and emits Markdown gets no `compatibility`.
-
-### `user-invocable` and hook-loaded skills
-
-Every skill states `disable-model-invocation`, `user-invocable`, and `license` explicitly, even at
-their defaults, so the frontmatter says who invokes it. This is a review rule, not a validator check.
-
-`user-invocable: false` on any skill the user will not call by name, which includes every skill a
-hook names (`agent-coding-contract`, `write-less-code`, `usage-limit-handoff`,
-`delegate-bulk-reads`, `branch`). Its root `README.md` Invoke cell reads
-`Model-only, no slash command`.
-
-When a hook names the skill on every firing, the description is **one line**: what the skill is,
-with no trigger phrases and no mention of the hook. Keep the full description when the model also
-loads the skill unprompted (`write-less-code`, `branch`).
+Skill and agent authoring rules (templates, `references/` policy, naming, frontmatter conventions)
+live in `plugins/CLAUDE.md`, which loads when working under `plugins/`.
 
 ## Plugin Dependencies
 
@@ -225,12 +131,6 @@ The PR also carries its `CHANGELOG.md` entry and `docs/PLUGIN_VERSIONS.md` rows,
 ## Commands
 
 ```bash
-# Find a skill by name across all plugins
-find plugins -path '*skills/<name>/SKILL.md'
-
-# Show every declared dependency edge
-grep -H '"dependencies"' plugins/*/*/.claude-plugin/plugin.json
-
 # Validate the whole repo — CI runs this too
 # (no arguments, whole repo only; CI uses Python 3.13; the repo has no test suite, this is the gate)
 python tools/validate-plugins/validate.py
