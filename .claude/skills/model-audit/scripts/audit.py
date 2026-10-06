@@ -2,7 +2,7 @@
 """Audit stale ceh-* plugins with headless Claude Code runs and record the results.
 
 Run from anywhere:
-  python .claude/skills/model-audit/scripts/audit.py [--plugins ceh-a ceh-b] [--model M --effort E] [--apply]
+  python .claude/skills/model-audit/scripts/audit.py [--plugins plugins/standalone/ceh-a ...] [--model M --effort E] [--apply]
 
 Per plugin, at most `jobs` plugins at a time because every run shares one rate limit:
   1. `/doctor prompt-audit <plugin>`, saved raw to audits/<date>/<plugin>.doctor.md.
@@ -88,8 +88,8 @@ def guide_list(slugs: list[str]) -> str:
 
 def audit_plugin(state: dict, run: dict) -> dict:
     name = state["plugin"]
-    pdir = REPO / "plugins/standalone" / name
-    rel = pdir.relative_to(REPO).as_posix()
+    rel = state["path"]
+    pdir = REPO / rel
     tuning = detect.load_tuning(pdir)
     if run["apply"]:
         apply_note = f"Apply each kept edit with the Edit tool, editing only files under `{rel}`."
@@ -283,7 +283,9 @@ def write_summary(results: list[dict], run: dict, repo_valid: bool) -> Path:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument(
-        "--plugins", nargs="+", help="audit these plugins even if not stale"
+        "--plugins",
+        nargs="+",
+        help="audit these plugins even if not stale, as paths from the repo root",
     )
     ap.add_argument("--model", help="unpinned-audit model (default from config.json)")
     ap.add_argument("--effort", help="unpinned-audit effort")
@@ -304,11 +306,11 @@ def main() -> int:
     using = detect.in_use(known)
     if args.plugins:
         states = []
-        for name in args.plugins:
-            pdir = REPO / "plugins/standalone" / name
-            if not pdir.is_dir():
+        for path in args.plugins:
+            pdir = (REPO / path.replace("\\", "/")).resolve()
+            if not (pdir / ".claude-plugin/plugin.json").is_file():
                 sys.exit(
-                    f"FAIL: no plugin directory {pdir.relative_to(REPO).as_posix()}"
+                    f"FAIL: no plugin at {path} (give its path from the repo root)"
                 )
             # A named plugin is always re-audited against every in-use generation.
             states.append(detect.plugin_state(pdir, known, using, force=True))

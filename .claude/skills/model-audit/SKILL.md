@@ -5,7 +5,7 @@ description: >-
   over as a draft PR. Runs the detector, a headless /doctor prompt-audit per stale plugin, the
   pinned-agent tuning passes, strict validation, then commits to audit/<date> and opens the PR.
   User-invoked only, because every audit is a billed model call.
-argument-hint: "[--plugins ceh-a ceh-b] [--model M --effort E] [--tune-model M --tune-effort E] [--apply]"
+argument-hint: "[--plugins plugins/standalone/ceh-a ...] [--model M --effort E] [--tune-model M --tune-effort E] [--apply]"
 disable-model-invocation: true
 user-invocable: true
 license: Apache-2.0
@@ -16,8 +16,8 @@ license: Apache-2.0
 Every step below runs inside this skill. The user reviews the draft PR and nothing else. The
 scripts and their state files are documented in `${CLAUDE_SKILL_DIR}/README.md`.
 
-Arguments: `$ARGUMENTS`. Pass them through to `audit.py` unchanged. `--plugins` audits the named
-plugins even when they are not stale, and `--model`/`--effort` override the default audit pair in
+Arguments: `$ARGUMENTS`. Pass them through to `audit.py` unchanged. `--plugins` audits the given
+plugins even when they are not stale, each as its path from the repo root, and `--model`/`--effort` override the default audit pair in
 `${CLAUDE_SKILL_DIR}/assets/config.json`.
 
 ## 1. Branch
