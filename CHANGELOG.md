@@ -37,6 +37,7 @@ plugins by path instead of assuming `plugins/standalone/`. No plugin version cha
 - Move the Skills and Frontmatter Conventions sections from `CLAUDE.md` to a new `plugins/CLAUDE.md`, leaving a pointer
 - Drop the plugin domain table from `CLAUDE.md`, which repeated the root `README.md` Plugins table, and the `find`/`grep` one-liners from Commands
 - The `add-plugin-component` new-plugin checklist no longer asks for a `CLAUDE.md` Plugins table row
+- `model-audit` `SKILL.md` gains a next-steps section for the reviewer (keep or drop edits, accept or reject pinned tuning, mirror shared content, bump, changelog, re-run failures, merge), and the skill's `README.md` an Arguments table saying what each argument does and its default
 - `model-audit`: `--plugins` takes plugin paths from the repo root instead of bare names, and the stale scan finds every plugin under `plugins/` except scenario bundles instead of globbing `plugins/standalone/`
 
 ## 2026-10-05
