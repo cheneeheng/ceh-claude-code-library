@@ -252,7 +252,7 @@ every component with the step 1 table before creating anything, then:
 4. Root `README.md` — a row in the **Plugins** table, the plugin in the **Categorization** tier
    table, its Skills/Agents rows, and a line in both install lists (`/plugin install` and the
    manual `path` list).
-5. `CLAUDE.md` — a row in the **Plugins** table and the plugin in the tier table.
+5. `CLAUDE.md` — the plugin in the tier table.
 6. A `ceh-scenario-*` bundle, only if the plugin belongs in that situation's install set. A bundle
    holds `plugin.json` (with `dependencies`) and `README.md` and nothing else — `validate.py`
    enforces it. Record any new edge in `docs/PLUGIN_DEPENDENCIES.md`.

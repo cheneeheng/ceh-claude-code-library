@@ -9,6 +9,18 @@ before this repo live in
 
 ---
 
+## 2026-10-06
+
+The root `CLAUDE.md` loads in every session, so it now carries only what a session cannot derive
+and what applies repo-wide. Plugin-authoring rules load only when working under `plugins/`. No
+plugin version changes.
+
+### Changed
+
+- Move the Skills and Frontmatter Conventions sections from `CLAUDE.md` to a new `plugins/CLAUDE.md`, leaving a pointer
+- Drop the plugin domain table from `CLAUDE.md`, which repeated the root `README.md` Plugins table, and the `find`/`grep` one-liners from Commands
+- The `add-plugin-component` new-plugin checklist no longer asks for a `CLAUDE.md` Plugins table row
+
 ## 2026-10-05
 
 Releases are retired. The changelog now grows one dated section per PR-open day, written in the
