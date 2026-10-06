@@ -6,7 +6,8 @@ Run from anywhere:
 
 Per plugin, at most `jobs` plugins at a time because every run shares one rate limit:
   1. `/doctor prompt-audit <plugin>`, saved raw to audits/<date>/<plugin>.doctor.md.
-  2. A filter pass that keeps only removals the missing model guides back.
+  2. A filter pass that keeps general-guide fixes, defects, and model-guide changes that help
+     at least one in-use model without hurting the others.
   3. A tuning pass for each stale pinned agent or skill, with the override model.
 Then it writes audits/<date>/<plugin>.md, updates tuning.json (never `tuned-for`), runs
 `claude plugin validate <plugin> --strict`, and writes audits/<date>/SUMMARY.md.
@@ -105,12 +106,13 @@ def audit_plugin(state: dict, run: dict) -> dict:
     denied = 0
     tuned = []
 
-    guides = state["missing"]
+    guides = state["guides"]
     if guides:
-        # A new model generation (a slug with no minor version, e.g. opus-6) gets the stronger pair.
-        generation = any(len(detect.version(s)[1]) == 1 for s in guides)
+        # A new model generation (a slug with no minor version, e.g. opus-6) gets the stronger
+        # pair. Only the triggering slugs count, not the predecessors pulled in with them.
+        new_gen = any(len(detect.version(s)[1]) == 1 for s in state["missing"])
         model, effort = (
-            run["override"] if generation and not run["forced"] else run["default"]
+            run["override"] if new_gen and not run["forced"] else run["default"]
         )
         print(f"[{name}] /doctor prompt-audit with {model}/{effort}", file=sys.stderr)
         raw, _, _ = claude(f"/doctor prompt-audit {rel}", model, effort)
@@ -122,7 +124,9 @@ def audit_plugin(state: dict, run: dict) -> dict:
                 "filter.md",
                 raw_report=raw_path.relative_to(REPO).as_posix(),
                 plugin_dir=rel,
+                general_page=detect.GUIDES_PAGE,
                 guide_urls=guide_list(guides),
+                other_guide_urls=guide_list(state["other-guides"]) or "- none",
                 pinned_files=pinned,
                 apply_instruction=apply_note,
             ),
@@ -306,11 +310,8 @@ def main() -> int:
                 sys.exit(
                     f"FAIL: no plugin directory {pdir.relative_to(REPO).as_posix()}"
                 )
-            state = detect.plugin_state(pdir, known, using, force=True)
-            state["missing"] = (
-                state["missing"] or using
-            )  # a named plugin is always re-audited
-            states.append(state)
+            # A named plugin is always re-audited against every in-use generation.
+            states.append(detect.plugin_state(pdir, known, using, force=True))
     else:
         states = detect.stale_plugins(known)
     if not states:

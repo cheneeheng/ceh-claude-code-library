@@ -2,14 +2,16 @@ Tune the pinned file `{file}` for the model `{target}`. Its frontmatter pins `mo
 and it was last tuned for: {tuned_for}.
 
 Fetch the general best-practices page, then these model guides in order. Each guide is written as
-the differences from its predecessor, so together they describe what changed since the last tuning:
+the differences from its predecessor, so together they describe what changed since the last tuning
+(or, if never tuned, the current generation of the model):
 
 {guide_urls}
 
-Read the file. Propose edits that fit it to `{target}`: remove instructions a guide says cause
-problems on that model, and rewrite or add instructions where a guide recommends a different
-approach. Keep the agent's role, tools, inputs, and output contract unchanged. Tie every edit to a
-guide statement.
+Read the file. Adapt it to both: the general page applies to every model, and the model guides
+refine it for `{target}`. Where they disagree, the newest model guide wins. Remove instructions a
+page says cause problems, and rewrite or add instructions where a page recommends a different
+approach. Model-specific wording is fine here, since only `{target}` runs this file. Keep the
+agent's role, tools, inputs, and output contract unchanged. Tie every edit to a page statement.
 
 {apply_instruction}
 

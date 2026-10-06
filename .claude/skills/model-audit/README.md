@@ -20,7 +20,7 @@ Paths are relative to `.claude/skills/model-audit/`.
 | `assets/config.json`             | `default` model/effort for unpinned audits, `override` pair for pinned tuning and new generations, `jobs`.               |
 | `assets/known-model-guides.json` | Every guide slug seen so far. `detect.py --write` adds new ones.                                                         |
 | `assets/models-in-use.json`      | Optional. Slugs (`opus-5-5`) or family aliases (`opus` = newest opus guide). Other guides never trigger audits.          |
-| `references/filter.md`           | Filter-pass prompt: keeps only `/doctor` findings that remove an instruction a missing guide says causes problems.       |
+| `references/filter.md`           | Filter-pass prompt for unpinned files: general-page fixes, defects, and changes that help one model and hurt none.       |
 | `references/tune.md`             | Tuning-pass prompt for a pinned agent or skill, from its last tuned guide up to its target.                              |
 
 ```bash
@@ -40,7 +40,14 @@ python .claude/skills/model-audit/scripts/audit.py [--plugins ceh-a ceh-b] [--mo
 ```json
 {
   "targets": "general",
-  "checked-against": ["fable-5-1", "opus-5-5", "sonnet-5-5"],
+  "checked-against": [
+    "fable-5",
+    "fable-5-1",
+    "opus-5",
+    "opus-5-5",
+    "sonnet-5",
+    "sonnet-5-5"
+  ],
   "pinned": {
     "agents/novice-walker.md": {
       "model": "sonnet-5-5",
@@ -66,7 +73,7 @@ python .claude/skills/model-audit/scripts/audit.py [--plugins ceh-a ceh-b] [--mo
   accepting a tuning edit. `audit.py` never changes it.
 - `pinned.<path>.proposed-for`: the target of the last tuning proposal. A file whose
   `proposed-for` equals its target is not stale again, so an unreviewed or rejected proposal is
-  not regenerated every week. `--plugins` forces a new proposal.
+  not regenerated every week. `--plugins` forces a new proposal and ignores `checked-against`.
 - `audit-model`, `tuned-by-model`: the model that actually ran, read from the run's
   `modelUsage`. `audit-model-effort`, `tuned-by-model-effort`: the `--effort` value passed. The CLI
   output does not report the applied effort, so this is the requested level.
@@ -75,16 +82,23 @@ The file passes `claude plugin validate <plugin-dir> --strict`.
 
 ## How a plugin is audited
 
+Which guides: each in-use slug brings its same-generation predecessors, because a guide only lists
+what changed since the one before it. `opus-5-5` brings `opus-5`, but not `opus-4-8`, which
+belongs to an older generation and is treated as superseded. Slugs already in `checked-against`
+are skipped.
+
 1. `/doctor prompt-audit plugins/standalone/<plugin>`, saved raw as `<plugin>.doctor.md`.
-2. The filter pass keeps only removals that a missing guide backs, quoting the guide. It drops
-   everything else into a "Dropped findings" list, including missing-file and contradiction
-   findings, so you can still see them.
-3. A tuning pass for each stale pinned file, using the `override` pair.
+2. The filter pass (unpinned files) starts from that report, adds anything it missed, and keeps a
+   change only when the general page backs it, or a model guide says it benefits that model and
+   no other in-use guide says it hurts theirs, or it fixes a missing reference or contradiction.
+   Changes written for one model only are dropped. Every dropped finding is listed with a reason.
+3. A tuning pass for each stale pinned file, using the `override` pair. It adapts the file to the
+   general page and to its model's guides, and model-specific wording is allowed there.
 4. `claude plugin validate <plugin-dir> --strict`, then `validate.py` once for the repo.
 
 Model choice: `default` (Sonnet) for unpinned audits, `override` (Opus) for pinned tuning and for
-any audit whose missing guides include a new generation, meaning a slug with no minor version such
-as `opus-6`. To re-run a plugin whose Sonnet report looked weak, use
+any audit triggered by a new generation, meaning an in-use slug with no minor version such as
+`opus-6`. Predecessors pulled in alongside a point release, such as `opus-5`, do not count. To re-run a plugin whose Sonnet report looked weak, use
 `--plugins <plugin> --model opus`. Effort levels are those `claude --help` lists
 (`low, medium, high, xhigh, max`). Which levels each model honours is not checked here.
 

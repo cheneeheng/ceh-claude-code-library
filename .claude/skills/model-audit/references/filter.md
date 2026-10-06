@@ -1,27 +1,44 @@
-Filter the `/doctor prompt-audit` report at `{raw_report}` for the plugin at `{plugin_dir}`.
+Review the plugin at `{plugin_dir}`, starting from the `/doctor prompt-audit` report at
+`{raw_report}`.
 
-The plugin's unpinned skills and agents follow Anthropic's general prompting techniques and must
-work on every model, so they never get model-specific additions. A finding survives only when it
-proposes removing or softening an instruction that one of these model guides says causes problems,
-for example forced self-verification, "keep progress updates brief", heavy anti-markdown blocks,
-or CRITICAL/MUST phrasing:
+The plugin's unpinned skills and agents run on every in-use model, so a change must fit all of
+them. Fetch every page below before judging anything.
+
+General best practices, which apply to every model:
+
+- {general_page}
+
+New model guides to act on. Each is written as the differences from its predecessor:
 
 {guide_urls}
 
-Fetch each guide, then read the report and the files it cites. For every finding:
+Other in-use model guides, which a change must not hurt:
 
-- Keep it if a guide statement supports the removal. Quote that statement and link its guide.
-- Drop it otherwise, including anything that adds model-specific wording.
-- Drop findings on these pinned files, which are tuned separately: {pinned_files}
+{other_guide_urls}
+
+Read the report and the files it cites, then the plugin's other skill and agent files. Add any
+change the pages call for that the report missed. Keep a change when one of these holds:
+
+1. The general page backs it. Removals, rewrites, and additions all count.
+2. A model guide says it benefits that model, and no other guide above says it hurts its model.
+   If a guide is silent on the instruction, treat that model as unaffected.
+3. It fixes a model-independent defect: a reference to a missing file or command, or two
+   instructions that contradict each other.
+
+Drop everything else, including any change that helps one model but a guide says hurts another,
+and any change written for one model only, such as "on Sonnet, do X". Quote the statement that
+backs every kept change, with its URL. Ignore these pinned files, which are tuned separately:
+{pinned_files}
 
 {apply_instruction}
 
 Reply with only this Markdown, no preamble:
 
-## Kept findings
+## Kept changes
 
-One `### <file>:<line>` heading per finding, then: the instruction, the guide quote with its URL,
-and the proposed edit as a before/after pair. Write "None." if nothing survived.
+One `### <file>:<line>` heading per change, then: the rule it keeps under (1, 2, or 3), the
+backing quote with its URL, for rule 2 the models it benefits and why the others are unaffected,
+and the change as a before/after pair. Write "None." if nothing survived.
 
 ## Dropped findings
 

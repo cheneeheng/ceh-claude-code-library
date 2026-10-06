@@ -103,12 +103,31 @@ def load_tuning(plugin_dir: Path) -> dict:
     )
 
 
+def generation(slug: str, known: list[str]) -> list[str]:
+    """`slug` and its same-generation predecessors (opus-5-5 -> opus-5, opus-5-5), oldest first.
+
+    Each guide is a diff from its predecessor, so the newest alone misses what earlier point
+    releases of its generation introduced. Older generations are skipped as superseded.
+    """
+    family, top = version(slug)
+    return sorted(
+        (
+            s
+            for s in known
+            if version(s)[0] == family
+            and version(s)[1][:1] == top[:1]
+            and version(s)[1] <= top
+        ),
+        key=lambda s: version(s)[1],
+    )
+
+
 def guide_chain(tuned_for: str | None, target: str, known: list[str]) -> list[str]:
     """Guides from just after `tuned_for` up to `target` in one family, oldest first."""
     family, top = version(target)
     old_family, low = version(tuned_for) if tuned_for else (None, ())
     if old_family != family:
-        return [target]
+        return generation(target, known)
     return sorted(
         (s for s in known if version(s)[0] == family and low < version(s)[1] <= top),
         key=lambda s: version(s)[1],
@@ -118,8 +137,24 @@ def guide_chain(tuned_for: str | None, target: str, known: list[str]) -> list[st
 def plugin_state(
     plugin_dir: Path, known: list[str], using: list[str], force: bool = False
 ) -> dict:
-    """`force` re-tunes pinned files whose last proposal for the target is still unreviewed."""
+    """State of one plugin.
+
+    `missing`: in-use slugs not yet checked, the audit trigger. `guides`: those slugs with their
+    same-generation predecessors, minus what is checked, the guides to act on. `other-guides`: the
+    in-use generations of the other families, which an unpinned change must not hurt. `force` ignores
+    `checked-against` and re-tunes pinned files whose last proposal is still unreviewed.
+    """
     tuning = load_tuning(plugin_dir)
+    checked = set() if force else set(tuning.get("checked-against", []))
+    missing = [s for s in using if s not in checked]
+    guides = {g for s in missing for g in generation(s, known)} - checked
+    stale_families = {version(s)[0] for s in missing}
+    others = {
+        g
+        for s in using
+        if version(s)[0] not in stale_families
+        for g in generation(s, known)
+    }
     pinned = []
     for path, model in pinned_files(plugin_dir).items():
         entry = tuning.get("pinned", {}).get(path, {})
@@ -138,7 +173,9 @@ def plugin_state(
         )
     return {
         "plugin": plugin_dir.name,
-        "missing": [s for s in using if s not in tuning.get("checked-against", [])],
+        "missing": missing,
+        "guides": sorted(guides, key=version),
+        "other-guides": sorted(others, key=version),
         "pinned": pinned,
     }
 
