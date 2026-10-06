@@ -137,7 +137,7 @@ Produce a complete draft — not an outline, not a bullet summary.
 - **Opening**: inside a moment or a thought within the first 2 sentences — not background, not a product pitch.
 - **Body**: match structure to post type (below). Use the user's own words and specifics — quotable interview lines go in nearly verbatim, and real details are not paraphrased into abstractions.
 - **Closing**: the open thread (see Voice). No "I hope this was helpful", no manufactured takeaway, lesson, or CTA.
-- **Length**: what the content needs — don't pad, don't cut substance.
+- **Length**: what the content needs, not the length of the source material — don't pad, don't cut substance.
   - Opinion / Personal Story / Thought Leadership: 400–800 words. Tight is better.
   - Lessons Learned / Launch: 600–1,000 words.
   - How-To / Tutorial: 800–1,800 words, driven by steps and code samples — no ceiling if genuinely required.
