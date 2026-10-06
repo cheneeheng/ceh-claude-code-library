@@ -127,7 +127,8 @@ operations/OP-07-recovery         — How-to: rollback, restore from backup, esc
 Each page keeps one mode: OP-01 explains and OP-03 lists, so neither holds a procedure. Changing a
 setting is a procedure in OP-04. **Under `write-project-docs`**, drop OP-01 and OP-03: the overview
 belongs in `docs/concepts/` and the settings in `docs/reference/configuration.md`, and the runbook
-links to both instead of repeating them.
+links to both instead of repeating them. Renumber the remaining pages from `OP-01` (standard §3), so
+install becomes `OP-01-install`.
 
 ### 4. Write each procedure
 

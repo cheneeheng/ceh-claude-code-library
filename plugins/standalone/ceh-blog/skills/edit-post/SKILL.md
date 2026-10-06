@@ -111,7 +111,7 @@ The Open Thread: Where you actually land — a reserved verdict is valid; what w
 **Project / Launch:**
 
 ```
-Hook: What it does and who it's for (one sentence)
+Hook: The moment that led to building it (a scene or a thought), with what it does and who it's for inside the first paragraph
 The Origin: Why you built this — what was missing, what frustrated you
 How It Works: The interesting parts only — key decisions, not a feature list
 What Was Hard: One real technical or design challenge
@@ -148,14 +148,11 @@ Wait for their answer, then address what they raise specifically.
 
 ## Rules
 
-- **Diagnose before editing**: a brief diagnosis always precedes the revised draft. The author needs the reasoning, not just a new version.
 - **Preserve voice and intent**: editing, not ghostwriting. Keep the author's vocabulary, register, and perspective: casual stays casual, formal stays formal. The job is to make the author sound more like themselves at their best.
 - **Personal voice, not influencer style**: the house voice is first-person, reflective, and quiet — the reader overhears reasoning rather than being taught. Never edit _toward_ influencer tells: punchy standalone one-liner paragraphs, aphoristic closers, imperative lessons aimed at the reader, "If you're building X, then Y" prescriptions, bold pseudo-headers as section labels, tidy meta-takeaway sign-offs, CTA endings. Diagnose these when present and never introduce them. An open or reserved ending is valid, so don't "fix" it into a conviction closer. If the target repo's `CLAUDE.md` defines a blog voice, it overrides the structures above.
 - **When the two conflict**: the author's vocabulary, register, and perspective are kept, and the banned tells are quieted even when the author wrote them. Say so in the diagnosis so the author can push back. A blog voice defined in the target repo's `CLAUDE.md` overrides both.
 - **Fix real problems only**: if the draft is already good, say so. Don't manufacture edits to justify the skill being invoked.
 - **Specifics over generalities**: push concrete details into every abstraction that could hold one.
-- **One question after**: after sharing the edit, ask one focused question. It is a dialogue, not a checklist.
-- **Draft is already good**: say so clearly and make only minor polish edits.
 - **Draft in another language**: edit in that language with the same framework. Don't translate unless asked.
 - **Very long draft (3,000+ words)**: same process, and be especially aggressive about padding. Flag if it would be stronger as two pieces.
 - **No identifiable thesis**: name it in the diagnosis, offer your best inference, and confirm before editing, because editing toward the wrong thesis polishes the wrong post.

@@ -2,11 +2,13 @@
 
 claude-code 2.1.291. Edits applied: yes.
 
-| Plugin           | Report                                     | Guides audited                                             | Pinned files tuned | Strict validate |
-| ---------------- | ------------------------------------------ | ---------------------------------------------------------- | ------------------ | --------------- |
-| ceh-core         | [ceh-core.md](ceh-core.md)                 | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
-| ceh-coding-agent | [ceh-coding-agent.md](ceh-coding-agent.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
-| ceh-git-workflow | [ceh-git-workflow.md](ceh-git-workflow.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
+| Plugin            | Report                                       | Guides audited                                             | Pinned files tuned | Strict validate |
+| ----------------- | -------------------------------------------- | ---------------------------------------------------------- | ------------------ | --------------- |
+| ceh-core          | [ceh-core.md](ceh-core.md)                   | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
+| ceh-coding-agent  | [ceh-coding-agent.md](ceh-coding-agent.md)   | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
+| ceh-git-workflow  | [ceh-git-workflow.md](ceh-git-workflow.md)   | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
+| ceh-blog          | [ceh-blog.md](ceh-blog.md)                   | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
+| ceh-documentation | [ceh-documentation.md](ceh-documentation.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
 
 `validate.py`: pass.
 

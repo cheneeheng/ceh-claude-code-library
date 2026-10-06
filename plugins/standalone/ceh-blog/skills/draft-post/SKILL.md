@@ -189,7 +189,7 @@ The Open Thread: Where you actually land — a reserved verdict is valid; what w
 **Project / Launch:**
 
 ```
-Hook: What it does and who it's for (one sentence)
+Hook: The moment that led to building it (a scene or a thought), with what it does and who it's for inside the first paragraph
 The Origin: Why you built this — what was missing, what frustrated you, why existing tools didn't cut it
 How It Works: The interesting parts only — architecture, key decisions, not a feature list
 What Was Hard: Be honest — one real technical or design challenge
@@ -275,7 +275,6 @@ they cost the author, not warnings issued to the reader.
 - **Pick the strongest thread**: if the material sprawls, choose the sharpest angle rather than covering everything, and tell the user which thread you picked and why.
 - **Concrete over abstract**: push for specifics — real numbers, actual events, named people, exact moments.
 - **Use the user's words**: pull real phrases, specifics, and examples from the material and the interview. A usable line ("first impression is a lot cleaner and smooth") goes into the draft nearly word-for-word.
-- **No fluff drafts**: specific, well-structured, worth publishing — not a padded word count mirroring the input length.
 
 ### Edge cases
 
