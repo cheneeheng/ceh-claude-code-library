@@ -1,27 +1,37 @@
 name: model-audit
 
-# Weekly: audit plugins that are stale against Claude's per-model prompting guides and open a
+# Weekly (schedule currently disabled): audit plugins that are stale against Claude's per-model prompting guides and open a
 # draft PR with the reports. See .claude/skills/model-audit/README.md. Nothing merges without review.
+#
+# Uses the Claude Code CLI, not anthropics/claude-code-action: audit.py fans out many headless
+# `claude -p` runs, each with its own model, effort, and JSON output, which one action prompt cannot.
+# The action also runs Claude through the Agent SDK and puts no `claude` on PATH for audit.py to call.
 on:
-  schedule:
-    - cron: "0 6 * * 5" # Fridays 06:00 UTC
+  # Disabled for now: re-enable by uncommenting. Manual dispatch still works.
+  # schedule:
+  #   - cron: "0 6 * * 5" # Fridays 06:00 UTC
   workflow_dispatch:
     inputs:
       apply:
         description: Apply the proposed edits on the audit branch
         type: boolean
-        default: false
+        default: true
 
 permissions:
   contents: write
   pull-requests: write
+
+# Every run is billed: never let two overlap.
+concurrency:
+  group: model-audit
+  cancel-in-progress: false
 
 jobs:
   audit:
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -33,21 +43,20 @@ jobs:
           cat "$RUNNER_TEMP/detect.json"
           echo "stale=$(jq '.stale | length' "$RUNNER_TEMP/detect.json")" >> "$GITHUB_OUTPUT"
 
-      - if: steps.detect.outputs.stale != '0'
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
+      # Native installer: the npm package is deprecated. It installs to ~/.local/bin.
       - name: Install Claude Code
         if: steps.detect.outputs.stale != '0'
-        run: npm install -g @anthropic-ai/claude-code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Audit
         id: audit
         if: steps.detect.outputs.stale != '0'
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-        run: python .claude/skills/model-audit/scripts/audit.py ${{ inputs.apply && '--apply' || '' }}
+        # Scheduled runs have no inputs, so they always apply. Edits land on audit/<date>, not main.
+        run: python .claude/skills/model-audit/scripts/audit.py ${{ (github.event_name != 'workflow_dispatch' || inputs.apply) && '--apply' || '' }}
 
       # Runs even when the audit exits non-zero, so errors land in the PR for review.
       - name: Open draft PR
