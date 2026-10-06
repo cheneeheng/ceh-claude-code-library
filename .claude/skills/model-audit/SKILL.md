@@ -18,7 +18,8 @@ scripts and their state files are documented in `${CLAUDE_SKILL_DIR}/README.md`.
 
 Arguments: `$ARGUMENTS`. Pass them through to `audit.py` unchanged. `--plugins` audits the given
 plugins even when they are not stale, each as its path from the repo root, and `--model`/`--effort` override the default audit pair in
-`${CLAUDE_SKILL_DIR}/assets/config.json`.
+`${CLAUDE_SKILL_DIR}/assets/config.json`. What each argument does is in the README's Arguments
+section.
 
 ## 1. Branch
 
@@ -62,4 +63,31 @@ git push -u origin audit/<date> && gh pr create --draft --title "chore(model-aud
 versions or write the changelog here: which edits survive is the user's decision, and the
 summary's reviewer checklist covers both.
 
-Reply with the PR URL, the summary table, and any errors or validation failures.
+Reply with the PR URL, the summary table, any errors or validation failures, and the next steps
+below, trimmed to what this run needs: drop the pinned-tuning step when nothing was tuned, the
+version steps when no edit was kept.
+
+## 5. Next steps for the user
+
+1. **Review the reports.** Read each `audits/<date>/<plugin>.md` and check that every kept change
+   cites a guide that actually backs it. `<plugin>.doctor.md` is the raw `/doctor` output it
+   started from.
+2. **Keep or drop edits.** With `--apply`, revert the hunks under `plugins/` you reject. Without
+   it, apply the ones you keep by hand before merging: `tuning.json` already records the guides as
+   checked, so the next run will not propose them again.
+3. **Accept or reject pinned tuning.** For each accepted file, set `tuned-for` to its `model` in
+   the plugin's `tuning.json`. For a rejected one, revert the edit and leave `tuned-for` alone:
+   `proposed-for` stops the same proposal from coming back.
+4. **Mirror shared content.** If a kept edit touches a section listed in
+   `docs/CROSS_REFERENCES.md`, apply it to every copy in the same PR.
+5. **Bump versions.** Each plugin with a kept edit gets a PATCH bump in both its `plugin.json` and
+   `.claude-plugin/marketplace.json`, and its `docs/PLUGIN_VERSIONS.md` row. A plugin whose only
+   change is `tuning.json` gets none.
+6. **Changelog.** Add the PR's entry under the date it was opened, per the root `CLAUDE.md`
+   Versioning section, with a `### Plugin versions` table if anything was bumped.
+7. **Handle failures.** For an errored plugin or a failed validation, fix the cause, then re-run
+   `/model-audit --plugins <plugin-path>`. A report that looks weak can be re-run with
+   `--model opus`.
+8. **Verify and merge.** Run `python tools/validate-plugins/validate.py`, optionally
+   `claude plugin eval` from a plugin root, tick the PR checklist, mark it ready, and merge with a
+   merge commit per the root `CLAUDE.md` "Landing a branch".
