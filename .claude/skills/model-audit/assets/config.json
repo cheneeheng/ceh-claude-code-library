@@ -1,0 +1,5 @@
+{
+  "default": { "model": "sonnet", "effort": "medium" },
+  "override": { "model": "opus", "effort": "high" },
+  "jobs": 3
+}
