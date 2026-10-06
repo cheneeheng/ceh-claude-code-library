@@ -53,10 +53,11 @@ Categorization rules of thumb:
 
 ```
 .agents_workspace/            # Session artifacts, git-ignored in full: DECISION_LOG.md, skill-evals/
-.claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/)
+.claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/), model-audit (scripts/, references/, assets/)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
-.github/workflows/            # validate.yml — runs validate.py on push and PR
+audits/<date>/                # Model-audit reports, one <plugin>.md each plus SUMMARY.md — written by the model-audit skill
+.github/workflows/            # validate.yml — runs validate.py on push and PR; model-audit.yml — weekly audit draft PR
 docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md
 examples/                     # Worked usage examples, one ceh-<plugin>/README.md each — not validated
 plugins/                      # All plugins — two folders, one directory per plugin, no tier subfolders
@@ -64,7 +65,7 @@ plugins/                      # All plugins — two folders, one directory per p
 │   └── ceh-scenario-<name>/  # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY
 └── standalone/
     └── ceh-<plugin-name>/
-        ├── .claude-plugin/           # plugin.json — version and dependencies live here
+        ├── .claude-plugin/           # plugin.json — version and dependencies live here; tuning.json — model-audit state
         ├── agents/                   # Optional — subagents, one <name>.md each
         ├── docs/                     # Optional — maintainer docs for this plugin (architecture, test records), not loaded by any skill
         ├── hooks/                    # Optional — hooks.json wiring scripts via ${CLAUDE_PLUGIN_ROOT}
@@ -76,6 +77,7 @@ plugins/                      # All plugins — two folders, one directory per p
                 ├── SKILL.md               # Required — frontmatter + full body, all content inline
                 └── references/            # Sparingly — see Skills below (same for assets/, scripts/)
 tools/
+├── model-audit/               # README.md pointer only — the tools live in .claude/skills/model-audit/
 ├── skills-sync/               # Copies skills into a project's .claude/skills/ — py/sh/ps1/html, own README.md
 └── validate-plugins/          # The CI gate — stdlib-only Python, own README.md
 ```

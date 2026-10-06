@@ -15,6 +15,17 @@ The root `CLAUDE.md` loads in every session, so it now carries only what a sessi
 and what applies repo-wide. Plugin-authoring rules load only when working under `plugins/`. No
 plugin version changes.
 
+A repo-local `model-audit` skill keeps the plugins aligned with Claude's per-model prompting guides.
+It detects guides a plugin has not been checked against, runs headless `/doctor prompt-audit` and
+pinned-agent tuning passes, and hands the reports over as a draft PR. It never merges or runs evals.
+No plugin version changes.
+
+### Added
+
+- `.claude/skills/model-audit/`: the `/model-audit` skill, with the stdlib detector and parallel audit runner in `scripts/`, the filter and tuning prompts in `references/`, and the config and guide state in `assets/`
+- `.github/workflows/model-audit.yml`: a weekly (Friday 06:00 UTC) or manual run that opens the audit draft PR
+- `tools/model-audit/README.md`, a pointer to the skill folder
+
 ### Changed
 
 - Move the Skills and Frontmatter Conventions sections from `CLAUDE.md` to a new `plugins/CLAUDE.md`, leaving a pointer
