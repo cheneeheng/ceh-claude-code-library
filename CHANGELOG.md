@@ -37,12 +37,18 @@ called. `ceh-web-frontend` depends on `ceh-ui-design` by deliberate exception to
 so installing the web stack still installs the design skill. The skill's invocation name changes
 from `ceh-web-frontend:design-ui` to `ceh-ui-design:design-ui`.
 
+The competitor-analysis pages read like a book: long paragraphs and wide tables a new reader had to
+work through before getting to the point. Each report now leads with the decision, a one-line summary
+and verdict over an Adopt now / Build / Skip board, so a glance is enough. Detail moves into
+expandable cards. A shared page template in the plugin fixes the layout for both skills, so every
+run renders the same shape. `docs/IDEAS.md` gains the nine ideas from the pstack analysis.
+
 ### Plugin versions
 
 | Plugin                    | Version |
 | ------------------------- | ------- |
 | `ceh-ag-ui`               | 1.1.0   |
-| `ceh-competitor-analysis` | 1.1.0   |
+| `ceh-competitor-analysis` | 1.1.1   |
 | `ceh-ui-design`           | 1.0.0   |
 | `ceh-usability-audit`     | 1.0.1   |
 | `ceh-web-frontend`        | 1.1.0   |
@@ -60,6 +66,8 @@ from `ceh-web-frontend:design-ui` to `ceh-ui-design:design-ui`.
 - `ceh-web-frontend` 1.1.0: `design-ui` removed (now `ceh-ui-design:design-ui`); depends on `ceh-ui-design`
 - `ceh-ag-ui` 1.1.0: depends on `ceh-ui-design` instead of `ceh-web-frontend`; invocations renamed to `ceh-ui-design:design-ui`
 - `ceh-usability-audit` 1.0.1: hand-off pointers renamed to `ceh-ui-design:design-ui`
+- `ceh-competitor-analysis` 1.1.1: reports lead with a summary, verdict, and Adopt now / Build / Skip board, and both skills render from a shared `references/report-page.html` template with expandable cards; mermaid diagrams dropped
+- `docs/IDEAS.md`: nine ideas from the pstack competitor analysis
 
 ### Fixed
 

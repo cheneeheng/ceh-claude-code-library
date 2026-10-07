@@ -25,8 +25,8 @@ license: Apache-2.0
 
 Write one report per competitor to `.agents_workspace/competitor-analysis/<slug>.md`, and render it
 as `<slug>.html` beside it. Done means every claim in it traces to a file, a URL, or a command you
-ran, every "incorporate" row names the place in our work where it would land, and the HTML page
-carries the same content as the Markdown.
+ran, every idea we take names the place in our work where it would land, a new reader gets the
+point at a glance, and the HTML page carries the same content as the Markdown.
 
 ## Procedure
 
@@ -53,12 +53,17 @@ carries the same content as the Markdown.
    not hold. A row you could not check gets "unverified" in its evidence cell.
 6. **Write the report** in the shape under Output, one file per competitor. Create the directory
    if it does not exist.
-7. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" and build
-   `<slug>.html` from the Markdown, following its design pass and finishing recipes. Use the
-   Tidewater theme unless the user names another, copied once to
-   `.agents_workspace/competitor-analysis/themes/<theme>.css` and linked from every page. The
-   Markdown stays the source: the page adds no claim the Markdown lacks, and is rebuilt whenever
-   the Markdown changes.
+7. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" for the
+   theme and its review pass. Use the Tidewater theme unless the user names another, copied once to
+   `.agents_workspace/competitor-analysis/themes/<theme>.css` and linked from every page. Build
+   `<slug>.html` by filling `${CLAUDE_PLUGIN_ROOT}/references/report-page.html`, keeping its
+   COMPETITOR-ONLY blocks: the hero from the summary line, verdict, and up to three headline
+   counts, the Adopt now / Build / Skip board from section 1, the step strip from section 2, one
+   expandable card per mechanism from section 3, and the inventory bars from section 4. The layout
+   is fixed by the template: do not add sections or restyle it. Every closed card shows only a name
+   and one line, and the detail goes inside it. The Markdown stays the source: the page may fold
+   detail into cards but adds no claim the Markdown lacks, and is rebuilt whenever the Markdown
+   changes.
 
 ## Rules
 
@@ -74,19 +79,26 @@ carries the same content as the Markdown.
 - **An "oh wow" moment is a mechanism, not a slogan.** It is something the competitor built or
   enforces that we could copy: a generator, a gate, a loop, a rule with teeth. Each one needs an
   evidence pointer, such as a `path` in the repo or a URL.
-- **Every "incorporate" row names its landing spot** in our work: a plugin, a skill, a tool, or a
-  file. Rate effort S, M, or L, and say in the notes when an idea conflicts with one of our existing
-  standards.
-- **List what is not worth copying, with the reason.** A competitor's idea that contradicts our
-  principles is a finding, not an omission.
-- **Be concise.** Prefer tables to prose. A mermaid diagram is optional: include one only when it
-  makes the structure faster to grasp than a table, and keep it to about ten nodes.
+- **Every idea we take names its landing spot** in our work: a plugin, a skill, a tool, or a
+  file. Effort S goes under Adopt now, M or L under Build. Say in the why when an idea conflicts
+  with one of our existing standards.
+- **List what is not worth copying under Skip, with the reason.** A competitor's idea that
+  contradicts our principles is a finding, not an omission.
+- **Write for a glance first.** A new reader gets the point from the summary line, the verdict,
+  and the names in the board alone. Each name is a few words, each one-liner fits on one line, and
+  a why or how runs one to three sentences. No mermaid diagrams: the step strip replaces them.
 - Do not rank one competitor against another here. That belongs to the comparison.
 
 ## Output
 
+The decision comes first, so a reader who stops after section 1 still has the answer.
+
 ```markdown
 # Competitor analysis: <name>
+
+<One sentence: what it is and its core idea.>
+
+**Verdict:** <One or two sentences: its real moat and what is worth taking.>
 
 | Field   | Value                                                       |
 | ------- | ----------------------------------------------------------- |
@@ -96,35 +108,39 @@ carries the same content as the Markdown.
 | License | <license>                                                   |
 | Size    | <counts, and the command that measured them>                |
 
-## 1. What it is
+## 1. What we take
 
-<One paragraph: what it is, who it is for, its core idea.>
+### Adopt now
 
-<Optional small mermaid diagram.>
+| Idea | Lands in | Why |
+| ---- | -------- | --- |
 
-| Aspect | How <name> does it |
-| ------ | ------------------ |
+### Build
 
-## 2. Inventory
+| Idea | Lands in | Effort | Why |
+| ---- | -------- | ------ | --- |
 
-<Every component, grouped. Repo: skills, agents, hooks, scripts, commands, configs. Product:
-features, plans, integrations. A count per group.>
+### Skip
+
+| Idea | Why not |
+| ---- | ------- |
+
+## 2. How it works
+
+1. <Three to five steps, one line each, from the user's first action to the result.>
 
 ## 3. "Oh wow" moments
 
-| #   | What | Why it is impressive | Evidence |
-| --- | ---- | -------------------- | -------- |
+| #   | What | One line | How it works | Evidence |
+| --- | ---- | -------- | ------------ | -------- |
 
-## 4. What we should incorporate
+## 4. Inventory
 
-| Idea | Where it lands in our work | Effort | Notes |
-| ---- | -------------------------- | ------ | ----- |
+| Group | Count | Items |
+| ----- | ----- | ----- |
 
-**Not worth copying:** <ideas, each with the reason.>
-
-## 5. Verdict
-
-<Two to four sentences: what its real moat is and what is worth taking.>
+<Repo: skills, agents, hooks, scripts, commands, configs. Product: features, plans, integrations.
+Largest group first. A group with nothing gets a 0 row.>
 ```
 
 ## Stop conditions

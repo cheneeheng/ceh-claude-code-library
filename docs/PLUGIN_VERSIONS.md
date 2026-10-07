@@ -28,7 +28,7 @@ a removed plugin loses its row.
 | `ceh-blog`                | 1.0.1   | `2026-10-06` |
 | `ceh-business-plan`       | 1.0.5   | `2026-10-02` |
 | `ceh-coding-agent`        | 1.0.1   | `2026-10-06` |
-| `ceh-competitor-analysis` | 1.1.0   | `2026-10-07` |
+| `ceh-competitor-analysis` | 1.1.1   | `2026-10-07` |
 | `ceh-core`                | 1.0.0   | `2026-10-02` |
 | `ceh-documentation`       | 1.0.1   | `2026-10-06` |
 | `ceh-git-datastore`       | 1.0.1   | `2026-10-02` |
