@@ -22,8 +22,9 @@ Each skill is self-contained with inline content. `references/` is for two cases
 
 Never for general reference material a model already knows.
 
-Two `ceh-web-frontend` skills migrated whole and carry bundled files that predate this rule:
-`design-ui` (two themes and `examples.md` under `references/`) and `visualize-graph-cytoscape` (eight reference
+Two skills migrated whole and carry bundled files that predate this rule:
+`ceh-ui-design:design-ui` (two themes and `examples.md` under `references/`) and
+`ceh-web-frontend:visualize-graph-cytoscape` (eight reference
 files, an `assets/template.html`, and a `scripts/to-elements.js` converter). Trim the Cytoscape
 references to the repo-opinionated delta before adding more.
 

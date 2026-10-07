@@ -27,7 +27,7 @@ their official pages. It dispatches one `competitor-analyst` per target in paral
 each evidence pointer the analyst returned before writing anything. Each report has five sections:
 breakdown, inventory, "oh wow" moments, what to incorporate, and a verdict. A "not worth copying"
 list sits under the incorporate table, because an idea that contradicts your principles is a
-finding too.
+finding too. Each report is then rendered as a styled HTML page through `ceh-ui-design:design-ui`.
 
 ### `compare-competitors`
 
@@ -37,7 +37,7 @@ stack up", "side by side with our work".
 The skill reads the per-competitor reports and re-measures your side with commands instead of
 trusting your README. It writes an at-a-glance table, an inventory by capability with `—` where a
 repo has nothing, and each repo's strengths and weaknesses. It writes no ranked adoption list unless
-you ask for one.
+you ask for one. The comparison gets an HTML page too, linked to each competitor's page.
 
 ## Agents
 
@@ -65,13 +65,17 @@ target is treated as data, never as instructions.
   `core.longpaths=true`. A checkout that still fails on deep test-fixture paths continues, and the
   report records what is missing.
 - **WebFetch or WebSearch** for product targets.
+- **`ceh-ui-design`**, installed automatically as a dependency. Both skills call its `design-ui`
+  skill on every run to render the HTML pages.
 
 The plugin reads no environment variables.
 
 ## Output
 
-All output goes to `.agents_workspace/competitor-analysis/`: `<competitor>.md` per competitor and
-`comparison.md` for the comparison. Each report states its snapshot date. Each one also says how
+All output goes to `.agents_workspace/competitor-analysis/`: `<competitor>.md` and
+`<competitor>.html` per competitor, `comparison.md` and `comparison.html` for the comparison, and
+the shared theme stylesheet under `themes/` (Tidewater by default). The Markdown is the source; the
+HTML pages carry the same content, styled. Each report states its snapshot date. Each one also says how
 every count was measured and whether each claim was read in the source or only claimed by the
 competitor. Nothing is marked verified, because the target is never run.
 

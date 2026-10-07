@@ -137,7 +137,7 @@ component. It also shows the agent the expected shape, because it goes out in th
 
 ### Component, theme only
 
-Build against the token and class contract of `ceh-web-frontend:design-ui` (see Hands off to):
+Build against the token and class contract of `ceh-ui-design:design-ui` (see Hands off to):
 
 - **Use theme classes and tokens only.** That means `.card`, `.table`, `.badge`, `.bar-track` /
   `.bar-fill.is-N`, `.eyebrow`, `.muted`, `.numeric`, and `var(--token)` in `app.css` for anything
@@ -159,6 +159,6 @@ agent prompt or few-shot example that uses the old shape. Update those in the sa
 
 ## Hands off to
 
-- Invoke the Skill tool with skill="ceh-web-frontend:design-ui" to load the token and class
+- Invoke the Skill tool with skill="ceh-ui-design:design-ui" to load the token and class
   contract the component is built against.
 - The canvas itself does not exist yet: `ceh-ag-ui:build-ag-ui`.

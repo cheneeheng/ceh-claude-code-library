@@ -20,8 +20,9 @@ something looks to the auditor.
 `ceh-web-frontend:make-ui-accessible` owns the mechanical floor — keyboard reachability, contrast,
 ARIA, focus. A perfectly WCAG-conformant product can still be incomprehensible; this plugin owns the
 comprehension layer and delegates the floor rather than re-deriving it.
-`ceh-web-frontend:design-ui` owns build-time visual decisions. This plugin audits after the fact,
-and is not web-only. Both hand-offs are conditional, so `ceh-web-frontend` is not a dependency.
+`ceh-ui-design:design-ui` owns build-time visual decisions. This plugin audits after the fact,
+and is not web-only. Both hand-offs are conditional, so neither `ceh-web-frontend` nor
+`ceh-ui-design` is a dependency.
 
 ## Honest limits
 
@@ -230,12 +231,12 @@ bias is confirmed and the screenshot handoff is the better path.
 
 ## Deliberately out of scope
 
-| Not here                                                     | Why                                                                                                                                            |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| Real user testing, interviews, diary studies, usability labs | This plugin is a proxy for those, not a replacement. It says so in every report                                                                |
-| WCAG conformance, contrast ratios, ARIA, focus management    | `ceh-web-frontend:make-ui-accessible` owns the mechanical floor                                                                                |
-| Layout, hierarchy, spacing, theme, visual polish             | `ceh-web-frontend:design-ui`, at build time                                                                                                    |
-| A/B tests, funnel analytics, session replay, heatmaps        | Needs production traffic and instrumentation, not a coding-session moment                                                                      |
-| Localization and internationalization review                 | A tooling and translation-pipeline investment; no in-session trigger                                                                           |
-| Information architecture for a whole product                 | A design exercise, not an audit. `ceh-coding-agent:document-architecture` for structure, `ceh-web-frontend:design-ui` for navigation placement |
-| Marketing copy, landing-page conversion, SEO wording         | `ceh-seo:pitch-project`                                                                                                                        |
+| Not here                                                     | Why                                                                                                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Real user testing, interviews, diary studies, usability labs | This plugin is a proxy for those, not a replacement. It says so in every report                                                             |
+| WCAG conformance, contrast ratios, ARIA, focus management    | `ceh-web-frontend:make-ui-accessible` owns the mechanical floor                                                                             |
+| Layout, hierarchy, spacing, theme, visual polish             | `ceh-ui-design:design-ui`, at build time                                                                                                    |
+| A/B tests, funnel analytics, session replay, heatmaps        | Needs production traffic and instrumentation, not a coding-session moment                                                                   |
+| Localization and internationalization review                 | A tooling and translation-pipeline investment; no in-session trigger                                                                        |
+| Information architecture for a whole product                 | A design exercise, not an audit. `ceh-coding-agent:document-architecture` for structure, `ceh-ui-design:design-ui` for navigation placement |
+| Marketing copy, landing-page conversion, SEO wording         | `ceh-seo:pitch-project`                                                                                                                     |

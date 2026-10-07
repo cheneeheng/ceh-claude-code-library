@@ -29,7 +29,8 @@ stack testing skills route between each other, with the trigger phrases and sequ
 | Testing               | `ceh-testing`             | Stack-agnostic testing technique: reproduce-first bug fixes (`test-a-bug-fix`), test-case design, suite audit (`audit-test-suite`), behavior-preservation checks, and the risk gaps a green suite misses                                                                                                                                 |
 | Python Service        | `ceh-python-service`      | FastAPI, asyncpg, PostgreSQL schema, Alembic, uv/ruff/mypy, and pytest for web services; unit, integration, and system tester agents                                                                                                                                                                                                     |
 | Python Library        | `ceh-python-library`      | Packaging and publishing, public API surface and semver, uv/ruff/mypy, and pytest for distributable libraries with no web dependencies                                                                                                                                                                                                   |
-| Web Frontend          | `ceh-web-frontend`        | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, UI visual design and themes, Cytoscape.js graphs; unit, integration, and system tester agents                                                                                                                                 |
+| Web Frontend          | `ceh-web-frontend`        | SvelteKit and React on Bun + Vite: TypeScript style and tooling, Vitest/Playwright testing, accessibility, Cytoscape.js graphs; unit, integration, and system tester agents. Brings `ceh-ui-design` for visual design                                                                                                                    |
+| UI Design             | `ceh-ui-design`           | Framework-agnostic visual design for any UI or HTML page: layout archetypes, hierarchy, navigation and in-page contents, states, finishing recipes, and the Meridian and Tidewater themes                                                                                                                                                |
 | SEO                   | `ceh-seo`                 | Discoverability for anything exposed to the internet: crawlable public web pages (head tags, structured data, sitemap, rendering), the `llms.txt` agent index, and the findability of README, package, and landing text                                                                                                                  |
 | Blog                  | `ceh-blog`                | Blog posts in a personal, series-first voice: draft from a topic, repo, or notes (interviewing when material is thin), edit an existing draft, repurpose a finished post for X, LinkedIn, TL;DR, and newsletters                                                                                                                         |
 | Plan Build Review     | `ceh-plan-build-review`   | The plan-driven development loop: plan a fullstack app one release at a time or all the way to MVP, implement from the plan, review the implementation against it, and patch a built version with small non-feature changes                                                                                                              |
@@ -44,12 +45,12 @@ stack testing skills route between each other, with the trigger phrases and sequ
 
 ### Categorization
 
-| Tier                  | Loaded            | Plugins                                                                                                                                                                                                        |
-| --------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                                                       |
-| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                              |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-competitor-analysis` |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                    |
+| Tier                  | Loaded            | Plugins                                                                                                                                                                                                                         |
+| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                                                                        |
+| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                               |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-competitor-analysis`, `ceh-ui-design` |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                     |
 
 Each plugin is self-contained: a foundational standard needed by more than one plugin is duplicated
 into each instead of extracted into a shared base, so one plugin per use case is all you load.
@@ -120,15 +121,20 @@ building, so they load _alongside_ a use-case plugin, not instead of one.
 
 ### Web Frontend (`ceh-web-frontend`)
 
-| Skill                           | Invoke                                        | When                                                                                                                         |
-| ------------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Configure Bun + Vite Env        | Model-only, no slash command                  | Bun/Vite setup, scripts, deps, TypeScript style, ESLint/Prettier                                                             |
-| Write SvelteKit Code            | Model-only, no slash command                  | Editing Svelte routes, shared `.svelte.ts` state, components, or the API client                                              |
-| Write React + Vite Code         | Model-only, no slash command                  | Editing React components, hooks, routing, or `vite.config.ts`                                                                |
-| Write Vitest + Playwright Tests | Model-only, no slash command                  | Writing `.test.ts`, `.test.tsx`, or `.spec.ts` files, or MSW handlers                                                        |
-| Make UI Accessible              | Model-only, no slash command                  | Writing component markup (Svelte or React)                                                                                   |
-| Design UI                       | `/ceh-web-frontend:design-ui`                 | Any frontend visual design decision: layout, hierarchy, navigation, states, finishing recipes, Meridian and Tidewater themes |
-| Visualize Graph (Cytoscape)     | `/ceh-web-frontend:visualize-graph-cytoscape` | A network, dependency map, org chart, or any clickable node-link diagram with Cytoscape.js                                   |
+| Skill                           | Invoke                                        | When                                                                                       |
+| ------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Configure Bun + Vite Env        | Model-only, no slash command                  | Bun/Vite setup, scripts, deps, TypeScript style, ESLint/Prettier                           |
+| Write SvelteKit Code            | Model-only, no slash command                  | Editing Svelte routes, shared `.svelte.ts` state, components, or the API client            |
+| Write React + Vite Code         | Model-only, no slash command                  | Editing React components, hooks, routing, or `vite.config.ts`                              |
+| Write Vitest + Playwright Tests | Model-only, no slash command                  | Writing `.test.ts`, `.test.tsx`, or `.spec.ts` files, or MSW handlers                      |
+| Make UI Accessible              | Model-only, no slash command                  | Writing component markup (Svelte or React)                                                 |
+| Visualize Graph (Cytoscape)     | `/ceh-web-frontend:visualize-graph-cytoscape` | A network, dependency map, org chart, or any clickable node-link diagram with Cytoscape.js |
+
+### UI Design (`ceh-ui-design`)
+
+| Skill     | Invoke                     | When                                                                                                                                                        |
+| --------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Design UI | `/ceh-ui-design:design-ui` | Any visual design decision for a UI or HTML page: layout, hierarchy, navigation, in-page contents, states, finishing recipes, Meridian and Tidewater themes |
 
 ### SEO (`ceh-seo`)
 
@@ -331,6 +337,7 @@ What each bundle installs is listed in [`docs/PLUGIN_DEPENDENCIES.md`](docs/PLUG
 /plugin install ceh-python-service@ceh-claude-code-library --scope user
 /plugin install ceh-python-library@ceh-claude-code-library --scope user
 /plugin install ceh-web-frontend@ceh-claude-code-library --scope user
+/plugin install ceh-ui-design@ceh-claude-code-library --scope user
 /plugin install ceh-seo@ceh-claude-code-library --scope user
 /plugin install ceh-blog@ceh-claude-code-library --scope user
 /plugin install ceh-plan-build-review@ceh-claude-code-library --scope user
@@ -344,8 +351,8 @@ What each bundle installs is listed in [`docs/PLUGIN_DEPENDENCIES.md`](docs/PLUG
 /plugin install ceh-competitor-analysis@ceh-claude-code-library --scope user
 ```
 
-Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-ag-ui` brings
-`ceh-web-frontend`. `ceh-workflow-builder` and `ceh-workflow-runner` are in no bundle, so install
+Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-web-frontend`,
+`ceh-ag-ui` and `ceh-competitor-analysis` bring `ceh-ui-design`. `ceh-workflow-builder` and `ceh-workflow-runner` are in no bundle, so install
 them on their own: the builder where you author a flow, the runner wherever a flow runs.
 `ceh-competitor-analysis` is in no bundle either: install it when you need it. Add `--scope project` instead of `--scope user` for a project-specific install.
 
@@ -394,6 +401,7 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
       "path": "~/ceh-claude-code-library/plugins/standalone/ceh-python-library"
     },
     { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-web-frontend" },
+    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-ui-design" },
     { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-seo" },
     { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-blog" },
     {

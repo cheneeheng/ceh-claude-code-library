@@ -1,5 +1,5 @@
 /* The theme loads first; everything below uses its tokens only, so swapping brand.css re-themes
-   the whole canvas. Theme files come from ceh-web-frontend:design-ui (Tidewater by default). */
+   the whole canvas. Theme files come from ceh-ui-design:design-ui (Tidewater by default). */
 @import "./brand.css";
 
 .shell { display: grid; grid-template-columns: 1fr 24rem; height: 100vh; background: var(--bg); }

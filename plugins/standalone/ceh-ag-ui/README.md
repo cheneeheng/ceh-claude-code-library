@@ -2,7 +2,7 @@
 
 Generative-UI canvases for agents that speak the [AG-UI](https://docs.ag-ui.com) protocol. The
 user types, and the agent answers by placing components from a **catalogue fixed at build time**,
-styled only by the theme (Tidewater by default, from `ceh-web-frontend:design-ui`). The agent picks
+styled only by the theme (Tidewater by default, from `ceh-ui-design:design-ui`). The agent picks
 the component and fills in the content. It can never change how anything looks.
 
 All five skills are **build-time**: Claude Code loads one while writing your app, and none runs
@@ -21,7 +21,7 @@ inside the running app. Worked examples, prompt by prompt:
 
 ## Prerequisites
 
-- **`ceh-web-frontend`**: installed automatically as a dependency. `build-ag-ui` and
+- **`ceh-ui-design`**: installed automatically as a dependency. `build-ag-ui` and
   `add-canvas-component` call its `design-ui` skill on every run for the theme and its token and
   class contract.
 - **Bun (or Node.js 20+) and network access**: the canvas. `react`, `vite`, `zod` 4 and

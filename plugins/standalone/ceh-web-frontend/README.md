@@ -14,12 +14,13 @@ accessibility, testing, tooling) stay single-sourced.
 | `write-react-vite-code`         | Model-only, no slash command                  | Editing React components, hooks, routing, or `vite.config.ts`                                                                                                                                                                                                                              |
 | `write-vitest-playwright-tests` | Model-only, no slash command                  | Writing `.test.ts`, `.test.tsx`, or `.spec.ts` files, or MSW handlers                                                                                                                                                                                                                      |
 | `make-ui-accessible`            | Model-only, no slash command                  | Writing component markup (Svelte or React)                                                                                                                                                                                                                                                 |
-| `design-ui`                     | `/ceh-web-frontend:design-ui`                 | Any frontend UI visual design decision: layout archetypes, hierarchy, navigation placement, empty/loading/error states, density, finishing recipes (command dock, humanized tables, lifecycle steppers), plus theming from bundled token-driven templates (Meridian, Tidewater)            |
 | `visualize-graph-cytoscape`     | `/ceh-web-frontend:visualize-graph-cytoscape` | Building a network, dependency map, org chart, knowledge graph, or any clickable node-link diagram with Cytoscape.js: layout by graph shape, converting real data into elements JSON, stylesheet, tap-to-highlight, readable zoom defaults, and when a node-link diagram is the wrong tool |
 
-`design-ui` bundles two themes under `references/` (`meridian/` and `tidewater/`, each a
-`brand.css` plus a `brand-guide.html`). `visualize-graph-cytoscape` bundles a working
-`assets/template.html`, a `scripts/to-elements.js` data converter, and eight reference files.
+`visualize-graph-cytoscape` bundles a working `assets/template.html`, a `scripts/to-elements.js`
+data converter, and eight reference files.
+
+UI visual design (layout, hierarchy, navigation, theming) lives in `ceh-ui-design:design-ui`.
+`ceh-ui-design` is a dependency, so installing this plugin installs it too.
 
 The plugin ships no hooks. The skills load from their descriptions alone, so nothing is injected into
 a session that does not touch these moments. If `make-ui-accessible` is observed to under-trigger on
@@ -58,3 +59,7 @@ Called by the tester agents via `bash "${CLAUDE_PLUGIN_ROOT}/scripts/<name>.sh"`
 The tester agents preload `ceh-testing:design-test-cases` and `write-vitest-playwright-tests` invokes
 it on every run, so the plugin declares `ceh-testing` as a dependency and Claude Code installs it
 automatically.
+
+`ceh-ui-design` is a dependency by deliberate exception: no skill here invokes it on every run.
+`design-ui` lived in this plugin until 1.1.0, and the dependency keeps it installed for everyone
+who installs the web stack.

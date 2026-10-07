@@ -2,7 +2,8 @@
 name: compare-competitors
 description: >-
   Load this skill when putting competitors side by side with our own work after each has been
-  analysed: one comparison.md with an at-a-glance table, an inventory by capability showing what
+  analysed: one comparison.md, also rendered as a styled HTML page, with an at-a-glance table, an
+  inventory by capability showing what
   each one ships and where nobody does, and each one's strengths, weaknesses, and positioning.
   A comparison only, with no adoption roadmap unless asked. Trigger on "compare them with us",
   "comparison report", "master report", "how do we stack up", "side by side with our work", or
@@ -16,8 +17,10 @@ license: Apache-2.0
 # Compare competitors
 
 Write `.agents_workspace/competitor-analysis/comparison.md`, comparing every analysed competitor
-with our work. Done means a reader can see in under a minute how the options differ and where each
-one has a gap, and every cell traces back to a per-competitor report or a command run on our side.
+with our work, and render it as `comparison.html` beside it. Done means a reader can see in under a
+minute how the options differ and where each one has a gap, every cell traces back to a
+per-competitor report or a command run on our side, and the HTML page carries the same content as
+the Markdown.
 
 ## Procedure
 
@@ -34,6 +37,10 @@ one has a gap, and every cell traces back to a per-competitor report or a comman
    with `—` where it has nothing. Choose the capability rows from the union of everything every
    repo ships, so that a gap on any side is visible.
 5. **Write the comparison** in the shape under Output.
+6. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" and build
+   `comparison.html` from the Markdown, with the same theme file the per-competitor pages link
+   (`themes/<theme>.css`, Tidewater unless the user names another). Link each competitor's
+   `.html` page where the Markdown links its `.md`. The page adds no claim the Markdown lacks.
 
 ## Rules
 
@@ -87,3 +94,7 @@ Detail per competitor: [<a>.md](<a>.md), [<b>.md](<b>.md). Snapshot date <YYYY-M
 
 <One or two sentences on how each one positions itself, ours included.>
 ```
+
+## Hands off to
+
+- Invoke the Skill tool with skill="ceh-ui-design:design-ui" to render the HTML page (step 6).
