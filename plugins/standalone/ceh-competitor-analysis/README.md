@@ -24,10 +24,13 @@ does X compare to us", "study this competitor", or a pasted GitHub URL with "inv
 The skill classifies each target as a repo or a product. It shallow-clones repos into a scratch
 directory as **untrusted data** and never installs, builds, or runs them. Products are read from
 their official pages. It dispatches one `competitor-analyst` per target in parallel, then checks
-each evidence pointer the analyst returned before writing anything. Each report has five sections:
-breakdown, inventory, "oh wow" moments, what to incorporate, and a verdict. A "not worth copying"
-list sits under the incorporate table, because an idea that contradicts your principles is a
-finding too. Each report is then rendered as a styled HTML page through `ceh-ui-design:design-ui`.
+each evidence pointer the analyst returned before writing anything. Each report puts the decision
+first, under a one-line summary and verdict: what to take, as Adopt now, Build, and Skip. A Skip
+row is a finding too, because an idea that contradicts your principles is worth recording. Then
+come how it works in a few steps, the "oh wow" moments, and the inventory. Each report is then
+rendered as an HTML page from the plugin's page template, with the theme from
+`ceh-ui-design:design-ui`. A new reader gets the point from the board alone and opens a card only
+for the detail.
 
 ### `compare-competitors`
 
@@ -75,7 +78,8 @@ The plugin reads no environment variables.
 All output goes to `.agents_workspace/competitor-analysis/`: `<competitor>.md` and
 `<competitor>.html` per competitor, `comparison.md` and `comparison.html` for the comparison, and
 the shared theme stylesheet under `themes/` (Tidewater by default). The Markdown is the source; the
-HTML pages carry the same content, styled. Each report states its snapshot date. Each one also says how
+HTML pages carry the same content, built from `references/report-page.html`, with detail folded
+into expandable cards. Each report states its snapshot date. Each one also says how
 every count was measured and whether each claim was read in the source or only claimed by the
 competitor. Nothing is marked verified, because the target is never run.
 

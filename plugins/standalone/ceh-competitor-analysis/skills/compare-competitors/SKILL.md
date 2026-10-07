@@ -37,10 +37,14 @@ the Markdown.
    with `—` where it has nothing. Choose the capability rows from the union of everything every
    repo ships, so that a gap on any side is visible.
 5. **Write the comparison** in the shape under Output.
-6. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" and build
-   `comparison.html` from the Markdown, with the same theme file the per-competitor pages link
-   (`themes/<theme>.css`, Tidewater unless the user names another). Link each competitor's
-   `.html` page where the Markdown links its `.md`. The page adds no claim the Markdown lacks.
+6. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" for the
+   theme and its review pass, with the same theme file the per-competitor pages link
+   (`themes/<theme>.css`, Tidewater unless the user names another). Build `comparison.html` by
+   filling `${CLAUDE_PLUGIN_ROOT}/references/report-page.html`, keeping its COMPARISON-ONLY blocks:
+   the hero from the positioning line and up to three headline counts, one table panel each for
+   "At a glance" and "Inventory by capability", and one expandable card per repo from "Where each
+   one is strongest". Link each competitor's `.html` page in the top bar. The page may fold detail
+   into cards but adds no claim the Markdown lacks.
 
 ## Rules
 
@@ -53,8 +57,8 @@ the Markdown.
   disagree on a number, rerun the measurement rather than picking one.
 - **Use the same word for the same concept across columns**, such as "skill", "agent", and "hook",
   even where a competitor uses its own term. Note the mapping once below the table.
-- **Be concise.** Use tables first. A mermaid diagram is optional: include it only when it shows the
-  structural difference faster than a table, and keep it to about ten nodes.
+- **Write for a glance first.** Use tables first, keep each cell to a few words, and keep each
+  strongest and weakest entry to one line. No mermaid diagrams.
 
 ## Output
 
@@ -75,8 +79,6 @@ Detail per competitor: [<a>.md](<a>.md), [<b>.md](<b>.md). Snapshot date <YYYY-M
 | Quality gate         |         |         |            |
 | Versioning           |         |         |            |
 | <added dimension>    |         |         |            |
-
-<Optional small mermaid diagram.>
 
 ## Inventory by capability
 

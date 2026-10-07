@@ -1,0 +1,171 @@
+<!doctype html>
+<!--
+  Report page template for ceh-competitor-analysis. Copy it, fill every {{placeholder}}, repeat the
+  blocks marked REPEAT, and delete every block marked COMPETITOR-ONLY or COMPARISON-ONLY that does
+  not apply, along with all of these comments. Closed cards carry the glance layer: a name and one
+  line. Open cards carry the detail. Every value is a theme token, so the page re-themes with the
+  linked stylesheet.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{page title}}</title>
+<link rel="stylesheet" href="themes/{{theme}}.css">
+<style>
+body { margin: 0; }
+.topbar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--border); }
+.topbar-in { max-width: 1200px; margin: 0 auto; padding: var(--space-3) var(--space-6); display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+.topbar nav { display: flex; gap: var(--space-1); flex-wrap: wrap; }
+.topbar a { color: var(--fg-muted); text-decoration: none; font-size: var(--fs-75); padding: var(--space-1) var(--space-3); }
+.topbar a:hover, .topbar a[aria-current] { color: var(--fg); }
+main { max-width: 1200px; margin: 0 auto; padding: var(--space-10) var(--space-6) var(--space-16); }
+.hero { display: grid; grid-template-columns: 1fr auto; gap: var(--space-8); align-items: end; }
+.hero h1 { margin: var(--space-1) 0 var(--space-2); }
+.hero p { margin: 0; max-width: 58ch; }
+.facts { display: flex; gap: var(--space-6); }
+.facts div { text-align: right; }
+.facts .numeric { display: block; font-size: var(--fs-500); font-weight: var(--weight-semibold); line-height: var(--lh-tight); }
+.facts .muted { font-size: var(--fs-75); }
+section { margin-top: var(--space-12); }
+.sec-head { margin-bottom: var(--space-4); }
+.sec-head h2 { margin: var(--space-1) 0 0; font-size: var(--fs-400); }
+.sec-head p { margin: var(--space-1) 0 0; font-size: var(--fs-100); }
+.x { border-radius: var(--radius-md); }
+.x summary { cursor: pointer; list-style: none; position: relative; padding-right: var(--space-6); }
+.x summary::-webkit-details-marker { display: none; }
+.x summary::after { content: "+"; position: absolute; right: 0; top: 0; color: var(--fg-subtle); font-family: var(--font-mono); transition: transform var(--dur-fast) var(--ease-out); }
+.x[open] summary::after { transform: rotate(45deg); color: var(--accent); }
+.x summary:hover::after { color: var(--fg); }
+.x .more { margin-top: var(--space-2); padding-top: var(--space-2); border-top: 1px solid var(--border); font-size: var(--fs-100); color: var(--fg-muted); }
+.x .more p { margin: 0 0 var(--space-2); }
+.x .more p:last-child { margin-bottom: 0; }
+.x .more code { font-size: var(--fs-75); }
+.board { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4); align-items: start; }
+.col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-4); border-top: 3px solid var(--col); }
+.col.now { --col: var(--secondary); }
+.col.later { --col: var(--accent); }
+.col.skip { --col: var(--border-strong); }
+.col h3 { margin: 0 0 var(--space-1); font-size: var(--fs-300); }
+.col > .muted { font-size: var(--fs-75); margin: 0 0 var(--space-3); }
+.col .items { display: grid; gap: var(--space-2); }
+.col .x { padding: var(--space-2) var(--space-3); background: var(--surface-2); }
+.col .x summary strong { display: block; font-size: var(--fs-100); font-weight: var(--weight-semibold); }
+.col .x summary span { font-size: var(--fs-75); color: var(--fg-muted); }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-3); align-items: start; }
+.cards .x { padding: var(--space-3) var(--space-4); border: 1px solid var(--border); background: var(--surface); }
+.cards .x[open] { border-color: var(--border-strong); }
+.cards .n { font-family: var(--font-mono); font-size: var(--fs-75); color: var(--accent); }
+.cards h3 { margin: var(--space-1) 0; font-size: var(--fs-200); font-family: var(--font-ui); font-weight: var(--weight-semibold); }
+.cards summary p { margin: 0; font-size: var(--fs-100); color: var(--fg-muted); }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-3); counter-reset: s; }
+.steps div { border-left: 2px solid var(--secondary); padding: var(--space-1) var(--space-3); font-size: var(--fs-100); }
+.steps div::before { counter-increment: s; content: counter(s); display: block; font-family: var(--font-mono); font-size: var(--fs-75); color: var(--secondary); }
+.inv { display: grid; gap: var(--space-2); max-width: 640px; }
+.inv-row { display: grid; grid-template-columns: 9rem 1fr 2.5rem; gap: var(--space-3); align-items: center; font-size: var(--fs-100); }
+.inv-row .numeric { text-align: right; }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow-x: auto; }
+.panel .table { font-size: var(--fs-100); min-width: 640px; }
+.panel .table th, .panel .table td { padding: var(--space-2) var(--space-3); vertical-align: top; text-align: left; }
+.panel .table th { background: var(--surface-2); }
+.panel .table td:first-child { font-weight: var(--weight-semibold); }
+.source { font-size: var(--fs-75); margin-top: var(--space-6); }
+@media (max-width: 860px) { .hero { grid-template-columns: 1fr; } .facts div { text-align: left; } }
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <span class="eyebrow">Competitor analysis</span>
+  <nav aria-label="Reports">
+    <!-- REPEAT per page in the folder: comparison first, then each competitor. aria-current="page" on this one. -->
+    <a href="{{slug}}.html">{{page name}}</a>
+  </nav>
+</div></header>
+
+<main>
+  <div class="hero">
+    <div>
+      <span class="eyebrow">{{Competitor | Comparison}}</span>
+      <h1>{{name}}</h1>
+      <p class="lead">{{one sentence: what it is}} <strong>{{the verdict in one short sentence}}</strong></p>
+    </div>
+    <div class="facts">
+      <!-- REPEAT, at most 3: the headline counts. -->
+      <div><span class="numeric">{{count}}</span><span class="muted">{{label}}</span></div>
+    </div>
+  </div>
+
+  <!-- COMPETITOR-ONLY: the decision board, from "What we take". -->
+  <section>
+    <div class="sec-head"><span class="eyebrow">Decision</span><h2>What we take</h2><p class="muted">Open a card for where it lands and why.</p></div>
+    <div class="board">
+      <div class="col now">
+        <h3>Adopt now</h3><p class="muted">Effort S.</p>
+        <div class="items">
+          <!-- REPEAT per Adopt now row. -->
+          <details class="x"><summary><strong>{{idea}}</strong><span>{{lands in}}</span></summary><div class="more"><p>{{why}}</p></div></details>
+        </div>
+      </div>
+      <div class="col later">
+        <h3>Build</h3><p class="muted">Effort M or L.</p>
+        <div class="items">
+          <!-- REPEAT per Build row. Put the effort in the why paragraph when it is L. -->
+          <details class="x"><summary><strong>{{idea}}</strong><span>{{lands in}}</span></summary><div class="more"><p>{{why}}</p></div></details>
+        </div>
+      </div>
+      <div class="col skip">
+        <h3>Skip</h3><p class="muted">Conflicts with our principles.</p>
+        <div class="items">
+          <!-- REPEAT per Skip row. -->
+          <details class="x"><summary><strong>{{idea}}</strong><span>{{why not, short}}</span></summary><div class="more"><p>{{why not, full}}</p></div></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPETITOR-ONLY: from "How it works". -->
+  <section>
+    <div class="sec-head"><span class="eyebrow">How it works</span><h2>{{the core idea in a few words}}</h2></div>
+    <div class="steps">
+      <!-- REPEAT, 3 to 5 steps, one line each. -->
+      <div>{{step}}</div>
+    </div>
+  </section>
+
+  <!-- COMPETITOR-ONLY: from "Oh wow" moments. -->
+  <section>
+    <div class="sec-head"><span class="eyebrow">Oh wow · {{count}}</span><h2>Mechanisms worth knowing</h2><p class="muted">Open a card for how it works and where it lives.</p></div>
+    <div class="cards">
+      <!-- REPEAT per mechanism, numbered 01, 02, … -->
+      <details class="x"><summary><span class="n">{{nn}}</span><h3>{{what}}</h3><p>{{one line}}</p></summary><div class="more"><p>{{how it works}}</p><p><code>{{evidence}}</code></p></div></details>
+    </div>
+  </section>
+
+  <!-- COMPETITOR-ONLY: from "Inventory". Bar width = count / largest count, in %. -->
+  <section>
+    <div class="sec-head"><span class="eyebrow">Inventory · {{total}} components</span><h2>What it ships</h2></div>
+    <div class="inv">
+      <!-- REPEAT per group, largest first, data colors is-1 … is-4 in order. A zero group shows a muted label and an em dash. -->
+      <div class="inv-row"><span>{{group}}</span><div class="bar-track"><div class="bar-fill is-1" style="width:{{pct}}%"></div></div><span class="numeric">{{count}}</span></div>
+    </div>
+  </section>
+
+  <!-- COMPARISON-ONLY: one tabular section per table in comparison.md ("At a glance", "Inventory by capability"). -->
+  <section>
+    <div class="sec-head"><span class="eyebrow">{{section eyebrow}}</span><h2>{{section title}}</h2><p class="muted">{{one-line caption}}</p></div>
+    <div class="panel"><table class="table">{{table rows}}</table></div>
+  </section>
+
+  <!-- COMPARISON-ONLY: from "Where each one is strongest", one card per repo, ours last. -->
+  <section>
+    <div class="sec-head"><span class="eyebrow">Strengths · {{count}}</span><h2>Where each one is strongest</h2><p class="muted">Open a card for the weakness and positioning.</p></div>
+    <div class="cards">
+      <!-- REPEAT per repo. -->
+      <details class="x"><summary><span class="n">{{repo}}</span><h3>{{strongest at}}</h3><p>{{positioning, one line}}</p></summary><div class="more"><p><strong>Weakest at:</strong> {{weakest at}}</p></div></details>
+    </div>
+  </section>
+
+  <p class="muted source">{{source · version · license · author · how it was read, date}}</p>
+</main>
+</body>
+</html>
