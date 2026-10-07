@@ -22,22 +22,23 @@ a removed plugin loses its row.
 
 ## Standalone plugins
 
-| Plugin                  | Version | Changed in   |
-| ----------------------- | ------- | ------------ |
-| `ceh-ag-ui`             | 1.0.0   | `2026-10-02` |
-| `ceh-blog`              | 1.0.1   | `2026-10-06` |
-| `ceh-business-plan`     | 1.0.5   | `2026-10-02` |
-| `ceh-coding-agent`      | 1.0.1   | `2026-10-06` |
-| `ceh-core`              | 1.0.0   | `2026-10-02` |
-| `ceh-documentation`     | 1.0.1   | `2026-10-06` |
-| `ceh-git-datastore`     | 1.0.1   | `2026-10-02` |
-| `ceh-git-workflow`      | 1.0.1   | `2026-10-06` |
-| `ceh-plan-build-review` | 1.0.0   | `2026-10-02` |
-| `ceh-python-library`    | 1.0.0   | `2026-10-02` |
-| `ceh-python-service`    | 1.0.0   | `2026-10-02` |
-| `ceh-seo`               | 1.0.0   | `2026-10-02` |
-| `ceh-testing`           | 1.0.0   | `2026-10-02` |
-| `ceh-usability-audit`   | 1.0.0   | `2026-10-02` |
-| `ceh-web-frontend`      | 1.0.0   | `2026-10-02` |
-| `ceh-workflow-builder`  | 1.3.0   | `2026-10-05` |
-| `ceh-workflow-runner`   | 1.0.0   | `2026-10-05` |
+| Plugin                    | Version | Changed in   |
+| ------------------------- | ------- | ------------ |
+| `ceh-ag-ui`               | 1.0.0   | `2026-10-02` |
+| `ceh-blog`                | 1.0.1   | `2026-10-06` |
+| `ceh-business-plan`       | 1.0.5   | `2026-10-02` |
+| `ceh-coding-agent`        | 1.0.1   | `2026-10-06` |
+| `ceh-competitor-analysis` | 1.0.0   | `2026-10-07` |
+| `ceh-core`                | 1.0.0   | `2026-10-02` |
+| `ceh-documentation`       | 1.0.1   | `2026-10-06` |
+| `ceh-git-datastore`       | 1.0.1   | `2026-10-02` |
+| `ceh-git-workflow`        | 1.0.1   | `2026-10-06` |
+| `ceh-plan-build-review`   | 1.0.0   | `2026-10-02` |
+| `ceh-python-library`      | 1.0.0   | `2026-10-02` |
+| `ceh-python-service`      | 1.0.0   | `2026-10-02` |
+| `ceh-seo`                 | 1.0.0   | `2026-10-02` |
+| `ceh-testing`             | 1.0.0   | `2026-10-02` |
+| `ceh-usability-audit`     | 1.0.0   | `2026-10-02` |
+| `ceh-web-frontend`        | 1.0.0   | `2026-10-02` |
+| `ceh-workflow-builder`    | 1.3.0   | `2026-10-05` |
+| `ceh-workflow-runner`     | 1.0.0   | `2026-10-05` |

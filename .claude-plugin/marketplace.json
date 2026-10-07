@@ -111,6 +111,12 @@
       "description": "CEH workflow runner: execute a built flow.yaml workflow interactively or headless — stages in order, approvals, gates, run state and resume, ending on a FLOW STATUS line. Install it wherever a flow runs; building one needs ceh-workflow-builder instead."
     },
     {
+      "name": "ceh-competitor-analysis",
+      "source": "./plugins/standalone/ceh-competitor-analysis",
+      "version": "1.0.0",
+      "description": "CEH competitor analysis: study a competitor's repo or product and learn from it — one evidence-anchored report per competitor (breakdown, full inventory, the \"oh wow\" mechanisms worth learning from, what to incorporate and where it lands in our work), then a side-by-side comparison with our own work. Repos are shallow-cloned and read as untrusted data, never run."
+    },
+    {
       "name": "ceh-scenario-service",
       "source": "./plugins/scenarios/ceh-scenario-service",
       "version": "1.0.0",
