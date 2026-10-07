@@ -47,8 +47,14 @@
     {
       "name": "ceh-web-frontend",
       "source": "./plugins/standalone/ceh-web-frontend",
-      "version": "1.0.1",
-      "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, accessibility, UI visual design and theming, Cytoscape.js graph visualization, and testing agents (unit/integration/system)."
+      "version": "1.1.0",
+      "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, accessibility, Cytoscape.js graph visualization, and testing agents (unit/integration/system). UI visual design comes from the ceh-ui-design dependency."
+    },
+    {
+      "name": "ceh-ui-design",
+      "source": "./plugins/standalone/ceh-ui-design",
+      "version": "1.0.0",
+      "description": "CEH UI design: framework-agnostic visual design for any UI or HTML page — layout archetypes, hierarchy, navigation placement (including in-page contents), empty/loading/error states, density, finishing recipes, and two bundled token-driven themes (Meridian, Tidewater)."
     },
     {
       "name": "ceh-seo",
@@ -77,13 +83,13 @@
     {
       "name": "ceh-ag-ui",
       "source": "./plugins/standalone/ceh-ag-ui",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "CEH AG-UI: generative-UI canvases for agents that speak the AG-UI protocol — a React + Vite canvas where the agent places components from a fixed, themed catalogue (Tidewater by default), adding catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps."
     },
     {
       "name": "ceh-usability-audit",
       "source": "./plugins/standalone/ceh-usability-audit",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "CEH usability audit: measure whether a non-expert can actually use what you built — cold zero-context walkthroughs by persona-constrained subagents that report where they stalled and how many steps each milestone cost against a budget set before the walk, a five-question interface audit across web UI/CLI/library/app surfaces, a three-part rewrite pass over every user-reachable error message, and a plain-language pass over labels and copy. Findings are ranked by observed outcome, not by how bad they look."
     },
     {
@@ -113,8 +119,8 @@
     {
       "name": "ceh-competitor-analysis",
       "source": "./plugins/standalone/ceh-competitor-analysis",
-      "version": "1.0.0",
-      "description": "CEH competitor analysis: study a competitor's repo or product and learn from it — one evidence-anchored report per competitor (breakdown, full inventory, the \"oh wow\" mechanisms worth learning from, what to incorporate and where it lands in our work), then a side-by-side comparison with our own work. Repos are shallow-cloned and read as untrusted data, never run."
+      "version": "1.1.0",
+      "description": "CEH competitor analysis: study a competitor's repo or product and learn from it — one evidence-anchored report per competitor (breakdown, full inventory, the \"oh wow\" mechanisms worth learning from, what to incorporate and where it lands in our work), then a side-by-side comparison with our own work, each as Markdown plus a styled HTML page. Repos are shallow-cloned and read as untrusted data, never run."
     },
     {
       "name": "ceh-scenario-service",

@@ -9,7 +9,7 @@ description: >-
   usability", "is this intuitive", "why does nobody find this button", "our API is hard to use",
   "the CLI is confusing", "make this easier to understand", or before shipping a screen, command, or
   public API. Not for the install/onboarding path (use ceh-usability-audit:walk-first-run), visual
-  design decisions at build time (use ceh-web-frontend:design-ui), or WCAG conformance (use
+  design decisions at build time (use ceh-ui-design:design-ui), or WCAG conformance (use
   ceh-web-frontend:make-ui-accessible).
 disable-model-invocation: false
 user-invocable: true
@@ -222,7 +222,7 @@ in that folder.
 - Can a stranger even get in? `ceh-usability-audit:walk-first-run`.
 - The finding is an error string: `ceh-usability-audit:audit-error-messages`.
 - The finding is wording: `ceh-usability-audit:write-plain-language`.
-- Layout, hierarchy, spacing, theme: `ceh-web-frontend:design-ui`.
+- Layout, hierarchy, spacing, theme: `ceh-ui-design:design-ui`.
 - Keyboard, contrast, ARIA, focus: `ceh-web-frontend:make-ui-accessible`.
 - The fix is a doc, not the product: `ceh-documentation:write-guides-and-runbooks` when the reader
   needed a task or a runbook, `ceh-documentation:write-api-reference` when they needed a lookup.

@@ -28,18 +28,38 @@ contents" rule puts a content page's section links in the top bar first, and fal
 contents rail only when the bar cannot carry them: 6 or more sections, `h3` links, a bar already
 full of site pages, or an app shell.
 
+`design-ui` then moved out of `ceh-web-frontend` into a new standalone `ceh-ui-design` plugin. The
+skill was already framework-agnostic, and plugins that render HTML without a frontend stack can now
+depend on it alone. `ceh-competitor-analysis` is the first: both of its skills now render their
+report as a styled HTML page beside the Markdown on every run, Tidewater by default. `ceh-ag-ui`
+depends on `ceh-ui-design` instead of `ceh-web-frontend`, since `design-ui` was the only thing it
+called. `ceh-web-frontend` depends on `ceh-ui-design` by deliberate exception to the every-run rule,
+so installing the web stack still installs the design skill. The skill's invocation name changes
+from `ceh-web-frontend:design-ui` to `ceh-ui-design:design-ui`.
+
 ### Plugin versions
 
 | Plugin                    | Version |
 | ------------------------- | ------- |
-| `ceh-competitor-analysis` | 1.0.0   |
-| `ceh-web-frontend`        | 1.0.1   |
+| `ceh-ag-ui`               | 1.1.0   |
+| `ceh-competitor-analysis` | 1.1.0   |
+| `ceh-ui-design`           | 1.0.0   |
+| `ceh-usability-audit`     | 1.0.1   |
+| `ceh-web-frontend`        | 1.1.0   |
 
 ### Added
 
 - `ceh-competitor-analysis` 1.0.0: `analyze-competitor` and `compare-competitors` skills, and the read-only `competitor-analyst` agent that reads one competitor in isolation
 - `docs/IDEAS.md`: backlog of future plugin, skill, and validator ideas, with a Dropped section
 - `ceh-web-frontend` 1.0.1: `design-ui` "In-page contents" rule, with a worked contents-rail example in `references/examples.md`
+- `ceh-ui-design` 1.0.0: standalone plugin holding the `design-ui` skill, its Meridian and Tidewater themes, and `examples.md`
+- `ceh-competitor-analysis` 1.1.0: `analyze-competitor` and `compare-competitors` render each report as an HTML page via `ceh-ui-design:design-ui`, with a shared theme under `themes/`
+
+### Changed
+
+- `ceh-web-frontend` 1.1.0: `design-ui` removed (now `ceh-ui-design:design-ui`); depends on `ceh-ui-design`
+- `ceh-ag-ui` 1.1.0: depends on `ceh-ui-design` instead of `ceh-web-frontend`; invocations renamed to `ceh-ui-design:design-ui`
+- `ceh-usability-audit` 1.0.1: hand-off pointers renamed to `ceh-ui-design:design-ui`
 
 ### Fixed
 

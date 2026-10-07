@@ -22,7 +22,7 @@ you, in Claude Code ──► skill loads ──► code lands in your repo ─�
 The prompts below are what you type into Claude Code. Any wording that describes the same moment
 triggers the skill, and you can always invoke one directly with `/ceh-ag-ui:<skill>`.
 
-Install: `/plugin install ceh-ag-ui@ceh-claude-code-library`. This brings `ceh-web-frontend` with it, for the
+Install: `/plugin install ceh-ag-ui@ceh-claude-code-library`. This brings `ceh-ui-design` with it, for the
 theme.
 
 ---
@@ -36,7 +36,7 @@ theme.
 **What happens:**
 
 1. The bundled template is copied to `apps/assistant/web` and `apps/assistant/agent`.
-2. `ceh-web-frontend:design-ui` is loaded, and Tidewater's `brand.css` is copied to
+2. `ceh-ui-design:design-ui` is loaded, and Tidewater's `brand.css` is copied to
    `web/src/brand.css`.
 3. The seven default components are kept, unless you said which ones the app does not need.
 
@@ -105,7 +105,7 @@ to a theme class, so the agent picks the meaning and the theme picks the look.
 
 > Switch the canvas to the Meridian theme.
 
-**Skill:** `ceh-web-frontend:design-ui` (the theme layer). This works because every `ceh-ag-ui`
+**Skill:** `ceh-ui-design:design-ui` (the theme layer). This works because every `ceh-ag-ui`
 component uses only theme tokens.
 
 **What happens:** `web/src/brand.css` is replaced with Meridian's. No component file changes. Both

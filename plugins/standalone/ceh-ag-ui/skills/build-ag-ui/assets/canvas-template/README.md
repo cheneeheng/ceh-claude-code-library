@@ -7,7 +7,7 @@ against the entry's zod schema and renders it. Styling comes only from the theme
 
 ```bash
 # once — install the theme (Tidewater by default; Meridian swaps in with no markup changes)
-cp <ceh-web-frontend design-ui>/references/tidewater/brand.css web/src/brand.css
+cp <ceh-ui-design design-ui>/references/tidewater/brand.css web/src/brand.css
 
 # terminal 1 — mock agent on :8000 (swap for your real AG-UI endpoint)
 cd agent && uv run uvicorn main:app --port 8000

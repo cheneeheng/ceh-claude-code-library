@@ -54,7 +54,7 @@ the empty state offers starter prompts built from the catalogue.
 
 ### 2. Install the theme
 
-Invoke the Skill tool with skill="ceh-web-frontend:design-ui" and follow its _Theme layer_, with
+Invoke the Skill tool with skill="ceh-ui-design:design-ui" and follow its _Theme layer_, with
 one override: the theme is already chosen. Use **Tidewater** without asking, unless the user named
 Meridian or brought their own token file with the same token and class contract. Copy the
 `tidewater/brand.css` file from that skill's references directory to `web/src/brand.css`, which
@@ -147,7 +147,7 @@ user's template. The work is done when:
 
 ## Hands off to
 
-- Invoke the Skill tool with skill="ceh-web-frontend:design-ui" to install the theme (step 2).
+- Invoke the Skill tool with skill="ceh-ui-design:design-ui" to install the theme (step 2).
 - A component beyond the seven defaults goes to `ceh-ag-ui:add-canvas-component`, and the real
   agent server to `ceh-ag-ui:build-ag-ui-agent`.
 - Later, the canvas can grow **shared state**, where the agent keeps a live value the UI mirrors
