@@ -48,12 +48,21 @@ their "What we take" ideas, 11 to adopt now and 7 to build, each with where it w
 gstack guard-hook ideas stay out, and so do the ideas both analyses chose to skip. The earlier
 entries and the Dropped section are gone; git history keeps them. No plugin version changes.
 
+Competitor reports now account for everything a competitor ships. `analyze-competitor` rates every
+skill, agent, workflow, or feature against our work as covered, partial, gap, or N/A, in a new
+coverage section, and every partial or gap item must land in Adopt now, Build, or Skip, with each
+row naming the items it covers. The analyst agent lists every component instead of a sample and
+gives a first-pass rating, and the page template gains the coverage tables. Re-run this way, the
+gstack and pstack analyses took 101 partial or gap items, and `docs/IDEAS.md` now holds the
+resulting 22 adopt-now and 24 build ideas. gstack's two guard-hook ideas are listed as rejected,
+because Claude Code's built-in auto mode is good enough.
+
 ### Plugin versions
 
 | Plugin                    | Version |
 | ------------------------- | ------- |
 | `ceh-ag-ui`               | 1.1.0   |
-| `ceh-competitor-analysis` | 1.1.1   |
+| `ceh-competitor-analysis` | 1.1.2   |
 | `ceh-ui-design`           | 1.0.0   |
 | `ceh-usability-audit`     | 1.0.1   |
 | `ceh-web-frontend`        | 1.1.0   |
@@ -74,6 +83,8 @@ entries and the Dropped section are gone; git history keeps them. No plugin vers
 - `ceh-competitor-analysis` 1.1.1: reports lead with a summary, verdict, and Adopt now / Build / Skip board, and both skills render from a shared `references/report-page.html` template with expandable cards; mermaid diagrams dropped
 - `docs/IDEAS.md`: nine ideas from the pstack competitor analysis
 - `docs/IDEAS.md`: replaced with the 18 adopt-now and build ideas from the gstack and pstack analyses, minus gstack's two guard hooks
+- `ceh-competitor-analysis` 1.1.2: `analyze-competitor` rates every competitor component for coverage and requires every partial or gap item in "What we take"; the analyst lists every component with a first-pass rating; the page template gains coverage tables
+- `docs/IDEAS.md`: expanded to 22 adopt-now and 24 build ideas covering every partial or gap item from both analyses, with the two guard hooks marked rejected
 
 ### Fixed
 

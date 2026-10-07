@@ -36,19 +36,23 @@ If any of these is missing, say so in your first line and work with what you hav
 2. **Inventory everything it ships**, grouped by type. For a repo, that means skills, agents,
    commands, hooks, scripts or CLIs, configs, and docs. For a product, it means features, plans, and
    integrations. Count each group with a command (`ls`, `find`, `grep -c`, `wc -l`) and record the
-   command.
+   command. List every user-facing unit by name with a one-line purpose, never a sample: the parent
+   rates each one against our work.
 3. **Hunt for mechanisms.** Look for what the competitor enforces or automates rather than what it
    asserts: generators, CI gates, budgets, hooks, evidence ledgers, review loops, prompt patterns
    with teeth. Read the files that implement each one, not only the README that describes it.
 4. **Map ideas onto our inventory.** For each mechanism worth copying, name the place in our
    inventory where it would land, or "new component" when nothing fits. Also note anything that
    contradicts a principle our inventory states.
-5. **Report.** Return the output below as your final message.
+5. **Rate coverage.** For every component you listed, give a first-pass rating against our
+   inventory: Covered, Partial, Gap, or N/A (plumbing for the competitor's own product, host, or
+   vendor), with the component of ours that covers it.
+6. **Report.** Return the output below as your final message.
 
 ## Output to parent session
 
-Lead with the identity table. Stay under about 150 lines. Never paste file contents back. Point at
-them instead.
+Lead with the identity table. Stay under about 150 lines plus one coverage row per component. Never
+paste file contents back. Point at them instead.
 
 ```markdown
 ## <name>: fact sheet
@@ -78,6 +82,11 @@ them instead.
 
 | Idea | Lands in | Conflicts with our principles? |
 | ---- | -------- | ------------------------------ |
+
+### Coverage
+
+| Component | Group | Rating (Covered / Partial / Gap / N/A) | Our component |
+| --------- | ----- | -------------------------------------- | ------------- |
 
 ### Not read / gaps
 
