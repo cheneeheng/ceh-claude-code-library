@@ -180,6 +180,74 @@ Tabs switch peer views of the _same_ object in place — they never navigate awa
 </div>
 ```
 
+## Navigation — in-page contents
+
+A long report with more sections than its top bar can carry (≥6, three shown): a sticky contents
+rail beside the content, with the section in view marked. Under 860px the rail drops to a static
+list above the content. With ≤5 sections the same links go in the top bar instead.
+
+```html
+<style>
+  html {
+    scroll-padding-top: var(--space-8);
+  }
+  .doc {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: var(--space-12);
+  }
+  .toc {
+    position: sticky;
+    top: var(--space-8);
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+  }
+  @media (max-width: 860px) {
+    .doc {
+      grid-template-columns: 1fr;
+    }
+    .toc {
+      position: static;
+    }
+  }
+</style>
+<div class="doc">
+  <nav class="toc" aria-label="On this page">
+    <p class="eyebrow">On this page</p>
+    <a class="has-edge is-active" aria-current="location" href="#summary"
+      >Summary</a
+    >
+    <a class="has-edge" href="#findings">Findings</a>
+    <a class="has-edge" href="#verdict">Verdict</a>
+  </nav>
+  <main>
+    <section id="summary">…</section>
+    <section id="findings">…</section>
+    <section id="verdict">…</section>
+  </main>
+</div>
+<script>
+  const links = document.querySelectorAll(".toc a");
+  const spy = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        for (const a of links) {
+          const on = a.hash === "#" + e.target.id;
+          a.classList.toggle("is-active", on);
+          on
+            ? a.setAttribute("aria-current", "location")
+            : a.removeAttribute("aria-current");
+        }
+      }
+    },
+    { rootMargin: "-30% 0px -60% 0px" },
+  );
+  document.querySelectorAll("main section[id]").forEach((s) => spy.observe(s));
+</script>
+```
+
 ## Color and depth
 
 **Bad** — brand color as decoration, two primaries, semantic color without meaning:
