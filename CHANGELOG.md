@@ -18,6 +18,9 @@ run. Every count names the command that measured it. Every "oh wow" mechanism po
 URL it came from, and every incorporate row names where it would land in our work. The comparison is
 a comparison only, with no adoption roadmap unless asked.
 
+A new `docs/IDEAS.md` backlog tracks future plugin, skill, and validator ideas taken from the
+competitor analyses, with the reason each rejected idea was dropped. No plugin version changes.
+
 ### Plugin versions
 
 | Plugin                    | Version |
@@ -27,6 +30,7 @@ a comparison only, with no adoption roadmap unless asked.
 ### Added
 
 - `ceh-competitor-analysis` 1.0.0: `analyze-competitor` and `compare-competitors` skills, and the read-only `competitor-analyst` agent that reads one competitor in isolation
+- `docs/IDEAS.md`: backlog of future plugin, skill, and validator ideas, with a Dropped section
 
 ---
 
