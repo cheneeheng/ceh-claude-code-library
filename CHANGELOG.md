@@ -43,6 +43,11 @@ and verdict over an Adopt now / Build / Skip board, so a glance is enough. Detai
 expandable cards. A shared page template in the plugin fixes the layout for both skills, so every
 run renders the same shape. `docs/IDEAS.md` gains the nine ideas from the pstack analysis.
 
+`docs/IDEAS.md` then started over from the re-run gstack and pstack analyses. It now holds only
+their "What we take" ideas, 11 to adopt now and 7 to build, each with where it would land. The two
+gstack guard-hook ideas stay out, and so do the ideas both analyses chose to skip. The earlier
+entries and the Dropped section are gone; git history keeps them. No plugin version changes.
+
 ### Plugin versions
 
 | Plugin                    | Version |
@@ -68,6 +73,7 @@ run renders the same shape. `docs/IDEAS.md` gains the nine ideas from the pstack
 - `ceh-usability-audit` 1.0.1: hand-off pointers renamed to `ceh-ui-design:design-ui`
 - `ceh-competitor-analysis` 1.1.1: reports lead with a summary, verdict, and Adopt now / Build / Skip board, and both skills render from a shared `references/report-page.html` template with expandable cards; mermaid diagrams dropped
 - `docs/IDEAS.md`: nine ideas from the pstack competitor analysis
+- `docs/IDEAS.md`: replaced with the 18 adopt-now and build ideas from the gstack and pstack analyses, minus gstack's two guard hooks
 
 ### Fixed
 
