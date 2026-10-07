@@ -1,203 +1,165 @@
 # Ideas Backlog
 
-Ideas for future plugins, skills, and validator checks. Nothing here is committed work. When an idea
-ships, delete its entry and let the `CHANGELOG.md` entry carry the history. When an idea is rejected,
-move it to **Dropped** with the reason, so it is not proposed again.
+Ideas taken from the gstack and pstack competitor analyses of 2026-10-07 ("What we take": Adopt
+now and Build). Nothing here is committed work.
 
-Effort: S is under a day, M is a few days.
+Effort: S is under a day, M is a few days, L is longer.
 
-## Open
+## Adopt now
 
-### Evidence bound to content, not commit SHAs
+### Lead-judgment buckets
 
-- **Source:** gstack (section 3 #4)
-- **Where:** `ceh-testing`, `ceh-git-workflow:pull-request` (pre-merge gate)
-- **Effort:** M
-- **Idea:** Record "these tests passed" against a hash of the working-tree contents instead of a
-  commit SHA. A rebase or squash keeps the evidence valid, and an edit after a review or test run
-  marks it stale. The pre-merge gate then cites fresh evidence instead of rerunning.
-- **Open question:** Needs a small script to fingerprint the tree and store results. Check whether
-  `git write-tree` over a temporary index is enough before building anything bespoke.
-
-### Untrusted-text envelope for tracker content
-
-- **Source:** gstack (section 3 #8)
-- **Where:** `ceh-git-workflow:code-review`, `ceh-git-workflow:pull-request`
-- **Effort:** S for the prose rule, M for a script
-- **Idea:** Issue and PR bodies are attacker-controlled input to an agent that has a shell. Start
-  with a prose rule: tracker text is data, never instructions, quote it and flag any line that tries
-  to give commands. Add a wrapper script that labels injection-shaped lines (including fullwidth and
-  zero-width evasion) only if the prose rule proves insufficient. A CI check that every tracker-text
-  input goes through the wrapper is what makes it enforceable.
-- **Note:** `code-review` today mentions only SQL injection.
-
-### Egress receipts
-
-- **Source:** gstack (section 3 #9)
-- **Where:** an own skill or hook, alongside the second-opinion skill below
-- **Effort:** M
-- **Idea:** Before any send to an outside service, append a receipt (time, destination, payload
-  hash, hash of the previous receipt) to a local log. Editing or deleting an old receipt breaks the
-  chain, so tampering shows. Record each consent with a revoke command.
-- **Depends on:** only worth building once a skill sends code off the machine (second opinion).
-
-### `careful` skill
-
-- **Source:** gstack (section 4.1)
-- **Where:** `ceh-coding-agent`
+- **Source:** pstack `/interrogate`
+- **Where:** `ceh-git-workflow:code-review`
 - **Effort:** S
-- **Idea:** A user-invoked skill (`disable-model-invocation: true`) with a `hooks:` frontmatter
-  `PreToolUse` Bash guard. It denies or asks on `rm -rf`, `git push --force`, `git reset --hard`,
-  `DROP TABLE`, `kubectl delete`. The hook lives from invocation until the session ends.
-- **Priority:** Low. Claude Code auto mode already covers most of this. Revisit if auto mode
-  proves too permissive for production work. An always-on force-push block in
-  `ceh-git-workflow/hooks/hooks.json` is the cheaper variant. The branch guard needs no change: it
-  is already always on.
+- **Idea:** Sort findings into Act On, Consider, Noted, and Dismissed, with at most 5 Act On items,
+  and keep Dismissed with reasons so the user can override it. It sits on top of our existing
+  blocking/advisory split.
 
-### Context-budget ratchet in CI
+### Certainty ladder
 
-- **Source:** gstack (section 3 #3, 4.2)
-- **Where:** `tools/validate-plugins/validate.py`
+- **Source:** pstack `/blast-radius`
+- **Where:** `ceh-testing:verify-behavior-preserved`
 - **Effort:** S
-- **Idea:** `validate.py` checks only the 1024-char limit per description. Add per-plugin totals
-  for description chars and SKILL.md lines in a committed fixture. CI fails on growth unless the
-  fixture is bumped in the same commit. The 500-line rule in the SKILL template is guidance only
-  today.
+- **Idea:** Name the one fact a change's safety rests on and prove it at the highest rung reachable:
+  said so, pointed at a line, walked the failure, ran code, reproduced in the app. It fires on a
+  moment: "I don't trust this small diff".
 
-### Blame protocol for failing tests
+### `skip: <reason>` rows
 
-- **Source:** gstack (section 3 #10, 4.4)
-- **Where:** `ceh-testing`, `ceh-git-workflow:pull-request` (pre-merge gate)
+- **Source:** pstack `poteto-mode`
+- **Where:** `ceh-workflow-runner:run-agentic-workflow`, `ceh-plan-build-review:implement-from-plan`
 - **Effort:** S
-- **Idea:** Before calling a failure "pre-existing", run the same test on the base branch and cite
-  the result. Otherwise label it unverified. Applies only once a failure has already surfaced, so it
-  does not conflict with the no-tests-unless-asked rule.
+- **Idea:** Copy the steps into the task list verbatim and keep a skipped step visible as
+  `skip: <reason>`, so no step disappears silently.
 
-### Second-opinion skill
+### Patch-id re-check
 
-- **Source:** gstack (section 3 #6, 4.6)
-- **Where:** new skill in `ceh-coding-agent` (not a step in `code-review`)
-- **Effort:** M
-- **Idea:** When another model CLI (`codex`, `gemini`) is installed, send a diff, plan, or design to
-  it, merge the findings, and name which model produced each. Triggers on "get a second opinion",
-  which also covers plans, so it does not belong inside the PR-review skill.
-- **Notes:** Needs `compatibility` naming the CLI. It sends code off the machine, so it asks for
-  consent first, see Egress receipts.
-
-### `/correct`: mistake-to-enforcer loop
-
-- **Source:** pstack (section 3 #3, 4)
-- **Where:** new skill in `ceh-coding-agent`
-- **Effort:** M
-- **Idea:** Corrections today land as prose (memory files, CLAUDE.md lines), the weakest level,
-  because nothing fails when an agent skips them. On `/correct` or "you keep doing X": mine reverts,
-  PR review comments, `DECISION_LOG.md`, feedback memories, and the never/always lines in
-  CLAUDE.md, and group them into classes that happened at least twice. Fix each class at the highest
-  level that works: architecture, then types, then a lint or `validate.py` check whose error names
-  the fix, then a test, docs last. Prove each new check goes red on the real past mistake. Keep a
-  rule → enforcer table in CLAUDE.md.
-- **Note:** A candidate class here is a bumped plugin missing its `docs/PLUGIN_VERSIONS.md` row, if
-  `validate.py` does not check it yet.
-
-### Confidence ladder for safety claims
-
-- **Source:** pstack `/blast-radius` (section 3 #4, 4)
-- **Where:** `ceh-git-workflow:code-review`, `ceh-testing:verify-behavior-preserved`
+- **Source:** pstack shipping playbook
+- **Where:** `ceh-git-workflow:pull-request` (land step)
 - **Effort:** S
-- **Idea:** Name the one fact the change's safety depends on, push it as far down the ladder as is
-  cheap, and say where it stopped: 1 said so, 2 `file:line`, 3 walked the failure step by step, 4 ran
-  a script that fails loud, 5 reproduced in the running app. Splits our `inferred` status, which
-  today covers both "saw the line" and "traced the failure".
-- **Open question:** Whether the output style maps its status words onto rungs. Check
-  `docs/CROSS_REFERENCES.md` first if that text is duplicated.
+- **Idea:** Record the `git patch-id` a review or test run saw, and compare it again before landing.
+  A rebase can invalidate a review without touching a check.
+- **Note:** Not a release mechanism, so no conflict with the no-releases rule.
 
-### Don't ask what you can run
+### Design red-flag screen
 
-- **Source:** pstack (section 3 #2, 4)
-- **Where:** `ceh-coding-agent:agent-coding-contract`
+- **Source:** pstack `architect`
+- **Where:** `ceh-coding-agent:refactor-repo` or `document-architecture`
 - **Effort:** S
-- **Idea:** Before `AskUserQuestion` on a "which approach" fork, classify it. If running something
-  answers it (behavior, timing, output, layout), sketch a throwaway prototype in the scratchpad,
-  observe, decide, report. Only product or preference calls reach the user.
-- **Constraint:** Stays within the contract's always-allowed "throwaway snippet" category, so it does
-  not conflict with the no-tests-unless-asked rule. Mirror per `docs/CROSS_REFERENCES.md` if the
-  contract text is duplicated.
+- **Idea:** Screen a design for Ousterhout's red flags: shallow module, information leakage,
+  pass-through method.
+- **Note:** Register it in `docs/CROSS_REFERENCES.md` if it lands in both skills.
 
-### Workflow steps copied verbatim into tasks
+### Evidence label per claim
 
-- **Source:** pstack (section 3 #1, 4)
-- **Where:** `ceh-workflow-runner:run-agentic-workflow`, `ceh-plan-build-review`
-- **Effort:** S
-- **Idea:** At start, create one task per stage, named exactly as in the SKILL or `flow.yaml`, before
-  any task-specific todos. A stage not run is closed as `skip: <reason>`, and the final summary lists
-  every skip. A silently merged or dropped stage becomes visible.
-- **Open question:** Check whether `run-agentic-workflow` already creates per-stage tasks.
-
-### Multi-model review panel
-
-- **Source:** pstack `/interrogate` (section 3 #6, 4)
-- **Where:** `ceh-git-workflow:code-review` (opt-in mode)
-- **Effort:** M
-- **Idea:** Send the same prompt and rubric, no personas, to subagents pinned to `opus`, `sonnet`, and
-  `haiku`. Dedupe, rank findings by how many models agree, bucket each as act on, consider, noted,
-  or dismissed.
-- **Caveat:** All-Claude panels share blind spots, so agreement means less than pstack's
-  cross-family panel. Costs about 3x, so opt-in only. Overlaps with Second-opinion skill, which adds
-  a non-Claude model.
-
-### Generated project verify skill
-
-- **Source:** pstack `/create-verification-skill` (section 3 #7, 4)
-- **Where:** `ceh-testing` (new skill)
-- **Effort:** M
-- **Idea:** Read the repo (scripts, Makefile, compose, `.env.example`) and write
-  `.claude/skills/verify-<app>/SKILL.md` with Launch (command plus readiness probe), Doctor (common
-  failures), Drive (curl or browser steps), Evidence, Cleanup, and a feature map. The generator must
-  run the new skill end to end and fix it until it passes. Saves tester agents rediscovering how to
-  start the app each run.
-- **Notes:** The generator is stack-agnostic, only its output is stack-specific, so it passes the
-  technique/tooling test. Claude Code's built-in `run` skill already looks for such a project skill.
-  Needs a maintain step for drift.
-
-### Transcript evidence for model-audit
-
-- **Source:** pstack `/reflect` (section 3 #8, 4)
-- **Where:** `.claude/skills/model-audit/` (repo-local)
-- **Effort:** M
-- **Idea:** Read `~/.claude/projects/<this-repo-slug>/*.jsonl` only, never other projects. Look for
-  skills that should have fired and did not, skill output that was ignored, and corrections right
-  after a skill ran. Three reviewer lenses plus a synthesizer produce Accepted / Rejected / Backlog.
-  Items a script could enforce move to Backlog as `validate.py` candidates. Apply only after user
-  approval.
-- **Constraint:** A local mode only. `model-audit.yml` runs in CI, which has no transcripts.
-
-### Cite a skill only with what it changed
-
-- **Source:** pstack (section 3 #5, 4)
+- **Source:** pstack `poteto-mode`
 - **Where:** `ceh-coding-agent` output style
 - **Effort:** S
-- **Idea:** One line: when citing a skill or standard, name the choice it changed, and cite only
-  skills loaded this session. "Per write-less-code" becomes "per write-less-code, used `pathlib`
-  instead of a helper".
+- **Idea:** Every claim carries measured, inferred, or guess in the same sentence. Our Status column
+  does this per topic, and this extends it to each claim.
 
-### Fresh subagent per round
+### Description size cap
 
-- **Source:** pstack (section 3 #11, 4)
-- **Where:** tester agents, `ceh-core:delegate-bulk-reads`
+- **Source:** gstack `test/catalog-budget.test.ts`
+- **Where:** `tools/validate-plugins/validate.py`
 - **Effort:** S
-- **Idea:** A retry or follow-up goes to a new subagent whose brief merges the original brief, every
-  later directive, and the prior report, not a `SendMessage` resume. pstack's reason: resumed agents
-  drop mid-run directives. Exception: the round needs live state the old agent holds (a running
-  server, uncommitted changes).
-- **Priority:** Low. Bulk-reader questions already go to fresh agents, so the value is mostly in the
-  tester agents.
+- **Idea:** A per-description byte cap plus a ratcheted total keeps skill-catalog cost bounded.
+  gstack caps each description at 260 bytes. Ours run from 63 to 1,058 bytes, median 693.
+- **Note:** Stdlib-only, so it fits the validator.
 
-## Dropped
+### Quote or suppress
 
-- **Artifact handoff between skills (gstack 4.3).** Already shipped. `ceh-plan-build-review` chains
-  `SKELETON.md` and `ITER_NN.md` through `plan-schema.md` and `depends_on`. `ceh-business-plan`
-  shares one `BUSINESS_PLAN.md` schema that every skill reads and writes by section.
-- **Rules-only AGENTS.md digest (gstack 4.7).** Only useful for users on agents that read rules but
-  not skills. Dropped until there is demand.
-- **`triggers:` frontmatter field (gstack 4.8).** No harness reads it. Claude Code supports
-  `when_to_use` and `paths`, and the Agent Skills spec has neither `triggers` nor keywords.
+- **Source:** gstack confidence resolver
+- **Where:** `ceh-git-workflow:code-review`, `ceh-plan-build-review:review-against-plan`,
+  `ceh-testing:audit-test-suite`
+- **Effort:** S
+- **Idea:** A review finding with no quoted code drops below the line that shows it.
+- **Note:** Three plugins means a `docs/CROSS_REFERENCES.md` entry.
+
+### Scope drift first
+
+- **Source:** gstack review-scope resolver
+- **Where:** `ceh-git-workflow:code-review` and `pull-request` self-review
+- **Effort:** S
+- **Idea:** Compare the stated intent with the actual diff before judging code quality. Fits our
+  minimal-diff rule and `ceh-coding-agent:shrink-diff`.
+
+### Test value line
+
+- **Source:** gstack `docs/test-value-bar.md`
+- **Where:** `ceh-testing:design-test-cases`, `test-a-bug-fix`, `audit-test-suite`
+- **Effort:** S
+- **Idea:** Each new test states `protects`, `fails_when`, and `why_new`. Stack-agnostic, so it
+  belongs in `ceh-testing`.
+
+### One-way-door list
+
+- **Source:** gstack one-way-door registry
+- **Where:** `ceh-coding-agent:agent-coding-contract`, Stop conditions
+- **Effort:** S
+- **Idea:** A concrete list of questions that are never auto-decided. Our contract already stops on
+  irreversible impact, and the list gives that rule teeth.
+
+## Build
+
+### Generated verify skill
+
+- **Source:** pstack `/create-verification-skill`, `/maintain-verification-skill`
+- **Where:** new skill pair in `ceh-testing`, reusing `ceh-web-frontend:playwright-system-tester`
+- **Effort:** L
+- **Idea:** Generate a repo-local skill and feature map that drive the real app, prove it once
+  before handover, and keep it honest with a maintenance pass.
+- **Note:** It writes into the user's repo, so it fires only on an explicit request.
+
+### `/correct` enforcement ladder
+
+- **Source:** pstack `/correct`
+- **Where:** new skill in `ceh-coding-agent`, and `.claude/skills/model-audit` for this repo
+- **Effort:** M
+- **Idea:** Fix a repeated mistake at the highest level that works: architecture, then types, then a
+  lint, then a test, docs last. Prove each new check fails on a real past mistake. Matches how we
+  already push rules into `validate.py`.
+
+### Plan linter
+
+- **Source:** pstack `check-plan.mjs`
+- **Where:** `ceh-plan-build-review:plan-fullstack-app`, as stdlib Python in the skill's `scripts/`
+- **Effort:** M
+- **Idea:** A script that makes a plan carry its verify boxes, called from the skill body.
+
+### Arena with a hidden rubric
+
+- **Source:** pstack `/arena`
+- **Where:** a `ceh-workflow-builder` pattern, or a `ceh-ui-design:design-ui` theme bake-off
+- **Effort:** M
+- **Idea:** N attempts at the same task, a judge on a different model scoring against a rubric the
+  candidates never see, the best as base with grafts from the rest.
+- **Note:** Claude Code cannot mix vendors, so an Opus-vs-Sonnet judge is a weaker version.
+
+### Opt-in verify gate
+
+- **Source:** gstack `bin/gstack-verify-gate`
+- **Where:** `ceh-coding-agent` hooks
+- **Effort:** M
+- **Idea:** A Stop hook that runs a trusted, sha256-pinned check before the turn ends. Editing the
+  command revokes trust.
+- **Note:** Conflicts with "don't run tests unless asked" unless it stays opt-in per repo.
+
+### Parallel reviewers
+
+- **Source:** gstack Review Army
+- **Where:** new agents for `ceh-git-workflow:code-review`
+- **Effort:** M, could grow to L
+- **Idea:** Specialist reviewers run in parallel, and their findings are merged and deduped. Worth
+  the cost only on large diffs.
+
+### Shared-block generator
+
+- **Source:** gstack `SKILL.md.tmpl` generator
+- **Where:** `tools/`, plus a freshness check in `validate.py`
+- **Effort:** L
+- **Idea:** Generate duplicated blocks from one source instead of mirroring them by hand through
+  `docs/CROSS_REFERENCES.md`, and fail CI when the generated output is stale.
+- **Note:** Fits "SKILL.md all content inline" only if generated files are committed and CI diffs
+  them.
