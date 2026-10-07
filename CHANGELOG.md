@@ -9,6 +9,27 @@ before this repo live in
 
 ---
 
+## 2026-10-07
+
+A new `ceh-competitor-analysis` plugin turns a competitor study into a repeatable workflow. Each
+competitor, either a code repo or a product, gets one evidence-anchored report. A comparison then
+puts every competitor beside our own work. Repos are shallow-cloned and read as untrusted data, never
+run. Every count names the command that measured it. Every "oh wow" mechanism points at the file or
+URL it came from, and every incorporate row names where it would land in our work. The comparison is
+a comparison only, with no adoption roadmap unless asked.
+
+### Plugin versions
+
+| Plugin                    | Version |
+| ------------------------- | ------- |
+| `ceh-competitor-analysis` | 1.0.0   |
+
+### Added
+
+- `ceh-competitor-analysis` 1.0.0: `analyze-competitor` and `compare-competitors` skills, and the read-only `competitor-analyst` agent that reads one competitor in isolation
+
+---
+
 ## 2026-10-06
 
 The root `CLAUDE.md` loads in every session, so it now carries only what a session cannot derive
