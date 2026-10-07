@@ -61,13 +61,16 @@ Answer these five questions and state the answers (one line each) so the choices
 
 | Archetype          | Use for                                               | Structure                                                                            |
 | ------------------ | ----------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| **App shell**      | Data-dense tools, ≥5 nav destinations, daily-use apps | Fixed sidebar (nav) + scrollable content pane; topbar only for global search/account |
+| **App shell**      | Data-dense tools, ≥6 nav destinations, daily-use apps | Fixed sidebar (nav) + scrollable content pane; topbar only for global search/account |
 | **Top-nav**        | Content and marketing sites, ≤5 destinations          | Horizontal nav bar + full-width sections below                                       |
 | **Focused flow**   | Auth, checkout, onboarding, wizards, single forms     | Single centered column, minimal or no nav, one action per step                       |
 | **Dashboard grid** | Metric overviews, monitoring                          | App shell + card grid; cards sized by importance, not uniformly                      |
 
+The surface kind (design-pass question 1) picks the archetype; the destination count only breaks a
+tie between two that both fit.
+
 Do not mix archetypes on one surface. An app does not get a marketing hero; a login page does not
-get a sidebar.
+get a sidebar. An in-page contents rail (_Navigation_) is not an archetype and does not count.
 
 #### Content width
 
@@ -135,6 +138,27 @@ key-value cards — never squash columns.
   from the nav alone.
 - Icons in nav are optional; if used, every item gets one (no partial icon rows) and each icon is
   paired with its text label. Icon-only nav requires an established, unambiguous icon set.
+
+#### In-page contents
+
+A long single document (report, spec, docs page) lists its own sections. Those links scroll, they
+do not navigate, so the frequency-order and max-7 rules above do not apply.
+
+- **Show it** when the page has ≥4 `h2` sections or runs past ~3 screens.
+- **On a content page, the top bar comes first.** A standalone document with ≤5 sections puts its
+  section links in the top bar, and that is its whole navigation.
+- **Add a contents rail only when the top bar cannot carry the sections:** ≥6 `h2` sections,
+  sections that need `h3` links, or a top bar already full of site destinations. In an app shell
+  the rail is the only option.
+- **Rail placement:** sticky beside the content on wide screens, on the right when a sidebar
+  already holds the left. On narrow screens it becomes a static list above the first section,
+  never a horizontal scroller.
+- **Document order.** Link every `h2` with its heading text; add `h3` one indent down only for
+  long sections.
+- **Mark the section in view** with `.has-edge.is-active` plus `aria-current="location"`, driven by
+  an `IntersectionObserver` on the sections. The URL cannot say where the reader is.
+- **Offset jumps:** with any sticky header, set `scroll-padding-top` to its height so a jumped-to
+  heading never lands under it.
 
 ### Color and depth
 

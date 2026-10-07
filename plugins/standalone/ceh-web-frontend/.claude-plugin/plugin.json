@@ -1,6 +1,6 @@
 {
   "name": "ceh-web-frontend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, accessibility, UI visual design and theming, Cytoscape.js graph visualization, and testing agents (unit/integration/system).",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/ceh-claude-code-library",

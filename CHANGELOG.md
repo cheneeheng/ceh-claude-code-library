@@ -21,16 +21,29 @@ a comparison only, with no adoption roadmap unless asked.
 A new `docs/IDEAS.md` backlog tracks future plugin, skill, and validator ideas taken from the
 competitor analyses, with the reason each rejected idea was dropped. No plugin version changes.
 
+The `design-ui` skill now settles navigation for long single pages. Its layout table matched 5
+destinations to both the sidebar and the top-nav archetype, so a 5-section report could go either
+way. The sidebar now starts at 6, and the surface kind decides before the count. A new "In-page
+contents" rule puts a content page's section links in the top bar first, and falls back to a sticky
+contents rail only when the bar cannot carry them: 6 or more sections, `h3` links, a bar already
+full of site pages, or an app shell.
+
 ### Plugin versions
 
 | Plugin                    | Version |
 | ------------------------- | ------- |
 | `ceh-competitor-analysis` | 1.0.0   |
+| `ceh-web-frontend`        | 1.0.1   |
 
 ### Added
 
 - `ceh-competitor-analysis` 1.0.0: `analyze-competitor` and `compare-competitors` skills, and the read-only `competitor-analyst` agent that reads one competitor in isolation
 - `docs/IDEAS.md`: backlog of future plugin, skill, and validator ideas, with a Dropped section
+- `ceh-web-frontend` 1.0.1: `design-ui` "In-page contents" rule, with a worked contents-rail example in `references/examples.md`
+
+### Fixed
+
+- `ceh-web-frontend` 1.0.1: `design-ui` archetype table no longer matches 5 destinations to both app shell and top-nav
 
 ---
 
