@@ -24,10 +24,13 @@ does X compare to us", "study this competitor", or a pasted GitHub URL with "inv
 The skill classifies each target as a repo or a product. It shallow-clones repos into a scratch
 directory as **untrusted data** and never installs, builds, or runs them. Products are read from
 their official pages. It dispatches one `competitor-analyst` per target in parallel, then checks
-each evidence pointer the analyst returned before writing anything. Each report puts the decision
-first, under a one-line summary and verdict: what to take, as Adopt now, Build, and Skip. A Skip
-row is a finding too, because an idea that contradicts your principles is worth recording. Then
-come how it works in a few steps, the "oh wow" moments, and the inventory. Each report is then
+each evidence pointer the analyst returned before writing anything. Every skill, agent, workflow,
+or feature the competitor ships is rated against your work as covered, partial, gap, or N/A. Each
+report puts the decision first, under a one-line summary and verdict: what to take, as Adopt now,
+Build, and Skip. Every partial or gap item lands in one of the three, so nothing you lack goes
+unmentioned. A Skip row is a finding too, because an idea that contradicts your principles is worth
+recording. Then come how it works in a few steps, the "oh wow" moments, the inventory, and the
+coverage table. Each report is then
 rendered as an HTML page from the plugin's page template, with the theme from
 `ceh-ui-design:design-ui`. A new reader gets the point from the board alone and opens a card only
 for the detail.

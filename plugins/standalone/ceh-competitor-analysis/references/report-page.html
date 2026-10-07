@@ -69,6 +69,7 @@ section { margin-top: var(--space-12); }
 .panel .table th, .panel .table td { padding: var(--space-2) var(--space-3); vertical-align: top; text-align: left; }
 .panel .table th { background: var(--surface-2); }
 .panel .table td:first-child { font-weight: var(--weight-semibold); }
+.cov-group { font-size: var(--fs-200); margin: var(--space-6) 0 var(--space-2); }
 .source { font-size: var(--fs-75); margin-top: var(--space-6); }
 @media (max-width: 860px) { .hero { grid-template-columns: 1fr; } .facts div { text-align: left; } }
 </style>
@@ -114,7 +115,7 @@ section { margin-top: var(--space-12); }
         </div>
       </div>
       <div class="col skip">
-        <h3>Skip</h3><p class="muted">Conflicts with our principles.</p>
+        <h3>Skip</h3><p class="muted">Not for us, with the reason.</p>
         <div class="items">
           <!-- REPEAT per Skip row. -->
           <details class="x"><summary><strong>{{idea}}</strong><span>{{why not, short}}</span></summary><div class="more"><p>{{why not, full}}</p></div></details>
@@ -148,6 +149,18 @@ section { margin-top: var(--space-12); }
       <!-- REPEAT per group, largest first, data colors is-1 … is-4 in order. A zero group shows a muted label and an em dash. -->
       <div class="inv-row"><span>{{group}}</span><div class="bar-track"><div class="bar-fill is-1" style="width:{{pct}}%"></div></div><span class="numeric">{{count}}</span></div>
     </div>
+  </section>
+
+  <!-- COMPETITOR-ONLY: from "Coverage in our work". -->
+  <section>
+    <div class="sec-head"><span class="eyebrow">Coverage · {{total}} components</span><h2>What they ship against what we ship</h2><p class="muted">{{tally}}. {{legend}}</p></div>
+    <!-- REPEAT per component group. Ours cell: badge text-success Covered, text-warning Partial, text-danger Gap, muted N/A. -->
+    <h3 class="cov-group">{{group}} · {{count}}</h3>
+    <div class="panel"><table class="table">
+      <tr><th>{{competitor}} component</th><th>What it does</th><th>Ours</th><th>Our component</th></tr>
+      <!-- REPEAT per component. -->
+      <tr><td>{{component}}</td><td>{{what it does}}</td><td><span class="badge {{text-success | text-warning | text-danger | muted}}">{{rating}}</span></td><td>{{our component, or —}}</td></tr>
+    </table></div>
   </section>
 
   <!-- COMPARISON-ONLY: one tabular section per table in comparison.md ("At a glance", "Inventory by capability"). -->
