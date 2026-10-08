@@ -59,6 +59,9 @@ path for a run with no human.
   `audit-test-suite`: "When tests were not requested" becomes "What waits for a request", so each
   skill applies unasked and only slow or paid runs wait. `docs/CROSS_REFERENCES.md` and
   `docs/TESTING_WORKFLOW.md` follow
+- `ceh-coding-agent` output style: the closing Security / Performance / Architecture / Dependency
+  flag line is gone. Such a risk is now a row in the summary table, with a status, since the table
+  already lists everything found but not asked for
 - `README.md`, `CLAUDE.md`, and the `marketplace.json` description state the agents-first identity
   and point at `docs/VISION.md`
 - `docs/IDEAS.md`: every entry checked against the vision, with notes on Finish-branch menu, Claim
