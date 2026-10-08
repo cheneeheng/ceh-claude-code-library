@@ -272,6 +272,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Idea:** Answer "why is it like this" from git log, blame, and PRs, with every claim cited.
 - **Note:** Decided on 2026-10-08: a new skill in `ceh-codebase-explanation`, not an addition to
   `explain-codebase`, because it reads history rather than the current code.
+- **Status:** built on 2026-10-08 as `ceh-codebase-explanation:trace-code-rationale`.
 
 ### Mine the implied spec
 
@@ -398,6 +399,9 @@ Effort: S is under a day, M is a few days, L is longer.
   worked in this session instead of an interview.
 - **Note:** Decided on 2026-10-08: a separate plugin rather than a moment inside
   `build-agentic-workflow`, so it needs the `VISION.md` scope test and its own PR.
+- **Status:** built on 2026-10-08 as `ceh-session-to-skill:turn-session-into-skill`. It passes the
+  scope test under "Every step" (runs repeatable work), and hands a run that needs gates or
+  resumption to `build-agentic-workflow`.
 
 ### Loop failure review
 
@@ -409,6 +413,8 @@ Effort: S is under a day, M is a few days, L is longer.
   `retry.max` and `retry.changes`. The rest lands in `ceh-workflow-runner:run-agentic-workflow`'s
   gate handling: stop a retry whose failure output matches the last attempt, and flag a stage that
   edits its own gate's check.
+- **Status:** built on 2026-10-08 in `run-agentic-workflow`'s Gates: a `no-progress` stop and a
+  `gate-edited` check by file hash.
 
 ### Model per subagent role
 
