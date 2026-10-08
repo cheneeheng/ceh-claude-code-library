@@ -14,7 +14,8 @@ HTML without a frontend stack, such as `ceh-competitor-analysis`, can depend on 
 | `design-ui` | `/ceh-ui-design:design-ui` | Any UI visual design decision: layout archetypes, hierarchy, navigation placement and in-page contents, empty/loading/error states, density, finishing recipes (command dock, humanized tables, lifecycle steppers), plus theming from bundled token-driven templates (Meridian, Tidewater) |
 
 `design-ui` bundles two themes under `references/` (`meridian/` and `tidewater/`, each a
-`brand.css` plus a `brand-guide.html`) and worked good/bad markup in `references/examples.md`.
+`brand.css` plus a `brand-guide.html`) and worked markup for the finishing recipes in
+`references/examples.md`.
 
 ## Used by
 

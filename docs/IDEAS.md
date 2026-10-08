@@ -593,19 +593,6 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Note:** Pairs with Model per subagent role and Model-diverse review panel: those pick a model
   per role or compare models on one prompt, this one splits a task by the kind of work.
 
-### Scope the coding hooks
-
-- **Source:** the 2026-10-08 `VISION.md` audit
-- **Where:** `ceh-coding-conduct` hooks (`load-contract.sh`, `inject-less-code-reminder.sh`)
-- **Effort:** M
-- **Idea:** Open question, no solution chosen yet. The SessionStart contract load and the per-prompt
-  less-code reminder fire in every session, including ones that write no code, which costs context
-  every run (goal 4). No README records the failure each hook answers (principle 7). Decide how
-  far to scope them (conditional reminder, softer contract wording, or removal) and record the
-  evidence behind whatever stays.
-- **Note:** Also listed under "Where the repo does not match yet" in `VISION.md`. Close both
-  together.
-
 ### Dual-reviewer gate
 
 - **Source:** ECC `santa-method`, `council`, `council-multi-model`, the loop commands

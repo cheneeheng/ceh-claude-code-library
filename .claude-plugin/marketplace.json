@@ -17,7 +17,7 @@
     {
       "name": "ceh-coding-conduct",
       "source": "./plugins/standalone/ceh-coding-conduct",
-      "version": "2.0.1",
+      "version": "2.0.2",
       "description": "CEH coding conduct: how an agent behaves while it codes — the behavior contract and five-step workflow, write-less-code minimalism, and retroactive refactoring of a branch or a whole repo."
     },
     {
@@ -59,7 +59,7 @@
     {
       "name": "ceh-ui-design",
       "source": "./plugins/standalone/ceh-ui-design",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "CEH UI design: framework-agnostic visual design for any UI or HTML page — layout archetypes, hierarchy, navigation placement (including in-page contents), empty/loading/error states, density, finishing recipes, and two bundled token-driven themes (Meridian, Tidewater)."
     },
     {

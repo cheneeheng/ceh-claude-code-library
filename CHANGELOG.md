@@ -54,6 +54,16 @@ restated the library docs. `docs/VISION.md` lists the gaps still open. Every sta
 takes a PATCH bump. One deviation: the vision asks for its own changes in a separate PR, but the
 author asked for this audit as one PR.
 
+The two gaps the audit left open are closed. The coding hooks stay as they are, now with the
+evidence for each recorded in the `ceh-coding-conduct` README. A softer "load it when you write
+code" directive was tried, and the model never loaded the contract. The less-code ladder is a
+standing standard, not a moment, so no description fires it, and loaded once it drifted out of
+effect in long sessions. Only the three coding scenario bundles install the plugin, so sessions
+that write no code elsewhere do not pay for the hooks. Because the hook delivers `write-less-code`,
+its description drops its trigger phrases and becomes one line. `design-ui`'s `examples.md` drops
+from 551 to 200 lines and keeps only the finishing-recipe markup, the part the core rules' prose
+does not already carry.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -63,7 +73,7 @@ author asked for this audit as one PR.
 | `ceh-business-plan`        | 1.0.7   |
 | `ceh-codebase-explanation` | 1.0.1   |
 | `ceh-coding-agent`         | 1.0.2   |
-| `ceh-coding-conduct`       | 2.0.1   |
+| `ceh-coding-conduct`       | 2.0.2   |
 | `ceh-competitor-analysis`  | 1.1.3   |
 | `ceh-documentation`        | 1.0.3   |
 | `ceh-every-session`        | 2.0.1   |
@@ -79,7 +89,7 @@ author asked for this audit as one PR.
 | `ceh-scenario-webapp`      | 1.1.0   |
 | `ceh-seo`                  | 1.1.1   |
 | `ceh-testing`              | 1.0.3   |
-| `ceh-ui-design`            | 1.0.1   |
+| `ceh-ui-design`            | 1.0.2   |
 | `ceh-usability-audit`      | 1.1.1   |
 | `ceh-web-frontend`         | 1.1.2   |
 | `ceh-workflow-builder`     | 1.3.2   |
@@ -163,6 +173,16 @@ author asked for this audit as one PR.
 - `docs/IDEAS.md`: "Strictness-graded evals" gains the tempt-never-order rule for competing prompts
   and the promote-to-hook rule, a new "Hook fixture tests" entry, and "Fact-forcing edit gate" now
   says nothing checks the stated facts
+
+- `ceh-coding-conduct` README: a "Why each hook exists" section records the failure each hook
+  answers (principle 7). `docs/IDEAS.md` drops "Scope the coding hooks" and `docs/VISION.md` drops
+  both open gaps
+- `ceh-coding-conduct:write-less-code`: the description is one line with no trigger phrases, and
+  `plugins/CLAUDE.md` says why a session-long standard needs none
+- `ceh-ui-design:design-ui`: `references/examples.md` keeps the command dock, humanized table (now
+  with its eyebrow header), lifecycle stepper, monogram, and recessed input. The core-rule
+  examples, the scroll-spy script, and the scrollbar CSS are cut, since `SKILL.md` already states
+  them
 
 ## 2026-10-07
 

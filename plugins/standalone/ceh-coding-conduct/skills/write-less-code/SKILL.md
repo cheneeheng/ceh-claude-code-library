@@ -1,12 +1,7 @@
 ---
 name: write-less-code
 description: >-
-  Reach for the smallest solution that actually works before writing code: question whether the task
-  needs to exist (YAGNI), prefer the standard library, then native platform features, then an
-  already-installed dependency, then one line — custom code last. Load proactively before
-  implementing a feature, and whenever the user says "write less code", "be lazy", "lazy mode",
-  "simplest solution", "minimal solution", "yagni", "do less", "shortest path", or complains about
-  over-engineering, bloat, boilerplate, or unnecessary dependencies.
+  The write-less-code minimalism standard: the full ladder and what never to simplify away.
 disable-model-invocation: false
 user-invocable: false
 license: MIT

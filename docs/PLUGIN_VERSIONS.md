@@ -28,7 +28,7 @@ a removed plugin loses its row.
 | `ceh-blog`                 | 1.0.3   | `2026-10-08` |
 | `ceh-business-plan`        | 1.0.7   | `2026-10-08` |
 | `ceh-codebase-explanation` | 1.0.1   | `2026-10-08` |
-| `ceh-coding-conduct`       | 2.0.1   | `2026-10-08` |
+| `ceh-coding-conduct`       | 2.0.2   | `2026-10-08` |
 | `ceh-competitor-analysis`  | 1.1.3   | `2026-10-08` |
 | `ceh-documentation`        | 1.0.3   | `2026-10-08` |
 | `ceh-every-session`        | 2.0.1   | `2026-10-08` |
@@ -39,7 +39,7 @@ a removed plugin loses its row.
 | `ceh-python-service`       | 1.0.1   | `2026-10-08` |
 | `ceh-seo`                  | 1.1.1   | `2026-10-08` |
 | `ceh-testing`              | 1.0.3   | `2026-10-08` |
-| `ceh-ui-design`            | 1.0.1   | `2026-10-08` |
+| `ceh-ui-design`            | 1.0.2   | `2026-10-08` |
 | `ceh-usability-audit`      | 1.1.1   | `2026-10-08` |
 | `ceh-web-frontend`         | 1.1.2   | `2026-10-08` |
 | `ceh-workflow-builder`     | 1.3.2   | `2026-10-08` |
