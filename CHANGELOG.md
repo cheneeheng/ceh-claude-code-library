@@ -64,6 +64,13 @@ its description drops its trigger phrases and becomes one line. `design-ui`'s `e
 from 551 to 200 lines and keeps only the finishing-recipe markup, the part the core rules' prose
 does not already carry.
 
+Handoff becomes a general save and load. `ceh-every-session:hand-off-session` saves a session's
+working state to a handoff file on request and loads one back in a later session, checking it
+against the repo before resuming. `usage-limit-handoff` keeps its stop protocol and now saves
+through it, so the two share one file format and one index. `explain-codebase` now explains
+knowledge-base repos of Markdown or text notes as well as code: a component there is a topic area,
+links replace calls, and reading paths replace request flows.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -71,12 +78,12 @@ does not already carry.
 | `ceh-ag-ui`                | 1.1.1   |
 | `ceh-blog`                 | 1.0.3   |
 | `ceh-business-plan`        | 1.0.7   |
-| `ceh-codebase-explanation` | 1.0.1   |
+| `ceh-codebase-explanation` | 1.0.2   |
 | `ceh-coding-agent`         | 1.0.2   |
 | `ceh-coding-conduct`       | 2.0.2   |
 | `ceh-competitor-analysis`  | 1.1.3   |
 | `ceh-documentation`        | 1.0.3   |
-| `ceh-every-session`        | 2.0.1   |
+| `ceh-every-session`        | 2.1.0   |
 | `ceh-git-datastore`        | 1.0.3   |
 | `ceh-git-workflow`         | 1.0.2   |
 | `ceh-plan-build-review`    | 1.1.1   |
@@ -118,8 +125,14 @@ does not already carry.
   `repurpose-post`, and the plan-build-review skills
 - `docs/IDEAS.md`: "Sweep on Sonnet, judge on Opus" and "Scope the coding hooks"
 - `docs/ENVIRONMENT_VARIABLES.md`: `NODE_ENV`, read by `ceh-web-frontend`'s `run-e2e.sh`
+- `ceh-every-session:hand-off-session`: save a session to a handoff file and load it back
 
 ### Changed
+
+- `usage-limit-handoff` saves its artifact through `hand-off-session` instead of carrying its own
+  file format and index steps
+- `explain-codebase` handles knowledge bases: topic areas as components, links as connections,
+  reading paths as key flows
 
 - `plan-fullstack-app` asks once, up front, with a recommended answer for each question, instead of
   one question per turn. With no human, it takes the recommended answers and lists them as
