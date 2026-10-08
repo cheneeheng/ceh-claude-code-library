@@ -82,17 +82,29 @@ the shortlist: a PR body that shows a before and after and names its risk, workt
 a merge, a certainty ladder for refactors, a test-polluter bisect, a brief for every subagent, a
 plain re-pitch for "wait, what?", and a validator check that the changelog carries every bump.
 
+A second batch of quick ideas from `docs/IDEAS.md` lands as prose in existing skills. The testing
+skills agree the test's seam first, call the code the way users do, see the test fail first, and
+give each new test a `protects` / `fails_when` / `why_new` line that `audit-test-suite` also uses to
+find tests to delete. `write-less-code` looks for an existing helper, package, or skill before
+writing custom code, `refactor-repo` hunts information leakage, the React skill gains render-cost
+rules, `draft-post` captures the author's voice once in a profile file that `edit-post` reads, and
+`compare-competitors` scores each capability 1 to 5 against cited evidence, with no total. The
+component templates name a strong model for any agent that gives a final verdict and cut sentences
+that change nothing, and `add-plugin-component` describes a five-run micro-test for a doubtful
+wording. Two ideas turned out to be built already (Finish-branch menu, On-page SEO metadata), and
+"Mine the implied spec" is closed as covered by `verify-behavior-preserved`.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
 | `ceh-ag-ui`                | 1.1.1   |
-| `ceh-blog`                 | 1.0.3   |
+| `ceh-blog`                 | 1.0.4   |
 | `ceh-business-plan`        | 1.0.7   |
 | `ceh-codebase-explanation` | 1.0.3   |
 | `ceh-coding-agent`         | 1.0.2   |
-| `ceh-coding-conduct`       | 2.0.3   |
-| `ceh-competitor-analysis`  | 1.1.4   |
+| `ceh-coding-conduct`       | 2.0.4   |
+| `ceh-competitor-analysis`  | 1.1.5   |
 | `ceh-documentation`        | 1.0.3   |
 | `ceh-every-session`        | 2.1.0   |
 | `ceh-git-datastore`        | 1.0.3   |
@@ -106,10 +118,10 @@ plain re-pitch for "wait, what?", and a validator check that the changelog carri
 | `ceh-scenario-service`     | 1.1.0   |
 | `ceh-scenario-webapp`      | 1.1.0   |
 | `ceh-seo`                  | 1.1.1   |
-| `ceh-testing`              | 1.0.4   |
+| `ceh-testing`              | 1.0.5   |
 | `ceh-ui-design`            | 1.0.2   |
 | `ceh-usability-audit`      | 1.1.2   |
-| `ceh-web-frontend`         | 1.1.2   |
+| `ceh-web-frontend`         | 1.1.3   |
 | `ceh-workflow-builder`     | 1.3.2   |
 | `ceh-workflow-runner`      | 1.0.1   |
 
@@ -153,6 +165,21 @@ plain re-pitch for "wait, what?", and a validator check that the changelog carri
 - `explain-until-understood`: a plain re-pitch for "wait, what?" before the ladder
 - `validate.py`: each plugin's newest `CHANGELOG.md` Plugin versions row matches `plugin.json`, and
   `docs/PLUGIN_VERSIONS.md` dates it to that section
+- `design-test-cases`: a "Before the first test" section (name the seam, call the code the way
+  users do, see it fail first, no tautological tests) and a value line per new test
+- `test-a-bug-fix`: the reproducer calls the public entry point with a literal expected value, and
+  the hand-over gives each test a value line
+- `audit-test-suite`: step 1 lists a test with no nameable `fails_when` or a duplicate `why_new` as
+  a deletion candidate
+- `write-less-code`: one search for an existing helper, installed package, or skill before custom
+  code
+- `refactor-repo`: information leakage in the Phase 1 inventory
+- `write-react-vite-code`: a Render cost section
+- `draft-post`: a voice profile written once to `.agents_workspace/blog-voice.md`, which
+  `edit-post` reads
+- `compare-competitors`: a Scores table, 1 to 5 per capability with evidence in each cell and no
+  total
+- `add-plugin-component`: a five-run micro-test for a doubtful wording, on request only
 
 ### Changed
 
@@ -228,6 +255,12 @@ plain re-pitch for "wait, what?", and a validator check that the changelog carri
   with its eyebrow header), lifecycle stepper, monogram, and recessed input. The core-rule
   examples, the scroll-spy script, and the scrollbar CSS are cut, since `SKILL.md` already states
   them
+
+- Agent and skill templates: a final-verdict agent gets the most capable model, and both templates
+  ask for sentences that change nothing to be cut
+- `docs/IDEAS.md`: statuses for the second batch, Finish-branch menu and On-page SEO metadata marked
+  built with no edit, Mine the implied spec closed as covered, and decision notes on Rationale from
+  history, Skill from this session, and Loop failure review
 
 ## 2026-10-07
 

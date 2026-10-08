@@ -36,6 +36,9 @@ Body
 - Write standing instructions ("after every edit, ..."), not one-time steps. Claude Code does not
   re-read the file on later turns.
 - Imperative voice, concise. Give a reason only where a rule looks arbitrary without one.
+- Before committing, cut every sentence that would change nothing Claude does if deleted
+  ("be thorough", "use good judgment"). Say what to do rather than what not to do where both work,
+  and make sure the opening sentence states when the task is done.
 - Keep content inline. Use references/ only for a schema or template shared by several skills, or
   a standard too large to inline. A file used by one skill lives in its references/ and is
   cited as ${CLAUDE_SKILL_DIR}/<path>. A file shared by skills of the same plugin lives once in

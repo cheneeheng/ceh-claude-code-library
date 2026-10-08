@@ -18,7 +18,10 @@ Frontmatter
 - description: always `>-`, 2-space indent, no blank lines, max 600 chars (validate.py). Keep it
   short: every agent description loads into every session. Prose only, no <example> blocks.
 - model: always present, even as `inherit`, so every agent states what it runs on.
-  inherit | sonnet | haiku | opus. Pick a cheaper model when the job is mechanical.
+  inherit | sonnet | haiku | opus. Pick a cheaper model when the job is mechanical. An agent
+  that gives a final verdict (a review, a judge, a gate) gets the most capable model: turn count
+  beats token price, and a cheap judge that needs a second round costs more than a strong one.
+  A skill that dispatches an agent names the model in the dispatch the same way.
 - tools: the smallest set the job needs. Background subagents (the default) silently lose any
   built-in tool outside Read, Grep, Glob, LSP, Bash, PowerShell, Edit, Write, NotebookEdit,
   WebFetch, WebSearch, TodoWrite, Skill, ToolSearch, EnterWorktree, ExitWorktree, Monitor,
@@ -33,6 +36,9 @@ Body
   the parent conversation, so state everything it needs.
 - Headings are sentence case. Keep the sections below in this order.
 - Imperative voice, concise. Give a reason only where a rule looks arbitrary without one.
+- Before committing, cut every sentence that would change nothing the agent does if deleted
+  ("be thorough", "use good judgment"). Say what to do rather than what not to do where both work,
+  and make sure the Output section says when the run is done.
 -->
 
 You are a <role>. You <core job> and return <what the parent session receives>.

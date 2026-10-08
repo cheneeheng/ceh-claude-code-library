@@ -25,6 +25,10 @@ type (Lessons Learned, How-To, Opinion, Launch, Thought Leadership, Personal Sto
 audience and register; the author's voice markers (rhythm, vocabulary, formality); the thesis, and
 where it actually appears.
 
+If `.agents_workspace/blog-voice.md` exists (`ceh-blog:draft-post` writes it from published posts),
+read it and judge the draft's voice markers against it: a draft that drifts from the author's usual
+register is a finding, not a style to preserve.
+
 ### 2. Diagnose
 
 Produce a short, honest bullet list of the specific issues: two if there are two, six if there are

@@ -116,6 +116,10 @@ Effort: S is under a day, M is a few days, L is longer.
   assumes the branch always heads into a PR.
 - **Note:** Agents first: the agent picks, and only merge and discard, being outward-facing or
   irreversible, wait for a human or advance authorization.
+- **Status:** built, confirmed on 2026-10-08 with no edit: `pull-request` already has the Open
+  path, the local no-PR merge (Land the branch), and worktree cleanup after merge. "Keep" needs no
+  step, and "discard" deletes an unmerged branch, a one-way door the contract already holds for a
+  human.
 
 ### Worktree cleanup
 
@@ -150,6 +154,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-testing:design-test-cases`, `test-a-bug-fix`, `audit-test-suite`
 - **Effort:** S
 - **Idea:** Each new test states `protects`, `fails_when`, and `why_new`.
+- **Status:** built on 2026-10-08 as a hand-over line in `design-test-cases` and `test-a-bug-fix`,
+  not a comment in the test file, and as a deletion check in `audit-test-suite` step 1.
 
 ### Test-first rules
 
@@ -158,6 +164,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Write the failing test first, call the code the way users do, and assert literal
   expected values. The same rules feed Test-first by default.
+- **Status:** built on 2026-10-08 in `design-test-cases` ("Before the first test") and
+  `test-a-bug-fix` step 1. Test-first applies to new behavior and bug fixes only: making it the
+  default for every task stays with Test-first by default.
 
 ### Test seams agreed first
 
@@ -166,6 +175,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Agree the seams a test will hit before writing it, and name the tautological test as an
   anti-pattern. The red-green half joins Test-first by default.
+- **Status:** built on 2026-10-08 in `design-test-cases` ("Before the first test").
 
 ### Test-polluter bisect
 
@@ -231,6 +241,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Before custom code, search package registries and installed skills. Extends rungs 2
   to 4.
+- **Status:** built on 2026-10-08 in `write-less-code`'s Procedure, as one search of the repo, the
+  dependency manifest, and the skill list. A registry search waits for permission to add a
+  dependency, which the contract's non-goals forbid by default.
 
 ### Structural rules
 
@@ -247,6 +260,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Screen a design for Ousterhout's red flags: shallow module, information leakage,
   pass-through method.
+- **Status:** built on 2026-10-08 in `refactor-repo`'s Phase 1 inventory. Shallow modules and
+  pass-through methods were already there under over-abstraction, so only information leakage was
+  added.
 
 ### Rationale from history
 
@@ -254,6 +270,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-codebase-explanation:explain-codebase`, `explain-until-understood`
 - **Effort:** S
 - **Idea:** Answer "why is it like this" from git log, blame, and PRs, with every claim cited.
+- **Note:** Decided on 2026-10-08: a new skill in `ceh-codebase-explanation`, not an addition to
+  `explain-codebase`, because it reads history rather than the current code.
 
 ### Mine the implied spec
 
@@ -261,6 +279,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-codebase-explanation:explain-codebase`
 - **Effort:** S
 - **Idea:** Extract the behavior the code actually promises, as a spec, before changing it.
+- **Status:** not built, covered on 2026-10-08: `ceh-testing:verify-behavior-preserved` pins
+  current behavior with characterization tests before a change, which a prose spec would only
+  restate more weakly.
 
 ### Plain-English re-pitch
 
@@ -375,6 +396,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Add the moment "turn what we just did into a skill", building from the steps that
   worked in this session instead of an interview.
+- **Note:** Decided on 2026-10-08: a separate plugin rather than a moment inside
+  `build-agentic-workflow`, so it needs the `VISION.md` scope test and its own PR.
 
 ### Loop failure review
 
@@ -382,6 +405,10 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-workflow-builder:build-agentic-workflow`
 - **Effort:** S
 - **Idea:** Check a designed loop for spinning without progress and for gaming its own metric.
+- **Note:** Decided on 2026-10-08: `build-agentic-workflow` already bounds retries with
+  `retry.max` and `retry.changes`. The rest lands in `ceh-workflow-runner:run-agentic-workflow`'s
+  gate handling: stop a retry whose failure output matches the last attempt, and flag a stage that
+  edits its own gate's check.
 
 ### Model per subagent role
 
@@ -390,6 +417,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Name the model in every dispatch, with the most capable one on the final review. "Turn
   count beats token price" is the reason it gives.
+- **Status:** built on 2026-10-08 in the agent template's `model` guidance, which also covers a
+  skill's dispatch. `model-audit` is unchanged.
 
 ### Micro-test skill wording
 
@@ -398,6 +427,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Before a full skill-creator eval, test one wording five times against a no-guidance
   control and treat variance as the signal. Uses Anthropic tooling only.
+- **Status:** built on 2026-10-08 in `add-plugin-component` step 6, with `claude -p` runs, only on
+  request since every run is billed.
 
 ### Strictness-graded evals
 
@@ -423,6 +454,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Hunt sentences that change no behavior, prefer positive instructions over negation, and
   state a completion criterion.
+- **Status:** half built on 2026-10-08 in the guidance of both component templates. The
+  `model-audit` half is still open: its prompts live in scripts and were not changed.
 
 ### "It's working if" signals
 
@@ -497,6 +530,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-web-frontend:write-react-vite-code`
 - **Effort:** S
 - **Idea:** Add the render-cost rules our React skill lacks.
+- **Status:** built on 2026-10-08 as the Render cost section of `write-react-vite-code`.
 
 ### Trace every control
 
@@ -513,6 +547,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-seo:make-page-crawlable`
 - **Effort:** S
 - **Idea:** Ours covers crawlability and llms.txt. Add titles, descriptions, and structured data.
+- **Status:** built, confirmed on 2026-10-08 with no edit: `make-page-crawlable` steps 1 and 3
+  already cover the title, meta description, canonical, Open Graph, and JSON-LD by page type.
 
 ### AI-tells list
 
@@ -528,6 +564,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-blog:draft-post`, `edit-post`
 - **Effort:** S
 - **Idea:** Capture the author's voice from samples once and apply it to every draft.
+- **Status:** built on 2026-10-08: `draft-post` step 1 writes `.agents_workspace/blog-voice.md`
+  from three or more posts and `edit-post` step 1 reads it. A `CLAUDE.md` blog voice still wins,
+  and the banned tells still apply.
 
 ### Evidence-anchored rubric
 
@@ -536,9 +575,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-competitor-analysis:compare-competitors`
 - **Effort:** S
 - **Idea:** Score each dimension 1 to 5 against cited evidence, with no composite score.
-- **Status:** half built on 2026-10-08 in `ceh-competitor-analysis:analyze-competitor` step 6:
-  every coverage rating cites evidence on both sides, with no overall score. The 1-to-5 scale in
-  `compare-competitors` is still open.
+- **Status:** built on 2026-10-08. `ceh-competitor-analysis:analyze-competitor` step 6 cites
+  evidence for every coverage rating, and `compare-competitors` step 5 adds the 1-to-5 Scores
+  table, evidence in each cell and no total.
 
 ## Build
 

@@ -93,6 +93,22 @@ export function useSession(sessionId: string) {
 - Shared server state: a data-fetching library (TanStack Query) or a small store — not prop drilling through many layers.
 - Do not reach for a global store until state is genuinely shared across distant components.
 
+### Render cost
+
+A state change re-renders the owning component and its whole subtree, so where state lives decides
+what re-renders.
+
+- Keep state in the lowest component that needs it. State lifted to a page re-renders the page on
+  every keystroke.
+- Key list items by a stable id, never the array index, when the list can reorder, insert, or
+  delete. An index key re-mounts rows and mixes up their local state.
+- Every consumer of a context re-renders when its value changes. Pass a `useMemo`'d value, never an
+  inline object, and split a context whose parts change at different rates.
+- Reach for `memo`, `useMemo`, and `useCallback` only after the React DevTools Profiler shows a slow
+  render. Unmeasured memoization adds code and dependency-array bugs for no gain.
+- Render long lists (hundreds of rows) through a virtualizer, and load route components with
+  `React.lazy` so a page's code ships when it is visited.
+
 ### Routing
 
 Use **React Router**. Define routes in one place; keep route components thin (they compose hooks + presentational components).

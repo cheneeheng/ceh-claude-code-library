@@ -183,6 +183,19 @@ that the call raised — `order.status == "pending"` is the assertion that catch
 
 ## Rules
 
+### Before the first test
+
+- **Name the seam.** State where the test enters (the public function, endpoint, or command a
+  caller uses) and what it fakes (only what is slow, paid, or outside the process). Settle this
+  before writing, with the user when one is in the loop, because a seam picked mid-test drifts
+  inward to whatever is easiest to call.
+- **Call the code the way users do.** Go through the public entry point, not a private helper. A
+  test of the helper passes while the caller's wiring is broken.
+- **See it fail first** when the behavior is new or a bug is being fixed: run the test before the
+  code exists and confirm it fails for the expected reason. A test never seen red may test nothing.
+- **No tautological tests.** A test that mocks the unit under test, or asserts a mock returned what
+  it was told to return, passes whatever the code does. Delete it rather than count it.
+
 ### Assertion rules
 
 - **Assert the value, not its existence.** `assert result is not None` and
@@ -205,5 +218,9 @@ safety margin, so cut it before you hand the suite over.
 
 Say which rungs you skipped and why. A test file that states "no lifecycle, so no rung 4; grid is
 2 rows, so no pairwise" is reviewable; one that silently covers everything is not.
+
+Give each new test a value line in the hand-over, not in the test file:
+`<test> — protects: <behavior>; fails_when: <the defect it catches>; why_new: <what no existing
+test covers>`. A test with no nameable `fails_when` or `why_new` is the duplication above: cut it.
 
 To find out whether those tests would actually catch a defect, use `ceh-testing:audit-test-suite`.
