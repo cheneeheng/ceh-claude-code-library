@@ -94,6 +94,15 @@ that change nothing, and `add-plugin-component` describes a five-run micro-test 
 wording. Two ideas turned out to be built already (Finish-branch menu, On-page SEO metadata), and
 "Mine the implied spec" is closed as covered by `verify-behavior-preserved`.
 
+The three ideas that batch deferred are built. `ceh-codebase-explanation:trace-code-rationale`
+answers "why is it like this" from git log, blame, PRs, and issues, citing every claim and naming
+what the history does not record. It is a new skill because it reads history rather than the
+current code. The new `ceh-session-to-skill` plugin turns a task just finished in the session into
+a `SKILL.md`, built from the steps that worked, with no interview. It is its own plugin because its
+use case, capturing a finished run, differs from the builder's interview-first one, and the two
+descriptions now route to each other. `run-agentic-workflow` stops a retry whose failure matches
+the attempt before, and fails a stage that edited its own gate's check.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -101,7 +110,7 @@ wording. Two ideas turned out to be built already (Finish-branch menu, On-page S
 | `ceh-ag-ui`                | 1.1.1   |
 | `ceh-blog`                 | 1.0.4   |
 | `ceh-business-plan`        | 1.0.7   |
-| `ceh-codebase-explanation` | 1.0.3   |
+| `ceh-codebase-explanation` | 1.1.0   |
 | `ceh-coding-agent`         | 1.0.2   |
 | `ceh-coding-conduct`       | 2.0.4   |
 | `ceh-competitor-analysis`  | 1.1.5   |
@@ -118,12 +127,13 @@ wording. Two ideas turned out to be built already (Finish-branch menu, On-page S
 | `ceh-scenario-service`     | 1.1.0   |
 | `ceh-scenario-webapp`      | 1.1.0   |
 | `ceh-seo`                  | 1.1.1   |
+| `ceh-session-to-skill`     | 1.0.0   |
 | `ceh-testing`              | 1.0.5   |
 | `ceh-ui-design`            | 1.0.2   |
 | `ceh-usability-audit`      | 1.1.2   |
 | `ceh-web-frontend`         | 1.1.3   |
-| `ceh-workflow-builder`     | 1.3.2   |
-| `ceh-workflow-runner`      | 1.0.1   |
+| `ceh-workflow-builder`     | 1.3.3   |
+| `ceh-workflow-runner`      | 1.0.2   |
 
 ### Added
 
@@ -180,6 +190,12 @@ wording. Two ideas turned out to be built already (Finish-branch menu, On-page S
 - `compare-competitors`: a Scores table, 1 to 5 per capability with evidence in each cell and no
   total
 - `add-plugin-component`: a five-run micro-test for a doubtful wording, on request only
+- `ceh-codebase-explanation:trace-code-rationale`: why code is the way it is, from git history,
+  every claim cited
+- `ceh-session-to-skill` 1.0.0, with `turn-session-into-skill`: one `SKILL.md` from the steps that
+  worked in this session, corrections as rules and per-run values as arguments
+- `run-agentic-workflow`: a no-progress stop on retries and a gate-edited check before a green
+  gate counts
 
 ### Changed
 
@@ -261,6 +277,11 @@ wording. Two ideas turned out to be built already (Finish-branch menu, On-page S
 - `docs/IDEAS.md`: statuses for the second batch, Finish-branch menu and On-page SEO metadata marked
   built with no edit, Mine the implied spec closed as covered, and decision notes on Rationale from
   history, Skill from this session, and Loop failure review
+- `build-agentic-workflow`: the description routes a task just done in the session to
+  `ceh-session-to-skill`, and drops the "evaluating an existing skill" and plugin-repo routes to
+  stay within 600 characters
+- `docs/VISION.md`, `CLAUDE.md`, `README.md`: `ceh-session-to-skill` in the scope, tier, and plugin
+  tables
 
 ## 2026-10-07
 

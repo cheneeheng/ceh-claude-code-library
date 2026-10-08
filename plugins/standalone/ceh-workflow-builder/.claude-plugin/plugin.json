@@ -1,6 +1,6 @@
 {
   "name": "ceh-workflow-builder",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "CEH workflow builder: interview a repetitive multi-step task into a runnable artifact — one skill when it is simple, or a flow.yaml config with gates and approvals plus a thin trigger skill — emitted into the target repo's .claude/skills/. Running a flow needs ceh-workflow-runner.",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/ceh-claude-code-library",

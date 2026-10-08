@@ -23,8 +23,8 @@
     {
       "name": "ceh-codebase-explanation",
       "source": "./plugins/standalone/ceh-codebase-explanation",
-      "version": "1.0.3",
-      "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, and the living architecture document."
+      "version": "1.1.0",
+      "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, the living architecture document, and why code is the way it is, traced through git history."
     },
     {
       "name": "ceh-git-workflow",
@@ -113,13 +113,19 @@
     {
       "name": "ceh-workflow-builder",
       "source": "./plugins/standalone/ceh-workflow-builder",
-      "version": "1.3.2",
+      "version": "1.3.3",
       "description": "CEH workflow builder: interview a repetitive multi-step task into a runnable artifact — one skill when it is simple, or a flow.yaml config with gates and approvals plus a thin trigger skill — emitted into the target repo's .claude/skills/. Running a flow needs ceh-workflow-runner."
+    },
+    {
+      "name": "ceh-session-to-skill",
+      "source": "./plugins/standalone/ceh-session-to-skill",
+      "version": "1.0.0",
+      "description": "CEH session to skill: right after a task is done, turn the steps that worked in this session into a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments."
     },
     {
       "name": "ceh-workflow-runner",
       "source": "./plugins/standalone/ceh-workflow-runner",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "CEH workflow runner: execute a built flow.yaml workflow interactively or headless — stages in order, approvals, gates, run state and resume, ending on a FLOW STATUS line. Install it wherever a flow runs; building one needs ceh-workflow-builder instead."
     },
     {

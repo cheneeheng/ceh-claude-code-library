@@ -27,7 +27,7 @@ stack testing skills route between each other, with the trigger phrases and sequ
 | Scenario: Editorial  | `ceh-scenario-editorial`   | Install entry point for writing and publishing what readers see: every-session, git-workflow, blog, documentation, seo. Manifest only                                                                                                                                                                                            |
 | Every Session        | `ceh-every-session`        | Standards every session loads, however Claude Code is used: session save and load (`hand-off-session`); usage-limit guard + handoff (`usage-limit-handoff`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards)                                                                                          |
 | Coding Conduct       | `ceh-coding-conduct`       | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); the `CEH Coding Conduct` output style (always-on via `force-for-plugin`)                                                                    |
-| Codebase Explanation | `ceh-codebase-explanation` | Leave a codebase understood: explaining a subsystem, design, or diff until it lands (`explain-until-understood`); whole-repo orientation (`explain-codebase`); the living architecture document (`document-architecture`)                                                                                                        |
+| Codebase Explanation | `ceh-codebase-explanation` | Leave a codebase understood: explaining a subsystem, design, or diff until it lands (`explain-until-understood`); whole-repo orientation (`explain-codebase`); the living architecture document (`document-architecture`); why code is the way it is, from history (`trace-code-rationale`)                                      |
 | Git Workflow         | `ceh-git-workflow`         | Branching, commits, pull requests from open to merge, changelog entries, README upkeep (`update-readme`), releases including hotfixes, code review; a hook that blocks file edits on the default branch                                                                                                                          |
 | Testing              | `ceh-testing`              | Stack-agnostic testing technique: reproduce-first bug fixes (`test-a-bug-fix`), test-case design, suite audit (`audit-test-suite`), behavior-preservation checks, and the risk gaps a green suite misses                                                                                                                         |
 | Python Service       | `ceh-python-service`       | FastAPI, asyncpg, PostgreSQL schema, Alembic, uv/ruff/mypy, and pytest for web services; unit, integration, and system tester agents                                                                                                                                                                                             |
@@ -43,17 +43,18 @@ stack testing skills route between each other, with the trigger phrases and sequ
 | Business Plan        | `ceh-business-plan`        | Turn a product idea or an existing app plan into a validated business plan: a product-market-fit interview loop that interrogates the weakest assumption until a readiness gate passes, then a board-style review and five specialist passes on strategy, unit economics, go-to-market, premortem, and the 90-day operating plan |
 | Git Datastore        | `ceh-git-datastore`        | Run an app on a bare git repo instead of a database while that still fits: a gate that talks you out of it when it does not, a plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite                                                                                                                      |
 | Workflow Builder     | `ceh-workflow-builder`     | Turn a repetitive multi-step task into a runnable artifact: interview it into a spec, then emit one skill or a gated workflow skill with handoff schemas into the target repo                                                                                                                                                    |
+| Session to Skill     | `ceh-session-to-skill`     | Turn the task just finished into a reusable skill, built from the steps that worked in the session, with your corrections as rules and per-run values as arguments                                                                                                                                                               |
 | Workflow Runner      | `ceh-workflow-runner`      | Run a built `flow.yaml` workflow, interactive or headless: stages in order, approvals, gates, run state and resume. Install it wherever a flow runs, without the builder                                                                                                                                                         |
 | Competitor Analysis  | `ceh-competitor-analysis`  | Study a competitor's repo or product and learn from it: one evidence-anchored report each (breakdown, inventory, "oh wow" mechanisms, what to incorporate), then a side-by-side comparison with your own work. Repos are read as untrusted data, never run                                                                       |
 
 ### Categorization
 
-| Tier                  | Loaded            | Plugins                                                                                                                                                                                                                                                     |
-| --------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                                                                                                    |
-| **Cross-cutting**     | most sessions     | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                                                |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-competitor-analysis`, `ceh-ui-design`, `ceh-codebase-explanation` |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                                                 |
+| Tier                  | Loaded            | Plugins                                                                                                                                                                                                                                                                             |
+| --------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                                                                                                                            |
+| **Cross-cutting**     | most sessions     | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                                                                        |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`, `ceh-competitor-analysis`, `ceh-ui-design`, `ceh-codebase-explanation` |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                                                                         |
 
 Each plugin is self-contained: a foundational standard needed by more than one plugin is duplicated
 into each instead of extracted into a shared base, so one plugin per use case is all you load.
@@ -88,6 +89,7 @@ building, so they load _alongside_ a use-case plugin, not instead of one.
 | Explain Until Understood | `/ceh-codebase-explanation:explain-until-understood` | Explaining a subsystem, design, or diff to the person in the session: stated floor, foundations first, verified claims, ASCII pictures, one walked case, and the escalation ladder when an explanation misses |
 | Explain Codebase         | `/ceh-codebase-explanation:explain-codebase`         | Go through a whole repo, code or knowledge base, and write what each component does, how they connect, and key flows into the ignored `.agents_workspace/CODEBASE_EXPLAINED.md`                               |
 | Document Architecture    | `/ceh-codebase-explanation:document-architecture`    | Writing or updating the living `.agents_workspace/ARCHITECTURE.md`: 3-second Overview, Mermaid diagrams, Key Decisions log; also when a re-plan changes system shape                                          |
+| Trace Code Rationale     | `/ceh-codebase-explanation:trace-code-rationale`     | "Why is it like this", or before removing code that looks pointless: trace it through git log, blame, PRs, and issues, and answer with every claim cited and the unrecorded parts named                       |
 
 ### Git Workflow (`ceh-git-workflow`)
 
@@ -232,6 +234,12 @@ building, so they load _alongside_ a use-case plugin, not instead of one.
 | -------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | Run Agentic Workflow | `/ceh-workflow-runner:run-agentic-workflow` | Running a built workflow from its `flow.yaml`, interactive or headless: stages, approvals, gates, run state, resume, a final status line |
 
+### Session to Skill (`ceh-session-to-skill`)
+
+| Skill                   | Invoke                                          | When                                                                                                                                                                      |
+| ----------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Turn Session Into Skill | `/ceh-session-to-skill:turn-session-into-skill` | A task was just done in this session and should be repeatable: one `SKILL.md` from the steps that worked, corrections as rules, per-run values as arguments, no interview |
+
 ### Competitor Analysis (`ceh-competitor-analysis`)
 
 | Skill               | Invoke                                         | When                                                                                                                                         |
@@ -358,12 +366,15 @@ What each bundle installs is listed in [`docs/PLUGIN_DEPENDENCIES.md`](docs/PLUG
 /plugin install ceh-git-datastore@ceh-claude-code-library --scope user
 /plugin install ceh-workflow-builder@ceh-claude-code-library --scope user
 /plugin install ceh-workflow-runner@ceh-claude-code-library --scope user
+/plugin install ceh-session-to-skill@ceh-claude-code-library --scope user
 /plugin install ceh-competitor-analysis@ceh-claude-code-library --scope user
 ```
 
 Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-web-frontend`,
 `ceh-ag-ui` and `ceh-competitor-analysis` bring `ceh-ui-design`. `ceh-workflow-builder` and `ceh-workflow-runner` are in no bundle, so install
 them on their own: the builder where you author a flow, the runner wherever a flow runs.
+`ceh-session-to-skill` is in no bundle either: install it where you want finished tasks turned
+into skills.
 `ceh-competitor-analysis` is in no bundle either: install it when you need it. Add `--scope project` instead of `--scope user` for a project-specific install.
 
 ### Step 3 — Verify
@@ -442,6 +453,9 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     },
     {
       "path": "~/ceh-claude-code-library/plugins/standalone/ceh-workflow-runner"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-session-to-skill"
     },
     {
       "path": "~/ceh-claude-code-library/plugins/standalone/ceh-competitor-analysis"

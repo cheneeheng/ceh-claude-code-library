@@ -141,7 +141,16 @@ stage's note. Do not accept "looks right".
   stage's inputs are valid.
 - **Red, `retry`** — re-run the stage with `retry.changes` applied and the failure output in front of
   it, at most `retry.max` more times, recording the attempt in the note. Run `world_check` again
-  before each attempt. When the bound is spent, stop as above. Never raise the bound.
+  before each attempt. When the bound is spent, stop as above. Never raise the bound. If an attempt
+  fails with the same check output as the attempt before it, stop early as
+  `failed <id> no-progress`: the change between attempts did nothing, so the remaining attempts
+  would spend the budget on the same result.
+
+A green gate counts only if the stage left the check alone. Before dispatching a stage, record
+`git hash-object` for the files its `gate.check` names, the script it runs, and the tests it runs.
+Hash them again before marking `done`. If any changed, end as `failed <id> gate-edited`, because a
+stage that rewrites its own check can turn any result green. Skip this for a stage whose stated job
+is to edit those files.
 
 ## Rules
 
@@ -169,6 +178,7 @@ file too. Say nothing after it.
 
 - The config fails a validation rule, an input is missing or a capability is absent → end before
   step 1 with `FLOW STATUS: failed - <reason>`.
-- A gate is red and stops the run, a world check fails, an input file is missing or an approval is
-  declined → `FLOW STATUS: failed <stage-id> <reason>`.
+- A gate is red and stops the run, a retry makes no progress, a stage edited its own gate's check,
+  a world check fails, an input file is missing or an approval is declined →
+  `FLOW STATUS: failed <stage-id> <reason>`.
 - A headless approval is needed and not given → `FLOW STATUS: awaiting-approval <stage-id>`.

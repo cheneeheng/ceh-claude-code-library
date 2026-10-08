@@ -82,7 +82,7 @@ cross-cutting plugins hold the disciplines that apply at every stage.
 | Build      | Write the code, the UI, and the docs                                     | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-git-datastore`, `ceh-documentation`, `ceh-codebase-explanation`, `ceh-plan-build-review` |
 | Prove      | Show it works and that a person can use it                               | `ceh-testing`, `ceh-usability-audit`, `ceh-plan-build-review` (review)                                                                                                                      |
 | Tell       | Get it in front of the people who should find it                         | `ceh-blog`, `ceh-seo`                                                                                                                                                                       |
-| Every step | How the agent behaves, commits, spends context, and runs repeatable work | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`                                                                                |
+| Every step | How the agent behaves, commits, spends context, and runs repeatable work | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`                                                        |
 
 The test for a new plugin or skill: **does it help an agent ship a product, or get one in front of
 people?** If not, it does not belong here, however useful it is. General productivity, chat

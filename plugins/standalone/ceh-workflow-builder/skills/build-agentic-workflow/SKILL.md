@@ -5,8 +5,9 @@ description: >-
   a human driving by hand: decide whether it is one skill or a gated workflow, and emit it into the
   target repo's `.claude/skills/`. Trigger on "turn this into a skill", "build an agentic workflow",
   "I do this by hand every time". Delegates to ceh-workflow-builder:interview-workflow-task when the
-  task is not yet described. Not for evaluating an existing skill, adding a component to this plugin
-  repo, or running a built workflow (use ceh-workflow-runner:run-agentic-workflow).
+  task is not yet described. Not for a task just done in this session (use
+  ceh-session-to-skill:turn-session-into-skill) or running a built workflow (use
+  ceh-workflow-runner:run-agentic-workflow).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
