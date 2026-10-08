@@ -11,8 +11,8 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.0.1",
-      "description": "CEH every-session: standards every session loads, however Claude Code is used — usage-limit handoff and context economy via delegated bulk reads."
+      "version": "2.1.0",
+      "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit) and context economy via delegated bulk reads."
     },
     {
       "name": "ceh-coding-conduct",
@@ -23,7 +23,7 @@
     {
       "name": "ceh-codebase-explanation",
       "source": "./plugins/standalone/ceh-codebase-explanation",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, and the living architecture document."
     },
     {

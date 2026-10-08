@@ -39,16 +39,13 @@ Execute these steps in order, then end the turn.
    commit them; otherwise leave the working tree as-is and describe its state in the artifact.
    Never commit or stash unprompted just because the session is ending: the end of a session
    authorizes no change to the user's working tree.
-3. **Write the handoff artifact** to
-   `.agents_workspace/handoff/HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.md`
-   (format below). Create the directory if needed. Take the session id prefix from the guard
-   message and the timestamp from a single `date` call — do not guess either.
-4. **Append one line to the global index** at `~/.claude/handoff/index.md`, creating it if
-   absent:
-   `- <YYYY-MM-DD HH:MM> — <cwd> — <branch> — <one-line state> — <artifact path>`
-   This is what makes the work findable days later without remembering which repo it was in.
-5. **Report the same content as your final message**, so it is visible without opening the file.
-6. **End the turn.** Do not resume work in this session unless the user explicitly says to
+3. **Save the handoff.** Invoke the Skill tool with skill="ceh-every-session:hand-off-session"
+   and args `save`, and follow its save procedure: it writes the artifact under
+   `.agents_workspace/handoff/`, appends the line to the global index at
+   `~/.claude/handoff/index.md`, and reports the content as your message. Add this header line
+   under the artifact's title, from the guard message:
+   `**Window:** <name> at N%, resets at HH:MM`
+4. **End the turn.** Do not resume work in this session unless the user explicitly says to
    continue — they may prefer to wait for the window reset reported by the guard message.
 
 ## Rules
@@ -60,40 +57,5 @@ Execute these steps in order, then end the turn.
 - The quota reading is account-wide: claude.ai web, desktop, mobile and Claude Code all draw
   from the same pool, so usage can climb without this session doing anything.
 - If the guard fires while mid-handoff, ignore it: the protocol is already running.
-- Resume by reading the artifact in a fresh session rather than replaying the old one with
-  `--resume` — the replay spends the quota that just reset.
-
-## Output
-
-```markdown
-# Usage-limit handoff — <YYYY-MM-DD HH:MM>
-
-**Window:** <name> at N%, resets at HH:MM
-**Repo / branch:** <path> / <branch>
-**Session:** <session-id-prefix>
-
-**Goal** — what this session set out to do:
-
-- <one or two lines>
-
-**Done** — completed and in what state (validated / not validated):
-
-- <item — files touched, what was verified>
-
-**In flight** — the step that was closed or reverted at the cut:
-
-- <state of the working tree, anything half-planned>
-
-**Open** — remaining work, ordered; first item is the next actionable step:
-
-1. <next concrete step, specific enough to execute cold>
-2. <...>
-
-**Decisions pending** — forks the user still has to resolve, if any.
-
-**Resume with:** <one line: branch name, command to run, or file to open first>
-```
-
-Keep it factual and specific: file paths, branch names, exact commands. The reader is a future
-session with none of this context. Keep it short enough to read in full on resume — a bounded
-snapshot, never a log.
+- Resume with `/ceh-every-session:hand-off-session load` in a fresh session rather than
+  replaying the old one with `--resume` — the replay spends the quota that just reset.

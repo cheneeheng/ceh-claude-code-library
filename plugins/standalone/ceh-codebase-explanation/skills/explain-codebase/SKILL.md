@@ -3,9 +3,9 @@ name: explain-codebase
 description: >-
   Load this skill when the ask is to understand a whole repository and leave the understanding
   behind in a file: walk it component by component and write it to
-  .agents_workspace/CODEBASE_EXPLAINED.md. Trigger on "explain this codebase", "document what each
-  module does", "walk me through this project", or "I inherited this repo, what is going on".
-  Component level by default. Not for design diagrams and decision records
+  .agents_workspace/CODEBASE_EXPLAINED.md. Covers code repos and Markdown or text knowledge bases.
+  Trigger on "explain this codebase", "explain this repo", "what is in these notes", "walk me
+  through this project", or "I inherited this repo". Component level by default. Not for design diagrams and decision records
   (ceh-codebase-explanation:document-architecture), and not for end-user or operator documentation
   (ceh-documentation).
 disable-model-invocation: false
@@ -27,6 +27,10 @@ just greppable.
 The hard requirement is **accounting**: every file in the repo belongs to an explained component, to
 an explicit group rule, or to a named exclusion. A file that belongs to none of the three is a gap
 you report, not an omission you make quietly.
+
+The repo need not hold code. A knowledge base — Markdown, text, or other prose files on one or
+more subjects — gets the same pass, read as documents instead of programs. See
+[Code or knowledge base](#code-or-knowledge-base).
 
 ## Procedure
 
@@ -55,6 +59,28 @@ rule rather than enumerated, in both modes:
 > `migrations/` — 42 sequential Alembic revisions, `001_init` … `042_add_audit`; each adds tables
 > or columns and is applied in filename order.
 
+### Code or knowledge base
+
+Decide from the inventory which kind of repo this is, and say which in the doc's header line.
+Mostly source files and manifests is a code repo. Mostly prose files (`.md`, `.txt`, `.rst`,
+`.org`, notes exported from a notes app) with little or no code is a knowledge base. A repo with
+both, such as a docs site with a build config, explains each part in its own terms.
+
+In a knowledge base, a component is a **topic area**: a directory or a cohesive set of documents
+on one subject. Everything else in this skill holds, with these readings:
+
+| Code repo                                | Knowledge base                                                                                                                            |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Entry points, manifests                  | Index, README, table-of-contents, or map-of-content files, and any site config (`mkdocs.yml`, a vault config)                             |
+| Core domain, then supporting code        | Core subjects, then reference material (glossaries, sources, templates), then drafts and archives                                         |
+| What calls it, what it calls             | What links to it and what it links to; which documents build on which                                                                     |
+| Key flows: a request, a build, a CLI run | Reading paths: the order a newcomer reads to learn a subject, or the documents one question passes through                                |
+| A constraint the code imposes            | A link target other documents depend on, a naming or front-matter convention, a generated index, two documents that cover the same ground |
+
+Explain what each document says, not just what it is called: the claim, the definition, the
+procedure it carries. Summarize, never quote more than a sentence, and do not judge whether the
+content is correct. Contradictions between documents go into _Gaps and oddities_ as facts.
+
 ### Granularity
 
 **Default: component level.** A component is a directory or a cohesive set of files with one
@@ -81,8 +107,8 @@ at component level everywhere else. Say which mode you used in the doc's header 
    component's role is ambiguous. A 500-file repo does not need 500 reads — but every claim in the
    doc must be one you can point at a file for.
 4. **Explain each component** using the four-part shape below.
-5. **Trace 1–3 end-to-end flows** — a request, a build, a CLI invocation — naming the components
-   and files each step passes through. This is what turns a list of parts into an explanation.
+5. **Trace 1–3 end-to-end flows** — a request, a build, a CLI invocation, or in a knowledge base
+   a reading path — naming the components and files each step passes through. This is what turns a list of parts into an explanation.
 6. **Reconcile.** Diff the inventory against the doc. Every path assigned to a component, a group
    rule, or a named exclusion. Report the numbers in the Accounting section.
 
@@ -141,12 +167,14 @@ utilities and who imports them. Write what the reader cannot guess.
 ````markdown
 # Codebase Explained — <repo-name>
 
-_Generated by `explain-codebase` on <YYYY-MM-DD> at commit `<sha>`. Component-level detail._
+_Generated by `explain-codebase` on <YYYY-MM-DD> at commit `<sha>`. <Code repo | Knowledge base>,
+component-level detail._
 _<C> components · <N> files accounted for · <K> excluded._
 
 ## What this repo is
 
-2–4 sentences: what it does, who it is for, what kind of project it is, what stack it runs on.
+2–4 sentences: what it does, who it is for, what kind of project it is, what stack it runs on. For
+a knowledge base: what subjects it covers, who it is written for, and how it is organized.
 
 ## How it fits together
 

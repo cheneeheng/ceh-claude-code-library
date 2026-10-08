@@ -309,6 +309,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** The handoff writes a resume point only near the usage limit. Let it also fire on "save
   where we are" and "pick this up".
+- **Status:** built on 2026-10-08 as `ceh-every-session:hand-off-session` (save and load), which
+  `usage-limit-handoff` now calls.
 
 ### Phase-boundary tree
 
