@@ -285,6 +285,7 @@ they cost the author, not warnings issued to the reader.
 - **Multiple posts wanted**: one at a time — complete the first interview and draft before starting the next.
 - **Expert writing for beginners**: push them to explain jargon, add examples, and not skip "obvious" steps.
 - **Listicle or generic SEO post**: write it well anyway, but flag a more compelling angle if one is hiding underneath.
+- **No human to answer** (a headless run, or called by another agent): draft from the material you have and never invent a personal moment, quote, or number. Put a bracketed placeholder where each missing specific belongs (`[the moment you noticed X]`), mark the post as a draft, and end with the interview questions you would have asked, in order. With only a bare topic and no material, stop and report that the post needs the author's story.
 
 ## Output
 

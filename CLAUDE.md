@@ -1,9 +1,14 @@
 # CEH Claude Code Library
 
-Plugin repo for the `ceh-*` Claude Code plugins — engineering standards delivered as skills.
-Each plugin is a standalone, self-contained **use case**. Migration from
-[agent-skills](https://github.com/cheneeheng/agent-skills) is in progress: plugins land here one at
-a time, and the tables below grow as they do.
+Plugin repo for the `ceh-*` Claude Code plugins — guidance for autonomous agents, delivered as
+skills, subagents, and hooks. Each plugin is a standalone, self-contained **use case**. Migration
+from [agent-skills](https://github.com/cheneeheng/agent-skills) is in progress: plugins land here
+one at a time, and the tables below grow as they do.
+
+**Read `docs/VISION.md` before adding a plugin, accepting an idea, or changing a rule here.** It
+says why the repo works the way this file describes: agents first and humans second, the
+product-lifecycle scope, and the principles that settle a decision. If this file and the vision
+disagree, fix one of them in the same PR.
 
 ## Organizing Principle
 
@@ -58,7 +63,7 @@ Categorization rules of thumb:
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
 audits/<date>/                # Model-audit reports, one <plugin>.md each plus SUMMARY.md — written by the model-audit skill
 .github/workflows/            # validate.yml — runs validate.py on push and PR; model-audit.yml — weekly audit draft PR
-docs/                         # Maintainer docs — CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md
+docs/                         # Maintainer docs — VISION.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
 examples/                     # Worked usage examples, one ceh-<plugin>/README.md each — not validated
 plugins/                      # All plugins — two folders, one directory per plugin, no tier subfolders
 ├── scenarios/
@@ -210,6 +215,7 @@ Where they conflict, this section wins:
 | `plugins/standalone/ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version, metadata, dependencies                                         |
 | `.claude-plugin/marketplace.json`                            | Marketplace listing (all plugins)                                              |
 | `README.md`                                                  | User-facing docs — plugin, skill, and agent tables live here                   |
+| `docs/VISION.md`                                             | Identity, scope, goals, and principles: why the rules here are what they are   |
 | `docs/CROSS_REFERENCES.md`                                   | Content duplicated across skills: canonical source and every copy              |
 | `docs/PLUGIN_DEPENDENCIES.md`                                | Current dependency graph: every edge with its evidence                         |
 | `docs/ENVIRONMENT_VARIABLES.md`                              | Every environment variable any plugin reads: plugin, reader, default, effect   |

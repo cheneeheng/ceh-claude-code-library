@@ -19,8 +19,53 @@ default" is new, and "Opt-in verify gate" becomes "Verify gate". Every guard aga
 commands stays rejected, because Claude Code's built-in auto mode is good enough. No plugin version
 changes.
 
+The repo now has a stated vision in `docs/VISION.md`: guidance for autonomous agents, written for
+agents first and humans second, across a product's life from idea to working software to the people
+who should find it. The agent decides by default and asks a human only for facts no one else has
+or before an irreversible or outward-facing action. Only an explicit human instruction overrides a
+standard. The plugins that contradicted it now follow it. The coding contract and four
+`ceh-testing` skills treat proving a change as part of the task, so the agent writes and runs the
+tests that show its change works without being asked. Only slow or paid runs wait for a request.
+The contract also lets the agent make local, reversible state changes, and a calling agent can
+narrow a subagent's scope but no longer counts as user-level authority. The interview skills in
+`ceh-business-plan`, `ceh-blog`, and `ceh-workflow-builder` keep adaptive questioning and gain a
+path for a run with no human.
+
+### Plugin versions
+
+| Plugin                 | Version |
+| ---------------------- | ------- |
+| `ceh-blog`             | 1.0.2   |
+| `ceh-business-plan`    | 1.0.6   |
+| `ceh-coding-agent`     | 1.0.2   |
+| `ceh-testing`          | 1.0.1   |
+| `ceh-workflow-builder` | 1.3.1   |
+
+### Added
+
+- `docs/VISION.md`: identity, vision, autonomy limits, override rule, product-lifecycle scope,
+  goals, non-goals, nine principles, and their priority order when they conflict
+- `ceh-business-plan:develop-business-plan`, `ceh-business-plan:find-product-market-fit`,
+  `ceh-blog:draft-post`, `ceh-workflow-builder:interview-workflow-task`: a "No human to answer" path
+  that drafts or records gaps, asks nothing, and ends with the questions a person must answer
+
 ### Changed
 
+- `ceh-coding-agent:agent-coding-contract`: the Validation policy makes proving the change and
+  local, reversible state changes always allowed. Slow or paid runs and irreversible or
+  outward-facing actions need a request or advance authorization from a human. A calling agent can
+  narrow scope but cannot switch a standard off or grant authorization
+- `ceh-testing:test-a-bug-fix`, `verify-behavior-preserved`, `close-test-risk-gaps`,
+  `audit-test-suite`: "When tests were not requested" becomes "What waits for a request", so each
+  skill applies unasked and only slow or paid runs wait. `docs/CROSS_REFERENCES.md` and
+  `docs/TESTING_WORKFLOW.md` follow
+- `ceh-coding-agent` output style: the closing Security / Performance / Architecture / Dependency
+  flag line is gone. Such a risk is now a row in the summary table, with a status, since the table
+  already lists everything found but not asked for
+- `README.md`, `CLAUDE.md`, and the `marketplace.json` description state the agents-first identity
+  and point at `docs/VISION.md`
+- `docs/IDEAS.md`: every entry checked against the vision, with notes on Finish-branch menu, Claim
+  needs fresh evidence, and Test-first by default
 - `docs/IDEAS.md`: ideas from all five competitor analyses, with the destructive-shell half of the
   fact-forcing gate rejected alongside Destructive-command guard
 - `docs/IDEAS.md`: "Strictness-graded evals" gains the tempt-never-order rule for competing prompts

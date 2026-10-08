@@ -27,13 +27,14 @@ almost nobody uses it.
 The failure mode is refactoring against a thin suite, watching it stay green, and shipping a silent
 behavior change. Green on a suite that never covered the region proves nothing.
 
-## When tests were not requested
+## What waits for a request
 
-Writing tests and running a suite happen only when the user asked for them. If the request was only
-the refactor, write no characterization tests or golden files, run no coverage or suite, and make no
-separate commit of the pins. Instead, name the tests you would write (what they assert and which file
-they would live in) and state what stays unverified, so the user can ask for them. When tests were
-requested, the steps below apply in full.
+Writing and running the tests that prove the refactor preserved behavior is part of the refactor, so
+the steps below apply without being asked: the coverage check on the region, characterization tests,
+golden files, the separate commit of the pins on the feature branch, and the differential run. Only a
+slow or paid run waits for a request: the full suite, coverage beyond the region being changed,
+mutation testing, or repeated passes over the whole suite. When one of those would help and was not
+requested, name the command and what it would reveal, and state what stays unverified.
 
 ## Procedure
 

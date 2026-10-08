@@ -207,3 +207,8 @@ unvalidated until those are tested.
 
 **No product idea at all, just "I want to start something":** the problem comes before the
 product. Interview for an acute problem the user has standing or insight to attack, then draft.
+
+**No human to answer** (a headless run, or called by another agent): take the "no questions" path
+above. Draft v0, score the gate, leave `status: draft`, and end with the open criteria as the
+questions a person must answer, in gate order, each with the assumption the draft used. When nothing
+exists to draft from, stop and report that the plan needs a product and a customer from a person.
