@@ -39,6 +39,8 @@ package registry only when the user has allowed a new dependency.
 - Deletion over addition. Boring over clever — clever is what someone decodes at 3am. Fewest files; shortest working diff wins.
 - Complex request? Ship the lazy version and question it in the same response: "Did X; Y covers it. Need full X? Say so." Never stall on an answer you can default.
 - Two stdlib options the same size? Take the one correct on edge cases. Lazy means less code, not the flimsier algorithm.
+- Check at the boundary, trust inside. Parse and validate input once, where it enters, into a type that cannot hold a bad value. Code past the boundary takes that type and does not re-check, because repeated defensive checks are code nobody can prove reachable.
+- Count what a reader must hold in mind, not lines. Fewer names, layers, and flags in play at once beats a shorter file that makes the reader jump between five.
 - Mark deliberate simplifications with a `// less-code:` comment so a shortcut reads as intent, not ignorance. If the shortcut has a known ceiling (global lock, O(n²) scan, naive heuristic), the comment names the ceiling and the upgrade path: `# less-code: global lock; per-account locks if throughput matters`.
 
 ### When not to be lazy

@@ -18,15 +18,16 @@ branch guard hook.
 
 Auto-trigger on context; each loads only the relevant content.
 
-| Skill              | Auto-loads when                                                                                                                                                                    |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `branch`           | Creating or naming a branch                                                                                                                                                        |
-| `commit`           | Writing or reviewing a commit message                                                                                                                                              |
-| `pull-request`     | A branch is heading into `main`: opening a PR, merging one (or a local branch), or landing the branch in one pass — changelog under `[Unreleased]` → commit → PR → merge → cleanup |
-| `release`          | Shipping a version: bump → changelog → PR → merge → tag → GitHub release. Also covers tag-only and the hotfix variant                                                              |
-| `code-review`      | Writing PR review comments                                                                                                                                                         |
-| `update-changelog` | Writing a `CHANGELOG.md` entry — a versioned section, or bullets under `[Unreleased]`                                                                                              |
-| `update-readme`    | Keeping `README.md` accurate after a significant change: surgical edits behind a gate that does nothing when nothing material changed                                              |
+| Skill                     | Auto-loads when                                                                                                                                                                    |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `branch`                  | Creating or naming a branch                                                                                                                                                        |
+| `commit`                  | Writing or reviewing a commit message                                                                                                                                              |
+| `pull-request`            | A branch is heading into `main`: opening a PR, merging one (or a local branch), or landing the branch in one pass — changelog under `[Unreleased]` → commit → PR → merge → cleanup |
+| `release`                 | Shipping a version: bump → changelog → PR → merge → tag → GitHub release. Also covers tag-only and the hotfix variant                                                              |
+| `code-review`             | Writing PR review comments                                                                                                                                                         |
+| `address-review-comments` | Acting on review feedback on your own change. It's working if every comment gets a fixed, pushed-back, or answered line, and no reply agrees before quoting code or output         |
+| `update-changelog`        | Writing a `CHANGELOG.md` entry — a versioned section, or bullets under `[Unreleased]`                                                                                              |
+| `update-readme`           | Keeping `README.md` accurate after a significant change: surgical edits behind a gate that does nothing when nothing material changed                                              |
 
 `pull-request` and `release` each carry their full sequence inline and call only
 `update-changelog` on every run, plus `update-readme` when the change is user-facing, so a compound

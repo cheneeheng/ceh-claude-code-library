@@ -44,6 +44,11 @@ Body
   cited as ${CLAUDE_SKILL_DIR}/<path>. A file shared by skills of the same plugin lives once in
   the plugin's references/ and is cited as ${CLAUDE_PLUGIN_ROOT}/references/<file>.
 - Keep SKILL.md under 500 lines.
+
+Plugin README
+- The skill's row in the plugin README says "It's working if" followed by one or two signals a
+  user can see without reading this file: a section that appears in the output, a file written,
+  a question it asks first. Name only signals the body actually produces.
 -->
 
 # <Skill Title>

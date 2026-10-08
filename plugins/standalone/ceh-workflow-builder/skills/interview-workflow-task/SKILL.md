@@ -23,6 +23,10 @@ two whose absence corrupts data or sends mail twice.
 
 ## Procedure
 
+Triage first, in one line: a **spike**, a task done once or once more to learn how it goes, gets
+no spec, so say so and stop. Any task that will repeat gets the full interview below, even when it
+looks small, because questions 8 and 9 matter most on the tasks that look too small to ask them.
+
 1. Read the spec file and this conversation, then label every row (Start from what already exists).
 2. Ask only about the rows that fail, using the nine questions below and the rules under How to ask.
 3. Record each answer under its fixed heading in the spec file (see Output).

@@ -26,6 +26,7 @@ when `lint`, `format:check`, `typecheck`, and (SvelteKit) `check` all pass.
 2. Read browser-safe env vars through the framework's static env module, and keep secrets server-side.
 3. Write TypeScript to the style below.
 4. Before opening a PR, run the four checks under Linting and quality checks.
+5. Install the pre-commit hook once per clone, per Pre-commit hook below.
 
 ## Rules
 
@@ -119,6 +120,23 @@ bun run typecheck     # tsc --noEmit
 ```
 
 `svelte-check` is not optional in SvelteKit projects — it catches prop type mismatches, missing required props, and a11y warnings ESLint cannot see.
+
+#### Pre-commit hook
+
+Run lint and the format check on every commit, so neither fails first in a PR. Git runs hooks from
+a committed directory with no package needed: add `.githooks/pre-commit` (executable, LF line
+endings) and point git at it once per clone with `git config core.hooksPath .githooks`.
+
+```sh
+#!/bin/sh
+# .githooks/pre-commit
+set -e
+bun run lint
+bun run format:check
+```
+
+`typecheck` and `check` stay out of the hook: they check the whole program, which is too slow for
+every commit, so they run before the PR. Never commit with `--no-verify` to get past a hook.
 
 #### ESLint configuration
 

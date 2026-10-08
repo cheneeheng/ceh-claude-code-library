@@ -28,6 +28,7 @@ config. Done when `ruff` and `mypy` pass and `pyproject.toml` matches the config
    a dev dependency or an optional extra.
 3. Write code to the coding style below.
 4. Before every PR, run the three checks under Linting and type checking.
+5. Install the pre-commit hook once per clone, per Pre-commit hooks below.
 
 ## Rules
 
@@ -140,3 +141,30 @@ uv run mypy .
 ```
 
 Do not use `# type: ignore` without a comment. Do not downgrade `strict = true` to silence errors.
+
+### Pre-commit hooks
+
+Run ruff on every commit, so lint and format errors never reach a PR. Install once per clone with
+`uv add --dev pre-commit` and `uv run pre-commit install`. The hooks call ruff through `uv run`, so
+they use the version `uv.lock` pins rather than a second copy pinned in the hook config:
+
+```yaml
+# .pre-commit-config.yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types: [python]
+```
+
+mypy stays out of the hook: it checks the whole program, which is too slow for every commit, so it
+runs before the PR. A hook that rewrites a file aborts the commit: re-stage and commit again. Never
+commit with `--no-verify` to get past a hook.

@@ -107,6 +107,21 @@ row = await conn.fetchrow(
 )
 ```
 
+Page a list with a keyset scan on a unique sort key, never `OFFSET`: an offset re-reads every
+skipped row, so page 1,000 costs a thousand pages, and a concurrent insert shifts rows between
+pages. Back the sort key with an index on the same columns in the same order.
+
+```python
+rows = await conn.fetch(
+    "SELECT session_id, topic, created_at FROM sessions"
+    " WHERE (created_at, session_id) < ($1, $2)"
+    " ORDER BY created_at DESC, session_id DESC LIMIT $3",
+    cursor_created_at,
+    cursor_session_id,
+    limit,
+)
+```
+
 ### Tenant isolation
 
 Every query on user-owned data must filter by the owning user's ID. One user's data must never be reachable by another.
@@ -196,6 +211,23 @@ DATABASE_URL=$TEST_DATABASE_URL uv run alembic upgrade head
 - Every migration must be backward-compatible — the **old** app version must still work after the migration runs
 - Never run a migration and a code deploy simultaneously
 - Test the migration against a copy of production data before deploying
+
+#### Zero-downtime DDL
+
+A migration that holds a strong lock on a busy table blocks every query behind it. On any table
+that serves traffic:
+
+- Set `SET lock_timeout = '5s'` at the top of the migration, so a blocked `ALTER` fails fast and
+  can be retried instead of queueing every read behind it.
+- Create indexes with `CREATE INDEX CONCURRENTLY`, inside
+  `with op.get_context().autocommit_block():`, because it cannot run in a transaction.
+- Add a foreign key or check constraint as `NOT VALID`, then `VALIDATE CONSTRAINT` in a separate
+  migration. Validation takes a weaker lock than adding a validated constraint.
+- Add a `NOT NULL` column in three steps: add it nullable, backfill in batches of a few thousand
+  rows per transaction, then set `NOT NULL`. On PostgreSQL 12+, add a `CHECK (col IS NOT NULL)
+NOT VALID` and validate it first, so `SET NOT NULL` skips the full-table scan.
+- Never backfill a large table in the migration itself. Run it as a separate batched script, so a
+  slow backfill does not hold the deploy.
 
 #### Two-step destructive changes
 

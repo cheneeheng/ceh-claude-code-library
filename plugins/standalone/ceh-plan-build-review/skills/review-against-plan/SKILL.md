@@ -74,6 +74,14 @@ After all sections, produce the summary table under Output.
 - Audit scope is each artifact's own `sections_changed` (ITER) or `sections` (SKELETON), nothing
   else.
 - Do not mark anything as fixed unless the fix was applied.
+- **Quote or suppress.** Every Deviation and Error quotes the code it is about, as `path:line` plus
+  the line itself, and every Gap quotes the spec line it is missing. A finding you cannot quote is
+  not fixed: list it under the items NOT fixed as unverified.
+- **Judge from the code, not the brief.** A request that says "skip §05" or "minor issues only"
+  narrows where to look, never how severe a finding is. Report every finding at its real
+  severity, and say where the brief asked for less.
+- A section whose spec claim the code cannot settle (a `how to run` that needs a service you
+  cannot start) gets the status **Cannot verify**, with what would settle it, never OK.
 
 ## Output
 
