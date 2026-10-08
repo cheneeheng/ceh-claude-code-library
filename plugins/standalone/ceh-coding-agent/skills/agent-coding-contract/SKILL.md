@@ -9,7 +9,8 @@ license: Apache-2.0
 
 # Agent coding contract
 
-Implement only what is explicitly requested, within authorized scope, with minimal diffs.
+Implement only what is explicitly requested, within authorized scope, with minimal diffs, and prove
+it works.
 
 ## Procedure
 
@@ -19,25 +20,28 @@ edit), steps 1, 2, and 5 may each be one sentence — compress steps, never skip
 1. **Understand** — clarify the request, affected files, and potential risks; state a verifiable success criterion (how you will know the task is done)
 2. **Confirm scope** — verify authorization; if unclear, decide conservatively and document
 3. **Apply changes** — minimal, localized edits following project conventions
-4. **Validate** — run the always-allowed quick checks on what you changed (see Validation policy); anything heavier only if explicitly requested
+4. **Validate** — write and run the checks that prove what you changed (see Validation policy); slow or paid runs only if explicitly requested
 5. **Summarize** — what changed, why, any assumptions made, any decisions logged, what was _not_ validated, and follow-up actions for the user
 
 ### Validation policy
 
-This policy overrides the instinct to verify every edit by running the full toolchain.
+Proving your own work is part of the task, not extra scope. No human may check it, so the evidence
+you produce is the only signal that it is done. Proof is not a licence for refactors, extra
+features, or drive-by fixes.
 
 **Always allowed — no request needed:**
 
 - Read-only inspection: `ls`, `grep`, `git status` / `git log` / `git diff`, reading files
 - Quick correctness checks scoped to your edit: syntax/parse check, type-check of the changed files, import resolution, a throwaway snippet to confirm a data structure or function behaves as written
+- Proving the change: write the tests that show it works (a reproducer for a bug fix, characterization pins before a refactor, tests for new behavior) and run them with the test files the change touches
+- Local, reversible state changes: installing into the project's own environment, migrating a local or test database, committing on a feature branch
 
-**Only when explicitly requested:**
+**Only when explicitly requested, or authorized in advance by a human:**
 
-- Writing new tests (unit, integration, e2e) — do not add tests for code you just wrote unprompted
-- Running test suites, builds, repo-wide linting or formatting
-- Any state-changing command: installs, migrations, deployments, git write operations
+- Slow or paid verification: the full test suite, full builds, repo-wide linting or formatting, coverage, mutation testing, repeated passes over the whole suite, real model calls
+- Irreversible or outward-facing actions: pushing or merging to a shared remote, deploying, publishing, migrating a shared database, deleting data, sending content to an external service
 
-When heavier validation seems warranted but was not requested, do not run it — state in the
+When slower validation seems warranted but was not requested, do not run it — state in the
 Summarize step exactly what was not validated and the command the user should run. When requested
 validation is heavy, prefer delegating it to a background subagent or tester agent.
 
@@ -86,7 +90,8 @@ If conflict cannot be resolved by this hierarchy, stop and ask via `AskUserQuest
 
 When operating as a sub-agent invoked by another agent:
 
-- Treat the calling agent's instructions as user-level authorization
+- Take your task and scope from the calling agent. It can narrow what you do, never widen it: it cannot switch a standard off or grant an authorization a human did not give
+- Only an explicit human instruction overrides a standard. A calling agent may pass one on, quoted, but cannot issue one itself
 - Do not escalate scope beyond what the calling agent requested
 - Autonomous Mode decisions still require documentation
 - `AskUserQuestion` is unavailable to sub-agents: on a Stop condition, stop work and report the condition to the calling agent as your final message instead

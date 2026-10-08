@@ -4,8 +4,14 @@
 
 2026.09.30 - Migrating from [agent-skills](https://github.com/cheneeheng/agent-skills) repo.
 
-A collection of Claude Code plugins providing engineering standards for AI coding agents. Plugins
-are organized around **use cases**: load the ones that match what you are building.
+Claude Code plugins that guide autonomous agents through a product's life: shaping the idea,
+building and proving the software, and getting it in front of the people who should find it. They
+are written for agents first and people second. An agent follows them with no human watching, and a
+person using Claude Code gets the same guidance and can override it with an explicit instruction.
+Plugins are organized around **use cases**: load the ones that match what you are building.
+
+**Vision:** [`docs/VISION.md`](docs/VISION.md) — the identity, scope, and principles that settle
+decisions about this repo.
 
 **Guides:** [`docs/TESTING_WORKFLOW.md`](docs/TESTING_WORKFLOW.md) — how `ceh-testing` and the three
 stack testing skills route between each other, with the trigger phrases and sequence for each moment.

@@ -98,6 +98,10 @@ step that produces it.
   one, which is why the two are recorded differently.
 - Push back on an answer that fails its own check above, then re-ask. A recorded answer that cannot
   be checked is worse than a gap, because the next skill trusts it.
+- **No human to answer** (a headless run, or called by another agent): label every row as usual,
+  ask nothing, and leave each `fails` row recorded as unanswered with the question it needs. Never
+  fill it in yourself. Hand the spec path back and list the unanswered rows, so a person can answer
+  them in one sitting.
 
 ## Output
 

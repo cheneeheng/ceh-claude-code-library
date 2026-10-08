@@ -7,6 +7,10 @@ under Skip. Nothing here is committed work, and an entry marked **Status: reject
 so it is not proposed again. Where several competitors do the same job, the ideas are merged into
 one entry.
 
+Every entry was checked against [`VISION.md`](VISION.md) on 2026-10-08, and a **Note** records
+where the vision changes one. Check each new entry the same way. Hook and guard entries need a
+failure that guidance alone did not prevent before they are built (principle 7).
+
 Effort: S is under a day, M is a few days, L is longer.
 
 ## Adopt now
@@ -99,6 +103,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Offer merge, PR, keep, or discard when work ends, and clean up the worktree. Ours
   assumes the branch always heads into a PR.
+- **Note:** Agents first: the agent picks, and only merge and discard, being outward-facing or
+  irreversible, wait for a human or advance authorization.
 
 ### Worktree cleanup
 
@@ -167,6 +173,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-coding-agent:agent-coding-contract`, No implicit actions
 - **Effort:** S
 - **Idea:** A success claim cites output from the full verification command, run this turn.
+- **Note:** "Full" means the change's own checks. The full suite is a slow run and still waits for a
+  request, per the contract's Validation policy.
 
 ### Parallel dispatch brief
 
@@ -778,7 +786,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** M
 - **Idea:** No production code without a failing test: red, green, refactor on every task, not only
   when the user asks. Test-first rules and Test seams agreed first supply how.
-- **Note:** It needs `agent-coding-contract`'s validation policy to let it write and run tests.
+- **Note:** `agent-coding-contract`'s Validation policy now lets the agent write and run the tests
+  that prove its change, so nothing blocks this.
 
 ### Generated verify skill
 

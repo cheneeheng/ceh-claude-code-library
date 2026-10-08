@@ -25,9 +25,9 @@ a removed plugin loses its row.
 | Plugin                    | Version | Changed in   |
 | ------------------------- | ------- | ------------ |
 | `ceh-ag-ui`               | 1.1.0   | `2026-10-07` |
-| `ceh-blog`                | 1.0.1   | `2026-10-06` |
-| `ceh-business-plan`       | 1.0.5   | `2026-10-02` |
-| `ceh-coding-agent`        | 1.0.1   | `2026-10-06` |
+| `ceh-blog`                | 1.0.2   | `2026-10-08` |
+| `ceh-business-plan`       | 1.0.6   | `2026-10-08` |
+| `ceh-coding-agent`        | 1.0.2   | `2026-10-08` |
 | `ceh-competitor-analysis` | 1.1.2   | `2026-10-07` |
 | `ceh-core`                | 1.0.0   | `2026-10-02` |
 | `ceh-documentation`       | 1.0.1   | `2026-10-06` |
@@ -37,9 +37,9 @@ a removed plugin loses its row.
 | `ceh-python-library`      | 1.0.0   | `2026-10-02` |
 | `ceh-python-service`      | 1.0.0   | `2026-10-02` |
 | `ceh-seo`                 | 1.0.0   | `2026-10-02` |
-| `ceh-testing`             | 1.0.0   | `2026-10-02` |
+| `ceh-testing`             | 1.0.1   | `2026-10-08` |
 | `ceh-ui-design`           | 1.0.0   | `2026-10-07` |
 | `ceh-usability-audit`     | 1.0.1   | `2026-10-07` |
 | `ceh-web-frontend`        | 1.1.0   | `2026-10-07` |
-| `ceh-workflow-builder`    | 1.3.0   | `2026-10-05` |
+| `ceh-workflow-builder`    | 1.3.1   | `2026-10-08` |
 | `ceh-workflow-runner`     | 1.0.0   | `2026-10-05` |

@@ -25,13 +25,12 @@ a hurry or by a model — reliably contains tests that pass on broken code. This
 
 Run the checks in order: each is cheaper than the one after it, and the cheap ones find most of it.
 
-## When a suite run was not requested
+## What waits for a request
 
-Running a suite or writing tests happens only when the user asked for it. If the request was only to
-look at the tests, run nothing that executes the suite: no deliberate breakage, mutation run, repeat
-pass, timing, or coverage run. Check 1 only reads the test files, so it still applies. Instead, name
-each other check you would run (the command and what it would reveal) and state what stays
-unverified, so the user can ask for it. When a run was requested, the checks below apply in full.
+Checks 1 and 2 are fast and scoped, so they apply without being asked. The rest are slow runs and
+wait for a request: the mutation run (check 3), the repeated and parallel passes (check 4), the
+durations run (check 5), and the coverage run (check 6). When one of those would help and was not
+requested, name the command and what it would reveal, and state what stays unverified.
 
 ## Procedure
 

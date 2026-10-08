@@ -195,21 +195,22 @@ two-sentence floor-not-goal intro and two rows, word for word: `Python applicati
 and `Core business logic / domain services | 95%`.
 The service copy adds the `--cov=app` command, the library copy `--cov=your_library`.
 
-## Tests not requested (write and run nothing)
+## What waits for a request (proof by default)
 
-**Canonical:** `plugins/standalone/ceh-testing/skills/test-a-bug-fix/SKILL.md` — § When tests were not requested
+**Canonical:** `plugins/standalone/ceh-testing/skills/test-a-bug-fix/SKILL.md` — § What waits for a request
 
-| Copy                                                                       | Section                              | Diverges                                                                                                         |
-| -------------------------------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-testing/skills/verify-behavior-preserved/SKILL.md` | § When tests were not requested      | the request is "only the refactor"; adds no separate commit of the pins; names "the tests" and "the steps below" |
-| `plugins/standalone/ceh-testing/skills/close-test-risk-gaps/SKILL.md`      | § When tests were not requested      | the request is "only a readiness check"; still triages all five classes and names a test per class that fires    |
-| `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`          | § When a suite run was not requested | the unrequested action is running the suite, not writing tests; check 1 only reads files and still applies       |
+| Copy                                                                       | Section                    | Diverges                                                                                                                                                          |
+| -------------------------------------------------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-testing/skills/verify-behavior-preserved/SKILL.md` | § What waits for a request | proves the refactor; lists the region coverage check, the separate commit of the pins, and the differential run; adds coverage beyond the region to the slow list |
+| `plugins/standalone/ceh-testing/skills/close-test-risk-gaps/SKILL.md`      | § What waits for a request | proof is per class that fires; adds a benchmark harness run and a migration against a production-sized copy to the slow list                                      |
+| `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`          | § What waits for a request | judges existing tests rather than proving a change: checks 1 and 2 run unasked, checks 3 to 6 are the slow list                                                   |
 
 **Shared:** the rule, stated in prose with no reference to `ceh-coding-agent:agent-coding-contract`
-so `ceh-testing` keeps no dependency: writing tests and running a suite happen only when asked,
-otherwise write and run nothing, name the test or check (what it asserts or reveals, where it would
-live), state what stays unverified so the user can ask for it, and apply the skill in full when tests
-were requested.
+so `ceh-testing` keeps no dependency, and matching `docs/VISION.md` principle 3: writing and running
+the tests that prove the change is part of the task and happens unasked; only a slow or paid run (the
+full suite, coverage, mutation testing, repeated passes over the whole suite) waits for a request;
+when one would help and was not requested, name the command and what it would reveal, and state what
+stays unverified. The contract's Validation policy states the same split.
 
 ## Choosing what to test (hand-off to design-test-cases)
 

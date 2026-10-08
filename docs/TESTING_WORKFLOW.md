@@ -149,12 +149,14 @@ goes back to the stack's tester agents.
 The highest-value defect, a test computing its expectation with the same logic as the code under
 test, is invisible to every automated check and has to be read for.
 
-## Tests that were not requested
+## What waits for a request
 
-Every `ceh-testing` skill carries a "not requested" block: writing tests and running a suite happen
-only when asked. Otherwise the skill writes and runs nothing, names the test or check it would add,
-and states what stays unverified so you can ask for it. The block is registered in
-`docs/CROSS_REFERENCES.md` ("Tests not requested").
+Proof is part of the task, so a `ceh-testing` skill writes and runs the tests that prove the change
+without being asked. Four skills carry a "What waits for a request" block naming the slow or paid
+runs that still need one: the full suite, coverage, mutation testing, and repeated passes over the
+whole suite. For those, the skill names the command, what it would reveal, and what stays
+unverified, so you can ask for it. The block is registered in `docs/CROSS_REFERENCES.md` ("What
+waits for a request").
 
 ## Coverage: what the number is for
 

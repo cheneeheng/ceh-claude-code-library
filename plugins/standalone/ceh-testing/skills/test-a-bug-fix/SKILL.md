@@ -25,13 +25,13 @@ A bug is proof that a test was missing. The fix is the cheap half; the test that
 it is the deliverable. Write it **first** — a test written after the fix is written against the new
 code, not against the bug, and routinely passes on the broken version too.
 
-## When tests were not requested
+## What waits for a request
 
-Writing tests and running a suite happen only when the user asked for them. If the request was only
-to fix the bug, write no test and run nothing: no reproducer, no stash check, no bisect. Instead,
-name the test you would write (what it asserts and which file it would live in) and state what stays
-unverified, so the user can ask for it. When tests were requested, the procedure below applies in
-full.
+Writing and running the tests that prove the fix is part of the fix, so the procedure below applies
+without being asked: the reproducer, the stash check, the sibling cases, and a bisect on the
+reproducer. Only a slow or paid run waits for a request: the full suite, coverage, mutation testing,
+or repeated passes over the whole suite. When one of those would help and was not requested, name
+the command and what it would reveal, and state what stays unverified.
 
 ## Procedure
 

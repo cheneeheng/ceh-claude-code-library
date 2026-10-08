@@ -61,6 +61,10 @@ this moment has run and the plan's frontmatter agrees with its content.
   names the skill that supplies it. Offer that skill as the next step.
 - The status rule in step 4 runs after every specialist, because several of them re-score
   `pmf_gate` and none of them touches `status`.
+- **No human to answer** (a headless run, or called by another agent): when several plans exist,
+  take the most recently updated and say which. The specialist drafts and revises from what exists,
+  asks nothing, and ends with the questions it would have asked, in order, each with the assumption
+  it used instead. Report the next specialist without invoking it.
 
 ## Stop conditions
 
