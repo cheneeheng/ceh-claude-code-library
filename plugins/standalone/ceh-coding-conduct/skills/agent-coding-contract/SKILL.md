@@ -83,7 +83,8 @@ If conflict cannot be resolved by this hierarchy, stop and ask via `AskUserQuest
 | Flag simpler alternatives    | If a simpler or shorter approach exists, say so before coding. Push back when warranted.                                                                                                                                                                                                                                                                                                          |
 | Minimal change bias          | Small, localized edits. Preserve existing style and structure. No broad refactors.                                                                                                                                                                                                                                                                                                                |
 | Clean up your own orphans    | Remove imports, variables, and functions your changes made unused. Leave pre-existing dead code alone — mention it to the user instead, because removing it is a drive-by edit outside the authorized scope.                                                                                                                                                                                      |
-| No implicit actions          | Do not claim tests ran. Do not claim commands executed. Do not perform hidden work.                                                                                                                                                                                                                                                                                                               |
+| No implicit actions          | Do not claim tests ran. Do not claim commands executed. Do not perform hidden work. A claim that something works or passes cites output from a command run after the last edit it covers: output from before that edit is stale, so rerun the check or report the claim as unverified.                                                                                                            |
+| Build the lever              | When one change repeats across many places, prove it is complete with a command, not a read-through: a grep for the old form, a validator, a check script. Make the change itself with a script only when it is mechanical. Otherwise edit each place.                                                                                                                                            |
 | Explicit authorization       | Scope is what is necessary to fulfill the request — not only the files the user named. Within that scope, act. Beyond it, do not act: no drive-by fixes, no opportunistic refactors, no edits to adjacent surfaces, however tempting. If unsure whether a surface is necessary for the request, treat it as **out** of scope — do not touch it; flag it and document the call (see Decision log). |
 
 ### Multi-agent scenarios
@@ -145,7 +146,18 @@ Stop and request clarification using the `AskUserQuestion` tool when:
 
 - Context files conflict and the authority hierarchy cannot resolve it
 - Repository state contradicts the instructions
-- A change risks data loss, security issues, or irreversible impact
+- A change risks data loss, security issues, or irreversible impact, which includes every one-way door below
 - A partial failure leaves the system in an inconsistent state
 
 If partial: report what completed, describe the blocker explicitly, and await instruction before continuing. Do not silently roll back completed work.
+
+### One-way doors
+
+Never auto-decided in any mode. Each is a Stop condition unless a human authorized that exact action in advance:
+
+- The irreversible or outward-facing actions listed in the Validation policy
+- Rewriting history others may hold: force-push, rebase, or amend on a shared branch
+- Removing or renaming anything outside callers depend on: a public API, endpoint, CLI flag, config key, or environment variable
+- Changing a stored data format or schema that existing data must still read
+- Deleting files or branches this session did not create
+- Changing a license, rotating or exposing a secret, or anything that spends money

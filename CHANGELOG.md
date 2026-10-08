@@ -71,6 +71,11 @@ through it, so the two share one file format and one index. `explain-codebase` n
 knowledge-base repos of Markdown or text notes as well as code: a component there is a topic area,
 links replace calls, and reading paths replace request flows.
 
+Five adopt-now ideas from `docs/IDEAS.md` land as rules in existing skills. The coding contract
+lists the one-way doors it never auto-decides, requires a success claim to cite output from after
+the last edit, and proves a repeated change complete with a command. `audit-interface` traces every
+control, and `analyze-competitor` backs each coverage rating with evidence from both sides.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -80,8 +85,8 @@ links replace calls, and reading paths replace request flows.
 | `ceh-business-plan`        | 1.0.7   |
 | `ceh-codebase-explanation` | 1.0.2   |
 | `ceh-coding-agent`         | 1.0.2   |
-| `ceh-coding-conduct`       | 2.0.2   |
-| `ceh-competitor-analysis`  | 1.1.3   |
+| `ceh-coding-conduct`       | 2.0.3   |
+| `ceh-competitor-analysis`  | 1.1.4   |
 | `ceh-documentation`        | 1.0.3   |
 | `ceh-every-session`        | 2.1.0   |
 | `ceh-git-datastore`        | 1.0.3   |
@@ -97,7 +102,7 @@ links replace calls, and reading paths replace request flows.
 | `ceh-seo`                  | 1.1.1   |
 | `ceh-testing`              | 1.0.3   |
 | `ceh-ui-design`            | 1.0.2   |
-| `ceh-usability-audit`      | 1.1.1   |
+| `ceh-usability-audit`      | 1.1.2   |
 | `ceh-web-frontend`         | 1.1.2   |
 | `ceh-workflow-builder`     | 1.3.2   |
 | `ceh-workflow-runner`      | 1.0.1   |
@@ -126,9 +131,16 @@ links replace calls, and reading paths replace request flows.
 - `docs/IDEAS.md`: "Sweep on Sonnet, judge on Opus" and "Scope the coding hooks"
 - `docs/ENVIRONMENT_VARIABLES.md`: `NODE_ENV`, read by `ceh-web-frontend`'s `run-e2e.sh`
 - `ceh-every-session:hand-off-session`: save a session to a handoff file and load it back
+- `agent-coding-contract`: a One-way doors list under Stop conditions, and a "Build the lever"
+  core rule
+- `audit-interface`: a trace of every control in step 3, with an observed no-op ranked as a finding
 
 ### Changed
 
+- `agent-coding-contract`: "No implicit actions" requires a success claim to cite output from a
+  command run after the last edit it covers
+- `analyze-competitor`: every coverage rating cites the competitor's path or URL and our component,
+  and a Covered or Partial rating with no component of ours becomes a Gap
 - `usage-limit-handoff` saves its artifact through `hand-off-session` instead of carrying its own
   file format and index steps
 - `explain-codebase` handles knowledge bases: topic areas as components, links as connections,

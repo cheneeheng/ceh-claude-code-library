@@ -52,7 +52,10 @@ point at a glance, and the HTML page carries the same content as the Markdown.
    the competitor's own component types for a repo or by feature for a product. Rate each against our inventory as **Covered** (ours does the same job), **Partial**
    (ours does part of it), **Gap** (we ship nothing for it), or **N/A** (plumbing for the
    competitor's own product, host, or vendor), and name our component. Start from the analyst's
-   ratings and correct them against our inventory.
+   ratings and correct them against our inventory. Every rating rests on evidence from both
+   sides: the competitor component carries its path or URL, and a Covered or Partial row names
+   our component as `ceh-<plugin>:<name>` or a repo path. A Covered or Partial rating with no
+   component of ours to name is a Gap. Rate each row on its own and add no overall score.
 7. **Fill "What we take" from the coverage.** Every Partial or Gap item lands in Adopt now, Build,
    or Skip. One row may take several related items, and its why names each one it covers
    ("Covers `<item>` and `<item>`."). Before writing, check that every Partial or Gap name appears

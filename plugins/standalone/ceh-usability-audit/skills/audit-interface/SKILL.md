@@ -89,6 +89,12 @@ that is clean on all twelve is genuinely rare.
 | **Hover-only**            | An affordance that does not exist on touch or keyboard        | Make it a real, focusable control                                                                          |
 | **Untimed wait**          | A spinner past ~3s with no progress or estimate               | Show step counts ("3 of 7") or an estimate ("about 2 minutes")                                             |
 
+Then **trace every control** on each screen: every button, link, toggle, and menu item, not a
+sample. Use it, name the state it should change, and confirm the change shows where the user is
+looking. Flag a control that changes nothing, one that changes only state the user cannot see, and
+one that is disabled with no stated reason. Where the surface cannot be driven, follow the code
+from handler to state to render instead, and mark those rows unwalked.
+
 ### 4. Apply the naming test
 
 A large share of "confusing" is one bad noun. For every label, flag, function name, and menu item:
@@ -146,6 +152,10 @@ An anti-pattern you spotted that no walker stalled on is a **Hypothesis**, not a
 listed separately, unranked, and does not count against the gate. This will feel too strict on a
 real violation — keep it anyway; the alternative is a report where the loud items are the ones the
 auditor happened to care about.
+
+A control you used in the step 3 trace that visibly changed nothing is observed, not a Hypothesis.
+Rank it **Blocker** when a walked goal needs that control, otherwise **Friction**. A traced row you
+only read in code stays a Hypothesis.
 
 ### 7. Report and loop
 

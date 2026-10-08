@@ -76,7 +76,8 @@ before shipping a screen, command, or public API.
 Branches on surface first — a web UI, a CLI, a library API, and an app screen are probed differently
 — then runs the **five questions** every surface must answer unasked (where am I; what is this for;
 what can I do, and which is _the_ thing; what just happened; how do I get out), a twelve-item
-reject-on-sight anti-pattern sweep, the naming test, and the persona battery.
+reject-on-sight anti-pattern sweep, a trace of every control, the naming test, and the persona
+battery.
 
 ### `audit-error-messages`
 

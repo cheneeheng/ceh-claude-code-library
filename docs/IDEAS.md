@@ -168,6 +168,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** A concrete list of questions that are never auto-decided, giving our "stop on
   irreversible impact" rule teeth.
+- **Status:** built on 2026-10-08 as the contract's One-way doors list.
 
 ### Claim needs fresh evidence
 
@@ -177,6 +178,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Idea:** A success claim cites output from the full verification command, run this turn.
 - **Note:** "Full" means the change's own checks. The full suite is a slow run and still waits for a
   request, per the contract's Validation policy.
+- **Status:** built on 2026-10-08 in the contract's "No implicit actions" rule.
 
 ### Parallel dispatch brief
 
@@ -201,6 +203,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** For bulk or repeated work, write the script or codemod that does or checks it instead
   of editing by hand.
+- **Status:** built on 2026-10-08 as the contract's "Build the lever" rule. The check is always a
+  command, and a script makes the change only when it is mechanical, matching the rule that edits
+  go through Edit.
 
 ### Search before building
 
@@ -477,6 +482,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Follow each button through the state it changes and flag controls that change nothing
   visible.
+- **Status:** built on 2026-10-08 in step 3 of `audit-interface`.
 
 ### On-page SEO metadata
 
@@ -507,6 +513,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-competitor-analysis:compare-competitors`
 - **Effort:** S
 - **Idea:** Score each dimension 1 to 5 against cited evidence, with no composite score.
+- **Status:** half built on 2026-10-08 in `ceh-competitor-analysis:analyze-competitor` step 6:
+  every coverage rating cites evidence on both sides, with no overall score. The 1-to-5 scale in
+  `compare-competitors` is still open.
 
 ## Build
 
