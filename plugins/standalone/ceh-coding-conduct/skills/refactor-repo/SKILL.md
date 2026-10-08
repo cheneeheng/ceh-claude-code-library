@@ -39,6 +39,9 @@ Hunt the same categories as `shrink-diff`, plus the ones only time produces:
   shims, feature flags fully rolled out.
 - **Over-abstraction** — single-implementation interfaces, single-caller wrappers, config for
   constants, layers that only forward.
+- **Information leakage** — one design decision (a file format, a status string, an ordering
+  rule) known by two or more modules, so changing it means editing each. Unlike duplication the
+  code may look different everywhere. The fix moves the decision behind one module.
 - **Retroactive ladder violations** (below).
 
 For each area, also record its **test coverage status** — it decides in Phase 3 what may be

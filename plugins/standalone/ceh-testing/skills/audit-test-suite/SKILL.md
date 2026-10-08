@@ -83,6 +83,11 @@ rg -tts -tjs 'toBeDefined\(\)|toBeTruthy\(\)|not\.toBeNull\(\)|toHaveBeenCalled\
 That last one is the signature defect of generated tests, and grep will not find it — read the
 assertions in any file you did not write by hand.
 
+For each suspect test, try to write its value line: `protects: <behavior>; fails_when: <the
+defect it catches>; why_new: <what no other test covers>`. A test with no nameable `fails_when` is
+worthless, and one whose `why_new` names another test is a duplicate. List both as deletion
+candidates in the report.
+
 ### 2. Delete-the-code check (minutes, no tooling)
 
 Pick the three most important behaviors. For each, break the source deliberately — invert a

@@ -46,6 +46,10 @@ Put it at the **lowest level that reproduces it** — unit if a unit reproduces 
 if the bug lives in the interaction. If it only reproduces end-to-end, say so: that usually means
 the unit boundary is in the wrong place, and it is worth reporting even if you do not move it.
 
+At that level, call the code the way its callers do, through the public function or endpoint, and
+assert a literal expected value. A reproducer aimed at a private helper can go green while the
+caller still sees the bug.
+
 ### 2. Run it and read the failure
 
 It must fail, **and fail with the bug's actual symptom**. A test that errors on a typo, a missing
@@ -82,6 +86,10 @@ Stop there. A bug fix is not a licence to test the whole module.
 ### 6. Ship the test with the fix
 
 Same commit. A bug-fix commit with no test is incomplete — flag it in review.
+
+In the hand-over, give the reproducer and each sibling a value line: `<test> — protects:
+<behavior>; fails_when: <the defect returns>; why_new: <why no existing test caught it>`. The
+reproducer's `why_new` is the gap that let the bug ship.
 
 ### When it used to work — bisect on the reproducer
 

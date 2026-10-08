@@ -41,6 +41,13 @@ Read the previous posts, especially the latest episode in the same series. Then:
   knows. Don't re-tell a story a previous episode owns — call back in a sentence and link.
 - **Leave a thread**: plan what this episode leaves open. Closure instead if the series is
   finished.
+- **Capture the voice once**: if the blog has three or more posts, the target repo's `CLAUDE.md`
+  defines no blog voice, and `.agents_workspace/blog-voice.md` does not exist yet, write that file
+  from the posts: sentence length and rhythm, register, recurring words and phrases, words the
+  author never uses, and how posts open and close, each point backed by a quoted line. On later
+  runs read the file instead of re-deriving it, and offer once to move it into `CLAUDE.md` so it
+  outlives the workspace. The profile governs vocabulary, register, and rhythm. The banned tells
+  in Voice still apply.
 
 ### 2. Read the material and pick the route
 

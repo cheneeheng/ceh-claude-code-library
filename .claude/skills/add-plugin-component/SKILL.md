@@ -224,6 +224,12 @@ in a fresh session with `claude --plugin-dir plugins/standalone/ceh-<plugin>` an
 - Hook: `claude --debug` shows it firing on its event
 - MCP server: `/mcp` lists the server and its tools
 
+When one wording carries the component (a trigger phrase, a rule the model keeps breaking) and the
+user asks to check it, micro-test it before a full `skill-creator` eval: run the same prompt five
+times in fresh `claude -p` sessions with the plugin and five without, and compare. Results that
+vary across the five runs are the signal that the wording is weak, more than one pass or fail.
+Every run is a billed model call, so this waits for a request like any eval.
+
 Report any check you did not run as not run. Do not imply it passed.
 
 ## New plugin

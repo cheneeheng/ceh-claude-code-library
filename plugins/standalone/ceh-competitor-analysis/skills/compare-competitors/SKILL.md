@@ -34,13 +34,18 @@ the Markdown.
    security, or docs, and one column per repo, ours last. Put each repo's components in its cells,
    with `—` where it has nothing. Choose the capability rows from the union of everything every
    repo ships, so that a gap on any side is visible.
-5. **Write the comparison** in the shape under Output.
-6. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" for the
+5. **Score each capability.** Give every repo a 1-to-5 score per capability row, where 1 is
+   nothing and 5 is the strongest seen across the repos, and put the evidence in the same cell:
+   the per-competitor report section, file, or command behind the score. A score with no evidence
+   is `?`, never a guess. Add no total or average: a composite hides the gaps the table exists to
+   show.
+6. **Write the comparison** in the shape under Output.
+7. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" for the
    theme and its review pass, with the same theme file the per-competitor pages link
    (`themes/<theme>.css`, Tidewater unless the user names another). Build `comparison.html` by
    filling `${CLAUDE_PLUGIN_ROOT}/references/report-page.html`, keeping its COMPARISON-ONLY blocks:
    the hero from the positioning line and up to three headline counts, one table panel each for
-   "At a glance" and "Inventory by capability", and one expandable card per repo from "Where each
+   "At a glance", "Inventory by capability", and "Scores", and one expandable card per repo from "Where each
    one is strongest". Link each competitor's `.html` page in the top bar. The page may fold detail
    into cards but adds no claim the Markdown lacks.
 
@@ -85,6 +90,14 @@ Detail per competitor: [<a>.md](<a>.md), [<b>.md](<b>.md). Snapshot date <YYYY-M
 | Capability | <A> | <B> | <ours> |
 | ---------- | --- | --- | ------ |
 
+## Scores
+
+1 to 5 per capability, evidence in the cell, `?` where there is none. No total.
+
+| Capability | <A>                  | <B> | <ours> |
+| ---------- | -------------------- | --- | ------ |
+| <row>      | 4 — <a>.md Inventory |     |        |
+
 ## Where each one is strongest
 
 | Repo | Strongest at | Weakest at |
@@ -97,4 +110,4 @@ Detail per competitor: [<a>.md](<a>.md), [<b>.md](<b>.md). Snapshot date <YYYY-M
 
 ## Hands off to
 
-- Invoke the Skill tool with skill="ceh-ui-design:design-ui" to render the HTML page (step 6).
+- Invoke the Skill tool with skill="ceh-ui-design:design-ui" to render the HTML page (step 7).

@@ -28,6 +28,11 @@ Before writing any code, stop at the first rung that holds:
 The ladder is a reflex, not a research project. Two rungs work → take the higher
 one and move on. The first lazy solution that works is the right one.
 
+Rungs 4 and 6 fail most often because nobody looked. Before writing custom code, spend one search:
+grep the repo for a helper that already does it, read the dependency manifest for an installed
+package that does, and check the session's skill list for one that covers the task. Search a
+package registry only when the user has allowed a new dependency.
+
 ## Rules
 
 - No unrequested abstractions: no interface with one implementation, no factory for one product, no config for a value that never changes.
