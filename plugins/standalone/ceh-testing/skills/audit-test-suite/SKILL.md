@@ -140,6 +140,15 @@ Any test that passes alone and fails in a suite (or vice versa) is sharing state
 globals, a database row nobody rolled back, a patched clock, a cached singleton, `Date.now()`,
 an unseeded RNG. Fix the sharing — never fix it by pinning the order or adding a sleep.
 
+When the victim is known but the polluter is not, bisect for it. Run the victim after the first
+half of the tests that precede it, then after whichever half reproduces the failure, until one
+test is left. For a test that leaves stray files or rows rather than a failure, run each test
+alone and check what exists afterwards (`git status --porcelain`, a row count) instead.
+
+```bash
+pytest tests/a.py tests/b.py tests/victim.py::test_x -p no:randomly   # fails? polluter is in a or b
+```
+
 A flaky test is worse than no test: it trains everyone to re-run until green, which is how a real
 failure gets ignored.
 

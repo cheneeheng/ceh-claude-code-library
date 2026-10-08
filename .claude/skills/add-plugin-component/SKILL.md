@@ -203,7 +203,8 @@ Same gate CI runs via `.github/workflows/validate.yml`. It checks:
 - frontmatter: `name` format and match, `description` present, `>-`, ≤ 600 chars;
   `compatibility` ≤ 500 chars; only documented keys; no plugin-agent keys Claude Code ignores;
   `disable-model-invocation`, `user-invocable`, and `license` stated on every skill
-- `docs/PLUGIN_VERSIONS.md` matches every `plugin.json`; cross-cutting plugins depend only on
+- `docs/PLUGIN_VERSIONS.md` matches every `plugin.json`, and so does each plugin's newest
+  `CHANGELOG.md` Plugin versions row, under the date `PLUGIN_VERSIONS.md` gives it; cross-cutting plugins depend only on
   cross-cutting plugins; a skill a hook names is `user-invocable: false`
 - no `TEMPLATE-GUIDANCE` comment left from a template
 - `references/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references}/...`, and `${CLAUDE_SKILL_DIR}/...` mentions

@@ -36,6 +36,22 @@ requested, name the command and what it would reveal, and state what stays unver
 
 ## Procedure
 
+### 0. Name the fact the change's safety rests on
+
+Before the steps below, write one sentence: the fact that, if false, makes this refactor break
+something ("`total()` is the only caller of `round_cents()`"). Then prove it at the highest rung
+that is cheap, and say which rung you reached:
+
+| Rung | Evidence                                                 |
+| ---- | -------------------------------------------------------- |
+| 1    | Said so                                                  |
+| 2    | Pointed at the line that makes it true                   |
+| 3    | Walked the failure: traced what happens if it were false |
+| 4    | Ran code that shows it                                   |
+| 5    | Reproduced it in the running app                         |
+
+Rungs 1 and 2 are claims, not proof. Steps 1 to 4 below are how you reach rung 4.
+
 ### 1. Check the baseline before touching anything
 
 ```bash

@@ -32,6 +32,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Sort findings into Act On, Consider, Noted, and Dismissed, with at most 5 Act On items,
   and keep Dismissed with reasons so the user can override it.
+- **Status:** built on 2026-10-08 in reduced form: the `[blocking]` / `[advisory]` / `[question]`
+  prefixes already sort findings, so `code-review` caps `[blocking]` at five and adds a Dismissed
+  list rather than a second set of buckets.
 
 ### Quote or suppress
 
@@ -48,6 +51,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-git-workflow:code-review` and `pull-request` self-review
 - **Effort:** S
 - **Idea:** Compare the stated intent with the actual diff before judging code quality.
+- **Status:** built on 2026-10-08: step 1 of `code-review`, and a self-review bullet in
+  `pull-request`.
 
 ### No prejudging the reviewer
 
@@ -73,6 +78,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-git-workflow:code-review`
 - **Effort:** S
 - **Idea:** Swallowed errors, stale comments, and weak types as named review lenses.
+- **Status:** built on 2026-10-08 as checks inside `code-review`'s Correctness and Design steps.
 
 ### Patch-id re-check
 
@@ -81,6 +87,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Record the `git patch-id` a review or test run saw, and compare it again before landing.
   A rebase can invalidate a review without touching a check.
+- **Status:** built on 2026-10-08 in `pull-request`'s pre-merge gate.
 
 ### PR babysit loop
 
@@ -97,6 +104,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Lead with the smallest visual, show before and after, and name the door (one-way or
   two-way) and the blast radius.
+- **Status:** built on 2026-10-08 in `pull-request`'s body template: a before/after line under What
+  and a `## Risk` section.
 
 ### Finish-branch menu
 
@@ -114,6 +123,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-git-workflow:pull-request` (post-merge cleanup)
 - **Effort:** S
 - **Idea:** Prune merged or abandoned git worktrees, asking before any deletion.
+- **Status:** built on 2026-10-08 in `pull-request`'s Merge cleanup step. It removes a worktree the
+  session created without asking, and asks before removing any other.
 
 ### Docs drift check
 
@@ -122,6 +133,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** After a change lands, compare what the docs claim with what the diff shipped, not only
   whether the README mentions the feature.
+- **Status:** built on 2026-10-08 as step 4 of `update-readme`, scoped to the README.
 
 ### Certainty ladder
 
@@ -130,6 +142,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Name the one fact a change's safety rests on and prove it at the highest rung that is
   cheap: said so, pointed at a line, walked the failure, ran code, reproduced in the app.
+- **Status:** built on 2026-10-08 as step 0 of `verify-behavior-preserved`.
 
 ### Test value line
 
@@ -160,6 +173,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-testing:audit-test-suite`
 - **Effort:** S
 - **Idea:** Find which test leaves stray files or state by bisecting the suite.
+- **Status:** built on 2026-10-08 in step 4 of `audit-test-suite`, as prose and one command, with
+  no script.
 
 ### One-way-door list
 
@@ -168,6 +183,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** A concrete list of questions that are never auto-decided, giving our "stop on
   irreversible impact" rule teeth.
+- **Status:** built on 2026-10-08 as the contract's One-way doors list.
 
 ### Claim needs fresh evidence
 
@@ -177,6 +193,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Idea:** A success claim cites output from the full verification command, run this turn.
 - **Note:** "Full" means the change's own checks. The full suite is a slow run and still waits for a
   request, per the contract's Validation policy.
+- **Status:** built on 2026-10-08 in the contract's "No implicit actions" rule.
 
 ### Parallel dispatch brief
 
@@ -185,6 +202,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Our contract already says to fan out independent subtasks. Add what each subagent prompt
   must carry: scope, inputs as paths, expected return.
+- **Status:** built on 2026-10-08 in the contract's Task decomposition, which also requires the
+  decisions that bind the subagent.
 
 ### Infer house style first
 
@@ -201,6 +220,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** For bulk or repeated work, write the script or codemod that does or checks it instead
   of editing by hand.
+- **Status:** built on 2026-10-08 as the contract's "Build the lever" rule. The check is always a
+  command, and a script makes the change only when it is mechanical, matching the rule that edits
+  go through Edit.
 
 ### Search before building
 
@@ -247,6 +269,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Add the moment "wait, what?": re-pitch the last message in plain words before escalating
   the explanation.
+- **Status:** built on 2026-10-08 in `explain-until-understood`'s "When it did not land". The
+  description has no room under the 600-character cap, so the moment lives in the body only.
 
 ### Evidence label per claim
 
@@ -414,6 +438,10 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** We check that `plugin.json` and `marketplace.json` match, not that an old version
   string survives in a README or `docs/PLUGIN_VERSIONS.md`.
+- **Status:** built on 2026-10-08 against `CHANGELOG.md`: each plugin's newest Plugin versions row
+  must match `plugin.json`, under the date `docs/PLUGIN_VERSIONS.md` gives it. The validator
+  already checked `docs/PLUGIN_VERSIONS.md`, and README version mentions are deliberate history
+  ("until 1.1.0"), so they stay unchecked.
 
 ### Repo hygiene checks
 
@@ -477,6 +505,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Follow each button through the state it changes and flag controls that change nothing
   visible.
+- **Status:** built on 2026-10-08 in step 3 of `audit-interface`.
 
 ### On-page SEO metadata
 
@@ -507,6 +536,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-competitor-analysis:compare-competitors`
 - **Effort:** S
 - **Idea:** Score each dimension 1 to 5 against cited evidence, with no composite score.
+- **Status:** half built on 2026-10-08 in `ceh-competitor-analysis:analyze-competitor` step 6:
+  every coverage rating cites evidence on both sides, with no overall score. The 1-to-5 scale in
+  `compare-competitors` is still open.
 
 ## Build
 

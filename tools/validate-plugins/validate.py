@@ -26,7 +26,9 @@ Checks:
                bundle depends on a bundle.
   invocations- every `Invoke the Skill tool with skill="X"` resolves, is in-plugin or in a
                declared dependency, and does not set `disable-model-invocation: true`.
-  repo-rules - docs/PLUGIN_VERSIONS.md matches every plugin.json version; no marketplace entry
+  repo-rules - docs/PLUGIN_VERSIONS.md matches every plugin.json version; each plugin's newest
+               CHANGELOG.md Plugin versions row matches it too, under the section
+               PLUGIN_VERSIONS.md dates it to; no marketplace entry
                declares dependencies; a cross-cutting plugin (CLAUDE.md tier table) depends only
                on cross-cutting plugins; a skill a hook script names sets user-invocable: false.
   scripts    - *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
@@ -543,6 +545,36 @@ def check_repo_rules(versions: dict[str, str]) -> None:
             )
     for name in rows.keys() - versions.keys():
         fail(rel(pv_path), f"{name}: row for a plugin that does not exist")
+
+    # The newest CHANGELOG.md `### Plugin versions` row for a plugin shows its current version,
+    # and docs/PLUGIN_VERSIONS.md dates it to that section. Catches a bump that missed the log.
+    dates = dict(
+        re.findall(
+            r"^\| `(ceh-[a-z0-9-]+)` +\| [^ |]+ +\| `([\d-]+)`",
+            pv_path.read_text(encoding="utf-8"),
+            re.MULTILINE,
+        )
+    )
+    newest: dict[str, tuple[str, str]] = {}
+    section, in_table = None, False
+    for line in (REPO / "CHANGELOG.md").read_text(encoding="utf-8").splitlines():
+        if m := re.match(r"^## (\d{4}-\d{2}-\d{2})", line):
+            section, in_table = m.group(1), False
+        elif line.startswith("### "):
+            in_table = line == "### Plugin versions"
+        elif in_table and (m := re.match(r"^\| `(ceh-[a-z0-9-]+)` +\| ([^ |]+)", line)):
+            newest.setdefault(m.group(1), (m.group(2), section))
+    for name, (version, section) in newest.items():
+        if name in versions and version != versions[name]:
+            fail(
+                "CHANGELOG.md",
+                f"{name}: newest row ({section}) says {version}, plugin.json says {versions[name]}",
+            )
+        if name in dates and dates[name] != section:
+            fail(
+                rel(pv_path),
+                f"{name}: dated {dates[name]}, newest CHANGELOG.md row is under {section}",
+            )
 
     # Dependencies live in plugin.json only, never in a marketplace entry.
     mp_path = REPO / ".claude-plugin/marketplace.json"

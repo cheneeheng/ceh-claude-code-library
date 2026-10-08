@@ -17,25 +17,25 @@
     {
       "name": "ceh-coding-conduct",
       "source": "./plugins/standalone/ceh-coding-conduct",
-      "version": "2.0.2",
+      "version": "2.0.3",
       "description": "CEH coding conduct: how an agent behaves while it codes — the behavior contract and five-step workflow, write-less-code minimalism, and retroactive refactoring of a branch or a whole repo."
     },
     {
       "name": "ceh-codebase-explanation",
       "source": "./plugins/standalone/ceh-codebase-explanation",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, and the living architecture document."
     },
     {
       "name": "ceh-git-workflow",
       "source": "./plugins/standalone/ceh-git-workflow",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, and code review. Stack-agnostic."
     },
     {
       "name": "ceh-testing",
       "source": "./plugins/standalone/ceh-testing",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "description": "CEH testing techniques: stack-agnostic test design and verification moments — reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, and close the risk gaps functional tests structurally miss."
     },
     {
@@ -95,7 +95,7 @@
     {
       "name": "ceh-usability-audit",
       "source": "./plugins/standalone/ceh-usability-audit",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "description": "CEH usability audit: measure whether a non-expert can actually use what you built — cold zero-context walkthroughs by persona-constrained subagents that report where they stalled and how many steps each milestone cost against a budget set before the walk, a five-question interface audit across web UI/CLI/library/app surfaces, a three-part rewrite pass over every user-reachable error message, and a plain-language pass over labels and copy. Findings are ranked by observed outcome, not by how bad they look."
     },
     {
@@ -125,7 +125,7 @@
     {
       "name": "ceh-competitor-analysis",
       "source": "./plugins/standalone/ceh-competitor-analysis",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "description": "CEH competitor analysis: study a competitor's repo or product and learn from it — one evidence-anchored report per competitor (breakdown, full inventory, the \"oh wow\" mechanisms worth learning from, what to incorporate and where it lands in our work), then a side-by-side comparison with our own work, each as Markdown plus a styled HTML page. Repos are shallow-cloned and read as untrusted data, never run."
     },
     {

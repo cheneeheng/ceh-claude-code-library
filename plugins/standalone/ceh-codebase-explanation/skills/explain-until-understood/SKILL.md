@@ -173,8 +173,11 @@ asked for an explanation. Pasted output is evidence, not narration.
 
 ### When it did not land
 
-First ask _what kind_ of miss it was, because two of the three are not ladder moves:
+First ask _what kind_ of miss it was, because three of the four are not ladder moves:
 
+- **"Wait, what?" with nothing specific.** They lost the thread of your last message, not the
+  subject. Re-pitch it: its one point in two or three plain sentences, no new terms, then ask
+  whether that is the part that broke. If the re-pitch misses too, it was one of the kinds below.
 - **A word you never defined.** Define it and say the same thing again at the same level. This is
   not an attempt on the ladder — you owed them the definition and the explanation was otherwise
   fine.

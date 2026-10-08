@@ -79,9 +79,15 @@ Pick the path from the request, then run only that path:
 
    ```bash
    git checkout main && git pull origin main
+   git worktree list                          # a worktree on the branch blocks `branch -d`
    git branch -d <branch-name>                # lowercase: refuses an unmerged branch
    git fetch --prune
+   git worktree prune                         # drops records of worktrees already deleted
    ```
+
+   Remove a worktree on the merged branch with `git worktree remove <path>` before `branch -d`.
+   Remove one this session created without asking. For any other, list it with its branch and
+   last commit and ask first: it may hold uncommitted work.
 
 4. [Report the remote branch](#reporting-the-remote-branch).
 
@@ -113,6 +119,9 @@ chars). It seeds the merge commit subject.
 
 <One sentence: the change as an outcome for the reader, not a list of files.>
 
+<The smallest before and after that shows it: command output, a screenshot, or a few diff lines.
+Skip when there is nothing to show.>
+
 ## Why
 
 <The problem or request that motivated it. Link the issue: Closes #NNN.>
@@ -120,6 +129,11 @@ chars). It seeds the merge commit subject.
 ## How
 
 <Only the non-obvious decisions and the alternatives rejected. Skip if the diff explains itself.>
+
+## Risk
+
+<Two-way door (reverting the merge commit undoes it) or one-way (a migration, a published API,
+rewritten or deleted data). Then the blast radius: what breaks, and for whom, if this is wrong.>
 
 ## Testing
 
@@ -159,6 +173,8 @@ code.
 ### Author self-review
 
 - Read the full diff (`git diff main...HEAD`) before requesting review.
+- Every file in the diff serves the PR's What. Anything else moves to its own PR or gets named in
+  the body.
 - No commented-out code, debug logs, or `TODO` without a linked issue.
 - Rebased on latest `main`, scoped to one concern.
 
@@ -193,6 +209,18 @@ has to deploy and roll back independently of the app code.
 Do not merge until all hold: CI green, required approvals met, rebased on latest `main`, history
 clean (fixup/WIP/debug commits squashed or dropped). With no PR, the gate is whatever signals
 exist: rebased, clean history, local checks green.
+
+A rebase or conflict fix after review can change what was reviewed without touching a check. When
+a review or local test run finishes, record the change's patch id, and compare it again right
+before merging:
+
+```bash
+git diff origin/main...HEAD | git patch-id --stable   # first field is the id
+```
+
+The same id means the reviewed change is what lands, whatever the commit SHAs. A different id
+means the content moved: re-request review, or re-read the diff and rerun the local checks with no
+reviewer.
 
 Read CI with `gh run`, anchored to the commit, never the branch:
 

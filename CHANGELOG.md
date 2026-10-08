@@ -71,6 +71,17 @@ through it, so the two share one file format and one index. `explain-codebase` n
 knowledge-base repos of Markdown or text notes as well as code: a component there is a topic area,
 links replace calls, and reading paths replace request flows.
 
+Five adopt-now ideas from `docs/IDEAS.md` land as rules in existing skills. The coding contract
+lists the one-way doors it never auto-decides, requires a success claim to cite output from after
+the last edit, and proves a repeated change complete with a command. `audit-interface` traces every
+control, and `analyze-competitor` backs each coverage rating with evidence from both sides. Five
+more tighten `ceh-git-workflow`: `code-review` checks scope drift first, names three more lenses,
+caps blocking comments at five, and lists what it dismissed. `pull-request` re-checks the patch id
+before merging, and `update-readme` hunts the claims a change made false. The last seven finish
+the shortlist: a PR body that shows a before and after and names its risk, worktree cleanup after
+a merge, a certainty ladder for refactors, a test-polluter bisect, a brief for every subagent, a
+plain re-pitch for "wait, what?", and a validator check that the changelog carries every bump.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -78,14 +89,14 @@ links replace calls, and reading paths replace request flows.
 | `ceh-ag-ui`                | 1.1.1   |
 | `ceh-blog`                 | 1.0.3   |
 | `ceh-business-plan`        | 1.0.7   |
-| `ceh-codebase-explanation` | 1.0.2   |
+| `ceh-codebase-explanation` | 1.0.3   |
 | `ceh-coding-agent`         | 1.0.2   |
-| `ceh-coding-conduct`       | 2.0.2   |
-| `ceh-competitor-analysis`  | 1.1.3   |
+| `ceh-coding-conduct`       | 2.0.3   |
+| `ceh-competitor-analysis`  | 1.1.4   |
 | `ceh-documentation`        | 1.0.3   |
 | `ceh-every-session`        | 2.1.0   |
 | `ceh-git-datastore`        | 1.0.3   |
-| `ceh-git-workflow`         | 1.0.2   |
+| `ceh-git-workflow`         | 1.0.3   |
 | `ceh-plan-build-review`    | 1.1.1   |
 | `ceh-python-library`       | 1.0.1   |
 | `ceh-python-service`       | 1.0.1   |
@@ -95,9 +106,9 @@ links replace calls, and reading paths replace request flows.
 | `ceh-scenario-service`     | 1.1.0   |
 | `ceh-scenario-webapp`      | 1.1.0   |
 | `ceh-seo`                  | 1.1.1   |
-| `ceh-testing`              | 1.0.3   |
+| `ceh-testing`              | 1.0.4   |
 | `ceh-ui-design`            | 1.0.2   |
-| `ceh-usability-audit`      | 1.1.1   |
+| `ceh-usability-audit`      | 1.1.2   |
 | `ceh-web-frontend`         | 1.1.2   |
 | `ceh-workflow-builder`     | 1.3.2   |
 | `ceh-workflow-runner`      | 1.0.1   |
@@ -126,9 +137,30 @@ links replace calls, and reading paths replace request flows.
 - `docs/IDEAS.md`: "Sweep on Sonnet, judge on Opus" and "Scope the coding hooks"
 - `docs/ENVIRONMENT_VARIABLES.md`: `NODE_ENV`, read by `ceh-web-frontend`'s `run-e2e.sh`
 - `ceh-every-session:hand-off-session`: save a session to a handoff file and load it back
+- `agent-coding-contract`: a One-way doors list under Stop conditions, and a "Build the lever"
+  core rule
+- `audit-interface`: a trace of every control in step 3, with an observed no-op ranked as a finding
+- `code-review`: a scope-drift step before the review order, a Dismissed list in the summary, and
+  swallowed-error, stale-comment, and weak-type checks in the order
+- `pull-request`: a patch-id re-check in the pre-merge gate, and a scope check in self-review
+- `update-readme`: step 4, grep the README for every name the diff removed or renamed
+- `pull-request`: a before/after line and a `## Risk` section (door and blast radius) in the PR
+  body, and worktree cleanup after merge that asks before removing a worktree it did not create
+- `verify-behavior-preserved`: step 0, name the fact the change's safety rests on and the rung of
+  evidence reached
+- `audit-test-suite`: bisecting for the test that pollutes another
+- `agent-coding-contract`: what every subagent prompt must carry
+- `explain-until-understood`: a plain re-pitch for "wait, what?" before the ladder
+- `validate.py`: each plugin's newest `CHANGELOG.md` Plugin versions row matches `plugin.json`, and
+  `docs/PLUGIN_VERSIONS.md` dates it to that section
 
 ### Changed
 
+- `agent-coding-contract`: "No implicit actions" requires a success claim to cite output from a
+  command run after the last edit it covers
+- `analyze-competitor`: every coverage rating cites the competitor's path or URL and our component,
+  and a Covered or Partial rating with no component of ours becomes a Gap
+- `code-review`: at most five `[blocking]` comments, the rest deferred to a rework note
 - `usage-limit-handoff` saves its artifact through `hand-off-session` instead of carrying its own
   file format and index steps
 - `explain-codebase` handles knowledge bases: topic areas as components, links as connections,
