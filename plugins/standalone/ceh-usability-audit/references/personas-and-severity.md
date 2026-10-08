@@ -1,6 +1,6 @@
 # Personas and severity
 
-Shared by `walk-first-run` and `audit-interface`. Both dispatch walkers under these personas and
+Shared by `simulate-newcomer-first-run` and `audit-interface`. Both dispatch walkers under these personas and
 rank what the walkers report on this scale.
 
 ## The personas

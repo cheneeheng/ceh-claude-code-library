@@ -10,7 +10,7 @@ description: >-
   and sequences it: the reference goes to write-api-reference, concept pages to write-concept-docs,
   guides to write-guides-and-runbooks. Not for one guide or runbook alone (use
   write-guides-and-runbooks), a README refresh (use ceh-git-workflow:update-readme), or a maintainer
-  architecture doc (use ceh-coding-agent:document-architecture).
+  architecture doc (use ceh-codebase-explanation:document-architecture).
 argument-hint: "[project-path]"
 disable-model-invocation: false
 user-invocable: true

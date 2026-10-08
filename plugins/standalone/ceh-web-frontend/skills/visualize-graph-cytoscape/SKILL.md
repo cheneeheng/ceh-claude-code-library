@@ -11,7 +11,7 @@ description: >-
   JSON, the stylesheet, tap-to-highlight interactions, readable zoom defaults, and when a
   node-link diagram is the wrong answer. Prefer over hand-rolled SVG or a D3 force layout for any
   graph past a handful of nodes. Not for a fixed diagram that never changes (Mermaid), charts, or
-  architecture diagrams and decision records (use ceh-coding-agent:document-architecture).
+  architecture diagrams and decision records (use ceh-codebase-explanation:document-architecture).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

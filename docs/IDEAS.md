@@ -162,7 +162,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### One-way-door list
 
 - **Source:** gstack one-way-door registry
-- **Where:** `ceh-coding-agent:agent-coding-contract`, Stop conditions
+- **Where:** `ceh-coding-conduct:agent-coding-contract`, Stop conditions
 - **Effort:** S
 - **Idea:** A concrete list of questions that are never auto-decided, giving our "stop on
   irreversible impact" rule teeth.
@@ -170,7 +170,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Claim needs fresh evidence
 
 - **Source:** superpowers `verification-before-completion`
-- **Where:** `ceh-coding-agent:agent-coding-contract`, No implicit actions
+- **Where:** `ceh-coding-conduct:agent-coding-contract`, No implicit actions
 - **Effort:** S
 - **Idea:** A success claim cites output from the full verification command, run this turn.
 - **Note:** "Full" means the change's own checks. The full suite is a slow run and still waits for a
@@ -179,7 +179,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Parallel dispatch brief
 
 - **Source:** superpowers `dispatching-parallel-agents`
-- **Where:** `ceh-coding-agent:agent-coding-contract`, Task decomposition
+- **Where:** `ceh-coding-conduct:agent-coding-contract`, Task decomposition
 - **Effort:** S
 - **Idea:** Our contract already says to fan out independent subtasks. Add what each subagent prompt
   must carry: scope, inputs as paths, expected return.
@@ -187,7 +187,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Infer house style first
 
 - **Source:** ECC `inherit-legacy-style`, `coding-standards`
-- **Where:** `ceh-coding-agent:agent-coding-contract`
+- **Where:** `ceh-coding-conduct:agent-coding-contract`
 - **Effort:** S
 - **Idea:** Before editing legacy code, name the conventions it actually uses. Our contract says
   "follow repo patterns" without saying how to find them.
@@ -195,7 +195,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Build the lever
 
 - **Source:** pstack `principle-build-the-lever`
-- **Where:** `ceh-coding-agent:agent-coding-contract`
+- **Where:** `ceh-coding-conduct:agent-coding-contract`
 - **Effort:** S
 - **Idea:** For bulk or repeated work, write the script or codemod that does or checks it instead
   of editing by hand.
@@ -203,7 +203,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Search before building
 
 - **Source:** ECC `search-first`
-- **Where:** `ceh-coding-agent:write-less-code`
+- **Where:** `ceh-coding-conduct:write-less-code`
 - **Effort:** S
 - **Idea:** Before custom code, search package registries and installed skills. Extends rungs 2
   to 4.
@@ -212,14 +212,14 @@ Effort: S is under a day, M is a few days, L is longer.
 
 - **Source:** pstack principles boundary-discipline, minimize-reader-load,
   migrate-callers-then-delete-legacy-apis, redesign-from-first-principles
-- **Where:** `ceh-coding-agent:refactor-repo`, `write-less-code`
+- **Where:** `ceh-coding-conduct:refactor-repo`, `write-less-code`
 - **Effort:** S
 - **Idea:** Add these as rules inside our existing skills rather than as skills of their own.
 
 ### Design red-flag screen
 
 - **Source:** pstack `architect`
-- **Where:** `ceh-coding-agent:refactor-repo` or `document-architecture`
+- **Where:** `ceh-coding-conduct:refactor-repo` or `document-architecture`
 - **Effort:** S
 - **Idea:** Screen a design for Ousterhout's red flags: shallow module, information leakage,
   pass-through method.
@@ -227,21 +227,21 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Rationale from history
 
 - **Source:** pstack `why`, `investigation` playbook
-- **Where:** `ceh-coding-agent:explain-codebase`, `explain-until-understood`
+- **Where:** `ceh-codebase-explanation:explain-codebase`, `explain-until-understood`
 - **Effort:** S
 - **Idea:** Answer "why is it like this" from git log, blame, and PRs, with every claim cited.
 
 ### Mine the implied spec
 
 - **Source:** ECC `spec-miner`
-- **Where:** `ceh-coding-agent:explain-codebase`
+- **Where:** `ceh-codebase-explanation:explain-codebase`
 - **Effort:** S
 - **Idea:** Extract the behavior the code actually promises, as a spec, before changing it.
 
 ### Plain-English re-pitch
 
 - **Source:** mattpocock `wait-what`
-- **Where:** `ceh-coding-agent:explain-until-understood`
+- **Where:** `ceh-codebase-explanation:explain-until-understood`
 - **Effort:** S
 - **Idea:** Add the moment "wait, what?": re-pitch the last message in plain words before escalating
   the explanation.
@@ -249,14 +249,14 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Evidence label per claim
 
 - **Source:** pstack `poteto-mode`
-- **Where:** `ceh-coding-agent` output style
+- **Where:** `ceh-coding-conduct` output style
 - **Effort:** S
 - **Idea:** Every claim carries measured, inferred, or guess in the same sentence.
 
 ### Comment audit
 
 - **Source:** pstack `no-comments`, `comment-sicko` agent
-- **Where:** new read-only agent in `ceh-coding-agent`
+- **Where:** new read-only agent in `ceh-coding-conduct`
 - **Effort:** S
 - **Idea:** Flag comments that restate the code or excuse a workaround, and offer to encode real
   constraints in types or checks instead.
@@ -264,7 +264,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Protect lint configs
 
 - **Source:** ECC `config-protection`
-- **Where:** new `PreToolUse` hook in `ceh-coding-agent`
+- **Where:** new `PreToolUse` hook in `ceh-coding-conduct`
 - **Effort:** S
 - **Idea:** Block edits to an existing linter or formatter config so the agent fixes the code
   instead. Stack-agnostic.
@@ -280,7 +280,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Denial dampening
 
 - **Source:** ECC `gateguard-fact-force`
-- **Where:** `ceh-core` bulk-read guards, `ceh-git-workflow` branch-guard
+- **Where:** `ceh-every-session` bulk-read guards, `ceh-git-workflow` branch-guard
 - **Effort:** S
 - **Idea:** Full deny text for the first three denials, then one line with an ordinal, and every
   deny names the env var that disables it. Identical deny blocks push the model into repetition
@@ -299,7 +299,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Source:** gstack `context-save`, `context-restore`; pstack `recall`, `session-pickup` and
   `pause-safely` playbooks; ECC session commands, `session:start`, `stop:session-end`,
   `pre:compact`, `suggest-compact`, `strategic-compact`, `token-budget-advisor`
-- **Where:** `ceh-core:usage-limit-handoff`
+- **Where:** `ceh-every-session:usage-limit-handoff`
 - **Effort:** S
 - **Idea:** The handoff writes a resume point only near the usage limit. Let it also fire on "save
   where we are" and "pick this up".
@@ -307,7 +307,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Phase-boundary tree
 
 - **Source:** mattpocock `handoff`
-- **Where:** `ceh-core:usage-limit-handoff`
+- **Where:** `ceh-every-session:usage-limit-handoff`
 - **Effort:** S
 - **Idea:** At a phase change, pick continue, clear, handoff, subagent, or compact, first yes wins.
   Our handoff fires only near the usage limit.
@@ -315,10 +315,10 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Questionnaire for others
 
 - **Source:** mattpocock `to-questionnaire`
-- **Where:** new skill in `ceh-core`
+- **Where:** new skill in `ceh-every-session`
 - **Effort:** S
 - **Idea:** Turn open questions into an async questionnaire someone else answers. Holds for any
-  Claude Code use, so it passes the `ceh-core` test.
+  Claude Code use, so it passes the `ceh-every-session` test.
 
 ### `skip: <reason>` rows
 
@@ -418,8 +418,8 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Hook fixture tests
 
 - **Source:** ECC `tests/hooks/*.test.js`
-- **Where:** `tools/validate-plugins/validate.py`, the hook scripts of `ceh-core`,
-  `ceh-coding-agent`, and `ceh-git-workflow`
+- **Where:** `tools/validate-plugins/validate.py`, the hook scripts of `ceh-every-session`,
+  `ceh-coding-conduct`, and `ceh-git-workflow`
 - **Effort:** S
 - **Idea:** Pipe a hand-built tool call as JSON into each hook script and assert the exit code and
   deny text, so a broken guard fails CI. No model call, same result every run. ECC's
@@ -537,7 +537,7 @@ Effort: S is under a day, M is a few days, L is longer.
 
 - **Source:** superpowers `diagnosing-superpowers`; ECC `conversation-analyzer`, `agent-evaluator`,
   `harness-optimizer`, `loop-operator`, `gan-*` agents
-- **Where:** new skill, `ceh-core` candidate
+- **Where:** new skill, `ceh-every-session` candidate
 - **Effort:** L
 - **Idea:** Transcript forensics by parallel analysts, every finding citing `path:line`, then a scrub
   and scrub-audit loop before sharing. Holds for any Claude Code use.
@@ -587,16 +587,16 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Session retro
 
 - **Source:** mattpocock `retro`
-- **Where:** new skill in `ceh-coding-agent`
+- **Where:** new skill in `ceh-coding-conduct`
 - **Effort:** M
 - **Idea:** A mechanical violation becomes a lint rule, hook, or CI job, and prose standards stay
-  for judgement calls. Assumes a repo, so not `ceh-core`.
+  for judgement calls. Assumes a repo, so not `ceh-every-session`.
 
 ### Verify gate
 
 - **Source:** gstack `bin/gstack-verify-gate`; ECC `verification-loop`, `stop:format-typecheck`,
   `stop:check-console-log`, the quality commands
-- **Where:** `ceh-coding-agent` Stop hook
+- **Where:** `ceh-coding-conduct` Stop hook
 - **Effort:** M
 - **Idea:** A Stop hook that runs a trusted, sha256-pinned check before the turn ends, so a red
   check keeps the turn open. Each repo declares and pins its own check, and format and typecheck
@@ -605,7 +605,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Fact-forcing edit gate
 
 - **Source:** ECC `gateguard`, `safety-guard`, both gateguard hooks
-- **Where:** new `PreToolUse` hook in `ceh-coding-agent`
+- **Where:** new `PreToolUse` hook in `ceh-coding-conduct`
 - **Effort:** M
 - **Idea:** Deny the first edit of each file once, with a demand for importers, the public API
   touched, and the user's instruction verbatim. Opt-in, subagents exempt.
@@ -618,7 +618,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Scope-lock guard
 
 - **Source:** gstack `freeze`, `unfreeze`, `guard`
-- **Where:** new skill and hook in `ceh-coding-agent`
+- **Where:** new skill and hook in `ceh-coding-conduct`
 - **Effort:** M
 - **Idea:** Deny edits outside one folder while the skill is active, failing closed.
 - **Status:** rejected. Claude Code's built-in auto mode is good enough.
@@ -634,7 +634,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### `/correct` enforcement ladder
 
 - **Source:** pstack `correct`, `principle-encode-lessons-in-structure`
-- **Where:** new skill in `ceh-coding-agent`, and `.claude/skills/model-audit` for this repo
+- **Where:** new skill in `ceh-coding-conduct`, and `.claude/skills/model-audit` for this repo
 - **Effort:** M
 - **Idea:** Fix a repeated mistake at the highest level that works: architecture, then types, then
   a lint, then a test, docs last. Prove each new check fails on a real past mistake.
@@ -643,7 +643,7 @@ Effort: S is under a day, M is a few days, L is longer.
 
 - **Source:** pstack `architect`; principles foundational-thinking, model-the-domain,
   type-system-discipline, make-operations-idempotent, separate-before-serializing-shared-state
-- **Where:** new skill in `ceh-coding-agent`
+- **Where:** new skill in `ceh-coding-conduct`
 - **Effort:** M
 - **Idea:** Sketch types, signatures, and module boundaries before code, then check retries and
   shared state.
@@ -651,7 +651,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Architecture deepening report
 
 - **Source:** mattpocock `improve-codebase-architecture`, `codebase-design`
-- **Where:** `ceh-coding-agent:refactor-repo`
+- **Where:** `ceh-coding-conduct:refactor-repo`
 - **Effort:** M
 - **Idea:** Report shallow modules worth deepening, then interview on one. Phrase it as a moment,
   not a reference topic.
@@ -660,7 +660,7 @@ Effort: S is under a day, M is a few days, L is longer.
 
 - **Source:** mattpocock `grill-with-docs`, `domain-modeling`, `GLOSSARY.md`, the ADRs; ECC
   `architecture-decision-records`, `hexagonal-architecture`
-- **Where:** new sibling of `ceh-coding-agent:document-architecture`
+- **Where:** new sibling of `ceh-codebase-explanation:document-architecture`
 - **Effort:** M
 - **Idea:** Challenge terms into a committed glossary, and record a decision only when it passes the
   ADR tests. Our decision log is git-ignored.
@@ -670,7 +670,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Source:** gstack `investigate`; pstack `runtime-forensics` and `trace-forensics` playbooks,
   principles fix-root-causes and attack-the-premise; superpowers `systematic-debugging`;
   mattpocock `diagnosing-bugs`, `hitl-loop.template.sh`
-- **Where:** new skill in `ceh-coding-agent`
+- **Where:** new skill in `ceh-coding-conduct`
 - **Effort:** M
 - **Idea:** A debugging procedure before any fix. No theory until one command goes red on the exact
   symptom, then 3 to 5 falsifiable hypotheses, evidence from instrumentation or a captured trace,
@@ -680,7 +680,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Human-steps wizard
 
 - **Source:** mattpocock `wizard`, `template.sh`
-- **Where:** new skill in `ceh-coding-agent`, template under its `scripts/`
+- **Where:** new skill in `ceh-coding-conduct`, template under its `scripts/`
 - **Effort:** L
 - **Idea:** Generate a bash wizard for steps only a human can do, such as secrets. Only the stages
   are authored. `validate.py` would shellcheck the template.
@@ -688,7 +688,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Stateful teaching
 
 - **Source:** mattpocock `teach`
-- **Where:** `ceh-coding-agent:explain-until-understood`
+- **Where:** `ceh-codebase-explanation:explain-until-understood`
 - **Effort:** M
 - **Idea:** A teaching workspace that survives sessions. Ours writes no files by default, so state
   must be opt-in.
@@ -696,7 +696,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Stress-test a plan
 
 - **Source:** mattpocock `grilling`, `grill-me`
-- **Where:** new skill in `ceh-core`, format reused by `interview-workflow-task`
+- **Where:** new skill in `ceh-every-session`, format reused by `interview-workflow-task`
 - **Effort:** M
 - **Idea:** Rounds of every question whose prerequisites are settled, each with a recommended answer
   that "yes" accepts. Facts come from a subagent, never the user.
@@ -704,7 +704,7 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Cited research note
 
 - **Source:** mattpocock `research`; ECC `deep-research`, `research-ops`, `exa-search`
-- **Where:** new skill in `ceh-core`
+- **Where:** new skill in `ceh-every-session`
 - **Effort:** M
 - **Idea:** A background agent writes a note from primary sources, every claim cited. `bulk-reader`
   only reads local files.

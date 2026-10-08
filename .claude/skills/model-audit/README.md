@@ -34,15 +34,15 @@ python .claude/skills/model-audit/scripts/audit.py [--plugins plugins/standalone
 `/model-audit` passes its arguments to `audit.py` unchanged. With none, it audits every stale
 plugin with the pairs in `assets/config.json` and edits no plugin file.
 
-| Argument               | What it does                                                                                                                                                                                                                                         | Default                    |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `--plugins <path> ...` | Audits only these plugins, each given as its path from the repo root (`plugins/standalone/ceh-core`), stale or not. It ignores `checked-against`, so every in-use guide chain is re-audited, and re-tunes pinned files even with a proposal pending. | every stale plugin         |
-| `--model <m>`          | Model for the `/doctor` and filter runs on unpinned files. It also wins over the stronger pair a new generation (`opus-6`) would otherwise get.                                                                                                      | `default.model`, `sonnet`  |
-| `--effort <e>`         | Effort for the same runs: `low`, `medium`, `high`, `xhigh` or `max`. Like `--model`, it disables the new-generation upgrade.                                                                                                                         | `default.effort`, `medium` |
-| `--tune-model <m>`     | Model for the tuning pass on pinned files, and for unpinned runs triggered by a new generation.                                                                                                                                                      | `override.model`, `opus`   |
-| `--tune-effort <e>`    | Effort for the same runs as `--tune-model`.                                                                                                                                                                                                          | `override.effort`, `high`  |
-| `--jobs <n>`           | Plugins audited in parallel. It is capped because every run shares one account rate limit.                                                                                                                                                           | `jobs`, `3`                |
-| `--apply`              | Lets each run edit files under its plugin's directory. Without it, proposed edits exist only in the reports. Either way, `tuning.json` is updated.                                                                                                   | off: reports only          |
+| Argument               | What it does                                                                                                                                                                                                                                                  | Default                    |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `--plugins <path> ...` | Audits only these plugins, each given as its path from the repo root (`plugins/standalone/ceh-every-session`), stale or not. It ignores `checked-against`, so every in-use guide chain is re-audited, and re-tunes pinned files even with a proposal pending. | every stale plugin         |
+| `--model <m>`          | Model for the `/doctor` and filter runs on unpinned files. It also wins over the stronger pair a new generation (`opus-6`) would otherwise get.                                                                                                               | `default.model`, `sonnet`  |
+| `--effort <e>`         | Effort for the same runs: `low`, `medium`, `high`, `xhigh` or `max`. Like `--model`, it disables the new-generation upgrade.                                                                                                                                  | `default.effort`, `medium` |
+| `--tune-model <m>`     | Model for the tuning pass on pinned files, and for unpinned runs triggered by a new generation.                                                                                                                                                               | `override.model`, `opus`   |
+| `--tune-effort <e>`    | Effort for the same runs as `--tune-model`.                                                                                                                                                                                                                   | `override.effort`, `high`  |
+| `--jobs <n>`           | Plugins audited in parallel. It is capped because every run shares one account rate limit.                                                                                                                                                                    | `jobs`, `3`                |
+| `--apply`              | Lets each run edit files under its plugin's directory. Without it, proposed edits exist only in the reports. Either way, `tuning.json` is updated.                                                                                                            | off: reports only          |
 
 `detect.py --write` adds newly published guide slugs to `known-model-guides.json`. Without it, the
 detector only reports.
@@ -67,7 +67,7 @@ detector only reports.
     "sonnet-5-5"
   ],
   "pinned": {
-    "agents/novice-walker.md": {
+    "agents/newcomer-simulator.md": {
       "model": "sonnet-5-5",
       "tuned-for": null,
       "proposed-for": "sonnet-5-5",

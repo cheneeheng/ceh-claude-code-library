@@ -10,7 +10,7 @@ description: >-
   "reword this label", "our copy is too technical", "explain this in simpler terms", "write the
   empty state", or when naming a button, field, setting, or command. Not for error text (use
   ceh-usability-audit:audit-error-messages), whole-interface structure (use
-  ceh-usability-audit:audit-interface), or marketing copy (use ceh-seo:pitch-project).
+  ceh-usability-audit:audit-interface), or marketing copy (use ceh-seo:write-project-listing-text).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -148,9 +148,9 @@ A rewrite table, shown before any string is changed in place:
 
 - The string is an error message: `ceh-usability-audit:audit-error-messages`.
 - The wording is a symptom of a confusing flow: `ceh-usability-audit:audit-interface`.
-- Does a newcomer get far enough to read this at all? `ceh-usability-audit:walk-first-run`.
+- Does a newcomer get far enough to read this at all? `ceh-usability-audit:simulate-newcomer-first-run`.
 - It's a docs page, not in-product copy: `ceh-documentation:write-guides-and-runbooks` for a guide
   or runbook, `ceh-documentation:write-concept-docs` for an explanation.
-- It's the README first screen or a package description: `ceh-seo:pitch-project`.
+- It's the README first screen or a package description: `ceh-seo:write-project-listing-text`.
 - The label is unreadable to a screen reader or has no accessible name:
   `ceh-web-frontend:make-ui-accessible`.

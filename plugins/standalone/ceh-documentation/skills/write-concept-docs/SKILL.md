@@ -8,8 +8,8 @@ description: >-
   "document the design decisions for users", "write a concepts section", "why does it work this
   way — put it in the docs", or when ceh-documentation:write-project-docs delegates its concepts
   step. Not for a maintainer architecture doc with diagrams and a decision log (use
-  ceh-coding-agent:document-architecture), a per-module codebase walkthrough (use
-  ceh-coding-agent:explain-codebase), task steps (use write-guides-and-runbooks), or lookups (use
+  ceh-codebase-explanation:document-architecture), a per-module codebase walkthrough (use
+  ceh-codebase-explanation:explain-codebase), task steps (use write-guides-and-runbooks), or lookups (use
   write-api-reference).
 disable-model-invocation: false
 user-invocable: true

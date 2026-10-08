@@ -41,6 +41,12 @@ exemptions: model-only standards named for what they carry (`agent-coding-contra
 `usage-limit-handoff`, `branch`), and established terms of art (`pull-request`, `release`).
 `validate.py` cannot check part of speech, so this is a review rule.
 
+These are the how of principle 10 in `docs/VISION.md`, "Names say what they do": anyone who has
+seen only the name can say what the component does and when it is used. The same test covers
+plugins and scripts. A plugin is named for its use case (`ceh-coding-conduct`, not
+`ceh-coding-agent`), and a script for what it does (`inject-less-code-reminder.sh`, not
+`less-code-payload.sh`). The `ceh-` prefix is a namespace, exempt from the test.
+
 ## Frontmatter Conventions
 
 **`description` is always a folded block scalar (`>-`), never quoted and never plain.** Enforced by

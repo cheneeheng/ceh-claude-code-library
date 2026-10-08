@@ -106,7 +106,7 @@ that continues the family counter and carries `patch: true` in its frontmatter. 
 **only** artifact allowed past the terminator — it depends on the terminator (or a prior patch) and
 never carries `mvp`. Because it stays within the existing architecture, its `sections_changed`
 touches implementation sections (§04/§05), not §02; a change that touches §02 (data model or API
-surface) is a feature iteration, not a patch. Patches are produced only by `patch-built-version`;
+surface) is a feature iteration, not a patch. Patches are produced only by `apply-small-fix-to-version`;
 the planning skills never emit `patch: true`.
 
 **Field rules:**

@@ -31,15 +31,40 @@ narrow a subagent's scope but no longer counts as user-level authority. The inte
 `ceh-business-plan`, `ceh-blog`, and `ceh-workflow-builder` keep adaptive questioning and gain a
 path for a run with no human.
 
+Names now say what a component does. `docs/VISION.md` gains principle 10, "Names say what they
+do", because the name is the only part an agent always sees in full: descriptions get truncated in
+the skill listing. The `ceh-` prefix is exempt as a namespace. Every name that failed the test is
+renamed in the same PR. `ceh-core` becomes `ceh-every-session`, named for its admission rule.
+`ceh-coding-agent` covered too much, so it splits into `ceh-coding-conduct` (the contract,
+write-less-code, refactoring, the output style, the hooks) and the new `ceh-codebase-explanation`
+(`explain-codebase`, `explain-until-understood`, `document-architecture`). Both renames break
+existing installs: uninstall the old plugin and install the new one, or reinstall a scenario
+bundle. Three skills, one agent, and one hook script get names that say what they do. `ceh-ag-ui`
+keeps its name as a term of art.
+
 ### Plugin versions
 
-| Plugin                 | Version |
-| ---------------------- | ------- |
-| `ceh-blog`             | 1.0.2   |
-| `ceh-business-plan`    | 1.0.6   |
-| `ceh-coding-agent`     | 1.0.2   |
-| `ceh-testing`          | 1.0.1   |
-| `ceh-workflow-builder` | 1.3.1   |
+| Plugin                     | Version |
+| -------------------------- | ------- |
+| `ceh-blog`                 | 1.0.2   |
+| `ceh-business-plan`        | 1.0.6   |
+| `ceh-codebase-explanation` | 1.0.0   |
+| `ceh-coding-agent`         | 1.0.2   |
+| `ceh-coding-conduct`       | 2.0.0   |
+| `ceh-documentation`        | 1.0.2   |
+| `ceh-every-session`        | 2.0.0   |
+| `ceh-git-datastore`        | 1.0.2   |
+| `ceh-plan-build-review`    | 1.1.0   |
+| `ceh-scenario-editorial`   | 1.1.0   |
+| `ceh-scenario-ideation`    | 1.1.0   |
+| `ceh-scenario-library`     | 1.1.0   |
+| `ceh-scenario-service`     | 1.1.0   |
+| `ceh-scenario-webapp`      | 1.1.0   |
+| `ceh-seo`                  | 1.1.0   |
+| `ceh-testing`              | 1.0.2   |
+| `ceh-usability-audit`      | 1.1.0   |
+| `ceh-web-frontend`         | 1.1.1   |
+| `ceh-workflow-builder`     | 1.3.1   |
 
 ### Added
 
@@ -48,8 +73,24 @@ path for a run with no human.
 - `ceh-business-plan:develop-business-plan`, `ceh-business-plan:find-product-market-fit`,
   `ceh-blog:draft-post`, `ceh-workflow-builder:interview-workflow-task`: a "No human to answer" path
   that drafts or records gaps, asks nothing, and ends with the questions a person must answer
+- `docs/VISION.md` principle 10, "Names say what they do", with the `ceh-` prefix exempt as a
+  namespace. `plugins/CLAUDE.md` links its naming rule to it and extends the rule to plugins and
+  scripts
+- `ceh-codebase-explanation` 1.0.0: `explain-codebase`, `explain-until-understood`, and
+  `document-architecture`, moved unchanged from `ceh-coding-agent`. The service, library, and
+  webapp scenario bundles install it, so a bundle install keeps every skill it had
 
 ### Changed
+
+- **Breaking:** `ceh-core` is renamed `ceh-every-session` (2.0.0), and `ceh-coding-agent` is
+  renamed `ceh-coding-conduct` (2.0.0), with its output style now `CEH Coding Conduct`. Reinstall
+  under the new names. Every scenario bundle depends on the new names
+- Skills and agent renamed: `ceh-plan-build-review:patch-built-version` →
+  `apply-small-fix-to-version`, `ceh-seo:pitch-project` → `write-project-listing-text`,
+  `ceh-usability-audit:walk-first-run` → `simulate-newcomer-first-run`, agent `novice-walker` →
+  `newcomer-simulator`. Hook script `less-code-payload.sh` → `inject-less-code-reminder.sh`
+- `ceh-documentation`, `ceh-git-datastore`, `ceh-testing`, `ceh-web-frontend`: routing mentions
+  follow the renames
 
 - `ceh-coding-agent:agent-coding-contract`: the Validation policy makes proving the change and
   local, reversible state changes always allowed. Slow or paid runs and irreversible or

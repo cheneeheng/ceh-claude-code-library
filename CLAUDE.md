@@ -23,12 +23,12 @@ they live:
 
 Plugins fall into four tiers:
 
-| Tier                  | Loaded            | Plugins                                                                                                                                                                                                                         |
-| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                                                                        |
-| **Cross-cutting**     | most sessions     | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                               |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-competitor-analysis`, `ceh-ui-design` |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                     |
+| Tier                  | Loaded            | Plugins                                                                                                                                                                                                                                                     |
+| --------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                                                                                                    |
+| **Cross-cutting**     | most sessions     | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                                                |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-competitor-analysis`, `ceh-ui-design`, `ceh-codebase-explanation` |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                                                 |
 
 The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
 `dependencies` and nothing else — no skills, agents, or hooks. Experimental plugins never enter a
@@ -45,9 +45,9 @@ Categorization rules of thumb:
   invariant (manifest + README only).
 - **App-specific patterns are not standards.** Anything bound to one application's schema or design
   is removed rather than kept as a niche plugin.
-- **`ceh-core` admits only what holds however Claude Code is used** — coding, writing, research,
+- **`ceh-every-session` admits only what holds however Claude Code is used** — coding, writing, research,
   or ops. If a component assumes a repository, code, or a specific activity, it belongs elsewhere.
-  "Useful almost everywhere" is not the test; that is how a core plugin becomes a dumping ground.
+  "Useful almost everywhere" is not the test; that is how an every-session plugin becomes a dumping ground.
 - **The cross-cutting tier is orthogonal by construction.** It holds a discipline that applies
   whatever you are building, so it loads _alongside_ a use-case plugin, never instead of one.
 - **Technique splits from tooling when the technique is genuinely stack-agnostic.** The test:

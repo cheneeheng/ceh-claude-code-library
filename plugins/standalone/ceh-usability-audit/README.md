@@ -33,20 +33,20 @@ frustration. Every report this plugin writes says so, and none of them say "vali
 
 ## Skills
 
-| Skill                  | Invoke                                      | Triggers when                                                                                            |
-| ---------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `walk-first-run`       | `/ceh-usability-audit:walk-first-run`       | Can a stranger get from "just arrived" to first success: install, sign-up, setup, onboarding, first task |
-| `audit-interface`      | `/ceh-usability-audit:audit-interface`      | They are already in: is the web UI, CLI, API, or screen comprehensible                                   |
-| `audit-error-messages` | `/ceh-usability-audit:audit-error-messages` | Writing or reviewing anything a user reads when something goes wrong                                     |
-| `write-plain-language` | `/ceh-usability-audit:write-plain-language` | Writing or rewriting labels, help text, empty states, confirmation dialogs, onboarding copy              |
+| Skill                         | Invoke                                             | Triggers when                                                                                            |
+| ----------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `simulate-newcomer-first-run` | `/ceh-usability-audit:simulate-newcomer-first-run` | Can a stranger get from "just arrived" to first success: install, sign-up, setup, onboarding, first task |
+| `audit-interface`             | `/ceh-usability-audit:audit-interface`             | They are already in: is the web UI, CLI, API, or screen comprehensible                                   |
+| `audit-error-messages`        | `/ceh-usability-audit:audit-error-messages`        | Writing or reviewing anything a user reads when something goes wrong                                     |
+| `write-plain-language`        | `/ceh-usability-audit:write-plain-language`        | Writing or rewriting labels, help text, empty states, confirmation dialogs, onboarding copy              |
 
-### `walk-first-run`
+### `simulate-newcomer-first-run`
 
 **Auto-triggers on:** "can a new user figure this out", "is the setup clear", "test the onboarding",
 "try this with fresh eyes", "would a beginner get stuck", "nobody can install this", or before
 shipping a README, install guide, or sign-up flow.
 
-Freezes the artifact set a newcomer actually receives, dispatches one cold `novice-walker` per
+Freezes the artifact set a newcomer actually receives, dispatches one cold `newcomer-simulator` per
 persona, and records where each stopped. Three measurements make the ranking reproducible:
 **actions per milestone against a budget declared before the walk**, **external lookups** (anything
 above zero is a Detour by definition, and the missing information names its own fix), and **machine
@@ -104,11 +104,11 @@ regression. Say less, not vaguer.
 
 ## Agents
 
-| Agent           | Invoke                                         | When                                                                                                 |
-| --------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `novice-walker` | `@"ceh-usability-audit:novice-walker (agent)"` | Walk a target cold under one persona toward one goal and report where it stalled (Sonnet, read-only) |
+| Agent                | Invoke                                              | When                                                                                                 |
+| -------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `newcomer-simulator` | `@"ceh-usability-audit:newcomer-simulator (agent)"` | Walk a target cold under one persona toward one goal and report where it stalled (Sonnet, read-only) |
 
-### `novice-walker`
+### `newcomer-simulator`
 
 The instrument the two audit skills are built on. Walks a target cold under one persona toward one
 goal, and reports where it stalled. Read-only — it never edits, fixes, or suggests.
@@ -143,7 +143,7 @@ in the main session, or the agent is handed screenshots and page text instead of
 ## Prerequisites
 
 - **Whatever the target's own first-run steps need** (`uv`, `npm`, `docker`, a database):
-  `walk-first-run` assumes none of them. A missing prerequisite is itself an audit finding.
+  `simulate-newcomer-first-run` assumes none of them. A missing prerequisite is itself an audit finding.
 - **git CLI or a container runtime**: only to give each walker its own copy of the target when a
   walk writes to the working tree and the personas run in parallel.
 - **Claude in Chrome browser tools, or the CLI under audit installed**: only for `audit-interface`
@@ -214,7 +214,7 @@ flow nobody stalls on but everybody suffers through. Overrun is scored from meas
 feeds the gate without reintroducing auditor taste. It does nothing for a defect that is off the
 walked path, which remains the open half of this weakness.
 
-### 2. `novice-walker` cannot drive a browser
+### 2. `newcomer-simulator` cannot drive a browser
 
 Background subagents keep a reduced tool set, so the Chrome tools are stripped. Live web-UI walks
 therefore fall back to the main session, which **forfeits the cold-context guarantee** that makes
@@ -225,18 +225,18 @@ strongest, and it is the surface where the instrument is weakest. The documented
 holding one persona at a time yourself, or handing the agent screenshots and page text instead of a
 URL — are both weaker than a genuinely cold walk.
 
-**How to test it:** compare a main-session persona walk against a `novice-walker` run over the same
+**How to test it:** compare a main-session persona walk against a `newcomer-simulator` run over the same
 target's static artifacts. If the main-session walk finds materially fewer stalls, the self-audit
 bias is confirmed and the screenshot handoff is the better path.
 
 ## Deliberately out of scope
 
-| Not here                                                     | Why                                                                                                                                         |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Real user testing, interviews, diary studies, usability labs | This plugin is a proxy for those, not a replacement. It says so in every report                                                             |
-| WCAG conformance, contrast ratios, ARIA, focus management    | `ceh-web-frontend:make-ui-accessible` owns the mechanical floor                                                                             |
-| Layout, hierarchy, spacing, theme, visual polish             | `ceh-ui-design:design-ui`, at build time                                                                                                    |
-| A/B tests, funnel analytics, session replay, heatmaps        | Needs production traffic and instrumentation, not a coding-session moment                                                                   |
-| Localization and internationalization review                 | A tooling and translation-pipeline investment; no in-session trigger                                                                        |
-| Information architecture for a whole product                 | A design exercise, not an audit. `ceh-coding-agent:document-architecture` for structure, `ceh-ui-design:design-ui` for navigation placement |
-| Marketing copy, landing-page conversion, SEO wording         | `ceh-seo:pitch-project`                                                                                                                     |
+| Not here                                                     | Why                                                                                                                                                 |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Real user testing, interviews, diary studies, usability labs | This plugin is a proxy for those, not a replacement. It says so in every report                                                                     |
+| WCAG conformance, contrast ratios, ARIA, focus management    | `ceh-web-frontend:make-ui-accessible` owns the mechanical floor                                                                                     |
+| Layout, hierarchy, spacing, theme, visual polish             | `ceh-ui-design:design-ui`, at build time                                                                                                            |
+| A/B tests, funnel analytics, session replay, heatmaps        | Needs production traffic and instrumentation, not a coding-session moment                                                                           |
+| Localization and internationalization review                 | A tooling and translation-pipeline investment; no in-session trigger                                                                                |
+| Information architecture for a whole product                 | A design exercise, not an audit. `ceh-codebase-explanation:document-architecture` for structure, `ceh-ui-design:design-ui` for navigation placement |
+| Marketing copy, landing-page conversion, SEO wording         | `ceh-seo:write-project-listing-text`                                                                                                                |

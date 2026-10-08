@@ -52,13 +52,13 @@ conditional hand-offs or negative routing, which stay prose.
 
 ## What each scenario installs
 
-| Bundle                   | Installs                                                                                                                                                                          |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ceh-scenario-service`   | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-service`, `ceh-usability-audit`, `ceh-plan-build-review`, `ceh-git-datastore` |
-| `ceh-scenario-library`   | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-library`, `ceh-usability-audit`, `ceh-plan-build-review`                      |
-| `ceh-scenario-webapp`    | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-web-frontend`, `ceh-usability-audit`, `ceh-plan-build-review`, `ceh-ag-ui`           |
-| `ceh-scenario-ideation`  | `ceh-core`, `ceh-git-workflow`, `ceh-business-plan`, `ceh-plan-build-review`                                                                                                      |
-| `ceh-scenario-editorial` | `ceh-core`, `ceh-git-workflow`, `ceh-blog`, `ceh-documentation`, `ceh-seo`                                                                                                        |
+| Bundle                   | Installs                                                                                                                                                                                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ceh-scenario-service`   | `ceh-every-session`, `ceh-coding-conduct`, `ceh-codebase-explanation`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-service`, `ceh-usability-audit`, `ceh-plan-build-review`, `ceh-git-datastore` |
+| `ceh-scenario-library`   | `ceh-every-session`, `ceh-coding-conduct`, `ceh-codebase-explanation`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-library`, `ceh-usability-audit`, `ceh-plan-build-review`                      |
+| `ceh-scenario-webapp`    | `ceh-every-session`, `ceh-coding-conduct`, `ceh-codebase-explanation`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-web-frontend`, `ceh-usability-audit`, `ceh-plan-build-review`, `ceh-ag-ui`           |
+| `ceh-scenario-ideation`  | `ceh-every-session`, `ceh-git-workflow`, `ceh-business-plan`, `ceh-plan-build-review`                                                                                                                                    |
+| `ceh-scenario-editorial` | `ceh-every-session`, `ceh-git-workflow`, `ceh-blog`, `ceh-documentation`, `ceh-seo`                                                                                                                                      |
 
 `ceh-testing` is listed by each stack bundle directly as well as through its stack plugin.
 `ceh-ui-design` is in no bundle's list but reaches `ceh-scenario-webapp` through both
@@ -66,17 +66,17 @@ conditional hand-offs or negative routing, which stay prose.
 
 ## Not in every bundle
 
-| Plugin                            | Where it is                             | Note                                                                                                             |
-| --------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `ceh-workflow-builder`            | no bundle, install it on its own        | its agent-skills bundle (`ceh-scenario-agent-tooling`) was not migrated, because `ceh-evaluation` stays archived |
-| `ceh-workflow-runner`             | no bundle, install it on its own        | split from `ceh-workflow-builder` so a flow runs without the builder; neither depends on the other               |
-| `ceh-seo`, `ceh-blog`             | `ceh-scenario-editorial` only           |                                                                                                                  |
-| `ceh-ag-ui`                       | `ceh-scenario-webapp` only              | it depends on `ceh-ui-design`                                                                                    |
-| `ceh-ui-design`                   | no bundle lists it                      | installed through `ceh-web-frontend`, `ceh-ag-ui` or `ceh-competitor-analysis`, or on its own                    |
-| `ceh-git-datastore`               | `ceh-scenario-service` only             |                                                                                                                  |
-| `ceh-business-plan`               | `ceh-scenario-ideation` only            |                                                                                                                  |
-| `ceh-coding-agent`, `ceh-testing` | the three stack bundles, not the others |                                                                                                                  |
-| Anything under `archive/`         | no bundle, not published                | experimental plugins never enter a bundle                                                                        |
+| Plugin                              | Where it is                             | Note                                                                                                             |
+| ----------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `ceh-workflow-builder`              | no bundle, install it on its own        | its agent-skills bundle (`ceh-scenario-agent-tooling`) was not migrated, because `ceh-evaluation` stays archived |
+| `ceh-workflow-runner`               | no bundle, install it on its own        | split from `ceh-workflow-builder` so a flow runs without the builder; neither depends on the other               |
+| `ceh-seo`, `ceh-blog`               | `ceh-scenario-editorial` only           |                                                                                                                  |
+| `ceh-ag-ui`                         | `ceh-scenario-webapp` only              | it depends on `ceh-ui-design`                                                                                    |
+| `ceh-ui-design`                     | no bundle lists it                      | installed through `ceh-web-frontend`, `ceh-ag-ui` or `ceh-competitor-analysis`, or on its own                    |
+| `ceh-git-datastore`                 | `ceh-scenario-service` only             |                                                                                                                  |
+| `ceh-business-plan`                 | `ceh-scenario-ideation` only            |                                                                                                                  |
+| `ceh-coding-conduct`, `ceh-testing` | the three stack bundles, not the others |                                                                                                                  |
+| Anything under `archive/`           | no bundle, not published                | experimental plugins never enter a bundle                                                                        |
 
 ## Rules for an edge
 
@@ -99,18 +99,18 @@ References that look like edges but deliberately are not:
 
 | Reference                                                                                                                               | Why it stays prose                                                                                     |
 | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `ceh-coding-agent:shrink-diff` / `refactor-repo` → `ceh-testing:verify-behavior-preserved`                                              | Conditional, only past a mechanical transform                                                          |
-| `ceh-coding-agent:shrink-diff` / `refactor-repo` → `ceh-git-workflow` (`code-review`, `pull-request`, `branch`)                         | Negative routing and advisory pointers                                                                 |
-| `ceh-coding-agent:document-architecture` → `ceh-python-service:write-postgresql-code`                                                   | Advisory ("mirrors"), and a cross-cutting plugin cannot depend on a stack plugin                       |
-| `ceh-testing:verify-behavior-preserved` → `ceh-coding-agent:shrink-diff` / `refactor-repo`                                              | Advisory pointer to the skills it pairs with                                                           |
+| `ceh-coding-conduct:shrink-diff` / `refactor-repo` → `ceh-testing:verify-behavior-preserved`                                            | Conditional, only past a mechanical transform                                                          |
+| `ceh-coding-conduct:shrink-diff` / `refactor-repo` → `ceh-git-workflow` (`code-review`, `pull-request`, `branch`)                       | Negative routing and advisory pointers                                                                 |
+| `ceh-codebase-explanation:document-architecture` → `ceh-python-service:write-postgresql-code`                                           | Advisory ("mirrors"), and a cross-cutting plugin cannot depend on a stack plugin                       |
+| `ceh-testing:verify-behavior-preserved` → `ceh-coding-conduct:shrink-diff` / `refactor-repo`                                            | Advisory pointer to the skills it pairs with                                                           |
 | `ceh-testing:design-test-cases` → the three stack testing skills                                                                        | Names the owner of the tooling. An edge would create a cycle                                           |
 | `ceh-usability-audit` → `ceh-web-frontend`, `ceh-ui-design`, `ceh-documentation`, `ceh-seo`, `ceh-git-workflow`, the two Python plugins | Conditional hand-offs and negative routing, for example WCAG only when there is a UI                   |
-| `ceh-documentation` → `ceh-git-workflow:update-readme`, `ceh-coding-agent:document-architecture` / `explain-codebase`                   | Negative routing                                                                                       |
-| `ceh-seo:pitch-project` → `ceh-git-workflow:update-readme`                                                                              | Negative routing                                                                                       |
+| `ceh-documentation` → `ceh-git-workflow:update-readme`, `ceh-codebase-explanation:document-architecture` / `explain-codebase`           | Negative routing                                                                                       |
+| `ceh-seo:write-project-listing-text` → `ceh-git-workflow:update-readme`                                                                 | Negative routing                                                                                       |
 | `ceh-plan-build-review` → `ceh-git-workflow:release` / `code-review`                                                                    | Negative routing, plus a pointer for the user after a patch                                            |
 | `ceh-python-library` → `ceh-python-service` (testing and environment skills)                                                            | Negative routing                                                                                       |
-| `ceh-web-frontend:visualize-graph-cytoscape` → `ceh-coding-agent:document-architecture`                                                 | Negative routing                                                                                       |
-| `ceh-git-datastore` README → `ceh-python-service:write-postgresql-code`, `ceh-coding-agent:document-architecture`                       | README pointers only, no skill body names them                                                         |
+| `ceh-web-frontend:visualize-graph-cytoscape` → `ceh-codebase-explanation:document-architecture`                                         | Negative routing                                                                                       |
+| `ceh-git-datastore` README → `ceh-python-service:write-postgresql-code`, `ceh-codebase-explanation:document-architecture`               | README pointers only, no skill body names them                                                         |
 | `ceh-business-plan:find-product-market-fit` → the `ceh-plan-build-review` plan schema                                                   | Removed by inlining the three rules it uses (see `docs/CROSS_REFERENCES.md`, "Patch ITER frontmatter") |
 
 ## Checking and changing the graph

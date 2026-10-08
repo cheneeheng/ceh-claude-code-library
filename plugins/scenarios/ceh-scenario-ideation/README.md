@@ -19,7 +19,7 @@ them at the same scope.
 
 | Plugin                  |
 | ----------------------- |
-| `ceh-core`              |
+| `ceh-every-session`     |
 | `ceh-git-workflow`      |
 | `ceh-business-plan`     |
 | `ceh-plan-build-review` |

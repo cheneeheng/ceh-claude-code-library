@@ -37,16 +37,16 @@ dependency (see `docs/PLUGIN_DEPENDENCIES.md`), so the technique skill is always
 
 ## Routing: what you say to what runs
 
-| Moment                                                                              | Loads                                                              |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| Opening or creating a test file                                                     | Stack testing skill (passive)                                      |
-| "write tests for this", "what should I test", "cover the edge cases"                | `design-test-cases` + stack skill                                  |
-| "write unit/integration/system tests" (many at once)                                | Tester agents + stack skill + `design-test-cases`                  |
-| "fix this bug", a pasted stack trace, "this worked last week"                       | `test-a-bug-fix`                                                   |
-| "refactor this", "extract this", "upgrade this dependency"                          | `verify-behavior-preserved`                                        |
-| "shrink the diff", "simplify the branch before the PR"                              | `verify-behavior-preserved` **and** `ceh-coding-agent:shrink-diff` |
-| "is this ready", "before I open the PR", "race condition", "is this migration safe" | `close-test-risk-gaps`                                             |
-| "are these tests any good", "why didn't the tests catch this", "flaky test"         | `audit-test-suite`, in report-only mode when the run is slow       |
+| Moment                                                                              | Loads                                                                |
+| ----------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Opening or creating a test file                                                     | Stack testing skill (passive)                                        |
+| "write tests for this", "what should I test", "cover the edge cases"                | `design-test-cases` + stack skill                                    |
+| "write unit/integration/system tests" (many at once)                                | Tester agents + stack skill + `design-test-cases`                    |
+| "fix this bug", a pasted stack trace, "this worked last week"                       | `test-a-bug-fix`                                                     |
+| "refactor this", "extract this", "upgrade this dependency"                          | `verify-behavior-preserved`                                          |
+| "shrink the diff", "simplify the branch before the PR"                              | `verify-behavior-preserved` **and** `ceh-coding-conduct:shrink-diff` |
+| "is this ready", "before I open the PR", "race condition", "is this migration safe" | `close-test-risk-gaps`                                               |
+| "are these tests any good", "why didn't the tests catch this", "flaky test"         | `audit-test-suite`, in report-only mode when the run is slow         |
 
 ## Scenario A: tests for a new feature
 
@@ -100,7 +100,7 @@ The stack skill supplies the fixture and runner underneath, the technique skill 
 ## Scenario D: a refactor, and shrinking a branch
 
 "shrink the diff" is listed as a trigger by **both** `verify-behavior-preserved` and
-`ceh-coding-agent:shrink-diff`. That is deliberate: both skills change working code with no behavior
+`ceh-coding-conduct:shrink-diff`. That is deliberate: both skills change working code with no behavior
 change intended, and the shrink side carries no verification step of its own. The
 `Behavior preservation` block in `shrink-diff` and `refactor-repo` points back at the pinning step
 for anything past a mechanical transform.
@@ -110,7 +110,7 @@ for anything past a mechanical transform.
 | "refactor this", "extract this", "upgrade this dependency", "make sure nothing broke" | `verify-behavior-preserved` only                                                             |
 | "shrink the diff", "simplify the branch before the PR"                                | both                                                                                         |
 | "consolidate the branch", "can this diff be smaller"                                  | `shrink-diff` primarily                                                                      |
-| `/ceh-coding-agent:refactor-repo`                                                     | `refactor-repo`, which is manual only, and it names `verify-behavior-preserved` for the pins |
+| `/ceh-coding-conduct:refactor-repo`                                                   | `refactor-repo`, which is manual only, and it names `verify-behavior-preserved` for the pins |
 
 **Ordering is the thing to watch.** The two want opposite ends of the timeline: pinning must happen
 _before_ the edit, but "shrink the diff" is said _after_ the branch is functionally complete. That
@@ -119,7 +119,7 @@ first, the pins were written against already-shrunk code and prove nothing. To f
 
 ```
 /ceh-testing:verify-behavior-preserved     # pin behavior, commit the pins on their own
-/ceh-coding-agent:shrink-diff              # then shrink; suite stays green with no test edits
+/ceh-coding-conduct:shrink-diff              # then shrink; suite stays green with no test edits
 ```
 
 Committing the pins separately is what lets a reviewer see they predate the change.

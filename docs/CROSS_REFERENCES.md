@@ -48,11 +48,11 @@ probe means editing it twice. `ceh-git-workflow:release` reaches the same behavi
 
 ## Write-less-code ladder (skill + per-turn digest)
 
-**Canonical:** `plugins/standalone/ceh-coding-agent/skills/write-less-code/SKILL.md` — § Procedure + § When not to be lazy
+**Canonical:** `plugins/standalone/ceh-coding-conduct/skills/write-less-code/SKILL.md` — § Procedure + § When not to be lazy
 
-| Copy                                                               | Section                  | Diverges                                                                                                                       |
-| ------------------------------------------------------------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| `plugins/standalone/ceh-coding-agent/scripts/less-code-payload.sh` | `additionalContext` text | compact digest of the ladder and the never-simplify list, injected per turn by the hook, plus a pointer to load the full skill |
+| Copy                                                                         | Section                  | Diverges                                                                                                                       |
+| ---------------------------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-coding-conduct/scripts/inject-less-code-reminder.sh` | `additionalContext` text | compact digest of the ladder and the never-simplify list, injected per turn by the hook, plus a pointer to load the full skill |
 
 **Shared:** the six-rung ladder (YAGNI → stdlib → native platform feature → already-installed
 dependency → one line → minimum that works) and the never-simplify-away list (trust-boundary
@@ -61,11 +61,11 @@ retroactive ladder below re-frames the same six rungs, so a rung change propagat
 
 ## Retroactive ladder + behavior preservation
 
-**Canonical:** `plugins/standalone/ceh-coding-agent/skills/shrink-diff/SKILL.md` — § The retroactive ladder + § Behavior preservation
+**Canonical:** `plugins/standalone/ceh-coding-conduct/skills/shrink-diff/SKILL.md` — § The retroactive ladder + § Behavior preservation
 
-| Copy                                                                | Section                                            | Diverges                                                                          |
-| ------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-coding-agent/skills/refactor-repo/SKILL.md` | § The retroactive ladder + § Behavior preservation | none in the text; applied per approved cluster rather than to the branch seed set |
+| Copy                                                                  | Section                                            | Diverges                                                                          |
+| --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-coding-conduct/skills/refactor-repo/SKILL.md` | § The retroactive ladder + § Behavior preservation | none in the text; applied per approved cluster rather than to the branch seed set |
 
 **Shared:** both blocks word for word — the six retroactive rungs, and the behavior-preservation
 bullets (no behavior change in a refactor, tests before and after, mechanical transforms only
@@ -73,22 +73,22 @@ without coverage, pin behavior with `ceh-testing:verify-behavior-preserved`, `re
 
 ## Explanation honesty rules
 
-**Canonical:** `plugins/standalone/ceh-coding-agent/skills/explain-codebase/SKILL.md` — § Rules
+**Canonical:** `plugins/standalone/ceh-coding-conduct/skills/explain-codebase/SKILL.md` — § Rules
 
-| Copy                                                                           | Section | Diverges                                                                                 |
-| ------------------------------------------------------------------------------ | ------- | ---------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-coding-agent/skills/explain-until-understood/SKILL.md` | § Rules | carries only the three rules that hold for a spoken explanation, not the file-bound ones |
+| Copy                                                                             | Section | Diverges                                                                                 |
+| -------------------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-coding-conduct/skills/explain-until-understood/SKILL.md` | § Rules | carries only the three rules that hold for a spoken explanation, not the file-bound ones |
 
 **Shared:** three bullets word for word — "Evidence over inference", "Don't paste code" (with the
 verbatim-literal exception), and "Describe what exists today".
 
 ## Bulk-read guard exemption list (`ALWAYS_ALLOW`)
 
-**Canonical:** `plugins/standalone/ceh-core/scripts/bulk-read-guard.py` — `ALWAYS_ALLOW` tuple
+**Canonical:** `plugins/standalone/ceh-every-session/scripts/bulk-read-guard.py` — `ALWAYS_ALLOW` tuple
 
-| Copy                                                          | Section              | Diverges |
-| ------------------------------------------------------------- | -------------------- | -------- |
-| `plugins/standalone/ceh-core/scripts/bulk-read-bash-guard.py` | `ALWAYS_ALLOW` tuple | none     |
+| Copy                                                                   | Section              | Diverges |
+| ---------------------------------------------------------------------- | -------------------- | -------- |
+| `plugins/standalone/ceh-every-session/scripts/bulk-read-bash-guard.py` | `ALWAYS_ALLOW` tuple | none     |
 
 **Shared:** the glob tuple, verbatim. The two guards cover the same files by two routes (`Read` and
 `cat`/`head`), so a pattern in one and not the other denies a file on one route and allows it on
@@ -96,11 +96,11 @@ the other. Each hook is a standalone script with no shared module, so the list i
 
 ## Bulk-reader answer format (Answer / Not found / Coverage)
 
-**Canonical:** `plugins/standalone/ceh-core/agents/bulk-reader.md` — § Output to parent session
+**Canonical:** `plugins/standalone/ceh-every-session/agents/bulk-reader.md` — § Output to parent session
 
-| Copy                                                              | Section                            | Diverges                                                                            |
-| ----------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-core/skills/delegate-bulk-reads/SKILL.md` | § Trust the anchors, not the prose | names the sections only and carries the caller-side verification rules, no template |
+| Copy                                                                       | Section                            | Diverges                                                                            |
+| -------------------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-every-session/skills/delegate-bulk-reads/SKILL.md` | § Trust the anchors, not the prose | names the sections only and carries the caller-side verification rules, no template |
 
 **Shared:** the three fixed sections and their order — `## Answer` (every claim anchored
 `path:line`), `## Not found / uncertain` (never omitted, `- Nothing outstanding.` when clean),
@@ -160,9 +160,9 @@ editing both.
 
 **Canonical:** `plugins/standalone/ceh-seo/skills/make-page-crawlable/SKILL.md` — § Procedure, 5. Write the page text for citation
 
-| Copy                                                       | Section                             | Diverges                                                                 |
-| ---------------------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------ |
-| `plugins/standalone/ceh-seo/skills/pitch-project/SKILL.md` | § Procedure, 4. Apply the GEO rules | adds "state scope facts explicitly"; drops the answer-first-section rule |
+| Copy                                                                    | Section                             | Diverges                                                                 |
+| ----------------------------------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/SKILL.md` | § Procedure, 4. Apply the GEO rules | adds "state scope facts explicitly"; drops the answer-first-section rule |
 
 **Shared:** extractable standalone claims with numbers over adjectives, and question-shaped headings.
 
@@ -205,7 +205,7 @@ The service copy adds the `--cov=app` command, the library copy `--cov=your_libr
 | `plugins/standalone/ceh-testing/skills/close-test-risk-gaps/SKILL.md`      | § What waits for a request | proof is per class that fires; adds a benchmark harness run and a migration against a production-sized copy to the slow list                                      |
 | `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`          | § What waits for a request | judges existing tests rather than proving a change: checks 1 and 2 run unasked, checks 3 to 6 are the slow list                                                   |
 
-**Shared:** the rule, stated in prose with no reference to `ceh-coding-agent:agent-coding-contract`
+**Shared:** the rule, stated in prose with no reference to `ceh-coding-conduct:agent-coding-contract`
 so `ceh-testing` keeps no dependency, and matching `docs/VISION.md` principle 3: writing and running
 the tests that prove the change is part of the task and happens unasked; only a slow or paid run (the
 full suite, coverage, mutation testing, repeated passes over the whole suite) waits for a request;
@@ -266,9 +266,9 @@ the initial backend directory tree. Add it here as a copy when `ceh-scaffolding`
 
 **Canonical:** `plugins/standalone/ceh-plan-build-review/references/plan-schema.md` — § Frontmatter (the `patch` field rules)
 
-| Copy                                                                           | Section                              | Diverges                                                           |
-| ------------------------------------------------------------------------------ | ------------------------------------ | ------------------------------------------------------------------ |
-| `plugins/standalone/ceh-plan-build-review/skills/patch-built-version/SKILL.md` | § Procedure, 3. Write the patch ITER | the patch ITER frontmatter block only, with per-field placeholders |
+| Copy                                                                                  | Section                              | Diverges                                                           |
+| ------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------ |
+| `plugins/standalone/ceh-plan-build-review/skills/apply-small-fix-to-version/SKILL.md` | § Procedure, 3. Write the patch ITER | the patch ITER frontmatter block only, with per-field placeholders |
 
 **Shared:** the ITER frontmatter keys with `patch: true`, no `mvp`, `depends_on` the terminator or the
 prior patch, and `sections_changed` within §04/§05. The rest of the plan schema (file naming, version
@@ -321,10 +321,10 @@ and to `plan-schema.md`.
 
 **Canonical:** `plugins/standalone/ceh-usability-audit/references/personas-and-severity.md` — § The personas, § Severity
 
-| Copy                                                             | Section                                                             | Diverges                                                                                       |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-usability-audit/README.md`               | § The personas, § Severity — assigned by outcome, not by appearance | condensed for the reader: column wording differs, the five personas and four severities do not |
-| `plugins/standalone/ceh-usability-audit/agents/novice-walker.md` | § Holding the persona                                               | the same five personas as second-person instructions to the walker, not a table                |
+| Copy                                                                  | Section                                                             | Diverges                                                                                       |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-usability-audit/README.md`                    | § The personas, § Severity — assigned by outcome, not by appearance | condensed for the reader: column wording differs, the five personas and four severities do not |
+| `plugins/standalone/ceh-usability-audit/agents/newcomer-simulator.md` | § Holding the persona                                               | the same five personas as second-person instructions to the walker, not a table                |
 
 **Shared:** the five personas (Blank Slate, Cautious Returner, Interrupted, Wrong Turn, Small
 Screen) with their constraints and the failure class each catches, the four severities (Blocker,

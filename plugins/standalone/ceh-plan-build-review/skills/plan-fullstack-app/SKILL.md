@@ -10,7 +10,7 @@ description: >-
   feature", "plan this iteration", "create a skeleton plan", "plan the next release", "plan this
   whole app to MVP", "plan everything upfront", "lay out all the iterations", "full build plan".
   Not for building the plan (use implement-from-plan) or a small non-feature change to a built
-  version (use patch-built-version).
+  version (use apply-small-fix-to-version).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
