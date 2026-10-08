@@ -32,6 +32,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Sort findings into Act On, Consider, Noted, and Dismissed, with at most 5 Act On items,
   and keep Dismissed with reasons so the user can override it.
+- **Status:** built on 2026-10-08 in reduced form: the `[blocking]` / `[advisory]` / `[question]`
+  prefixes already sort findings, so `code-review` caps `[blocking]` at five and adds a Dismissed
+  list rather than a second set of buckets.
 
 ### Quote or suppress
 
@@ -48,6 +51,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-git-workflow:code-review` and `pull-request` self-review
 - **Effort:** S
 - **Idea:** Compare the stated intent with the actual diff before judging code quality.
+- **Status:** built on 2026-10-08: step 1 of `code-review`, and a self-review bullet in
+  `pull-request`.
 
 ### No prejudging the reviewer
 
@@ -73,6 +78,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-git-workflow:code-review`
 - **Effort:** S
 - **Idea:** Swallowed errors, stale comments, and weak types as named review lenses.
+- **Status:** built on 2026-10-08 as checks inside `code-review`'s Correctness and Design steps.
 
 ### Patch-id re-check
 
@@ -81,6 +87,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Record the `git patch-id` a review or test run saw, and compare it again before landing.
   A rebase can invalidate a review without touching a check.
+- **Status:** built on 2026-10-08 in `pull-request`'s pre-merge gate.
 
 ### PR babysit loop
 
@@ -122,6 +129,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** After a change lands, compare what the docs claim with what the diff shipped, not only
   whether the README mentions the feature.
+- **Status:** built on 2026-10-08 as step 4 of `update-readme`, scoped to the README.
 
 ### Certainty ladder
 

@@ -22,17 +22,26 @@ and the verdict, so the author knows exactly what blocks the merge.
 
 ## Procedure
 
-1. Review in priority order:
-   1. **Correctness** — does it do what it claims? Are edge cases handled?
+1. Check scope drift before judging the code. Compare what the PR says it does (title, body,
+   linked issue) with what the diff changes. A file or behavior the description does not account
+   for is the first comment: `[blocking]` when it changes behavior, `[question]` otherwise.
+2. Review in priority order:
+   1. **Correctness** — does it do what it claims? Are edge cases handled? Are errors swallowed:
+      an empty `catch`, a log-and-continue, a fallback default that hides a failure?
    2. **Security** — injection risks, secrets exposure, input validation gaps
    3. **Test coverage** — is new behavior tested? Are tests testing behavior?
-   4. **Design** — right abstraction? Fits existing patterns?
+   4. **Design** — right abstraction? Fits existing patterns? Does a comment the diff left alone
+      now describe code that no longer does that? Is a type weaker than the data: `any`, a bare
+      `dict` or `str` where a domain type exists, optional where the value is always present?
    5. **Style** — only flag if linting tools don't catch it
-2. Leave a **summary** comment — one or two sentences: what the PR does and your overall read.
-   Lead with anything that blocks.
-3. Leave **line comments** — each prefixed `[blocking]` / `[advisory]` / `[question]`, anchored to
-   the exact line, stating the problem and (for blocking) what would resolve it.
-4. End with an explicit verdict (see Output).
+3. Leave a **summary** comment — one or two sentences: what the PR does and your overall read.
+   Lead with anything that blocks. Close it with a **Dismissed** list: each finding you considered
+   and dropped, one line with the reason, so the author can overrule the call.
+4. Leave **line comments** — each prefixed `[blocking]` / `[advisory]` / `[question]`, anchored to
+   the exact line, stating the problem and (for blocking) what would resolve it. Leave at most
+   five `[blocking]` comments. With more, leave the five that matter most and say in the summary
+   that the PR needs rework before the rest are worth reviewing.
+5. End with an explicit verdict (see Output).
 
 ### Comment prefixes
 

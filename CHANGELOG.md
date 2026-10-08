@@ -74,7 +74,10 @@ links replace calls, and reading paths replace request flows.
 Five adopt-now ideas from `docs/IDEAS.md` land as rules in existing skills. The coding contract
 lists the one-way doors it never auto-decides, requires a success claim to cite output from after
 the last edit, and proves a repeated change complete with a command. `audit-interface` traces every
-control, and `analyze-competitor` backs each coverage rating with evidence from both sides.
+control, and `analyze-competitor` backs each coverage rating with evidence from both sides. Five
+more tighten `ceh-git-workflow`: `code-review` checks scope drift first, names three more lenses,
+caps blocking comments at five, and lists what it dismissed. `pull-request` re-checks the patch id
+before merging, and `update-readme` hunts the claims a change made false.
 
 ### Plugin versions
 
@@ -90,7 +93,7 @@ control, and `analyze-competitor` backs each coverage rating with evidence from 
 | `ceh-documentation`        | 1.0.3   |
 | `ceh-every-session`        | 2.1.0   |
 | `ceh-git-datastore`        | 1.0.3   |
-| `ceh-git-workflow`         | 1.0.2   |
+| `ceh-git-workflow`         | 1.0.3   |
 | `ceh-plan-build-review`    | 1.1.1   |
 | `ceh-python-library`       | 1.0.1   |
 | `ceh-python-service`       | 1.0.1   |
@@ -134,6 +137,10 @@ control, and `analyze-competitor` backs each coverage rating with evidence from 
 - `agent-coding-contract`: a One-way doors list under Stop conditions, and a "Build the lever"
   core rule
 - `audit-interface`: a trace of every control in step 3, with an observed no-op ranked as a finding
+- `code-review`: a scope-drift step before the review order, a Dismissed list in the summary, and
+  swallowed-error, stale-comment, and weak-type checks in the order
+- `pull-request`: a patch-id re-check in the pre-merge gate, and a scope check in self-review
+- `update-readme`: step 4, grep the README for every name the diff removed or renamed
 
 ### Changed
 
@@ -141,6 +148,7 @@ control, and `analyze-competitor` backs each coverage rating with evidence from 
   command run after the last edit it covers
 - `analyze-competitor`: every coverage rating cites the competitor's path or URL and our component,
   and a Covered or Partial rating with no component of ours becomes a Gap
+- `code-review`: at most five `[blocking]` comments, the rest deferred to a rework note
 - `usage-limit-handoff` saves its artifact through `hand-off-session` instead of carrying its own
   file format and index steps
 - `explain-codebase` handles knowledge bases: topic areas as components, links as connections,

@@ -29,7 +29,7 @@
     {
       "name": "ceh-git-workflow",
       "source": "./plugins/standalone/ceh-git-workflow",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, and code review. Stack-agnostic."
     },
     {

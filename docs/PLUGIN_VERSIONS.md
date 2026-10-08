@@ -33,7 +33,7 @@ a removed plugin loses its row.
 | `ceh-documentation`        | 1.0.3   | `2026-10-08` |
 | `ceh-every-session`        | 2.1.0   | `2026-10-08` |
 | `ceh-git-datastore`        | 1.0.3   | `2026-10-08` |
-| `ceh-git-workflow`         | 1.0.2   | `2026-10-08` |
+| `ceh-git-workflow`         | 1.0.3   | `2026-10-08` |
 | `ceh-plan-build-review`    | 1.1.1   | `2026-10-08` |
 | `ceh-python-library`       | 1.0.1   | `2026-10-08` |
 | `ceh-python-service`       | 1.0.1   | `2026-10-08` |

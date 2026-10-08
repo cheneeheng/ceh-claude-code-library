@@ -159,6 +159,8 @@ code.
 ### Author self-review
 
 - Read the full diff (`git diff main...HEAD`) before requesting review.
+- Every file in the diff serves the PR's What. Anything else moves to its own PR or gets named in
+  the body.
 - No commented-out code, debug logs, or `TODO` without a linked issue.
 - Rebased on latest `main`, scoped to one concern.
 
@@ -193,6 +195,18 @@ has to deploy and roll back independently of the app code.
 Do not merge until all hold: CI green, required approvals met, rebased on latest `main`, history
 clean (fixup/WIP/debug commits squashed or dropped). With no PR, the gate is whatever signals
 exist: rebased, clean history, local checks green.
+
+A rebase or conflict fix after review can change what was reviewed without touching a check. When
+a review or local test run finishes, record the change's patch id, and compare it again right
+before merging:
+
+```bash
+git diff origin/main...HEAD | git patch-id --stable   # first field is the id
+```
+
+The same id means the reviewed change is what lands, whatever the commit SHAs. A different id
+means the content moved: re-request review, or re-read the diff and rerun the local checks with no
+reviewer.
 
 Read CI with `gh run`, anchored to the commit, never the branch:
 

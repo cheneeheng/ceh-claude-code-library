@@ -62,6 +62,13 @@ Only update sections the diff touches:
 Do not touch license, contributing guidelines, acknowledgments, or badges, unless the change
 specifically requires it.
 
+### 4. Check what the README still claims
+
+Mentioning the new feature is half the job. The other half is the claims the diff made false. Grep
+the README for every name the diff removed or renamed (command, flag, env var, route, file path,
+config key) and fix each hit. Check each example command and path in the sections you touched
+against the current code.
+
 ## Rules
 
 - **Surgical edits.** Update only sections affected by the change. Never rewrite the whole README
