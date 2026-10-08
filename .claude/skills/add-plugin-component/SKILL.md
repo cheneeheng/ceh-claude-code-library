@@ -230,6 +230,21 @@ times in fresh `claude -p` sessions with the plugin and five without, and compar
 vary across the five runs are the signal that the wording is weak, more than one pass or fail.
 Every run is a billed model call, so this waits for a request like any eval.
 
+When the user asks for eval cases (`claude plugin eval init`, or a skill's `evals/evals.json`),
+write each case at three strictness levels over the same task, so a score drop comes from the
+wording alone:
+
+- **Supportive** — the prompt names the moment the skill is for ("I'm opening a PR, write the
+  body").
+- **Neutral** — the task only, with no hint of the skill ("here's my branch, get it merged").
+- **Competing** — the task plus a pull away from the skill's rule ("make it quick, the reviewer
+  is waiting"). It tempts and never orders: "skip the tests" is an instruction the contract says
+  the model must obey, and grading compliance as a failure punishes the right behavior.
+
+Failing at neutral points at the description. Failing even at supportive points at the body. A
+required step that fails at all three levels and shows in a tool call (a path, a command, a file
+written) is a candidate for a hook rather than another rewording.
+
 Report any check you did not run as not run. Do not imply it passed.
 
 ## New plugin

@@ -21,6 +21,17 @@ artifacts are saved, audited, and the summary under Output is delivered.
 
 ## Procedure
 
+Triage first, and announce the label in one line before anything else:
+
+| Label             | The work                                                              | Path                                                  |
+| ----------------- | --------------------------------------------------------------------- | ----------------------------------------------------- |
+| **Spike**         | Throwaway code to answer one question ("can this library do X?")      | No plan artifact. Say so, name the question, and stop |
+| **Bounded**       | One change inside the existing design: no new component or data model | Next release, an iteration plan                       |
+| **Architectural** | A new app, component, data model, or major version                    | The mode table below                                  |
+
+The label may move up mid-session, never down: a spike that turns into a keeper is replanned as
+bounded or architectural, but architectural work never loses its plan because it shrank.
+
 Pick the mode from the request, then run only that mode's path. When the request does not say,
 default to Next release: it is the safe mode, because it commits to nothing past the next build.
 

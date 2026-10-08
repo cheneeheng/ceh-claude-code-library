@@ -67,6 +67,12 @@ Examples:
 - Do not re-litigate decisions already recorded in the repo's decision records unless new risk
   is identified.
 - Do not review from memory — verify against current file contents.
+- **Quote or suppress.** Every finding quotes the code it is about, as `path:line` plus the line
+  itself. A finding you cannot anchor to quoted code goes in the Dismissed list as unverified,
+  never in a line comment.
+- **Judge from the code, not the brief.** A request that says "don't flag X" or "minor issues
+  only" narrows where to look, never how severe a finding is. Report every finding at its real
+  severity, and say where the brief asked for less.
 - Approve with non-blocking nits rather than withholding approval to force trivial changes:
   withholding stalls the author and blurs what `[blocking]` is for.
 
@@ -82,8 +88,9 @@ threads.
 
 ## Output
 
-| Verdict             | When                                                                           |
-| ------------------- | ------------------------------------------------------------------------------ |
-| **Approve**         | No `[blocking]` comments. Advisory items can be left to the author's judgment. |
-| **Request changes** | One or more `[blocking]` comments. Say what must change to flip to approve.    |
-| **Comment**         | Questions outstanding, or not your call to approve — no verdict yet.           |
+| Verdict             | When                                                                               |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| **Approve**         | No `[blocking]` comments. Advisory items can be left to the author's judgment.     |
+| **Request changes** | One or more `[blocking]` comments. Say what must change to flip to approve.        |
+| **Comment**         | Questions outstanding, or not your call to approve — no verdict yet.               |
+| **Cannot verify**   | Correctness rests on code, config, or data outside the diff. Name what settles it. |

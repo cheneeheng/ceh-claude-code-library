@@ -178,7 +178,7 @@ editing both.
 (line-length 88, `select = [E,F,I,UP,N,B]`) + mypy (`strict = true`) + pytest
 (`asyncio_mode = "auto"`) config, the coding-style rules (type hints, built-in generics, no `Any`
 without a comment), the naming table, three-group imports, and the "ruff only, no `# type: ignore`
-without a comment" linting rules.
+without a comment" linting rules. The § Pre-commit hooks block has its own entry below.
 
 ## Python testing foundation (pytest core)
 
@@ -418,6 +418,55 @@ in both files together:
 - **The closed heading set and `$CEH_WORKFLOW_BUILD_DIR`.** Neither skill may add a heading to the
   spec, and both name the variable and its `.agents_workspace/` default, because the interview has
   to work without the builder loaded.
+
+## Quote or suppress (review findings)
+
+**Canonical:** `plugins/standalone/ceh-git-workflow/skills/code-review/SKILL.md` — § Rules
+
+| Copy                                                                           | Section  | Diverges                                                                                              |
+| ------------------------------------------------------------------------------ | -------- | ----------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | § Rules  | a Gap quotes the spec line it is missing; an unquoted finding goes under the items NOT fixed, unfixed |
+| `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`              | § Output | an unquoted finding goes below the findings list                                                      |
+
+**Shared:** every finding quotes the code it is about, as `path:line` plus the line itself, and a
+finding you cannot anchor to quoted code is reported as unverified, outside the findings.
+
+## Judge from the code, not the brief
+
+**Canonical:** `plugins/standalone/ceh-git-workflow/skills/code-review/SKILL.md` — § Rules + § Output (Cannot verify)
+
+| Copy                                                                           | Section | Diverges                                                                                 |
+| ------------------------------------------------------------------------------ | ------- | ---------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | § Rules | example brief names a plan section; Cannot verify is a per-section status, not a verdict |
+
+**Shared:** a brief that says "don't flag X" or "minor issues only" narrows where to look, never
+how severe a finding is; every finding at its real severity; and a **Cannot verify** outcome that
+names what would settle it.
+
+## Pre-commit hooks (stack env skills)
+
+**Canonical:** `plugins/standalone/ceh-python-service/skills/configure-python-service-env/SKILL.md` — § Pre-commit hooks + Procedure step 5
+
+| Copy                                                                                 | Section                                                | Diverges                                                                                          |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-python-library/skills/configure-python-library-env/SKILL.md` | § Pre-commit hooks + Procedure step 5                  | none                                                                                              |
+| `plugins/standalone/ceh-web-frontend/skills/configure-bun-vite-env/SKILL.md`         | § Linting and quality checks, Pre-commit hook + step 5 | a committed `.githooks/pre-commit` via `core.hooksPath`, no package; runs `lint` + `format:check` |
+
+**Shared:** lint and format run on every commit, installed once per clone; the whole-program check
+(mypy, or `typecheck` + `check`) stays out of the hook and runs before the PR; never commit with
+`--no-verify`.
+
+## AI-writing tells
+
+**Canonical:** `plugins/standalone/ceh-blog/skills/edit-post/SKILL.md` — § 3. Edit, AI-writing tells
+
+| Copy                                                               | Section    | Diverges                                |
+| ------------------------------------------------------------------ | ---------- | --------------------------------------- |
+| `plugins/standalone/ceh-documentation/references/docs-standard.md` | § 8. Voice | drops "even when the author wrote them" |
+
+**Shared:** the tells list word for word (stock words, stock frames, reflexive triplets,
+signposting, the default em dash, the restating closer) and "replace with the specific thing, or
+delete".
 
 ---
 

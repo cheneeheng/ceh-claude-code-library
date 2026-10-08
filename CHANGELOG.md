@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-10-08
 
+A third batch of 15 quick ideas from `docs/IDEAS.md` lands. Reviews get stricter about evidence: a
+finding that quotes no code is reported as unverified, a brief cannot cap a finding's severity,
+and a review can end in "cannot verify". The receiving side of a review gets its own skill,
+`ceh-git-workflow:address-review-comments`, which checks each comment against the code before
+acting on it. `ceh-every-session:write-questionnaire` hands open questions to someone outside the
+session. `validate.py` now caps the total size of all descriptions with a ratchet, and checks for
+invisible characters, personal absolute paths, and components missing from their plugin README.
+The phase-boundary idea was dropped for now, because no observable event marks a phase's end.
+
 `docs/IDEAS.md` now covers all five competitor analyses: superpowers, ECC, and mattpocock/skills
 join gstack and pstack. Their "What we take" ideas add 40 adopt-now and 15 build entries, and 11
 more merge into existing entries as extra sources. The testing ideas follow the analyses' reworked
@@ -108,19 +117,19 @@ the attempt before, and fails a stage that edited its own gate's check.
 | Plugin                     | Version |
 | -------------------------- | ------- |
 | `ceh-ag-ui`                | 1.1.1   |
-| `ceh-blog`                 | 1.0.4   |
+| `ceh-blog`                 | 1.0.5   |
 | `ceh-business-plan`        | 1.0.7   |
 | `ceh-codebase-explanation` | 1.1.0   |
 | `ceh-coding-agent`         | 1.0.2   |
-| `ceh-coding-conduct`       | 2.0.4   |
+| `ceh-coding-conduct`       | 2.0.5   |
 | `ceh-competitor-analysis`  | 1.1.5   |
-| `ceh-documentation`        | 1.0.3   |
-| `ceh-every-session`        | 2.1.0   |
+| `ceh-documentation`        | 1.0.4   |
+| `ceh-every-session`        | 2.2.0   |
 | `ceh-git-datastore`        | 1.0.3   |
-| `ceh-git-workflow`         | 1.0.3   |
-| `ceh-plan-build-review`    | 1.1.1   |
-| `ceh-python-library`       | 1.0.1   |
-| `ceh-python-service`       | 1.0.1   |
+| `ceh-git-workflow`         | 1.1.0   |
+| `ceh-plan-build-review`    | 1.1.2   |
+| `ceh-python-library`       | 1.0.2   |
+| `ceh-python-service`       | 1.0.2   |
 | `ceh-scenario-editorial`   | 1.1.0   |
 | `ceh-scenario-ideation`    | 1.1.0   |
 | `ceh-scenario-library`     | 1.1.0   |
@@ -128,15 +137,21 @@ the attempt before, and fails a stage that edited its own gate's check.
 | `ceh-scenario-webapp`      | 1.1.0   |
 | `ceh-seo`                  | 1.1.1   |
 | `ceh-session-to-skill`     | 1.0.0   |
-| `ceh-testing`              | 1.0.5   |
+| `ceh-testing`              | 1.0.6   |
 | `ceh-ui-design`            | 1.0.2   |
 | `ceh-usability-audit`      | 1.1.2   |
-| `ceh-web-frontend`         | 1.1.3   |
-| `ceh-workflow-builder`     | 1.3.3   |
+| `ceh-web-frontend`         | 1.1.4   |
+| `ceh-workflow-builder`     | 1.3.4   |
 | `ceh-workflow-runner`      | 1.0.2   |
 
 ### Added
 
+- `ceh-git-workflow:address-review-comments`: verify each review comment against the code, fix
+  what holds, push back with quoted evidence on what does not, reply to every thread
+- `ceh-every-session:write-questionnaire`: turn open questions into a self-contained file someone
+  outside the session answers, then read the answers back
+- `validate.py`: a ratchet on the total description size, and hygiene checks for invisible
+  Unicode, personal absolute paths, and components missing from their plugin README
 - `docs/VISION.md`: identity, vision, autonomy limits, override rule, product-lifecycle scope,
   goals, non-goals, nine principles, and their priority order when they conflict
 - `ceh-business-plan:develop-business-plan`, `ceh-business-plan:find-product-market-fit`,
@@ -199,6 +214,20 @@ the attempt before, and fails a stage that edited its own gate's check.
 
 ### Changed
 
+- `code-review`, `review-against-plan`, `audit-test-suite`: quote or suppress, so a finding with
+  no quoted code is reported as unverified. `code-review` and `review-against-plan` also judge from
+  the code, not the brief, and gain a Cannot verify outcome
+- `write-less-code`: check at the boundary and trust inside, and count reader load, not lines.
+  `refactor-repo`: migrate callers then delete, and redesign when patches pile up
+- CEH Coding Conduct output style: a claim below the table names its evidence in the same sentence
+- `plan-fullstack-app`, `interview-workflow-task`: triage first, and a spike gets no plan or spec
+- `configure-python-service-env`, `configure-python-library-env`, `configure-bun-vite-env`: a
+  pre-commit hook step that runs lint and format on every commit
+- `write-fastapi-endpoints`: cursor pagination and deprecation headers. `write-postgresql-code`:
+  keyset paging and zero-downtime DDL
+- `edit-post` and the `ceh-documentation` docs standard: an AI-writing tells list
+- `add-plugin-component`: strictness-graded eval cases, and an "It's working if" line in the
+  template's README guidance. `model-audit`'s filter pass also cuts prose that changes no behavior
 - `agent-coding-contract`: "No implicit actions" requires a success claim to cite output from a
   command run after the last edit it covers
 - `analyze-competitor`: every coverage rating cites the competitor's path or URL and our component,

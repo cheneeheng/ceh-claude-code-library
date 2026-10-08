@@ -1,7 +1,7 @@
 {
   "name": "ceh-every-session",
-  "version": "2.1.0",
-  "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit) and context economy via delegated bulk reads.",
+  "version": "2.2.0",
+  "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, and context economy via delegated bulk reads.",
   "author": {
     "name": "cheneeheng",
     "email": "eeheng.chen@gmail.com"

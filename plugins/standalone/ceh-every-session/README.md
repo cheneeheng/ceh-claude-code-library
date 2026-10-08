@@ -7,6 +7,8 @@ Today it carries two session-protection concerns: `hand-off-session` saves a ses
 state to a file and loads it back in a later session, `usage-limit-handoff` uses it to stop a
 session cleanly before the account usage limit cuts it off, and `delegate-bulk-reads` with the cheap `bulk-reader`
 agent pushes I/O-heavy reading onto a small model so file contents never reach the main context.
+`write-questionnaire` hands open questions to someone outside the session and reads their answers
+back.
 
 ## Skills
 
@@ -15,10 +17,12 @@ agent pushes I/O-heavy reading onto a small model so file contents never reach t
 | `hand-off-session`    | On demand — "save the session", "pick this up", or when `usage-limit-handoff` calls it | Save: close the step in flight, write a handoff file (goal, done, in flight, open, decisions pending, resume line) to `.agents_workspace/handoff/` plus a line in the global `~/.claude/handoff/index.md`. Load: find the named or newest handoff, check it against the repo, and resume from its first open step.                                                                                                                                                                                                                                                                                                          |
 | `usage-limit-handoff` | When the usage-limit guard hook fires (5h or weekly window past threshold)             | Stop-and-summarize protocol: close the current atomic step, start nothing new, save the handoff through `hand-off-session` with the usage window in its header, end the turn. Subagents report upward instead of writing the artifact.                                                                                                                                                                                                                                                                                                                                                                                      |
 | `delegate-bulk-reads` | Before dispatching `bulk-reader`, and before acting on what it returns                 | The caller's half of the delegation. How to write the prompt so the answer is usable (one question per call, explicit paths, never ask it to edit), and the verification rules that apply afterwards: read the anchored lines before editing or reporting them, treat an unanchored bullet as unverified, and distrust a clean `Not found / uncertain` rather than lean on it — confirm coverage yourself, because every path sent owes a verdict in `Answer`. Carries the size floor (~400 lines, not "three or more files") and the rule that a "why" is worth splitting into several "wheres". Guard tuning lives below. |
+| `write-questionnaire` | On demand — "make a questionnaire", "I need to ask the team", "read the answers back"  | Write: turn the session's open questions into one self-contained file under `.agents_workspace/questionnaires/`, each question with its context, what it blocks, and options with a recommended default. Read: apply every `Answer:` line and list what is still open. It's working if each question reads sensibly to someone who never saw the session, and a blank answer is reported as open, not filled with the default.                                                                                                                                                                                              |
 
 **Manual triggers**
 
 - `hand-off-session` — `/hand-off-session save` or `/hand-off-session load [path]`, or say `"save where we are"` / `"pick this up"`.
+- `write-questionnaire` — `/write-questionnaire write` or `/write-questionnaire read [path]`, or say `"make a questionnaire for the team"`.
 - `usage-limit-handoff` — no slash command (hidden from the `/` menu), loaded by the usage-limit guard hook.
 - `delegate-bulk-reads` — no slash command (hidden from the `/` menu), loaded before dispatching `bulk-reader` or when a read guard names it.
 

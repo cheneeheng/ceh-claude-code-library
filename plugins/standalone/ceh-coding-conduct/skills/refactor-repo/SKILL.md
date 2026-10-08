@@ -102,6 +102,16 @@ A refactor changes shape, never behavior:
   check: it only proves what it already covered.
 - Commit refactors with the `refactor:` type, separate from any other change.
 
+### Replacing and redesigning
+
+- Migrate callers, then delete. To replace an API, move every caller to the new one, prove no
+  caller of the old one is left with a grep or the type checker, then delete the old one in the
+  same cluster. A shim that keeps both alive is the two-path state this campaign exists to end.
+- Redesign when patches pile up. When an area holds a third special case for the same concept,
+  or a fix keeps breaking a neighbour, propose a redesign from what the code must do today rather
+  than another patch. It is a candidate like any other: it goes in the Phase 2 table and waits
+  for approval.
+
 ## Output
 
 ### Phase 4 — Report

@@ -202,7 +202,9 @@ find less. Use them only under an external mandate (DO-178C, IEC 61508 and simil
 ## Output
 
 Report worst-first, each finding with file and line, and separate what you fixed from what needs a
-decision:
+decision. **Quote or suppress:** every finding quotes the code it is about, as `path:line` plus the
+line itself. A finding you cannot anchor to quoted code goes below the list as unverified, never in
+it.
 
 ```
 CRITICAL  tests/unit/test_billing.py:41  no assertion — only checks no exception raised

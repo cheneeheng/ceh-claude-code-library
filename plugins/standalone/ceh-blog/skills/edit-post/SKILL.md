@@ -70,6 +70,20 @@ checklist:
 
 **Influencer tells**: quiet down any banned tell (see Rules) — fold them back into connected, first-person paragraphs. Never introduce them.
 
+**AI-writing tells**: cut these on every editing pass, even when the author wrote them:
+
+- Stock words: delve, tapestry, testament, landscape, realm, leverage, robust, seamless, crucial,
+  pivotal, elevate, unlock, harness, and "navigate" used figuratively.
+- Stock frames: "It's not X, it's Y", "In today's fast-paced world", "Whether you're X or Y",
+  "Let's dive in", "It's worth noting that", "At the end of the day".
+- Reflexive triplets: three adjectives or three parallel clauses where one carries the point.
+- Signposting: "In this section, we will", "In conclusion", "Let's take a look at".
+- The em dash as the default joint between clauses, where a period, comma, or colon does the job.
+- A closing sentence that restates the paragraph it ends.
+
+Replace a tell with the specific thing it stood in for. A tell with nothing behind it is deleted,
+not reworded.
+
 **Series continuity**: if the draft is an episode in a series, find the earlier posts (the draft's own directory if it is a file, else a path or URL the user gave; ask once if neither exists) and check against them — versions, dates, what the reader already knows. It should pick up the previous episode's open thread (cross-linked) rather than re-telling a story an earlier post owns.
 
 **Structural fit**: does the post follow its type's natural shape (below)? Scattered steps or a buried story need reordering, not rewording.

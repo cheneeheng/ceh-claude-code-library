@@ -213,6 +213,20 @@ A copied sample keeps its source's status: a snippet copied onto `docs/index.md`
 - Second person, present tense, active voice. Procedures are imperative: "Run the migration".
 - One term per concept across the whole docs set; the reference name wins a conflict.
 - No marketing adjectives, no emoji, no "simply" or "just".
+- **AI-writing tells**: cut these on every editing pass:
+  - Stock words: delve, tapestry, testament, landscape, realm, leverage, robust, seamless,
+    crucial, pivotal, elevate, unlock, harness, and "navigate" used figuratively.
+  - Stock frames: "It's not X, it's Y", "In today's fast-paced world", "Whether you're X or Y",
+    "Let's dive in", "It's worth noting that", "At the end of the day".
+  - Reflexive triplets: three adjectives or three parallel clauses where one carries the point.
+  - Signposting: "In this section, we will", "In conclusion", "Let's take a look at".
+  - The em dash as the default joint between clauses, where a period, comma, or colon does the
+    job.
+  - A closing sentence that restates the paragraph it ends.
+
+  Replace a tell with the specific thing it stood in for. A tell with nothing behind it is
+  deleted, not reworded.
+
 - **Never invent.** Every command, flag, default, signature, label, and rationale comes from the
   code, its history, a design record, or the documented behavior of a named dependency or tool
   (Docker, uvicorn, the stdlib). Anything else is a `[VERIFY: …]`.

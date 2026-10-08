@@ -20,6 +20,7 @@ Checks:
                plain scalar containing ': ' (which strict YAML rejects).
   references - `references/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references}/...` and `${CLAUDE_SKILL_DIR}/...`
                mentions in SKILL.md/agent files resolve to a real file.
+  budget     - the sum of all skill and agent descriptions stays under MAX_TOTAL_DESCRIPTION_LEN.
   skill-refs - `plugin:component` references resolve to a real skill or agent.
   deps       - every `dependencies` entry names a plugin in this repo, the graph is acyclic,
                a ceh-scenario-* directory holds only plugin.json + README.md, and only a
@@ -31,6 +32,8 @@ Checks:
                PLUGIN_VERSIONS.md dates it to; no marketplace entry
                declares dependencies; a cross-cutting plugin (CLAUDE.md tier table) depends only
                on cross-cutting plugins; a skill a hook script names sets user-invocable: false.
+  hygiene    - no invisible Unicode or personal absolute path in tracked text; every skill and
+               agent is named in its plugin README.
   scripts    - *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
 """
 
@@ -50,6 +53,9 @@ MAX_NAME_LEN = 64
 # Claude Code allows 1024. The repo budget is lower because every description is paid for in
 # context on every session that installs the plugin (docs/VISION.md, goal 4).
 MAX_DESCRIPTION_LEN = 600
+# Ratchet on the sum of every skill and agent description. Lower it when the total drops; raise it
+# only in the PR that adds a component, by that component's description length.
+MAX_TOTAL_DESCRIPTION_LEN = 41474
 MAX_COMPATIBILITY_LEN = 500
 TEMPLATE_MARKER = "TEMPLATE-GUIDANCE"
 
@@ -356,6 +362,50 @@ def check_references() -> None:
                 fail(where, f"skill-dir reference '{rec}' not found")
 
 
+def check_description_budget() -> None:
+    total = sum(
+        len((parse_frontmatter(doc) or {}).get("description", ""))
+        for doc in doc_files()
+    )
+    if total > MAX_TOTAL_DESCRIPTION_LEN:
+        fail(
+            "descriptions",
+            f"total is {total} chars, over the {MAX_TOTAL_DESCRIPTION_LEN} ratchet - trim, "
+            "or raise MAX_TOTAL_DESCRIPTION_LEN by the new component's description only",
+        )
+
+
+# --- repo hygiene ----------------------------------------------------------
+
+INVISIBLE_PAT = re.compile("[\u200b-\u200f\u202a-\u202e\u2060-\u2064\ufeff]")
+USER_PATH_PAT = re.compile(r"[A-Za-z]:[\\/]Users[\\/]\w|/Users/\w|/home/\w")
+HYGIENE_ROOTS = ("plugins", "docs", "tools", ".claude", ".github")
+HYGIENE_SUFFIXES = {".md", ".json", ".py", ".sh", ".ps1", ".yml", ".yaml", ".html"}
+
+
+def check_hygiene() -> None:
+    """No invisible Unicode, no personal absolute paths, every component in its plugin README."""
+    files = list(REPO.glob("*.md"))
+    for root in HYGIENE_ROOTS:
+        files += [p for p in (REPO / root).rglob("*") if p.suffix in HYGIENE_SUFFIXES]
+    for path in files:
+        text = path.read_text(encoding="utf-8")
+        for n, line in enumerate(text.splitlines(), 1):
+            if m := INVISIBLE_PAT.search(line):
+                fail(f"{rel(path)}:{n}", f"invisible character U+{ord(m.group()):04X}")
+            if m := USER_PATH_PAT.search(line):
+                fail(f"{rel(path)}:{n}", f"personal absolute path '{m.group()}...'")
+
+    for d in plugin_dirs():
+        readme = d / "README.md"
+        text = readme.read_text(encoding="utf-8") if readme.exists() else ""
+        names = [p.name for p in (d / "skills").glob("*") if p.is_dir()]
+        names += [p.stem for p in (d / "agents").glob("*.md")]
+        for name in sorted(names):
+            if f"`{name}`" not in text:
+                fail(rel(readme), f"no row names component `{name}`")
+
+
 # --- skill references (plugin:component) -----------------------------------
 
 
@@ -634,10 +684,12 @@ def main() -> int:
     check_skills()
     check_agents()
     check_references()
+    check_description_budget()
     check_skill_refs()
     check_dependencies()
     check_invocations()
     check_repo_rules(versions)
+    check_hygiene()
     check_scripts()
 
     if errors:

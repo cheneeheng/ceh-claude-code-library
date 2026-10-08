@@ -26,6 +26,10 @@ change the pages call for that the report missed. Keep a change when one of thes
    If a guide is silent on the instruction, treat that model as unaffected.
 3. It fixes a model-independent defect: a reference to a missing file or command, or two
    instructions that contradict each other.
+4. It cuts prose that changes no behavior, model-independent too: a sentence whose deletion
+   changes nothing the model does ("be thorough", "use good judgment"), a negative instruction
+   rewritten as the positive one it implies where both say the same, or a missing statement of
+   when the task is done, added to the file's opening.
 
 Where a page above and the `/doctor` report disagree on the same instruction, follow the report.
 Its patterns are written for current models, while the general page's sample prompts can use
@@ -42,6 +46,6 @@ Reply with only this Markdown, no preamble:
 
 ## Kept changes
 
-One `### <file>:<line>` heading per change, then: the rule it keeps under (1, 2, or 3), the
+One `### <file>:<line>` heading per change, then: the rule it keeps under (1 to 4), the
 backing quote with its URL, for rule 2 the models it benefits and why the others are unaffected,
 and the change as a before/after pair. Write "None." if nothing survived.

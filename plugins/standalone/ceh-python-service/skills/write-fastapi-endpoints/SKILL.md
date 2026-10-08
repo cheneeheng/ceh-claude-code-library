@@ -72,9 +72,29 @@ Do not return `200` for errors. Do not return `500` for user input errors.
 | `message`        | Human-readable, safe to display                      |
 | `correlation_id` | Propagated from the request for log tracing          |
 
+#### Pagination
+
+Every collection endpoint is paginated from its first release, because adding it later is a
+breaking change for every client that read the whole list.
+
+- Cursor-based by default: `GET /sessions?limit=50&cursor=<opaque>`. `limit` defaults to 50 and is
+  capped at 100 with a Pydantic `Field(le=100)`, so a client cannot ask for the whole table.
+- Response shape: `{ "items": [...], "next_cursor": "..." }`, with `next_cursor` `null` on the last
+  page. The cursor is opaque to clients (base64 of the last row's sort key), so its contents can
+  change without a version bump.
+- The sort key is unique and stable, such as `(created_at, id)`, so rows inserted mid-scan are
+  neither skipped nor repeated. The query is a keyset scan (see `ceh-python-service:write-postgresql-code`).
+- Offset pagination (`?page=`) only for small, admin-only lists, where a page shifting under
+  concurrent inserts does no harm.
+
 #### API versioning
 
 Prefer backward-compatible additions (new optional fields, new endpoints). Only version when a breaking change cannot be avoided. When required: use a URL prefix (`/v2/resources`), maintain `/v1/` for a documented deprecation period, and record the timeline in `ARCHITECTURE.md` Key Decisions.
+
+During the deprecation period, every `/v1/` response carries `Deprecation: true` and a `Sunset`
+header with the removal date (RFC 8594), so clients find out from the API, not from a changelog
+they never read. Removing a field, renaming one, or making an optional request field required are
+breaking changes. Adding an optional field or a new endpoint is not.
 
 #### Headers
 

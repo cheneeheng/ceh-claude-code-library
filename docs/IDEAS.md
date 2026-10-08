@@ -22,8 +22,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** A per-description byte cap plus a ratcheted total keeps skill-catalog cost bounded.
   gstack caps each description at 260 bytes. Ours run from 63 to 1,058 bytes, median 693.
-- **Status:** half built on 2026-10-08: `validate.py` caps each description at 600 characters. The
-  ratcheted total is still open.
+- **Status:** built on 2026-10-08: `validate.py` caps each description at 600 characters, and
+  `MAX_TOTAL_DESCRIPTION_LEN` ratchets the total. A PR that adds a component raises it by that
+  component's description only.
 
 ### Lead-judgment buckets
 
@@ -44,6 +45,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** A review finding with no quoted code drops below the line that shows it.
 - **Note:** Three plugins means a `docs/CROSS_REFERENCES.md` entry.
+- **Status:** built on 2026-10-08 as a rule in `code-review` and `review-against-plan`, and in
+  `audit-test-suite`'s Output. An unquoted finding is reported as unverified, outside the findings.
 
 ### Scope drift first
 
@@ -63,6 +66,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Idea:** A review brief never says "do not flag" or "at most Minor", and a third verdict, "cannot
   verify from diff", exists.
 - **Note:** Two plugins means a `docs/CROSS_REFERENCES.md` entry.
+- **Status:** built on 2026-10-08 as "Judge from the code, not the brief" in both skills, with a
+  Cannot verify verdict in `code-review` and a Cannot verify section status in `review-against-plan`.
 
 ### Receive review with rigor
 
@@ -71,6 +76,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Fires on "address these review comments": verify each comment against the code before
   acting, push back with evidence, no performative agreement.
+- **Status:** built on 2026-10-08 as `ceh-git-workflow:address-review-comments`.
 
 ### Extra review lenses
 
@@ -252,6 +258,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-coding-conduct:refactor-repo`, `write-less-code`
 - **Effort:** S
 - **Idea:** Add these as rules inside our existing skills rather than as skills of their own.
+- **Status:** built on 2026-10-08: boundary discipline and reader load in `write-less-code`'s Rules,
+  migrate-then-delete and redesign in `refactor-repo`'s "Replacing and redesigning".
 
 ### Design red-flag screen
 
@@ -300,6 +308,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-coding-conduct` output style
 - **Effort:** S
 - **Idea:** Every claim carries measured, inferred, or guess in the same sentence.
+- **Status:** built on 2026-10-08 in the output style's Honesty section, for claims below the summary
+  table. The table's Status column already labelled the rest.
 
 ### Comment audit
 
@@ -365,6 +375,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** At a phase change, pick continue, clear, handoff, subagent, or compact, first yes wins.
   Our handoff fires only near the usage limit.
+- **Status:** dropped for now on 2026-10-08. No observable event marks the end of a phase, so the
+  skill would have no moment to trigger on. Revisit once "phase boundary" is defined as an event,
+  such as a plan file written or a PR merged.
 
 ### Questionnaire for others
 
@@ -373,6 +386,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Turn open questions into an async questionnaire someone else answers. Holds for any
   Claude Code use, so it passes the `ceh-every-session` test.
+- **Status:** built on 2026-10-08 as `ceh-every-session:write-questionnaire` (write and read).
 
 ### `skip: <reason>` rows
 
@@ -389,6 +403,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Announce spike, bounded, or architectural before planning, and only architectural work
   gets a written spec. The path may upgrade, never downgrade.
+- **Status:** built on 2026-10-08 as the triage table at the top of `plan-fullstack-app`'s Procedure.
+  `interview-workflow-task` uses only the spike cut, because every repeated task still needs all
+  nine questions.
 
 ### Skill from this session
 
@@ -452,6 +469,8 @@ Effort: S is under a day, M is a few days, L is longer.
   command, written content) is promoted to a hook rather than reworded again. ECC's report flags
   any step passing in at most one of three runs (`threshold_promote_to_hook: 0.6`) but writes no
   hook.
+- **Status:** built on 2026-10-08 as guidance in `add-plugin-component` step 6. It applies only when the
+  user asks for eval cases, since every run is billed.
 
 ### Agent-prose no-op hunt
 
@@ -460,8 +479,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Hunt sentences that change no behavior, prefer positive instructions over negation, and
   state a completion criterion.
-- **Status:** half built on 2026-10-08 in the guidance of both component templates. The
-  `model-audit` half is still open: its prompts live in scripts and were not changed.
+- **Status:** built on 2026-10-08: the guidance of both component templates, and rule 4 of
+  `model-audit`'s filter prompt (`references/filter.md`).
 
 ### "It's working if" signals
 
@@ -469,6 +488,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `examples/ceh-<plugin>/README.md`, `assets/SKILL.template.md`
 - **Effort:** S
 - **Idea:** Each skill lists signals a user can see without reading SKILL.md, honest to evidence.
+- **Status:** built on 2026-10-08 in reduced form: the skill template's guidance asks for an "It's
+  working if" line in the plugin README row of each new skill. Existing skills were not back-filled.
 
 ### Stale-version audit
 
@@ -489,6 +510,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `tools/validate-plugins/validate.py`
 - **Effort:** S
 - **Idea:** Check README counts against disk, invisible characters, and absolute user paths.
+- **Status:** built on 2026-10-08 as `validate.py`'s hygiene check. No README states a count, so the
+  disk check is that every skill and agent is named in its plugin README.
 
 ### Hook fixture tests
 
@@ -521,6 +544,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** None of our three env skills mentions pre-commit today.
 - **Note:** Three copies means a `docs/CROSS_REFERENCES.md` entry.
+- **Status:** built on 2026-10-08. The Python skills use the `pre-commit` framework with local hooks
+  that call ruff through `uv run`. The Bun skill uses a committed `.githooks/pre-commit` via
+  `core.hooksPath`, with no package added.
 
 ### API and migration rules
 
@@ -529,6 +555,9 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Add pagination and versioning conventions, and reversible, zero-downtime migration
   steps where ours are thin.
+- **Status:** built on 2026-10-08. Versioning already existed, so `write-fastapi-endpoints` gains
+  cursor pagination and the `Deprecation` / `Sunset` headers, and `write-postgresql-code` gains
+  keyset paging and a Zero-downtime DDL section.
 
 ### React render performance
 
@@ -563,6 +592,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** A list of AI-writing tells to cut from prose we publish, applied on an editing pass.
 - **Note:** Two plugins means a `docs/CROSS_REFERENCES.md` entry.
+- **Status:** built on 2026-10-08 in `edit-post` step 3 and in §8 Voice of the `ceh-documentation`
+  docs standard, which every documentation skill reads.
 
 ### Brand voice profile
 
