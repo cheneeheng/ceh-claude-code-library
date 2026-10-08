@@ -39,8 +39,8 @@ which number to look at each week.
    and name the slowest. Effort spent anywhere else does not raise output. When a key result is
    later missed, ask why five times before changing the plan (Taiichi Ohno's practice at Toyota).
 9. Allocate money and person-weeks to each objective. State the total against the runway in §11
-   and say what is deliberately unfunded. Keep a buffer of about a fifth unallocated, so overruns land
-   in the buffer instead of cutting an objective.
+   and say what is deliberately unfunded. Keep a buffer of about a fifth unallocated, so
+   overruns land in the buffer instead of cutting an objective.
 10. Set the cadence: a weekly input review of 30 minutes, a monthly re-score of the PMF gate and
     the kill criteria, a re-plan at 90 days.
 11. Write §13 now, then show it. Writing before asking keeps the plan if the session is

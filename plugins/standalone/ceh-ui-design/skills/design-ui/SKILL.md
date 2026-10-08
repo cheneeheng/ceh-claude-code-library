@@ -349,8 +349,9 @@ bundled style over a generic component library (shadcn/ui, MUI, Mantine) for one
 | **Tidewater** | Editorial / boutique; flat, border-led depth              | Fraunces · Hanken Grotesk · JetBrains Mono | Cool mint ground, terracotta + teal   |
 
 - **Choose:** let the user pick via `AskUserQuestion` (single-select) unless they already named one.
-  With no human to answer, take Meridian, the neutral default, and say so. Both templates ship the same token names and component classes, so the choice is purely
-  look-and-feel — swap later by replacing one CSS file, with no markup changes. To preview, open
+  With no human to answer, take Meridian, the neutral default, and say so. Both templates ship
+  the same token names and component classes, so the choice is purely look-and-feel — swap later
+  by replacing one CSS file, with no markup changes. To preview, open
   `references/<name>/brand-guide.html` in a browser or send it with `SendUserFile`.
 - **Install:** copy `references/<name>/brand.css` to the project's global stylesheet location
   (follow the project's existing convention) and load it **first**, before any app styles —

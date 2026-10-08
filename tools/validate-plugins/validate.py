@@ -580,7 +580,11 @@ def check_repo_rules(versions: dict[str, str]) -> None:
             continue
         wired = re.findall(r"scripts/([\w.-]+)", hooks.read_text(encoding="utf-8"))
         for script in dict.fromkeys(wired):
-            text = (d / "scripts" / script).read_text(encoding="utf-8")
+            path = d / "scripts" / script
+            if not path.exists():
+                fail(rel(hooks), f"wires scripts/{script}, which does not exist")
+                continue
+            text = path.read_text(encoding="utf-8")
             for plugin, skill in dict.fromkeys(COMPONENT_PAT.findall(text)):
                 sm = (
                     REPO / "plugins/standalone" / plugin / "skills" / skill / "SKILL.md"

@@ -424,8 +424,8 @@ or
 ```
 
 Always point to the last artifact where that section was substantively written, not to the skeleton
-by default, because the latest write is the current spec. A pointer may cross a version boundary, e.g. a `v2` iteration whose §03 was last
-written in the `v1` skeleton points to `SKELETON § 03`.
+by default, because the latest write is the current spec. A pointer may cross a version boundary,
+e.g. a `v2` iteration whose §03 was last written in the `v1` skeleton points to `SKELETON § 03`.
 
 **`depends_on` frontmatter.** Every iteration lists the artifacts it builds on, by stem, so the
 implementation step can resolve pointers by walking the chain backward:
@@ -485,4 +485,4 @@ Whole build to MVP:
   partial full-MVP plan. Proceed to a full-MVP plan only if the user insists, flagging later
   iterations as low-confidence.
 - The audit finds gaps that need user input → collect them and present them together before
-  finalising.
+  finalising. Headless, finalise with each gap listed as an open item in the closing summary.
