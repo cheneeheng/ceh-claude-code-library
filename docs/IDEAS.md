@@ -22,6 +22,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** A per-description byte cap plus a ratcheted total keeps skill-catalog cost bounded.
   gstack caps each description at 260 bytes. Ours run from 63 to 1,058 bytes, median 693.
+- **Status:** half built on 2026-10-08: `validate.py` caps each description at 600 characters. The
+  ratcheted total is still open.
 
 ### Lead-judgment buckets
 
@@ -268,6 +270,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Block edits to an existing linter or formatter config so the agent fixes the code
   instead. Stack-agnostic.
+- **Status:** waiting on evidence. A new guard is built only after an observed failure that prose
+  did not prevent (principle 7), so this stays unbuilt until one is recorded here.
 
 ### Block hook bypass
 
@@ -276,6 +280,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Deny `--no-verify`, `-n`, and `-c core.hooksPath=` on commit, which our pre-commit
   discipline assumes never happen.
+- **Status:** waiting on evidence. A new guard is built only after an observed failure that prose
+  did not prevent (principle 7), so this stays unbuilt until one is recorded here.
 
 ### Denial dampening
 
@@ -431,10 +437,12 @@ Effort: S is under a day, M is a few days, L is longer.
 ### Rejection records
 
 - **Source:** mattpocock `SCOPE.md`, `.out-of-scope/`
-- **Where:** new `docs/OUT_OF_SCOPE.md`, fed by the Skip lists in the analyses
+- **Where:** this file, as **Status: rejected** entries, fed by the Skip lists in the analyses
 - **Effort:** S
 - **Idea:** One entry per rejected idea with the reason, checked before a skipped idea comes back.
   Needs an observed failure, not a hypothetical gain.
+- **Note:** Not a separate `OUT_OF_SCOPE.md`: principle 9 in `VISION.md` puts rejections here, so
+  one file answers "was this already proposed".
 
 ### Pre-commit setup step
 
@@ -567,6 +575,36 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** M
 - **Idea:** The same prompt and rubric to subagents on different models, with findings ranked by
   agreement. Opt-in, since it costs several times a single review.
+
+### Sweep on Sonnet, judge on Opus
+
+- **Source:** our own trial on 2026-10-08: the same read-only `VISION.md` audit, run by Opus and
+  by a Sonnet subagent
+- **Where:** `.claude/skills/model-audit`, `ceh-every-session:delegate-bulk-reads`
+- **Effort:** M
+- **Idea:** Split a repo-wide audit by model. Opus breaks the goal into narrow questions, parallel
+  Sonnet subagents sweep for them and return `file:line` findings, then Opus spot-checks a sample,
+  re-checks every "all clear" claim, adds the judgment findings, and writes the report. Mechanical
+  fixes go to Sonnet, and rewrites that need judgment stay with Opus.
+- **Note:** One trial, so not yet evidence. About 60% of findings overlapped, and the union beat
+  either model. Every Sonnet `file:line` finding held up. Its one error was a negative claim (all
+  env vars documented), and it missed the judgment findings: built-in overlap, per-session hook
+  cost, `IDEAS.md` conflicts. Repeat on one or two more audits before building.
+- **Note:** Pairs with Model per subagent role and Model-diverse review panel: those pick a model
+  per role or compare models on one prompt, this one splits a task by the kind of work.
+
+### Scope the coding hooks
+
+- **Source:** the 2026-10-08 `VISION.md` audit
+- **Where:** `ceh-coding-conduct` hooks (`load-contract.sh`, `inject-less-code-reminder.sh`)
+- **Effort:** M
+- **Idea:** Open question, no solution chosen yet. The SessionStart contract load and the per-prompt
+  less-code reminder fire in every session, including ones that write no code, which costs context
+  every run (goal 4). No README records the failure each hook answers (principle 7). Decide how
+  far to scope them (conditional reminder, softer contract wording, or removal) and record the
+  evidence behind whatever stays.
+- **Note:** Also listed under "Where the repo does not match yet" in `VISION.md`. Close both
+  together.
 
 ### Dual-reviewer gate
 

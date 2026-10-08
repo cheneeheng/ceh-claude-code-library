@@ -2,13 +2,9 @@
 name: close-test-risk-gaps
 description: >-
   Load this skill as a pre-completion gate when a feature is functionally working and about to be
-  called done — it triages five failure classes a passing functional suite structurally cannot
-  catch: concurrency/non-idempotent retries, contract drift across a process boundary, performance
-  regression, broken authorization, and migration or rolling-deploy incompatibility. Trigger on "is
-  this ready", "anything else to test", "before I open the PR", "race condition", "idempotency",
-  "N+1 query", "authorization test", "is this migration safe", "backfill", "tests pass but I am not
-  confident", or unnamed: a shared stock/counter decrements, a retry could double-charge, a
-  caller-supplied ID could return someone else's data, or a column is renamed/backfilled. Not for
+  called done. It triages five failure classes a passing functional suite cannot catch: concurrency
+  and retries, contract drift, performance regression, broken authorization, and migration
+  incompatibility. Trigger on "is this ready", "before I open the PR", "race condition". Not for
   new-test selection (ceh-testing:design-test-cases), suite trust (ceh-testing:audit-test-suite),
   one bug (ceh-testing:test-a-bug-fix), or refactor safety (ceh-testing:verify-behavior-preserved).
 disable-model-invocation: false
@@ -170,7 +166,8 @@ Three rules the matrix encodes:
 - **Cover write and delete, not only read.** They are usually pasted from the read handler, minus
   the ownership check.
 
-Add one matrix per resource type, not per endpoint.
+Add one matrix per resource type, not per endpoint: the ownership rule belongs to the resource, so
+per-endpoint matrices repeat the same cases.
 
 ---
 

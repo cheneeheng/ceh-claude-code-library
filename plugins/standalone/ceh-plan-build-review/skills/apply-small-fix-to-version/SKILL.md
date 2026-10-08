@@ -3,12 +3,10 @@ name: apply-small-fix-to-version
 description: >-
   Load this skill when patching an already-implemented version of a planned app: a small,
   non-feature change made after that version was built (bug fix, copy or config tweak, validation
-  tightening, small behavioral adjustment, dependency bump, small post-MVP polish). Records the
-  change as a patch ITER_NN.md (frontmatter patch: true) so the plan stays truthful, then
-  implements only the touched sections. Trigger on "patch this version", "small change to the
-  shipped version", "non-feature fix", "fix this in the built app and keep the plan in sync". Not
-  for anything that adds or changes a feature (use plan-fullstack-app), and not for
-  the version bump or release (use ceh-git-workflow:release).
+  tightening, dependency bump). Records the change as a patch ITER_NN.md so the plan stays truthful,
+  then implements only the touched sections. Trigger on "patch this version", "small change to the
+  shipped version", "non-feature fix". Not for anything that adds or changes a feature (use
+  plan-fullstack-app), and not for the version bump or release (use ceh-git-workflow:release).
 argument-hint: "[what-to-patch]"
 disable-model-invocation: false
 user-invocable: true
@@ -110,7 +108,8 @@ Report per Output, then hand off the release per Hands off to.
   §02. If you find yourself listing §02, re-run the gate (step 2): it is probably an iteration.
 - Keep the diff to the plan as small as the diff to the code.
 - Do not implement any section outside `sections_changed`.
-- Do not bump versions or tag. The version bump and release are not this skill's job.
+- Do not bump versions or tag. The version bump and release are not this skill's job: the release
+  skill runs bump, changelog, and tag as one gated flow.
 
 ## Output
 
@@ -122,7 +121,8 @@ Report per Output, then hand off the release per Hands off to.
 
 - The routing gate classifies the change as a feature → stop, say so in one line, and point the
   user at `plan-fullstack-app`.
-- More than one plan family exists and the user named none → ask which version is being patched.
+- More than one plan family exists and the user named none → take the highest version, per
+  "Locating plan files" in the plan schema, and say which.
 
 ## Hands off to
 

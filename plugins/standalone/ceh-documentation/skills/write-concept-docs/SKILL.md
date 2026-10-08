@@ -1,16 +1,13 @@
 ---
 name: write-concept-docs
 description: >-
-  Load this skill when writing user-facing concept pages for a project in Markdown: the mental
-  model a user needs (core objects, lifecycle, data flow, configuration precedence, error and retry
-  model) and why it is built that way, the decision, the alternatives rejected, the trade-off, each
-  traced to a source in the repo or its history. Trigger on "explain how this works in the docs",
-  "document the design decisions for users", "write a concepts section", "why does it work this
-  way — put it in the docs", or when ceh-documentation:write-project-docs delegates its concepts
-  step. Not for a maintainer architecture doc with diagrams and a decision log (use
-  ceh-codebase-explanation:document-architecture), a per-module codebase walkthrough (use
-  ceh-codebase-explanation:explain-codebase), task steps (use write-guides-and-runbooks), or lookups (use
-  write-api-reference).
+  Load this skill when writing user-facing concept pages for a project in Markdown: the mental model
+  a user needs (core objects, lifecycle, data flow, error model) and why it is built that way.
+  Trigger on "explain how this works in the docs", "write a concepts section", or when
+  ceh-documentation:write-project-docs delegates its concepts step. Not for a maintainer
+  architecture doc (use ceh-codebase-explanation:document-architecture), a codebase walkthrough (use
+  ceh-codebase-explanation:explain-codebase), task steps (use write-guides-and-runbooks), or lookups
+  (use write-api-reference).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

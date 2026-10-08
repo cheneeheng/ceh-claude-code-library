@@ -108,7 +108,7 @@ const router = createBrowserRouter([
 
 ### Centralized API client
 
-All `fetch` calls go through `src/lib/api/client.ts`. Components and hooks never call `fetch` directly.
+All `fetch` calls go through `src/lib/api/client.ts`. Components and hooks never call `fetch` directly, so the base URL, headers, and error parsing live in one place and tests mock one boundary.
 
 ```ts
 export const apiClient = {

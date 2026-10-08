@@ -37,7 +37,7 @@ a rival cannot copy cheaply, and that visibly give something up. Done is a §04 
    re-score criterion 3 of the PMF gate.
 8. List what §05, §09, and §13 now contain that the strategy refuses, and ask the user to confirm
    the list before removing anything. Never touch another skill's subsection: report a conflict
-   with it instead.
+   with it instead, because each specialist owns its tagged lines and some are fixed on purpose.
 
 ## The nine tests
 
@@ -105,6 +105,10 @@ Written into §04 of `BUSINESS_PLAN.md`:
   that and name `ceh-business-plan:find-product-market-fit`.
 - Every candidate advantage fails the copy-cost test and the user has no further material → write
   the block with the failures showing and say plainly that the plan has no defensible edge yet.
+- **No human to answer** (a headless run, or called by another agent): ask nothing. Draft and
+  revise from what the plan holds, tag every gap `[assumption]`, and end with the questions you
+  would have asked, in order, each with the assumption you used instead. Remove nothing in step 8:
+  list the conflicts, because a removal is the user's call.
 
 ## Hands off to
 

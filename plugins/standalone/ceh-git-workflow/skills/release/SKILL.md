@@ -3,12 +3,10 @@ name: release
 description: >-
   Load this skill when shipping a version: bump it, write the changelog section, land the bump
   through a PR, then tag the merge commit on main and publish the GitHub release. Trigger on "cut a
-  release", "ship a release", "bump the version", "bump and release", "tag a release", "publish a
-  release", "run the release flow", "do the full release", and on an urgent production fix that
-  must ship now ("hotfix", "critical fix"). Auto-load whenever a version field changes in any
-  project manifest (pyproject.toml, package.json, plugin.json, marketplace.json, Cargo.toml,
-  *.csproj, build.gradle) or a git tag is being created. Not for landing a branch with no version
-  (use ceh-git-workflow:pull-request).
+  release", "bump the version", "tag a release", "publish a release", "run the release flow", and on
+  an urgent production fix that must ship now ("hotfix"). Auto-load whenever a version field changes
+  in a project manifest (pyproject.toml, package.json, plugin.json, Cargo.toml) or a git tag is
+  being created. Not for landing a branch with no version (use ceh-git-workflow:pull-request).
 argument-hint: "[version]"
 disable-model-invocation: false
 user-invocable: true
@@ -71,7 +69,8 @@ The [Full release](#full-release) with these differences:
 3. Review is fast-tracked to 1 approval, but CI must pass. A broken hotfix is worse than a delayed
    one.
 4. The PR body links the incident and names the symptom, so the merge commit explains itself.
-5. After publishing, deploy staging then production (both, however abbreviated). Confirm the
+5. After publishing, deploy staging then production (both, however abbreviated), because a rushed
+   fix that skips staging can ship a second failure straight to production. Confirm the
    symptom is gone and error rates are back to baseline before declaring the incident resolved,
    and be ready to roll back. A P1/P2 gets a post-mortem within 48 hours.
 
@@ -93,7 +92,8 @@ When in doubt, PATCH. Versions only increase. Pre-releases take a suffix (`v1.4.
 ### Gates
 
 - One version everywhere: every manifest reads the same vX.Y.Z before the commit.
-- Tag the merge commit on `main`, never the feature branch: `git pull origin main` first.
+- Tag the merge commit on `main`, never the feature branch, because the tag must name the tree
+  that passed the gate on `main`: `git pull origin main` first.
 - Never tag or release on a red gate. Surface it and wait.
 
 ### Attribution
@@ -128,8 +128,12 @@ chore: release vX.Y.Z
 
 ## Stop conditions
 
-- Bump level unclear between MINOR and MAJOR → state the breaking candidate and ask.
+- Bump level unclear between MINOR and MAJOR → state the breaking candidate and ask. With no human
+  to answer, take MAJOR and say why, because an unflagged break costs users more than an extra
+  major version.
 - CI red or approvals missing at step 7 → surface it and wait. Never tag around it.
+- No human present and no standing authorization to publish → prepare everything up to the tag,
+  then stop and report. Tagging and publishing are outward-facing and cannot be taken back.
 
 ## Hands off to
 

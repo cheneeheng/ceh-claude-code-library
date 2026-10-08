@@ -15,8 +15,8 @@ Frontmatter
 - Keys in this order, only the ones you need: name, description, model, effort, tools,
   disallowedTools, skills, maxTurns, memory, background, omitClaudeMd, color.
 - name: lowercase letters, digits, single hyphens, equal to the file name without `.md`.
-- description: always `>-`, 2-space indent, no blank lines, max 1024 chars. Keep it short: every
-  agent description loads into every session. Prose only, no <example> blocks.
+- description: always `>-`, 2-space indent, no blank lines, max 600 chars (validate.py). Keep it
+  short: every agent description loads into every session. Prose only, no <example> blocks.
 - model: always present, even as `inherit`, so every agent states what it runs on.
   inherit | sonnet | haiku | opus. Pick a cheaper model when the job is mechanical.
 - tools: the smallest set the job needs. Background subagents (the default) silently lose any

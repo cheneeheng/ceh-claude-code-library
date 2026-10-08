@@ -1,9 +1,5 @@
 # ceh-claude-code-library
 
-**WORK IN PROGRESS**
-
-2026.09.30 - Migrating from [agent-skills](https://github.com/cheneeheng/agent-skills) repo.
-
 Claude Code plugins that guide autonomous agents through a product's life: shaping the idea,
 building and proving the software, and getting it in front of the people who should find it. They
 are written for agents first and people second. An agent follows them with no human watching, and a

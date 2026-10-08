@@ -1,16 +1,12 @@
 ---
 name: plan-fullstack-app
 description: >-
-  Load this skill when planning a software project into SKELETON.md and ITER_NN.md files, either
-  one release at a time or the complete build to a working MVP in one session. Next-release mode
-  (the default) writes one scoped artifact: a greenfield skeleton, the next iteration, or the start
-  of a new major version, and copes with vague, early-stage descriptions. Whole-build mode plans
-  the skeleton plus every iteration upfront, behind a complexity gate that falls back to
-  next-release mode when the build is large, novel, or uncertain. Trigger on "plan the next
-  feature", "plan this iteration", "create a skeleton plan", "plan the next release", "plan this
-  whole app to MVP", "plan everything upfront", "lay out all the iterations", "full build plan".
-  Not for building the plan (use implement-from-plan) or a small non-feature change to a built
-  version (use apply-small-fix-to-version).
+  Load this skill when planning a software project into SKELETON.md and ITER_NN.md files, one
+  release at a time or the complete build to a working MVP in one session. Next-release mode (the
+  default) writes one scoped artifact. Whole-build mode plans the skeleton plus every iteration
+  upfront, behind a complexity gate. Trigger on "plan the next feature", "create a skeleton plan",
+  "plan this whole app to MVP". Not for building the plan (use implement-from-plan) or a small
+  non-feature change to a built version (use apply-small-fix-to-version).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -59,13 +55,11 @@ artifact scoped to one release.
 
 Before writing anything, determine:
 
-1. **What is the app?** Capture the core concept in one sentence. If unclear, ask, but only one
-   question at a time.
+1. **What is the app?** Capture the core concept in one sentence.
 2. **Greenfield or continuing?** Is this a new project, or adding to or changing something that
    already exists?
 3. **Which plan family?** Is this work part of the current plan set, or the start of a **new major
-   version** (v2, v3, …)? See [Plan families and versions](#plan-families-and-versions). When in
-   doubt, ask.
+   version** (v2, v3, …)? See [Plan families and versions](#plan-families-and-versions).
 4. **What is the scope of this session?** Skeleton, a specific feature, a rework?
 
 Use the answers to select the output:
@@ -77,8 +71,11 @@ Use the answers to select the output:
 | New major version that reshapes the scaffolding             | [Skeleton plan](#skeleton-plan), new `vN` family                                                   |
 | New major version that builds directly on the prior one     | [Iteration plan](#iteration-plan), new `vN` family — first iteration `depends_on` the prior family |
 
-Do not proceed to planning until intent is clear. Do not ask more than one clarifying question per
-exchange.
+Infer every answer you can from the description and the repo first. Put whatever is still unclear
+into **one round** of questions, each with your recommended answer, then plan without stopping
+again: a question per turn costs the human a turn each and stalls the run between them. With no
+human to answer (a headless run), take each recommended answer, list it under Assumptions in the
+closing summary, and plan.
 
 ### 2. Apply the anti-overplan check
 
@@ -131,7 +128,7 @@ over a plan you cannot trust.
 
 Before planning anything, decide whether this app is simple and certain enough to plan end-to-end.
 Gather what you need by inferring from the user's description first, then ask only for what is
-genuinely missing, one question at a time.
+genuinely missing, in the single round described under [Assess intent](#1-assess-intent).
 
 You are judging foreseeability: can the whole build be planned now without guessing at decisions
 that can only be made by building first?
@@ -179,7 +176,8 @@ harder for hidden uncertainty, not an automatic stop on its own.
 - **PROCEED** → state in one line why the app clears the gate, then continue to step 2.
 - **STOP** → state plainly that this app is better planned incrementally, give the specific reason
   (which signal tripped), and offer Next release mode, starting with the skeleton. Run it only
-  once the user agrees, since it changes what they asked for. Do not produce a partial full-MVP
+  once the user agrees, since it changes what they asked for. With no human to agree, write the
+  Next release skeleton and report the fallback and its reason. Do not produce a partial full-MVP
   plan as a consolation: that is the exact fiction this gate exists to prevent. If the user insists
   after a clear recommendation, proceed but flag the later iterations as low-confidence and likely
   to change.
@@ -189,7 +187,8 @@ harder for hidden uncertainty, not an automatic stop on its own.
 The MVP is the terminator for the whole plan. Without a hard edge, "plan everything" has no
 stopping point and silently becomes overplanning. So pin it down before sequencing anything.
 
-Write two short lists and confirm them with the user if there is any doubt:
+Write two short lists. If there is any doubt, confirm them in the question round. With no human to
+answer, keep the shorter "In the MVP" list and list the call under Assumptions:
 
 - **In the MVP:** the minimal set of capabilities that makes the app genuinely usable for its core
   purpose. If a feature can be removed and the app still delivers its core value, it is not in the
@@ -425,8 +424,8 @@ or
 ```
 
 Always point to the last artifact where that section was substantively written, not to the skeleton
-by default. A pointer may cross a version boundary, e.g. a `v2` iteration whose §03 was last
-written in the `v1` skeleton points to `SKELETON § 03`.
+by default, because the latest write is the current spec. A pointer may cross a version boundary,
+e.g. a `v2` iteration whose §03 was last written in the `v1` skeleton points to `SKELETON § 03`.
 
 **`depends_on` frontmatter.** Every iteration lists the artifacts it builds on, by stem, so the
 implementation step can resolve pointers by walking the chain backward:
@@ -448,7 +447,8 @@ Iteration rules:
 
 ## Rules
 
-- Ask at most one clarifying question at a time.
+- Ask once: one round of questions, each with a recommended answer. Headless, take the
+  recommended answers and list them under Assumptions.
 - Do not produce a `CLAUDE.md` unless the user asks, or any file beyond the planning set.
 - Never rewrite a skeleton or iteration delivered in a prior session.
 - Next release only: one artifact per session, scoped to one release. Do not plan the iteration
@@ -462,7 +462,7 @@ Iteration rules:
 Next release: one file under `.agents_workspace/planning/` (`SKELETON.md`, `ITER_NN.md`, or their
 `_vN` forms). Whole build to MVP: the full planning set for the family. Every file opens with the
 frontmatter from `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md`. Close the reply with a brief
-summary.
+summary, ending with an Assumptions list of every recommended answer taken without a reply.
 
 Next release:
 
@@ -479,9 +479,10 @@ Whole build to MVP:
 ## Stop conditions
 
 - Intent is unclear (the app, greenfield vs continuing, the plan family, or the session scope) →
-  ask one question and wait instead of planning on a guess.
+  ask the single round from Assess intent, with a recommended answer each, instead of planning on
+  a silent guess. Headless, take the recommended answers and list them under Assumptions.
 - The complexity gate returns STOP → state the reason, offer Next release mode, and produce no
   partial full-MVP plan. Proceed to a full-MVP plan only if the user insists, flagging later
   iterations as low-confidence.
 - The audit finds gaps that need user input → collect them and present them together before
-  finalising.
+  finalising. Headless, finalise with each gap listed as an open item in the closing summary.

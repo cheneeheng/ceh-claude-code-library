@@ -39,7 +39,8 @@ which number to look at each week.
    and name the slowest. Effort spent anywhere else does not raise output. When a key result is
    later missed, ask why five times before changing the plan (Taiichi Ohno's practice at Toyota).
 9. Allocate money and person-weeks to each objective. State the total against the runway in §11
-   and say what is deliberately unfunded. Keep a buffer of about a fifth unallocated.
+   and say what is deliberately unfunded. Keep a buffer of about a fifth unallocated, so
+   overruns land in the buffer instead of cutting an objective.
 10. Set the cadence: a weekly input review of 30 minutes, a monthly re-score of the PMF gate and
     the kill criteria, a re-plan at 90 days.
 11. Write §13 now, then show it. Writing before asking keeps the plan if the session is
@@ -69,8 +70,9 @@ that touches their money, safety, or data.
   them.
 - Never invent owners, headcount, or budget. With a solo founder, every owner is that person and
   the plan says so, which is itself the capacity check.
-- A solo founder gets one objective, not three.
-- Dates are calendar dates, not "Q2" or "week 6".
+- A solo founder gets one objective, not three, because one person's capacity cannot carry three.
+- Dates are calendar dates, not "Q2" or "week 6", so a key result is plainly met or missed on the
+  day.
 - When the capacity does not cover the objectives, cut objectives. Do not stretch the weeks.
 - The operating plan follows the business plan. If a key result needs a customer, price, or
   channel the plan has not settled, stop and send it back rather than planning around the gap.
@@ -105,6 +107,9 @@ Period: <start date> to <end date>
   Report it and name `ceh-business-plan:run-premortem`.
 - The 90-day spend exceeds the runway → stop and report the shortfall. Do not write a plan the
   cash cannot carry.
+- **No human to answer** (a headless run, or called by another agent): ask nothing. Draft and
+  revise from what the plan holds, tag every gap `[assumption]`, and end with the questions you
+  would have asked, in order, each with the assumption you used instead.
 
 ## Hands off to
 

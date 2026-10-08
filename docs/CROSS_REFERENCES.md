@@ -18,7 +18,7 @@ bottom of this file.
 **Shared:** the hotfix process: branch `fix/critical-<description>` from `main`, minimal scope,
 1-approval review, CI must pass, merge commit to `main`, bump PATCH + tag, staging → production.
 In agent-skills `ceh-ops:incidents` carries the same steps without commands. Add it here as a copy
-when `ceh-ops` migrates.
+if `ceh-ops` is ever migrated.
 
 ## Semver bump mapping
 
@@ -260,7 +260,7 @@ method shape (`response.ok` check, then `throw new ApiRequestError(response.stat
 **Shared:** route handlers contain no business logic (they call services), services contain no SQL
 (they call the db layer), the db layer contains no business logic, and each aggregate has one
 mutation path. In agent-skills `ceh-scaffolding:scaffold-python-service` restates the rules next to
-the initial backend directory tree. Add it here as a copy when `ceh-scaffolding` migrates.
+the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` is ever migrated.
 
 ## Patch ITER frontmatter
 
@@ -316,6 +316,22 @@ is a fresh family with the `NN` counter restarting at 01, a version with its own
 self-contained, an iterations-only version depends on the prior family's terminal artifacts, and
 `depends_on` names artifacts by stem and points only backward. A change goes to the planner skill
 and to `plan-schema.md`.
+
+## Business-plan "No human to answer" clause
+
+**Canonical:** `plugins/standalone/ceh-business-plan/skills/develop-business-plan/SKILL.md` — § Rules, "No human to answer"
+
+| Copy                                                                              | Section                            | Diverges                                                   |
+| --------------------------------------------------------------------------------- | ---------------------------------- | ---------------------------------------------------------- |
+| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/SKILL.md`           | § Stop conditions, last bullet     | adds: remove nothing in step 8, list the conflicts instead |
+| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/SKILL.md` | § Stop conditions, last bullet     | none                                                       |
+| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/SKILL.md`          | § Stop conditions, last bullet     | none                                                       |
+| `plugins/standalone/ceh-business-plan/skills/run-premortem/SKILL.md`              | § Stop conditions, last bullet     | none                                                       |
+| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/SKILL.md`         | § Stop conditions, last bullet     | none                                                       |
+| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/SKILL.md`    | § Edge Cases, "No human to answer" | takes its own "no questions" path and scores the PMF gate  |
+
+**Shared:** with no human to answer, the skill asks nothing, drafts from what the plan holds, and
+ends with the questions it would have asked, in order, each with the assumption it used instead.
 
 ## Usability persona set and severity scale
 

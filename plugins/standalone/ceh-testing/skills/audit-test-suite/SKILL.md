@@ -1,12 +1,11 @@
 ---
 name: audit-test-suite
 description: >-
-  Load this skill to find out whether a passing test suite would actually catch a defect — assertion
+  Load this skill to find out whether a passing test suite would actually catch a defect: assertion
   quality, mutation testing on the diff, flaky and order-dependent tests, tests that mirror the
   implementation, and tests that pass with the code removed. Trigger on "are these tests any good",
-  "do I trust this suite", "audit the tests", "mutation testing", "mutmut", "stryker", "why did the
-  tests not catch this", "flaky test", "tests pass but the bug shipped", "review the test coverage",
-  or after generating a batch of tests. Not for choosing new test cases (use
+  "do I trust this suite", "audit the tests", "mutation testing", "flaky test", "tests pass but the
+  bug shipped", or after generating a batch of tests. Not for choosing new test cases (use
   ceh-testing:design-test-cases) or for testing a specific bug fix (use ceh-testing:test-a-bug-fix).
 disable-model-invocation: false
 user-invocable: true
@@ -118,6 +117,7 @@ survivors is the deliverable.
 
 If the tool is not installed, do not install it unprompted: report the one-line command
 (`uv add --dev mutmut`, `bun add -d @stryker-mutator/core`) and continue with the other checks.
+Installing edits the lockfile, which an audit has no mandate to change.
 
 Cap the run, for example `timeout 900 mutmut run ...`. Run it last so a timeout still leaves the
 cheap findings intact, and if it does not finish, report partial results and say the run was
@@ -205,7 +205,8 @@ subagent cannot ask the parent anything, so the report has to stand alone.
 
 - Skip check 2 (it breaks source on purpose), never edit any file, and never install a package or
   change a lockfile or CI config.
-- Cap the list at about 15 findings and cut the tail rather than listing everything.
+- Cap the list at about 15 findings and cut the tail rather than listing everything, because a
+  long tail buries the few fixes that matter.
 - After the list, add: the commands run and their verdicts, including checks skipped and why (tool
   missing, timed out, not run); the zero-coverage files the diff touches; the 2–3 fixes worth making
   first, as concrete suggestions; and any bug found in source, reported and never fixed.

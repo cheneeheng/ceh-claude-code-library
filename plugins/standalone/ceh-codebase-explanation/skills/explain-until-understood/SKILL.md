@@ -2,15 +2,12 @@
 name: explain-until-understood
 description: >-
   Explain a subsystem, design, diff, or unfamiliar tool to someone in the session until they can
-  answer questions about it unaided — assuming they know nothing about the subject and stating the
-  floor it builds from. Reads the real thing rather than a doc or changelog, defines the
-  foundations before using them, verifies claims by running, draws structure and time in plain
-  ASCII, walks one real case step by step, shows the tempting-but-wrong alternative, closes on a
-  transferable rule plus a self-test. Carries the escalation ladder for an explanation that
-  missed — prose, steps, pictures, foundations — on the rule that you change the representation
-  rather than restate it louder. Writes no files by default. Not for implementing, fixing, or
-  reviewing code, a repo-wide orientation file (ceh-codebase-explanation:explain-codebase), or user-facing
-  documentation (ceh-documentation).
+  answer questions about it unaided, assuming they know nothing. Reads the real thing rather than a
+  doc, defines foundations before using them, verifies claims by running, and closes on a
+  transferable rule plus a self-test. When an explanation misses, change the representation rather
+  than restate it. Writes no files by default. Not for implementing or reviewing code, a repo-wide
+  orientation file (ceh-codebase-explanation:explain-codebase), or user-facing documentation
+  (ceh-documentation).
 argument-hint: "[what to explain]"
 disable-model-invocation: false
 user-invocable: true

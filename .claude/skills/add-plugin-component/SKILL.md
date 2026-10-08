@@ -200,8 +200,11 @@ python tools/validate-plugins/validate.py
 Same gate CI runs via `.github/workflows/validate.yml`. It checks:
 
 - manifests: `plugin.json` ↔ `marketplace.json` sync, semver, `name` matching the directory
-- frontmatter: `name` format and match, `description` present, `>-`, ≤ 1024 chars;
-  `compatibility` ≤ 500 chars; only documented keys; no plugin-agent keys Claude Code ignores
+- frontmatter: `name` format and match, `description` present, `>-`, ≤ 600 chars;
+  `compatibility` ≤ 500 chars; only documented keys; no plugin-agent keys Claude Code ignores;
+  `disable-model-invocation`, `user-invocable`, and `license` stated on every skill
+- `docs/PLUGIN_VERSIONS.md` matches every `plugin.json`; cross-cutting plugins depend only on
+  cross-cutting plugins; a skill a hook names is `user-invocable: false`
 - no `TEMPLATE-GUIDANCE` comment left from a template
 - `references/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references}/...`, and `${CLAUDE_SKILL_DIR}/...` mentions
   resolve to real files, and `ceh-<plugin>:<component>` mentions resolve

@@ -3,13 +3,10 @@ name: write-api-reference
 description: >-
   Load this skill when writing or completing a project's user-facing reference documentation in
   Markdown: every public function, class, HTTP endpoint, CLI command and flag, configuration key,
-  environment variable, and error, so an experienced user can look up any item, see when it was
-  added, and follow a link to why it behaves as it does. Trigger on "write the API reference",
-  "document every endpoint", "document all the CLI flags", "reference docs for this library",
-  "document the config options", or when ceh-documentation:write-project-docs delegates its
-  reference step. Counts the public surface first and reports coverage against it. Not for guides
-  or tutorials (use write-guides-and-runbooks), explanations of design (use write-concept-docs), or
-  the README (use ceh-git-workflow:update-readme).
+  environment variable, and error. Trigger on "write the API reference", "document every endpoint",
+  "document all the CLI flags", or when ceh-documentation:write-project-docs delegates its reference
+  step. Not for guides or tutorials (use write-guides-and-runbooks), design explanations (use
+  write-concept-docs), or the README (use ceh-git-workflow:update-readme).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

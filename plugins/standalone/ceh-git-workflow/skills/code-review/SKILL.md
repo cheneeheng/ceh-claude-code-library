@@ -16,6 +16,10 @@ license: Apache-2.0
 Every comment must be clearly marked as **blocking** or **advisory**, and every review ends with
 an explicit verdict.
 
+Claude Code's built-in `/code-review` and `/security-review` hunt for defects in a diff. Use them
+for the finding. This skill adds what they do not carry: the comment prefixes, the review order,
+and the verdict, so the author knows exactly what blocks the merge.
+
 ## Procedure
 
 1. Review in priority order:
@@ -54,7 +58,8 @@ Examples:
 - Do not re-litigate decisions already recorded in the repo's decision records unless new risk
   is identified.
 - Do not review from memory — verify against current file contents.
-- Approve with non-blocking nits rather than withholding approval to force trivial changes.
+- Approve with non-blocking nits rather than withholding approval to force trivial changes:
+  withholding stalls the author and blurs what `[blocking]` is for.
 
 ### Responding as the author
 

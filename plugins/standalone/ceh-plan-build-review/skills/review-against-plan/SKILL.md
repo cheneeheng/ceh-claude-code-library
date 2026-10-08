@@ -1,13 +1,11 @@
 ---
 name: review-against-plan
 description: >-
-  Load this skill when auditing or verifying that the codebase matches a SKELETON.md or ITER_NN.md
-  planning document, including version-tagged variants like SKELETON_v2.md or v2_ITER_03.md. For
-  each in-scope section, checks the actual implementation against the spec, identifies gaps,
-  deviations, and errors, then fixes them and reports a compliance table. Trigger on "review
-  against plan", "verify the plan is implemented", "audit the code against the plan", "does the
-  build match the skeleton", or when the user points at a plan file and asks to audit it. Not for
-  building the plan in the first place (use implement-from-plan), writing the plan (use
+  Load this skill when auditing that the codebase matches a SKELETON.md or ITER_NN.md planning
+  document, including variants like SKELETON_v2.md. For each in-scope section, checks the
+  implementation against the spec, fixes gaps and deviations, and reports a compliance table.
+  Trigger on "review against plan", "verify the plan is implemented", "does the build match the
+  skeleton". Not for building the plan (use implement-from-plan), writing the plan (use
   plan-fullstack-app), or reviewing a pull request (use ceh-git-workflow:code-review).
 argument-hint: "[plan-file]"
 disable-model-invocation: false
@@ -38,8 +36,8 @@ document schema, and its section table and pointer resolution rules are authorit
    - ITER: audit only `sections_changed`. Resolve pointers for `sections_unchanged` to use as
      context, but do not audit them: a prior review cycle covered them.
    - SKELETON: audit all sections listed in `sections`.
-4. If multiple ITER files exist within the target family and the user did not specify, confirm
-   which one to review.
+4. If multiple ITER files exist within the target family and the user did not specify, review the
+   highest-numbered one, because a prior review cycle covered the earlier ones. Say which.
 
 ### 2. Audit section by section
 
@@ -64,7 +62,8 @@ Work through in-scope sections in numerical order. For each section, check, cate
   `${CLAUDE_PLUGIN_ROOT}/references/implementation-gotchas.md` present in the code is also an
   Error.
 
-**Fix.** Fix each finding immediately after categorizing it. Do not batch auditing before fixing.
+**Fix.** Fix each finding immediately after categorizing it. Do not batch auditing before fixing:
+a later section can depend on an earlier fix, and a run cut short keeps the fixes already made.
 
 ### 3. Report
 
@@ -94,6 +93,7 @@ Below the table, list the items NOT fixed and why.
 ## Stop conditions
 
 - A fix requires a decision (e.g. a route deviation where both the spec and the implementation
-  could be correct) → state the ambiguity and ask before changing anything.
+  could be correct) → state the ambiguity and ask before changing anything. With no human to
+  answer, leave it unfixed and list it under the items NOT fixed.
 - More than one plan family, or several ITER files in the target family, and the user named none →
-  ask which one to review.
+  take the highest version and the highest-numbered ITER, and say which.

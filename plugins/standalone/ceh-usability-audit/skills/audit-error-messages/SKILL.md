@@ -1,16 +1,12 @@
 ---
 name: audit-error-messages
 description: >-
-  Load this skill when writing or reviewing anything a user reads when something goes wrong —
-  exception text, validation copy, CLI failures, toasts, HTTP error bodies, log lines a human acts
-  on. Harvests every user-reachable error string in the codebase, triages each against the
-  three-part rule (what happened, what specifically was wrong, what to do next), and produces a
-  rewrite table plus the placement and cascade fixes. Trigger on "improve the error messages",
-  "this error is useless", "users do not understand this error", "what should this exception say",
-  "unhelpful error", "review the validation messages", "our errors just say failed", or when adding
-  a raise/throw/toast/console.error a user will read. Applies to libraries and CLIs as much as UIs.
-  Not for logging/observability plumbing (use ceh-python-service:write-fastapi-endpoints) or general
-  copy (use ceh-usability-audit:write-plain-language).
+  Load this skill when writing or reviewing anything a user reads when something goes wrong:
+  exception text, validation copy, CLI failures, toasts, HTTP error bodies. Triages each error
+  string against the three-part rule (what happened, what was wrong, what to do next) and produces a
+  rewrite table. Trigger on "improve the error messages", "this error is useless", "unhelpful
+  error". Not for logging plumbing (use ceh-python-service:write-fastapi-endpoints) or general copy
+  (use ceh-usability-audit:write-plain-language).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -141,7 +137,8 @@ in the message; the reader is already stuck and is not going to go and read a ma
 
 ### Writing the replacement
 
-- Sentence case, no terminal period on short UI strings, no exclamation marks, no "Oops".
+- Sentence case, no terminal period on short UI strings, no exclamation marks, no "Oops". The
+  reader is already stuck, and cheerfulness reads as not taking that seriously.
 - Second person for what the user does; **never** second person for what went wrong.
 - The value the user gave, quoted, appears in the message. Always.
 - One idea per sentence. The action to take is the last thing on the line — that is what gets read.

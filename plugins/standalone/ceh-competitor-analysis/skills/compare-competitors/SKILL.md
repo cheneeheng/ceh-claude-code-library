@@ -2,13 +2,11 @@
 name: compare-competitors
 description: >-
   Load this skill when putting competitors side by side with our own work after each has been
-  analysed: one comparison.md, also rendered as a styled HTML page, with an at-a-glance table, an
-  inventory by capability showing what
-  each one ships and where nobody does, and each one's strengths, weaknesses, and positioning.
-  A comparison only, with no adoption roadmap unless asked. Trigger on "compare them with us",
-  "comparison report", "master report", "how do we stack up", "side by side with our work", or
-  right after ceh-competitor-analysis:analyze-competitor when several competitors were analysed.
-  Not for analysing a single competitor (use ceh-competitor-analysis:analyze-competitor).
+  analysed: one comparison.md, also rendered as HTML, with an at-a-glance table, an inventory by
+  capability, and each one's strengths, weaknesses, and positioning. A comparison only, no adoption
+  roadmap unless asked. Trigger on "compare them with us", "comparison report", "how do we stack
+  up", or right after ceh-competitor-analysis:analyze-competitor when several competitors were
+  analysed. Not for analysing a single competitor (use ceh-competitor-analysis:analyze-competitor).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

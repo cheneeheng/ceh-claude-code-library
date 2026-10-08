@@ -1,14 +1,12 @@
 ---
 name: document-architecture
 description: >-
-  Load this skill when creating or updating the project's living architecture document — an
-  ARCHITECTURE.md that is mainly Mermaid diagrams plus a Key Decisions log. Trigger when the user
-  says "write the architecture doc", "add architecture diagrams", "create ARCHITECTURE.md",
-  "document the system architecture", "diagram the system", "update the architecture doc",
-  "record this decision", or asks for a high-level overview or mental model of what the project
-  does. Also load when a version re-plan changes the system's shape (new component, changed data
-  flow, reversed design choice) and the current picture or decision log must be brought back in
-  sync.
+  Load this skill when creating or updating the project's living architecture document, an
+  ARCHITECTURE.md that is mainly Mermaid diagrams plus a Key Decisions log. Trigger on "write the
+  architecture doc", "add architecture diagrams", "create ARCHITECTURE.md", "diagram the system",
+  "record this decision", or a request for a high-level overview of what the project does. Also load
+  when a version re-plan changes the system's shape (new component, changed data flow, reversed
+  design choice) and the picture or decision log must be brought back in sync.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

@@ -1,16 +1,12 @@
 ---
 name: shrink-diff
 description: >-
-  Retroactively simplify what a feature branch added: after the work is done, apply the
-  write-less-code standard to the accumulated diff against main — across however many commits or
-  sessions produced it. Finds duplication the branch introduced against existing code, wrappers left
-  with one caller, code the changes made dead, and custom code a smaller ladder rung (stdlib, native
-  feature, installed dependency, one line) replaces. Load when a branch is functionally complete and
-  its diff should get smaller before review, and whenever the user says "shrink the diff",
-  "consolidate the branch", "simplify what I changed", "can this diff be smaller", "master
-  refactor", or "simplify the branch before the PR". Not for whole-codebase cleanup (use
-  refactor-repo), write-time minimalism (use write-less-code), or reviewing a PR (use
-  ceh-git-workflow:code-review).
+  Retroactively simplify what a feature branch added by applying the write-less-code standard to the
+  accumulated diff against main. Finds duplication the branch introduced, single-caller wrappers,
+  code the changes made dead, and custom code a smaller ladder rung replaces. Load when a branch is
+  functionally complete and its diff should shrink before review, and on "shrink the diff",
+  "consolidate the branch". Not for whole-codebase cleanup (use refactor-repo), write-time
+  minimalism (use write-less-code), or reviewing a PR (use ceh-git-workflow:code-review).
 argument-hint: "[base-branch]"
 disable-model-invocation: false
 user-invocable: true
@@ -27,6 +23,10 @@ license: Apache-2.0
 commits escapes it: session three writes a helper session one already had, a later commit leaves
 a wrapper with one caller, an early abstraction outlives its need. This skill applies the same
 standard retroactively — one pass over the finished diff, before it goes to review.
+
+Claude Code's built-in `/simplify` already reviews changed code for reuse and simplification. This
+skill adds what it does not carry: the write-less-code ladder as the yardstick, the whole branch
+against its base as the scope, and behavior preservation as the gate on every edit.
 
 ## Procedure
 
@@ -63,7 +63,7 @@ Walk each piece of code in scope down the write-less-code ladder, in hindsight:
 2. **Stdlib does it?** Replace the custom version.
 3. **Native platform feature covers it?** Replace the custom version.
 4. **An already-installed dependency solves it?** Replace the custom version. Never add a new
-   dependency to shrink code.
+   dependency to shrink code: its install, supply-chain, and upgrade cost outlasts the lines saved.
 5. **Can it be one line?** Make it one line.
 6. **Only then:** keep it, as the minimum that works — collapse single-implementation
    abstractions, inline single-caller wrappers, turn config-for-a-constant back into a constant.

@@ -42,29 +42,48 @@ existing installs: uninstall the old plugin and install the new one, or reinstal
 bundle. Three skills, one agent, and one hook script get names that say what they do. `ceh-ag-ui`
 keeps its name as a term of art.
 
+The repo is audited against its vision, and every gap the audit found is closed in one PR, except
+the coding hooks, which stay an open question. Skills that stopped for a human now ask once, up
+front, with a recommended answer, and every one of them has a path for a run with no human:
+`plan-fullstack-app` no longer asks one question per turn, the five business-plan specialists draft
+and list their questions, and the plan-family, theme, cluster, and bump-level stops take a
+conservative default and say so. Every skill and agent description now fits 600 characters, which
+`validate.py` enforces, along with five rules it previously left to review. 61 rules gain the reason
+behind them (principle 8). The Cytoscape skill drops its API and stylesheet references, which
+restated the library docs. `docs/VISION.md` lists the gaps still open. Every standalone plugin
+takes a PATCH bump. One deviation: the vision asks for its own changes in a separate PR, but the
+author asked for this audit as one PR.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
-| `ceh-blog`                 | 1.0.2   |
-| `ceh-business-plan`        | 1.0.6   |
-| `ceh-codebase-explanation` | 1.0.0   |
+| `ceh-ag-ui`                | 1.1.1   |
+| `ceh-blog`                 | 1.0.3   |
+| `ceh-business-plan`        | 1.0.7   |
+| `ceh-codebase-explanation` | 1.0.1   |
 | `ceh-coding-agent`         | 1.0.2   |
-| `ceh-coding-conduct`       | 2.0.0   |
-| `ceh-documentation`        | 1.0.2   |
-| `ceh-every-session`        | 2.0.0   |
-| `ceh-git-datastore`        | 1.0.2   |
-| `ceh-plan-build-review`    | 1.1.0   |
+| `ceh-coding-conduct`       | 2.0.1   |
+| `ceh-competitor-analysis`  | 1.1.3   |
+| `ceh-documentation`        | 1.0.3   |
+| `ceh-every-session`        | 2.0.1   |
+| `ceh-git-datastore`        | 1.0.3   |
+| `ceh-git-workflow`         | 1.0.2   |
+| `ceh-plan-build-review`    | 1.1.1   |
+| `ceh-python-library`       | 1.0.1   |
+| `ceh-python-service`       | 1.0.1   |
 | `ceh-scenario-editorial`   | 1.1.0   |
 | `ceh-scenario-ideation`    | 1.1.0   |
 | `ceh-scenario-library`     | 1.1.0   |
 | `ceh-scenario-service`     | 1.1.0   |
 | `ceh-scenario-webapp`      | 1.1.0   |
-| `ceh-seo`                  | 1.1.0   |
-| `ceh-testing`              | 1.0.2   |
-| `ceh-usability-audit`      | 1.1.0   |
-| `ceh-web-frontend`         | 1.1.1   |
-| `ceh-workflow-builder`     | 1.3.1   |
+| `ceh-seo`                  | 1.1.1   |
+| `ceh-testing`              | 1.0.3   |
+| `ceh-ui-design`            | 1.0.1   |
+| `ceh-usability-audit`      | 1.1.1   |
+| `ceh-web-frontend`         | 1.1.2   |
+| `ceh-workflow-builder`     | 1.3.2   |
+| `ceh-workflow-runner`      | 1.0.1   |
 
 ### Added
 
@@ -79,8 +98,40 @@ keeps its name as a term of art.
 - `ceh-codebase-explanation` 1.0.0: `explain-codebase`, `explain-until-understood`, and
   `document-architecture`, moved unchanged from `ceh-coding-agent`. The service, library, and
   webapp scenario bundles install it, so a bundle install keeps every skill it had
+- `validate.py`: a 600-character description cap, explicit `disable-model-invocation`,
+  `user-invocable`, and `license` on every skill, `docs/PLUGIN_VERSIONS.md` matching every
+  `plugin.json`, no `dependencies` in a marketplace entry, cross-cutting plugins depending only on
+  cross-cutting plugins, and `user-invocable: false` on every skill a hook script names
+- A "No human to answer" path in `sharpen-strategy`, `stress-test-unit-economics`,
+  `plan-go-to-market`, `run-premortem`, and `set-operating-plan`, registered in
+  `docs/CROSS_REFERENCES.md`, and a headless default in `refactor-repo`, `design-ui`, `release`,
+  `repurpose-post`, and the plan-build-review skills
+- `docs/IDEAS.md`: "Sweep on Sonnet, judge on Opus" and "Scope the coding hooks"
+- `docs/ENVIRONMENT_VARIABLES.md`: `NODE_ENV`, read by `ceh-web-frontend`'s `run-e2e.sh`
 
 ### Changed
+
+- `plan-fullstack-app` asks once, up front, with a recommended answer for each question, instead of
+  one question per turn. With no human, it takes the recommended answers and lists them as
+  assumptions
+- Plan-build-review skills take the highest plan family and the highest-numbered ITER when the
+  user names none, and say which, instead of stopping to ask
+- `audit-interface` and `simulate-newcomer-first-run`: the 5/5 gate is the done condition, not a
+  user's confirmation
+- `ceh-git-workflow:code-review` and `ceh-coding-conduct:shrink-diff` name the built-in
+  `/code-review`, `/security-review`, and `/simplify` and state what they add
+- Every skill and agent description over 600 characters is cut to fit, keeping its routing clauses
+- 61 rules across 19 plugins gain the reason behind them
+- `ceh-web-frontend:visualize-graph-cytoscape`: `references/api.md` and `references/style.md` are
+  removed, and `references/layouts.md` keeps lifecycle, re-running, and extension choice only
+- `docs/VISION.md`: the scope test admits teaching a person who must approve or supply a fact, the
+  "Every step" row covers repeatable work, and "Where the repo does not match yet" lists the open
+  gaps
+- `docs/IDEAS.md`: "Rejection records" points at this file instead of a new `OUT_OF_SCOPE.md`, and
+  two new-guard ideas wait on evidence
+- `README.md` drops the work-in-progress banner, and `CLAUDE.md` no longer calls the migration in
+  progress
+- `audits/2026-10-06/SUMMARY.md` notes the plugin renames
 
 - **Breaking:** `ceh-core` is renamed `ceh-every-session` (2.0.0), and `ceh-coding-agent` is
   renamed `ceh-coding-conduct` (2.0.0), with its output style now `CEH Coding Conduct`. Reinstall

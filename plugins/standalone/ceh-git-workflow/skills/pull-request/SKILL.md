@@ -2,14 +2,11 @@
 name: pull-request
 description: >-
   Load this skill when a branch is heading into main, any phrasing: open/create/raise a PR, push a
-  branch for review, merge/land a PR or a local branch, "merge it", "clean up the branch", or the
-  compound "commit, open a PR and merge it", "get this branch into main", "wrap up this branch".
-  Covers the PR title and What/Why/How/Testing/Checklist body, definition of done, self-review,
-  size limits, the pre-merge gate and how to read CI without being fooled, merge-commit-only
-  strategy, auto-merge, post-merge cleanup, and the land path that logs the change under
-  Unreleased in the changelog before committing. No version bump, no tag. Not for shipping a
-  version (use ceh-git-workflow:release) or reviewing someone else's PR (use
-  ceh-git-workflow:code-review).
+  branch for review, merge/land a PR or a local branch, "merge it", "clean up the branch", or "get
+  this branch into main". Covers the PR title and body, self-review, the pre-merge gate and reading
+  CI, merge-commit-only strategy, post-merge cleanup, and logging the change under Unreleased in the
+  changelog. No version bump, no tag. Not for shipping a version (use ceh-git-workflow:release) or
+  reviewing someone else's PR (use ceh-git-workflow:code-review).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
@@ -68,7 +65,8 @@ Pick the path from the request, then run only that path:
    fi
    ```
 
-   With no PR (solo repo, low-risk work), merge locally. Still `--no-ff`, never fast-forward:
+   With no PR (solo repo, low-risk work), merge locally. Still `--no-ff`, never fast-forward, so
+   the branch still lands as one merge commit that reverts as a unit:
 
    ```bash
    git checkout <branch-name> && git fetch origin && git rebase origin/main
@@ -173,15 +171,19 @@ code.
 | Refactor     | ≤ 500 LOC                                                 | 800 LOC |
 | DB migration | Migration file only; split app changes into a separate PR |         |
 
-Over the guideline, split by layer (schema → service → API).
+Over the guideline, split by layer (schema → service → API). Review quality falls with diff size:
+past these sizes a reviewer skims instead of verifying. A migration ships alone because the schema
+has to deploy and roll back independently of the app code.
 
 ### Approvals and merge strategy
 
 - Approvals: 1 for bug fixes and small features, 2 for new API surfaces, schema, or security
-  changes, 1 minimum for an urgent fix. Never bypass CI.
+  changes, 1 minimum for an urgent fix. Those three are the hardest to undo once shipped, so they
+  get a second reviewer. Never bypass CI.
 - **Merge commit only.** Never squash, never rebase-merge. Commits land on `main` as written, and
-  the per-PR history is kept on purpose, so keep each commit Conventional Commits format and
-  clean the branch as you go.
+  the per-PR history is kept on purpose: each PR stays one revertable unit on `main`, and its
+  commits stay available to bisect. Keep each commit Conventional Commits format and clean the
+  branch as you go.
 - **Never pass `--delete-branch`.** Claude Code's permission classifier reads it as destructive
   and blocks the whole command, so the merge fails. Remote cleanup is left to the repo's
   "Automatically delete head branches" setting.
@@ -214,7 +216,8 @@ diagnose.
 
 ### Resolving conflicts
 
-Rebase on `main` and resolve there, never inside the merge commit:
+Rebase on `main` and resolve there, never inside the merge commit, where the resolution escapes
+review and CI:
 
 ```bash
 git fetch origin && git rebase origin/main

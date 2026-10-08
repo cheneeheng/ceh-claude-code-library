@@ -56,11 +56,15 @@ when `lint`, `format:check`, `typecheck`, and (SvelteKit) `check` all pass.
 - Line length: **100 characters** (Prettier: `printWidth` 100, single quotes, `prettier-plugin-svelte`)
 - Local imports use the path alias (`$lib` in SvelteKit, the configured alias in React), never deep relative paths
 - Never use `any` — use `unknown` with type narrowing if the type is truly unknown
-- Prefer `undefined` over `null` for optional values
+- Prefer `undefined` over `null` for optional values: optional properties and default parameters
+  already produce `undefined`, so one "absent" value avoids mismatches
 - Use `?.` and `??`; do not use `||` for defaults on falsy inputs (it collapses `0`, `''`, `false`)
 - `strict: true` in `tsconfig.json` is non-negotiable. Never use `// @ts-ignore` — fix the type error.
 
 #### `type` is the default, `interface` is the exception
+
+`type` also covers unions and aliases, and it never merges declarations by accident, so one keyword
+does the job.
 
 ```ts
 // Good — use type for data shapes, unions, and aliases
@@ -74,6 +78,9 @@ interface PluginExtension {
 ```
 
 #### No TypeScript `enum`: use `const` assertions
+
+An `enum` emits runtime code that behaves unlike plain JavaScript. A `const` object is a plain value
+with a derived union type.
 
 ```ts
 const ItemStatus = {

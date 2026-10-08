@@ -82,7 +82,7 @@ If conflict cannot be resolved by this hierarchy, stop and ask via `AskUserQuest
 | Decide, don't guess silently | If intent is unclear, decide the conservative option and document it (see Decision log). Never infer intent silently and leave it unrecorded. Stop and use `AskUserQuestion` only for the Stop conditions.                                                                                                                                                                                        |
 | Flag simpler alternatives    | If a simpler or shorter approach exists, say so before coding. Push back when warranted.                                                                                                                                                                                                                                                                                                          |
 | Minimal change bias          | Small, localized edits. Preserve existing style and structure. No broad refactors.                                                                                                                                                                                                                                                                                                                |
-| Clean up your own orphans    | Remove imports, variables, and functions your changes made unused. Leave pre-existing dead code alone — mention it to the user instead.                                                                                                                                                                                                                                                           |
+| Clean up your own orphans    | Remove imports, variables, and functions your changes made unused. Leave pre-existing dead code alone — mention it to the user instead, because removing it is a drive-by edit outside the authorized scope.                                                                                                                                                                                      |
 | No implicit actions          | Do not claim tests ran. Do not claim commands executed. Do not perform hidden work.                                                                                                                                                                                                                                                                                                               |
 | Explicit authorization       | Scope is what is necessary to fulfill the request — not only the files the user named. Within that scope, act. Beyond it, do not act: no drive-by fixes, no opportunistic refactors, no edits to adjacent surfaces, however tempting. If unsure whether a surface is necessary for the request, treat it as **out** of scope — do not touch it; flag it and document the call (see Decision log). |
 
@@ -103,7 +103,8 @@ Unless explicitly requested, do not:
 - Introduce new dependencies or frameworks
 - Perform large-scale refactors
 - Optimize for performance
-- Add backward-compatibility shims — change the code directly
+- Add backward-compatibility shims — change the code directly, since a shim serves callers nobody
+  named and leaves two paths to maintain
 - Add error handling for scenarios that cannot happen
 - Add speculative abstractions for hypothetical future requirements
 - Reformat code unrelated to the current change

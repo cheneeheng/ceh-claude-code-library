@@ -2,14 +2,11 @@
 name: competitor-analyst
 description: >-
   Use this agent to read one competitor (a cloned repo or a product's public pages) in an isolated
-  subagent and return a compressed, evidence-anchored fact sheet: what it is, a full inventory of
-  what it ships, candidate "oh wow" mechanisms with file or URL pointers, and ideas mapped onto our
-  inventory. Isolation keeps a large competitor's files out of the main session and lets several
-  competitors be read in parallel. Dispatch one per target from
-  ceh-competitor-analysis:analyze-competitor. Invoke for "analyse this competitor repo", "inventory
-  what this repo ships". Read-only: it never edits, installs, builds, or runs the target. Not for
-  writing the final report or the comparison (use ceh-competitor-analysis:analyze-competitor and
-  ceh-competitor-analysis:compare-competitors).
+  subagent and return a compressed, evidence-anchored fact sheet: what it is, what it ships,
+  candidate "oh wow" mechanisms with pointers, and ideas mapped onto our inventory. Dispatch one per
+  target from ceh-competitor-analysis:analyze-competitor. Read-only: never edits, installs, builds,
+  or runs the target. Not for writing the final report or the comparison (use
+  ceh-competitor-analysis:analyze-competitor and ceh-competitor-analysis:compare-competitors).
 model: inherit
 tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
 maxTurns: 60
@@ -52,7 +49,8 @@ If any of these is missing, say so in your first line and work with what you hav
 ## Output to parent session
 
 Lead with the identity table. Stay under about 150 lines plus one coverage row per component. Never
-paste file contents back. Point at them instead.
+paste file contents back. Point at them instead. This agent exists to keep a large competitor out of
+the caller's context, so a long reply defeats it.
 
 ```markdown
 ## <name>: fact sheet

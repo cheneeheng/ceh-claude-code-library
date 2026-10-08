@@ -27,8 +27,9 @@ within each family — `ITER_01_v2.md` is the first iteration of the `v2` family
 When the user did not name the plan files, look for `SKELETON` and `ITER_NN` files (`.md`) under
 `.agents_workspace/planning/` (where the planning skills write them) or any subfolder within it.
 Group the discovered files by version tag into plan families (untagged files are the default
-family). If more than one family exists and the user named none, confirm with the user which
-version is the target.
+family). If more than one family exists and the user named none, take the highest version, because
+an older family is usually finished and the newest is where work continues. Say which family you
+took in the first line of the reply, so a wrong guess costs one correction, not a wasted run.
 
 ### Cross-version dependencies
 

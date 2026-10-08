@@ -4,10 +4,9 @@ description: >-
   Load this skill when shipping or creating a public-facing web page or route: a landing page,
   marketing page, docs site, blog page, or any HTML surface that crawlers and AI engines will see.
   Trigger on "add SEO", "make this page discoverable", "meta tags", "open graph", "structured data",
-  "sitemap", "robots.txt", or when a new public route is created in a SvelteKit or React app. Not
-  for README, package-listing, or repo text (use ceh-seo:write-project-listing-text), not for authoring
-  the llms.txt file itself (use ceh-seo:write-llms-txt), and not for writing the page's content
-  itself (use ceh-blog).
+  "sitemap", or when a new public route is created in a SvelteKit or React app. Not for README or
+  repo text (use ceh-seo:write-project-listing-text), authoring llms.txt (use
+  ceh-seo:write-llms-txt), or the page's content (use ceh-blog).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -48,9 +47,12 @@ not as a later "SEO pass".
    - **404s return HTTP 404.** An SPA fallback serving every unknown path as 200 poisons the
      index with phantom pages.
    - **Moved pages get a 301** at the server/adapter level — no redirect chains, no client-side
-     `window.location` redirects.
+     `window.location` redirects. Most AI crawlers run no JavaScript, and each hop in a chain
+     loses signal.
 3. Add structured data:
-   - JSON-LD in a `<script type="application/ld+json">` block — never microdata attributes.
+   - JSON-LD in a `<script type="application/ld+json">` block — never microdata attributes. JSON-LD
+     sits apart from the visible markup, so it is generated and validated without touching
+     templates.
    - Match the type to the page: `WebSite` + `Organization` on the home page,
      `Article`/`BlogPosting` on posts, `SoftwareApplication` or `Product` on product pages,
      `FAQPage` on FAQ content.

@@ -17,7 +17,7 @@ accessibility, testing, tooling) stay single-sourced.
 | `visualize-graph-cytoscape`     | `/ceh-web-frontend:visualize-graph-cytoscape` | Building a network, dependency map, org chart, knowledge graph, or any clickable node-link diagram with Cytoscape.js: layout by graph shape, converting real data into elements JSON, stylesheet, tap-to-highlight, readable zoom defaults, and when a node-link diagram is the wrong tool |
 
 `visualize-graph-cytoscape` bundles a working `assets/template.html`, a `scripts/to-elements.js`
-data converter, and eight reference files.
+data converter, and six reference files.
 
 UI visual design (layout, hierarchy, navigation, theming) lives in `ceh-ui-design:design-ui`.
 `ceh-ui-design` is a dependency, so installing this plugin installs it too.

@@ -63,7 +63,7 @@ describe("summarizeItems", () => {
 
 ### Component tests: test what the user sees
 
-Use `@testing-library/svelte` (SvelteKit) or `@testing-library/react` (React). Do not test implementation details. No snapshot tests — explicit assertions only.
+Use `@testing-library/svelte` (SvelteKit) or `@testing-library/react` (React). Do not test implementation details. No snapshot tests — explicit assertions only, because a snapshot breaks on any markup change and gets re-approved unread.
 
 ```ts
 import { render, screen } from "@testing-library/svelte";
@@ -80,6 +80,9 @@ it("renders open items", () => {
 The React form differs only in the render call, `render(<ItemPanel state={buildTestState({ items: [mockOpenItem()] })} />)`, imported from `@testing-library/react`. The queries and assertions are the same.
 
 ### API mocking with MSW: do not mock `fetch` directly
+
+MSW intercepts at the network layer, so the real client code (URL, headers, parsing, errors) still
+runs under test.
 
 ```ts
 import { setupServer } from "msw/node";

@@ -111,6 +111,9 @@ Most this can cost: <money> and <months>. If it fails, what remains: <list>.
   plan should not proceed in this form, and what would have to change.
 - The user asks to delete or weaken a kill criterion after a result has come in → refuse to
   rewrite history. Record the original, the result, and the new decision as a separate dated line.
+- **No human to answer** (a headless run, or called by another agent): ask nothing. Draft and
+  revise from what the plan holds, tag every gap `[assumption]`, and end with the questions you
+  would have asked, in order, each with the assumption you used instead.
 
 ## Hands off to
 

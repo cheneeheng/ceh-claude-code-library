@@ -146,7 +146,8 @@ stage's note. Do not accept "looks right".
 ## Rules
 
 - **Run the config as written.** Do not reorder stages, merge them, add a stage, or tune a bound.
-  Where the config is wrong, fail and say which rule.
+  Where the config is wrong, fail and say which rule. The stages and gates are what was approved,
+  so a run that edits them is no longer the approved workflow.
 - **Never imitate an absent tool and never fall back after a denial.**
 - **One level deep.** A stage may not run this skill, and a stage you dispatch is told so.
 - **No secrets on disk.** Run artifacts and `run-state.md` hold references to secrets, never values.
