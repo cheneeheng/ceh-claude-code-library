@@ -23,7 +23,7 @@
     {
       "name": "ceh-codebase-explanation",
       "source": "./plugins/standalone/ceh-codebase-explanation",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, and the living architecture document."
     },
     {
@@ -35,7 +35,7 @@
     {
       "name": "ceh-testing",
       "source": "./plugins/standalone/ceh-testing",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "description": "CEH testing techniques: stack-agnostic test design and verification moments — reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, and close the risk gaps functional tests structurally miss."
     },
     {

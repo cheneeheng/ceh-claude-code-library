@@ -55,6 +55,7 @@ For large tasks:
 - Log non-obvious decomposition choices in the Decision log (only when the split itself was ambiguous)
 - Never silently combine unrelated changes into a single subtask
 - When independent subtasks have no ordering dependency or shared state, spawn parallel subagents via the built-in `Agent` tool rather than executing sequentially
+- A subagent starts with none of this conversation, so each prompt carries its scope (what it may and may not touch), its inputs as file paths rather than pasted content, the decisions already made that bind it, and the exact shape of what it returns
 
 ## Rules
 

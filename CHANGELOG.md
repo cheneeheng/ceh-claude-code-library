@@ -77,7 +77,10 @@ the last edit, and proves a repeated change complete with a command. `audit-inte
 control, and `analyze-competitor` backs each coverage rating with evidence from both sides. Five
 more tighten `ceh-git-workflow`: `code-review` checks scope drift first, names three more lenses,
 caps blocking comments at five, and lists what it dismissed. `pull-request` re-checks the patch id
-before merging, and `update-readme` hunts the claims a change made false.
+before merging, and `update-readme` hunts the claims a change made false. The last seven finish
+the shortlist: a PR body that shows a before and after and names its risk, worktree cleanup after
+a merge, a certainty ladder for refactors, a test-polluter bisect, a brief for every subagent, a
+plain re-pitch for "wait, what?", and a validator check that the changelog carries every bump.
 
 ### Plugin versions
 
@@ -86,7 +89,7 @@ before merging, and `update-readme` hunts the claims a change made false.
 | `ceh-ag-ui`                | 1.1.1   |
 | `ceh-blog`                 | 1.0.3   |
 | `ceh-business-plan`        | 1.0.7   |
-| `ceh-codebase-explanation` | 1.0.2   |
+| `ceh-codebase-explanation` | 1.0.3   |
 | `ceh-coding-agent`         | 1.0.2   |
 | `ceh-coding-conduct`       | 2.0.3   |
 | `ceh-competitor-analysis`  | 1.1.4   |
@@ -103,7 +106,7 @@ before merging, and `update-readme` hunts the claims a change made false.
 | `ceh-scenario-service`     | 1.1.0   |
 | `ceh-scenario-webapp`      | 1.1.0   |
 | `ceh-seo`                  | 1.1.1   |
-| `ceh-testing`              | 1.0.3   |
+| `ceh-testing`              | 1.0.4   |
 | `ceh-ui-design`            | 1.0.2   |
 | `ceh-usability-audit`      | 1.1.2   |
 | `ceh-web-frontend`         | 1.1.2   |
@@ -141,6 +144,15 @@ before merging, and `update-readme` hunts the claims a change made false.
   swallowed-error, stale-comment, and weak-type checks in the order
 - `pull-request`: a patch-id re-check in the pre-merge gate, and a scope check in self-review
 - `update-readme`: step 4, grep the README for every name the diff removed or renamed
+- `pull-request`: a before/after line and a `## Risk` section (door and blast radius) in the PR
+  body, and worktree cleanup after merge that asks before removing a worktree it did not create
+- `verify-behavior-preserved`: step 0, name the fact the change's safety rests on and the rung of
+  evidence reached
+- `audit-test-suite`: bisecting for the test that pollutes another
+- `agent-coding-contract`: what every subagent prompt must carry
+- `explain-until-understood`: a plain re-pitch for "wait, what?" before the ladder
+- `validate.py`: each plugin's newest `CHANGELOG.md` Plugin versions row matches `plugin.json`, and
+  `docs/PLUGIN_VERSIONS.md` dates it to that section
 
 ### Changed
 

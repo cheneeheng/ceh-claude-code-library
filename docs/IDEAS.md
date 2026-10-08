@@ -104,6 +104,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Lead with the smallest visual, show before and after, and name the door (one-way or
   two-way) and the blast radius.
+- **Status:** built on 2026-10-08 in `pull-request`'s body template: a before/after line under What
+  and a `## Risk` section.
 
 ### Finish-branch menu
 
@@ -121,6 +123,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-git-workflow:pull-request` (post-merge cleanup)
 - **Effort:** S
 - **Idea:** Prune merged or abandoned git worktrees, asking before any deletion.
+- **Status:** built on 2026-10-08 in `pull-request`'s Merge cleanup step. It removes a worktree the
+  session created without asking, and asks before removing any other.
 
 ### Docs drift check
 
@@ -138,6 +142,7 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Name the one fact a change's safety rests on and prove it at the highest rung that is
   cheap: said so, pointed at a line, walked the failure, ran code, reproduced in the app.
+- **Status:** built on 2026-10-08 as step 0 of `verify-behavior-preserved`.
 
 ### Test value line
 
@@ -168,6 +173,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `ceh-testing:audit-test-suite`
 - **Effort:** S
 - **Idea:** Find which test leaves stray files or state by bisecting the suite.
+- **Status:** built on 2026-10-08 in step 4 of `audit-test-suite`, as prose and one command, with
+  no script.
 
 ### One-way-door list
 
@@ -195,6 +202,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Our contract already says to fan out independent subtasks. Add what each subagent prompt
   must carry: scope, inputs as paths, expected return.
+- **Status:** built on 2026-10-08 in the contract's Task decomposition, which also requires the
+  decisions that bind the subagent.
 
 ### Infer house style first
 
@@ -260,6 +269,8 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** Add the moment "wait, what?": re-pitch the last message in plain words before escalating
   the explanation.
+- **Status:** built on 2026-10-08 in `explain-until-understood`'s "When it did not land". The
+  description has no room under the 600-character cap, so the moment lives in the body only.
 
 ### Evidence label per claim
 
@@ -427,6 +438,10 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Effort:** S
 - **Idea:** We check that `plugin.json` and `marketplace.json` match, not that an old version
   string survives in a README or `docs/PLUGIN_VERSIONS.md`.
+- **Status:** built on 2026-10-08 against `CHANGELOG.md`: each plugin's newest Plugin versions row
+  must match `plugin.json`, under the date `docs/PLUGIN_VERSIONS.md` gives it. The validator
+  already checked `docs/PLUGIN_VERSIONS.md`, and README version mentions are deliberate history
+  ("until 1.1.0"), so they stay unchecked.
 
 ### Repo hygiene checks
 
