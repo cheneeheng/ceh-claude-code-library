@@ -29,7 +29,7 @@ for a whole codebase.
 **Manual triggers**
 
 - `agent-coding-contract` — no slash command (hidden from the `/` menu), loaded by the SessionStart hook.
-- `write-less-code` — no slash command (hidden from the `/` menu), say `"write less code"` / `"be lazy"` / `"simplest solution"` / `"yagni"`.
+- `write-less-code` — no slash command (hidden from the `/` menu), named by the per-prompt reminder hook.
 - `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
 
@@ -63,6 +63,22 @@ actually being written.
 `SessionStart` nor `UserPromptSubmit` fires inside a subagent. An agent with a restricted tool list
 has no Skill tool, so the directive points it at the contract's `SKILL.md` to read instead. The
 read-only agents `Explore`, `Plan`, and `bulk-reader` are skipped.
+
+### Why each hook exists
+
+Hooks are enforcement, so each one is kept on a failure that guidance alone did not prevent:
+
+- **The contract loads first, unconditionally.** A directive to load the contract "when you write
+  code" was tried, and the model never invoked it later in the session. The contract is model-only
+  with a one-line description, so nothing else triggers it.
+- **The less-code reminder repeats every prompt.** Write-less-code is a standard that holds the
+  whole session, not a moment, so no description fires it: an agent starting to write code does not
+  stop to look for it. Loaded once, the ladder also drifted out of effect in long sessions and the
+  agent over-built.
+
+Both hooks fire in every session where the plugin is enabled, including ones that write no code.
+The cost lands only where it should: among the scenario bundles, only `ceh-scenario-service`,
+`ceh-scenario-library`, and `ceh-scenario-webapp` install this plugin.
 
 ## What the contract enforces
 

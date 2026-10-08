@@ -26,7 +26,7 @@ Work in this order:
 2. **Theme** — install one of the bundled token-driven templates (_Theme layer_, end of this file).
    Never hand-roll colors, type, or spacing.
 3. **Build** — apply the _Rules_ below, core rules then _Finishing recipes_, consulting
-   `references/examples.md` (worked good/bad markup per section) and the chosen theme's
+   `references/examples.md` (worked markup for the finishing recipes) and the chosen theme's
    `brand-guide.html`.
 4. **Review pass** — run the checklist before calling the UI done.
 
@@ -199,7 +199,7 @@ mixed density inside one view reads as broken.
 The core rules make a UI _correct_; these recipes make it _finished_. Apply them on the first
 build. In page order: the command dock (global state), section headers, then how data is displayed
 (tables, lifecycle colors, monograms, stat blocks), then controls and motion. Worked markup for
-each lives in `references/examples.md`.
+the dock, tables, stepper, monogram, and inputs lives in `references/examples.md`.
 
 #### Command dock — global state and its action
 

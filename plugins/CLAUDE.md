@@ -26,8 +26,9 @@ Two skills migrated whole and carry bundled files that predate this rule:
 `ceh-ui-design:design-ui` (two themes and `examples.md` under `references/`) and
 `ceh-web-frontend:visualize-graph-cytoscape` (six reference
 files, an `assets/template.html`, and a `scripts/to-elements.js` converter). The Cytoscape API and
-stylesheet references were cut on 2026-10-08 as material the model already knows. `design-ui`'s
-`examples.md` is still untrimmed.
+stylesheet references were cut on 2026-10-08 as material the model already knows. On the same day
+`design-ui`'s `examples.md` was cut to the finishing recipes, the markup the core rules' prose does
+not already carry.
 
 Scaffold or script bundles a skill executes or copies are not reference material and are allowed:
 `ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent` `assets/`) and `ceh-git-datastore`
@@ -90,5 +91,7 @@ hook names (`agent-coding-contract`, `write-less-code`, `usage-limit-handoff`,
 `Model-only, no slash command`.
 
 When a hook names the skill on every firing, the description is **one line**: what the skill is,
-with no trigger phrases and no mention of the hook. Keep the full description when the model also
-loads the skill unprompted (`write-less-code`, `branch`).
+with no trigger phrases and no mention of the hook. Keep the full description only when the model
+also loads the skill unprompted at a moment of its own (`branch`). A standard that holds the whole
+session, such as `write-less-code`, has no such moment: no description fires it, so the hook is
+its delivery and trigger phrases only cost listing space.

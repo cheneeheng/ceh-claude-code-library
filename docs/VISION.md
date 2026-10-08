@@ -225,13 +225,7 @@ every run would pay for the extra install, so standards are duplicated (3 beats 
 This list shrinks as the gaps close. Remove a line in the PR that closes it. Add one when a change
 here, or a new finding, opens a gap the same PR cannot close.
 
-- **Coding hooks run in every session, with no recorded evidence.** The `ceh-coding-conduct`
-  SessionStart and per-prompt hooks fire in sessions that write no code (goal 4), and nothing
-  records the failure each one answers (principle 7). Open, see "Scope the coding hooks" in
-  [`IDEAS.md`](IDEAS.md).
-- **`design-ui` carries reference bulk.** Its 551-line `references/examples.md` predates the
-  references rule in `plugins/CLAUDE.md` and is not yet cut to the repo-opinionated delta
-  (principle 5).
+No known gaps as of 2026-10-08.
 
 ## Changing this file
 
