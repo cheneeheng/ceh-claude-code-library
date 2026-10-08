@@ -37,7 +37,8 @@ Execute these steps in order, then end the turn.
    subagents or background tasks, or run validation that was not already in flight.
 2. **Secure unsaved state.** If uncommitted changes exist and committing was already authorized,
    commit them; otherwise leave the working tree as-is and describe its state in the artifact.
-   Never commit or stash unprompted just because the session is ending.
+   Never commit or stash unprompted just because the session is ending: the end of a session
+   authorizes no change to the user's working tree.
 3. **Write the handoff artifact** to
    `.agents_workspace/handoff/HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.md`
    (format below). Create the directory if needed. Take the session id prefix from the guard

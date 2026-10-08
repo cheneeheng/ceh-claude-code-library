@@ -25,7 +25,8 @@ config. Done when `ruff` and `mypy` pass and `pyproject.toml` matches the config
 
 ## Procedure
 
-1. Run every command through `uv run`, and change dependencies only with `uv add` / `uv sync`.
+1. Run every command through `uv run`, and change dependencies only with `uv add` / `uv sync`, so
+   every run uses the one environment `uv.lock` pins and a stray `pip install` cannot drift it.
 2. Load every secret through `pydantic-settings` from the environment, and keep `.env.example` current.
 3. Write code to the coding style below.
 4. Before every PR, run the three checks under Linting and type checking.
@@ -140,7 +141,7 @@ from app.models.session import SessionState
 
 ### Linting and type checking
 
-**ruff** for linting and formatting (do not add flake8, pylint, isort, or Black). **mypy** for type checking.
+**ruff** for linting and formatting (do not add flake8, pylint, isort, or Black: one tool and one config cannot disagree with itself). **mypy** for type checking.
 
 Required before every PR:
 

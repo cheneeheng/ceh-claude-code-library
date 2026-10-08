@@ -85,7 +85,8 @@ Each test that writes data must run in a transaction that rolls back after the t
 
 - Mock the LLM API client in all tests (no real API calls)
 - Mock external HTTP services
-- Do **not** mock PostgreSQL in integration tests
+- Do **not** mock PostgreSQL in integration tests: a mock cannot catch bad SQL, a constraint
+  violation, or migration drift, which are this tier's main risks
 - Use `unittest.mock` or `pytest-mock`
 
 ### Coverage floor

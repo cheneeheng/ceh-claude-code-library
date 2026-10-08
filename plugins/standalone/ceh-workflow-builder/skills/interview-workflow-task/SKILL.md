@@ -2,12 +2,12 @@
 name: interview-workflow-task
 description: >-
   Load this skill when a repetitive task must come out of someone's head and onto disk before
-  anything is built: ask the nine questions a workflow artifact needs answered, then write the answers to a
-  workflow spec file. Trigger on "interview me about this task", "ask me what you need to automate
-  this", "help me spec out this workflow", "I'm not sure what you need to know", or when
-  `build-agentic-workflow` finds its inputs incomplete. Produces the spec only. Not for deciding one
-  skill vs a workflow, designing steps and gates, or writing any `SKILL.md` — that is
-  ceh-workflow-builder:build-agentic-workflow, which reads this spec.
+  anything is built: ask the nine questions a workflow artifact needs answered, then write the
+  answers to a workflow spec file. Trigger on "interview me about this task", "help me spec out this
+  workflow", "I'm not sure what you need to know", or when `build-agentic-workflow` finds its inputs
+  incomplete. Produces the spec only. Not for deciding skill vs workflow, designing steps, or
+  writing any `SKILL.md` (that is ceh-workflow-builder:build-agentic-workflow, which reads this
+  spec).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

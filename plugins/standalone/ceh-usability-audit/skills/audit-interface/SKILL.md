@@ -1,16 +1,13 @@
 ---
 name: audit-interface
 description: >-
-  Load this skill to audit whether an existing interface is comprehensible to a non-expert — a web
-  UI, a CLI, a library's public API, or an app screen — after someone is already inside it. Runs the
-  five questions every surface must answer without being asked, a reject-on-sight anti-pattern
-  sweep, and a persona battery, then ranks findings by observed outcome rather than by how bad they
-  look. Trigger on "this feels confusing", "users keep getting stuck", "review this UI for
-  usability", "is this intuitive", "why does nobody find this button", "our API is hard to use",
-  "the CLI is confusing", "make this easier to understand", or before shipping a screen, command, or
-  public API. Not for the install/onboarding path (use ceh-usability-audit:simulate-newcomer-first-run), visual
-  design decisions at build time (use ceh-ui-design:design-ui), or WCAG conformance (use
-  ceh-web-frontend:make-ui-accessible).
+  Load this skill to audit whether an existing interface is comprehensible to a non-expert, whether
+  a web UI, CLI, library API, or app screen, after someone is already inside it. Runs the five
+  questions every surface must answer, an anti-pattern sweep, and a persona battery. Trigger on
+  "this feels confusing", "users keep getting stuck", "is this intuitive", or before shipping a
+  screen or public API. Not for the install path (use
+  ceh-usability-audit:simulate-newcomer-first-run), visual design (use ceh-ui-design:design-ui), or
+  WCAG (use ceh-web-frontend:make-ui-accessible).
 disable-model-invocation: false
 user-invocable: true
 effort: high
@@ -77,20 +74,20 @@ seconds gets progress or an estimate — not a bare spinner.
 Each is one line, each is common, and each has a mechanical fix. Sweep for all of them; a surface
 that is clean on all twelve is genuinely rare.
 
-| Anti-pattern              | What it is                                                    | Fix                                                                        |
-| ------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| **Mystery meat**          | Icon-only control with no label or tooltip                    | Add a text label. Icon-only is acceptable only for close, back, and search |
-| **Silent success**        | Action completes, nothing visibly changes                     | Confirm in place, and show the changed thing                               |
-| **Dead end**              | An error or empty state with no action leading out of it      | Every terminal state carries the next action as a control, not as prose    |
-| **Jargon leak**           | Implementation vocabulary on the surface                      | Rename to what the user would say. See `write-plain-language`              |
-| **Blame copy**            | "Invalid input", "You must…"                                  | Name what was expected and give an example. See `audit-error-messages`     |
-| **Hidden requirement**    | A rule revealed only on failure — password rules after submit | State the rule before and beside the field; validate as they leave it      |
-| **Ambiguous destructive** | "Remove" / "Delete" / "Archive" with no stated consequence    | Say what disappears, whether it comes back, and how                        |
-| **Modal trap**            | A dialog with no visible way to dismiss                       | Visible cancel, plus Escape                                                |
-| **Two primaries**         | Two equally-weighted buttons where one is destructive         | Exactly one primary; the safe one. Everything else is secondary            |
-| **Infinite prerequisite** | Step 1 needs something only step 4 explains                   | Reorder, or state the prerequisite up front with a link                    |
-| **Hover-only**            | An affordance that does not exist on touch or keyboard        | Make it a real, focusable control                                          |
-| **Untimed wait**          | A spinner past ~3s with no progress or estimate               | Show step counts ("3 of 7") or an estimate ("about 2 minutes")             |
+| Anti-pattern              | What it is                                                    | Fix                                                                                                        |
+| ------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **Mystery meat**          | Icon-only control with no label or tooltip                    | Add a text label. Icon-only is acceptable only for close, back, and search, the icons everyone has learned |
+| **Silent success**        | Action completes, nothing visibly changes                     | Confirm in place, and show the changed thing                                                               |
+| **Dead end**              | An error or empty state with no action leading out of it      | Every terminal state carries the next action as a control, not as prose                                    |
+| **Jargon leak**           | Implementation vocabulary on the surface                      | Rename to what the user would say. See `write-plain-language`                                              |
+| **Blame copy**            | "Invalid input", "You must…"                                  | Name what was expected and give an example. See `audit-error-messages`                                     |
+| **Hidden requirement**    | A rule revealed only on failure — password rules after submit | State the rule before and beside the field; validate as they leave it                                      |
+| **Ambiguous destructive** | "Remove" / "Delete" / "Archive" with no stated consequence    | Say what disappears, whether it comes back, and how                                                        |
+| **Modal trap**            | A dialog with no visible way to dismiss                       | Visible cancel, plus Escape                                                                                |
+| **Two primaries**         | Two equally-weighted buttons where one is destructive         | Exactly one primary; the safe one. Everything else is secondary                                            |
+| **Infinite prerequisite** | Step 1 needs something only step 4 explains                   | Reorder, or state the prerequisite up front with a link                                                    |
+| **Hover-only**            | An affordance that does not exist on touch or keyboard        | Make it a real, focusable control                                                                          |
+| **Untimed wait**          | A spinner past ~3s with no progress or estimate               | Show step counts ("3 of 7") or an estimate ("about 2 minutes")                                             |
 
 ### 4. Apply the naming test
 
@@ -153,7 +150,9 @@ auditor happened to care about.
 ### 7. Report and loop
 
 Write the report described under Output. Then fix the **top Blocker only** and re-run **only the
-personas that stalled on it**. Repeat until the gate reads 5/5 and the user confirms.
+personas that stalled on it**. Repeat until the gate reads 5/5: the gate is the done condition. A
+user who is present may still stop the loop early or accept a lower score; record that in the
+report.
 
 ## Rules
 

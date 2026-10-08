@@ -42,7 +42,8 @@ the Output block filled, and the channel test scheduled in §13 with its dates a
 9. Set the channel test: two to four weeks, one number that means pass, and the next channel to
    try on a fail.
 10. Name the one adjacent segment that follows the beachhead and what must be true before moving
-    to it. Do not plan beyond that.
+    to it. Do not plan beyond that: anything further rests on beachhead results that do not exist
+    yet.
 11. Write §09 now, and put the channel test in §10 and §13 as one line each, ending
     `(plan-go-to-market)`. Writing before asking keeps the plan if the session is interrupted.
 12. Ask about the weakest step, one question per turn, three questions at most. Revise §09 in
@@ -128,6 +129,9 @@ Written into §09 of `BUSINESS_PLAN.md` as one subsection, replaced whole on a r
   its customers at this price, with the gap in money per customer.
 - §08 has no price or no acquisition ceiling → stop before step 6, because no channel can be
   judged without one. Name `ceh-business-plan:stress-test-unit-economics`.
+- **No human to answer** (a headless run, or called by another agent): ask nothing. Draft and
+  revise from what the plan holds, tag every gap `[assumption]`, and end with the questions you
+  would have asked, in order, each with the assumption you used instead.
 
 ## Hands off to
 

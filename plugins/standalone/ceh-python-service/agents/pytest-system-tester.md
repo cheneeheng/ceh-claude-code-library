@@ -2,12 +2,10 @@
 name: pytest-system-tester
 description: >-
   Use this agent only when the user explicitly asks for full end-to-end or system-level pytest tests
-  that exercise the entire application stack as a real user or external caller would, in a subagent
-  because system tests are slow and expensive. Do not use proactively. Invoke for "write E2E
-  tests", "write system tests", "test the full flow", "test the whole pipeline", "simulate a real
-  user scenario", "write smoke tests", "write acceptance tests", "test the deployed app". Spins up
-  the real application, uses real external infrastructure (or close approximations via Docker), and
-  validates complete user journeys. Not for unit or component-level tests (use pytest-unit-tester or
+  that exercise the entire application stack as a real user would, in a subagent because system
+  tests are slow and expensive. Do not use proactively. Invoke for "write E2E tests", "write system
+  tests", "write smoke tests", "write acceptance tests". Spins up the real application and validates
+  complete user journeys. Not for unit or component-level tests (use pytest-unit-tester or
   pytest-integration-tester).
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
@@ -127,7 +125,8 @@ Manual setup: uv add --dev pytest-timeout.
   finished, what stopped you, what the parent should decide.
 - Report a check you could not run as "not run" with the reason. Never imply it passed.
 - NEVER run against production — always require explicit test environment config
-- NEVER write more than 8 system tests — write high-value scenarios only
+- NEVER write more than 8 system tests — write high-value scenarios only, because each one runs the
+  full stack and is slow and flaky enough that it must earn its cost
 - ALWAYS clean up state between scenarios (order-independent)
 - NEVER assert on internal implementation — only externally observable behavior
 - Use `docker compose` (v2), not `docker-compose` (v1, deprecated)

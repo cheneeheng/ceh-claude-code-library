@@ -9,9 +9,10 @@ Checks:
   manifests  - plugin.json valid, name matches dir, semver version; marketplace.json
                lists every plugin with a matching version and an existing source path.
   skills     - every skills/<name>/SKILL.md has name + description frontmatter, name == dir,
-               description <= 1024 chars, optional compatibility <= 500 chars.
+               description <= 600 chars, optional compatibility <= 500 chars, and states
+               disable-model-invocation, user-invocable and license explicitly.
   agents     - every agents/<name>.md has name + description + model frontmatter, name == file
-               stem, description <= 1024 chars.
+               stem, description <= 600 chars.
   keys       - skill/agent names are lowercase-hyphenated (<= 64 chars); every frontmatter key is
                one Claude Code documents; no plugin-agent key Claude Code ignores; no
                TEMPLATE-GUIDANCE comment left over from a template.
@@ -25,6 +26,9 @@ Checks:
                bundle depends on a bundle.
   invocations- every `Invoke the Skill tool with skill="X"` resolves, is in-plugin or in a
                declared dependency, and does not set `disable-model-invocation: true`.
+  repo-rules - docs/PLUGIN_VERSIONS.md matches every plugin.json version; no marketplace entry
+               declares dependencies; a cross-cutting plugin (CLAUDE.md tier table) depends only
+               on cross-cutting plugins; a skill a hook script names sets user-invocable: false.
   scripts    - *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
 """
 
@@ -41,7 +45,9 @@ REPO = Path(__file__).resolve().parents[2]
 SEMVER = re.compile(r"^\d+\.\d+\.\d+$")
 NAME = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 MAX_NAME_LEN = 64
-MAX_DESCRIPTION_LEN = 1024
+# Claude Code allows 1024. The repo budget is lower because every description is paid for in
+# context on every session that installs the plugin (docs/VISION.md, goal 4).
+MAX_DESCRIPTION_LEN = 600
 MAX_COMPATIBILITY_LEN = 500
 TEMPLATE_MARKER = "TEMPLATE-GUIDANCE"
 
@@ -86,6 +92,8 @@ AGENT_KEYS = {
     "color",
     "experimental",
 }
+# Stated on every skill even at their defaults, so the frontmatter says who invokes it.
+EXPLICIT_SKILL_KEYS = ("disable-model-invocation", "user-invocable", "license")
 # Valid on project agents, but Claude Code ignores them on plugin agents.
 PLUGIN_AGENT_IGNORED_KEYS = {"permissionMode", "hooks", "mcpServers", "initialPrompt"}
 
@@ -288,6 +296,10 @@ def check_skills() -> None:
                 fail(rel(skill_dir), "skill directory has no SKILL.md")
                 continue
             check_frontmatter_doc(sm, skill_dir.name, SKILL_KEYS)
+            fm = parse_frontmatter(sm) or {}
+            for key in EXPLICIT_SKILL_KEYS:
+                if key not in fm:
+                    fail(rel(sm), f"frontmatter must state '{key}' explicitly")
 
 
 def check_agents() -> None:
@@ -507,14 +519,89 @@ def check_invocations() -> None:
                 )
 
 
+# --- repo rules from CLAUDE.md -----------------------------------------------
+
+COMPONENT_PAT = re.compile(r"\b(ceh-[a-z0-9-]+):([a-z0-9-]+)\b")
+
+
+def check_repo_rules(versions: dict[str, str]) -> None:
+    """Rules CLAUDE.md states that a machine can check (docs/VISION.md, goal 5)."""
+    # docs/PLUGIN_VERSIONS.md mirrors every plugin.json version.
+    pv_path = REPO / "docs/PLUGIN_VERSIONS.md"
+    rows = dict(
+        re.findall(
+            r"^\| `(ceh-[a-z0-9-]+)` +\| ([^ |]+)",
+            pv_path.read_text(encoding="utf-8"),
+            re.MULTILINE,
+        )
+    )
+    for name, version in versions.items():
+        if rows.get(name) != version:
+            fail(
+                rel(pv_path),
+                f"{name}: row says {rows.get(name)}, plugin.json says {version}",
+            )
+    for name in rows.keys() - versions.keys():
+        fail(rel(pv_path), f"{name}: row for a plugin that does not exist")
+
+    # Dependencies live in plugin.json only, never in a marketplace entry.
+    mp_path = REPO / ".claude-plugin/marketplace.json"
+    for entry in (load_json(mp_path, rel(mp_path)) or {}).get("plugins", []):
+        if "dependencies" in entry:
+            fail(
+                rel(mp_path),
+                f"{entry.get('name')}: declare dependencies in plugin.json only",
+            )
+
+    # A cross-cutting plugin depends only on cross-cutting plugins. The tier list is the
+    # **Cross-cutting** row of the CLAUDE.md tier table.
+    row = re.search(
+        r"^\| \*\*Cross-cutting\*\*.*$",
+        (REPO / "CLAUDE.md").read_text(encoding="utf-8"),
+        re.MULTILINE,
+    )
+    if row is None:
+        fail("CLAUDE.md", "tier table has no **Cross-cutting** row")
+    else:
+        cross = set(re.findall(r"`(ceh-[a-z0-9-]+)`", row.group(0)))
+        for name, targets in plugin_deps().items():
+            if name in cross:
+                for t in targets:
+                    if t not in cross:
+                        fail(
+                            f"plugins/standalone/{name}",
+                            f"cross-cutting plugin depends on non-cross-cutting '{t}'",
+                        )
+
+    # A skill a hook names is model-only: `user-invocable: false`.
+    for d in plugin_dirs():
+        hooks = d / "hooks/hooks.json"
+        if not hooks.exists():
+            continue
+        wired = re.findall(r"scripts/([\w.-]+)", hooks.read_text(encoding="utf-8"))
+        for script in dict.fromkeys(wired):
+            text = (d / "scripts" / script).read_text(encoding="utf-8")
+            for plugin, skill in dict.fromkeys(COMPONENT_PAT.findall(text)):
+                sm = (
+                    REPO / "plugins/standalone" / plugin / "skills" / skill / "SKILL.md"
+                )
+                fm = parse_frontmatter(sm) if sm.exists() else None
+                if fm is not None and fm.get("user-invocable", "").lower() != "false":
+                    fail(
+                        rel(sm),
+                        f"named by hook script {script}, so set 'user-invocable: false'",
+                    )
+
+
 def main() -> int:
-    check_manifests()
+    versions = check_manifests()
     check_skills()
     check_agents()
     check_references()
     check_skill_refs()
     check_dependencies()
     check_invocations()
+    check_repo_rules(versions)
     check_scripts()
 
     if errors:

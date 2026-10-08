@@ -24,9 +24,10 @@ Never for general reference material a model already knows.
 
 Two skills migrated whole and carry bundled files that predate this rule:
 `ceh-ui-design:design-ui` (two themes and `examples.md` under `references/`) and
-`ceh-web-frontend:visualize-graph-cytoscape` (eight reference
-files, an `assets/template.html`, and a `scripts/to-elements.js` converter). Trim the Cytoscape
-references to the repo-opinionated delta before adding more.
+`ceh-web-frontend:visualize-graph-cytoscape` (six reference
+files, an `assets/template.html`, and a `scripts/to-elements.js` converter). The Cytoscape API and
+stylesheet references were cut on 2026-10-08 as material the model already knows. `design-ui`'s
+`examples.md` is still untrimmed.
 
 Scaffold or script bundles a skill executes or copies are not reference material and are allowed:
 `ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent` `assets/`) and `ceh-git-datastore`

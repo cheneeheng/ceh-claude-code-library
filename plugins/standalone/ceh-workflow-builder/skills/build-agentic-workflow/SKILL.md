@@ -1,18 +1,12 @@
 ---
 name: build-agentic-workflow
 description: >-
-  Load this skill when turning a repetitive multi-step task into something an agent runs instead
-  of something a human drives by hand: design it from a workflow spec, decide whether it is one
-  skill or a gated multi-step workflow, and emit the artifact into the target repo's
-  `.claude/skills/`. Trigger on "turn this into a skill", "turn this into a workflow", "build an
-  agentic workflow", "automate this process", "make this repeatable", "I do this by hand every
-  time", or "I need a skill that calls other skills". Covers the one-skill-vs-workflow gate, the
-  `flow.yaml` config with its stages and gates, per-step data-contract schemas, and leaf-first
-  emission. Building is interactive only; the result runs interactive or headless. An
-  intake gate delegates to ceh-workflow-builder:interview-workflow-task when the task is not yet
-  described. Not for evaluating a skill that already exists, not for adding a component to this
-  plugin repo, and not for running a built workflow (use
-  ceh-workflow-runner:run-agentic-workflow).
+  Load this skill when turning a repetitive multi-step task into something an agent runs instead of
+  a human driving by hand: decide whether it is one skill or a gated workflow, and emit it into the
+  target repo's `.claude/skills/`. Trigger on "turn this into a skill", "build an agentic workflow",
+  "I do this by hand every time". Delegates to ceh-workflow-builder:interview-workflow-task when the
+  task is not yet described. Not for evaluating an existing skill, adding a component to this plugin
+  repo, or running a built workflow (use ceh-workflow-runner:run-agentic-workflow).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -159,7 +153,8 @@ added to `.claude/skills/` competes for auto-triggering in the target repo, and 
 flat, so a generated set is grouped only by naming — flow `<name>-flow`, steps `<name>-<step>`.
 
 **Nesting is capped at one level.** A workflow's steps may be skills; a step skill may not itself be
-a workflow, and no stage, saved workflow included, may call the runner.
+a workflow, and no stage, saved workflow included, may call the runner. A stage runs as a
+subagent, which cannot ask the user, so a nested runner's approvals would have no one to ask.
 
 **A step skill cannot be hidden.** `disable-model-invocation: true` would block the flow's own call
 to it. Instead, its `description` must name the owning flow and route away from direct use.

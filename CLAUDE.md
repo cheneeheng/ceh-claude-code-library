@@ -1,9 +1,10 @@
 # CEH Claude Code Library
 
 Plugin repo for the `ceh-*` Claude Code plugins — guidance for autonomous agents, delivered as
-skills, subagents, and hooks. Each plugin is a standalone, self-contained **use case**. Migration
-from [agent-skills](https://github.com/cheneeheng/agent-skills) is in progress: plugins land here
-one at a time, and the tables below grow as they do.
+skills, subagents, and hooks. Each plugin is a standalone, self-contained **use case**. The plugins
+were migrated from [agent-skills](https://github.com/cheneeheng/agent-skills). One left there
+arrives the same way, through `add-plugin-component`, only if it passes the scope test in the
+vision.
 
 **Read `docs/VISION.md` before adding a plugin, accepting an idea, or changing a rule here.** It
 says why the repo works the way this file describes: agents first and humans second, the
@@ -64,7 +65,7 @@ archive/                      # Retired plugins or plugin contents — unpublish
 audits/<date>/                # Model-audit reports, one <plugin>.md each plus SUMMARY.md — written by the model-audit skill
 .github/workflows/            # validate.yml — runs validate.py on push and PR; model-audit.yml — weekly audit draft PR
 docs/                         # Maintainer docs — VISION.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
-examples/                     # Worked usage examples, one ceh-<plugin>/README.md each — not validated
+examples/                     # Worked usage examples, a ceh-<plugin>/README.md where one exists (only ceh-ag-ui today) — not validated
 plugins/                      # All plugins — two folders, one directory per plugin, no tier subfolders
 ├── scenarios/
 │   └── ceh-scenario-<name>/  # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY

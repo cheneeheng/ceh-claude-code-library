@@ -76,17 +76,21 @@ How it asks:
 A plugin belongs here when it helps shape, build, prove, or tell people about a product. The
 cross-cutting plugins hold the disciplines that apply at every stage.
 
-| Stage      | What happens                                       | Plugins today                                                                                                                                                                               |
-| ---------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Shape      | Decide what to build and whether it is worth it    | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-plan-build-review` (planning)                                                                                                          |
-| Build      | Write the code, the UI, and the docs               | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-git-datastore`, `ceh-documentation`, `ceh-codebase-explanation`, `ceh-plan-build-review` |
-| Prove      | Show it works and that a person can use it         | `ceh-testing`, `ceh-usability-audit`, `ceh-plan-build-review` (review)                                                                                                                      |
-| Tell       | Get it in front of the people who should find it   | `ceh-blog`, `ceh-seo`                                                                                                                                                                       |
-| Every step | How the agent behaves, commits, and spends context | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`                                                                                |
+| Stage      | What happens                                                             | Plugins today                                                                                                                                                                               |
+| ---------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shape      | Decide what to build and whether it is worth it                          | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-plan-build-review` (planning)                                                                                                          |
+| Build      | Write the code, the UI, and the docs                                     | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-git-datastore`, `ceh-documentation`, `ceh-codebase-explanation`, `ceh-plan-build-review` |
+| Prove      | Show it works and that a person can use it                               | `ceh-testing`, `ceh-usability-audit`, `ceh-plan-build-review` (review)                                                                                                                      |
+| Tell       | Get it in front of the people who should find it                         | `ceh-blog`, `ceh-seo`                                                                                                                                                                       |
+| Every step | How the agent behaves, commits, spends context, and runs repeatable work | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`                                                                                |
 
 The test for a new plugin or skill: **does it help an agent ship a product, or get one in front of
 people?** If not, it does not belong here, however useful it is. General productivity, chat
 helpers, and anything bound to one application are out.
+
+Teaching a person passes the test when that person must give the agent something it cannot get
+alone: a yes before an irreversible action, or a fact only they hold. A yes to a system nobody
+understood is not consent, so `ceh-codebase-explanation:explain-until-understood` stays.
 
 ## Goals
 
@@ -221,7 +225,13 @@ every run would pay for the extra install, so standards are duplicated (3 beats 
 This list shrinks as the gaps close. Remove a line in the PR that closes it. Add one when a change
 here, or a new finding, opens a gap the same PR cannot close.
 
-None known.
+- **Coding hooks run in every session, with no recorded evidence.** The `ceh-coding-conduct`
+  SessionStart and per-prompt hooks fire in sessions that write no code (goal 4), and nothing
+  records the failure each one answers (principle 7). Open, see "Scope the coding hooks" in
+  [`IDEAS.md`](IDEAS.md).
+- **`design-ui` carries reference bulk.** Its 551-line `references/examples.md` predates the
+  references rule in `plugins/CLAUDE.md` and is not yet cut to the repo-opinionated delta
+  (principle 5).
 
 ## Changing this file
 

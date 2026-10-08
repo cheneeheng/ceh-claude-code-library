@@ -2,15 +2,11 @@
 name: vitest-integration-tester
 description: >-
   Use this agent to write frontend integration tests in a subagent, to build out an integration
-  suite across many flows or run integration tests and report results in isolation. Use proactively
-  when the user asks to test how components work together, a component with real shared state, or a
-  form submission or data-loading flow within the browser environment. Invoke for "test this page
-  component", "test the full form flow", "test with real MSW handlers", "test state + component
-  together", "test this feature without mocking the state". Handles tests that wire real shared
-  state (Svelte 5 `.svelte.ts` modules), real MSW network handlers, and multiple components
-  together in a single jsdom/happy-dom environment. Not for one or two tests written inline (use
-  ceh-web-frontend:write-vitest-playwright-tests), isolated single-component or pure-function tests
-  (use vitest-unit-tester), or full browser E2E tests against a running server (use
+  suite or run it and report results in isolation. Use proactively when the user asks to test how
+  components work together, a component with real shared state, or a form or data-loading flow.
+  Invoke for "test this page component", "test the full form flow", "test with real MSW handlers".
+  Not for one or two inline tests (use ceh-web-frontend:write-vitest-playwright-tests),
+  single-component or pure-function tests (use vitest-unit-tester), or browser E2E (use
   playwright-system-tester).
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash

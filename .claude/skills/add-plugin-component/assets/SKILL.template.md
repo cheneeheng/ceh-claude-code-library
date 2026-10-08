@@ -22,7 +22,7 @@ Frontmatter
 - name: lowercase letters, digits, single hyphens, max 64 chars, equal to the directory name. Use a
   verb phrase (`draft-post`, `make-page-crawlable`): a skill is something you do at a moment.
   Agents are nouns (`bulk-reader`). Exempt: model-only standards and established terms of art.
-- description: always `>-`, 2-space indent, no blank lines, max 1024 chars. Triggers live here,
+- description: always `>-`, 2-space indent, no blank lines, max 600 chars (validate.py). Triggers live here,
   not in `when_to_use` and not in the body.
 - Any other value containing ": " gets single quotes: argument-hint: '[plan-file]'.
 - Add `compatibility: >-` only when the skill needs software the machine may lack. Name the

@@ -2,14 +2,12 @@
 name: explain-codebase
 description: >-
   Load this skill when the ask is to understand a whole repository and leave the understanding
-  behind in a file: walk it component by component, explain what each one does and how they fit
-  together, and write it to .agents_workspace/CODEBASE_EXPLAINED.md (git-ignored, never tracked).
-  Trigger on "go through the repo and explain what is happening", "explain this codebase",
-  "document what each module does", "walk me through this project", "write an onboarding doc for
-  this repo", or "I inherited this repo — what is going on". Explains at component/module level by
-  default; drops to one entry per file only when the user explicitly asks for per-file detail. Not
-  for design diagrams and decision records (ceh-codebase-explanation:document-architecture), and not for
-  end-user or operator documentation (ceh-documentation).
+  behind in a file: walk it component by component and write it to
+  .agents_workspace/CODEBASE_EXPLAINED.md. Trigger on "explain this codebase", "document what each
+  module does", "walk me through this project", or "I inherited this repo, what is going on".
+  Component level by default. Not for design diagrams and decision records
+  (ceh-codebase-explanation:document-architecture), and not for end-user or operator documentation
+  (ceh-documentation).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
@@ -113,7 +111,8 @@ utilities and who imports them. Write what the reader cannot guess.
   behavior — a constant, a threshold, a regex, a status string — is quoted verbatim and does not
   count against that ceiling; paraphrasing a value loses the mechanism.
 - **Depth follows weight.** Core components earn paragraphs; repo meta earns a clause.
-- **Regenerate, don't patch.** Re-run the skill and overwrite when the repo has moved on.
+- **Regenerate, don't patch.** Re-run the skill and overwrite when the repo has moved on. A patched
+  file mixes stale and fresh claims, while a regenerated one is accurate at the commit it names.
 
 ## Output
 

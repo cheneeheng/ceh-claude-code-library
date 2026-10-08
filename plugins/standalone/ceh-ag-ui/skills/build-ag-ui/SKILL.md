@@ -1,16 +1,12 @@
 ---
 name: build-ag-ui
 description: >-
-  Load this skill when starting a generative-UI frontend for an agent that speaks AG-UI (the
-  Agent-User Interaction protocol): a canvas where the agent answers the user by placing components
-  from a predefined catalogue, next to a chat input. Trigger on "build a UI with AG-UI", "ag-ui
-  frontend", "generative UI for my agent", "let the agent render components", "agent canvas", or
-  any mention of @ag-ui/client or HttpAgent when no canvas exists yet. Starts from the user's own
-  template when they give one, otherwise copies the bundled canvas (React + Vite + @ag-ui/client,
-  seven Tidewater-styled catalogue components, a deterministic mock agent). Not for adding one
-  component to an existing canvas (use ceh-ag-ui:add-canvas-component), the real agent server (use
-  ceh-ag-ui:build-ag-ui-agent), live shared state (use ceh-ag-ui:add-live-state-panel), or approval
-  steps (use ceh-ag-ui:add-human-approval).
+  Load this skill when starting a generative-UI frontend for an agent that speaks AG-UI: a canvas
+  where the agent answers by placing components from a predefined catalogue. Trigger on "build a UI
+  with AG-UI", "ag-ui frontend", "generative UI for my agent", or any mention of @ag-ui/client when
+  no canvas exists yet. Not for one component (use ceh-ag-ui:add-canvas-component), the agent server
+  (use ceh-ag-ui:build-ag-ui-agent), live state (use ceh-ag-ui:add-live-state-panel), or approvals
+  (use ceh-ag-ui:add-human-approval).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
@@ -58,7 +54,8 @@ Invoke the Skill tool with skill="ceh-ui-design:design-ui" and follow its _Theme
 one override: the theme is already chosen. Use **Tidewater** without asking, unless the user named
 Meridian or brought their own token file with the same token and class contract. Copy the
 `tidewater/brand.css` file from that skill's references directory to `web/src/brand.css`, which
-`app.css` imports first. Switching later means replacing that one file, and no markup changes.
+`app.css` imports first. Switching later means replacing that one file, and no markup changes, so a
+canvas build never stalls on a look-and-feel question.
 
 ### 3. Shape the catalogue
 

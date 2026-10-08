@@ -1,15 +1,12 @@
 ---
 name: test-a-bug-fix
 description: >-
-  Load this skill when a bug, defect, crash, regression, or incident is being fixed — before writing
+  Load this skill when a bug, defect, crash, regression, or incident is being fixed, before writing
   the fix. Enforces reproduce-first: write the smallest failing test, confirm it fails for the real
-  reason, fix, then prove the test goes red again without the fix; and bisect on that reproducer
-  when the behavior used to be correct. Trigger on "fix this bug", "this is broken", "getting an
-  error", "this returns the wrong value", "regression", "this worked last week", "which commit broke
-  this", "git bisect", "hotfix", "postmortem action item", or a pasted stack trace or failing
-  output. Also load when reviewing a bug-fix PR that ships no test. Not for choosing inputs for new
-  feature tests (use ceh-testing:design-test-cases) or for judging an existing suite (use
-  ceh-testing:audit-test-suite).
+  reason, fix, then prove the test goes red again without the fix. Trigger on "fix this bug", "this
+  is broken", "regression", "this worked last week", or a pasted stack trace. Also load when
+  reviewing a bug-fix PR that ships no test. Not for choosing inputs for new feature tests (use
+  ceh-testing:design-test-cases) or judging an existing suite (use ceh-testing:audit-test-suite).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

@@ -14,7 +14,7 @@ never enter this context, so its answer is all there is to work with. Its own de
 it is the wrong tool; this covers how to drive it and how to treat what comes back.
 
 **Do not override the worker's model.** The agent file pins it; the `Agent` tool's `model`
-parameter would replace that per call. Measured over six runs against the agent-skills repo, a larger worker
+parameter would replace that per call. Measured over six runs on a real plugin repository, a larger worker
 never wins: on enumerative questions the pinned worker already recalls every fact, so the swap buys
 nothing and costs about ten points of saving; on reasoning questions it recovers part of the
 missing detail but drops the saving from roughly 60% to 25%, and still omits silently. When an

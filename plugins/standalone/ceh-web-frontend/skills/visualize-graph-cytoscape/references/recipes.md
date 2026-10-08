@@ -1,7 +1,7 @@
 # Interaction recipes
 
 Working implementations of the features almost every graph visualizer needs. Copy and
-adapt. All assume the class names from the default stylesheet in `style.md`
+adapt. All assume the class names from the base stylesheet in `assets/template.html`
 (`dimmed`, `hot`, `hidden`).
 
 ## Tap to highlight a neighbourhood

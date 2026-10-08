@@ -33,7 +33,8 @@ are sold. Done is a unit model, a cash timeline, and a sensitivity table in §08
 6. Answer the default-alive question: at the current cost base and a growth rate already observed
    or conservatively assumed, does the business reach break-even before the cash runs out? (Paul
    Graham's test.) State yes or no with the month.
-7. Run the sensitivity table. Flex each input to its own plausible bad case, not a uniform 10%.
+7. Run the sensitivity table. Flex each input to its own plausible bad case, not a uniform 10%,
+   because a uniform flex hides which input actually kills the business.
    The input whose bad case flips the unit to a loss, or moves the cash-out month before
    break-even, is the kill input.
 8. Apply the margin of safety: the plan must still work with the two weakest inputs at their bad
@@ -66,13 +67,15 @@ before applying one.
 ## Rules
 
 - No number without its arithmetic. Write `40 customers x $49 x 12 = $23,520`, never `$23.5k ARR`.
+  Only a visible input can be checked or replaced.
 - Never invent the user's figures. An estimate is a range with an `[assumption]` tag and a named
   way to replace it with a real number.
 - Bottom-up only. Revenue is customers times price. A percentage of a large market is not a
   forecast.
 - Three numbers decide viability: contribution per unit, payback period, cash low point. Lead with
   those. A five-year projection adds false precision and is out of scope.
-- State bad news in the first line. If the unit loses money, say so before showing the tables.
+- State bad news in the first line. If the unit loses money, say so before showing the tables,
+  because it changes every decision downstream and is easy to skim past below them.
 - Re-tag as numbers firm up. An input the user confirms from a real invoice or a real sale becomes
   `[evidence]`.
 
@@ -117,6 +120,9 @@ Unit: <one customer per month>
   report that the business does not work as planned, with the gap in money per unit.
 - There is no price and no customer signal to anchor one → stop and name
   `ceh-business-plan:find-product-market-fit`. A model on a guessed price tests nothing.
+- **No human to answer** (a headless run, or called by another agent): ask nothing. Draft and
+  revise from what the plan holds, tag every gap `[assumption]`, and end with the questions you
+  would have asked, in order, each with the assumption you used instead.
 
 ## Hands off to
 

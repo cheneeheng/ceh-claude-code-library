@@ -1,13 +1,12 @@
 ---
 name: refactor-repo
 description: >-
-  Audit a whole codebase (or one named module) for accumulated complexity and shrink it through
-  a propose-then-apply refactor campaign: a read-only inventory of candidates (duplication, dead
-  code, over-abstraction, write-less-code ladder violations), a ranked proposal with estimated
-  payoff, risk, and diff size, then — only after explicit approval of specific clusters — apply
-  them on refactor/ branches under a behavior-preservation gate, mechanical transforms only
-  where tests are missing. Not for simplifying one branch's diff before a PR (use shrink-diff)
-  or write-time minimalism (use write-less-code).
+  Audit a whole codebase (or one named module) for accumulated complexity and shrink it through a
+  propose-then-apply refactor campaign: a read-only inventory of candidates (duplication, dead code,
+  over-abstraction), a ranked proposal with payoff, risk, and diff size, then, only after explicit
+  approval of specific clusters, apply them on refactor/ branches under a behavior-preservation
+  gate. Not for simplifying one branch's diff before a PR (use shrink-diff) or write-time minimalism
+  (use write-less-code).
 argument-hint: "[module-or-path]"
 disable-model-invocation: true
 user-invocable: true
@@ -54,7 +53,7 @@ Walk each piece of code in scope down the write-less-code ladder, in hindsight:
 2. **Stdlib does it?** Replace the custom version.
 3. **Native platform feature covers it?** Replace the custom version.
 4. **An already-installed dependency solves it?** Replace the custom version. Never add a new
-   dependency to shrink code.
+   dependency to shrink code: its install, supply-chain, and upgrade cost outlasts the lines saved.
 5. **Can it be one line?** Make it one line.
 6. **Only then:** keep it, as the minimum that works — collapse single-implementation
    abstractions, inline single-caller wrappers, turn config-for-a-constant back into a constant.
@@ -69,7 +68,8 @@ Deliver a ranked candidate table:
 Group candidates into clusters sized so each cluster makes one reviewable PR (the size limits in
 `ceh-git-workflow:pull-request`). Then **stop and wait for the user to select clusters**. Invoking
 this skill approved the campaign, not any specific candidate — never proceed past this point
-unprompted.
+unprompted. With no human to select (a headless run), the ranked table is the deliverable: end the
+run there and apply nothing, because no cluster was approved.
 
 ### Phase 3 — Apply approved clusters
 

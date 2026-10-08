@@ -22,7 +22,8 @@ config. Done when `ruff` and `mypy` pass and `pyproject.toml` matches the config
 
 ## Procedure
 
-1. Run every command through `uv run`, and change dependencies only with `uv add` / `uv sync`.
+1. Run every command through `uv run`, and change dependencies only with `uv add` / `uv sync`, so
+   every run uses the one environment `uv.lock` pins and a stray `pip install` cannot drift it.
 2. Before adding a runtime dependency, check that every consumer should inherit it. If not, make it
    a dev dependency or an optional extra.
 3. Write code to the coding style below.
@@ -128,7 +129,7 @@ Never use `time.sleep()` in async code — use `await asyncio.sleep()`.
 
 ### Linting and type checking
 
-**ruff** for linting and formatting (do not add flake8, pylint, isort, or Black). **mypy** for type checking.
+**ruff** for linting and formatting (do not add flake8, pylint, isort, or Black: one tool and one config cannot disagree with itself). **mypy** for type checking.
 
 Required before every PR:
 

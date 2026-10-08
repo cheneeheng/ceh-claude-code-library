@@ -73,7 +73,8 @@ specifically requires it.
 - **Keep examples runnable.** Flags, args, and paths must match current code.
 - **Update the table of contents** if one exists and you added or removed a section.
 - Never delete existing content unless it is factually wrong.
-- Never commit or push.
+- Never commit or push. The caller owns commit order, and a README edit lands in the change's own
+  commit.
 - In a monorepo, update only the READMEs affected by the change.
 
 ## Stop conditions

@@ -2,16 +2,11 @@
 name: visualize-graph-cytoscape
 description: >-
   Load this skill when building a UI that draws entities as connected nodes and edges with
-  Cytoscape.js: a network or node-link diagram, dependency map, knowledge graph, org chart,
-  topology or call graph, lineage view, or state machine the user can click, drag, zoom, and
-  explore. Trigger on "visualize this graph", "draw a network", "show what connects to what",
-  "render this edge list or adjacency matrix", "make a dependency map", or any mention of
-  cytoscape, cytoscape.js, cy.js, or node-link. Covers choosing the layout from the graph's shape,
-  converting real data (parent pointers, depends_on arrays, edge lists, matrices) into elements
-  JSON, the stylesheet, tap-to-highlight interactions, readable zoom defaults, and when a
-  node-link diagram is the wrong answer. Prefer over hand-rolled SVG or a D3 force layout for any
-  graph past a handful of nodes. Not for a fixed diagram that never changes (Mermaid), charts, or
-  architecture diagrams and decision records (use ceh-codebase-explanation:document-architecture).
+  Cytoscape.js: a network diagram, dependency map, knowledge graph, org chart, or call graph the
+  user can click, drag, zoom, and explore. Trigger on "visualize this graph", "draw a network",
+  "make a dependency map", or any mention of cytoscape. Covers choosing a layout, converting real
+  data into elements JSON, and when a node-link diagram is the wrong answer. Not for a fixed diagram
+  (Mermaid), charts, or architecture diagrams (use ceh-codebase-explanation:document-architecture).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
@@ -121,7 +116,8 @@ l.one('layoutstop', fn); l.run();`. Use the second whenever the handler must als
 
 Built-in layouts only: `null`, `random`, `preset`, `grid`, `circle`, `concentric`,
 `breadthfirst`, `cose`. Everything else is an extension you must load and register.
-Full option lists with defaults are in `references/layouts.md`.
+Lifecycle, re-running, and the extension layouts are in `references/layouts.md`. Full option
+lists are in the Cytoscape.js docs.
 
 Rule of thumb: if the user's graph is hierarchical, do not use a force layout. Force
 layouts on trees look like accidents.
@@ -188,8 +184,8 @@ hand-escape into a selector string.
 
 Start from the base stylesheet in `assets/template.html`, then adjust. Every visualizer
 needs at minimum: node body, node label, edge line, edge arrow, selected state, and the
-dim/highlight pair used by interactions. See `references/style.md` for the full property
-reference.
+dim/highlight pair used by interactions. Look up any other property in the Cytoscape.js style
+docs.
 
 ### 4. Wire the interactions
 
@@ -409,9 +405,8 @@ trees. Any of these is better than a fitted view of unreadable specks. Set `minZ
 
 Load these as needed; do not read all of them upfront.
 
-- `references/api.md` — core and collection API inventory, selectors, events, algorithms
-- `references/style.md` — full stylesheet property reference
-- `references/layouts.md` — every layout with its real option defaults, plus extensions
+- `references/layouts.md` — layout lifecycle, re-running without losing the user's place, which
+  extension to pick
 - `references/integration.md` — React, Vue, Svelte, bundlers, SSR, data validation
 - `references/theming.md` — dark mode, design tokens, resolving CSS variables to canvas
 - `references/recipes.md` — highlight, search, filter, expand/collapse, tooltips, export, context menus

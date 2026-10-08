@@ -131,7 +131,8 @@ uv publish --publish-url https://test.pypi.org/legacy/   # TestPyPI dry run firs
 uv publish                    # then the real PyPI
 ```
 
-- Always build **both** a wheel and an sdist.
+- Always build **both** a wheel and an sdist: the wheel installs fast, and the sdist serves source
+  builds and distro packagers.
 - Publish to **TestPyPI** and install from it once before publishing to real PyPI.
 - A version is published exactly once — PyPI rejects re-uploads. Bump the version to fix a bad release.
 

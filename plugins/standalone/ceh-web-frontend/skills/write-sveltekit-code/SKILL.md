@@ -69,7 +69,8 @@ export const load: PageServerLoad = async ({ params }) => {
 
 Svelte 5 is the standard: use runes, not `svelte/store` (`writable` / `derived`). Shared state lives
 in one `.svelte.ts` module under `src/lib/state/`. It is updated **only** from API responses, through
-the module's exported functions — never mutated directly by components.
+the module's exported functions — never mutated directly by components, so the server stays the
+source of truth and every change has one traceable writer.
 
 **Browser-only.** Module-level state lives once per server process, so during server rendering it is
 shared across every user's request and can leak one user's data to another. Never write a
@@ -114,7 +115,7 @@ export function getOpenItems() {
 
 ### Centralized API client
 
-All `fetch` calls go through `src/lib/api/client.ts`. Components and shared-state modules never call `fetch` directly.
+All `fetch` calls go through `src/lib/api/client.ts`. Components and shared-state modules never call `fetch` directly, so the base URL, headers, and error parsing live in one place and tests mock one boundary.
 
 ```ts
 export const apiClient = {
@@ -146,7 +147,8 @@ import { PUBLIC_API_BASE_URL } from "$env/static/public"; // safe for browser
 import { DATABASE_URL } from "$env/static/private"; // server-only
 ```
 
-Never use `import.meta.env.VITE_*`.
+Never use `import.meta.env.VITE_*`: the `$env` modules enforce the public/private split at build
+time, and `VITE_*` does not.
 
 ### Error handling
 

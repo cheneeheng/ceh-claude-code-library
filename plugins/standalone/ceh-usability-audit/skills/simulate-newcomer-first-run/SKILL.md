@@ -2,15 +2,11 @@
 name: simulate-newcomer-first-run
 description: >-
   Load this skill to find out whether a stranger with no context can get from "just arrived" to
-  "first real success" on their own — install, sign-up, setup, onboarding, or the first task.
-  Dispatches cold persona-constrained subagents given only what a newcomer actually has (README,
-  landing page, --help), told to stop at the first thing they cannot get past; ranks the stalls by
-  observed outcome and loops fix/re-run until a 5-point gate passes. Sets milestones with an action
-  budget up front, so "far too many steps" is a finding rather than a pass, and estimates
-  time-to-first-success from a fixed cost model. Trigger on "can a new user figure this out", "is
-  the setup clear", "test the onboarding", "try this with fresh eyes", "would a beginner get stuck",
-  "nobody can install this", "how long does setup take", or "time to first success". Not for an
-  interface already entered (use ceh-usability-audit:audit-interface) or WCAG (use
+  "first real success" on their own: install, sign-up, setup, onboarding, or the first task.
+  Dispatches cold persona-constrained subagents, ranks the stalls by observed outcome, and loops fix
+  and re-run until a 5-point gate passes. Trigger on "can a new user figure this out", "test the
+  onboarding", "try this with fresh eyes", "time to first success". Not for an interface already
+  entered (use ceh-usability-audit:audit-interface) or WCAG (use
   ceh-web-frontend:make-ui-accessible).
 disable-model-invocation: false
 user-invocable: true
@@ -210,7 +206,9 @@ Write the report described under Output, with the raw walker transcripts beside 
 Fix the **top Blocker only**, then re-run **only the personas that stalled on it**. A full re-run
 after every edit is waste, and re-running a persona that already passed tells you nothing.
 
-Repeat until the gate reads 5/5 and the user confirms. Report the gate honestly at every iteration
+Repeat until the gate reads 5/5: the gate is the done condition. A user who is present may still
+stop the loop early or accept a lower score; record that in the report. Report the gate honestly at
+every iteration
 — a 3/5 that is stated is worth more than a 5/5 that was argued into place.
 
 ## Rules

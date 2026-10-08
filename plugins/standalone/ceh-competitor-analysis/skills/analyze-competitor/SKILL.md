@@ -2,15 +2,11 @@
 name: analyze-competitor
 description: >-
   Load this skill when analysing a competitor's repo or product to learn from it: one concise
-  Markdown report per competitor, also rendered as a styled HTML page, with a breakdown of what it
-  is, a full inventory of what it ships rated covered, partial, or gap against ours,
-  the "oh wow" moments worth learning from, and what we should incorporate, each mapped to where it
-  lands in our own work. Works on code repos (shallow-cloned, read as untrusted data, never run) and
-  on products (official site, docs, pricing, changelog). Trigger on "competitor analysis", "analyze
-  this repo", "what can we learn from X", "how does X compare to us", "study this competitor", or a
-  pasted GitHub URL with "investigate". Not for the cross-competitor comparison against our work
-  (use ceh-competitor-analysis:compare-competitors), and not for business-plan strategy against
-  named competitors (use ceh-business-plan:sharpen-strategy).
+  Markdown report per competitor, also rendered as HTML, with what it is, an inventory of what it
+  ships rated covered, partial, or gap against ours, and what we should incorporate. Trigger on
+  "competitor analysis", "analyze this repo", "what can we learn from X". Not for the
+  cross-competitor comparison (use ceh-competitor-analysis:compare-competitors), and not for
+  business-plan strategy against named competitors (use ceh-business-plan:sharpen-strategy).
 argument-hint: "<repo-url | product-url> [more targets...]"
 disable-model-invocation: false
 user-invocable: true

@@ -2,15 +2,11 @@
 name: add-live-state-panel
 description: >-
   Load this skill when adding a live panel to an AG-UI canvas: one fixed area showing a value the
-  agent keeps updating while it works (a progress tracker, a plan checklist, a running tally, a
-  draft document), instead of a new component per answer. Wires STATE_SNAPSHOT and STATE_DELTA
-  (JSON Patch) from the agent, onStateChanged in @ag-ui/client, a fixed state panel on the canvas,
-  and UI-to-agent state via RunAgentInput.state. Trigger on "show the agent's progress live",
-  "shared state", "sync state with the agent", "the agent should update this panel as it goes", or
-  any mention of STATE_SNAPSHOT or STATE_DELTA. A build-time skill: it writes the panel and the
-  agent code that feeds it. Builds on a canvas from ceh-ag-ui:build-ag-ui. Not for placing a
-  one-off component (use ceh-ag-ui:add-canvas-component) or asking the user to approve something
-  (use ceh-ag-ui:add-human-approval).
+  agent keeps updating while it works (a progress tracker, a running tally), instead of a new
+  component per answer. Wires STATE_SNAPSHOT and STATE_DELTA from the agent to a fixed panel.
+  Trigger on "show the agent's progress live", "shared state", "sync state with the agent". Builds
+  on a canvas from ceh-ag-ui:build-ag-ui. Not for a one-off component (use
+  ceh-ag-ui:add-canvas-component) or user approval (use ceh-ag-ui:add-human-approval).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

@@ -1,14 +1,10 @@
 ---
 name: write-plain-language
 description: >-
-  Load this skill when writing or rewriting words a user reads inside the product — button and field
-  labels, empty states, onboarding copy, tooltips, confirmation dialogs, CLI help text, setting
-  names, or a docs page a beginner has to follow. Supplies the vocabulary floor and swap table, the
-  sentence rules, the define-on-first-use rule for surviving domain terms, button and label
-  conventions, and an explicit list of what must never be simplified. Trigger on "make this
-  clearer", "simplify this wording", "rewrite this for non-technical users", "plain English",
-  "reword this label", "our copy is too technical", "explain this in simpler terms", "write the
-  empty state", or when naming a button, field, setting, or command. Not for error text (use
+  Load this skill when writing or rewriting words a user reads inside the product: button and field
+  labels, empty states, onboarding copy, tooltips, confirmation dialogs, CLI help text. Supplies the
+  vocabulary swap table, sentence rules, and what must never be simplified. Trigger on "make this
+  clearer", "plain English", "reword this label", "write the empty state". Not for error text (use
   ceh-usability-audit:audit-error-messages), whole-interface structure (use
   ceh-usability-audit:audit-interface), or marketing copy (use ceh-seo:write-project-listing-text).
 disable-model-invocation: false
@@ -105,6 +101,7 @@ notifications` is unreadable in both states.
 - **Give numbers, not adjectives.** "About 2 minutes" beats "Processing". "3 of 7" beats a spinner.
   "Up to 25 MB" beats "large files not supported".
 - **Time is relative first, absolute on hover or beside:** "3 hours ago" over `2026-08-01T09:14Z`.
+  A reader judges recency at a glance but has to work out a timestamp.
 - **Empty states carry the first action as a control**, not as a sentence. "No projects yet" plus a
   **Create your first project** button — not "You can create a project from the menu above."
 

@@ -32,6 +32,9 @@ If the user specifies format(s), proceed immediately. Otherwise ask once:
 >
 > _Any combination."_
 
+With no human to answer (a headless run), produce all four, since each is cheap and dropping one
+is easier for the author than asking again later.
+
 ### 2. Read the post
 
 Identify: **the thesis** (the single central claim); **the key takeaway**; **the audience**; **the tone**; **length** (enough content to thread, or short-form?).

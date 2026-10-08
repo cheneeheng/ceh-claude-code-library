@@ -22,7 +22,8 @@ license: Apache-2.0
 
 Schema, queries, and migrations move together: a new table needs its DDL, the migration that creates
 it, and the queries that read it. Use **asyncpg** directly — no ORM — and **Alembic** for every
-schema change. Never modify the database schema by hand.
+schema change. Plain parameterized SQL keeps every query visible in review, where an ORM hides it.
+Never modify the database schema by hand.
 
 ## Procedure
 

@@ -1,14 +1,11 @@
 ---
 name: write-examples
 description: >-
-  Load this skill when writing new runnable example programs for the project in the workspace (or a
-  project path the user gives) under examples/: a short feature tour that shows a new user the most
-  important features fast, and copy-paste recipes a user can drop straight into their own project
-  or tool that depends on this one. Every example is run before it is kept. Trigger on "write
-  examples for this project", "add usage examples", "we need an examples folder", "show new users
-  how to use this", "give users something to copy into their app", "write integration snippets", or
-  "the examples are missing or broken, redo them". Not for documenting examples that already exist
-  as docs pages (use ceh-documentation:write-project-docs), task-by-task how-to prose (use
+  Load this skill when writing new runnable example programs for the project under examples/: a
+  short feature tour for new users and copy-paste recipes for their own project. Every example is
+  run before it is kept. Trigger on "write examples for this project", "add usage examples", "we
+  need an examples folder", or "the examples are missing or broken". Not for documenting existing
+  examples as docs pages (use ceh-documentation:write-project-docs), how-to prose (use
   write-guides-and-runbooks), or a README refresh (use ceh-git-workflow:update-readme).
 argument-hint: "[project-path]"
 disable-model-invocation: false
@@ -90,7 +87,7 @@ lays examples out differently by convention (Rust's flat `examples/*.rs` run by
 `cargo run --example`, Go's one `package main` per `examples/<name>/` directory), follow the
 convention and keep the two tracks as a name prefix (`tour_01_...`, `recipe_...`) instead of
 subfolders. Examples are programs, not tests: do not write them as Go `Example*` functions or
-doctests.
+doctests, because a user must be able to run and copy each one as a standalone program.
 
 **Examples run against the working tree, but integrators install the latest release.** Compare the
 public surface the examples use against the latest release tag
@@ -198,7 +195,8 @@ section with one `###` heading per file and its output in a `text` block. If the
 
 - **Never change the project to run an example.** A recipe's extra dependencies (a web framework,
   an HTTP client) go into a throwaway environment: `uv run --with <pkg>`, `bunx`, a temp venv.
-  Never add them to the project's manifest or lockfile.
+  Never add them to the project's manifest or lockfile: integrators install the released project,
+  so an example that needs project edits misleads them.
 - **Never run against production or a real account.** An example that writes, deletes, sends, or
   bills runs only against a local or test instance. Start it yourself if the project can run one
   (the dev server, a compose file) and stop it afterwards. If the only reachable target is live, do

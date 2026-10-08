@@ -2,13 +2,11 @@
 name: vitest-unit-tester
 description: >-
   Use this agent to write isolated, fast unit tests for TypeScript pure functions, classes, and
-  modules in a subagent, to generate many unit tests at once, close broad coverage gaps across
-  files, or run the unit suite and report results in isolation. Use proactively when the user asks
-  to write, add, or improve unit tests in a TypeScript codebase. Invoke for "test this function",
-  "add unit tests", "cover this module", "TDD this", "mock this dependency", or mentions of
-  Jest/Vitest/Mocha. Handles coverage gaps, edge cases, error paths, and mock setup. Not for one or
-  two tests written inline (use ceh-web-frontend:write-vitest-playwright-tests) or for HTTP
-  endpoints, database interactions, or cross-module flows (use vitest-integration-tester or
+  modules in a subagent, to generate many at once, close coverage gaps, or run the unit suite and
+  report results in isolation. Use proactively when the user asks to write or improve unit tests in
+  a TypeScript codebase. Invoke for "test this function", "add unit tests", "cover this module". Not
+  for one or two inline tests (use ceh-web-frontend:write-vitest-playwright-tests) or HTTP
+  endpoints, databases, or cross-module flows (use vitest-integration-tester or
   playwright-system-tester).
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
@@ -60,7 +58,8 @@ If a request crosses that boundary, say so and stop.
    - Mock every external dependency (`vi.mock` / `jest.mock`) — no real I/O, no real timers,
      no real network, no real filesystem
    - Use fake timers for time-dependent code
-   - Prefer `toStrictEqual` over `toEqual` for objects
+   - Prefer `toStrictEqual` over `toEqual` for objects: it also checks `undefined` properties and
+     object types, which `toEqual` ignores
    - Assert on error _messages_ or custom error _types_, not just that something threw
 
 5. **Run and verify.** Execute `bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-unit-tests.sh" <test_file>` and iterate

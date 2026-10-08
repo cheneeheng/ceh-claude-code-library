@@ -2,13 +2,11 @@
 name: implement-from-plan
 description: >-
   Load this skill when building from a planning document: implement a SKELETON.md or ITER_NN.md,
-  including version-tagged variants like SKELETON_v2.md or v2_ITER_03.md. Reads the plan
-  frontmatter to determine artifact type and scope, then implements each in-scope section in order
-  (§01–§06), resolving iteration pointers and depends_on chains to find the authoritative spec.
-  Trigger on "implement from plan", "build from the plan", "implement the skeleton", "build
-  ITER_02", or when the user points at a plan file and asks to build it. Not for writing the plan
-  (use plan-fullstack-app), auditing built code against a plan (use review-against-plan), or a
-  small non-feature change to a built version (use apply-small-fix-to-version).
+  including variants like SKELETON_v2.md or v2_ITER_03.md. Reads the plan frontmatter for artifact
+  type and scope, then implements each in-scope section in order. Trigger on "implement from plan",
+  "build from the plan", "implement the skeleton", "build ITER_02". Not for writing the plan (use
+  plan-fullstack-app), auditing built code against a plan (use review-against-plan), or a small
+  non-feature change to a built version (use apply-small-fix-to-version).
 argument-hint: "[plan-file]"
 disable-model-invocation: false
 user-invocable: true
@@ -95,5 +93,7 @@ After all sections are done, report:
 
 ## Stop conditions
 
-- A section spec is missing or incomplete → stop and ask instead of inventing it.
-- More than one plan family exists and the user named none → ask which version is the target.
+- A section spec is missing or incomplete → ask instead of inventing it. With no human to answer,
+  skip that section and list it under sections skipped, since invented spec is worse than a gap.
+- More than one plan family exists and the user named none → take the highest version, per
+  "Locating plan files", and say which.

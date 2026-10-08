@@ -2,16 +2,12 @@
 name: design-ui
 description: >-
   Load this skill when making any frontend UI visual design decision: laying out a page or app
-  shell, placing navigation, deciding whether a title/section/card appears, establishing hierarchy
-  and spacing, picking a look and feel, theme, or brand before building UI, or restyling/polishing
-  an existing app. Includes finishing recipes and bundled token-driven themes (Meridian,
-  Tidewater). Auto-load on: design the UI, lay out this page, where should the nav go, make it look
-  good/modern/professional, polish this UI, the UI looks primitive/plain, style my app, pick a
-  theme/design system, apply a brand, review this UI design, or starting the visual layer of a new
-  frontend. Framework-agnostic. Not for accessibility/WCAG fixes (use
-  ceh-web-frontend:make-ui-accessible), tooling setup (use ceh-web-frontend:configure-bun-vite-env),
-  component/route logic (use ceh-web-frontend:write-react-vite-code or
-  ceh-web-frontend:write-sveltekit-code), or API/DB schema design.
+  shell, placing navigation, establishing hierarchy and spacing, picking a theme or brand, or
+  restyling an existing app. Auto-load on: design the UI, lay out this page, make it look
+  professional, polish this UI. Not for accessibility (use ceh-web-frontend:make-ui-accessible),
+  tooling (use ceh-web-frontend:configure-bun-vite-env), component logic (use
+  ceh-web-frontend:write-react-vite-code or ceh-web-frontend:write-sveltekit-code), or API/DB schema
+  design.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -132,7 +128,8 @@ key-value cards — never squash columns.
   deep.
 - **Order by frequency of use**, never alphabetically. The most-used destination sits first/top;
   Settings, account, and sign-out go last (sidebar bottom or top-bar far right).
-- **Max 7 top-level items.** Beyond that, group under labeled sections (sidebar) or consolidate.
+- **Max 7 top-level items.** Beyond that, group under labeled sections (sidebar) or consolidate:
+  past about seven, users scan the list instead of finding the item.
 - **The active location must be visibly marked** — a filled/edged state on the current nav item
   (the theme's `.has-edge.is-active` exists for exactly this). A user should know where they are
   from the nav alone.
@@ -352,7 +349,7 @@ bundled style over a generic component library (shadcn/ui, MUI, Mantine) for one
 | **Tidewater** | Editorial / boutique; flat, border-led depth              | Fraunces · Hanken Grotesk · JetBrains Mono | Cool mint ground, terracotta + teal   |
 
 - **Choose:** let the user pick via `AskUserQuestion` (single-select) unless they already named one.
-  Both templates ship the same token names and component classes, so the choice is purely
+  With no human to answer, take Meridian, the neutral default, and say so. Both templates ship the same token names and component classes, so the choice is purely
   look-and-feel — swap later by replacing one CSS file, with no markup changes. To preview, open
   `references/<name>/brand-guide.html` in a browser or send it with `SendUserFile`.
 - **Install:** copy `references/<name>/brand.css` to the project's global stylesheet location

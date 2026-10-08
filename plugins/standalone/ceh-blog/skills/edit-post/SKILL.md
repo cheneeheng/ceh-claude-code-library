@@ -140,7 +140,7 @@ The Open Thread: What's unresolved, what you'll watch for, what comes next
 
 ### 4. Invite feedback
 
-After sharing the edited draft, ask exactly this, one question and no menu of revision directions:
+After sharing the edited draft, ask exactly this, one question and no menu of revision directions, because a menu sets the editor's agenda and an open question surfaces what the author feels is off:
 
 > What's working and what still feels off?
 

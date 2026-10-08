@@ -1,15 +1,12 @@
 ---
 name: write-fastapi-endpoints
 description: >-
-  Load this skill when designing or writing FastAPI endpoints, services, or middleware: defining URL
-  paths, choosing HTTP methods and status codes, shaping error responses, adding a new endpoint,
-  wiring up dependency injection, configuring lifespan startup/shutdown, registering exception
-  handlers, defining the custom exception hierarchy, or setting route/service/database layer
-  boundaries. Also covers the service's cross-cutting concerns: structured log calls, metrics, the
-  /health endpoint, correlation ID middleware, CORS, rate limiting, and request input validation.
-  Auto-load whenever a route handler is written, an HTTP status code is chosen, an error response
-  shape is defined, a FastAPI dependency is defined, a domain exception is added, a log call or
-  metric is written, or CORS, rate limiting, or /health is touched. Not for frontend or browser code.
+  Load this skill when designing or writing FastAPI endpoints, services, or middleware: URL paths,
+  HTTP methods and status codes, error response shapes, dependency injection, lifespan, exception
+  handlers, or route/service/database layer boundaries. Also covers structured logs, metrics,
+  /health, correlation ID middleware, CORS, rate limiting, and input validation. Auto-load whenever
+  a route handler is written, a status code is chosen, a domain exception is added, or a log call or
+  metric is written. Not for frontend or browser code.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -196,7 +193,7 @@ Apply to all mutating endpoints and expensive read endpoints. Return `429 Too Ma
 ### Input validation
 
 - All request bodies validated through Pydantic models — reject with `422` on failure
-- Use `ConfigDict(extra='forbid')` on models receiving externally-sourced input (API requests, LLM output)
+- Use `ConfigDict(extra='forbid')` on models receiving externally-sourced input (API requests, LLM output), so an unknown field fails loudly instead of being dropped and hiding a typo or an injected key
 - All LLM output must pass schema validation before any state mutation
 
 ### Global exception handlers
@@ -264,7 +261,8 @@ log.error("database_connection_failed", host=settings.db_host, error=str(e))
 | `WARNING` | Unexpected but recoverable                    |
 | `ERROR`   | Failures requiring attention                  |
 
-Do not log at `INFO` on every request — use `DEBUG` for high-frequency events.
+Do not log at `INFO` on every request — use `DEBUG` for high-frequency events. Per-request counts
+and latency already live in the metrics below, so an `INFO` line per request only adds volume.
 
 **Never log:** secrets, tokens, passwords, PII, raw user-provided content, or full external API responses.
 

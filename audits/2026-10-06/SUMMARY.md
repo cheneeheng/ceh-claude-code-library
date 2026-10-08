@@ -2,6 +2,10 @@
 
 claude-code 2.1.291. Edits applied: yes.
 
+> Renamed since this audit (2026-10-08): `ceh-core` is now `ceh-every-session`, and
+> `ceh-coding-agent` is now `ceh-coding-conduct`, with its explanation skills split out into
+> `ceh-codebase-explanation`. The reports keep the names they were written under.
+
 | Plugin            | Report                                       | Guides audited                                             | Pinned files tuned | Strict validate |
 | ----------------- | -------------------------------------------- | ---------------------------------------------------------- | ------------------ | --------------- |
 | ceh-core          | [ceh-core.md](ceh-core.md)                   | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |

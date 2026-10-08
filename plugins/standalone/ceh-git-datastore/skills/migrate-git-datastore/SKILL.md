@@ -2,14 +2,11 @@
 name: migrate-git-datastore
 description: >-
   Load this skill when a git-backed or file-based JSON store has to become a real database: CAS
-  retries or write latency climbing, a second app node or a move to serverless, cross-project
-  queries or reporting or search turning into requirements, records per project past ~50k, or a
-  right-to-erasure obligation appearing. Trigger on "we have outgrown the file store", "move off
-  files to Postgres", "migrate the git datastore", "we need a real database now", "derive a schema
-  from these JSON records", or "verify the backfill was correct". Also load to decide whether it is
-  time at all - telling someone to keep the git store another quarter is a normal outcome. Covers
-  schema inference, pinned-snapshot export, backfill, dual-write, verification and per-project
-  cutover. Not for building the store (use ceh-git-datastore:build-git-datastore).
+  retries or write latency climbing, a second app node or serverless move, cross-project queries
+  becoming requirements, or a right-to-erasure obligation. Trigger on "we have outgrown the file
+  store", "move off files to Postgres", "migrate the git datastore", or "verify the backfill was
+  correct". Also load to decide whether it is time at all, since "keep it another quarter" is a
+  normal outcome. Not for building the store (use ceh-git-datastore:build-git-datastore).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
