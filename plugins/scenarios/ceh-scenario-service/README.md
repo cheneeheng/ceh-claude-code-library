@@ -17,17 +17,18 @@ them at the same scope.
 
 ## What it pulls in
 
-| Plugin                  |
-| ----------------------- |
-| `ceh-core`              |
-| `ceh-coding-agent`      |
-| `ceh-git-workflow`      |
-| `ceh-testing`           |
-| `ceh-documentation`     |
-| `ceh-python-service`    |
-| `ceh-usability-audit`   |
-| `ceh-plan-build-review` |
-| `ceh-git-datastore`     |
+| Plugin                     |
+| -------------------------- |
+| `ceh-every-session`        |
+| `ceh-coding-conduct`       |
+| `ceh-codebase-explanation` |
+| `ceh-git-workflow`         |
+| `ceh-testing`              |
+| `ceh-documentation`        |
+| `ceh-python-service`       |
+| `ceh-usability-audit`      |
+| `ceh-plan-build-review`    |
+| `ceh-git-datastore`        |
 
 ## Notes
 

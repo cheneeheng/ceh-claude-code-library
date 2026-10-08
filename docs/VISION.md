@@ -76,13 +76,13 @@ How it asks:
 A plugin belongs here when it helps shape, build, prove, or tell people about a product. The
 cross-cutting plugins hold the disciplines that apply at every stage.
 
-| Stage      | What happens                                       | Plugins today                                                                                                                                                   |
-| ---------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Shape      | Decide what to build and whether it is worth it    | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-plan-build-review` (planning)                                                                              |
-| Build      | Write the code, the UI, and the docs               | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-git-datastore`, `ceh-documentation`, `ceh-plan-build-review` |
-| Prove      | Show it works and that a person can use it         | `ceh-testing`, `ceh-usability-audit`, `ceh-plan-build-review` (review)                                                                                          |
-| Tell       | Get it in front of the people who should find it   | `ceh-blog`, `ceh-seo`                                                                                                                                           |
-| Every step | How the agent behaves, commits, and spends context | `ceh-core`, `ceh-coding-agent`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`                                                               |
+| Stage      | What happens                                       | Plugins today                                                                                                                                                                               |
+| ---------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shape      | Decide what to build and whether it is worth it    | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-plan-build-review` (planning)                                                                                                          |
+| Build      | Write the code, the UI, and the docs               | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-git-datastore`, `ceh-documentation`, `ceh-codebase-explanation`, `ceh-plan-build-review` |
+| Prove      | Show it works and that a person can use it         | `ceh-testing`, `ceh-usability-audit`, `ceh-plan-build-review` (review)                                                                                                                      |
+| Tell       | Get it in front of the people who should find it   | `ceh-blog`, `ceh-seo`                                                                                                                                                                       |
+| Every step | How the agent behaves, commits, and spends context | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`                                                                                |
 
 The test for a new plugin or skill: **does it help an agent ship a product, or get one in front of
 people?** If not, it does not belong here, however useful it is. General productivity, chat
@@ -190,6 +190,17 @@ Fewer, sharper skills beat broad coverage. Content that no longer earns its plac
 `archive/`. An idea that does not fit is rejected with its reason recorded in `docs/IDEAS.md`, so
 it is not proposed again.
 **Ask:** what would we lose if this did not exist?
+
+### 10. Names say what they do
+
+A plugin, skill, agent, hook, or script is named so a person or an agent can tell what it does from
+the name alone, without opening it. The name is the only part an agent always sees in full:
+descriptions get truncated in the skill listing, and only the name appears in file trees and in
+`Invoke the Skill tool with skill="..."` calls. Choose clear over short and the plain word over the
+clever one. A term of art stays only when the people who use it already know it (`ag-ui`,
+`pull-request`). The `ceh-` prefix is a namespace that keeps these plugins apart from everyone
+else's, not part of the name this principle judges.
+**Ask:** could someone who has seen only the name say what it does and when it is used?
 
 ## When principles conflict
 

@@ -9,16 +9,22 @@
   },
   "plugins": [
     {
-      "name": "ceh-core",
-      "source": "./plugins/standalone/ceh-core",
-      "version": "1.0.0",
-      "description": "CEH core: standards that hold however Claude Code is used — usage-limit handoff and context economy via delegated bulk reads."
+      "name": "ceh-every-session",
+      "source": "./plugins/standalone/ceh-every-session",
+      "version": "2.0.0",
+      "description": "CEH every-session: standards every session loads, however Claude Code is used — usage-limit handoff and context economy via delegated bulk reads."
     },
     {
-      "name": "ceh-coding-agent",
-      "source": "./plugins/standalone/ceh-coding-agent",
-      "version": "1.0.2",
-      "description": "CEH coding-agent standards: the behavior contract and five-step workflow, write-less-code minimalism, retroactive refactoring, whole-repo explanation, and the living architecture document."
+      "name": "ceh-coding-conduct",
+      "source": "./plugins/standalone/ceh-coding-conduct",
+      "version": "2.0.0",
+      "description": "CEH coding conduct: how an agent behaves while it codes — the behavior contract and five-step workflow, write-less-code minimalism, and retroactive refactoring of a branch or a whole repo."
+    },
+    {
+      "name": "ceh-codebase-explanation",
+      "source": "./plugins/standalone/ceh-codebase-explanation",
+      "version": "1.0.0",
+      "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, and the living architecture document."
     },
     {
       "name": "ceh-git-workflow",
@@ -29,7 +35,7 @@
     {
       "name": "ceh-testing",
       "source": "./plugins/standalone/ceh-testing",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "CEH testing techniques: stack-agnostic test design and verification moments — reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, and close the risk gaps functional tests structurally miss."
     },
     {
@@ -47,7 +53,7 @@
     {
       "name": "ceh-web-frontend",
       "source": "./plugins/standalone/ceh-web-frontend",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, accessibility, Cytoscape.js graph visualization, and testing agents (unit/integration/system). UI visual design comes from the ceh-ui-design dependency."
     },
     {
@@ -59,7 +65,7 @@
     {
       "name": "ceh-seo",
       "source": "./plugins/standalone/ceh-seo",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "CEH SEO: discoverability standards for anything exposed to the internet — technical SEO/GEO for public web pages (meta tags, structured data, sitemap, rendering strategy), authoring the llms.txt agent index, and findability of public-facing text (README first screen, package descriptions and keywords, repo topics, landing copy)."
     },
     {
@@ -71,13 +77,13 @@
     {
       "name": "ceh-plan-build-review",
       "source": "./plugins/standalone/ceh-plan-build-review",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "CEH plan-build-review: the plan-driven development loop — plan a fullstack app (iteratively or all the way to MVP), implement from the plan, review the implementation against it, and patch a shipped version with small non-feature changes."
     },
     {
       "name": "ceh-documentation",
       "source": "./plugins/standalone/ceh-documentation",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "CEH documentation: write user-facing documentation for a project — a full docs set, user guides and operator runbooks, an exhaustive API reference, concept pages with sourced design rationale, and runnable examples."
     },
     {
@@ -89,7 +95,7 @@
     {
       "name": "ceh-usability-audit",
       "source": "./plugins/standalone/ceh-usability-audit",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "description": "CEH usability audit: measure whether a non-expert can actually use what you built — cold zero-context walkthroughs by persona-constrained subagents that report where they stalled and how many steps each milestone cost against a budget set before the walk, a five-question interface audit across web UI/CLI/library/app surfaces, a three-part rewrite pass over every user-reachable error message, and a plain-language pass over labels and copy. Findings are ranked by observed outcome, not by how bad they look."
     },
     {
@@ -101,7 +107,7 @@
     {
       "name": "ceh-git-datastore",
       "source": "./plugins/standalone/ceh-git-datastore",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "CEH git-backed datastore: run an app on a bare git repo instead of a database while that still fits — a gate that talks you out of it when it does not, a working plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite when a trigger fires."
     },
     {
@@ -125,31 +131,31 @@
     {
       "name": "ceh-scenario-service",
       "source": "./plugins/scenarios/ceh-scenario-service",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "CEH scenario bundle: working on a Python backend service — features, fixes, tests, docs, releases."
     },
     {
       "name": "ceh-scenario-library",
       "source": "./plugins/scenarios/ceh-scenario-library",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "CEH scenario bundle: working on a Python library — features, fixes, tests, docs, releases."
     },
     {
       "name": "ceh-scenario-webapp",
       "source": "./plugins/scenarios/ceh-scenario-webapp",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "CEH scenario bundle: working on a web frontend — features, fixes, tests, docs, releases."
     },
     {
       "name": "ceh-scenario-ideation",
       "source": "./plugins/scenarios/ceh-scenario-ideation",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "CEH scenario bundle: shaping an idea before a stack is chosen — testing it for product-market fit and planning the build."
     },
     {
       "name": "ceh-scenario-editorial",
       "source": "./plugins/scenarios/ceh-scenario-editorial",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "CEH scenario bundle: writing and publishing what readers see — blog posts, user and operator docs, discoverability."
     }
   ]

@@ -83,5 +83,5 @@ metadata are expressed in frontmatter or nav config, never by renaming a file ou
   a software project needs a `docs/` set.
 - Changelog maintenance belongs to `ceh-git-workflow:update-changelog`: every input it reads is
   git, so it fires on a git moment, not a documentation one.
-- A maintainer architecture document belongs to `ceh-coding-agent:document-architecture`, and a
-  per-module codebase walkthrough to `ceh-coding-agent:explain-codebase`.
+- A maintainer architecture document belongs to `ceh-codebase-explanation:document-architecture`, and a
+  per-module codebase walkthrough to `ceh-codebase-explanation:explain-codebase`.

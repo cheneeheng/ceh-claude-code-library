@@ -8,7 +8,7 @@ description: >-
   Trigger on "implement from plan", "build from the plan", "implement the skeleton", "build
   ITER_02", or when the user points at a plan file and asks to build it. Not for writing the plan
   (use plan-fullstack-app), auditing built code against a plan (use review-against-plan), or a
-  small non-feature change to a built version (use patch-built-version).
+  small non-feature change to a built version (use apply-small-fix-to-version).
 argument-hint: "[plan-file]"
 disable-model-invocation: false
 user-invocable: true
@@ -43,7 +43,7 @@ section table, pointer rules, and resolution order there are authoritative.
    terminator in a default full-sequence run. If the user named a single iteration, target only
    that one and use its `depends_on` chain to resolve unchanged sections for context.
 5. Exclude **patch ITERs** (frontmatter `patch: true`) from the default run. They sit past the
-   terminator and are produced by the `patch-built-version` skill. Implement one only when it is
+   terminator and are produced by the `apply-small-fix-to-version` skill. Implement one only when it is
    the named target, on its own.
 
 ### 2. Resolve pointers before starting

@@ -190,7 +190,7 @@ anything**. The second number is the one that moves when a codebase gets better.
 - The error is one finding in a wider interface problem: `ceh-usability-audit:audit-interface`.
 - The wording is fine but the whole product speaks system vocabulary:
   `ceh-usability-audit:write-plain-language`.
-- The message is right but nobody reaches it during setup: `ceh-usability-audit:walk-first-run`.
+- The message is right but nobody reaches it during setup: `ceh-usability-audit:simulate-newcomer-first-run`.
 - This is log/metric plumbing, not user-facing text: `ceh-python-service:write-fastapi-endpoints`.
 - The rewrite breaks a documented exception or exit code:
   `ceh-python-library:publish-python-library`.

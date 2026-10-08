@@ -155,5 +155,5 @@ for anything risky.
 Committing the tests separately is what lets a reviewer see that the pins predate the change. Tests
 written in the same commit as the refactor cannot prove they were not shaped by it.
 
-Pairs with `ceh-coding-agent:shrink-diff` and `ceh-coding-agent:refactor-repo` — both change
+Pairs with `ceh-coding-conduct:shrink-diff` and `ceh-coding-conduct:refactor-repo` — both change
 working code with no behavior change intended, and neither carries a verification step of its own.

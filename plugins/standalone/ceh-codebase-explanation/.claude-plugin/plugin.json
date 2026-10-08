@@ -1,0 +1,15 @@
+{
+  "name": "ceh-codebase-explanation",
+  "version": "1.0.0",
+  "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, and the living architecture document.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/ceh-claude-code-library",
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent",
+    "codebase",
+    "exploration",
+    "architecture",
+    "explanation"
+  ]
+}

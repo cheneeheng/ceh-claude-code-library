@@ -8,7 +8,7 @@ description: >-
   look. Trigger on "this feels confusing", "users keep getting stuck", "review this UI for
   usability", "is this intuitive", "why does nobody find this button", "our API is hard to use",
   "the CLI is confusing", "make this easier to understand", or before shipping a screen, command, or
-  public API. Not for the install/onboarding path (use ceh-usability-audit:walk-first-run), visual
+  public API. Not for the install/onboarding path (use ceh-usability-audit:simulate-newcomer-first-run), visual
   design decisions at build time (use ceh-ui-design:design-ui), or WCAG conformance (use
   ceh-web-frontend:make-ui-accessible).
 disable-model-invocation: false
@@ -23,7 +23,7 @@ license: Apache-2.0
 
 # Audit an interface
 
-`walk-first-run` asks whether a stranger can get _in_. This skill asks whether, once in, they can
+`simulate-newcomer-first-run` asks whether a stranger can get _in_. This skill asks whether, once in, they can
 tell **where they are, what to do, and what just happened** — on any surface, without being told.
 
 Two failure modes produce nearly every unusable interface, and both are invisible to the person who
@@ -113,7 +113,7 @@ Two corollaries worth checking explicitly:
 
 The three passes above find the failures you can see. The personas find the ones you cannot, because
 they constrain what the reader is allowed to know. Dispatch
-`ceh-usability-audit:novice-walker` per persona with a concrete in-product goal (not "explore" —
+`ceh-usability-audit:newcomer-simulator` per persona with a concrete in-product goal (not "explore" —
 **"change the account email"**), the surface's entry point, an explicit allowlist of what they may
 read, and two things without which the battery misreports:
 
@@ -219,7 +219,7 @@ in that folder.
 
 ## Hands off to
 
-- Can a stranger even get in? `ceh-usability-audit:walk-first-run`.
+- Can a stranger even get in? `ceh-usability-audit:simulate-newcomer-first-run`.
 - The finding is an error string: `ceh-usability-audit:audit-error-messages`.
 - The finding is wording: `ceh-usability-audit:write-plain-language`.
 - Layout, hierarchy, spacing, theme: `ceh-ui-design:design-ui`.

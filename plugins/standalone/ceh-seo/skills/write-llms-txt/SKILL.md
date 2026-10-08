@@ -7,7 +7,7 @@ description: >-
   index for this site", or when public pages or docs sections are added to a site that already
   ships one. Not for per-page head tags, sitemap.xml, or robots.txt (use
   ceh-seo:make-page-crawlable) and not for README or package-listing text (use
-  ceh-seo:pitch-project).
+  ceh-seo:write-project-listing-text).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -47,7 +47,7 @@ the ordering rules and the curation, not the markdown.
    - **H1 is the only required element.** Everything else is optional, but a file with no blockquote
      wastes the one line an agent reads first.
    - **The blockquote is a summary, not a tagline.** It is the same job as the README first screen —
-     category noun, who it is for, the differentiator (see `ceh-seo:pitch-project`).
+     category noun, who it is for, the differentiator (see `ceh-seo:write-project-listing-text`).
    - **Prose sits between the blockquote and the first H2, and may not contain headings.** A heading
      there silently starts the file-list region early and swallows the prose.
    - **Every H2 section is a list of links and nothing else.** Format is `- [name](url): notes`. The

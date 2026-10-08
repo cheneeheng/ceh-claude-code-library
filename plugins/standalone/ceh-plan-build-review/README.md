@@ -11,23 +11,23 @@ directly consumable by the implement, review, and patch skills. Plan artifacts a
 
 ## Skills
 
-| Skill                 | Invoke                                       | Triggers when                                                                                                                                                                                                    |
-| --------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `plan-fullstack-app`  | `/ceh-plan-build-review:plan-fullstack-app`  | Planning a project: next-release mode writes one scoped `SKELETON.md` or `ITER_NN.md`, whole-build mode writes the skeleton plus every iteration to MVP behind a complexity gate that falls back to next-release |
-| `implement-from-plan` | `/ceh-plan-build-review:implement-from-plan` | Pointing at a plan and asking to build it: implements a `SKELETON.md` / `ITER_NN.md` section by section (§01–§06), resolving iteration pointers to the authoritative spec                                        |
-| `review-against-plan` | `/ceh-plan-build-review:review-against-plan` | Auditing the code against a plan: checks each in-scope section against the spec, finds gaps, deviations, and errors, then fixes them                                                                             |
-| `patch-built-version` | `/ceh-plan-build-review:patch-built-version` | Making a small, non-feature change to a version that is already built: routes features out to the iterative planner, otherwise records a `patch: true` `ITER_NN.md` and implements only the touched sections     |
+| Skill                        | Invoke                                              | Triggers when                                                                                                                                                                                                    |
+| ---------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plan-fullstack-app`         | `/ceh-plan-build-review:plan-fullstack-app`         | Planning a project: next-release mode writes one scoped `SKELETON.md` or `ITER_NN.md`, whole-build mode writes the skeleton plus every iteration to MVP behind a complexity gate that falls back to next-release |
+| `implement-from-plan`        | `/ceh-plan-build-review:implement-from-plan`        | Pointing at a plan and asking to build it: implements a `SKELETON.md` / `ITER_NN.md` section by section (§01–§06), resolving iteration pointers to the authoritative spec                                        |
+| `review-against-plan`        | `/ceh-plan-build-review:review-against-plan`        | Auditing the code against a plan: checks each in-scope section against the spec, finds gaps, deviations, and errors, then fixes them                                                                             |
+| `apply-small-fix-to-version` | `/ceh-plan-build-review:apply-small-fix-to-version` | Making a small, non-feature change to a version that is already built: routes features out to the iterative planner, otherwise records a `patch: true` `ITER_NN.md` and implements only the touched sections     |
 
 ## The loop
 
 ```text
 plan-fullstack-app ──► SKELETON.md / ITER_NN.md ──► implement-from-plan ──► review-against-plan
                                   │
-                                  └── small non-feature change after a version ships ──► patch-built-version
+                                  └── small non-feature change after a version ships ──► apply-small-fix-to-version
                                       (feature? → back to plan-fullstack-app)
 ```
 
-`patch-built-version` does not bump versions or tag. It hands the SemVer PATCH bump to
+`apply-small-fix-to-version` does not bump versions or tag. It hands the SemVer PATCH bump to
 `ceh-git-workflow:release`, which is a prose handoff, not a dependency.
 
 ## Plan mode is for the research before these skills, not for running them
@@ -55,5 +55,5 @@ Four files live once in `references/` at the plugin root and are read through
 - `audit-checklist.md`, the pre-delivery audit checklist, read by `plan-fullstack-app`.
 - `implementation-gotchas.md`, the technical traps in §04, §05, and §06, read by
   `plan-fullstack-app` (to address them in the plan), by `implement-from-plan` and
-  `patch-built-version` (to avoid them in code), and by `review-against-plan` (a trap present in
+  `apply-small-fix-to-version` (to avoid them in code), and by `review-against-plan` (a trap present in
   §04 or §05 code is an Error).

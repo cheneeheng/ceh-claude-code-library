@@ -69,12 +69,12 @@ and what to do instead), and an FAQ. It deliberately does not repeat what the sk
 
 ## Relation to other plugins
 
-| Question                                                                              | Owner                                      |
-| ------------------------------------------------------------------------------------- | ------------------------------------------ |
-| Should this app use a database at all, yet                                            | `build-git-datastore`                      |
-| Is it time to leave, and how                                                          | `migrate-git-datastore`                    |
-| PostgreSQL schema, query, transaction, pool, and migration code once you have arrived | `ceh-python-service:write-postgresql-code` |
-| Recording the choice as a durable decision                                            | `ceh-coding-agent:document-architecture`   |
+| Question                                                                              | Owner                                            |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| Should this app use a database at all, yet                                            | `build-git-datastore`                            |
+| Is it time to leave, and how                                                          | `migrate-git-datastore`                          |
+| PostgreSQL schema, query, transaction, pool, and migration code once you have arrived | `ceh-python-service:write-postgresql-code`       |
+| Recording the choice as a durable decision                                            | `ceh-codebase-explanation:document-architecture` |
 
 Neither skill declares a dependency on those: `migrate-git-datastore` targets SQLite as often as
 Postgres, so the handoff is a branch most runs never reach.

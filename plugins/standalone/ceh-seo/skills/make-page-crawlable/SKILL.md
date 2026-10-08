@@ -5,7 +5,7 @@ description: >-
   marketing page, docs site, blog page, or any HTML surface that crawlers and AI engines will see.
   Trigger on "add SEO", "make this page discoverable", "meta tags", "open graph", "structured data",
   "sitemap", "robots.txt", or when a new public route is created in a SvelteKit or React app. Not
-  for README, package-listing, or repo text (use ceh-seo:pitch-project), not for authoring
+  for README, package-listing, or repo text (use ceh-seo:write-project-listing-text), not for authoring
   the llms.txt file itself (use ceh-seo:write-llms-txt), and not for writing the page's content
   itself (use ceh-blog).
 disable-model-invocation: false
