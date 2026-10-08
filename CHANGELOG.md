@@ -12,7 +12,7 @@ before this repo live in
 ## 2026-10-08
 
 `docs/IDEAS.md` now covers all five competitor analyses: superpowers, ECC, and mattpocock/skills
-join gstack and pstack. Their "What we take" ideas add 39 adopt-now and 15 build entries, and 11
+join gstack and pstack. Their "What we take" ideas add 40 adopt-now and 15 build entries, and 11
 more merge into existing entries as extra sources. The testing ideas follow the analyses' reworked
 judgment, which no longer discounts an idea for writing or running tests unasked: "Test-first by
 default" is new, and "Opt-in verify gate" becomes "Verify gate". Every guard against dangerous
@@ -23,6 +23,9 @@ changes.
 
 - `docs/IDEAS.md`: ideas from all five competitor analyses, with the destructive-shell half of the
   fact-forcing gate rejected alongside Destructive-command guard
+- `docs/IDEAS.md`: "Strictness-graded evals" gains the tempt-never-order rule for competing prompts
+  and the promote-to-hook rule, a new "Hook fixture tests" entry, and "Fact-forcing edit gate" now
+  says nothing checks the stated facts
 
 ## 2026-10-07
 

@@ -365,7 +365,16 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `.claude/skills/add-plugin-component` eval guidance
 - **Effort:** S
 - **Idea:** Write each eval case at three prompt strictness levels, supportive, neutral, and
-  competing, inside `claude plugin eval`, not their bespoke harness.
+  competing, inside `claude plugin eval`, not their bespoke harness. The same task carries all
+  three, so a score drop comes from the wording alone: failing at neutral points at the
+  description, failing even at supportive points at the body.
+- **Note:** A competing prompt tempts and never orders. "Make it look great" is pressure, "use
+  react-datepicker" is an instruction our contract says the model must obey, and a case scoring
+  that as a failure punishes compliance.
+- **Note:** A required step that fails at all three levels and is visible in a tool call (a path, a
+  command, written content) is promoted to a hook rather than reworded again. ECC's report flags
+  any step passing in at most one of three runs (`threshold_promote_to_hook: 0.6`) but writes no
+  hook.
 
 ### Agent-prose no-op hunt
 
@@ -397,6 +406,19 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Where:** `tools/validate-plugins/validate.py`
 - **Effort:** S
 - **Idea:** Check README counts against disk, invisible characters, and absolute user paths.
+
+### Hook fixture tests
+
+- **Source:** ECC `tests/hooks/*.test.js`
+- **Where:** `tools/validate-plugins/validate.py`, the hook scripts of `ceh-core`,
+  `ceh-coding-agent`, and `ceh-git-workflow`
+- **Effort:** S
+- **Idea:** Pipe a hand-built tool call as JSON into each hook script and assert the exit code and
+  deny text, so a broken guard fails CI. No model call, same result every run. ECC's
+  `config-protection` test writes a real `.eslintrc.js`, sends a `Write` to it, and expects exit
+  `2` with `BLOCKED: Modifying .eslintrc.js is not allowed.`
+- **Note:** Today nothing runs our hooks: `validate.py` only syntax-checks scripts (`bash -n`,
+  shellcheck, `py_compile`).
 
 ### Rejection records
 
@@ -577,8 +599,10 @@ Effort: S is under a day, M is a few days, L is longer.
 - **Source:** ECC `gateguard`, `safety-guard`, both gateguard hooks
 - **Where:** new `PreToolUse` hook in `ceh-coding-agent`
 - **Effort:** M
-- **Idea:** Deny the first edit of a file until the model states importers, the public API touched,
-  and the user's instruction verbatim. Opt-in, subagents exempt.
+- **Idea:** Deny the first edit of each file once, with a demand for importers, the public API
+  touched, and the user's instruction verbatim. Opt-in, subagents exempt.
+- **Note:** Nothing checks the answer: ECC allows the identical retry whatever the model wrote
+  (`gateguard-fact-force.js:1873-1887`), so it forces a search, not a verification.
 - **Note:** ECC's gate also demands targets and a rollback plan before destructive shell commands.
   That half is rejected with Destructive-command guard: Claude Code's built-in auto mode is good
   enough.
