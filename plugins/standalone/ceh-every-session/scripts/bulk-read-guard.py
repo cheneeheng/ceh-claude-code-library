@@ -12,6 +12,8 @@ import fnmatch
 import json
 import os
 import sys
+import tempfile
+from pathlib import Path
 
 FALLBACK_MIN_LINES = 350
 
@@ -74,6 +76,25 @@ def count_lines(path):
         return None
 
 
+def denial_number(payload):
+    """This hook's denial count in this session, 1 on the first.
+
+    Identical deny blocks push the model into repetition loops, so after the
+    third the caller sends one line carrying this ordinal instead.
+    """
+    session = payload.get("session_id") or "default"
+    state = Path(tempfile.gettempdir()) / f"ceh-denials-{Path(__file__).stem}-{session}"
+    try:
+        n = int(state.read_text(encoding="utf-8")) + 1
+    except (OSError, ValueError):
+        n = 1
+    try:
+        state.write_text(str(n), encoding="utf-8")
+    except OSError:
+        pass
+    return n
+
+
 def deny(reason):
     json.dump(
         {
@@ -89,6 +110,10 @@ def deny(reason):
 
 
 def main():
+    # Kill switch: CEH_DISABLED_HOOKS lists hook script names to skip.
+    disabled = os.environ.get("CEH_DISABLED_HOOKS", "").replace(" ", "").split(",")
+    if Path(__file__).stem in disabled:
+        sys.exit(0)
     threshold = min_lines()
     if threshold is None:
         sys.exit(0)
@@ -117,6 +142,13 @@ def main():
     if lines is None or lines < threshold:
         sys.exit(0)
 
+    n = denial_number(payload)
+    if n > 3:
+        deny(
+            f"Blocked again (denial {n} this session): {path} is {lines} lines. Read a "
+            f"region with offset/limit, or delegate to `bulk-reader`. The user can unset "
+            f"BULK_READER_MIN_LINES to switch this guard off."
+        )
     deny(
         f"Blocked: {path} is {lines} lines (threshold {threshold}). "
         f"Decide which you need before retrying:\n\n"
@@ -129,7 +161,8 @@ def main():
         f"subagent with your question and this path. It returns a line-anchored answer "
         f"without the contents entering this context.\n\n"
         f"Do not chunk the whole file into many offset reads; that costs more than one "
-        f"delegation. Raise BULK_READER_MIN_LINES if this threshold is wrong for this repo."
+        f"delegation. The user can raise BULK_READER_MIN_LINES if this threshold is wrong "
+        f"for this repo, or unset it to switch this guard off."
     )
 
 

@@ -119,6 +119,10 @@ def warn_once(marker, message):
 
 
 def main() -> None:
+    # Kill switch: CEH_DISABLED_HOOKS lists hook script names to skip.
+    disabled = os.environ.get("CEH_DISABLED_HOOKS", "").replace(" ", "").split(",")
+    if Path(__file__).stem in disabled:
+        sys.exit(0)
     payload = json.loads(sys.stdin.read())
     session_id = payload.get("session_id") or "default"
     state_dir = Path(tempfile.gettempdir())

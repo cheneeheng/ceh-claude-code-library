@@ -8,6 +8,9 @@
 # Also wired to SubagentStart, which passes the event name as $1: UserPromptSubmit never
 # fires inside a subagent.
 
+# Kill switch: CEH_DISABLED_HOOKS lists hook script names to skip.
+case ",${CEH_DISABLED_HOOKS// /}," in *",$(basename "$0" .sh),"*) exit 0 ;; esac
+
 read -r -d '' CONTEXT <<'EOF'
 WRITE LESS CODE — the best code is the code never written. Before writing any code, stop at the first rung that holds:
 1. Does this need to exist at all? (YAGNI) — speculative need: skip it, say so in one line.

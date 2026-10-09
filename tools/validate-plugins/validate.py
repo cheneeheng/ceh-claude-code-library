@@ -35,15 +35,20 @@ Checks:
   hygiene    - no invisible Unicode or personal absolute path in tracked text; every skill and
                agent is named in its plugin README.
   scripts    - *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
+  hooks      - every script a hooks.json runs has fixtures here; each fixture pipes a hand-built
+               payload into the script and checks its exit code and output. No model call.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import subprocess
 import sys
+import tempfile
+import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -55,7 +60,7 @@ MAX_NAME_LEN = 64
 MAX_DESCRIPTION_LEN = 600
 # Ratchet on the sum of every skill and agent description. Lower it when the total drops; raise it
 # only in the PR that adds a component, by that component's description length.
-MAX_TOTAL_DESCRIPTION_LEN = 42018
+MAX_TOTAL_DESCRIPTION_LEN = 43022
 MAX_COMPATIBILITY_LEN = 500
 TEMPLATE_MARKER = "TEMPLATE-GUIDANCE"
 
@@ -465,6 +470,162 @@ def check_scripts() -> None:
                     fail(where, f"py_compile error: {r.stderr.strip()}")
 
 
+# --- hook fixtures ---------------------------------------------------------
+
+HOOK_SCRIPT_PAT = re.compile(r"/scripts/([\w.-]+)")
+
+
+def hook_fixtures(tmp: Path) -> list[dict]:
+    """Build the files the fixtures read, then return one dict per fixture.
+
+    Keys: script, stdin (dict), env, args, repeat (runs on one session; the last is checked),
+    code (exit code), out (substring of stdout; "" means stdout must be empty), err (substring
+    of stderr).
+    """
+    big, small = tmp / "big.txt", tmp / "small.txt"
+    big.write_text("x\n" * 400, encoding="utf-8")
+    small.write_text("x\n" * 5, encoding="utf-8")
+    big_p, small_p = big.as_posix(), small.as_posix()
+
+    repos = {}
+    for branch in ("main", "feat/x"):
+        repo = tmp / branch.replace("/", "-")
+        repo.mkdir()
+        git = ["git", "-C", str(repo), "-c", "user.name=t", "-c", "user.email=t@t"]
+        subprocess.run([*git, "init", "-q", "-b", branch], check=True)
+        subprocess.run([*git, "commit", "-q", "--allow-empty", "-m", "x"], check=True)
+        repos[branch] = (repo / "f.txt").as_posix()
+
+    now_ms = time.time() * 1000
+    for name, pct in (("home-95", 95), ("home-50", 50)):
+        sl = tmp / name / ".claude" / "statusline" / "p"
+        sl.mkdir(parents=True)
+        record = {
+            "ts": now_ms,
+            "data": {"rate_limits": {"five_hour": {"used_percentage": pct}}},
+        }
+        (sl / "s.jsonl").write_text(json.dumps(record) + "\n", encoding="utf-8")
+    (tmp / "home-empty").mkdir()
+
+    def home(name: str) -> dict:
+        h = str(tmp / name)
+        return {"HOME": h, "USERPROFILE": h}
+
+    def edit(path: str) -> dict:
+        return {"tool_name": "Edit", "tool_input": {"file_path": path}}
+
+    def read(path: str, **extra) -> dict:
+        return {"tool_name": "Read", "tool_input": {"file_path": path, **extra}}
+
+    def bash(cmd: str) -> dict:
+        return {"tool_name": "Bash", "tool_input": {"command": cmd}}
+
+    bulk = {"BULK_READER_MIN_LINES": "350"}
+    any_tool = {"tool_name": "Read", "tool_input": {}, "transcript_path": "t.jsonl"}
+    return [
+        # branch-guard: deny on the default branch, allow elsewhere or when switched off.
+        {"script": "branch-guard.py", "stdin": edit(repos["main"]), "out": "On the default branch"},
+        {"script": "branch-guard.py", "stdin": edit(repos["feat/x"]), "out": ""},
+        {"script": "branch-guard.py", "stdin": edit(repos["main"]), "env": {"CEH_BRANCH_GUARD": "off"}, "out": ""},
+        {"script": "branch-guard.py", "stdin": edit(repos["main"]), "env": {"CEH_DISABLED_HOOKS": "x, branch-guard"}, "out": ""},
+        {"script": "branch-guard.py", "stdin": edit(repos["main"]), "repeat": 4, "out": "denial 4"},
+        # bulk-read-guard: whole reads of a large file only, and only when opted in.
+        {"script": "bulk-read-guard.py", "stdin": read(big_p), "env": bulk, "out": "Blocked:"},
+        {"script": "bulk-read-guard.py", "stdin": read(big_p, limit=20), "env": bulk, "out": ""},
+        {"script": "bulk-read-guard.py", "stdin": read(small_p), "env": bulk, "out": ""},
+        {"script": "bulk-read-guard.py", "stdin": read(big_p), "out": ""},
+        {"script": "bulk-read-guard.py", "stdin": read(big_p), "env": {**bulk, "CEH_DISABLED_HOOKS": "bulk-read-guard"}, "out": ""},
+        {"script": "bulk-read-guard.py", "stdin": read(big_p), "env": bulk, "repeat": 4, "out": "denial 4"},
+        # bulk-read-bash-guard: dumps are denied, narrowed commands pass.
+        {"script": "bulk-read-bash-guard.py", "stdin": bash(f"cat {big_p}"), "env": bulk, "out": "Blocked:"},
+        {"script": "bulk-read-bash-guard.py", "stdin": bash(f"cat {big_p} | grep x"), "env": bulk, "out": ""},
+        {"script": "bulk-read-bash-guard.py", "stdin": bash(f"head -n 5 {big_p}"), "env": bulk, "out": ""},
+        {"script": "bulk-read-bash-guard.py", "stdin": bash(f"tail -n +2 {big_p}"), "env": bulk, "out": "Blocked:"},
+        {"script": "bulk-read-bash-guard.py", "stdin": bash(f"cat {big_p}"), "env": bulk, "repeat": 4, "out": "denial 4"},
+        # usage-limit-watch: warn with no sensor, block over the threshold, quiet under it.
+        {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-empty"), "code": 1, "err": "INACTIVE"},
+        {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-95"), "code": 2, "err": "usage-limit-handoff"},
+        {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-50"), "out": ""},
+        {"script": "usage-limit-watch.py", "stdin": any_tool, "env": {**home("home-empty"), "CEH_DISABLED_HOOKS": "usage-limit-watch"}, "out": ""},
+        # Context injectors: valid JSON naming their skill, silent when switched off.
+        {"script": "load-contract.sh", "stdin": {}, "out": "ceh-coding-conduct:agent-coding-contract"},
+        {"script": "load-contract.sh", "stdin": {}, "args": ["SubagentStart"], "out": '"hookEventName": "SubagentStart"'},
+        {"script": "load-contract.sh", "stdin": {}, "env": {"CEH_DISABLED_HOOKS": "load-contract"}, "out": ""},
+        {"script": "inject-less-code-reminder.sh", "stdin": {}, "out": "WRITE LESS CODE"},
+        {"script": "inject-less-code-reminder.sh", "stdin": {}, "env": {"CEH_DISABLED_HOOKS": "inject-less-code-reminder"}, "out": ""},
+    ]  # fmt: skip
+
+
+def check_hooks() -> None:
+    scripts: dict[str, Path] = {}
+    for d in plugin_dirs():
+        hooks = d / "hooks" / "hooks.json"
+        if hooks.is_file():
+            for name in HOOK_SCRIPT_PAT.findall(hooks.read_text(encoding="utf-8")):
+                scripts[name] = d / "scripts" / name
+
+    # The full path, not "bash": Windows CreateProcess searches System32 first and finds WSL's
+    # bash.exe, which does not pass the fixture's environment variables through.
+    bash = shutil.which("bash")
+    # The developer's own CEH_* and BULK_READER_* settings must not change a fixture's result.
+    base_env = {
+        k: v
+        for k, v in os.environ.items()
+        if not k.startswith(("CEH_", "BULK_READER_"))
+    }
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp = Path(tmp_dir)
+        state = tmp / "state"  # denial counters and warn-once markers land here
+        state.mkdir()
+        base_env.update({"TMP": str(state), "TEMP": str(state), "TMPDIR": str(state)})
+        fixtures = hook_fixtures(tmp)
+
+        for name in sorted(set(scripts) - {f["script"] for f in fixtures}):
+            fail(
+                rel(scripts[name]),
+                "hook script has no fixture in validate.py hook_fixtures()",
+            )
+
+        for i, f in enumerate(fixtures):
+            script = scripts.get(f["script"])
+            where = f"hook fixture {i} ({f['script']})"
+            if script is None:
+                fail(where, "no hooks.json runs this script")
+                continue
+            if script.suffix == ".sh" and not bash:
+                continue
+            cmd = [sys.executable] if script.suffix == ".py" else [bash]
+            stdin = json.dumps({"session_id": f"fixture-{i}", **f["stdin"]})
+            env = {**base_env, **f.get("env", {})}
+            for _ in range(f.get("repeat", 1)):
+                r = subprocess.run(
+                    # cwd=REPO + POSIX-relative path so Git Bash on Windows resolves it.
+                    [*cmd, rel(script), *f.get("args", [])],
+                    cwd=REPO,
+                    input=stdin,
+                    capture_output=True,
+                    text=True,
+                    env=env,
+                    timeout=30,
+                )
+            if r.returncode != f.get("code", 0):
+                fail(
+                    where,
+                    f"exit {r.returncode}, expected {f.get('code', 0)}: {r.stderr.strip()}",
+                )
+            if f.get("out") == "" and r.stdout.strip():
+                fail(where, f"expected no output, got: {r.stdout.strip()[:200]}")
+            elif f.get("out") and f["out"] not in r.stdout:
+                fail(where, f"stdout lacks {f['out']!r}: {r.stdout.strip()[:200]}")
+            if f.get("err") and f["err"] not in r.stderr:
+                fail(where, f"stderr lacks {f['err']!r}: {r.stderr.strip()[:200]}")
+            if r.stdout.strip():
+                try:
+                    json.loads(r.stdout)
+                except ValueError:
+                    fail(where, f"stdout is not valid JSON: {r.stdout.strip()[:200]}")
+
+
 # --- dependencies & invocations --------------------------------------------
 
 
@@ -691,6 +852,7 @@ def main() -> int:
     check_repo_rules(versions)
     check_hygiene()
     check_scripts()
+    check_hooks()
 
     if errors:
         print(f"FAIL: {len(errors)} problem(s) found\n")

@@ -43,6 +43,8 @@ dependency (see `docs/PLUGIN_DEPENDENCIES.md`), so the technique skill is always
 | "write tests for this", "what should I test", "cover the edge cases"                | `design-test-cases` + stack skill                                    |
 | "write unit/integration/system tests" (many at once)                                | Tester agents + stack skill + `design-test-cases`                    |
 | "fix this bug", a pasted stack trace, "this worked last week"                       | `test-a-bug-fix`                                                     |
+| "debug this", "why is this failing", a fix that did not hold                        | `ceh-coding-conduct:find-root-cause`, then `test-a-bug-fix`          |
+| "implement this", "add a feature", "TDD"                                            | `write-test-first` + `design-test-cases` + stack skill               |
 | "refactor this", "extract this", "upgrade this dependency"                          | `verify-behavior-preserved`                                          |
 | "shrink the diff", "simplify the branch before the PR"                              | `verify-behavior-preserved` **and** `ceh-coding-conduct:shrink-diff` |
 | "is this ready", "before I open the PR", "race condition", "is this migration safe" | `close-test-risk-gaps`                                               |
@@ -184,6 +186,8 @@ core logic (Python) and 70% for `src/lib/` (frontend).
 | `pytest-unit-tester` vs `vitest-unit-tester`                   | The Python one runs only when you ask for unit tests. The Vitest one is proactive once you ask to write or improve them                                                      |
 | `audit-test-suite` inline vs report-only mode                  | Same checks. Inline for a quick read, report-only in a background subagent when the run is slow or noisy                                                                     |
 | `close-test-risk-gaps` vs `design-test-cases`                  | The ladder picks inputs for a function, the gate triages failure classes for a feature about to ship                                                                         |
+| `write-test-first` vs `test-a-bug-fix`                         | New behavior vs a defect. Both see the test fail before the code; only the bug fix proves the test red again with the fix removed                                            |
+| `ceh-coding-conduct:find-root-cause` vs `test-a-bug-fix`       | Cause unknown vs cause known. Find the cause first, then the bug-fix skill turns its reproduction into the regression test                                                   |
 
 ## Install combinations
 

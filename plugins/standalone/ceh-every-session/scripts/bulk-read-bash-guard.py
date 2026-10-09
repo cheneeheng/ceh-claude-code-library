@@ -27,6 +27,8 @@ import os
 import re
 import shlex
 import sys
+import tempfile
+from pathlib import Path
 
 FALLBACK_MIN_LINES = 350
 DUMP_COMMANDS = {"cat", "less", "more", "bat", "batcat"}
@@ -186,6 +188,25 @@ def offending_file(segment, threshold):
     return None
 
 
+def denial_number(payload):
+    """This hook's denial count in this session, 1 on the first.
+
+    Identical deny blocks push the model into repetition loops, so after the
+    third the caller sends one line carrying this ordinal instead.
+    """
+    session = payload.get("session_id") or "default"
+    state = Path(tempfile.gettempdir()) / f"ceh-denials-{Path(__file__).stem}-{session}"
+    try:
+        n = int(state.read_text(encoding="utf-8")) + 1
+    except (OSError, ValueError):
+        n = 1
+    try:
+        state.write_text(str(n), encoding="utf-8")
+    except OSError:
+        pass
+    return n
+
+
 def deny(reason):
     json.dump(
         {
@@ -201,6 +222,10 @@ def deny(reason):
 
 
 def main():
+    # Kill switch: CEH_DISABLED_HOOKS lists hook script names to skip.
+    disabled = os.environ.get("CEH_DISABLED_HOOKS", "").replace(" ", "").split(",")
+    if Path(__file__).stem in disabled:
+        sys.exit(0)
     threshold = min_lines()
     if threshold is None:
         sys.exit(0)
@@ -226,6 +251,13 @@ def main():
                 if len(paths) == 1
                 else ", ".join(f"`{p}`" for p in paths) + f" total {lines} lines"
             )
+            n = denial_number(payload)
+            if n > 3:
+                deny(
+                    f"Blocked again (denial {n} this session): {subject}. Narrow the "
+                    f"command, or delegate to `bulk-reader`. The user can unset "
+                    f"BULK_READER_MIN_LINES to switch this guard off."
+                )
             deny(
                 f"Blocked: {subject} (threshold {threshold}) and this "
                 f"command would dump that into context. Decide which you need:\n\n"
@@ -235,7 +267,8 @@ def main():
                 f"file, since a summary cannot give you the exact text an edit needs.\n\n"
                 f"2. An understanding of the file: invoke the Skill tool with "
                 f'skill="ceh-every-session:delegate-bulk-reads", then delegate to the '
-                f"`bulk-reader` subagent with your question and this path."
+                f"`bulk-reader` subagent with your question and this path.\n\n"
+                f"The user can unset BULK_READER_MIN_LINES to switch this guard off."
             )
     sys.exit(0)
 

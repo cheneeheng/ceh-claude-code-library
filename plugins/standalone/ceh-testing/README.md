@@ -11,13 +11,14 @@ passing functional suite structurally miss. Load it alongside a stack plugin, no
 
 ## Skills
 
-| Skill                       | Invoke                                   | Triggers when                                                                                                                                                                                         |
-| --------------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `test-a-bug-fix`            | `/ceh-testing:test-a-bug-fix`            | A bug, crash, regression, or incident is being fixed: write the failing test before the fix, prove it goes red without the fix, bisect on it when the behavior used to work                           |
-| `design-test-cases`         | `/ceh-testing:design-test-cases`         | Deciding which inputs and scenarios to cover: partitions, boundaries, decision tables, state transitions, pairwise, properties, metamorphic relations, fuzzing, forced dependency failure             |
-| `audit-test-suite`          | `/ceh-testing:audit-test-suite`          | Finding out whether a passing suite would catch a defect: assertion quality, mutation testing on the diff, flakiness, level and speed, branch coverage                                                |
-| `verify-behavior-preserved` | `/ceh-testing:verify-behavior-preserved` | Before a change meant to alter no observable behavior: refactor, extraction, dependency or runtime upgrade, port. Pins current behavior with characterization tests, golden files, a differential run |
-| `close-test-risk-gaps`      | `/ceh-testing:close-test-risk-gaps`      | Pre-completion gate: triage concurrency, contract drift, performance, authorization, and migration/rollout gaps. A class whose trigger does not fire is skipped explicitly                            |
+| Skill                       | Invoke                                   | Triggers when                                                                                                                                                                                          |
+| --------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `test-a-bug-fix`            | `/ceh-testing:test-a-bug-fix`            | A bug, crash, regression, or incident is being fixed: write the failing test before the fix, prove it goes red without the fix, bisect on it when the behavior used to work                            |
+| `design-test-cases`         | `/ceh-testing:design-test-cases`         | Deciding which inputs and scenarios to cover: partitions, boundaries, decision tables, state transitions, pairwise, properties, metamorphic relations, fuzzing, forced dependency failure              |
+| `audit-test-suite`          | `/ceh-testing:audit-test-suite`          | Finding out whether a passing suite would catch a defect: assertion quality, mutation testing on the diff, flakiness, level and speed, branch coverage                                                 |
+| `verify-behavior-preserved` | `/ceh-testing:verify-behavior-preserved` | Before a change meant to alter no observable behavior: refactor, extraction, dependency or runtime upgrade, port. Pins current behavior with characterization tests, golden files, a differential run  |
+| `close-test-risk-gaps`      | `/ceh-testing:close-test-risk-gaps`      | Pre-completion gate: triage concurrency, contract drift, performance, authorization, and migration/rollout gaps. A class whose trigger does not fire is skipped explicitly                             |
+| `write-test-first`          | `/ceh-testing:write-test-first`          | About to write code that adds or changes behavior, asked for tests or not: red, green, refactor per slice. It's working if each slice in the hand-over quotes the failure seen before its code existed |
 
 The plugin ships no agents. `audit-test-suite` has a report-only mode for a large or slow suite: hand
 the audit to a background subagent with the skill loaded and it returns a ranked report without
@@ -31,6 +32,7 @@ editing anything. Writing the missing tests belongs to the stack's own tester ag
 | Which inputs and scenarios               | `design-test-cases`                                                   |
 | Is this suite trustworthy                | `audit-test-suite`                                                    |
 | Did this bug get a test                  | `test-a-bug-fix`                                                      |
+| Did this new code get a test first       | `write-test-first`                                                    |
 | Did this refactor change behavior        | `verify-behavior-preserved`                                           |
 | What does a passing suite still miss     | `close-test-risk-gaps`                                                |
 

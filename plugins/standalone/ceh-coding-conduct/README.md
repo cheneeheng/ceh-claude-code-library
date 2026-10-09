@@ -19,12 +19,13 @@ for a whole codebase.
 
 ## Skills
 
-| Skill                   | When it loads                                                                                        | What it does                                                                                                                                                                                                                                                                                               |
-| ----------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `agent-coding-contract` | Every coding session (auto, via hook)                                                                | The full behavioral contract — core rules, five-step workflow, stop conditions, decision logging.                                                                                                                                                                                                          |
-| `write-less-code`       | Every coding session (auto, via hook)                                                                | The minimalism reflex — the ladder (YAGNI → stdlib → native → installed dep → one line), native-platform-first, the `// less-code:` shortcut convention. The positive half of the contract's minimal-change rules.                                                                                         |
-| `shrink-diff`           | On demand — when a feature branch is functionally done and its diff should get smaller before review | Retroactive minimalism — applies the write-less-code standard to the accumulated diff vs `main`, across all the commits and sessions that produced it: dedupe against existing code, delete dead weight, collapse over-built structure. Diff-scoped, with three narrow causes for touching unchanged code. |
-| `refactor-repo`         | Manual only (`/refactor-repo`) — never auto-fires                                                    | Whole-codebase (or per-module) refactor campaign: read-only inventory, ranked proposal with payoff/risk/diff-size estimates, then apply only user-approved clusters on `refactor/` branches under a behavior-preservation gate.                                                                            |
+| Skill                   | When it loads                                                                                        | What it does                                                                                                                                                                                                                                                                                                                                                |
+| ----------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `agent-coding-contract` | Every coding session (auto, via hook)                                                                | The full behavioral contract — core rules, five-step workflow, stop conditions, decision logging.                                                                                                                                                                                                                                                           |
+| `write-less-code`       | Every coding session (auto, via hook)                                                                | The minimalism reflex — the ladder (YAGNI → stdlib → native → installed dep → one line), native-platform-first, the `// less-code:` shortcut convention. The positive half of the contract's minimal-change rules.                                                                                                                                          |
+| `shrink-diff`           | On demand — when a feature branch is functionally done and its diff should get smaller before review | Retroactive minimalism — applies the write-less-code standard to the accumulated diff vs `main`, across all the commits and sessions that produced it: dedupe against existing code, delete dead weight, collapse over-built structure. Diff-scoped, with three narrow causes for touching unchanged code.                                                  |
+| `refactor-repo`         | Manual only (`/refactor-repo`) — never auto-fires                                                    | Whole-codebase (or per-module) refactor campaign: read-only inventory, ranked proposal with payoff/risk/diff-size estimates, then apply only user-approved clusters on `refactor/` branches under a behavior-preservation gate.                                                                                                                             |
+| `find-root-cause`       | Something is broken and its cause is unknown, before any fix — or after a fix that did not hold      | Debugging before fixing: one command red on the exact symptom, 3 to 5 falsifiable hypotheses, evidence that kills them one variable at a time, then a cause confirmed by a prediction. After two failed fixes it attacks the shared premise. It's working if the hand-over has a hypotheses table and a Prediction line, and no fix lands before the cause. |
 
 **Manual triggers**
 
@@ -32,6 +33,7 @@ for a whole codebase.
 - `write-less-code` — no slash command (hidden from the `/` menu), named by the per-prompt reminder hook.
 - `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
+- `find-root-cause` — `/find-root-cause`, or say `"debug this"` / `"why is this failing"`.
 
 ## Output style
 
@@ -75,6 +77,9 @@ Hooks are enforcement, so each one is kept on a failure that guidance alone did 
   whole session, not a moment, so no description fires it: an agent starting to write code does not
   stop to look for it. Loaded once, the ladder also drifted out of effect in long sessions and the
   agent over-built.
+
+To switch one off without uninstalling the plugin, list its script name in `CEH_DISABLED_HOOKS`
+(comma-separated, no extension): `load-contract`, `inject-less-code-reminder`.
 
 Both hooks fire in every session where the plugin is enabled, including ones that write no code.
 The cost lands only where it should: among the scenario bundles, only `ceh-scenario-service`,

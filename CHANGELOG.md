@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-10-09
 
+Five ideas from `docs/IDEAS.md` are built. Until now nothing ran the hook scripts: `validate.py`
+only syntax-checked them, so a broken guard still passed CI. Now `validate.py` pipes hand-built
+tool calls into every hook and checks the exit code and output. Every hook also gets a kill
+switch, `CEH_DISABLED_HOOKS`. The three deny guards send their full text three times per session,
+then one numbered line, because an identical deny block repeated pushes the model into loops. Two
+new skills cover moments nothing covered before: finding a bug's cause before fixing it, and
+writing the failing test before new code by default. `docs/IDEAS.md` moves to one table per
+section.
+
 A new experimental plugin, `ceh-orchestration-lab`, moves the orchestration experiment from
 synthetic tasks into real projects. Every batch of the synthetic benchmark was solved by Haiku
 alone, so it could not separate the strategies. The plugin ships the two strategies a skill can
@@ -23,10 +32,23 @@ as background only. Nothing was copied from it.
 
 | Plugin                  | Version |
 | ----------------------- | ------- |
+| `ceh-coding-conduct`    | 2.1.0   |
+| `ceh-every-session`     | 2.2.1   |
+| `ceh-git-workflow`      | 1.1.1   |
 | `ceh-orchestration-lab` | 1.0.0   |
+| `ceh-testing`           | 1.1.0   |
 
 ### Added
 
+- `ceh-coding-conduct:find-root-cause`: reproduce the symptom with one command, list 3 to 5
+  falsifiable hypotheses, gather evidence one variable at a time, and confirm the cause by a
+  prediction before any fix. After two failed fixes it checks the premise every attempt shared.
+- `ceh-testing:write-test-first`: red, green, refactor per slice of new behavior, by default
+  rather than on request, with the failure seen before the code quoted in the hand-over.
+- `CEH_DISABLED_HOOKS`: a comma-separated list of hook script names to skip, read by every hook
+  in `ceh-coding-conduct`, `ceh-every-session`, and `ceh-git-workflow`.
+- `validate.py` hook fixtures: every script a `hooks.json` runs needs fixtures, and each fixture
+  checks the exit code and output for a hand-built payload. No model call is made.
 - `ceh-orchestration-lab` 1.0.0, experimental and in no bundle:
   - `plan-then-implement`: this session writes one complete plan and one `implementer` subagent
     carries it out, with at most one fix-up resume.
@@ -37,6 +59,13 @@ as background only. Nothing was copied from it.
     from the run's start.
   - A shared run-log procedure in `references/run-log.md`, which writes
     `.agents_workspace/orchestration-lab/<stamp>_<session-id>/` per run plus a `runs.md` index.
+
+### Changed
+
+- `branch-guard`, `bulk-read-guard`, and `bulk-read-bash-guard` send their full deny text for
+  the first three denials in a session, then one line with the denial's number. Every deny names
+  the setting that switches the guard off.
+- `docs/IDEAS.md` lists each section as one table instead of one heading per entry.
 
 ---
 

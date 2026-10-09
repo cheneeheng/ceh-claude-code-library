@@ -94,6 +94,35 @@ verbatim-literal exception), and "Describe what exists today".
 `cat`/`head`), so a pattern in one and not the other denies a file on one route and allows it on
 the other. Each hook is a standalone script with no shared module, so the list is duplicated.
 
+## Hook kill switch (`CEH_DISABLED_HOOKS`)
+
+**Canonical:** `plugins/standalone/ceh-git-workflow/scripts/branch-guard.py` — the `CEH_DISABLED_HOOKS` check at the top of `main()`
+
+| Copy                                                                         | Section                | Diverges                               |
+| ---------------------------------------------------------------------------- | ---------------------- | -------------------------------------- |
+| `plugins/standalone/ceh-every-session/scripts/bulk-read-guard.py`            | top of `main()`        | `sys.exit(0)` instead of `return`      |
+| `plugins/standalone/ceh-every-session/scripts/bulk-read-bash-guard.py`       | top of `main()`        | `sys.exit(0)` instead of `return`      |
+| `plugins/standalone/ceh-every-session/scripts/usage-limit-watch.py`          | top of `main()`        | `sys.exit(0)` instead of `return`      |
+| `plugins/standalone/ceh-coding-conduct/scripts/load-contract.sh`             | the `case` line on top | bash: `case` on `$(basename "$0" .sh)` |
+| `plugins/standalone/ceh-coding-conduct/scripts/inject-less-code-reminder.sh` | the `case` line on top | bash: `case` on `$(basename "$0" .sh)` |
+
+**Shared:** `CEH_DISABLED_HOOKS` is a comma-separated list of hook script names without the
+extension, spaces ignored, and a listed script exits 0 with no output before reading its input.
+Every hook script carries the check, and `validate.py` has a fixture proving it for each.
+
+## Denial dampening (`denial_number`)
+
+**Canonical:** `plugins/standalone/ceh-git-workflow/scripts/branch-guard.py` — `denial_number()` and its use in `main()`
+
+| Copy                                                                   | Section                                | Diverges                                       |
+| ---------------------------------------------------------------------- | -------------------------------------- | ---------------------------------------------- |
+| `plugins/standalone/ceh-every-session/scripts/bulk-read-guard.py`      | `denial_number()`, its use in `main()` | the short line points at offset/limit reads    |
+| `plugins/standalone/ceh-every-session/scripts/bulk-read-bash-guard.py` | `denial_number()`, its use in `main()` | the short line points at narrowing the command |
+
+**Shared:** `denial_number()` verbatim (a per-hook, per-session counter file in the temp
+directory), the full deny text for denials 1 to 3, then one line carrying "denial N this session",
+and every deny, full or short, naming the setting that switches the guard off.
+
 ## Bulk-reader answer format (Answer / Not found / Coverage)
 
 **Canonical:** `plugins/standalone/ceh-every-session/agents/bulk-reader.md` — § Output to parent session
@@ -204,6 +233,7 @@ The service copy adds the `--cov=app` command, the library copy `--cov=your_libr
 | `plugins/standalone/ceh-testing/skills/verify-behavior-preserved/SKILL.md` | § What waits for a request | proves the refactor; lists the region coverage check, the separate commit of the pins, and the differential run; adds coverage beyond the region to the slow list |
 | `plugins/standalone/ceh-testing/skills/close-test-risk-gaps/SKILL.md`      | § What waits for a request | proof is per class that fires; adds a benchmark harness run and a migration against a production-sized copy to the slow list                                      |
 | `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`          | § What waits for a request | judges existing tests rather than proving a change: checks 1 and 2 run unasked, checks 3 to 6 are the slow list                                                   |
+| `plugins/standalone/ceh-testing/skills/write-test-first/SKILL.md`          | § What waits for a request | applies on every task that adds behavior, not only when asked                                                                                                     |
 
 **Shared:** the rule, stated in prose with no reference to `ceh-coding-conduct:agent-coding-contract`
 so `ceh-testing` keeps no dependency, and matching `docs/VISION.md` principle 3: writing and running
