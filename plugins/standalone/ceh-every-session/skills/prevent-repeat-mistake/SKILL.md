@@ -63,9 +63,9 @@ waiting for the user's approval.
 ## Output
 
 ```markdown
-| Mistake    | Evidence                        | Rung  | Fix                         | Proof                                           | Status  |
-| ---------- | ------------------------------- | ----- | --------------------------- | ----------------------------------------------- | ------- |
-| <one line> | <path:line or quoted tool call> | <1-5> | <what was added or drafted> | <fails on the real mistake: yes / not provable> | applied | awaiting approval |
+| Mistake    | Evidence                        | Rung  | Fix                         | Proof                                           | Status                        |
+| ---------- | ------------------------------- | ----- | --------------------------- | ----------------------------------------------- | ----------------------------- |
+| <one line> | <path:line or quoted tool call> | <1-5> | <what was added or drafted> | <fails on the real mistake: yes / not provable> | <applied / awaiting approval> |
 ```
 
 Below the table, for each rung chosen, one line on why the rungs above it did not fit.

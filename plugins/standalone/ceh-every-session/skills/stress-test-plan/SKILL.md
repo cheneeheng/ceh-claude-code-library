@@ -62,5 +62,5 @@ the user ends the session, and the plan records the outcome.
 
 ## Open
 
-- <Question> — assumed <recommendation>, not confirmed | blocked on <prerequisite>
+- <Question> — assumed <recommendation>, not confirmed (or: blocked on <prerequisite>)
 ```

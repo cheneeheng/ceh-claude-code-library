@@ -26,8 +26,8 @@ spot-checked, and its path and short answer are reported.
 1. **Pin the question.** One sentence, answerable, with the decision it feeds ("Does library X
    support streaming in v3, so we can drop our polling code?"). A topic ("research X") becomes a
    question first: state the question you chose in the brief and in the note.
-2. **Dispatch one background agent** with the Agent tool (`general-purpose`, `run_in_background`)
-   so the fetched pages stay out of this session. Name the model: the session's own model when the
+2. **Dispatch one background agent** with the Agent tool (`general-purpose`) so the fetched pages
+   stay out of this session. Name the model: the session's own model when the
    note settles a decision, a cheaper one for a plain fact-find. The brief carries everything,
    because the agent sees none of this conversation:
    - the question and the decision it feeds;
