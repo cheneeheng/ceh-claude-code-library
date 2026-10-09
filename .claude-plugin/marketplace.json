@@ -117,6 +117,12 @@
       "description": "CEH workflow builder: interview a repetitive multi-step task into a runnable artifact — one skill when it is simple, or a flow.yaml config with gates and approvals plus a thin trigger skill — emitted into the target repo's .claude/skills/. Running a flow needs ceh-workflow-runner."
     },
     {
+      "name": "ceh-orchestration-lab",
+      "source": "./plugins/standalone/ceh-orchestration-lab",
+      "version": "1.0.0",
+      "description": "EXPERIMENTAL. CEH orchestration lab: run real coding tasks under one of two orchestration strategies (plan then implement, or a supervised orchestrate loop) with a cheaper worker model, and log every run for later comparison."
+    },
+    {
       "name": "ceh-session-to-skill",
       "source": "./plugins/standalone/ceh-session-to-skill",
       "version": "1.0.0",

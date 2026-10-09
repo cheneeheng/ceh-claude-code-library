@@ -55,7 +55,7 @@ MAX_NAME_LEN = 64
 MAX_DESCRIPTION_LEN = 600
 # Ratchet on the sum of every skill and agent description. Lower it when the total drops; raise it
 # only in the PR that adds a component, by that component's description length.
-MAX_TOTAL_DESCRIPTION_LEN = 41474
+MAX_TOTAL_DESCRIPTION_LEN = 42018
 MAX_COMPATIBILITY_LEN = 500
 TEMPLATE_MARKER = "TEMPLATE-GUIDANCE"
 
