@@ -53,6 +53,10 @@ above zero is a Detour by definition, and the missing information names its own 
 wait** — the real seconds a human spends watching an install. Loops fix → re-run until a 5-point
 gate passes.
 
+For a library, CLI, or API the walk ends at the first real call, and the walker pastes every code
+block on its path verbatim: a sample that only works after the walker fixes it is a stall, since
+that is the error a developer who pastes it gets.
+
 **The budget is what stops "technically possible" from passing.** Without it a README that takes
 forty steps scores as clean, because nobody stalled outright — and length is the most common
 usability failure after an outright blocker. So the goal is split into two to four milestones, each

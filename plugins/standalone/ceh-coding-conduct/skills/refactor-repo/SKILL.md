@@ -42,6 +42,11 @@ Hunt the same categories as `shrink-diff`, plus the ones only time produces:
 - **Information leakage** — one design decision (a file format, a status string, an ordering
   rule) known by two or more modules, so changing it means editing each. Unlike duplication the
   code may look different everywhere. The fix moves the decision behind one module.
+- **Shallow modules worth deepening** — a module whose interface is nearly as large as what it
+  hides, so every caller repeats the same sequence of calls, the same setup, or the same
+  knowledge of its internals. The fix is the opposite of inlining: merge the module and the
+  logic its callers repeat into one module with a smaller interface. Record the caller count,
+  since that is what deepening pays back.
 - **Retroactive ladder violations** (below).
 
 For each area, also record its **test coverage status** — it decides in Phase 3 what may be
@@ -73,6 +78,13 @@ Group candidates into clusters sized so each cluster makes one reviewable PR (th
 this skill approved the campaign, not any specific candidate — never proceed past this point
 unprompted. With no human to select (a headless run), the ranked table is the deliverable: end the
 run there and apply nothing, because no cluster was approved.
+
+A deepening candidate carries its proposed interface in the table: the signatures callers would
+use after, beside the calls they make today, so the user judges the design rather than a label.
+When the user selects one, settle its open design questions before any code: ask them a round at a
+time, each with a recommended answer, starting with what the new interface hides and what it must
+still expose. The answers become the cluster's scope, and a question left open keeps the cluster
+unapplied.
 
 ### Phase 3 — Apply approved clusters
 

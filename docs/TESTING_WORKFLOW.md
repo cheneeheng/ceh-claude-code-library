@@ -49,6 +49,8 @@ dependency (see `docs/PLUGIN_DEPENDENCIES.md`), so the technique skill is always
 | "shrink the diff", "simplify the branch before the PR"                              | `verify-behavior-preserved` **and** `ceh-coding-conduct:shrink-diff` |
 | "is this ready", "before I open the PR", "race condition", "is this migration safe" | `close-test-risk-gaps`                                               |
 | "are these tests any good", "why didn't the tests catch this", "flaky test"         | `audit-test-suite`, in report-only mode when the run is slow         |
+| "QA this", "click through the app and find bugs", "try to break it"                 | `explore-app-for-bugs`, report-only unless fix mode is asked for     |
+| "make sure it looks the same", "visual regression check"                            | `ceh-web-frontend:check-visual-parity`                               |
 
 ## Scenario A: tests for a new feature
 

@@ -5,8 +5,8 @@ description: >-
   of the plugin: it finds `BUSINESS_PLAN.md`, works out which moment this is, and routes to the
   specialist skill that owns it. Trigger on "write a business plan", "validate my product idea",
   "who would pay for this", "review my business plan", "do the numbers work", "go-to-market plan",
-  "run a premortem", or "set our OKRs". Not for the technical build plan of the app itself (use
-  ceh-plan-build-review) and not for a marketing blog post (use ceh-blog).
+  "run a premortem", "set our OKRs", or "write a pitch deck". Not for the technical build plan of
+  the app itself (use ceh-plan-build-review) and not for a marketing blog post (use ceh-blog).
 argument-hint: "[plan-or-idea]"
 disable-model-invocation: false
 user-invocable: true
@@ -48,6 +48,7 @@ this moment has run and the plan's frontmatter agrees with its content.
 | The first customers must be won: channel, launch, acquisition                | Invoke the Skill tool with skill="ceh-business-plan:plan-go-to-market"          |
 | A hard-to-undo commitment is near, or the question is what could go wrong    | Invoke the Skill tool with skill="ceh-business-plan:run-premortem"              |
 | The plan is agreed and work must start: objectives, owners, the next 90 days | Invoke the Skill tool with skill="ceh-business-plan:set-operating-plan"         |
+| Money must be raised: a pitch deck, investor outreach, a fundraising email   | Invoke the Skill tool with skill="ceh-business-plan:write-investor-materials"   |
 
 ## Rules
 
