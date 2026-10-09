@@ -1,0 +1,9 @@
+{
+  "name": "ceh-build-planning",
+  "version": "1.0.0",
+  "description": "CEH build planning: decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/ceh-claude-code-library",
+  "license": "Apache-2.0",
+  "keywords": ["agent", "planning", "build-plan", "mvp", "scope", "phases"]
+}

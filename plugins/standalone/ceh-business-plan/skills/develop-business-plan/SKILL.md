@@ -6,7 +6,7 @@ description: >-
   specialist skill that owns it. Trigger on "write a business plan", "validate my product idea",
   "who would pay for this", "review my business plan", "do the numbers work", "go-to-market plan",
   "run a premortem", "set our OKRs", or "write a pitch deck". Not for the technical build plan of
-  the app itself (use ceh-plan-build-review) and not for a marketing blog post (use ceh-blog).
+  the app itself (use ceh-build-planning) and not for a marketing blog post (use ceh-blog).
 argument-hint: "[plan-or-idea]"
 disable-model-invocation: false
 user-invocable: true
@@ -67,4 +67,4 @@ this moment has run and the plan's frontmatter agrees with its content.
 ## Stop conditions
 
 - The request is for the app's technical plan or architecture → say this plugin owns the business
-  plan only and name `ceh-plan-build-review`.
+  plan only and name `ceh-build-planning`.

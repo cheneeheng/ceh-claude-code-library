@@ -227,8 +227,7 @@ every run would pay for the extra install, so standards are duplicated (3 beats 
 This list shrinks as the gaps close. Remove a line in the PR that closes it. Add one when a change
 here, or a new finding, opens a gap the same PR cannot close.
 
-- `ceh-plan-build-review` still ships as one plugin that spans Shape, Build, and Prove, until it
-  is split into `ceh-build-planning`, `ceh-build-from-plan`, and `ceh-check-build-against-plan`.
+No known gaps as of 2026-10-09.
 
 ## Changing this file
 

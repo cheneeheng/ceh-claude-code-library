@@ -12,7 +12,7 @@ this is, and calls the specialist skill that owns it. With no plan on disk it al
 `find-product-market-fit`, which is a loop, not a one-shot generator:
 
 ```
-Intake   → read app plans (SKELETON.md / ITER_NN.md) or any PRD/spec/pitch you provide
+Intake   → read build plans (docs/plans/*.md) or any PRD/spec/pitch you provide
 Draft v0 → write BUSINESS_PLAN.md from what's known; score the PMF gate
 Interview→ attack the lowest-scoring gate criterion — one sharp question at a time
 Revise   → fold the answer in, re-tag confidence, re-score the gate
@@ -20,8 +20,8 @@ Revise   → fold the answer in, re-tag confidence, re-score the gate
 Validate → flip status to validated; hand off the next experiment
 ```
 
-If `plan-build-review` app plans exist, they seed the draft (the §01 Concept, §02 Architecture,
-§03 Tech Stack become the product and target-user starting point). If nothing exists, the skill
+If `ceh-build-planning` build plans exist, they seed the draft (their Goal, Scope, and Design
+become the product and target-user starting point). If nothing exists, the skill
 opens with one grounding question, drafts from your answer, then interrogates.
 
 Every load-bearing claim is tagged `[evidence]`, `[assumption]`, or `[hypothesis-to-test]`. A plan
@@ -98,8 +98,9 @@ test) and you confirm:
 
 ## Relationship to other plugins
 
-- `ceh-plan-build-review` owns the **technical** build plan (how the app is built). This plugin
-  owns the **business** plan (why it sells, who pays). It reads the app plans as input and defers
-  product detail to them rather than duplicating architecture.
-- Validation that surfaces product changes flows back to `ceh-plan-build-review`; the plan's §13
-  milestones become the build/validation backlog.
+- `ceh-build-planning` owns the **technical** build plan (how the app is built). This plugin
+  owns the **business** plan (why it sells, who pays). It reads the build plans as input and
+  defers product detail to them rather than duplicating architecture. A build plan in turn points
+  to `BUSINESS_PLAN.md` for the goal and target user instead of restating them.
+- Validation that surfaces product changes flows into a new `ceh-build-planning` plan; the plan's
+  §13 milestones become the build/validation backlog.

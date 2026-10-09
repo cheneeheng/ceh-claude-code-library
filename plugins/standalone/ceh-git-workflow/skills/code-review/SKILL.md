@@ -42,8 +42,8 @@ and the verdict, so the author knows exactly what blocks the merge.
    stack reviewers. Spec findings are never merged into or re-ranked against the standards
    findings: they answer "is it the right change", the rest answer "is the change written well",
    and a merge lets a style nit outrank a missing requirement. A missing requirement is
-   `[blocking]`. For a `ceh-plan-build-review` plan, `ceh-plan-build-review:review-against-plan`
-   is the fuller check.
+   `[blocking]`. To check the whole codebase against a build plan rather than one diff,
+   `ceh-check-build-against-plan:check-build-against-plan` is the fuller check.
 4. Review in priority order:
    1. **Correctness** — does it do what it claims? Are edge cases handled? Are errors swallowed:
       an empty `catch`, a log-and-continue, a fallback default that hides a failure?

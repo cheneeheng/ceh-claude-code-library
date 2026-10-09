@@ -39,7 +39,9 @@ leaves in the response shape below.
 
 - Lowercase, hyphen-separated path segments: `/user-profiles`
 - Plural nouns for collections: `/sessions`
-- Nested resources for ownership: `/sessions/{id}/messages`
+- Nested resources for ownership: `/sessions/{id}/messages`. A resource that exists but belongs
+  to another user returns the same status as a missing one, so the response never confirms it
+  exists.
 - No verbs in URLs — HTTP methods express the action. A non-CRUD action is a sub-resource:
   `POST /resources/{id}/archive`
 
@@ -140,6 +142,10 @@ async def get_session_service(
     return SessionService(pool=pool, settings=settings)
 ```
 
+`@lru_cache` captures the environment at the first call, so a test that sets env vars after import
+silently reads the old settings, database URL included. Override `get_settings` through
+`app.dependency_overrides`, or call `get_settings.cache_clear()` in a fixture that runs first.
+
 ### Lifespan for startup and shutdown
 
 ```python
@@ -205,6 +211,10 @@ app.add_middleware(
 ```
 
 Never use `allow_origins=["*"]` in production.
+
+A cookie that more than one endpoint sets (register, login, refresh) gets identical `path`,
+`samesite`, `secure`, and `domain` everywhere. Different parameters create two cookies, and the
+browser sends only one of them.
 
 ### Rate limiting
 

@@ -113,7 +113,7 @@ Period: <start date> to <end date>
 
 ## Hands off to
 
-- When an objective is a product build, suggest `ceh-plan-build-review` for the technical plan.
+- When an objective is a product build, suggest `ceh-build-planning` for the technical plan.
   This skill owns the business objective, not the architecture.
 - When §11 has no cash-out month, suggest `ceh-business-plan:stress-test-unit-economics` first.
 - When §09 has no channel test, suggest `ceh-business-plan:plan-go-to-market` first.

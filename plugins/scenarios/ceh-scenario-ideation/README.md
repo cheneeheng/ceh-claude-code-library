@@ -17,12 +17,12 @@ them at the same scope.
 
 ## What it pulls in
 
-| Plugin                  |
-| ----------------------- |
-| `ceh-every-session`     |
-| `ceh-git-workflow`      |
-| `ceh-business-plan`     |
-| `ceh-plan-build-review` |
+| Plugin               |
+| -------------------- |
+| `ceh-every-session`  |
+| `ceh-git-workflow`   |
+| `ceh-business-plan`  |
+| `ceh-build-planning` |
 
 ## Notes
 

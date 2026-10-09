@@ -1,0 +1,9 @@
+{
+  "name": "ceh-build-from-plan",
+  "version": "1.0.0",
+  "description": "CEH build from plan: build a written plan phase by phase, test first, implementing only what each phase names and proving it with the phase's own check, with the evidence recorded in the plan.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/ceh-claude-code-library",
+  "license": "Apache-2.0",
+  "keywords": ["agent", "implement", "plan-driven", "phases", "evidence"]
+}

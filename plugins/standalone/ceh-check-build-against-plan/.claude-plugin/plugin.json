@@ -1,0 +1,9 @@
+{
+  "name": "ceh-check-build-against-plan",
+  "version": "1.0.0",
+  "description": "CEH check build against plan: check whether finished code is what its plan said to build, reporting every gap, deviation, and unplanned extra with quoted evidence, and rerunning each phase's check.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/ceh-claude-code-library",
+  "license": "Apache-2.0",
+  "keywords": ["agent", "audit", "plan-compliance", "scope", "verification"]
+}

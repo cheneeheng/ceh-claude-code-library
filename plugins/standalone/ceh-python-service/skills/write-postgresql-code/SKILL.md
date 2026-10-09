@@ -152,6 +152,10 @@ async with pool.acquire() as conn:
         )
 ```
 
+Never assign an ordered number with `SELECT MAX(n) + 1`: two concurrent transactions read the same
+maximum and write the same number. Use an identity column or a sequence, or lock the parent row
+with `SELECT ... FOR UPDATE` inside the transaction that assigns it.
+
 ### Connection pool
 
 ```python

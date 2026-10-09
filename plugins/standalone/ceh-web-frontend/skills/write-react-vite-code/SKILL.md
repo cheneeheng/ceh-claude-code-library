@@ -66,6 +66,9 @@ export function ItemPanel({ items, onItemClick }: Props) {
 - Custom hooks are named `use*` and own one concern (data fetching, subscription, derived state).
 - Specify exhaustive `useEffect` dependency arrays — do not silence the lint rule.
 - Prefer derived values computed during render over `useState` + `useEffect` mirrors.
+- StrictMode mounts every component twice in development, so an effect that performs a one-time
+  action (send a message, create a session, log an analytics event) fires twice. Make the action
+  idempotent, or guard it with a `useRef(false)` flag set on the first run.
 
 ```tsx
 export function useSession(sessionId: string) {
@@ -104,6 +107,9 @@ what re-renders.
   delete. An index key re-mounts rows and mixes up their local state.
 - Every consumer of a context re-renders when its value changes. Pass a `useMemo`'d value, never an
   inline object, and split a context whose parts change at different rates.
+- Define the config objects a library compares by reference (graph styles, grid column
+  definitions, editor extensions) at module level. Created inside a component, a new object on
+  every render makes the library tear down and remount its children.
 - Reach for `memo`, `useMemo`, and `useCallback` only after the React DevTools Profiler shows a slow
   render. Unmeasured memoization adds code and dependency-array bugs for no gain.
 - Render long lists (hundreds of rows) through a virtualizer, and load route components with
@@ -148,6 +154,14 @@ export const apiClient = {
   },
 };
 ```
+
+- Cookie auth against an API on another origin needs `credentials: "include"` on every request
+  in the client. Without it the browser drops the cookie and every call fails auth.
+- When a 401 triggers a token refresh, concurrent 401s share one in-flight refresh promise. Each
+  refreshing on its own makes the second refresh fail on the already rotated token, which logs
+  the user out.
+- A streaming endpoint that needs POST or an auth header is read with `fetch` and a
+  `ReadableStream` reader, because `EventSource` sends only GET and no custom headers.
 
 ### Environment variables
 
