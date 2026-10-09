@@ -6,10 +6,12 @@ were migrated from [agent-skills](https://github.com/cheneeheng/agent-skills). O
 arrives the same way, through `add-plugin-component`, only if it passes the scope test in the
 vision.
 
-**Read `docs/VISION.md` before adding a plugin, accepting an idea, or changing a rule here.** It
-says why the repo works the way this file describes: agents first and humans second, the
-product-lifecycle scope, and the principles that settle a decision. If this file and the vision
-disagree, fix one of them in the same PR.
+**Everything added to or changed in this repo must hold up against `docs/VISION.md`.** Read it
+before adding or changing a plugin, skill, agent, hook, script, or rule, and before accepting an
+idea into `docs/IDEAS.md`. It says why the repo works the way this file describes: agents first and
+humans second, the product-lifecycle scope, and the principles that settle a decision. A change the
+vision does not allow either changes or does not land. If this file and the vision disagree, fix
+one of them in the same PR.
 
 ## Organizing Principle
 

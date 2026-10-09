@@ -87,6 +87,15 @@ anything is built. `code-review` and `check-build-against-plan` gain an opt-in g
 reviewers must both pass. Neither sees the other or the session, so neither inherits the fixer's
 belief that the fix worked.
 
+`docs/IDEAS.md` becomes the backlog for every idea about this repo, wherever it came from, not only
+the competitor analyses. It splits into Done and Open, on hold, and rejected, so what is left to
+decide no longer hides among the built rows. A new open idea, a project rules generator for
+`ceh-every-session`, writes the fixed facts of one project, such as "Svelte, not React", as rules
+that bind code, planning, and writing tasks alike. Fan-out and long runs is scoped and put on hold:
+fan-out and long runs are covered, and the stacked-PR remainder waits until stacked PRs are in use.
+`CLAUDE.md` now says that everything added or changed must hold up against `docs/VISION.md`, not
+only new plugins, ideas, and rules.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -188,9 +197,13 @@ belief that the fix worked.
 - `ceh-check-build-against-plan` 1.0.0, `check-build-against-plan`: every plan item marked Built,
   Gap, Deviation, Extra, Failing, or Cannot verify with quoted evidence, and each phase check
   rerun. Report-only unless asked to fix.
+- `docs/IDEAS.md`: the Project rules generator idea, open, for `ceh-every-session`.
 
 ### Changed
 
+- `docs/IDEAS.md` holds every idea for the repo, in two tables: Done, and Open, on hold, and
+  rejected. Fan-out and long runs is scoped into three parts and put on hold.
+- `CLAUDE.md`: every addition or change must hold up against `docs/VISION.md`.
 - `branch-guard`, `bulk-read-guard`, and `bulk-read-bash-guard` send their full deny text for
   the first three denials in a session, then one line with the denial's number. Every deny names
   the setting that switches the guard off.
