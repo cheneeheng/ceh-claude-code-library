@@ -52,6 +52,13 @@ walkthrough became one paragraph in `simulate-newcomer-first-run`, because that 
 `audit-interface` already covered the install path and the API, and the only gap was code samples
 that fail when pasted.
 
+`docs/VISION.md` now plans the split of `ceh-plan-build-review`. It was the only plugin listed in
+three lifecycle stages, so a user who only wanted to check code against a plan had to install the
+planner and the builder too. The lifecycle table names its three replacements, one per stage:
+`ceh-build-planning`, `ceh-build-from-plan`, and `ceh-check-build-against-plan`. Principle 6 now
+says a plugin covers one stage. Until the split lands, the gap is listed under "Where the repo does
+not match yet".
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -150,6 +157,9 @@ that fail when pasted.
 - `ceh-testing` README no longer lists exploratory testing as out of scope.
 - `validate.py`: `MAX_TOTAL_DESCRIPTION_LEN` rises by the four new descriptions and the pitch-deck
   trigger added to `develop-business-plan`.
+- `docs/VISION.md`: the lifecycle table replaces `ceh-plan-build-review` with one plugin per
+  stage, principle 6 adds that a plugin covers one lifecycle stage, and "Where the repo does not
+  match yet" lists the pending split.
 
 ---
 
