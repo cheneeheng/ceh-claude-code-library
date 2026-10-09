@@ -39,19 +39,34 @@ that run in parallel, one in `ceh-python-service` and one in `ceh-web-frontend`,
 cross-cutting git plugin carries no stack-specific rules. Retros, performance measurement, a
 committed glossary, worktree isolation, motion rules, and a context budget report fill the rest.
 
+A third batch of ten Build ideas follows, chosen from the entries that need no observed failure, no
+further trial, and no change to `ceh-plan-build-review`, which is due for a rework of its own.
+`code-review` now checks a linked spec on its own axis, so a style nit can never outrank a missing
+requirement, and offers an opt-in panel that sends one brief to several models and ranks findings
+by agreement. Four new skills cover moments nothing covered before: sketching types and boundaries
+before code, exploring the running app for bugs, proving a migration left the UI's look unchanged,
+and turning a validated business plan into investor materials. `refactor-repo` proposes shallow
+modules to deepen, `design-ui` builds a variants board when the direction is open, and
+`explain-until-understood` can keep a learning file across sessions. The developer-experience
+walkthrough became one paragraph in `simulate-newcomer-first-run`, because that skill and
+`audit-interface` already covered the install path and the API, and the only gap was code samples
+that fail when pasted.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
-| `ceh-codebase-explanation` | 1.2.0   |
-| `ceh-coding-conduct`       | 2.1.0   |
+| `ceh-business-plan`        | 1.1.0   |
+| `ceh-codebase-explanation` | 1.2.1   |
+| `ceh-coding-conduct`       | 2.2.0   |
 | `ceh-every-session`        | 2.3.0   |
-| `ceh-git-workflow`         | 1.2.0   |
+| `ceh-git-workflow`         | 1.2.1   |
 | `ceh-orchestration-lab`    | 1.0.0   |
 | `ceh-python-service`       | 1.1.0   |
-| `ceh-testing`              | 1.2.0   |
-| `ceh-ui-design`            | 1.0.3   |
-| `ceh-web-frontend`         | 1.2.0   |
+| `ceh-testing`              | 1.3.0   |
+| `ceh-ui-design`            | 1.0.4   |
+| `ceh-usability-audit`      | 1.1.3   |
+| `ceh-web-frontend`         | 1.3.0   |
 
 ### Added
 
@@ -95,6 +110,17 @@ committed glossary, worktree isolation, motion rules, and a context budget repor
 - `model-audit budget` (repo-local): `scripts/context_budget.py` reports per plugin what its
   descriptions and context-injecting hooks add to each session, prompt, and subagent, with no
   model call.
+- `ceh-coding-conduct:sketch-design`: types, signatures, and module boundaries before code, then
+  four checks on the sketch: illegal states, operations that run twice, shared state, and the
+  smallest interface.
+- `ceh-testing:explore-app-for-bugs`: charters over the changed areas of the running app, each bug
+  reproduced twice with its evidence, into `.agents_workspace/qa/`. Report-only unless fix mode is
+  asked for.
+- `ceh-web-frontend:check-visual-parity`: deterministic Playwright screenshots of the old version
+  as the baseline, the new version compared on the same machine, and every diff explained.
+- `ceh-business-plan:write-investor-materials`: a deck outline and outreach notes from a validated
+  plan, every slide citing its plan section and confidence tag, and an ask tied to the milestones
+  it reaches. `develop-business-plan` routes "write a pitch deck" to it.
 
 ### Changed
 
@@ -110,6 +136,20 @@ committed glossary, worktree isolation, motion rules, and a context budget repor
 - `ceh-ui-design:design-ui` gains a Motion section: durations and easing by token, `transform`
   and `opacity` only, no layout shift, and reduced motion honoured by script-driven animation too.
 - `validate.py`: `MAX_TOTAL_DESCRIPTION_LEN` rises by the eight new descriptions only.
+- `ceh-git-workflow:code-review` gains step 3, the spec checked on its own axis and reported in its
+  own Against the spec list, a Fowler-smell baseline for repos with no written standards, and an
+  opt-in Panel mode that sends one brief to two or three models and ranks findings by agreement.
+- `ceh-coding-conduct:refactor-repo` inventories shallow modules worth deepening, shows each with
+  its before and after interface, and settles its design questions before any code.
+- `ceh-ui-design:design-ui` gains a Variants board: throwaway HTML options that each differ on one
+  design-pass answer, iterated on feedback, also usable for logic prototypes.
+- `ceh-codebase-explanation:explain-until-understood` can keep an opt-in learning workspace per
+  subject, opened in a later session with two self-test questions.
+- `ceh-usability-audit:simulate-newcomer-first-run` ends a library, CLI, or API walk at the first
+  real call, and counts a pasted code sample that needs fixing as a stall.
+- `ceh-testing` README no longer lists exploratory testing as out of scope.
+- `validate.py`: `MAX_TOTAL_DESCRIPTION_LEN` rises by the four new descriptions and the pitch-deck
+  trigger added to `develop-business-plan`.
 
 ---
 

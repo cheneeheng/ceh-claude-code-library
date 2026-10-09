@@ -20,8 +20,8 @@ The target is a reader who can answer questions about the system **without the e
 front of them** — not a reader who followed along. Following along is the failure mode that feels
 like success, on both sides.
 
-The output is the conversation. By default this skill writes no files; the two exceptions are in
-_Output_ below.
+The output is the conversation. By default this skill writes no files; the exceptions, each on
+request, are in _Output_ below.
 
 ## Procedure
 
@@ -273,6 +273,8 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
 - **Default: nothing is written.** The explanation is the reply.
 - **Scratch notes** under `.agents_workspace/` are in scope when the user asks for something to
   re-read later.
+- **A learning workspace**, when the user asks to learn something over several sessions ("teach
+  me this over the week", "keep track of what I know"). See below.
 - **Anything that lands in the repo** — `docs/`, README, architecture notes — is a different job.
   Hand off to the skill that owns it (see _Hands off to_) rather than writing it here.
 - **One case has no owner:** a developer-facing explainer of a single subsystem, written into
@@ -281,6 +283,42 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
   the nearest, and it will reshape the material into diagrams plus Key Decisions rather than
   preserve the explanation you just gave. Having named the gap, write the file yourself if the user
   still wants it, keeping the explanation's shape. This is the one repo path this skill may write.
+
+### Learning workspace
+
+Opt-in only. Keep one file per subject at `.agents_workspace/learning/<subject>.md`, so a later
+session starts from what the reader already knows instead of from zero:
+
+```markdown
+# Learning: <subject>
+
+**Goal:** <what the reader wants to be able to do, in their words>
+**Next:** <the one thing the next session explains first>
+
+## Terms
+
+| Term | Definition, as the reader put it back |
+| ---- | ------------------------------------- |
+
+## Rules of thumb
+
+- <each transferable rule an explanation closed on>
+
+## Self-test
+
+| Question | Last answer          | Date       |
+| -------- | -------------------- | ---------- |
+| <q>      | unaided / missed / — | YYYY-MM-DD |
+
+## Open questions
+```
+
+- **On load**, read the file before explaining anything. Ask two Self-test questions first, the
+  missed ones before the oldest, and record each answer. A term the reader cannot use unaided goes
+  back into the next explanation as a foundation, not as review.
+- **After each explanation lands**, add its terms, its rule, and its self-test question, and
+  rewrite Next. Record a definition only once the reader has said it back in their own words:
+  the file tracks what they know, not what was said to them.
 
 ## Hands off to
 

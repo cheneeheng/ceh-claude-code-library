@@ -49,6 +49,27 @@ Answer these five questions and state the answers (one line each) so the choices
 4. **Which theme template?** (Theme layer below)
 5. **What do empty, loading, and error look like?** Designed now, not retrofitted.
 
+### Variants board
+
+When the user asks for options ("show me a few directions", "I can't picture it"), or the design
+pass leaves question 2 or 4 with two answers that both fit, build a board before the real UI:
+
+1. Write two to four throwaway static HTML files to `.agents_workspace/design-variants/<surface>/`,
+   one per variant, plus an `index.html` that shows them side by side in labelled `<iframe>`s at
+   the same width. Use the bundled theme tokens and real-looking content, never lorem ipsum.
+2. Make each variant differ from the others on **one** design-pass answer (the archetype, the
+   theme, or the density) and label it with that answer. Variants that differ on everything at once
+   get feedback like "the second one", which maps to no decision.
+3. Show the board's path and ask which to keep. On feedback, keep the chosen answer fixed and vary
+   the next open one. Two or three rounds is the usual end.
+4. Record the chosen answers in the design-pass list, then build the real UI from them. The board
+   stays in `.agents_workspace/` and is never imported by the app.
+
+The same board serves a logic prototype: when a flow's behavior is the open question (a multi-step
+form, a drag interaction), make each variant a small self-contained HTML page with inline script
+that behaves the way that option would. With no user to choose, pick by the Review pass checklist
+and write the reason beside the chosen answer.
+
 ## Rules
 
 ### Layout

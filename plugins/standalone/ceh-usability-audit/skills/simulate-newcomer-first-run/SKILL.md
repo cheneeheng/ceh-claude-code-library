@@ -92,6 +92,12 @@ Record the list verbatim in the report. **Source code is not in the frozen set**
 audience is people reading the source. Neither is anything you explained in this conversation, an
 issue thread, or a commit message.
 
+**For a library, CLI, or API, the last milestone is the first real call**: the smallest program or
+command a developer would write from the docs, returning the documented result. Tell the walker to
+copy every code block on its path verbatim, with no edits, and to report each one whose output,
+error, or required setup differs from what the doc shows. A sample that only works after the walker
+fixes it is a stall, because a newcomer who pastes it gets the error instead.
+
 ### 4. Dispatch cold walkers
 
 Spawn one `ceh-usability-audit:newcomer-simulator` agent **per persona** (below). Each gets exactly six

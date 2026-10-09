@@ -30,18 +30,19 @@ is to convert each into evidence or a cheap, scheduled test.
 
 ## Skills
 
-| Skill                        | Description                                                                                            |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `develop-business-plan`      | The entry point: find the plan, work out the moment, and route to the specialist that owns it          |
-| `find-product-market-fit`    | Draft a business plan proactively, then loop interview→revise until the PMF readiness gate passes      |
-| `review-business-plan`       | Report-only board review: score the plan on seven lenses and name the one finding that most changes it |
-| `sharpen-strategy`           | Where to play, how to win, what to refuse, checked against nine tests of a defensible edge             |
-| `stress-test-unit-economics` | Per-unit model with arithmetic shown, cash low point, and the one input that kills the business        |
-| `plan-go-to-market`          | The first ten customers by name, one channel, its arithmetic, and a pass-or-fail channel test          |
-| `run-premortem`              | Assume the business failed, write how, and attach a warning signal, kill criterion, and loss cap       |
-| `set-operating-plan`         | A 90-day plan: at most three objectives, owned key results, weekly inputs, a stop-doing list           |
+| Skill                        | Description                                                                                                                                                                                    |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `develop-business-plan`      | The entry point: find the plan, work out the moment, and route to the specialist that owns it                                                                                                  |
+| `find-product-market-fit`    | Draft a business plan proactively, then loop interview→revise until the PMF readiness gate passes                                                                                              |
+| `review-business-plan`       | Report-only board review: score the plan on seven lenses and name the one finding that most changes it                                                                                         |
+| `sharpen-strategy`           | Where to play, how to win, what to refuse, checked against nine tests of a defensible edge                                                                                                     |
+| `stress-test-unit-economics` | Per-unit model with arithmetic shown, cash low point, and the one input that kills the business                                                                                                |
+| `plan-go-to-market`          | The first ten customers by name, one channel, its arithmetic, and a pass-or-fail channel test                                                                                                  |
+| `run-premortem`              | Assume the business failed, write how, and attach a warning signal, kill criterion, and loss cap                                                                                               |
+| `set-operating-plan`         | A 90-day plan: at most three objectives, owned key results, weekly inputs, a stop-doing list                                                                                                   |
+| `write-investor-materials`   | A deck outline and outreach notes from a validated plan, every claim citing its plan section. It's working if each slide ends in a `Source: §NN` line and the ask names the milestones it buys |
 
-`develop-business-plan` is the only skill you invoke. The other seven are model-only, with no
+`develop-business-plan` is the only skill you invoke. The other eight are model-only, with no
 slash command and a one-line description: they do not trigger on their own, and
 `develop-business-plan` calls the right one. After each specialist returns it resets
 `status: draft` when the gate has dropped below 8/8, and names the specialist to run next.
@@ -54,7 +55,7 @@ Invoke manually:
 
 ## Where the specialist skills come from
 
-The six specialist skills turn widely published operating principles into checks an agent can
+Six of the specialist skills turn widely published operating principles into checks an agent can
 run. Each test names the leader it is associated with (Drucker, Grove, Buffett, Munger, Bezos,
 Walton, Jobs, Dell, Kamprad, Ohno, and others) so the reasoning can be traced. The attributions
 are paraphrases of well-known ideas, not quotations, and the skills use them as tests to apply,
@@ -70,13 +71,16 @@ never as authority that settles a question.
 - `"pressure-test my startup idea"`
 - `"review my business plan"`, `"what's our moat"`, `"do the numbers work"`
 - `"how do I get my first customers"`, `"run a premortem"`, `"90-day plan"`
+- `"write a pitch deck"`
 
 ## What it produces
 
 A single living `BUSINESS_PLAN.md` (13 sections: problem, target customer, value prop, solution,
 competition, market math, business model, go-to-market, traction, financials, risks, milestones),
 revised in place across the loop, with a `pmf_gate: N/8` score in its frontmatter. The schema and
-the 8-point gate live in `references/business-plan-schema.md`, shared by all eight skills.
+the 8-point gate live in `references/business-plan-schema.md`, shared by all nine skills.
+`write-investor-materials` writes `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` beside the plan
+and leaves the plan itself unchanged.
 
 ## The PMF readiness gate
 
