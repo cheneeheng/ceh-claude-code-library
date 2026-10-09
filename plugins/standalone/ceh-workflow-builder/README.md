@@ -1,7 +1,10 @@
 # ceh-workflow-builder
 
-Turn a repetitive multi-step task into something an agent runs, instead of
-something you drive by hand every time.
+Turn repeated product work into something an agent runs: a weekly SEO or
+usability pass, a pre-release check, a recurring feature loop. Repetition is the
+intake test. A workflow exists because the same steps run again in the same
+shape and only the input changes, so a one-off or a task whose steps change
+every time gets no workflow.
 
 The hard part is not writing a `SKILL.md` — three other tools do that. The hard
 parts are deciding whether the task is one skill or a multi-step workflow, and
@@ -16,8 +19,15 @@ is emitted as a `flow.yaml` config plus a thin trigger skill, and runs through
 the generic runner in the separate `ceh-workflow-runner` plugin, so that plugin
 must be installed wherever the flow runs. This plugin is not needed there.
 
-Building is interactive only. Running works interactively and headless
-(`claude -p`).
+Building asks a person. With nobody to ask (`claude -p`), the build writes a
+draft to the build directory, marks every gap, and ends with the questions a
+person must answer; nothing lands in `.claude/skills/` until they agree.
+Running works interactively and headless.
+
+Stages go to Claude Code's native capabilities (skills, subagents, scripts,
+saved dynamic workflows) wherever they cover the step. The runner adds only
+what native lacks: approvals between stages, world checks before a re-run,
+resume state, and the `FLOW STATUS:` line.
 
 How the pieces fit together, with diagrams, is in
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). The tests behind the headless
@@ -44,9 +54,11 @@ twice) and 9 (which steps are irreversible) are the two people skip, and
 assuming them empty is what produces a workflow with no re-run guard that
 publishes without pausing.
 
-**Auto-triggers on:** "interview me about this task", "ask me what you need to
-automate this", "help me spec out this workflow", or "I'm not sure what you
-need to know".
+Opens with the repetition test: a task that will not run again in the same
+shape gets no spec.
+
+**Auto-triggers on:** "interview me about this task", "help me spec out this
+workflow", or when `build-agentic-workflow` finds its inputs incomplete.
 
 ### `build-agentic-workflow`
 
@@ -55,9 +67,9 @@ per step whether it becomes an existing skill, a script, inline prose, or its
 own step skill, then emits the set leaf-first so every reference resolves as it
 is written.
 
-**Auto-triggers on:** "turn this into a skill", "turn this into a workflow",
-"build an agentic workflow", "automate this process", "make this repeatable",
-"I do this by hand every time", or "I need a skill that calls other skills".
+**Auto-triggers on:** "turn this into a workflow", "we run the same check
+every release", "build an agentic workflow", or "I need a skill that calls
+other skills".
 
 Covers the assumed-capability contract, the six-condition workflow gate, the
 step-earns-a-skill test, saved dynamic workflows as an optional stage backend,

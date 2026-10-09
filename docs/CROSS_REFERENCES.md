@@ -399,7 +399,7 @@ the runner rejects, or the reverse. Keep the two files byte-identical.
 
 **Shared:** the nine questions, their numbering, and that numbering carrying through to the spec's
 `## 1.` to `## 9.` headings. Later sections of `build-agentic-workflow` cite them as "spec question
-6/7/8/9", so renumbering means editing both files plus those citations. Four more things must change
+6/7/8/9", so renumbering means editing both files plus those citations. Five more things must change
 in both files together:
 
 - **Never answer for the user.** The interview must not record an obvious answer as the user's, and
@@ -414,6 +414,10 @@ in both files together:
 - **The closed heading set and `$CEH_WORKFLOW_BUILD_DIR`.** Neither skill may add a heading to the
   spec, and both name the variable and its `.agents_workspace/` default, because the interview has
   to work without the builder loaded.
+- **The no-human path.** The interview leaves an unanswerable row recorded as unanswered with its
+  question, and the builder's Headless build carries that row into the draft as `OPEN: spec row
+<n>` and its closing questions. Neither fills it, and the builder never gives it the declined-row
+  reading. If one skill starts filling open rows headless, the other's gate stops catching them.
 
 ## Quote or suppress (review findings)
 

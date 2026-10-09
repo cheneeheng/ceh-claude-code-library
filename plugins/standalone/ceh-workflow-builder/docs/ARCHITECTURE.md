@@ -13,20 +13,22 @@ Evidence for every runtime claim marked `Fn` is in [TEST_RESULTS.md](TEST_RESULT
 
 ## Two phases, two lifetimes
 
-| Phase     | Who drives                                                        | Mode                    | Produces                                                             |
-| --------- | ----------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------- |
-| **Build** | `interview-workflow-task`, `build-agentic-workflow`               | Interactive only        | Files committed to the target repo                                   |
-| **Run**   | `ceh-workflow-runner:run-agentic-workflow`, following `flow.yaml` | Interactive or headless | Run artifacts and `run-state.md` under the git-ignored run directory |
+| Phase     | Who drives                                                        | Mode                           | Produces                                                                       |
+| --------- | ----------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------ |
+| **Build** | `interview-workflow-task`, `build-agentic-workflow`               | Interactive, or headless draft | Files committed to the target repo, or a draft plus questions in the build dir |
+| **Run**   | `ceh-workflow-runner:run-agentic-workflow`, following `flow.yaml` | Interactive or headless        | Run artifacts and `run-state.md` under the git-ignored run directory           |
 
-Building is interactive by construction: the interview asks the user, the intake gate refuses to
-infer missing answers, and nothing is written until the user agrees to the file list. Running is the
-part that must work unattended.
+Building asks a person by construction: the interview draws out intent nobody wrote down, the
+intake gate refuses to infer missing answers, and nothing reaches the target repo until the user
+agrees to the file list. With no person to ask, the build drafts from what the spec answers, marks
+every open row, writes the draft only to the build dir, and ends with the questions a person must
+answer. Running is the part that must work unattended.
 
 ## Components
 
 ```mermaid
 flowchart LR
-    subgraph build["Build: interactive only"]
+    subgraph build["Build: interactive, or headless draft"]
         interview["interview-workflow-task"]
         spec[("&lt;name&gt;-workflow-spec.md<br/>in the build dir")]
         builder["build-agentic-workflow"]
@@ -77,7 +79,8 @@ The single-skill path is unchanged: when the builder's workflow gate does not ho
 
 ## Stage backends
 
-The runner owns ordering, gates, approvals and state. Each stage's work goes to one backend:
+The runner owns ordering, gates, approvals and state. Each stage's work goes to one backend, a
+native Claude Code capability wherever one covers the step:
 
 | `kind`     | Runs via               | Own context    | Can ask the user  | Use for                                                                                                 |
 | ---------- | ---------------------- | -------------- | ----------------- | ------------------------------------------------------------------------------------------------------- |
@@ -227,20 +230,21 @@ verified only there.
 
 ## Design decisions
 
-| Decision                                                                           | Why                                                                                                                                                      |
-| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A generic runner skill reads `flow.yaml`, instead of compiling it to per-step code | One config drives both modes with no regeneration. A dynamic workflow cannot be the interpreter: it cannot read files or ask the user.                   |
-| Dynamic workflows are a stage backend, not the orchestrator                        | They take no mid-run input, so approvals must sit between stages. One workflow per stage matches the docs' advice for sign-off between stages.           |
-| Mode is an explicit argument                                                       | A skill cannot detect headless reliably.                                                                                                                 |
-| No "proceed anyway" headless approval                                              | `headless:` is `stop`, `preapproved-only` or `fail`. Pre-approval is an explicit `approve=` argument, recorded in run state.                             |
-| Missing Workflow tool fails or falls back, never imitates                          | Observed imitation looked like success on disk (F6).                                                                                                     |
-| A denied workflow call fails the stage instead of falling back                     | A fallback would hide a missing permission behind a run that looks healthy.                                                                              |
-| Fan-out declares `max_items` as well as `max_parallel`                             | Headless runs have no `/workflows` view to stop them, so the config bounds the cost.                                                                     |
-| No `on_fail: retry` on a stage with an approval or a fan-out                       | A retry must never fire an irreversible step or a whole fan-out a second time.                                                                           |
-| Explicit `--settings` and `--allowedTools` on every headless run                   | `enableWorkflows` is undocumented (F8), and a launch allowed without a rule was likely machine-specific (F12). Explicit flags make the run reproducible. |
-| The runner lives in the plugin, not vendored into each target repo                 | One copy, updated with the plugin. Generated flows declare the plugin in `compatibility`.                                                                |
-| Workflow `.js` is written with LF and pinned by `.gitattributes`                   | CRLF makes the launch fail (F2).                                                                                                                         |
-| Building stays interactive-only                                                    | The intake must not infer answers, and emission needs the user's agreement to the file list.                                                             |
+| Decision                                                                                                          | Why                                                                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A generic runner skill reads `flow.yaml`, instead of compiling it to per-step code                                | One config drives both modes with no regeneration. A dynamic workflow cannot be the interpreter: it cannot read files or ask the user.                   |
+| Dynamic workflows are a stage backend, not the orchestrator                                                       | They take no mid-run input, so approvals must sit between stages. One workflow per stage matches the docs' advice for sign-off between stages.           |
+| Mode is an explicit argument                                                                                      | A skill cannot detect headless reliably.                                                                                                                 |
+| No "proceed anyway" headless approval                                                                             | `headless:` is `stop`, `preapproved-only` or `fail`. Pre-approval is an explicit `approve=` argument, recorded in run state.                             |
+| Missing Workflow tool fails or falls back, never imitates                                                         | Observed imitation looked like success on disk (F6).                                                                                                     |
+| A denied workflow call fails the stage instead of falling back                                                    | A fallback would hide a missing permission behind a run that looks healthy.                                                                              |
+| Fan-out declares `max_items` as well as `max_parallel`                                                            | Headless runs have no `/workflows` view to stop them, so the config bounds the cost.                                                                     |
+| No `on_fail: retry` on a stage with an approval or a fan-out                                                      | A retry must never fire an irreversible step or a whole fan-out a second time.                                                                           |
+| Explicit `--settings` and `--allowedTools` on every headless run                                                  | `enableWorkflows` is undocumented (F8), and a launch allowed without a rule was likely machine-specific (F12). Explicit flags make the run reproducible. |
+| The runner lives in the plugin, not vendored into each target repo                                                | One copy, updated with the plugin. Generated flows declare the plugin in `compatibility`.                                                                |
+| Workflow `.js` is written with LF and pinned by `.gitattributes`                                                  | CRLF makes the launch fail (F2).                                                                                                                         |
+| A headless build writes a draft and questions, never into `.claude/skills/`                                       | The intake must not infer answers, and emission needs the user's agreement to the file list. A skill there would load in the next session.               |
+| Stages go to native capabilities; the runner keeps only approvals, world checks, resume state and the status line | Claude Code keeps gaining what hand-written orchestration does, so the runner shrinks as native grows rather than competing with it.                     |
 
 ## Risks
 

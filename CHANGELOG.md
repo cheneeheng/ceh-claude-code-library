@@ -111,6 +111,19 @@ per decision keeps each one short, and retiring a decision deletes one file. Its
 collects the choices installed skills leave open, the decisions already in the project's
 documents, and a short list of areas, then asks only what the files do not answer.
 
+`ceh-workflow-builder` and `ceh-workflow-runner` now match `docs/VISION.md`. Repetition is the
+intake test: a workflow exists because the same steps run again in the same shape with only the
+input changing, so the descriptions and examples speak of repeated product work (a weekly SEO
+pass, a pre-release check) and the interview's triage states the test outright. The builder gains
+the no-human path the vision's interview exception requires: headless, it drafts from what the
+spec answers into the build directory, marks every open row, records its conservative choices as
+assumptions, writes nothing into `.claude/skills/`, and ends with the questions a person must
+answer. Both skills now say a stage goes to Claude Code's native capability wherever one covers
+the step, and that the runner keeps only approvals between stages, world checks before a re-run,
+resume state, and the `FLOW STATUS:` line, so it shrinks as Claude Code grows. The builder skill is
+cut from 472 to 376 lines, mostly by dropping what `flow-config-schema.md` already says. The
+cut is not eval-verified.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -135,6 +148,8 @@ documents, and a short list of areas, then asks only what the files do not answe
 | `ceh-ui-design`                | 1.0.4   |
 | `ceh-usability-audit`          | 1.1.3   |
 | `ceh-web-frontend`             | 1.3.1   |
+| `ceh-workflow-builder`         | 1.3.5   |
+| `ceh-workflow-runner`          | 1.0.3   |
 
 ### Added
 
@@ -219,6 +234,13 @@ documents, and a short list of areas, then asks only what the files do not answe
 
 ### Changed
 
+- `ceh-workflow-builder` 1.3.5: `build-agentic-workflow` gets a Headless build path (a draft in the
+  build directory plus closing questions, open rows never filled, nothing in `.claude/skills/`), a
+  native-first rule for stage backends, and a trim from 472 to 376 lines that is not eval-verified.
+  `interview-workflow-task` opens with an explicit repetition test. Descriptions, READMEs and
+  `docs/ARCHITECTURE.md` speak of repeated product work and drop "building is interactive only".
+- `ceh-workflow-runner` 1.0.3: `run-agentic-workflow` states that stages go to native capabilities
+  and the runner keeps only approvals, world checks, resume state and the `FLOW STATUS:` line.
 - `docs/IDEAS.md` holds every idea for the repo, in two tables: Done, and Open, on hold, and
   rejected. Fan-out and long runs is scoped into three parts and put on hold.
 - `CLAUDE.md`: every addition or change must hold up against `docs/VISION.md`.

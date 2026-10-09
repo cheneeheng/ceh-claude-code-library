@@ -1,12 +1,12 @@
 ---
 name: run-agentic-workflow
 description: >-
-  Load this skill when running a built workflow from its `flow.yaml`: walk the stages in order, pause for
-  approvals, check every gate, keep run state on disk and end with a `FLOW STATUS:` line. Works
-  interactively and headless (`claude -p`). Trigger on "run the flow.yaml", "run this workflow
-  config", or when a generated `<name>-flow` skill hands over its config. Not for building a
-  workflow (use ceh-workflow-builder:build-agentic-workflow) and not for writing a flow's spec
-  (use ceh-workflow-builder:interview-workflow-task).
+  Load this skill when repeated product work runs from its `flow.yaml`: walk the stages in order,
+  pause for approvals, check every gate, keep run state on disk and end with a `FLOW STATUS:` line.
+  Works interactively and headless (`claude -p`). Trigger on "run the flow.yaml", or when a
+  generated `<name>-flow` skill hands over its config. Not for building a workflow (use
+  ceh-workflow-builder:build-agentic-workflow) and not for writing a flow's spec (use
+  ceh-workflow-builder:interview-workflow-task).
 argument-hint: "config=<path> [mode=interactive|headless] [resume=latest|new] [approve=<stage-id>,...] [<input>=<value> ...]"
 disable-model-invocation: false
 user-invocable: true
@@ -23,6 +23,14 @@ Run the stages of one `flow.yaml` in order, exactly as written. The runner owns 
 gates, run state and resume; each stage owns its own work. It ends every run with one line,
 `FLOW STATUS: done`, `FLOW STATUS: awaiting-approval <stage-id>` or `FLOW STATUS: failed <stage-id>
 <reason>`, because a headless caller has nothing else to branch on.
+
+**Native first, the runner only for the delta.** Each stage's work goes to the Claude Code
+capability the config names: the Skill tool, the Agent tool, Bash, the Workflow tool. The runner
+does not reimplement any of them. It keeps only what Claude Code does not provide across stages:
+approvals asked mid-run between stages, world checks before a stage re-runs, run state that
+survives the session for resume, and the `FLOW STATUS:` line. Ordering and gates exist to carry
+those four. The reason is that native capabilities keep growing: when Claude Code covers one of the
+four, that part of the runner goes, so the runner shrinks rather than competes with it.
 
 The config format, the validation rules, the `run-state.md` layout and the status line are in
 `${CLAUDE_PLUGIN_ROOT}/references/flow-config-schema.md`. Read it before step 1; this skill does not
