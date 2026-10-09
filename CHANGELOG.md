@@ -101,6 +101,16 @@ changes it governs. Before, the vision listed only new plugins, ideas, and rule 
 repo-local `add-plugin-component` checklist now starts with that check, so it runs where components
 are actually added.
 
+A project's decisions now have a committed home that every session reads. Until now the plugins
+recorded a decision in the agent's git-ignored decision log, or in a committed file only when it
+was an architecture or plan decision, so "Svelte, not React" or "EU small businesses only" bound
+nothing in the next session. `ceh-every-session:record-project-decisions` writes each decision as
+its own short rule file, `.claude/rules/decision-<topic>.md`, which Claude Code loads at launch with
+the priority of `.claude/CLAUDE.md`, so code, planning, and writing tasks all follow it. One file
+per decision keeps each one short, and retiring a decision deletes one file. Its seed mode
+collects the choices installed skills leave open, the decisions already in the project's
+documents, and a short list of areas, then asks only what the files do not answer.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -111,7 +121,7 @@ are actually added.
 | `ceh-check-build-against-plan` | 1.0.1   |
 | `ceh-codebase-explanation`     | 1.2.1   |
 | `ceh-coding-conduct`           | 2.2.1   |
-| `ceh-every-session`            | 2.3.0   |
+| `ceh-every-session`            | 2.4.0   |
 | `ceh-git-workflow`             | 1.2.3   |
 | `ceh-orchestration-lab`        | 1.0.0   |
 | `ceh-python-service`           | 1.1.1   |
@@ -128,6 +138,9 @@ are actually added.
 
 ### Added
 
+- `ceh-every-session` 2.4.0, `record-project-decisions`: one rule file per project decision under
+  `.claude/rules/decision-<topic>.md`, loaded in every session. Record mode writes one decision, seed mode
+  collects open choices from installed skills and the project's documents and asks the rest.
 - `ceh-session-diagnosis` 1.0.0, a new plugin. `diagnose-session` finds the transcript, dispatches
   four `transcript-analyst` agents in parallel (instructions, tools, context, claims), re-reads
   every cited line a conclusion rests on, and classes each root cause as request, guidance,
