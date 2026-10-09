@@ -1,8 +1,14 @@
 # ceh-workflow-runner
 
-Run a workflow that `ceh-workflow-builder` built. The builder is for authoring
+Run a workflow that `ceh-workflow-builder` built for repeated product work,
+such as a weekly SEO pass or a pre-release check. The builder is for authoring
 and is not needed once the flow exists, so this plugin carries only the runner:
 install it wherever a flow runs, interactively or headless (`claude -p`).
+
+Each stage's work goes to a Claude Code native capability. The runner keeps
+only what native lacks: approvals between stages, world checks before a re-run,
+run state for resume, and the `FLOW STATUS:` line. As Claude Code covers one of
+those, that part of the runner goes.
 
 The `flow.yaml` contract is in
 [references/flow-config-schema.md](references/flow-config-schema.md), a

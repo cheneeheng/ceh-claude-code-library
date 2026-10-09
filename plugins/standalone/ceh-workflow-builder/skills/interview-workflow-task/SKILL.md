@@ -1,13 +1,12 @@
 ---
 name: interview-workflow-task
 description: >-
-  Load this skill when a repetitive task must come out of someone's head and onto disk before
-  anything is built: ask the nine questions a workflow artifact needs answered, then write the
-  answers to a workflow spec file. Trigger on "interview me about this task", "help me spec out this
-  workflow", "I'm not sure what you need to know", or when `build-agentic-workflow` finds its inputs
-  incomplete. Produces the spec only. Not for deciding skill vs workflow, designing steps, or
-  writing any `SKILL.md` (that is ceh-workflow-builder:build-agentic-workflow, which reads this
-  spec).
+  Load this skill when repeated product work must come out of someone's head and onto disk before
+  it is built: ask the nine questions a workflow artifact needs answered, then write the answers to
+  a workflow spec file. Trigger on "interview me about this task", "help me spec out this
+  workflow", or when `build-agentic-workflow` finds its inputs incomplete. Produces the spec only.
+  Not for deciding skill vs workflow, designing steps, or writing any `SKILL.md` (that is
+  ceh-workflow-builder:build-agentic-workflow, which reads this spec).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -15,17 +14,22 @@ license: Apache-2.0
 
 # Interview a workflow task
 
-Turn "I do this by hand every time" into a spec that `build-agentic-workflow` can design from
-without guessing. This skill asks and records. It does not design, and it does not emit an artifact.
+Turn "we run this same pass every release" into a spec that `build-agentic-workflow` can design
+from without guessing. This skill asks and records. It does not design, and it does not emit an
+artifact.
 
 The nine questions are not a formality. Questions 8 and 9 are the two people skip, and they are the
 two whose absence corrupts data or sends mail twice.
 
 ## Procedure
 
-Triage first, in one line: a **spike**, a task done once or once more to learn how it goes, gets
-no spec, so say so and stop. Any task that will repeat gets the full interview below, even when it
-looks small, because questions 8 and 9 matter most on the tasks that look too small to ask them.
+Triage first, in one line, against the **repetition test**: will the same steps run again in the
+same shape, with only the input changing between runs? A workflow exists for that reason alone. A
+one-off, or a **spike** done once or once more to learn how it goes, fails the test and gets no
+spec, so say so and stop. A task whose steps change shape from run to run fails it too, because a
+fixed flow would encode the wrong steps next time. Any task that passes gets the full interview
+below, even when it looks small, because questions 8 and 9 matter most on the tasks that look too
+small to ask them.
 
 1. Read the spec file and this conversation, then label every row (Start from what already exists).
 2. Ask only about the rows that fail, using the nine questions below and the rules under How to ask.
