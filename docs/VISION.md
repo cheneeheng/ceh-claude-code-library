@@ -1,8 +1,9 @@
 # Vision
 
 What this library is, what it is for, and the principles that settle a decision when the rules
-elsewhere do not. Read it before adding a plugin, accepting an idea from [`IDEAS.md`](IDEAS.md),
-or changing a rule in `CLAUDE.md`.
+elsewhere do not. Everything added to or changed in this repo must hold up against it. Read it
+before adding or changing a plugin, skill, agent, hook, script, or rule, and before accepting an
+idea into [`IDEAS.md`](IDEAS.md).
 
 `CLAUDE.md` says how the repo works, and this file says why. If the two disagree, one of them is
 wrong. Fix it on purpose, as described in Changing this file, never by quietly ignoring one.

@@ -96,6 +96,9 @@ fan-out and long runs are covered, and the stacked-PR remainder waits until stac
 `CLAUDE.md` now says that everything added or changed must hold up against `docs/VISION.md`, not
 only new plugins, ideas, and rules.
 
+`docs/VISION.md` now opens with the same rule, so the vision and `CLAUDE.md` name the same set of
+changes it governs. Before, the vision listed only new plugins, ideas, and rule changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -204,6 +207,8 @@ only new plugins, ideas, and rules.
 - `docs/IDEAS.md` holds every idea for the repo, in two tables: Done, and Open, on hold, and
   rejected. Fan-out and long runs is scoped into three parts and put on hold.
 - `CLAUDE.md`: every addition or change must hold up against `docs/VISION.md`.
+- `docs/VISION.md`: its opening says every addition or change must hold up against it, matching
+  `CLAUDE.md`.
 - `branch-guard`, `bulk-read-guard`, and `bulk-read-bash-guard` send their full deny text for
   the first three denials in a session, then one line with the denial's number. Every deny names
   the setting that switches the guard off.
