@@ -97,7 +97,9 @@ fan-out and long runs are covered, and the stacked-PR remainder waits until stac
 only new plugins, ideas, and rules.
 
 `docs/VISION.md` now opens with the same rule, so the vision and `CLAUDE.md` name the same set of
-changes it governs. Before, the vision listed only new plugins, ideas, and rule changes.
+changes it governs. Before, the vision listed only new plugins, ideas, and rule changes. The
+repo-local `add-plugin-component` checklist now starts with that check, so it runs where components
+are actually added.
 
 ### Plugin versions
 
@@ -209,6 +211,8 @@ changes it governs. Before, the vision listed only new plugins, ideas, and rule 
 - `CLAUDE.md`: every addition or change must hold up against `docs/VISION.md`.
 - `docs/VISION.md`: its opening says every addition or change must hold up against it, matching
   `CLAUDE.md`.
+- `.claude/skills/add-plugin-component` step 1: check every new or changed component against
+  `docs/VISION.md`, and record a rejection in `docs/IDEAS.md`.
 - `branch-guard`, `bulk-read-guard`, and `bulk-read-bash-guard` send their full deny text for
   the first three denials in a session, then one line with the denial's number. Every deny names
   the setting that switches the guard off.

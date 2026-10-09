@@ -30,6 +30,11 @@ fails when they drift.
 Plugins split on **use case**, not tech domain or lifecycle phase. Load exactly one plugin per
 use case, so each must be self-contained. The tiers are defined in `CLAUDE.md`.
 
+Check the component against `docs/VISION.md` first, whether it is new or a change: it passes the
+scope test, and it answers the **Ask** question of every principle it touches. A component the
+vision does not allow is changed until it does, or not built. Record the reason in `docs/IDEAS.md`
+when it is rejected.
+
 - A skill triggers on a **moment** (a verb: "I'm opening a PR", "I'm writing a migration"), never
   a **topic** (a noun: "PostgreSQL"). Topic-named skills either never auto-trigger or restate what
   the model already knows. If you cannot name the moment, the skill is not ready.
