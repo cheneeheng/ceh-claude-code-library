@@ -75,24 +75,38 @@ creation, LLM roles and context) into the planner's design checklist. Middleware
 covered, and the async ORM trap fits no stack here, so both were dropped. So were the Docker volume
 and SSE heartbeat traps, which no stack skill owns.
 
+A triage of the open `docs/IDEAS.md` entries follows. Six are rejected for now, two wait on
+`ceh-orchestration-lab` leaving experimental, one is dropped until the built-in `run` skill proves
+short, the verify gate waits on evidence, and four are built. Two new plugins, each loaded only when
+needed: `ceh-session-diagnosis` finds why a session went wrong from its transcript, and
+`ceh-security-audit` audits the whole codebase, which Claude Code's `/security-review` does not,
+since it checks only pending changes. Session diagnosis was first marked as an every-session
+candidate. It became a plugin of its own because it fires only after something went wrong, and an
+every-session description costs every session. `ceh-build-planning` gains a plan review before
+anything is built. `code-review` and `check-build-against-plan` gain an opt-in gate where two fresh
+reviewers must both pass. Neither sees the other or the session, so neither inherits the fixer's
+belief that the fix worked.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-build-from-plan`          | 1.0.0   |
-| `ceh-build-planning`           | 1.0.0   |
+| `ceh-build-planning`           | 1.1.0   |
 | `ceh-business-plan`            | 1.1.1   |
-| `ceh-check-build-against-plan` | 1.0.0   |
+| `ceh-check-build-against-plan` | 1.0.1   |
 | `ceh-codebase-explanation`     | 1.2.1   |
 | `ceh-coding-conduct`           | 2.2.1   |
 | `ceh-every-session`            | 2.3.0   |
-| `ceh-git-workflow`             | 1.2.2   |
+| `ceh-git-workflow`             | 1.2.3   |
 | `ceh-orchestration-lab`        | 1.0.0   |
 | `ceh-python-service`           | 1.1.1   |
 | `ceh-scenario-ideation`        | 1.2.0   |
 | `ceh-scenario-library`         | 1.2.0   |
 | `ceh-scenario-service`         | 1.2.0   |
 | `ceh-scenario-webapp`          | 1.2.0   |
+| `ceh-security-audit`           | 1.0.0   |
+| `ceh-session-diagnosis`        | 1.0.0   |
 | `ceh-testing`                  | 1.3.0   |
 | `ceh-ui-design`                | 1.0.4   |
 | `ceh-usability-audit`          | 1.1.3   |
@@ -100,6 +114,20 @@ and SSE heartbeat traps, which no stack skill owns.
 
 ### Added
 
+- `ceh-session-diagnosis` 1.0.0, a new plugin. `diagnose-session` finds the transcript, dispatches
+  four `transcript-analyst` agents in parallel (instructions, tools, context, claims), re-reads
+  every cited line a conclusion rests on, and classes each root cause as request, guidance,
+  environment, model, or Claude Code, with the file its fix goes to. A copy for sharing is
+  scrubbed, then audited by a fresh subagent for up to three rounds.
+- `ceh-security-audit` 1.0.0, a new plugin. `audit-codebase-security` maps entry points, trust
+  boundaries, assets, and attackers before reading for bugs, traces each entry point through nine
+  categories, quotes both the source and the sink of every finding, and saves the report under
+  `.agents_workspace/` so an unfixed hole is never committed. It runs the dependency check only
+  with consent to the network, never touches a live host, and never copies a secret's value.
+- `ceh-build-planning:review-build-plan`: reviews a plan or spec before anyone builds from it,
+  from a fresh subagent when the same session wrote it, through scope, engineering, design, and
+  developer-experience lenses, with every finding quoting its plan line and a Ready, Revise, or
+  Rethink verdict.
 - `ceh-coding-conduct:find-root-cause`: reproduce the symptom with one command, list 3 to 5
   falsifiable hypotheses, gather evidence one variable at a time, and confirm the cause by a
   prediction before any fix. After two failed fixes it checks the premise every attempt shared.
@@ -167,6 +195,18 @@ and SSE heartbeat traps, which no stack skill owns.
   the first three denials in a session, then one line with the denial's number. Every deny names
   the setting that switches the guard off.
 - `docs/IDEAS.md` lists each section as one table instead of one heading per entry.
+- `docs/IDEAS.md` triage: Shared-block generator, Transcript reflection, Fact-forcing edit gate,
+  Human-steps wizard, Parallel ticket frontier, and Deploy and canary are rejected for now. Sweep on
+  Sonnet and Arena with a hidden rubric wait on `ceh-orchestration-lab`. Generated verify skill
+  and Trigger-by-name eval cases are dropped for now. Verify gate waits on evidence, and Fan-out
+  and long runs needs its scope settled in a follow-up session.
+- `ceh-git-workflow:code-review` gains an opt-in Gate mode: two fresh reviewers on the Panel mode
+  brief, Approve only when both approve, up to three rounds.
+- `ceh-check-build-against-plan:check-build-against-plan` gains step 5, an opt-in gate on fix
+  mode: two fresh reviewers recheck the fix, both must pass, the fixer touches only what they
+  flagged, and the loop stops after three rounds.
+- `ceh-build-planning`'s plan format moves from `write-build-plan`'s `references/` to the plugin's
+  `references/`, now that two of its skills read it.
 - `ceh-git-workflow:code-review` gains step 2: on a diff with more than about 200 changed lines in
   covered files, or on request, it dispatches the installed stack reviewers in parallel and merges
   their findings before the five-`[blocking]` cap.

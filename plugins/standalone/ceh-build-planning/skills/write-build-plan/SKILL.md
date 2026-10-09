@@ -16,7 +16,7 @@ license: Apache-2.0
 # Write a Build Plan
 
 Turn a request into one plan file that an agent can build from without asking again, in the format
-in `${CLAUDE_SKILL_DIR}/references/plan-format.md`. Done means the plan is saved, audited, and
+in `${CLAUDE_PLUGIN_ROOT}/references/plan-format.md`. Done means the plan is saved, audited, and
 summarized under Output.
 
 ## Procedure
@@ -94,5 +94,7 @@ Close the reply with:
 
 ## Hands off to
 
+- For an architectural plan, `ceh-build-planning:review-build-plan` reviews it from a fresh context
+  before anyone builds.
 - When `ceh-build-from-plan` is installed, `ceh-build-from-plan:implement-from-plan` builds the
   plan phase by phase.

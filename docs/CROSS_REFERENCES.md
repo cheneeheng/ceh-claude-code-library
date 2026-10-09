@@ -297,7 +297,8 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 
 ## Build plan format
 
-**Canonical:** `plugins/standalone/ceh-build-planning/skills/write-build-plan/references/plan-format.md` — whole file
+**Canonical:** `plugins/standalone/ceh-build-planning/references/plan-format.md` — whole file,
+shared there by `write-build-plan` and `review-build-plan`
 
 | Copy                                                                                                        | Section    | Diverges |
 | ----------------------------------------------------------------------------------------------------------- | ---------- | -------- |

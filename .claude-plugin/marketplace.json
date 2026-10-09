@@ -29,7 +29,7 @@
     {
       "name": "ceh-git-workflow",
       "source": "./plugins/standalone/ceh-git-workflow",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, code review, and addressing review comments. Stack-agnostic."
     },
     {
@@ -77,8 +77,8 @@
     {
       "name": "ceh-build-planning",
       "source": "./plugins/standalone/ceh-build-planning",
-      "version": "1.0.0",
-      "description": "CEH build planning: decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check."
+      "version": "1.1.0",
+      "description": "CEH build planning: decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check, then review the plan before anyone builds from it."
     },
     {
       "name": "ceh-build-from-plan",
@@ -89,7 +89,7 @@
     {
       "name": "ceh-check-build-against-plan",
       "source": "./plugins/standalone/ceh-check-build-against-plan",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "CEH check build against plan: check whether finished code is what its plan said to build, reporting every gap, deviation, and unplanned extra with quoted evidence, and rerunning each phase's check."
     },
     {
@@ -139,6 +139,18 @@
       "source": "./plugins/standalone/ceh-session-to-skill",
       "version": "1.0.0",
       "description": "CEH session to skill: right after a task is done, turn the steps that worked in this session into a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments."
+    },
+    {
+      "name": "ceh-session-diagnosis",
+      "source": "./plugins/standalone/ceh-session-diagnosis",
+      "version": "1.0.0",
+      "description": "CEH session diagnosis: find why a Claude Code session went wrong from its transcript, with parallel analysts whose every finding cites a transcript line, each root cause routed to a fix, and a scrubbed copy for sharing."
+    },
+    {
+      "name": "ceh-security-audit",
+      "source": "./plugins/standalone/ceh-security-audit",
+      "version": "1.0.0",
+      "description": "CEH security audit: audit a whole codebase, not one diff, by mapping the attack surface and tracing each entry point to its sinks, and report every exploitable finding with the attack it enables, its severity, and a fix."
     },
     {
       "name": "ceh-workflow-runner",

@@ -1,0 +1,9 @@
+{
+  "name": "ceh-session-diagnosis",
+  "version": "1.0.0",
+  "description": "CEH session diagnosis: find why a Claude Code session went wrong from its transcript, with parallel analysts whose every finding cites a transcript line, each root cause routed to a fix, and a scrubbed copy for sharing.",
+  "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
+  "repository": "https://github.com/cheneeheng/ceh-claude-code-library",
+  "license": "Apache-2.0",
+  "keywords": ["agent", "diagnosis", "transcript", "debugging", "retro"]
+}
