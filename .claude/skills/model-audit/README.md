@@ -17,6 +17,7 @@ Paths are relative to `.claude/skills/model-audit/`.
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `scripts/detect.py`              | Stdlib-only, no LLM. Fetches the guide slugs, diffs them against `known-model-guides.json`, lists stale plugins as JSON. |
 | `scripts/audit.py`               | Runs the headless audits in parallel, writes `audits/<date>/`, updates each `tuning.json`, validates.                    |
+| `scripts/context_budget.py`      | Stdlib-only, no LLM. Per plugin: description characters plus what its context-injecting hooks print, per event.          |
 | `assets/config.json`             | `default` model/effort for unpinned audits, `override` pair for pinned tuning and new generations, `jobs`.               |
 | `assets/known-model-guides.json` | Every guide slug seen so far. `detect.py --write` adds new ones.                                                         |
 | `assets/models-in-use.json`      | Optional. Slugs (`opus-5-5`) or family aliases (`opus` = newest opus guide). Other guides never trigger audits.          |
@@ -25,6 +26,7 @@ Paths are relative to `.claude/skills/model-audit/`.
 
 ```bash
 python .claude/skills/model-audit/scripts/detect.py [--write]
+python .claude/skills/model-audit/scripts/context_budget.py   # also /model-audit budget
 python .claude/skills/model-audit/scripts/audit.py [--plugins plugins/standalone/ceh-a ...] [--model M --effort E] \
   [--tune-model M --tune-effort E] [--jobs N] [--apply]
 ```

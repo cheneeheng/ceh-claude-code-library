@@ -21,13 +21,15 @@ implicit mid-turn decisions, sharpen the host skill's description rather than ad
 
 ## Agents
 
-| Agent                       | When to use                                                 |
-| --------------------------- | ----------------------------------------------------------- |
-| `pytest-unit-tester`        | Write isolated unit tests for a function or class           |
-| `pytest-integration-tester` | Write tests for module boundaries and DB interactions       |
-| `pytest-system-tester`      | Write full E2E scenario tests (explicit request only, slow) |
+| Agent                       | When to use                                                                                                                                                                                      |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pytest-unit-tester`        | Write isolated unit tests for a function or class                                                                                                                                                |
+| `pytest-integration-tester` | Write tests for module boundaries and DB interactions                                                                                                                                            |
+| `pytest-system-tester`      | Write full E2E scenario tests (explicit request only, slow)                                                                                                                                      |
+| `python-service-reviewer`   | Review the Python service files of a large diff in parallel, dispatched by `ceh-git-workflow:code-review`. Read-only. It's working if every finding quotes its `path:line` from the head version |
 
-All three preload `ceh-python-service:write-pytest-service-tests` and `ceh-testing:design-test-cases`.
+The three testers preload `ceh-python-service:write-pytest-service-tests` and `ceh-testing:design-test-cases`.
+`python-service-reviewer` preloads nothing: it loads only the skills whose files the diff touches.
 
 ## Scripts
 

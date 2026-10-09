@@ -5,7 +5,7 @@ description: >-
   over as a draft PR. Runs the detector, a headless /doctor prompt-audit per stale plugin, the
   pinned-agent tuning passes, strict validation, then commits to audit/<date> and opens the PR.
   User-invoked only, because every audit is a billed model call.
-argument-hint: "[--plugins plugins/standalone/ceh-a ...] [--model M --effort E] [--tune-model M --tune-effort E] [--apply]"
+argument-hint: "[budget] | [--plugins plugins/standalone/ceh-a ...] [--model M --effort E] [--tune-model M --tune-effort E] [--apply]"
 disable-model-invocation: true
 user-invocable: true
 license: Apache-2.0
@@ -20,6 +20,12 @@ Arguments: `$ARGUMENTS`. Pass them through to `audit.py` unchanged. `--plugins` 
 plugins even when they are not stale, each as its path from the repo root, and `--model`/`--effort` override the default audit pair in
 `${CLAUDE_SKILL_DIR}/assets/config.json`. What each argument does is in the README's Arguments
 section.
+
+**Context budget only.** When `$ARGUMENTS` is `budget`, run
+`python "${CLAUDE_SKILL_DIR}/scripts/context_budget.py"`, reply with its table and the three
+plugins that cost the most, and stop: no branch, no model call, no PR. The table shows what each
+plugin's descriptions and context-injecting hooks add to every session, every prompt, and every
+subagent.
 
 ## 1. Branch
 

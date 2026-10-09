@@ -25,7 +25,17 @@ and the verdict, so the author knows exactly what blocks the merge.
 1. Check scope drift before judging the code. Compare what the PR says it does (title, body,
    linked issue) with what the diff changes. A file or behavior the description does not account
    for is the first comment: `[blocking]` when it changes behavior, `[question]` otherwise.
-2. Review in priority order:
+2. Fan out to stack reviewers when the diff is large. If more than about 200 changed lines fall in
+   files a stack reviewer covers, or the user asks for a deep review, and that reviewer agent is
+   installed, write the diff with `git diff <base>...<head> > <scratch>/review.diff` and dispatch
+   each matching agent in the background, in parallel, with the diff path, the PR's stated intent,
+   and both commits: `ceh-python-service:python-service-reviewer` for Python service code,
+   `ceh-web-frontend:web-frontend-reviewer` for frontend code. Review the rest yourself meanwhile.
+   When they return, merge: one comment per problem at the same `path:line`, at the higher
+   severity, and re-read every quoted line against the file before it becomes a comment. The
+   five-`[blocking]` cap applies after the merge. Smaller diffs skip this step, since the fan-out
+   costs more than it finds.
+3. Review in priority order:
    1. **Correctness** — does it do what it claims? Are edge cases handled? Are errors swallowed:
       an empty `catch`, a log-and-continue, a fallback default that hides a failure?
    2. **Security** — injection risks, secrets exposure, input validation gaps
@@ -34,14 +44,14 @@ and the verdict, so the author knows exactly what blocks the merge.
       now describe code that no longer does that? Is a type weaker than the data: `any`, a bare
       `dict` or `str` where a domain type exists, optional where the value is always present?
    5. **Style** — only flag if linting tools don't catch it
-3. Leave a **summary** comment — one or two sentences: what the PR does and your overall read.
+4. Leave a **summary** comment — one or two sentences: what the PR does and your overall read.
    Lead with anything that blocks. Close it with a **Dismissed** list: each finding you considered
    and dropped, one line with the reason, so the author can overrule the call.
-4. Leave **line comments** — each prefixed `[blocking]` / `[advisory]` / `[question]`, anchored to
+5. Leave **line comments** — each prefixed `[blocking]` / `[advisory]` / `[question]`, anchored to
    the exact line, stating the problem and (for blocking) what would resolve it. Leave at most
    five `[blocking]` comments. With more, leave the five that matter most and say in the summary
    that the PR needs rework before the rest are worth reviewing.
-5. End with an explicit verdict (see Output).
+6. End with an explicit verdict (see Output).
 
 ### Comment prefixes
 
