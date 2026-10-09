@@ -56,11 +56,13 @@ implementing" from an instruction the model can forget into one it cannot skip.
 Files outside a git work tree pass, as do detached and unborn `HEAD`s. The guard covers the file
 tools only: a `Bash` write (`sed -i`, `>`) on the default branch still goes through, so it is a
 nudge with teeth rather than a sandbox. It fails open: unparseable input, a missing `git`, or a
-crashed interpreter allows the edit.
+crashed interpreter allows the edit. After three full denials in a session it sends one line with
+the denial's number, because repeating an identical block pushes the model into loops.
 
-| Variable           | Default          | Effect                                                                                |
-| ------------------ | ---------------- | ------------------------------------------------------------------------------------- |
-| `CEH_BRANCH_GUARD` | unset (guard on) | `off` allows edits on the default branch, for when the user asked to edit it in place |
+| Variable             | Default              | Effect                                                                                |
+| -------------------- | -------------------- | ------------------------------------------------------------------------------------- |
+| `CEH_BRANCH_GUARD`   | unset (guard on)     | `off` allows edits on the default branch, for when the user asked to edit it in place |
+| `CEH_DISABLED_HOOKS` | unset (all hooks on) | Comma-separated hook script names to skip; `branch-guard` switches this guard off     |
 
 ## Scripts
 

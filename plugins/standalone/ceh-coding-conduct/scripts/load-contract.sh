@@ -7,6 +7,9 @@
 # inside a subagent. An agent with a restricted tool list has no Skill tool, so it is pointed
 # at the skill file instead.
 
+# Kill switch: CEH_DISABLED_HOOKS lists hook script names to skip.
+case ",${CEH_DISABLED_HOOKS// /}," in *",$(basename "$0" .sh),"*) exit 0 ;; esac
+
 EVENT=${1:-SessionStart}
 
 read -r -d '' CONTEXT <<'EOF'

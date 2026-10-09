@@ -11,14 +11,14 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.2.0",
+      "version": "2.2.1",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, and context economy via delegated bulk reads."
     },
     {
       "name": "ceh-coding-conduct",
       "source": "./plugins/standalone/ceh-coding-conduct",
-      "version": "2.0.5",
-      "description": "CEH coding conduct: how an agent behaves while it codes — the behavior contract and five-step workflow, write-less-code minimalism, and retroactive refactoring of a branch or a whole repo."
+      "version": "2.1.0",
+      "description": "CEH coding conduct: how an agent behaves while it codes — the behavior contract and five-step workflow, write-less-code minimalism, finding a bug's root cause before fixing it, and retroactive refactoring of a branch or a whole repo."
     },
     {
       "name": "ceh-codebase-explanation",
@@ -29,14 +29,14 @@
     {
       "name": "ceh-git-workflow",
       "source": "./plugins/standalone/ceh-git-workflow",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, code review, and addressing review comments. Stack-agnostic."
     },
     {
       "name": "ceh-testing",
       "source": "./plugins/standalone/ceh-testing",
-      "version": "1.0.6",
-      "description": "CEH testing techniques: stack-agnostic test design and verification moments — reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, and close the risk gaps functional tests structurally miss."
+      "version": "1.1.0",
+      "description": "CEH testing techniques: stack-agnostic test design and verification moments — write the failing test before new code, reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, and close the risk gaps functional tests structurally miss."
     },
     {
       "name": "ceh-python-service",

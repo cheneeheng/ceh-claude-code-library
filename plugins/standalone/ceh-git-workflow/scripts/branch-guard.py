@@ -13,6 +13,8 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
+from pathlib import Path
 
 
 def git(cwd, *args):
@@ -22,11 +24,35 @@ def git(cwd, *args):
     return out.stdout.strip() if out.returncode == 0 else ""
 
 
+def denial_number(payload):
+    """This hook's denial count in this session, 1 on the first.
+
+    Identical deny blocks push the model into repetition loops, so after the
+    third the caller sends one line carrying this ordinal instead.
+    """
+    session = payload.get("session_id") or "default"
+    state = Path(tempfile.gettempdir()) / f"ceh-denials-{Path(__file__).stem}-{session}"
+    try:
+        n = int(state.read_text(encoding="utf-8")) + 1
+    except (OSError, ValueError):
+        n = 1
+    try:
+        state.write_text(str(n), encoding="utf-8")
+    except OSError:
+        pass
+    return n
+
+
 def main():
+    # Kill switch: CEH_DISABLED_HOOKS lists hook script names to skip.
+    disabled = os.environ.get("CEH_DISABLED_HOOKS", "").replace(" ", "").split(",")
+    if Path(__file__).stem in disabled:
+        return
     if os.environ.get("CEH_BRANCH_GUARD", "").strip().lower() == "off":
         return
 
-    tool_input = json.load(sys.stdin).get("tool_input") or {}
+    payload = json.load(sys.stdin)
+    tool_input = payload.get("tool_input") or {}
     path = tool_input.get("file_path") or tool_input.get("notebook_path")
     if not path:
         return
@@ -48,13 +74,20 @@ def main():
     if branch not in (default, "main", "master"):
         return
 
-    reason = (
-        f"On the default branch ({branch}). Create a feature branch first "
-        "(ceh-git-workflow:branch: feat/ fix/ chore/ docs/ test/ refactor/), then retry "
-        "this edit. Uncommitted work carries over via 'git checkout -b <name>'. If the "
-        f"user explicitly asked to edit {branch} in place, tell them to set "
-        "CEH_BRANCH_GUARD=off."
-    )
+    n = denial_number(payload)
+    if n <= 3:
+        reason = (
+            f"On the default branch ({branch}). Create a feature branch first "
+            "(ceh-git-workflow:branch: feat/ fix/ chore/ docs/ test/ refactor/), then retry "
+            "this edit. Uncommitted work carries over via 'git checkout -b <name>'. If the "
+            f"user explicitly asked to edit {branch} in place, tell them to set "
+            "CEH_BRANCH_GUARD=off."
+        )
+    else:
+        reason = (
+            f"Denied again (denial {n} this session): still on {branch}. Branch first, or "
+            "the user sets CEH_BRANCH_GUARD=off."
+        )
     print(
         json.dumps(
             {

@@ -43,6 +43,10 @@ work on its own bugs would cost more than it saves. One subsection per guard bel
 | [Usage-limit guard](#usage-limit-guard) | `PostToolUse` (every tool)    | `usage-limit-watch.py`                          | on      |
 | [Bulk-read guards](#bulk-read-guards)   | `PreToolUse` (`Read`, `Bash`) | `bulk-read-guard.py`, `bulk-read-bash-guard.py` | opt-in  |
 
+To switch one hook off without uninstalling the plugin, list its script name in
+`CEH_DISABLED_HOOKS` (comma-separated, no extension): `usage-limit-watch`, `bulk-read-guard`,
+`bulk-read-bash-guard`.
+
 ### Usage-limit guard
 
 **Every tool call** — a `PostToolUse` hook (`scripts/usage-limit-watch.py`) samples the account-wide
@@ -99,6 +103,8 @@ Targeted reads always pass: `Read` with `offset`/`limit`, piped or redirected ba
 that window against the real file rather than reading the bare integer, so `tail -n +1` (an offset
 — it prints the whole file) is blocked while `tail -n +400` on a 500-line file is not, and `-c`
 is measured in bytes. Several files in one command are summed: `cat a b c` costs their total.
+Each guard sends its full deny text for its first three denials in a session, then one line with
+the denial's number, because repeating an identical block pushes the model into loops.
 Both guards need `python3` on PATH
 (stdlib only) and fail open — unparseable input, a binary file, a missing path, or a crashed
 interpreter allows the read through, because a guard that blocked work on its own bugs would cost
