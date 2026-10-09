@@ -11,7 +11,7 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.2.1",
+      "version": "2.3.0",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, and context economy via delegated bulk reads."
     },
     {
@@ -23,25 +23,25 @@
     {
       "name": "ceh-codebase-explanation",
       "source": "./plugins/standalone/ceh-codebase-explanation",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, the living architecture document, and why code is the way it is, traced through git history."
     },
     {
       "name": "ceh-git-workflow",
       "source": "./plugins/standalone/ceh-git-workflow",
-      "version": "1.1.1",
+      "version": "1.2.0",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, code review, and addressing review comments. Stack-agnostic."
     },
     {
       "name": "ceh-testing",
       "source": "./plugins/standalone/ceh-testing",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "description": "CEH testing techniques: stack-agnostic test design and verification moments — write the failing test before new code, reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, and close the risk gaps functional tests structurally miss."
     },
     {
       "name": "ceh-python-service",
       "source": "./plugins/standalone/ceh-python-service",
-      "version": "1.0.2",
+      "version": "1.1.0",
       "description": "CEH Python service: FastAPI, asyncpg, PostgreSQL schema, Alembic migrations, uv, and testing (unit/integration/system) standards for web services."
     },
     {
@@ -53,13 +53,13 @@
     {
       "name": "ceh-web-frontend",
       "source": "./plugins/standalone/ceh-web-frontend",
-      "version": "1.1.4",
+      "version": "1.2.0",
       "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, accessibility, Cytoscape.js graph visualization, and testing agents (unit/integration/system). UI visual design comes from the ceh-ui-design dependency."
     },
     {
       "name": "ceh-ui-design",
       "source": "./plugins/standalone/ceh-ui-design",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "description": "CEH UI design: framework-agnostic visual design for any UI or HTML page — layout archetypes, hierarchy, navigation placement (including in-page contents), empty/loading/error states, density, finishing recipes, and two bundled token-driven themes (Meridian, Tidewater)."
     },
     {

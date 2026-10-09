@@ -296,6 +296,30 @@ action may lift with a deeper shadow or rotate its glyph on hover; affordances (
 slide in on hover/focus; state changes transition color rather than snapping. Never animate more
 than one property group per element, and never decorate static content with motion.
 
+#### Motion
+
+Motion explains a change: where an element came from, where it went, or that the app heard the
+input. Motion that explains nothing is decoration, and it gets cut.
+
+- **Pick the duration by distance and size**, from the theme's tokens only: `--dur-fast` for
+  hover, press, and color changes; `--dur-base` for an element entering, expanding, or a menu
+  opening; `--dur-slow` for an overlay, drawer, or route change. Nothing in product UI runs longer.
+- **Pick the easing by direction.** Entering or settling uses `--ease-out`, so it starts fast and
+  lands soft. Moving between two on-screen positions uses `--ease-standard`. An exit runs at the
+  next shorter duration than its enter, because the user has already moved on.
+- **Animate `transform` and `opacity` only.** Animating `width`, `height`, `top`, or `margin`
+  reflows the page on every frame and jank shows first on slow hardware. Expand a panel with a
+  `transform` or a `grid-template-rows` transition, not `height: auto` hacks.
+- **Keep the layout still.** Content that appears pushes nothing that the user is reading or about
+  to click: reserve its space or overlay it.
+- **Show progress, not suspense.** A skeleton or `.spinner` after about 300 ms of waiting; no
+  entrance animation on page load, no staggered list reveals, no looping motion outside a
+  loading or live state (`.dot-live`).
+- **Reduced motion covers JavaScript too.** The template's `prefers-reduced-motion` rule stops CSS
+  transitions and animations only. Motion driven from script (the Web Animations API, a motion
+  library, a scroll handler) checks `matchMedia('(prefers-reduced-motion: reduce)')` itself and
+  swaps the movement for an instant change or a fade.
+
 ### Anti-patterns — reject on sight
 
 Structure tells (a design pass never happened):

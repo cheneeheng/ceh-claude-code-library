@@ -39,6 +39,14 @@ another feature branch. Delete branches after merge.
 
    Do this before opening the PR and again if `main` moves ahead while the PR is in review.
 
+3. For a long run that edits many files (a multi-task plan, an autonomous workflow) while the user
+   keeps working in the same checkout, offer an isolated worktree before starting. Prefer Claude
+   Code's own worktree (the `EnterWorktree` tool, or `claude --worktree <name>`) over a raw
+   `git worktree add`, because Claude Code tracks it and cleans it up on exit. The worktree still
+   gets a `<type>/<short-description>` branch. A Claude Code worktree branches from the default
+   branch, not from the current `HEAD`, unless `worktree.baseRef` is `"head"` in `settings.json`,
+   so check its base before building on unmerged work.
+
 ### Naming
 
 ```

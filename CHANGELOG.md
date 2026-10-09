@@ -28,15 +28,30 @@ briefs, every worker report, the token usage by model, and the user's verdict. R
 pattern can later become fixtures for a controlled rerun. The archived `ceh-orchestration` served
 as background only. Nothing was copied from it.
 
+Ten more ideas from `docs/IDEAS.md` are built, all from its Build section. Three new
+`ceh-every-session` skills work on any kind of file, not only code: a research note in which
+every claim is cited, a plan stress-test that asks in rounds with a recommended answer each time,
+and a fix for a mistake that keeps coming back, placed at the strongest level that would have
+caught it. The last one merges the Session retro and `/correct` ladder ideas. It moved from
+`ceh-coding-conduct` to `ceh-every-session` because the same ladder holds for notes, plans, and
+strategy documents. `code-review` can now hand a large diff to two new read-only stack reviewers
+that run in parallel, one in `ceh-python-service` and one in `ceh-web-frontend`, so the
+cross-cutting git plugin carries no stack-specific rules. Retros, performance measurement, a
+committed glossary, worktree isolation, motion rules, and a context budget report fill the rest.
+
 ### Plugin versions
 
-| Plugin                  | Version |
-| ----------------------- | ------- |
-| `ceh-coding-conduct`    | 2.1.0   |
-| `ceh-every-session`     | 2.2.1   |
-| `ceh-git-workflow`      | 1.1.1   |
-| `ceh-orchestration-lab` | 1.0.0   |
-| `ceh-testing`           | 1.1.0   |
+| Plugin                     | Version |
+| -------------------------- | ------- |
+| `ceh-codebase-explanation` | 1.2.0   |
+| `ceh-coding-conduct`       | 2.1.0   |
+| `ceh-every-session`        | 2.3.0   |
+| `ceh-git-workflow`         | 1.2.0   |
+| `ceh-orchestration-lab`    | 1.0.0   |
+| `ceh-python-service`       | 1.1.0   |
+| `ceh-testing`              | 1.2.0   |
+| `ceh-ui-design`            | 1.0.3   |
+| `ceh-web-frontend`         | 1.2.0   |
 
 ### Added
 
@@ -59,6 +74,27 @@ as background only. Nothing was copied from it.
     from the run's start.
   - A shared run-log procedure in `references/run-log.md`, which writes
     `.agents_workspace/orchestration-lab/<stamp>_<session-id>/` per run plus a `runs.md` index.
+- `ceh-every-session:write-research-note`: a background agent answers one question from primary
+  sources into `.agents_workspace/research/`, every claim cited, and the session re-fetches the
+  citations the answer rests on.
+- `ceh-every-session:stress-test-plan`: questions a plan in rounds of at most four, only once a
+  question's prerequisites are settled, each with a recommended answer. Facts come from a
+  subagent, and the outcome is written back as `## Decisions` and `## Open`.
+- `ceh-every-session:prevent-repeat-mistake`: names a repeated mistake from quoted evidence, picks
+  the strongest fix (remove the cause, a Claude Code setting, a check, written guidance last),
+  proves it fails on the real mistake, and only drafts changes to `CLAUDE.md`, settings, memory,
+  or hooks.
+- `ceh-git-workflow:write-engineering-retro`: what shipped and how work flowed over a period, from
+  git history and `gh`, with at most three changes and no per-person counts.
+- `ceh-testing:measure-performance`: vet a measurement against its noise, baseline, profile, and
+  keep one change per measurement and one commit per win.
+- `ceh-codebase-explanation:maintain-glossary`: settles one word and one definition per concept
+  in a committed `GLOSSARY.md` and reports files still using a rejected alias.
+- `ceh-python-service:python-service-reviewer` and `ceh-web-frontend:web-frontend-reviewer`:
+  read-only reviewer agents that load only the plugin skills whose files the diff touches.
+- `model-audit budget` (repo-local): `scripts/context_budget.py` reports per plugin what its
+  descriptions and context-injecting hooks add to each session, prompt, and subagent, with no
+  model call.
 
 ### Changed
 
@@ -66,6 +102,14 @@ as background only. Nothing was copied from it.
   the first three denials in a session, then one line with the denial's number. Every deny names
   the setting that switches the guard off.
 - `docs/IDEAS.md` lists each section as one table instead of one heading per entry.
+- `ceh-git-workflow:code-review` gains step 2: on a diff with more than about 200 changed lines in
+  covered files, or on request, it dispatches the installed stack reviewers in parallel and merges
+  their findings before the five-`[blocking]` cap.
+- `ceh-git-workflow:branch` offers a Claude Code worktree for a long run while the user keeps
+  working in the same checkout.
+- `ceh-ui-design:design-ui` gains a Motion section: durations and easing by token, `transform`
+  and `opacity` only, no layout shift, and reduced motion honoured by script-driven animation too.
+- `validate.py`: `MAX_TOTAL_DESCRIPTION_LEN` rises by the eight new descriptions only.
 
 ---
 

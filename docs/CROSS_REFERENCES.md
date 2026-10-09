@@ -453,10 +453,12 @@ in both files together:
 
 **Canonical:** `plugins/standalone/ceh-git-workflow/skills/code-review/SKILL.md` — § Rules
 
-| Copy                                                                           | Section  | Diverges                                                                                              |
-| ------------------------------------------------------------------------------ | -------- | ----------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | § Rules  | a Gap quotes the spec line it is missing; an unquoted finding goes under the items NOT fixed, unfixed |
-| `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`              | § Output | an unquoted finding goes below the findings list                                                      |
+| Copy                                                                           | Section      | Diverges                                                                                              |
+| ------------------------------------------------------------------------------ | ------------ | ----------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | § Rules      | a Gap quotes the spec line it is missing; an unquoted finding goes under the items NOT fixed, unfixed |
+| `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`              | § Output     | an unquoted finding goes below the findings list                                                      |
+| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`      | § Hard rules | quotes the line from the head version; an unquoted finding goes under Dismissed                       |
+| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`          | § Hard rules | same as `python-service-reviewer`                                                                     |
 
 **Shared:** every finding quotes the code it is about, as `path:line` plus the line itself, and a
 finding you cannot anchor to quoted code is reported as unverified, outside the findings.
@@ -465,9 +467,11 @@ finding you cannot anchor to quoted code is reported as unverified, outside the 
 
 **Canonical:** `plugins/standalone/ceh-git-workflow/skills/code-review/SKILL.md` — § Rules + § Output (Cannot verify)
 
-| Copy                                                                           | Section | Diverges                                                                                 |
-| ------------------------------------------------------------------------------ | ------- | ---------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | § Rules | example brief names a plan section; Cannot verify is a per-section status, not a verdict |
+| Copy                                                                           | Section                 | Diverges                                                                                   |
+| ------------------------------------------------------------------------------ | ----------------------- | ------------------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | § Rules                 | example brief names a plan section; Cannot verify is a per-section status, not a verdict   |
+| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`      | § Hard rules + § Output | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict |
+| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`          | § Hard rules + § Output | same as `python-service-reviewer`                                                          |
 
 **Shared:** a brief that says "don't flag X" or "minor issues only" narrows where to look, never
 how severe a finding is; every finding at its real severity; and a **Cannot verify** outcome that
