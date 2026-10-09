@@ -276,8 +276,11 @@ rule.
 
 **Shared:** the `src/lib/api/client.ts` rule (all `fetch` calls go through it), the `apiClient`
 method shape (`response.ok` check, then `throw new ApiRequestError(response.status, err.error)`), the
-`ApiRequestError` class, and the three error rules: never expose internal codes or stack traces, map
-`error.code` to friendly messages in one central map, and always surface the `correlation_id`.
+`ApiRequestError` class, the three error rules: never expose internal codes or stack traces, map
+`error.code` to friendly messages in one central map, and always surface the `correlation_id`, and
+the three client traps under the client code: `credentials: "include"` for cross-origin cookie
+auth, one shared in-flight token refresh, and `fetch` with a `ReadableStream` reader instead of
+`EventSource` for a POST or authenticated stream.
 
 ## Layer boundaries (route → service → db)
 
@@ -292,60 +295,22 @@ method shape (`response.ok` check, then `throw new ApiRequestError(response.stat
 mutation path. In agent-skills `ceh-scaffolding:scaffold-python-service` restates the rules next to
 the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` is ever migrated.
 
-## Patch ITER frontmatter
+## Build plan format
 
-**Canonical:** `plugins/standalone/ceh-plan-build-review/references/plan-schema.md` — § Frontmatter (the `patch` field rules)
+**Canonical:** `plugins/standalone/ceh-build-planning/skills/write-build-plan/references/plan-format.md` — whole file
 
-| Copy                                                                                  | Section                              | Diverges                                                           |
-| ------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------ |
-| `plugins/standalone/ceh-plan-build-review/skills/apply-small-fix-to-version/SKILL.md` | § Procedure, 3. Write the patch ITER | the patch ITER frontmatter block only, with per-field placeholders |
+| Copy                                                                                                        | Section    | Diverges |
+| ----------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-format.md`               | whole file | none     |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-format.md` | whole file | none     |
 
-**Shared:** the ITER frontmatter keys with `patch: true`, no `mvp`, `depends_on` the terminator or the
-prior patch, and `sections_changed` within §04/§05. The rest of the plan schema (file naming, version
-families, SKELETON and ITER frontmatter, terminator, pointers, resolution order) lives once in
-`plan-schema.md` at the plugin root, read through `${CLAUDE_PLUGIN_ROOT}` by all five skills.
-`ceh-business-plan:find-product-market-fit` reads plan files too, but carries no copy: it inlines
-the three rules it uses (the file glob, the backward `depends_on` walk, and pointers).
-
-## Section contents (§01-§06 specs and the schema's Sections table)
-
-**Canonical:** `plugins/standalone/ceh-plan-build-review/references/section-specs.md` — all sections
-
-| Copy                                                                 | Section             | Diverges                                                                   |
-| -------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-plan-build-review/references/plan-schema.md` | § Sections, a table | condensed into table cells for the three consumer skills that read only it |
-
-**Shared:** what each of §01-§06 holds at skeleton and iteration level, including the
-`implementation-gotchas.md` note on §04 and §05 (the specs tell the planners to apply it, the table
-tells the build skills to). A change to one goes to the other.
-
-## §02 Architecture diagram requirement (Mermaid, iterations visualize the change)
-
-**Canonical:** `plugins/standalone/ceh-plan-build-review/references/section-specs.md` — § §02 · Architecture
-
-| Copy                                                                           | Section                                           | Diverges                         |
-| ------------------------------------------------------------------------------ | ------------------------------------------------- | -------------------------------- |
-| `plugins/standalone/ceh-plan-build-review/references/plan-schema.md`           | § Sections, §02 row                               | condensed table-cell form        |
-| `plugins/standalone/ceh-plan-build-review/references/audit-checklist.md`       | Architecture (§02)                                | one checklist bullet             |
-| `plugins/standalone/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | § Procedure, 2. Audit section by section, §02 row | post-implementation review check |
-
-**Shared:** the component diagram is Mermaid, not ASCII art. At skeleton level it shows what exists
-and how the pieces connect. At iteration level it also visualizes what changed, with new or
-modified pieces marked distinctly.
-
-## Planner "Plan families and versions" prose
-
-**Canonical:** `plugins/standalone/ceh-plan-build-review/skills/plan-fullstack-app/SKILL.md` — § Plan families and versions
-
-| Copy                                                                 | Section                                                          | Diverges                                                                        |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-plan-build-review/references/plan-schema.md` | § File Naming and Version Variants, § Cross-version dependencies | reader-side wording: the matching rules for tags, no emit rules for the planner |
-
-**Shared:** the family and `depends_on` rules: the default family is untagged, a new major version
-is a fresh family with the `NN` counter restarting at 01, a version with its own skeleton is
-self-contained, an iterations-only version depends on the prior family's terminal artifacts, and
-`depends_on` names artifacts by stem and points only backward. A change goes to the planner skill
-and to `plan-schema.md`.
+**Shared:** the whole plan format, byte for byte: the `docs/plans/<slug>.md` location, the
+frontmatter and its four statuses, the Goal, Scope, Design, Phases, and Open sections, the phase
+rules (a runnable Check, `todo` / `unplanned` / `done` with evidence), and the rules for changing
+a plan. Each of the three plugins carries a copy so it works installed alone. `diff` the three
+files after an edit: they must stay identical. `ceh-business-plan:find-product-market-fit` reads
+plans too, but carries no copy: it reads only the plans folder and the Goal, Scope, and Design
+sections.
 
 ## Business-plan "No human to answer" clause
 
@@ -453,12 +418,12 @@ in both files together:
 
 **Canonical:** `plugins/standalone/ceh-git-workflow/skills/code-review/SKILL.md` — § Rules
 
-| Copy                                                                           | Section      | Diverges                                                                                              |
-| ------------------------------------------------------------------------------ | ------------ | ----------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | § Rules      | a Gap quotes the spec line it is missing; an unquoted finding goes under the items NOT fixed, unfixed |
-| `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`              | § Output     | an unquoted finding goes below the findings list                                                      |
-| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`      | § Hard rules | quotes the line from the head version; an unquoted finding goes under Dismissed                       |
-| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`          | § Hard rules | same as `python-service-reviewer`                                                                     |
+| Copy                                                                                       | Section      | Diverges                                                                            |
+| ------------------------------------------------------------------------------------------ | ------------ | ----------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules      | a Gap quotes the plan line it is missing; an unquoted finding goes under Unverified |
+| `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`                          | § Output     | an unquoted finding goes below the findings list                                    |
+| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`                  | § Hard rules | quotes the line from the head version; an unquoted finding goes under Dismissed     |
+| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules | same as `python-service-reviewer`                                                   |
 
 **Shared:** every finding quotes the code it is about, as `path:line` plus the line itself, and a
 finding you cannot anchor to quoted code is reported as unverified, outside the findings.
@@ -467,11 +432,11 @@ finding you cannot anchor to quoted code is reported as unverified, outside the 
 
 **Canonical:** `plugins/standalone/ceh-git-workflow/skills/code-review/SKILL.md` — § Rules + § Output (Cannot verify)
 
-| Copy                                                                           | Section                 | Diverges                                                                                   |
-| ------------------------------------------------------------------------------ | ----------------------- | ------------------------------------------------------------------------------------------ |
-| `plugins/standalone/ceh-plan-build-review/skills/review-against-plan/SKILL.md` | § Rules                 | example brief names a plan section; Cannot verify is a per-section status, not a verdict   |
-| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`      | § Hard rules + § Output | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict |
-| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`          | § Hard rules + § Output | same as `python-service-reviewer`                                                          |
+| Copy                                                                                       | Section                      | Diverges                                                                                   |
+| ------------------------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules + § Procedure step 3 | example brief names a part of the app; Cannot verify is a per-item status, not a verdict   |
+| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`                  | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict |
+| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules + § Output      | same as `python-service-reviewer`                                                          |
 
 **Shared:** a brief that says "don't flag X" or "minor issues only" narrows where to look, never
 how severe a finding is; every finding at its real severity; and a **Cannot verify** outcome that

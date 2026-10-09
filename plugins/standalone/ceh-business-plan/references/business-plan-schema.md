@@ -18,13 +18,12 @@ created: YYYY-MM-DD
 updated: YYYY-MM-DD
 product: <one-line product name>
 stage: <idea | prototype | launched | revenue>
-derived_from: [] # plan stems this was built on, e.g. [SKELETON, ITER_03]; [] if none
+derived_from: [] # build plans this was built on, e.g. [docs/plans/mvp.md]; [] if none
 pmf_gate: 0/8 # criteria met out of 8 (see PMF Readiness Gate below)
 ---
 ```
 
-`derived_from` names plan artifacts by **stem** (filename without `.md`), matching the
-`plan-build-review` convention (`SKELETON`, `ITER_NN`, version-tagged variants like `SKELETON_v2`).
+`derived_from` names `ceh-build-planning` plans by their repo-relative path.
 
 ## Sections
 
@@ -125,7 +124,7 @@ created: 2026-03-02
 updated: 2026-03-09
 product: Ledgerline
 stage: idea
-derived_from: [SKELETON, ITER_02]
+derived_from: [docs/plans/mvp.md]
 pmf_gate: 5/8
 ---
 
@@ -149,7 +148,7 @@ The month-end match done in ten minutes instead of a day [hypothesis-to-test]
 
 ## §05 Solution / Product
 
-Upload the statement, get the mismatches. Technical detail: see SKELETON.
+Upload the statement, get the mismatches. Technical detail: see `docs/plans/mvp.md`.
 
 ## §06 Alternatives & Competition
 

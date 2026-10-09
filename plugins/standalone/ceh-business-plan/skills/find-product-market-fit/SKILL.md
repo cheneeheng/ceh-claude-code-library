@@ -47,13 +47,11 @@ Each loop closes one gap. Never run the interview as a fixed questionnaire — t
 
 Before any question, gather everything that already constrains the plan.
 
-1. **App plans in the repo** — glob for the `plan-build-review` artifacts:
-   `**/*SKELETON*.md`, `**/*ITER_*.md` (a version tag such as `v2` may sit on either side of the
-   name). If found, read them. They carry §01 Concept (what it does, who it's for, the key
-   flow), §02 Architecture, §03 Tech Stack — your product, target-user hint, and solution detail
-   are already there. Start from the highest-numbered `ITER` and follow its `depends_on`
-   frontmatter backward to the `SKELETON`. A section that only says "See SKELETON §02" is a
-   pointer: read the artifact it names, not the pointer. Record their stems in `derived_from`.
+1. **Build plans in the repo** — the `ceh-build-planning` plans in `docs/plans/*.md` (or the
+   plans folder the repo's `CLAUDE.md` names). If found, read them. Their Goal (what it does,
+   who it's for, the key flow), Scope, and Design carry your product, target-user hint, and
+   solution detail. A plan whose Goal points to a `BUSINESS_PLAN.md` was written from this plan:
+   read it for its Scope and Design only. Record their paths in `derived_from`.
 2. **Anything the user provided** — a PRD, pitch deck, spec, README, landing page, a pasted
    description. Read it directly. A GitHub URL: fetch the README.
 3. **Other plan-shaped files** — `PRD.md`, `BRIEF.md`, `docs/` product notes. Use them as input,
@@ -166,9 +164,9 @@ satisfied:
 - Flip frontmatter `status: validated`, set `pmf_gate: 8/8`, stamp `updated`.
 - Give a one-paragraph verdict: the sharpest version of who pays, for what, why you, and the one
   experiment that most de-risks the whole thing next.
-- Point onward: if the validation surfaced product changes, the app plan
-  (`ceh-plan-build-review`) should absorb them; the §13 milestones become the build/validation
-  backlog.
+- Point onward: if the validation surfaced product changes, the build plan
+  (`ceh-build-planning`) should absorb them in a new plan; the §13 milestones become the
+  build/validation backlog.
 - Name the plan's softest remaining area (edge, numbers, first customers, risks, or the next 90
   days). The gate proves a fit exists, not that the business is sound, and
   `ceh-business-plan:develop-business-plan` routes that area to the specialist that owns it.

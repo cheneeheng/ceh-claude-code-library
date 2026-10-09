@@ -140,6 +140,14 @@ export const apiClient = {
 };
 ```
 
+- Cookie auth against an API on another origin needs `credentials: "include"` on every request
+  in the client. Without it the browser drops the cookie and every call fails auth.
+- When a 401 triggers a token refresh, concurrent 401s share one in-flight refresh promise. Each
+  refreshing on its own makes the second refresh fail on the already rotated token, which logs
+  the user out.
+- A streaming endpoint that needs POST or an auth header is read with `fetch` and a
+  `ReadableStream` reader, because `EventSource` sends only GET and no custom headers.
+
 ### Environment variables
 
 ```ts

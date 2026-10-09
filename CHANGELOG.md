@@ -59,21 +59,44 @@ planner and the builder too. The lifecycle table names its three replacements, o
 says a plugin covers one stage. Until the split lands, the gap is listed under "Where the repo does
 not match yet".
 
+The split itself follows. `ceh-plan-build-review` is archived, and three plugins replace it, one
+per stage. Each works installed alone, so a user who enters at one stage installs only that stage.
+`ceh-build-planning:write-build-plan` plans a new app or one feature in an existing codebase, which
+the old app-only planner could not. `ceh-build-from-plan:implement-from-plan` now proves every
+phase: it writes the failing test first, runs the phase's own check, and records the evidence in
+the plan. Before, it ended with "items the user should verify manually".
+`ceh-check-build-against-plan:check-build-against-plan` is report-only by default and also flags
+built code the plan left out, which a test suite cannot see. The three share one short plan format,
+committed under `docs/plans/`, in place of the `SKELETON` / `ITER_NN` families with their version
+tags, pointers, and `depends_on` chains. `apply-small-fix-to-version` is not carried over, because
+it existed only to keep that format in step with small fixes. The old stack-specific gotchas file
+moved into the stack skills where each trap occurs, and the planning-time ones (implicit resource
+creation, LLM roles and context) into the planner's design checklist. Middleware order was already
+covered, and the async ORM trap fits no stack here, so both were dropped. So were the Docker volume
+and SSE heartbeat traps, which no stack skill owns.
+
 ### Plugin versions
 
-| Plugin                     | Version |
-| -------------------------- | ------- |
-| `ceh-business-plan`        | 1.1.0   |
-| `ceh-codebase-explanation` | 1.2.1   |
-| `ceh-coding-conduct`       | 2.2.0   |
-| `ceh-every-session`        | 2.3.0   |
-| `ceh-git-workflow`         | 1.2.1   |
-| `ceh-orchestration-lab`    | 1.0.0   |
-| `ceh-python-service`       | 1.1.0   |
-| `ceh-testing`              | 1.3.0   |
-| `ceh-ui-design`            | 1.0.4   |
-| `ceh-usability-audit`      | 1.1.3   |
-| `ceh-web-frontend`         | 1.3.0   |
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-build-from-plan`          | 1.0.0   |
+| `ceh-build-planning`           | 1.0.0   |
+| `ceh-business-plan`            | 1.1.1   |
+| `ceh-check-build-against-plan` | 1.0.0   |
+| `ceh-codebase-explanation`     | 1.2.1   |
+| `ceh-coding-conduct`           | 2.2.1   |
+| `ceh-every-session`            | 2.3.0   |
+| `ceh-git-workflow`             | 1.2.2   |
+| `ceh-orchestration-lab`        | 1.0.0   |
+| `ceh-python-service`           | 1.1.1   |
+| `ceh-scenario-ideation`        | 1.2.0   |
+| `ceh-scenario-library`         | 1.2.0   |
+| `ceh-scenario-service`         | 1.2.0   |
+| `ceh-scenario-webapp`          | 1.2.0   |
+| `ceh-testing`                  | 1.3.0   |
+| `ceh-ui-design`                | 1.0.4   |
+| `ceh-usability-audit`          | 1.1.3   |
+| `ceh-web-frontend`             | 1.3.1   |
 
 ### Added
 
@@ -128,6 +151,15 @@ not match yet".
 - `ceh-business-plan:write-investor-materials`: a deck outline and outreach notes from a validated
   plan, every slide citing its plan section and confidence tag, and an ask tied to the milestones
   it reaches. `develop-business-plan` routes "write a pitch deck" to it.
+- `ceh-build-planning` 1.0.0, `write-build-plan`: triage, In and Out scope, detail only as far as
+  the build is foreseeable, the design decisions a builder would otherwise stop on, and phases that
+  each end in a runnable check, saved to `docs/plans/<slug>.md`.
+- `ceh-build-from-plan` 1.0.0, `implement-from-plan`: phase by phase, test first, only what the
+  phase names, the phase's check run after the last edit, and the evidence recorded in the plan.
+  It stops after two fixes of the same failure, and writes a minimal plan first when none exists.
+- `ceh-check-build-against-plan` 1.0.0, `check-build-against-plan`: every plan item marked Built,
+  Gap, Deviation, Extra, Failing, or Cannot verify with quoted evidence, and each phase check
+  rerun. Report-only unless asked to fix.
 
 ### Changed
 
@@ -160,6 +192,28 @@ not match yet".
 - `docs/VISION.md`: the lifecycle table replaces `ceh-plan-build-review` with one plugin per
   stage, principle 6 adds that a plugin covers one lifecycle stage, and "Where the repo does not
   match yet" lists the pending split.
+- `docs/VISION.md`: the split has landed, so "Where the repo does not match yet" lists no gaps.
+- The three stack bundles install all three plan plugins in place of `ceh-plan-build-review`, and
+  `ceh-scenario-ideation` installs `ceh-build-planning` only, since ideation builds nothing yet.
+- `ceh-business-plan` reads build plans from `docs/plans/`, and its `derived_from` names plans by
+  path instead of `SKELETON` / `ITER_NN` stems.
+- `ceh-git-workflow:code-review` points a whole-codebase plan check at
+  `ceh-check-build-against-plan:check-build-against-plan`.
+- `ceh-python-service`: `write-fastapi-endpoints` adds that another user's resource answers like a
+  missing one, that `@lru_cache` settings need clearing in tests, and that a cookie set by several
+  endpoints needs identical parameters. `write-postgresql-code` forbids `SELECT MAX(n) + 1`
+  numbering.
+- `ceh-web-frontend`: `write-react-vite-code` adds the StrictMode double effect and module-level
+  config objects. Both it and `write-sveltekit-code` add three API-client traps: `credentials:
+"include"`, one shared token refresh, and `fetch` streaming instead of `EventSource`.
+- `docs/CROSS_REFERENCES.md`: one "Build plan format" entry replaces the four `plan-build-review`
+  schema entries, and the review rules point at `check-build-against-plan`.
+
+### Removed
+
+- `ceh-plan-build-review` is archived to `archive/ceh-plan-build-review/`, with its four skills
+  (`plan-fullstack-app`, `implement-from-plan`, `review-against-plan`,
+  `apply-small-fix-to-version`) and its reference files. It leaves the marketplace.
 
 ---
 

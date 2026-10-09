@@ -14,8 +14,8 @@ for a whole codebase.
 > `usage-limit-handoff`, `delegate-bulk-reads`, and the `bulk-reader` agent moved to the
 > `ceh-every-session` plugin: they hold however Claude Code is used, not only when coding.
 >
-> The plan-driven workflow skills (`implement-from-plan`, `review-against-plan`) moved to the
-> `ceh-plan-build-review` plugin, which bundles them with the planning skills.
+> The plan-driven workflow skills moved out to one plugin per stage: `ceh-build-planning`,
+> `ceh-build-from-plan` (`implement-from-plan`), and `ceh-check-build-against-plan`.
 
 ## Skills
 
