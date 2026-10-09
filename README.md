@@ -46,15 +46,16 @@ stack testing skills route between each other, with the trigger phrases and sequ
 | Session to Skill     | `ceh-session-to-skill`     | Turn the task just finished into a reusable skill, built from the steps that worked in the session, with your corrections as rules and per-run values as arguments                                                                                                                                                               |
 | Workflow Runner      | `ceh-workflow-runner`      | Run a built `flow.yaml` workflow, interactive or headless: stages in order, approvals, gates, run state and resume. Install it wherever a flow runs, without the builder                                                                                                                                                         |
 | Competitor Analysis  | `ceh-competitor-analysis`  | Study a competitor's repo or product and learn from it: one evidence-anchored report each (breakdown, inventory, "oh wow" mechanisms, what to incorporate), then a side-by-side comparison with your own work. Repos are read as untrusted data, never run                                                                       |
+| Orchestration Lab    | `ceh-orchestration-lab`    | **Experimental.** Run real coding tasks under one of two orchestration strategies (plan then implement, or a supervised orchestrate loop) with a cheaper worker model, and log every run with its base commit, token usage by model, and your verdict                                                                            |
 
 ### Categorization
 
-| Tier                  | Loaded            | Plugins                                                                                                                                                                                                                                                                             |
-| --------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                                                                                                                            |
-| **Cross-cutting**     | most sessions     | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                                                                        |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`, `ceh-competitor-analysis`, `ceh-ui-design`, `ceh-codebase-explanation` |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                                                                         |
+| Tier                  | Loaded            | Plugins                                                                                                                                                                                                                                                                                                      |
+| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                                                                                                                                                     |
+| **Cross-cutting**     | most sessions     | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                                                                                                 |
+| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-plan-build-review`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`, `ceh-competitor-analysis`, `ceh-ui-design`, `ceh-codebase-explanation`, `ceh-orchestration-lab` |
+| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                                                                                                  |
 
 Each plugin is self-contained: a foundational standard needed by more than one plugin is duplicated
 into each instead of extracted into a shared base, so one plugin per use case is all you load.
@@ -249,6 +250,15 @@ building, so they load _alongside_ a use-case plugin, not instead of one.
 | Analyze Competitor  | `/ceh-competitor-analysis:analyze-competitor`  | Analysing a competitor repo or product: breakdown, full inventory, "oh wow" mechanisms with evidence, what to incorporate and where it lands |
 | Compare Competitors | `/ceh-competitor-analysis:compare-competitors` | Putting the analysed competitors side by side with your own work: at-a-glance table, inventory by capability, strengths and weaknesses       |
 
+### Orchestration Lab (`ceh-orchestration-lab`)
+
+Experimental, and user-invoked only.
+
+| Skill               | Invoke                                       | When                                                                                                                                           |
+| ------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Plan Then Implement | `/ceh-orchestration-lab:plan-then-implement` | Trying a task as one plan and one handoff: this session plans, one implementer on a cheaper model carries it out, the run is logged            |
+| Orchestrate         | `/ceh-orchestration-lab:orchestrate`         | Trying a task as a supervised loop: this session briefs and reviews, implementers on a cheaper model do every edit and test, the run is logged |
+
 ---
 
 ## Agents
@@ -303,6 +313,12 @@ Agents run autonomously for a defined task and hand results back to the parent s
 | Agent              | Invoke                                                  | When                                                                                                                   |
 | ------------------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | Competitor Analyst | `@"ceh-competitor-analysis:competitor-analyst (agent)"` | Read one competitor repo or product in isolation and return an evidence-anchored fact sheet (read-only, never runs it) |
+
+### Orchestration Lab (`ceh-orchestration-lab`)
+
+| Agent       | Invoke                                         | When                                                                                                             |
+| ----------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Implementer | `@"ceh-orchestration-lab:implementer (agent)"` | Carry out one brief and run its check, as the worker of both orchestration-lab skills, on the model the run sets |
 
 ---
 
@@ -370,6 +386,7 @@ What each bundle installs is listed in [`docs/PLUGIN_DEPENDENCIES.md`](docs/PLUG
 /plugin install ceh-workflow-runner@ceh-claude-code-library --scope user
 /plugin install ceh-session-to-skill@ceh-claude-code-library --scope user
 /plugin install ceh-competitor-analysis@ceh-claude-code-library --scope user
+/plugin install ceh-orchestration-lab@ceh-claude-code-library --scope user
 ```
 
 Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-web-frontend`,
@@ -377,7 +394,9 @@ Dependencies install automatically: each stack plugin brings `ceh-testing`, and 
 them on their own: the builder where you author a flow, the runner wherever a flow runs.
 `ceh-session-to-skill` is in no bundle either: install it where you want finished tasks turned
 into skills.
-`ceh-competitor-analysis` is in no bundle either: install it when you need it. Add `--scope project` instead of `--scope user` for a project-specific install.
+`ceh-competitor-analysis` is in no bundle either: install it when you need it.
+`ceh-orchestration-lab` is experimental and in no bundle: install it in the projects where you
+want to try orchestration strategies. Add `--scope project` instead of `--scope user` for a project-specific install.
 
 ### Step 3 — Verify
 
@@ -461,6 +480,9 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
     },
     {
       "path": "~/ceh-claude-code-library/plugins/standalone/ceh-competitor-analysis"
+    },
+    {
+      "path": "~/ceh-claude-code-library/plugins/standalone/ceh-orchestration-lab"
     }
   ]
 }

@@ -9,6 +9,37 @@ before this repo live in
 
 ---
 
+## 2026-10-09
+
+A new experimental plugin, `ceh-orchestration-lab`, moves the orchestration experiment from
+synthetic tasks into real projects. Every batch of the synthetic benchmark was solved by Haiku
+alone, so it could not separate the strategies. The plugin ships the two strategies a skill can
+drive, and each run leaves a folder in the target project with the base commit, the plan or
+briefs, every worker report, the token usage by model, and the user's verdict. Runs that show a
+pattern can later become fixtures for a controlled rerun. The archived `ceh-orchestration` served
+as background only. Nothing was copied from it.
+
+### Plugin versions
+
+| Plugin                  | Version |
+| ----------------------- | ------- |
+| `ceh-orchestration-lab` | 1.0.0   |
+
+### Added
+
+- `ceh-orchestration-lab` 1.0.0, experimental and in no bundle:
+  - `plan-then-implement`: this session writes one complete plan and one `implementer` subagent
+    carries it out, with at most one fix-up resume.
+  - `orchestrate`: this session briefs and reviews in a loop while `implementer` subagents do
+    every edit and test run.
+  - The `implementer` agent, whose model each run sets.
+  - `scripts/token_usage.py`, which reads a session's transcripts and reports tokens by model
+    from the run's start.
+  - A shared run-log procedure in `references/run-log.md`, which writes
+    `.agents_workspace/orchestration-lab/<stamp>_<session-id>/` per run plus a `runs.md` index.
+
+---
+
 ## 2026-10-08
 
 A third batch of 15 quick ideas from `docs/IDEAS.md` lands. Reviews get stricter about evidence: a

@@ -76,6 +76,7 @@ conditional hand-offs or negative routing, which stay prose.
 | `ceh-git-datastore`                 | `ceh-scenario-service` only             |                                                                                                                  |
 | `ceh-business-plan`                 | `ceh-scenario-ideation` only            |                                                                                                                  |
 | `ceh-coding-conduct`, `ceh-testing` | the three stack bundles, not the others |                                                                                                                  |
+| `ceh-orchestration-lab`             | no bundle, install it on its own        | experimental, so it never enters a bundle                                                                        |
 | Anything under `archive/`           | no bundle, not published                | experimental plugins never enter a bundle                                                                        |
 
 ## Rules for an edge
