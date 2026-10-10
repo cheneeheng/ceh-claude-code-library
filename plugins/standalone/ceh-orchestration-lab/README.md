@@ -10,7 +10,8 @@ a folder with the base commit, the plan or briefs, every worker report, the toke
 and your verdict. Once a pattern shows, a run's base commit and final diff become a fixture for a
 controlled rerun.
 
-It is in no scenario bundle and never will be while it is experimental.
+While it is experimental, install it only in the projects where you want to try orchestration
+strategies.
 
 ## Skills
 

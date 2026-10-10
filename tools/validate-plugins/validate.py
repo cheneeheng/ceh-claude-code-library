@@ -22,9 +22,7 @@ Checks:
                mentions in SKILL.md/agent files resolve to a real file.
   budget     - the sum of all skill and agent descriptions stays under MAX_TOTAL_DESCRIPTION_LEN.
   skill-refs - `plugin:component` references resolve to a real skill or agent.
-  deps       - every `dependencies` entry names a plugin in this repo, the graph is acyclic,
-               a ceh-scenario-* directory holds only plugin.json + README.md, and only a
-               bundle depends on a bundle.
+  deps       - every `dependencies` entry names a plugin in this repo and the graph is acyclic.
   invocations- every `Invoke the Skill tool with skill="X"` resolves, is in-plugin or in a
                declared dependency, and does not set `disable-model-invocation: true`.
   repo-rules - docs/PLUGIN_VERSIONS.md matches every plugin.json version; each plugin's newest
@@ -642,7 +640,7 @@ def plugin_deps() -> dict[str, list[str]]:
 
 
 def check_dependencies() -> None:
-    """Deps resolve, the graph is acyclic, and ceh-scenario-* dirs hold a manifest only."""
+    """Deps resolve and the graph is acyclic."""
     deps = plugin_deps()
     dirs = {d.name: d for d in plugin_dirs()}
     for name, targets in deps.items():
@@ -650,10 +648,6 @@ def check_dependencies() -> None:
         for t in targets:
             if t not in deps:
                 fail(where, f"dependency '{t}' is not a plugin in this repo")
-            elif t.startswith("ceh-scenario-") and not name.startswith("ceh-scenario-"):
-                fail(
-                    where, f"only a scenario bundle may depend on scenario bundle '{t}'"
-                )
 
     # acyclicity (iterative DFS with a colour map, so the cycle path is reportable)
     colour: dict[str, int] = {}
@@ -670,19 +664,6 @@ def check_dependencies() -> None:
     for name in deps:
         if colour.get(name, 0) == 0:
             visit(name, [])
-
-    for d in plugin_dirs():
-        if not d.name.startswith("ceh-scenario-"):
-            continue
-        where = rel(d / ".claude-plugin/plugin.json")
-        if not deps[d.name]:
-            fail(where, "scenario bundle has no 'dependencies'")
-        allowed = {d / ".claude-plugin/plugin.json", d / "README.md"}
-        for f in sorted(d.rglob("*")):
-            if f.is_file() and f not in allowed:
-                fail(
-                    rel(f), "scenario bundle may contain only plugin.json and README.md"
-                )
 
 
 INVOKE_PAT = re.compile(r'Invoke the Skill tool with skill="([^"]+)"')

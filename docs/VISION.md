@@ -23,8 +23,8 @@ It is:
   well, and constrain it only where guidance has been shown to fail.
 - **Claude Code native.** It runs on any Claude Code runtime: interactive sessions, headless
   `claude -p`, subagents, and agent teams. It adds only what Claude Code lacks.
-- **Granular.** You install the plugin for the situation you are in, or a scenario bundle that
-  names several, and nothing else.
+- **Granular.** You install a small core once, then the plugin for the stage you are in, and
+  nothing else. [`GETTING_STARTED.md`](GETTING_STARTED.md) is the route.
 
 It is not:
 

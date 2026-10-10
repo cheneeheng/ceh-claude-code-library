@@ -74,11 +74,10 @@ def in_use(known: list[str]) -> list[str]:
 
 
 def plugin_dirs() -> list[Path]:
-    """Every plugin under plugins/ except scenario bundles, which hold no prompts to audit."""
+    """Every plugin under plugins/."""
     return sorted(
         m.parent.parent
         for m in (REPO / "plugins").glob("**/.claude-plugin/plugin.json")
-        if not m.parent.parent.name.startswith("ceh-scenario-")
     )
 
 

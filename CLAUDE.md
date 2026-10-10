@@ -24,18 +24,18 @@ they live:
 - **Plugin names declare their scope.** `ceh-python-service` vs `ceh-python-library` — the name
   states the use case and makes gaps obvious.
 
-Plugins fall into four tiers:
+Plugins fall into three tiers:
 
-| Tier                  | Loaded            | Plugins                                                                                                                                                                                                                                                                                                                                                                                                         |
-| --------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                                                                                                                                                                                                                                                        |
-| **Cross-cutting**     | most sessions     | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                                                                                                                                                                                                    |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-build-planning`, `ceh-build-from-plan`, `ceh-check-build-against-plan`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`, `ceh-session-diagnosis`, `ceh-security-audit`, `ceh-competitor-analysis`, `ceh-ui-design`, `ceh-codebase-explanation`, `ceh-orchestration-lab` |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                                                                                                                                                                                                     |
+| Tier                  | Loaded           | Plugins                                                                                                                                                                                                                                                                                                                                                                                                         |
+| --------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Cross-cutting**     | most sessions    | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                                                                                                                                                                                                    |
+| **Use-case workflow** | per activity     | `ceh-seo`, `ceh-blog`, `ceh-build-planning`, `ceh-build-from-plan`, `ceh-check-build-against-plan`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`, `ceh-session-diagnosis`, `ceh-security-audit`, `ceh-competitor-analysis`, `ceh-ui-design`, `ceh-codebase-explanation`, `ceh-orchestration-lab` |
+| **Stack / build**     | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                                                                                                                                                                                                     |
 
-The scenario tier is the install entry point, not a fourth axis: a bundle is a manifest with
-`dependencies` and nothing else — no skills, agents, or hooks. Experimental plugins never enter a
-bundle.
+There are no bundles. `docs/GETTING_STARTED.md` is the install entry point: a small core once,
+then one plugin per lifecycle stage as the user reaches it. A plugin that installs other plugins
+only to group them was tried as scenario bundles and retired (see `archive/README.md`), because it
+loaded whole stages the user had not reached and refused to let them disable any of it.
 
 Categorization rules of thumb:
 
@@ -43,9 +43,7 @@ Categorization rules of thumb:
   file types. Splitting duplicates the shared standards and reintroduces drift.
 - **A foundational standard needed by more than one use-case plugin is duplicated into each**, not
   extracted into a shared base plugin — see the Shared-Standards Duplication Policy below.
-- **Scenario bundles live in `plugins/scenarios/`**, every other plugin in `plugins/standalone/`.
-  The `ceh-scenario-` prefix carries the distinction and `validate.py` enforces the structural
-  invariant (manifest + README only).
+- **Every plugin lives in `plugins/standalone/`**, one directory each, no tier subfolders.
 - **App-specific patterns are not standards.** Anything bound to one application's schema or design
   is removed rather than kept as a niche plugin.
 - **`ceh-every-session` admits only what holds however Claude Code is used** — coding, writing, research,
@@ -66,11 +64,9 @@ Categorization rules of thumb:
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
 audits/<date>/                # Model-audit reports, one <plugin>.md each plus SUMMARY.md — written by the model-audit skill
 .github/workflows/            # validate.yml — runs validate.py on push and PR; model-audit.yml — weekly audit draft PR
-docs/                         # Maintainer docs — VISION.md, STRATEGY.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
+docs/                         # GETTING_STARTED.md (user-facing install guide) and maintainer docs — VISION.md, STRATEGY.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
 examples/                     # Worked usage examples, a ceh-<plugin>/README.md where one exists (only ceh-ag-ui today) — not validated
-plugins/                      # All plugins — two folders, one directory per plugin, no tier subfolders
-├── scenarios/
-│   └── ceh-scenario-<name>/  # Scenario bundle — .claude-plugin/plugin.json + README.md ONLY
+plugins/                      # All plugins — one directory per plugin, no tier subfolders
 └── standalone/
     └── ceh-<plugin-name>/
         ├── .claude-plugin/           # plugin.json — version and dependencies live here; tuning.json — model-audit state
@@ -218,6 +214,7 @@ Where they conflict, this section wins:
 | `plugins/standalone/ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version, metadata, dependencies                                         |
 | `.claude-plugin/marketplace.json`                            | Marketplace listing (all plugins)                                              |
 | `README.md`                                                  | User-facing docs — plugin, skill, and agent tables live here                   |
+| `docs/GETTING_STARTED.md`                                    | First-time install route: the core, then one plugin per stage reached          |
 | `docs/VISION.md`                                             | Identity, scope, goals, and principles: why the rules here are what they are   |
 | `docs/STRATEGY.md`                                           | How the plugins form one system: stages, handoff files, how work is chosen     |
 | `docs/CROSS_REFERENCES.md`                                   | Content duplicated across skills: canonical source and every copy              |

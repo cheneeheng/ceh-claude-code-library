@@ -1,7 +1,7 @@
 # Plugin Dependencies
 
 The current dependency graph between `ceh-*` plugins: every declared edge, the reference that
-forces it, and what each scenario bundle installs. The rules for an edge are in `CLAUDE.md`
+forces it. The rules for an edge are in `CLAUDE.md`
 (Plugin Dependencies); this page holds the graph as it stands and the evidence behind each edge.
 
 ## How dependencies behave
@@ -31,9 +31,8 @@ ceh-competitor-analysis  ──► ceh-ui-design
 (`ceh-web-frontend` → `ceh-testing` + `ceh-ui-design`). The cross-cutting rule holds: `ceh-testing`
 is cross-cutting and depends on nothing.
 
-The five `ceh-scenario-*` bundles sit above all of this. Each is a manifest that lists plugins and
-adds no edge between them, so the worst-case closure of a bundle is its own list plus the stack
-plugin's closure. See "What each scenario installs" below.
+No plugin exists only to install others. The scenario bundles that did were retired on 2026-10-10,
+and `docs/GETTING_STARTED.md` now says which plugins to install for each stage.
 
 `ceh-usability-audit` declares no dependency. Its references to `ceh-web-frontend`, `ceh-ui-design`,
 `ceh-documentation`, `ceh-seo`, `ceh-python-service` and `ceh-python-library` skills are all
@@ -50,47 +49,15 @@ conditional hand-offs or negative routing, which stay prose.
 | `ceh-competitor-analysis` ──► `ceh-ui-design` | every run     | Explicit invocation of `ceh-ui-design:design-ui` in `analyze-competitor` (step 7) and `compare-competitors` (step 6): every report and comparison is rendered as an HTML page                      |
 | `ceh-web-frontend` ──► `ceh-ui-design`        | **exception** | No skill invokes it. Kept by user decision (2026-10-07) when `design-ui` moved out of `ceh-web-frontend`, so installing the web stack still installs the design skill. Do not cite it as precedent |
 
-## What each scenario installs
-
-| Bundle                   | Installs                                                                                                                                                                                                                                                                     |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ceh-scenario-service`   | `ceh-every-session`, `ceh-coding-conduct`, `ceh-codebase-explanation`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-service`, `ceh-usability-audit`, `ceh-build-planning`, `ceh-build-from-plan`, `ceh-check-build-against-plan`, `ceh-git-datastore` |
-| `ceh-scenario-library`   | `ceh-every-session`, `ceh-coding-conduct`, `ceh-codebase-explanation`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-python-library`, `ceh-usability-audit`, `ceh-build-planning`, `ceh-build-from-plan`, `ceh-check-build-against-plan`                      |
-| `ceh-scenario-webapp`    | `ceh-every-session`, `ceh-coding-conduct`, `ceh-codebase-explanation`, `ceh-git-workflow`, `ceh-testing`, `ceh-documentation`, `ceh-web-frontend`, `ceh-usability-audit`, `ceh-build-planning`, `ceh-build-from-plan`, `ceh-check-build-against-plan`, `ceh-ag-ui`           |
-| `ceh-scenario-ideation`  | `ceh-every-session`, `ceh-git-workflow`, `ceh-business-plan`, `ceh-build-planning`                                                                                                                                                                                           |
-| `ceh-scenario-editorial` | `ceh-every-session`, `ceh-git-workflow`, `ceh-blog`, `ceh-documentation`, `ceh-seo`                                                                                                                                                                                          |
-
-`ceh-testing` is listed by each stack bundle directly as well as through its stack plugin.
-`ceh-ui-design` is in no bundle's list but reaches `ceh-scenario-webapp` through both
-`ceh-web-frontend` and `ceh-ag-ui`.
-
-## Not in every bundle
-
-| Plugin                                                | Where it is                                          | Note                                                                                                             |
-| ----------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `ceh-workflow-builder`                                | no bundle, install it on its own                     | its agent-skills bundle (`ceh-scenario-agent-tooling`) was not migrated, because `ceh-evaluation` stays archived |
-| `ceh-workflow-runner`                                 | no bundle, install it on its own                     | split from `ceh-workflow-builder` so a flow runs without the builder; neither depends on the other               |
-| `ceh-seo`, `ceh-blog`                                 | `ceh-scenario-editorial` only                        |                                                                                                                  |
-| `ceh-ag-ui`                                           | `ceh-scenario-webapp` only                           | it depends on `ceh-ui-design`                                                                                    |
-| `ceh-ui-design`                                       | no bundle lists it                                   | installed through `ceh-web-frontend`, `ceh-ag-ui` or `ceh-competitor-analysis`, or on its own                    |
-| `ceh-git-datastore`                                   | `ceh-scenario-service` only                          |                                                                                                                  |
-| `ceh-business-plan`                                   | `ceh-scenario-ideation` only                         |                                                                                                                  |
-| `ceh-build-from-plan`, `ceh-check-build-against-plan` | the three stack bundles, not `ceh-scenario-ideation` | ideation shapes the idea and plans the build, it builds nothing yet                                              |
-| `ceh-coding-conduct`, `ceh-testing`                   | the three stack bundles, not the others              |                                                                                                                  |
-| `ceh-orchestration-lab`                               | no bundle, install it on its own                     | experimental, so it never enters a bundle                                                                        |
-| Anything under `archive/`                             | no bundle, not published                             | experimental plugins never enter a bundle                                                                        |
-
 ## Rules for an edge
 
-`CLAUDE.md` (Plugin Dependencies) holds the first three. The validator enforces the last two.
+`CLAUDE.md` (Plugin Dependencies) holds the first three. The validator enforces the last one.
 
 1. **The reference fires on every run of the skill or agent.** A conditional handoff stays prose.
 2. **Negative routing never counts.** It names an alternative, and an edge would install what the
    user steered away from.
 3. **A cross-cutting plugin depends only on cross-cutting plugins.** This keeps the graph layered.
-4. **A non-bundle plugin never depends on a scenario bundle.** A bundle is an install entry point,
-   and depending on one drags a whole scenario into an unrelated install.
-5. **An explicit invocation needs its edge.** `Invoke the Skill tool with skill="ceh-x:y"` must
+4. **An explicit invocation needs its edge.** `Invoke the Skill tool with skill="ceh-x:y"` must
    target a skill in the same plugin or a declared dependency, and the target must not set
    `disable-model-invocation: true`. A call to such a target fails silently.
 
@@ -126,7 +93,7 @@ grep -H '"dependencies"' plugins/*/*/.claude-plugin/plugin.json
 # Every cross-plugin agent preload
 grep -A6 '^skills:' plugins/standalone/*/agents/*.md | grep -- '- ceh-'
 
-# Resolution, acyclicity, bundle shape, and rules 4 and 5
+# Resolution, acyclicity, and rule 4
 python tools/validate-plugins/validate.py
 ```
 

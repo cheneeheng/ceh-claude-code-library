@@ -27,6 +27,14 @@ work in flight. A new `ceh-testing` skill rolls the scattered Prove reports into
 `docs/EVIDENCE.md`, which the blog and listing skills read with `BUSINESS_PLAN.md`, so a launch
 post claims only what was proven. Each scenario bundle README now shows its route.
 
+A third PR the same day retires the five scenario bundles and replaces them with
+`docs/GETTING_STARTED.md`. The bundles no longer fit the strategy: three were cut by stack and two
+by stage, a stack bundle installed all of Build and Prove at once (up to 13 plugins), and none let
+the user disable a plugin it pulled in. The guide installs a small core once, then one plugin per
+stage as the user reaches it, at project scope. The vision, strategy, `CLAUDE.md`, the README and
+the validator change with it, in this one PR at the user's request. Anyone who installed a bundle
+keeps its plugins: uninstall the bundle and reinstall from the guide.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -37,6 +45,8 @@ post claims only what was proven. Each scenario bundle README now shows its rout
 | `ceh-business-plan`            | 1.1.2   |
 | `ceh-check-build-against-plan` | 1.0.2   |
 | `ceh-codebase-explanation`     | 1.2.2   |
+| `ceh-coding-conduct`           | 2.2.2   |
+| `ceh-orchestration-lab`        | 1.0.1   |
 | `ceh-scenario-editorial`       | 1.1.1   |
 | `ceh-scenario-ideation`        | 1.2.1   |
 | `ceh-scenario-library`         | 1.2.1   |
@@ -55,8 +65,25 @@ post claims only what was proven. Each scenario bundle README now shows its rout
   may make.
 - A Route section in every scenario bundle README: the skill that fires at each stage, and what it
   reads and writes.
+- `docs/GETTING_STARTED.md`: the first-time install route. The core at user scope, a table of
+  moments in stage order naming the plugin, the skill that fires, and the file it writes, the
+  stack plugins, and the plugins to add only when their moment arrives. Linked from the top of the
+  README.
 
 ### Changed
+
+- The five scenario bundles are retired: removed from the marketplace and moved to `archive/`, with
+  their reason in `archive/README.md`. Their rows above record their last published versions.
+- `docs/VISION.md` (Granular) and `docs/STRATEGY.md`: the install route is the guide, not bundles.
+  STRATEGY records why the bundles were retired.
+- `CLAUDE.md`: three tiers instead of four, one `plugins/standalone/` folder, and the guide in
+  Structure and Key Files.
+- README: the stage table replaces the tier table, and Install step 2 points to the guide.
+- `validate.py` and `model-audit`'s `detect.py`: the scenario bundle checks and exclusions are
+  gone. `docs/PLUGIN_DEPENDENCIES.md` drops the bundle sections and the bundle rule.
+- `add-plugin-component`: a new plugin gets a row in the guide instead of a place in a bundle.
+- `ceh-coding-conduct` and `ceh-orchestration-lab` READMEs: bundle mentions replaced with install
+  guidance.
 
 - `CLAUDE.md`: lists `docs/STRATEGY.md` in Structure and Key Files.
 - `docs/VISION.md`: `ceh-build-planning` moves from Shape to Build, and the scope section links
