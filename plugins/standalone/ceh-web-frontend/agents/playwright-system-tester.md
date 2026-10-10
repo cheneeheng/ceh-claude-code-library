@@ -1,12 +1,9 @@
 ---
 name: playwright-system-tester
 description: >-
-  Use this agent to write end-to-end, system, or smoke tests that exercise the whole system from the
-  outside, in a subagent, to run the suite and report results in isolation. Do not use proactively:
-  system tests start real infrastructure, so use only when the user explicitly asks for E2E, system,
-  or smoke tests. Invoke for "test the whole app", "test in a real browser", "Playwright test",
-  "test against staging", "test the full user journey". Not for single units (use
-  vitest-unit-tester) or in-process multi-module tests (use vitest-integration-tester).
+  Use this agent only when the user explicitly asks for E2E, system, or smoke tests of the whole app
+  in a real browser. Do not use proactively: they start real infrastructure. Invoke for "test the
+  whole app", "Playwright test", "test the full user journey".
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:

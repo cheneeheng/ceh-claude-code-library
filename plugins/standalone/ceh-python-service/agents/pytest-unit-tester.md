@@ -1,12 +1,9 @@
 ---
 name: pytest-unit-tester
 description: >-
-  Use this agent to write isolated, fast pytest unit tests with mocked dependencies in a subagent,
-  to generate many at once, close broad coverage gaps, or run the unit suite and report results in
-  isolation. Use only when the user asks for unit tests, never because code was created or changed.
-  Invoke for "write unit tests", "test this function", "cover this with pytest". Not for one or two
-  inline tests (use ceh-python-service:write-pytest-service-tests), real databases or service
-  boundaries (use pytest-integration-tester), or end-to-end flows (use pytest-system-tester).
+  Use this agent to write many fast pytest unit tests with mocked dependencies, or run the unit
+  suite in isolation, only when the user asks for unit tests. Invoke for "write unit tests", "cover
+  this with pytest". Not for one or two inline tests.
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:

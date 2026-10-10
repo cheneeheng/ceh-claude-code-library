@@ -2,8 +2,8 @@
 name: publish-python-library
 description: >-
   Load this skill when packaging, versioning, or publishing a Python library: build backend, src/
-  layout, wheels, PyPI, the public API in __init__.py / __all__, deprecations, semver. Auto-load when
-  build config or __all__ is edited, a public signature changes, or uv build runs.
+  layout, wheels, PyPI, the public API in __init__.py / __all__, deprecations, semver. Auto-load
+  when build config or __all__ is edited, a public signature changes, or uv build runs.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

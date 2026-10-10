@@ -1,12 +1,9 @@
 ---
 name: competitor-analyst
 description: >-
-  Use this agent to read one competitor (a cloned repo or a product's public pages) in an isolated
-  subagent and return a compressed, evidence-anchored fact sheet: what it is, what it ships,
-  candidate "oh wow" mechanisms with pointers, and ideas mapped onto our inventory. Dispatch one per
-  target from ceh-competitor-analysis:analyze-competitor. Read-only: never edits, installs, builds,
-  or runs the target. Not for writing the final report or the comparison (use
-  ceh-competitor-analysis:analyze-competitor and ceh-competitor-analysis:compare-competitors).
+  Use this agent to read one competitor (a cloned repo or public pages) and return an
+  evidence-anchored fact sheet: what it is, what it ships, ideas mapped onto ours. Dispatched one per
+  target by ceh-competitor-analysis:analyze-competitor. Read-only: never runs the target.
 model: inherit
 tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
 maxTurns: 60

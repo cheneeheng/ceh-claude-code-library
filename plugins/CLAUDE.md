@@ -54,11 +54,12 @@ plugins and scripts. A plugin is named for its use case (`ceh-coding-conduct`, n
 **`description` is always a folded block scalar (`>-`), never quoted and never plain.** Enforced by
 `validate.py`.
 
-**A skill `description` is at most 300 characters**, also enforced by `validate.py`. The skill
-listing has a budget of 1% of the context window, and once it overflows Claude Code drops whole
-descriptions, so one long description costs another skill its trigger. Write the moment, two or
-three trigger phrases, and at most one "Not for" pointer to the nearest look-alike. The skill body
-carries the rest of the routing.
+**A skill or agent `description` is at most 300 characters**, also enforced by `validate.py`. The
+skill listing has a budget of 1% of the context window, and once it overflows Claude Code drops
+whole descriptions, so one long description costs another skill its trigger. Agent descriptions load
+into every session too. For a skill, write the moment, two or three trigger phrases, and at most one
+"Not for" pointer to the nearest look-alike. For an agent, write when to delegate (proactively, only
+on request, or which skill dispatches it) and whether it is read-only. The body carries the rest.
 
 ```yaml
 ---

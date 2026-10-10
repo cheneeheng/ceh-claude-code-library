@@ -1,17 +1,10 @@
 ---
 name: add-plugin-component
 description: >-
-  Load this skill when adding or changing anything under plugins/ in this repo: a skill, agent,
-  hook, script, or a whole new ceh-* plugin, including migrating one from the old agent-skills
-  repo. Covers which plugin it belongs in, the SKILL.md and agent templates every new file starts
-  from, the frontmatter rules, and every registration chore that must land in the same commit
-  (both README tables, docs/CROSS_REFERENCES.md, plugin.json + marketplace.json version bumps,
-  validate.py). Trigger when a new SKILL.md or agents/*.md is being created, one is renamed or
-  moved between plugins, a directory is added under plugins/, or the user says "add a skill", "add
-  an agent", "new plugin component", "create a plugin", "new ceh plugin", "migrate this skill", or
-  asks why validate.py is failing. Overrides plugin-dev and skill-creator advice that conflicts
-  with this repo. Not for building a skill into another project's .claude/skills/ (use
-  ceh-workflow-builder:build-agentic-workflow).
+  Load this skill when adding or changing anything under plugins/ in this repo (a skill, agent,
+  hook, script, or new ceh-* plugin): templates, frontmatter rules, and the registration chores CI
+  checks. Trigger on "add a skill", "create a plugin", or validate.py failing. Overrides plugin-dev
+  and skill-creator.
 argument-hint: "[skill-or-agent-name]"
 disable-model-invocation: false
 user-invocable: true
@@ -205,8 +198,7 @@ python tools/validate-plugins/validate.py
 Same gate CI runs via `.github/workflows/validate.yml`. It checks:
 
 - manifests: `plugin.json` ↔ `marketplace.json` sync, semver, `name` matching the directory
-- frontmatter: `name` format and match, `description` present, `>-`, ≤ 300 chars on a skill
-  and ≤ 600 on an agent;
+- frontmatter: `name` format and match, `description` present, `>-`, ≤ 300 chars;
   `compatibility` ≤ 500 chars; only documented keys; no plugin-agent keys Claude Code ignores;
   `disable-model-invocation`, `user-invocable`, and `license` stated on every skill
 - `docs/PLUGIN_VERSIONS.md` matches every `plugin.json`, and so does each plugin's newest

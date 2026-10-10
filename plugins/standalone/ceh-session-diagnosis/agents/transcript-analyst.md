@@ -2,9 +2,8 @@
 name: transcript-analyst
 description: >-
   Use this agent to read one Claude Code session transcript through one lens and return findings
-  that each cite a transcript line, in an isolated subagent, because transcripts run to megabytes
-  and the caller needs only the findings. Dispatched in parallel, one per lens, by
-  ceh-session-diagnosis:diagnose-session. Read-only: it reports, never edits.
+  that each cite a transcript line. Dispatched in parallel, one per lens, by
+  ceh-session-diagnosis:diagnose-session. Read-only.
 model: sonnet
 tools: Read, Grep, Glob, Bash
 ---

@@ -1,12 +1,9 @@
 ---
 name: pytest-system-tester
 description: >-
-  Use this agent only when the user explicitly asks for full end-to-end or system-level pytest tests
-  that exercise the entire application stack as a real user would, in a subagent because system
-  tests are slow and expensive. Do not use proactively. Invoke for "write E2E tests", "write system
-  tests", "write smoke tests", "write acceptance tests". Spins up the real application and validates
-  complete user journeys. Not for unit or component-level tests (use pytest-unit-tester or
-  pytest-integration-tester).
+  Use this agent only when the user explicitly asks for end-to-end or system pytest tests against
+  the real running application. Do not use proactively: system tests are slow and costly. Invoke for
+  "write E2E tests", "write system tests", "write smoke tests".
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:

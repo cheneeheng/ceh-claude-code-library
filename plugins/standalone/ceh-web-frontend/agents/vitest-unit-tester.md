@@ -1,13 +1,9 @@
 ---
 name: vitest-unit-tester
 description: >-
-  Use this agent to write isolated, fast unit tests for TypeScript pure functions, classes, and
-  modules in a subagent, to generate many at once, close coverage gaps, or run the unit suite and
-  report results in isolation. Use proactively when the user asks to write or improve unit tests in
-  a TypeScript codebase. Invoke for "test this function", "add unit tests", "cover this module". Not
-  for one or two inline tests (use ceh-web-frontend:write-vitest-playwright-tests) or HTTP
-  endpoints, databases, or cross-module flows (use vitest-integration-tester or
-  playwright-system-tester).
+  Use proactively when the user asks for unit tests in a TypeScript codebase: many fast tests for
+  functions, classes, and modules, or a unit-suite run in isolation. Invoke for "add unit tests",
+  "cover this module". Not for one or two inline tests.
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:

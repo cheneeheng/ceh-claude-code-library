@@ -70,6 +70,13 @@ model loads sets `user-invocable: false`, and a skill only the user may start se
 `audit-error-messages` to model-only. No new user-only skill was added, because the library is
 agents-first and a user-only skill cannot be loaded by a request, an agent, or a workflow stage.
 
+An eighth PR the same day applies the same cap to agents, whose descriptions also load into every
+session. Twelve of the thirteen were over it. Each one now says when to delegate (proactively, only on request, or which skill
+dispatches it), two trigger phrases, and whether it is read-only. Why isolation helps moves to the
+body, where it already was. Skills and agents now share one 300-character cap, and all
+descriptions together come to 26,768 characters. The repo-local `add-plugin-component` skill, about
+700 characters, is cut to fit as well.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -82,14 +89,14 @@ agents-first and a user-only skill cannot be loaded by a request, an agent, or a
 | `ceh-check-build-against-plan` | 1.0.3   |
 | `ceh-codebase-explanation`     | 1.2.3   |
 | `ceh-coding-conduct`           | 2.2.3   |
-| `ceh-competitor-analysis`      | 1.1.6   |
+| `ceh-competitor-analysis`      | 1.1.7   |
 | `ceh-documentation`            | 1.0.5   |
-| `ceh-every-session`            | 2.4.1   |
+| `ceh-every-session`            | 2.4.2   |
 | `ceh-git-datastore`            | 1.0.4   |
 | `ceh-git-workflow`             | 1.2.4   |
 | `ceh-orchestration-lab`        | 1.0.1   |
 | `ceh-python-library`           | 1.0.3   |
-| `ceh-python-service`           | 1.1.2   |
+| `ceh-python-service`           | 1.1.3   |
 | `ceh-scenario-editorial`       | 1.1.1   |
 | `ceh-scenario-ideation`        | 1.2.1   |
 | `ceh-scenario-library`         | 1.2.1   |
@@ -97,12 +104,12 @@ agents-first and a user-only skill cannot be loaded by a request, an agent, or a
 | `ceh-scenario-webapp`          | 1.2.1   |
 | `ceh-security-audit`           | 1.0.1   |
 | `ceh-seo`                      | 1.1.3   |
-| `ceh-session-diagnosis`        | 1.0.1   |
+| `ceh-session-diagnosis`        | 1.0.2   |
 | `ceh-session-to-skill`         | 1.0.1   |
 | `ceh-testing`                  | 1.4.1   |
 | `ceh-ui-design`                | 1.0.5   |
-| `ceh-usability-audit`          | 1.1.4   |
-| `ceh-web-frontend`             | 1.3.2   |
+| `ceh-usability-audit`          | 1.1.5   |
+| `ceh-web-frontend`             | 1.3.3   |
 | `ceh-workflow-builder`         | 1.3.6   |
 | `ceh-workflow-runner`          | 1.0.4   |
 
@@ -191,6 +198,12 @@ agents-first and a user-only skill cannot be loaded by a request, an agent, or a
 - `plugins/CLAUDE.md`: the description cap and its reason, and a three-row table for the invocation
   flags (model only, user only, both). The `add-plugin-component` skill template and checklist and
   `tools/validate-plugins/README.md` say the same.
+- Every agent description, in six plugins: cut to 300 characters or fewer, keeping the delegation
+  signal ("Use proactively", "only when the user explicitly asks", or the dispatching skill).
+- `validate.py`: one 300-character cap for skills and agents, replacing the separate skill cap, and
+  the description-total ratchet lowered from 30,010 to 26,768.
+- `add-plugin-component`: its own description is cut from about 700 to 300 characters, and the agent
+  template, `plugins/CLAUDE.md`, and `tools/validate-plugins/README.md` state the agent cap.
 
 ## 2026-10-09
 

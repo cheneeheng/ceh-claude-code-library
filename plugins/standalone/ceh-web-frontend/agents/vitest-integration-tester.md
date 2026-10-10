@@ -1,13 +1,9 @@
 ---
 name: vitest-integration-tester
 description: >-
-  Use this agent to write frontend integration tests in a subagent, to build out an integration
-  suite or run it and report results in isolation. Use proactively when the user asks to test how
-  components work together, a component with real shared state, or a form or data-loading flow.
-  Invoke for "test this page component", "test the full form flow", "test with real MSW handlers".
-  Not for one or two inline tests (use ceh-web-frontend:write-vitest-playwright-tests),
-  single-component or pure-function tests (use vitest-unit-tester), or browser E2E (use
-  playwright-system-tester).
+  Use proactively when the user wants frontend components tested together: shared state, a form or
+  data-loading flow. Builds out or runs the integration suite in isolation. Invoke for "test this
+  page component", "test the full form flow". Not for one or two inline tests.
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:
