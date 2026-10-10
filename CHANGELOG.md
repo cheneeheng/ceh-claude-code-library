@@ -9,6 +9,25 @@ before this repo live in
 
 ---
 
+## 2026-10-10
+
+The repo gets a strategy, `docs/STRATEGY.md`, to sit beside the vision. The plugins were a
+catalogue: granular, but with nothing saying how one plugin's output becomes the next one's input.
+The strategy names the system, one lifecycle with many entry points: the vision's four stages are a
+route, and committed handoff files join them without a router. It moves build planning from Shape to
+Build, sets which files a target repo commits (whatever a later stage reads, with built plans
+distilled and deleted), and makes fixing a break on that route the test for new work. No plugin
+changes yet. The gaps it opens are listed in its own "Where the repo does not match yet" section.
+
+### Added
+
+- `docs/STRATEGY.md`: the stages, the handoff files between them, where they live, how work is
+  chosen, and the reference run that will measure progress.
+
+### Changed
+
+- `CLAUDE.md`: lists `docs/STRATEGY.md` in Structure and Key Files.
+
 ## 2026-10-09
 
 Five ideas from `docs/IDEAS.md` are built. Until now nothing ran the hook scripts: `validate.py`

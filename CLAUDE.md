@@ -66,7 +66,7 @@ Categorization rules of thumb:
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
 audits/<date>/                # Model-audit reports, one <plugin>.md each plus SUMMARY.md — written by the model-audit skill
 .github/workflows/            # validate.yml — runs validate.py on push and PR; model-audit.yml — weekly audit draft PR
-docs/                         # Maintainer docs — VISION.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
+docs/                         # Maintainer docs — VISION.md, STRATEGY.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
 examples/                     # Worked usage examples, a ceh-<plugin>/README.md where one exists (only ceh-ag-ui today) — not validated
 plugins/                      # All plugins — two folders, one directory per plugin, no tier subfolders
 ├── scenarios/
@@ -219,6 +219,7 @@ Where they conflict, this section wins:
 | `.claude-plugin/marketplace.json`                            | Marketplace listing (all plugins)                                              |
 | `README.md`                                                  | User-facing docs — plugin, skill, and agent tables live here                   |
 | `docs/VISION.md`                                             | Identity, scope, goals, and principles: why the rules here are what they are   |
+| `docs/STRATEGY.md`                                           | How the plugins form one system: stages, handoff files, how work is chosen     |
 | `docs/CROSS_REFERENCES.md`                                   | Content duplicated across skills: canonical source and every copy              |
 | `docs/PLUGIN_DEPENDENCIES.md`                                | Current dependency graph: every edge with its evidence                         |
 | `docs/ENVIRONMENT_VARIABLES.md`                              | Every environment variable any plugin reads: plugin, reader, default, effect   |
