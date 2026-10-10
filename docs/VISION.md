@@ -102,6 +102,11 @@ Teaching a person passes the test when that person must give the agent something
 alone: a yes before an irreversible action, or a fact only they hold. A yes to a system nobody
 understood is not consent, so `ceh-codebase-explanation:explain-until-understood` stays.
 
+Advising a person passes too, when it only points at the installed skill or agent that fits their
+situation and runs nothing. Which stage to enter next is the person's intent, a fact only they
+hold, and nobody remembers every skill installed. An advisor that ran what it suggested would be
+the router the strategy rules out, so it stops at the suggestion.
+
 ## Goals
 
 1. **Agents finish tasks without a human.** Every question an agent asks falls under Autonomy and
