@@ -91,6 +91,9 @@ rewritten: it told users to list plugin paths under a `plugins` key in `settings
 Code does not read. A local clone is now added as a marketplace, or one plugin loaded with
 `--plugin-dir`. No plugin changes.
 
+An eleventh PR the same day fixes the same wrong install block in the `ceh-git-datastore` README,
+the one plugin README that still had it.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -106,7 +109,7 @@ Code does not read. A local clone is now added as a marketplace, or one plugin l
 | `ceh-competitor-analysis`      | 1.1.7   |
 | `ceh-documentation`            | 1.0.5   |
 | `ceh-every-session`            | 2.4.2   |
-| `ceh-git-datastore`            | 1.0.4   |
+| `ceh-git-datastore`            | 1.0.5   |
 | `ceh-git-workflow`             | 1.2.4   |
 | `ceh-orchestration-lab`        | 1.0.1   |
 | `ceh-python-library`           | 1.0.3   |
@@ -227,6 +230,12 @@ Code does not read. A local clone is now added as a marketplace, or one plugin l
   `docs/CATALOG.md`, and a new plugin no longer adds a manual install path. `CLAUDE.md` now says the
   catalog row is a review rule, not a CI check, and drops a parked idea for a concept-map skill.
 - `plugins/CLAUDE.md`: says `validate.py` enforces `user-invocable: false` on a skill a hook names.
+
+### Fixed
+
+- `ceh-git-datastore` README: the manual install block used a `plugins` key in `settings.json` that
+  Claude Code does not read. It now adds a local clone as the marketplace, or loads the plugin for
+  one session with `--plugin-dir`.
 
 ## 2026-10-09
 
