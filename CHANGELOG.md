@@ -50,6 +50,13 @@ typed. The entry point is `/ceh-business-plan:develop-business-plan`, so every m
 slash command that starts it. The README's paste-ready block of all 26 plugins at user scope is
 gone, because walkers kept copying it instead of following the guide. No plugin changes.
 
+A sixth PR the same day makes the guide work for someone who does not write code. Five cold walkers
+played a person with a product idea who neither codes nor uses git. One stalled, because the guide
+only ever said to run installs "in that repo", and nobody without git has a repo. Project scope
+works in any plain folder, which was checked in an isolated config, so the guide now says so. The
+guidance on skipping the coding plugins now comes before their install commands rather than
+after. No plugin changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -114,6 +121,14 @@ gone, because walkers kept copying it instead of following the guide. No plugin 
   Step 3 adds `/reload-plugins`.
 - `docs/STRATEGY.md` and `add-plugin-component`: describe the guide's moments as a list with slash
   commands, and drop the README `/plugin install` list from the new-plugin checklist.
+- `docs/GETTING_STARTED.md`, for newcomers who do not write code:
+  - project scope and the setup prompt say "a git repo or any plain folder"
+  - the skip-the-coding-plugins guidance moves above the core install block, which gets an "If you
+    write code in git repos" lead-in
+  - the project-scope install pattern is stated once, in its own code block, above the moments
+  - the branch advice applies only with `ceh-git-workflow`
+  - committing `.claude/settings.json` applies only in a git repo
+  - step 1 says how to resume after an interruption
 
 - `CLAUDE.md`: lists `docs/STRATEGY.md` in Structure and Key Files.
 - `docs/VISION.md`: `ceh-build-planning` moves from Shape to Build, and the scope section links
