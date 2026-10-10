@@ -45,7 +45,9 @@ on a fresh clone and none answers for the product as a whole. This file is the o
    | Usability   | `.agents_workspace/ux-audits/<target>/run-<NNN>/UX_AUDIT.md` and `ERROR_MESSAGES.md`         |
    | Plan        | each plan in `docs/plans/`: phases `done` with evidence, and any check-against-plan findings |
 
-   An area with no source is `not run`, and names the skill that produces it: QA
+   With no plan in flight, the Plan area reads `none in flight` (built plans are retired to
+   `docs/ARCHITECTURE.md`), not `not run`: nothing was skipped. Any other area with no source is
+   `not run`, and names the skill that produces it: QA
    `ceh-testing:explore-app-for-bugs`, performance `ceh-testing:measure-performance`, security
    `ceh-security-audit:audit-codebase-security`, usability
    `ceh-usability-audit:simulate-newcomer-first-run`.

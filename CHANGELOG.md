@@ -34,6 +34,7 @@ post claims only what was proven. Each scenario bundle README now shows its rout
 | `ceh-blog`                     | 1.0.6   |
 | `ceh-build-from-plan`          | 1.0.1   |
 | `ceh-build-planning`           | 1.1.1   |
+| `ceh-business-plan`            | 1.1.2   |
 | `ceh-check-build-against-plan` | 1.0.2   |
 | `ceh-codebase-explanation`     | 1.2.2   |
 | `ceh-scenario-editorial`       | 1.1.1   |
@@ -64,7 +65,13 @@ post claims only what was proven. Each scenario bundle README now shows its rout
   distilled into `docs/ARCHITECTURE.md` Key Decisions and deleted, once any check against it has
   run.
 - `ceh-build-from-plan:implement-from-plan`: a new Retire step runs the check against the plan when
-  that plugin is installed, then distills and deletes the plan.
+  that plugin is installed, then distills and deletes the plan. The changelog entry it adds is
+  conditional on the repo keeping one, here and in the plan format.
+- `ceh-business-plan`: `derived_from` keeps a retired plan's path, which stays valid in git
+  history, and `find-product-market-fit` reads `docs/ARCHITECTURE.md` and the README for an app
+  whose plans are already retired.
+- `ceh-testing:write-evidence-report`: with no plan in flight, the Plan area reads `none in flight`
+  rather than `not run`.
 - `ceh-codebase-explanation:document-architecture`: writes a committed `docs/ARCHITECTURE.md`
   instead of `.agents_workspace/ARCHITECTURE.md`, and moves an existing one there on first run.
 - `ceh-blog:draft-post` and `ceh-seo:write-project-listing-text`: read `BUSINESS_PLAN.md` and

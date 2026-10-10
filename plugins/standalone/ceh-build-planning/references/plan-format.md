@@ -76,6 +76,6 @@ Each unsettled question, with the assumption taken until it is answered. "None" 
   Status, so the plan stays true to the code.
 - A `built` plan is distilled, then deleted, in one commit, once any check of the build against it
   has run. Each Design decision a later reader still needs becomes a Key Decisions entry in
-  `docs/ARCHITECTURE.md`, the change gets its changelog entry, and the plan file is removed. Git
-  history keeps the full plan: `git log --all -- docs/plans/<slug>.md`. New work gets a new plan
-  file.
+  `docs/ARCHITECTURE.md`, the change gets a changelog entry when the repo keeps one, and the plan
+  file is removed. Git history keeps the full plan: `git log --all -- docs/plans/<slug>.md`. New
+  work gets a new plan file.

@@ -48,8 +48,8 @@ reason recorded.
    `ceh-check-build-against-plan:check-build-against-plan` first, because it reads the plan. Then,
    in one commit: add each Design decision a later reader still needs to the Key Decisions log in
    `docs/ARCHITECTURE.md` (the format is in `ceh-codebase-explanation:document-architecture` when
-   installed, otherwise a dated heading with Context, Decision, and Consequences), add the
-   changelog entry, and delete the plan file. Say which decisions moved and that
+   installed, otherwise a dated heading with Context, Decision, and Consequences), add a
+   changelog entry when the repo keeps a changelog, and delete the plan file. Say which decisions moved and that
    `git log --all -- <plan path>` restores the plan.
 
 ## Rules
