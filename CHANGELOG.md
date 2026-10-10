@@ -108,6 +108,13 @@ guide from its URL and add the marketplace by name. The README's "From a local c
 marked as not part of this setup. With the test passed, the guide leads with the short form,
 `setup <repo URL>`, and keeps the long prompt as a fallback. No plugin changes.
 
+A fourteenth PR the same day changes what the user types. In three more live runs, one still cloned
+the repo, into the project folder, and deleted it afterwards. The decision to clone comes from
+"setup" next to a repo URL, before Claude reads any note. So the guide now has the user type
+"install the Claude Code plugins from" the raw guide URL, which is a file, not something Claude can
+clone. The guide gets its own note to Claude, which replaces the long paste-in prompt. The README
+note stays for anyone who still types the repo URL. No plugin changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -249,6 +256,8 @@ marked as not part of this setup. With the test passed, the guide leads with the
 - README note and `docs/GETTING_STARTED.md`: setup never clones the repo. The guide leads with
   `setup https://github.com/cheneeheng/ceh-claude-code-library`, and the long prompt is the
   fallback.
+- `docs/GETTING_STARTED.md`: the user types "install the Claude Code plugins from" the raw guide
+  URL, and a note to Claude in the guide replaces the long paste-in prompt.
 
 ### Fixed
 
