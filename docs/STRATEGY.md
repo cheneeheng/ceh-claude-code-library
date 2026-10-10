@@ -44,21 +44,21 @@ A build plan decides how, and it recurs for every feature inside the build loop:
 `ceh-build-planning:write-build-plan` itself triggers on "how should we build this". Keeping it in
 Shape would send "add a feature to my app" through the business-plan stage, the wrong door for a
 new user. The two stay connected through the handoff: the build plan reads `BUSINESS_PLAN.md` when
-one exists. The vision's scope table still lists `ceh-build-planning` under Shape. See Where the
-repo does not match yet.
+one exists.
 
 ## The spine: handoff files
 
-| Stage | Reads                                     | Writes                                                      |
-| ----- | ----------------------------------------- | ----------------------------------------------------------- |
-| Shape | an idea, a conversation                   | `BUSINESS_PLAN.md`                                          |
-| Build | `BUSINESS_PLAN.md` when present, the repo | `docs/plans/<slug>.md`, the code, `ARCHITECTURE.md`         |
-| Prove | the plan, the code                        | an evidence report: tests, security, usability, performance |
-| Tell  | `BUSINESS_PLAN.md`, the evidence report   | posts, SEO pages                                            |
+| Stage | Reads                                     | Writes                                                          |
+| ----- | ----------------------------------------- | --------------------------------------------------------------- |
+| Shape | an idea, a conversation                   | `BUSINESS_PLAN.md`                                              |
+| Build | `BUSINESS_PLAN.md` when present, the repo | `docs/plans/<slug>.md`, the code, `docs/ARCHITECTURE.md`        |
+| Prove | the plan, the code                        | `docs/EVIDENCE.md`: tests, QA, security, usability, performance |
+| Tell  | `BUSINESS_PLAN.md`, `docs/EVIDENCE.md`    | posts, listings, SEO pages                                      |
 
-Shape to Build already chains: `ceh-business-plan` writes `BUSINESS_PLAN.md`, and
-`ceh-build-planning` reads it and writes the plan that `ceh-build-from-plan` and
-`ceh-check-build-against-plan` read. Prove to Tell does not chain yet.
+Shape to Build: `ceh-business-plan` writes `BUSINESS_PLAN.md`, and `ceh-build-planning` reads it
+and writes the plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read. Prove to
+Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `docs/EVIDENCE.md`, and
+`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `BUSINESS_PLAN.md`.
 
 Three rules hold for every handoff file:
 
@@ -85,13 +85,14 @@ Committing every file a stage writes would bloat the repo, so committed handoff 
 lifecycle:
 
 - **Plans are deleted once built.** `docs/plans/` holds only plans in flight. When a plan reaches
-  `status: built`, the decisions that still matter move to the Key Decisions log in
-  `ARCHITECTURE.md`, the change goes to the changelog, and the plan file is deleted in the same
-  commit. Git history keeps the full plan. This also keeps planning cheap:
+  `status: built` and the build has been checked against it, the decisions that still matter move
+  to the Key Decisions log in `docs/ARCHITECTURE.md`, the change goes to the changelog, and the plan
+  file is deleted in the same commit. Git history keeps the full plan. This also keeps planning cheap:
   `ceh-build-planning:write-build-plan` reads every plan in the folder, so finished plans would add
   to the context of every later run.
-- **Reports are overwritten, not dated.** The evidence report is one file per product, rewritten
-  on each run. Git history holds the earlier runs.
+- **Reports are overwritten, not dated.** `docs/EVIDENCE.md` is one file per product, rewritten
+  on each run. Git history holds the earlier runs. The separate QA, performance, security, and
+  usability reports stay local: only the roll-up is read by another stage.
 
 ## How work is chosen
 
@@ -103,19 +104,16 @@ principle 9 (small surface, sharp edges) a rule for choosing work.
 The rule governs new components only. Fixes to existing components, and the every-step plugins,
 follow the usual rules in `CLAUDE.md`, still bound by the vision.
 
-The likely order, judged from the current gaps and not yet confirmed by a run:
+Done on 2026-10-10, when the strategy was adopted: Prove writes the evidence report, through a
+roll-up skill in `ceh-testing` because it is the Prove plugin every build bundle already installs,
+and Tell reads it with `BUSINESS_PLAN.md` instead of drafting from scratch.
 
-1. **Prove writes the evidence report.** The checks exist (`ceh-testing`, `ceh-security-audit`,
-   `ceh-usability-audit`). What is missing is the one committed file Tell can read. A new roll-up
-   skill in `ceh-testing` writes it from the reports the checks leave, because `ceh-testing` is the
-   Prove plugin every build bundle already installs. Tell reads that one file, never the separate
-   reports.
-2. **Tell reads Shape and Prove.** `ceh-blog` and `ceh-seo` draft from `BUSINESS_PLAN.md` and the
-   evidence report instead of from scratch.
-3. **The learning loop catches recurring overrides.** The vision says an override that keeps
+The likely order next, judged from the current gaps and not yet confirmed by a run:
+
+1. **The learning loop catches recurring overrides.** The vision says an override that keeps
    recurring is a plugin defect. `ceh-every-session:prevent-repeat-mistake` fixes one once a human
    names it, but nothing detects one.
-4. **Parallel builds.** Only what Claude Code's native worktrees and subagents lack, per the
+2. **Parallel builds.** Only what Claude Code's native worktrees and subagents lack, per the
    vision's non-goal on rebuilding Claude Code.
 
 ## Measuring progress: the reference run
@@ -154,17 +152,7 @@ Build: whoever has just shaped an idea usually wants the first plan straight aft
 
 This list shrinks as the gaps close. Remove a line in the PR that closes it.
 
-- `docs/VISION.md` lists `ceh-build-planning` under Shape and does not mention this file. Fixing
-  that is a vision change, in its own PR.
-- `ceh-build-from-plan:implement-from-plan` sets `status: built` but does not distill and delete
-  the plan.
-- `ceh-codebase-explanation:document-architecture` writes `.agents_workspace/ARCHITECTURE.md`. It is
-  a handoff file, read by later planning and the destination of distilled plan decisions, so it
-  belongs in the committed repo.
-- Prove writes four separate reports, dated, in `.agents_workspace/`. There is no evidence report,
-  and no `ceh-testing` skill to roll them up.
-- `ceh-blog` and `ceh-seo` read neither `BUSINESS_PLAN.md` nor an evidence report.
-- The scenario bundle READMEs list plugins but describe no route.
+No known gaps as of 2026-10-10.
 
 ## Open questions
 

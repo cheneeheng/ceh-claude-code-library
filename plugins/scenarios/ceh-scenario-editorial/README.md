@@ -25,6 +25,22 @@ them at the same scope.
 | `ceh-documentation` |
 | `ceh-seo`           |
 
+## Route
+
+The Tell stage of the lifecycle in [`docs/STRATEGY.md`](../../../docs/STRATEGY.md). It reads what
+earlier stages committed and writes what readers see. Nothing enforces the order.
+
+| Stage | Skill that fires                       | Reads                                  | Writes                        |
+| ----- | -------------------------------------- | -------------------------------------- | ----------------------------- |
+| Tell  | `ceh-blog:draft-post`                  | `BUSINESS_PLAN.md`, `docs/EVIDENCE.md` | a post                        |
+| Tell  | `ceh-seo:write-project-listing-text`   | `BUSINESS_PLAN.md`, `docs/EVIDENCE.md` | README first screen, listings |
+| Tell  | `ceh-seo:make-page-crawlable`          | the site                               | page markup                   |
+| Tell  | `ceh-documentation:write-project-docs` | the code                               | user and operator docs        |
+
+Before: `BUSINESS_PLAN.md` comes from `ceh-scenario-ideation`, and `docs/EVIDENCE.md` from
+`ceh-testing:write-evidence-report` in a build bundle. Without them the skills still run and say
+which claims rest on nothing proven.
+
 ## Notes
 
 - Disabling any plugin above is refused while this bundle is enabled. Disable the bundle first.

@@ -43,6 +43,14 @@ reason recorded.
    5. Set the phase's Status to `done` with its evidence: the commit, or the check command and
       one line of its passing output.
 4. **Close the plan.** When every phase is `done`, set `status: built`.
+5. **Retire the plan.** A built plan left in the plans folder is read by every later planning run,
+   so it does not stay. When `ceh-check-build-against-plan` is installed, run
+   `ceh-check-build-against-plan:check-build-against-plan` first, because it reads the plan. Then,
+   in one commit: add each Design decision a later reader still needs to the Key Decisions log in
+   `docs/ARCHITECTURE.md` (the format is in `ceh-codebase-explanation:document-architecture` when
+   installed, otherwise a dated heading with Context, Decision, and Consequences), add the
+   changelog entry, and delete the plan file. Say which decisions moved and that
+   `git log --all -- <plan path>` restores the plan.
 
 ## Rules
 
@@ -56,7 +64,8 @@ reason recorded.
 ## Output
 
 After the run, report per phase: done or stopped, the Check command and its result, assumptions
-taken, and anything not verified with the command the user should run.
+taken, and anything not verified with the command the user should run. When the plan was retired,
+list the decisions moved to `docs/ARCHITECTURE.md`.
 
 ## Stop conditions
 

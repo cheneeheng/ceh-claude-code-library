@@ -191,9 +191,22 @@ editing both.
 
 | Copy                                                                    | Section                             | Diverges                                                                 |
 | ----------------------------------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------ |
-| `plugins/standalone/ceh-seo/skills/write-project-listing-text/SKILL.md` | § Procedure, 4. Apply the GEO rules | adds "state scope facts explicitly"; drops the answer-first-section rule |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/SKILL.md` | § Procedure, 5. Apply the GEO rules | adds "state scope facts explicitly"; drops the answer-first-section rule |
 
 **Shared:** extractable standalone claims with numbers over adjectives, and question-shaped headings.
+
+## Tell reads the product handoff files
+
+**Canonical:** `plugins/standalone/ceh-blog/skills/draft-post/SKILL.md` — § Procedure, 2. Read the material, "Product handoff files"
+
+| Copy                                                                    | Section                                        | Diverges                                         |
+| ----------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------ |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/SKILL.md` | § Procedure, 1. Read the product handoff files | a numbered step, not a paragraph; same sentences |
+
+**Shared:** what Tell takes from `BUSINESS_PLAN.md` (user, problem, differentiator), that
+`docs/EVIDENCE.md` bounds every product claim to its Claims section with nothing said about a
+`stale`, `not run`, or `open issues` area, and the missing-file fallback. The file names and
+statuses must match `ceh-testing:write-evidence-report` and `docs/STRATEGY.md`.
 
 ## Python environment foundation (uv / ruff / mypy + style)
 

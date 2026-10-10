@@ -14,23 +14,23 @@ a removed plugin loses its row.
 
 | Plugin                   | Version | Changed in   |
 | ------------------------ | ------- | ------------ |
-| `ceh-scenario-editorial` | 1.1.0   | `2026-10-08` |
-| `ceh-scenario-ideation`  | 1.2.0   | `2026-10-09` |
-| `ceh-scenario-library`   | 1.2.0   | `2026-10-09` |
-| `ceh-scenario-service`   | 1.2.0   | `2026-10-09` |
-| `ceh-scenario-webapp`    | 1.2.0   | `2026-10-09` |
+| `ceh-scenario-editorial` | 1.1.1   | `2026-10-10` |
+| `ceh-scenario-ideation`  | 1.2.1   | `2026-10-10` |
+| `ceh-scenario-library`   | 1.2.1   | `2026-10-10` |
+| `ceh-scenario-service`   | 1.2.1   | `2026-10-10` |
+| `ceh-scenario-webapp`    | 1.2.1   | `2026-10-10` |
 
 ## Standalone plugins
 
 | Plugin                         | Version | Changed in   |
 | ------------------------------ | ------- | ------------ |
 | `ceh-ag-ui`                    | 1.1.1   | `2026-10-08` |
-| `ceh-blog`                     | 1.0.5   | `2026-10-08` |
-| `ceh-build-from-plan`          | 1.0.0   | `2026-10-09` |
-| `ceh-build-planning`           | 1.1.0   | `2026-10-09` |
+| `ceh-blog`                     | 1.0.6   | `2026-10-10` |
+| `ceh-build-from-plan`          | 1.0.1   | `2026-10-10` |
+| `ceh-build-planning`           | 1.1.1   | `2026-10-10` |
 | `ceh-business-plan`            | 1.1.1   | `2026-10-09` |
-| `ceh-check-build-against-plan` | 1.0.1   | `2026-10-09` |
-| `ceh-codebase-explanation`     | 1.2.1   | `2026-10-09` |
+| `ceh-check-build-against-plan` | 1.0.2   | `2026-10-10` |
+| `ceh-codebase-explanation`     | 1.2.2   | `2026-10-10` |
 | `ceh-coding-conduct`           | 2.2.1   | `2026-10-09` |
 | `ceh-competitor-analysis`      | 1.1.5   | `2026-10-08` |
 | `ceh-documentation`            | 1.0.4   | `2026-10-08` |
@@ -41,10 +41,10 @@ a removed plugin loses its row.
 | `ceh-python-library`           | 1.0.2   | `2026-10-08` |
 | `ceh-python-service`           | 1.1.1   | `2026-10-09` |
 | `ceh-security-audit`           | 1.0.0   | `2026-10-09` |
-| `ceh-seo`                      | 1.1.1   | `2026-10-08` |
+| `ceh-seo`                      | 1.1.2   | `2026-10-10` |
 | `ceh-session-diagnosis`        | 1.0.0   | `2026-10-09` |
 | `ceh-session-to-skill`         | 1.0.0   | `2026-10-08` |
-| `ceh-testing`                  | 1.3.0   | `2026-10-09` |
+| `ceh-testing`                  | 1.4.0   | `2026-10-10` |
 | `ceh-ui-design`                | 1.0.4   | `2026-10-09` |
 | `ceh-usability-audit`          | 1.1.3   | `2026-10-09` |
 | `ceh-web-frontend`             | 1.3.1   | `2026-10-09` |
