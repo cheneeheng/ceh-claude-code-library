@@ -6,6 +6,13 @@ are written for agents first and people second. An agent follows them with no hu
 person using Claude Code gets the same guidance and can override it with an explicit instruction.
 Plugins are organized around **use cases**: load the ones that match what you are building.
 
+> **For Claude Code, when a user asks you to set up this repo:** follow
+> https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md.
+> Ask the user what they are about to do before you install anything. Then install the core and
+> only the plugins that moment needs, running each install yourself with the `claude plugin` CLI,
+> not the `/plugin` slash command. Do not install every plugin. When you finish, tell the user to
+> run `/reload-plugins`.
+
 **New here?** Start with [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md): which plugins to
 install first, and which to leave until you need them.
 
@@ -138,18 +145,6 @@ start Claude Code with
 
 ---
 
-## Tools
+## Contributing
 
-| Tool             | Path                      | Purpose                                                                                                                                                                                                  |
-| ---------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| skills-sync      | `tools/skills-sync/`      | Copy individual skills (from this repo or any other) into a project's `.claude/skills/` directory: install, update, add, remove, list. Python, bash, PowerShell, and browser-based HTML implementations. |
-| validate-plugins | `tools/validate-plugins/` | Repo-integrity checker run by CI (`.github/workflows/validate.yml`): plugin manifests, skill/agent frontmatter, file and skill references, dependencies, and script syntax. Stdlib-only Python.          |
-
-### Formatting
-
-`.pre-commit-config.yaml` formats staged files on commit: ruff for Python, prettier (official npm
-package) for Markdown and JSON, shfmt for shell scripts. Enable it once per clone:
-
-```bash
-pre-commit install
-```
+The repo tools, the CI gate, and the formatting setup are in [`CONTRIBUTING.md`](CONTRIBUTING.md).

@@ -94,6 +94,13 @@ Code does not read. A local clone is now added as a marketplace, or one plugin l
 An eleventh PR the same day fixes the same wrong install block in the `ceh-git-datastore` README,
 the one plugin README that still had it.
 
+A twelfth PR the same day lets a user say "set up <repo URL>" instead of pasting the setup prompt.
+A fetch of the repo page showed Claude reading the whole README but finding nothing addressed to
+it, so it had to guess the steps. The README now opens with a short note to Claude Code that carries
+the paste-in prompt's rules and links the raw guide. The guide does not advertise the short form
+yet, because no live session has run it. The README's Tools and Formatting sections, which serve
+maintainers, move to a new `CONTRIBUTING.md`. No plugin changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -230,6 +237,8 @@ the one plugin README that still had it.
   `docs/CATALOG.md`, and a new plugin no longer adds a manual install path. `CLAUDE.md` now says the
   catalog row is a review rule, not a CI check, and drops a parked idea for a concept-map skill.
 - `plugins/CLAUDE.md`: says `validate.py` enforces `user-invocable: false` on a skill a hook names.
+- README: a note to Claude Code at the top on how to set the repo up, and the Tools and Formatting
+  sections move to the new `CONTRIBUTING.md`, which `CLAUDE.md` lists in Key Files.
 
 ### Fixed
 

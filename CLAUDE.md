@@ -213,6 +213,7 @@ Where they conflict, this section wins:
 | `.claude-plugin/marketplace.json`                            | Marketplace listing (all plugins)                                              |
 | `README.md`                                                  | User-facing overview — Plugins and lifecycle-stage tables, install steps       |
 | `docs/CATALOG.md`                                            | Every skill and agent, grouped by plugin, with its Invoke cell                 |
+| `CONTRIBUTING.md`                                            | Repo tools, the local CI gate, and pre-commit formatting                       |
 | `docs/GETTING_STARTED.md`                                    | First-time install route: the core, then one plugin per stage reached          |
 | `docs/VISION.md`                                             | Identity, scope, goals, and principles: why the rules here are what they are   |
 | `docs/STRATEGY.md`                                           | How the plugins form one system: stages, handoff files, how work is chosen     |
