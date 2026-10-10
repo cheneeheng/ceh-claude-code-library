@@ -9,6 +9,20 @@ The route below follows the product lifecycle in [`STRATEGY.md`](STRATEGY.md): S
 Tell. You can start at any stage. Each plugin works installed alone, and with several installed they
 chain through the committed files each one writes.
 
+## Let Claude set you up
+
+Open Claude Code in the repo you are about to work in, and paste:
+
+```
+Set me up with the ceh-claude-code-library Claude Code plugins, following
+https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md
+Ask me what you need to know first. Run the install commands yourself with the `claude plugin` CLI.
+```
+
+Claude asks what you are about to do, then installs the core and only the plugins that moment
+needs. Run `/reload-plugins` when it finishes: the new skills do not load until you do. Steps 1 to
+5 are the same route by hand, and the route Claude follows.
+
 ## 1. Add the marketplace
 
 ```
@@ -34,7 +48,8 @@ are for coding sessions.
 ## 3. Add the plugin for what you are about to do, at project scope
 
 `--scope project` keeps a plugin to the repo that needs it, so a repo that is only being planned
-does not load the build and launch plugins.
+does not load the build and launch plugins. It records the plugin in the repo's
+`.claude/settings.json`: commit that file and everyone who clones the repo gets the same plugins.
 
 | Stage | You are about to...                           | Install                                             | Skill that fires                                                        | It writes                                  |
 | ----- | --------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------ |
@@ -59,8 +74,18 @@ Pick one stack plugin for the build. Each brings `ceh-testing`, and the web one 
 | a distributable Python lib | `ceh-python-library` |
 | a web frontend             | `ceh-web-frontend`   |
 
+For example, a new Python backend service starts with a plan and adds the build plugins once the
+plan is written. In a Claude Code session opened in that repo, install the planning plugin now:
+
 ```
 /plugin install ceh-build-planning@ceh-claude-code-library --scope project
+```
+
+Then, when you build from the plan:
+
+```
+/plugin install ceh-build-from-plan@ceh-claude-code-library --scope project
+/plugin install ceh-python-service@ceh-claude-code-library --scope project
 ```
 
 The Tell stage reads `BUSINESS_PLAN.md` and `docs/EVIDENCE.md` when they exist. Without them it
@@ -83,9 +108,16 @@ still runs, and says which claims rest on nothing proven.
 ## 5. Check it worked
 
 ```
+/reload-plugins
 /help
 ```
 
-The `ceh-*:` skills you installed should appear in the skills list. To drop a plugin you no longer
-need, `/plugin uninstall <name>@ceh-claude-code-library`. Prerequisites (Python for hooks, `uv`,
-Bun, the GitHub CLI) are in the root [`README.md`](../README.md#prerequisites).
+Installed plugins do not load into a running session until `/reload-plugins` or a new session. Then
+the `ceh-*:` skills you installed appear in the skills list. `claude plugin list` shows each
+installed plugin with its version and scope. Running an install again is safe: it reports that the
+plugin is already installed, so after an interruption, check the list and carry on.
+
+To drop a plugin you no longer need, `claude plugin uninstall <name>@ceh-claude-code-library`, adding
+`--scope project` for one installed at project scope. Removing the marketplace removes every plugin
+installed from it. Prerequisites (Python for hooks, `uv`, Bun, the GitHub CLI) are in the root
+[`README.md`](../README.md#prerequisites).
