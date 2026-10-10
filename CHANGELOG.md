@@ -101,6 +101,13 @@ the paste-in prompt's rules and links the raw guide. The guide does not advertis
 yet, because no live session has run it. The README's Tools and Formatting sections, which serve
 maintainers, move to a new `CONTRIBUTING.md`. No plugin changes.
 
+A thirteenth PR the same day follows a live test of that note in an isolated config. Claude asked
+first, installed only the right plugins, and asked for `/reload-plugins`, but it cloned the repo
+into the user's folder to read the guide. The note and the guide now say not to clone: read the
+guide from its URL and add the marketplace by name. The README's "From a local clone" section is
+marked as not part of this setup. With the test passed, the guide leads with the short form,
+`setup <repo URL>`, and keeps the long prompt as a fallback. No plugin changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -239,6 +246,9 @@ maintainers, move to a new `CONTRIBUTING.md`. No plugin changes.
 - `plugins/CLAUDE.md`: says `validate.py` enforces `user-invocable: false` on a skill a hook names.
 - README: a note to Claude Code at the top on how to set the repo up, and the Tools and Formatting
   sections move to the new `CONTRIBUTING.md`, which `CLAUDE.md` lists in Key Files.
+- README note and `docs/GETTING_STARTED.md`: setup never clones the repo. The guide leads with
+  `setup https://github.com/cheneeheng/ceh-claude-code-library`, and the long prompt is the
+  fallback.
 
 ### Fixed
 

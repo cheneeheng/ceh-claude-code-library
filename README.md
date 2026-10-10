@@ -8,6 +8,9 @@ Plugins are organized around **use cases**: load the ones that match what you ar
 
 > **For Claude Code, when a user asks you to set up this repo:** follow
 > https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md.
+> Do not clone this repository: read the guide at that URL, and add the marketplace by name with
+> `claude plugin marketplace add cheneeheng/ceh-claude-code-library`, which needs no local copy.
+> The "From a local clone" section below is not for this setup.
 > Ask the user what they are about to do before you install anything. Then install the core and
 > only the plugins that moment needs, running each install yourself with the `claude plugin` CLI,
 > not the `/plugin` slash command. Do not install every plugin. When you finish, tell the user to
