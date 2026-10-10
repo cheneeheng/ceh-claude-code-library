@@ -91,7 +91,8 @@ what fails without it. A skill that only reads files and emits Markdown gets no 
 
 Every skill states `disable-model-invocation`, `user-invocable`, and `license` explicitly, even at
 their defaults, so the frontmatter says who invokes it. The validator checks that all three are
-present. Which values they take is a review rule, and every skill falls into one of three cases:
+present, and that a skill a hook script names sets `user-invocable: false`. The other values are a
+review rule, and every skill falls into one of three cases:
 
 | Who starts it  | `disable-model-invocation` | `user-invocable` | Use it for                                                                                          |
 | -------------- | -------------------------- | ---------------- | --------------------------------------------------------------------------------------------------- |
@@ -102,7 +103,7 @@ present. Which values they take is a review rule, and every skill falls into one
 Model only is the usual choice when the user would never type the name. That covers every skill a
 hook names (`agent-coding-contract`, `write-less-code`, `usage-limit-handoff`, `delegate-bulk-reads`,
 `branch`), the router-called `ceh-business-plan` specialists, the path-scoped stack standards, and
-standards like `design-test-cases` and `write-plain-language`. Its root `README.md` Invoke cell
+standards like `design-test-cases` and `write-plain-language`. Its `docs/CATALOG.md` Invoke cell
 reads `Model-only, no slash command`.
 
 User only is rare because the library is agents-first. Such a skill drops out of the skill listing

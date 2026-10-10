@@ -83,6 +83,14 @@ step and marked experimental. It was the only published plugin missing there, th
 is an experiment and leaves the table, to `archive/` or as a standard, when the experiment ends. No
 plugin changes.
 
+A tenth PR the same day moves the per-skill and per-agent tables out of the README into
+`docs/CATALOG.md`. They were about 300 of the README's 516 lines, a third copy of what each plugin
+README and `SKILL.md` description already say, and they buried what the repo is and how to install
+it. The README keeps the Plugins and lifecycle-stage tables. The manual install section is
+rewritten: it told users to list plugin paths under a `plugins` key in `settings.json`, which Claude
+Code does not read. A local clone is now added as a marketplace, or one plugin loaded with
+`--plugin-dir`. No plugin changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -212,6 +220,13 @@ plugin changes.
   template, `plugins/CLAUDE.md`, and `tools/validate-plugins/README.md` state the agent cap.
 - `docs/VISION.md`: `ceh-orchestration-lab` (experimental) in the Every step row of the lifecycle
   table, with a note on how it leaves the table.
+- README: the Skills and Agents tables, with the plugin-agent notes, move to the new
+  `docs/CATALOG.md`, linked from the top of the README. The 26-path manual install block becomes
+  `/plugin marketplace add` on a local clone, plus `claude --plugin-dir` for a one-session trial.
+- `CLAUDE.md`, `plugins/CLAUDE.md`, and `add-plugin-component`: new skill and agent rows go in
+  `docs/CATALOG.md`, and a new plugin no longer adds a manual install path. `CLAUDE.md` now says the
+  catalog row is a review rule, not a CI check, and drops a parked idea for a concept-map skill.
+- `plugins/CLAUDE.md`: says `validate.py` enforces `user-invocable: false` on a skill a hook names.
 
 ## 2026-10-09
 

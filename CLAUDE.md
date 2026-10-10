@@ -64,7 +64,7 @@ Categorization rules of thumb:
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
 audits/<date>/                # Model-audit reports, one <plugin>.md each plus SUMMARY.md — written by the model-audit skill
 .github/workflows/            # validate.yml — runs validate.py on push and PR; model-audit.yml — weekly audit draft PR
-docs/                         # GETTING_STARTED.md (user-facing install guide) and maintainer docs — VISION.md, STRATEGY.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
+docs/                         # GETTING_STARTED.md (user-facing install guide), CATALOG.md (every skill and agent), and maintainer docs — VISION.md, STRATEGY.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
 examples/                     # Worked usage examples, a ceh-<plugin>/README.md where one exists (only ceh-ag-ui today) — not validated
 plugins/                      # All plugins — one directory per plugin, no tier subfolders
 └── standalone/
@@ -90,9 +90,6 @@ tools/
 
 Each plugin's domain is in the root `README.md` Plugins table and its own `plugin.json`
 `description`.
-
-A concept-map skill for markdown-only knowledge bases would be a separate sibling of
-`document-architecture`, not part of it.
 
 ## Skills and Frontmatter
 
@@ -123,9 +120,10 @@ The repo-local skill `.claude/skills/add-plugin-component/` is the single checkl
 changing a skill, agent, hook, script, or a whole new plugin. It auto-loads when a `SKILL.md` or
 `agents/*.md` is created; load it explicitly if it has not.
 
-Whatever else gets skipped, these four land in the **same commit** or CI fails:
+Whatever else gets skipped, these four land in the **same commit**. CI fails when item 2, 3, or 4
+is missing. Item 1 is a review rule:
 
-1. A row in the root `README.md` table (Skills or Agents).
+1. A row in `docs/CATALOG.md` (Skills or Agents).
 2. A row in `plugins/standalone/ceh-<plugin>/README.md`.
 3. A version bump in **both** `plugins/standalone/ceh-<plugin>/.claude-plugin/plugin.json` and
    `.claude-plugin/marketplace.json` — level per the Versioning section below. CI checks only that
@@ -213,7 +211,8 @@ Where they conflict, this section wins:
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
 | `plugins/standalone/ceh-<plugin>/.claude-plugin/plugin.json` | Plugin version, metadata, dependencies                                         |
 | `.claude-plugin/marketplace.json`                            | Marketplace listing (all plugins)                                              |
-| `README.md`                                                  | User-facing docs — plugin, skill, and agent tables live here                   |
+| `README.md`                                                  | User-facing overview — Plugins and lifecycle-stage tables, install steps       |
+| `docs/CATALOG.md`                                            | Every skill and agent, grouped by plugin, with its Invoke cell                 |
 | `docs/GETTING_STARTED.md`                                    | First-time install route: the core, then one plugin per stage reached          |
 | `docs/VISION.md`                                             | Identity, scope, goals, and principles: why the rules here are what they are   |
 | `docs/STRATEGY.md`                                           | How the plugins form one system: stages, handoff files, how work is chosen     |
