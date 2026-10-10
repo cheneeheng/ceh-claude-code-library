@@ -399,51 +399,24 @@ Environment variables the plugins read are indexed in
 ### Step 2 — Install what you need now
 
 Do not install everything. Follow [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md): a small
-core once at user scope, then one plugin per stage at project scope as you reach it. The full list,
-for reference:
-
-```
-/plugin install ceh-every-session@ceh-claude-code-library --scope user
-/plugin install ceh-coding-conduct@ceh-claude-code-library --scope user
-/plugin install ceh-codebase-explanation@ceh-claude-code-library --scope user
-/plugin install ceh-git-workflow@ceh-claude-code-library --scope user
-/plugin install ceh-testing@ceh-claude-code-library --scope user
-/plugin install ceh-python-service@ceh-claude-code-library --scope user
-/plugin install ceh-python-library@ceh-claude-code-library --scope user
-/plugin install ceh-web-frontend@ceh-claude-code-library --scope user
-/plugin install ceh-ui-design@ceh-claude-code-library --scope user
-/plugin install ceh-seo@ceh-claude-code-library --scope user
-/plugin install ceh-blog@ceh-claude-code-library --scope user
-/plugin install ceh-build-planning@ceh-claude-code-library --scope user
-/plugin install ceh-build-from-plan@ceh-claude-code-library --scope user
-/plugin install ceh-check-build-against-plan@ceh-claude-code-library --scope user
-/plugin install ceh-documentation@ceh-claude-code-library --scope user
-/plugin install ceh-ag-ui@ceh-claude-code-library --scope user
-/plugin install ceh-usability-audit@ceh-claude-code-library --scope user
-/plugin install ceh-business-plan@ceh-claude-code-library --scope user
-/plugin install ceh-git-datastore@ceh-claude-code-library --scope user
-/plugin install ceh-workflow-builder@ceh-claude-code-library --scope user
-/plugin install ceh-workflow-runner@ceh-claude-code-library --scope user
-/plugin install ceh-session-to-skill@ceh-claude-code-library --scope user
-/plugin install ceh-session-diagnosis@ceh-claude-code-library --scope user
-/plugin install ceh-security-audit@ceh-claude-code-library --scope user
-/plugin install ceh-competitor-analysis@ceh-claude-code-library --scope user
-/plugin install ceh-orchestration-lab@ceh-claude-code-library --scope user
-```
+core once at user scope, then one plugin per stage at project scope as you reach it. The guide has
+the commands, and every plugin is listed in the [Plugins](#plugins) table above.
 
 Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-web-frontend`,
 `ceh-ag-ui` and `ceh-competitor-analysis` bring `ceh-ui-design`. Install `ceh-workflow-builder`
 where you author a flow and `ceh-workflow-runner` wherever a flow runs: neither brings the other.
 `ceh-orchestration-lab` is experimental: install it only in the projects where you want to try
-orchestration strategies. Add `--scope project` instead of `--scope user` for a project-specific install.
+orchestration strategies.
 
 ### Step 3 — Verify
 
 ```
+/reload-plugins
 /help
 ```
 
-The `ceh-*:` skills should appear in the skills list.
+Installed plugins load after `/reload-plugins` or in a new session. Then the `ceh-*:` skills appear
+in the skills list.
 
 ### Manual installation (alternative)
 

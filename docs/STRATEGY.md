@@ -132,9 +132,9 @@ The run makes real model calls, so it waits for an explicit human go-ahead. It h
 
 ## A guide shows the route, not bundles
 
-[`GETTING_STARTED.md`](GETTING_STARTED.md) shows the route: a core installed once, then a table of
-moments in stage order, each naming the plugin to install, the skill that fires, and the handoff
-file it writes. It shows the route without enforcing or installing it.
+[`GETTING_STARTED.md`](GETTING_STARTED.md) shows the route: a core installed once, then a list of
+moments in stage order, each naming the plugin to install, the command that starts it, and the
+handoff file it writes. It shows the route without enforcing or installing it.
 
 Scenario bundles did this job until 2026-10-10 and were retired. Three were cut by stack and two by
 stage, so they mixed the two axes this file keeps apart. A stack bundle installed all of Build and

@@ -44,6 +44,12 @@ installed only the core and the plugin for the stated moment, and the skills app
 `/reload-plugins`. A setup script was considered and rejected: a session needs nothing installed
 first, and a script would need four copies to keep in sync. No plugin changes.
 
+A fifth PR the same day clears the remaining walker findings. The guide named
+`ceh-business-plan:find-product-market-fit` as the first Shape step, but that skill cannot be
+typed. The entry point is `/ceh-business-plan:develop-business-plan`, so every moment now names the
+slash command that starts it. The README's paste-ready block of all 26 plugins at user scope is
+gone, because walkers kept copying it instead of following the guide. No plugin changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -98,6 +104,16 @@ first, and a script would need four copies to keep in sync. No plugin changes.
   3 says project scope writes `.claude/settings.json`. Step 5 adds `/reload-plugins`,
   `claude plugin list`, safe re-runs, the `--scope project` uninstall, and that removing the
   marketplace removes its plugins.
+- `docs/GETTING_STARTED.md`: the stage table becomes a list per stage that reads at 80 columns,
+  each moment with the slash command that starts it. The Shape entry point is corrected to
+  `/ceh-business-plan:develop-business-plan`. New lines cover how to confirm and undo the
+  marketplace, that `/plugin` and `claude plugin` are the same command, what user scope and a hook
+  are, the optional `ceh-every-session` install, and creating a branch before the first skill
+  writes in a new repo.
+- README: Install step 2 drops the 26-line `--scope user` command block and points to the guide.
+  Step 3 adds `/reload-plugins`.
+- `docs/STRATEGY.md` and `add-plugin-component`: describe the guide's moments as a list with slash
+  commands, and drop the README `/plugin install` list from the new-plugin checklist.
 
 - `CLAUDE.md`: lists `docs/STRATEGY.md` in Structure and Key Files.
 - `docs/VISION.md`: `ceh-build-planning` moves from Shape to Build, and the scope section links
