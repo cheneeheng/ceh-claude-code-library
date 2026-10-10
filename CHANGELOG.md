@@ -126,6 +126,12 @@ reaches every user. A hard dependency from every plugin on it was considered and
 the every-run rule for edges and VISION principle 6, and it would force the plugin's hooks onto users
 who never chose them.
 
+A sixteenth PR the same day widens the vision's scope test to admit an advisor: a component that
+tells a person which installed skill or agent fits their situation, and runs nothing. Nobody
+remembers every installed skill, and which stage to enter next is the person's intent, a fact only
+they hold. Stopping at the suggestion keeps it clear of the router the strategy rules out. The
+advisor itself lands in a separate PR, as the vision requires. No plugin changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -275,6 +281,8 @@ who never chose them.
   plugin READMEs, the root README, and `docs/IDEAS.md` follow.
 - `docs/GETTING_STARTED.md`: `ceh-every-session` is installed by everyone, first, and the note to
   Claude says to install it whatever the user is about to do.
+- `docs/VISION.md`: the scope test admits an advisor that points a person at the installed skill
+  or agent that fits, and runs nothing.
 
 ### Fixed
 
