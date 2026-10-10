@@ -11,7 +11,7 @@ chain through the committed files each one writes.
 
 ## Let Claude set you up
 
-Open Claude Code in the repo you are about to work in, and paste:
+Open Claude Code in the folder you are about to work in, a git repo or any plain folder, and paste:
 
 ```
 Set me up with the ceh-claude-code-library Claude Code plugins, following
@@ -36,9 +36,12 @@ installed from it.
 Every `/plugin ...` command typed in a Claude Code session also runs in a terminal as
 `claude plugin ...`. They are the same command.
 
+Interrupted partway? `claude plugin list` shows what is already installed, and running an install
+again is safe.
+
 ## 2. Install the core once, at user scope
 
-User scope installs a plugin for you in every repo on this machine. A hook is a script Claude Code
+User scope installs a plugin for you in every folder you open Claude Code in. A hook is a script Claude Code
 runs at fixed points, such as before each file edit, so a plugin with hooks acts on every session.
 
 | Plugin               | Install when                  | What you get                                                                                                          |
@@ -47,31 +50,42 @@ runs at fixed points, such as before each file edit, so a plugin with hooks acts
 | `ceh-coding-conduct` | you write code with Claude    | the coding contract, write-less-code, root-cause debugging, design before code. Always on, through hooks              |
 | `ceh-every-session`  | optional, any kind of session | session handoff, research notes, questionnaires, plan stress-tests, and a usage-limit guard. Always on, through hooks |
 
+Install only the rows whose "Install when" fits you. If you neither write code nor use git, for
+example you only write business plans or posts, skip the first block: `ceh-every-session` is the
+only core plugin that may apply.
+
+If you write code in git repos:
+
 ```
 /plugin install ceh-git-workflow@ceh-claude-code-library --scope user
 /plugin install ceh-coding-conduct@ceh-claude-code-library --scope user
 ```
 
-To add the optional one too:
+To add the optional one:
 
 ```
 /plugin install ceh-every-session@ceh-claude-code-library --scope user
 ```
 
-Skip `ceh-coding-conduct` if you only write business plans or posts: its hooks and output style
-are for coding sessions.
-
 ## 3. Add the plugin for what you are about to do, at project scope
 
-`--scope project` keeps a plugin to the repo that needs it, so a repo that is only being planned
-does not load the build and launch plugins. It records the plugin in the repo's
-`.claude/settings.json`: commit that file and everyone who clones the repo gets the same plugins.
+`--scope project` keeps a plugin to the folder that needs it, a git repo or any plain folder, so a
+project that is only being planned does not load the build and launch plugins. It records the
+plugin in that folder's `.claude/settings.json`. In a git repo, commit that file and everyone who
+clones the repo gets the same plugins.
 
-In a brand-new repo, create a branch before the first skill writes anything: `ceh-git-workflow`
-blocks file edits on the default branch. `git checkout -b <name>` works even before the first
-commit.
+If you installed `ceh-git-workflow` and the repo is brand new, create a branch before the first
+skill writes anything: that plugin blocks file edits on the default branch.
+`git checkout -b <name>` works even before the first commit.
 
-Each moment names the plugin to install, the command that starts it, and the file it writes.
+Install each plugin below in a Claude Code session opened in that folder, putting its name in place
+of `<plugin>`:
+
+```
+/plugin install <plugin>@ceh-claude-code-library --scope project
+```
+
+Each moment names the plugin, the command that starts it, and the file it writes.
 
 **Shape**
 
