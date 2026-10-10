@@ -77,6 +77,12 @@ body, where it already was. Skills and agents now share one 300-character cap, a
 descriptions together come to 26,768 characters. The repo-local `add-plugin-component` skill, about
 700 characters, is cut to fit as well.
 
+A ninth PR the same day adds `ceh-orchestration-lab` to the vision's lifecycle table, under Every
+step and marked experimental. It was the only published plugin missing there, though the README and
+`CLAUDE.md` already listed it, while the vision claimed no known gaps. A short note says the plugin
+is an experiment and leaves the table, to `archive/` or as a standard, when the experiment ends. No
+plugin changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -204,6 +210,8 @@ descriptions together come to 26,768 characters. The repo-local `add-plugin-comp
   the description-total ratchet lowered from 30,010 to 26,768.
 - `add-plugin-component`: its own description is cut from about 700 to 300 characters, and the agent
   template, `plugins/CLAUDE.md`, and `tools/validate-plugins/README.md` state the agent cap.
+- `docs/VISION.md`: `ceh-orchestration-lab` (experimental) in the Every step row of the lifecycle
+  table, with a note on how it leaves the table.
 
 ## 2026-10-09
 
