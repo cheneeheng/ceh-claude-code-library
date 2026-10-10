@@ -93,12 +93,7 @@ Postgres, so the handoff is a branch most runs never reach.
 /plugin install ceh-git-datastore@ceh-claude-code-library --scope user
 ```
 
-Or manually in `~/.claude/settings.json`:
-
-```json
-{
-  "plugins": [
-    { "path": "~/ceh-claude-code-library/plugins/standalone/ceh-git-datastore" }
-  ]
-}
-```
+Or from a local clone: add it as the marketplace with
+`/plugin marketplace add ~/ceh-claude-code-library`, then run the same install command. To try the
+plugin for one session without installing it, start Claude Code with
+`claude --plugin-dir ~/ceh-claude-code-library/plugins/standalone/ceh-git-datastore`.
