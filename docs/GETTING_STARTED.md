@@ -29,7 +29,17 @@ needs. Run `/reload-plugins` when it finishes: the new skills do not load until 
 /plugin marketplace add cheneeheng/ceh-claude-code-library
 ```
 
+`claude plugin marketplace list` confirms it was added. To undo it, run
+`claude plugin marketplace remove ceh-claude-code-library`, which also uninstalls every plugin
+installed from it.
+
+Every `/plugin ...` command typed in a Claude Code session also runs in a terminal as
+`claude plugin ...`. They are the same command.
+
 ## 2. Install the core once, at user scope
+
+User scope installs a plugin for you in every repo on this machine. A hook is a script Claude Code
+runs at fixed points, such as before each file edit, so a plugin with hooks acts on every session.
 
 | Plugin               | Install when                  | What you get                                                                                                          |
 | -------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -42,6 +52,12 @@ needs. Run `/reload-plugins` when it finishes: the new skills do not load until 
 /plugin install ceh-coding-conduct@ceh-claude-code-library --scope user
 ```
 
+To add the optional one too:
+
+```
+/plugin install ceh-every-session@ceh-claude-code-library --scope user
+```
+
 Skip `ceh-coding-conduct` if you only write business plans or posts: its hooks and output style
 are for coding sessions.
 
@@ -51,19 +67,45 @@ are for coding sessions.
 does not load the build and launch plugins. It records the plugin in the repo's
 `.claude/settings.json`: commit that file and everyone who clones the repo gets the same plugins.
 
-| Stage | You are about to...                           | Install                                             | Skill that fires                                                        | It writes                                  |
-| ----- | --------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------ |
-| Shape | test whether an idea is worth building        | `ceh-business-plan`                                 | `ceh-business-plan:find-product-market-fit`                             | `BUSINESS_PLAN.md`                         |
-| Shape | learn from a competitor's repo or product     | `ceh-competitor-analysis`                           | `ceh-competitor-analysis:analyze-competitor`                            | reports in `.agents_workspace/`            |
-| Build | plan a new app or one feature                 | `ceh-build-planning`                                | `ceh-build-planning:write-build-plan`                                   | `docs/plans/<slug>.md`                     |
-| Build | build from that plan                          | `ceh-build-from-plan` and your stack plugin (below) | `ceh-build-from-plan:implement-from-plan`                               | the code, the plan's evidence              |
-| Build | write the user and operator docs              | `ceh-documentation`                                 | `ceh-documentation:write-project-docs`                                  | `docs/`                                    |
-| Prove | check the code is what the plan said          | `ceh-check-build-against-plan`                      | `ceh-check-build-against-plan:check-build-against-plan`                 | a report in the session                    |
-| Prove | test it and roll up the evidence              | `ceh-testing` (a stack plugin already brings it)    | `ceh-testing:explore-app-for-bugs`, `ceh-testing:write-evidence-report` | `docs/EVIDENCE.md`                         |
-| Prove | check a stranger can use it                   | `ceh-usability-audit`                               | `ceh-usability-audit:simulate-newcomer-first-run`                       | a report in `.agents_workspace/`           |
-| Prove | audit the whole codebase for security         | `ceh-security-audit`                                | `ceh-security-audit:audit-codebase-security`                            | a report                                   |
-| Tell  | write a launch post                           | `ceh-blog`                                          | `ceh-blog:draft-post`                                                   | a post                                     |
-| Tell  | make it findable: README, listings, web pages | `ceh-seo`                                           | `ceh-seo:write-project-listing-text`, `ceh-seo:make-page-crawlable`     | README first screen, listings, page markup |
+In a brand-new repo, create a branch before the first skill writes anything: `ceh-git-workflow`
+blocks file edits on the default branch. `git checkout -b <name>` works even before the first
+commit.
+
+Each moment names the plugin to install, the command that starts it, and the file it writes.
+
+**Shape**
+
+- Test whether an idea is worth building: install `ceh-business-plan`, start with
+  `/ceh-business-plan:develop-business-plan`. Writes `BUSINESS_PLAN.md`.
+- Learn from a competitor's repo or product: install `ceh-competitor-analysis`, start with
+  `/ceh-competitor-analysis:analyze-competitor`. Writes reports in `.agents_workspace/`.
+
+**Build**
+
+- Plan a new app or one feature: install `ceh-build-planning`, start with
+  `/ceh-build-planning:write-build-plan`. Writes `docs/plans/<slug>.md`.
+- Build from that plan: install `ceh-build-from-plan` and your stack plugin (below), start with
+  `/ceh-build-from-plan:implement-from-plan`. Writes the code and the plan's evidence.
+- Write the user and operator docs: install `ceh-documentation`, start with
+  `/ceh-documentation:write-project-docs`. Writes `docs/`.
+
+**Prove**
+
+- Check the code is what the plan said: install `ceh-check-build-against-plan`, start with
+  `/ceh-check-build-against-plan:check-build-against-plan`. Reports in the session.
+- Test it and roll up the evidence: `ceh-testing` (a stack plugin already brings it), start with
+  `/ceh-testing:explore-app-for-bugs`, then `/ceh-testing:write-evidence-report`. Writes
+  `docs/EVIDENCE.md`.
+- Check a stranger can use it: install `ceh-usability-audit`, start with
+  `/ceh-usability-audit:simulate-newcomer-first-run`. Writes a report in `.agents_workspace/`.
+- Audit the whole codebase for security: install `ceh-security-audit`, start with
+  `/ceh-security-audit:audit-codebase-security`. Writes a report.
+
+**Tell**
+
+- Write a launch post: install `ceh-blog`, start with `/ceh-blog:draft-post`. Writes a post.
+- Make it findable: install `ceh-seo`, start with `/ceh-seo:write-project-listing-text` for the
+  README first screen and listings, or `/ceh-seo:make-page-crawlable` for web pages.
 
 Pick one stack plugin for the build. Each brings `ceh-testing`, and the web one also brings
 `ceh-ui-design`:

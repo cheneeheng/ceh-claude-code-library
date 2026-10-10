@@ -280,11 +280,12 @@ and plan every component with the step 1 table before creating anything, then:
    `version`, and `description` mirror `plugin.json`. `validate.py` fails on a plugin missing from
    the marketplace or a version mismatch.
 4. Root `README.md` — a row in the **Plugins** table, the plugin in the **By lifecycle stage**
-   table, its Skills/Agents rows, and a line in both install lists (`/plugin install` and the
-   manual `path` list).
+   table, its Skills/Agents rows, and a line in the manual installation `path` list. Install
+   commands live only in `docs/GETTING_STARTED.md`.
 5. `CLAUDE.md` — the plugin in the tier table.
-6. `docs/GETTING_STARTED.md` — a row for the moment it serves, in step 3 if it is on the
-   lifecycle route or step 4 if users add it only when that moment arrives. Record any new
+6. `docs/GETTING_STARTED.md` — an entry for the moment it serves, under its stage in step 3
+   (with the slash command that starts it) if it is on the lifecycle route, or a row in step 4 if
+   users add it only when that moment arrives. Record any new
    dependency edge in `docs/PLUGIN_DEPENDENCIES.md`.
 
 In the same PR, `CHANGELOG.md` lists the plugin at `1.0.0` under `### Added` and
