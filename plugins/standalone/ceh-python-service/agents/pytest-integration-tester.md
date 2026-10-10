@@ -1,12 +1,9 @@
 ---
 name: pytest-integration-tester
 description: >-
-  Use this agent to write pytest integration tests for how multiple Python modules, services, or
-  components work together, in a subagent, to build out an integration suite or run it and report
-  results in isolation. Use proactively when the user wants to test module interactions. Invoke for
-  "write integration tests", "test the API endpoints", "test the database layer". Not for one or two
-  inline tests (use ceh-python-service:write-pytest-service-tests), unit tests (use
-  pytest-unit-tester), or end-to-end journeys (use pytest-system-tester).
+  Use proactively when the user wants Python modules, services, or the database tested together:
+  build out or run a pytest integration suite in isolation. Invoke for "write integration tests",
+  "test the API endpoints". Not for one or two inline tests.
 model: sonnet
 tools: Read, Glob, Grep, Write, Edit, Bash
 skills:

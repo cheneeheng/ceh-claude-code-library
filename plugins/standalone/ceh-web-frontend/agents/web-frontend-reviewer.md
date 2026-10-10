@@ -1,11 +1,9 @@
 ---
 name: web-frontend-reviewer
 description: >-
-  Use this agent to review the frontend part of a diff (React or SvelteKit components, TypeScript,
-  styles, Vitest and Playwright tests) against this plugin's standards in an isolated subagent, so
-  a large review runs in parallel with the main one. Dispatched by ceh-git-workflow:code-review
-  with a diff file path. Read-only: it returns findings in code-review's format, never edits. Not
-  for writing tests (use vitest-unit-tester) or reviewing Python code (use python-service-reviewer).
+  Use this agent to review the frontend part of a diff (React, SvelteKit, TypeScript, styles,
+  tests) against this plugin's standards, in parallel with the main review. Dispatched by
+  ceh-git-workflow:code-review with a diff file path. Read-only: returns findings, never edits.
 model: sonnet
 tools: Read, Grep, Glob, Skill
 ---

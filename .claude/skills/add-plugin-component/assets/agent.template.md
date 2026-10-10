@@ -1,10 +1,9 @@
 ---
 name: <agent-name>
 description: >-
-  Use this agent to <task> in an isolated subagent instead of the main session, because <why
-  isolation helps: output volume, cheaper model, read-only guarantee>. Use proactively when
-  <condition>. Invoke for "<user phrase>", "<user phrase>". <Read-only: it reports, never edits.>
-  Not for <near-miss task> (use ceh-<plugin>:<skill-or-agent>).
+  Use this agent to <task>. Use proactively when <condition>, or: Dispatched by
+  ceh-<plugin>:<skill>. Invoke for "<user phrase>", "<user phrase>". <Read-only.> Not for <nearest
+  look-alike>.
 model: inherit
 tools: Read, Grep, Glob
 ---
@@ -15,8 +14,10 @@ Frontmatter
 - Keys in this order, only the ones you need: name, description, model, effort, tools,
   disallowedTools, skills, maxTurns, memory, background, omitClaudeMd, color.
 - name: lowercase letters, digits, single hyphens, equal to the file name without `.md`.
-- description: always `>-`, 2-space indent, no blank lines, max 600 chars (validate.py). Keep it
-  short: every agent description loads into every session. Prose only, no <example> blocks.
+- description: always `>-`, 2-space indent, no blank lines, max 300 chars (validate.py): every
+  agent description loads into every session. Say when to delegate (proactively, only on request,
+  or which skill dispatches it), two trigger phrases, and Read-only if it is. Why isolation helps
+  goes in the body. Prose only, no <example> blocks.
 - model: always present, even as `inherit`, so every agent states what it runs on.
   inherit | sonnet | haiku | opus. Pick a cheaper model when the job is mechanical. An agent
   that gives a final verdict (a review, a judge, a gate) gets the most capable model: turn count

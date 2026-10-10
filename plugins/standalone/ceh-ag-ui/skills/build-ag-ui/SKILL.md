@@ -1,9 +1,9 @@
 ---
 name: build-ag-ui
 description: >-
-  Load this skill when starting a generative-UI frontend for an AG-UI agent: a canvas where the agent
-  answers by placing components from a catalogue. Trigger on "build a UI with AG-UI", "generative UI
-  for my agent", or @ag-ui/client with no canvas yet.
+  Load this skill when starting a generative-UI frontend for an AG-UI agent: a canvas where the
+  agent answers by placing components from a catalogue. Trigger on "build a UI with AG-UI",
+  "generative UI for my agent", or @ag-ui/client with no canvas yet.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

@@ -2,8 +2,8 @@
 name: design-ui
 description: >-
   Load this skill when making any frontend visual design decision: page or app-shell layout,
-  navigation, hierarchy and spacing, a theme or brand, or a restyle. Trigger on "design the UI", "lay
-  out this page", "make it look professional", "polish this UI".
+  navigation, hierarchy and spacing, a theme or brand, or a restyle. Trigger on "design the UI",
+  "lay out this page", "make it look professional", "polish this UI".
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

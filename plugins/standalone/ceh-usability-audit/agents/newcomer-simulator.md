@@ -1,12 +1,9 @@
 ---
 name: newcomer-simulator
 description: >-
-  Use this agent to find out where a real newcomer would get stuck, by walking a target cold in an
-  isolated subagent given only what a newcomer has. It attempts one goal under one persona
-  constraint, stops at the first stall, and reports the exact stall point plus the action cost of
-  each milestone. Dispatch one per persona from ceh-usability-audit:simulate-newcomer-first-run or
-  ceh-usability-audit:audit-interface. Invoke for "try this with fresh eyes". Read-only: it reports,
-  never edits. Not for a live web UI, since it cannot drive a browser.
+  Use this agent to find where a newcomer gets stuck: it walks a target cold toward one goal as one
+  persona and reports the first stall. Dispatched one per persona by the ceh-usability-audit
+  skills. Invoke for "try this with fresh eyes". Read-only. Not for a live web UI.
 model: sonnet
 tools: Read, Glob, Grep, Bash
 maxTurns: 35

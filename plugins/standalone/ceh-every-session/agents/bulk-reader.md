@@ -1,12 +1,9 @@
 ---
 name: bulk-reader
 description: >-
-  Use proactively to read large or numerous files and return a compressed, line-anchored answer to
-  one specific question, so the file contents never enter the caller's context. Delegate when the
-  files run past roughly 400 lines in total, a single file is too large to read whole, or a
-  PreToolUse guard has denied a Read or a bash cat/head/tail. Count lines, not files. Read-only,
-  never edits. Not for debugging, architecture decisions, or anything about to be edited. It may
-  locate security-critical code, but the caller reads those lines itself before concluding anything.
+  Use proactively to answer one question from files past about 400 lines in total, or after a guard
+  denied a Read, with a line-anchored answer that keeps the contents out of the caller's context.
+  Read-only. Not for debugging or anything about to be edited.
 model: haiku
 tools: Read, Grep, Glob
 ---

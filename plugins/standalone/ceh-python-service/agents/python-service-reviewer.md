@@ -1,11 +1,9 @@
 ---
 name: python-service-reviewer
 description: >-
-  Use this agent to review the Python service part of a diff (FastAPI endpoints, PostgreSQL
-  queries and migrations, pytest tests) against this plugin's standards in an isolated subagent,
-  so a large review runs in parallel with the main one. Dispatched by ceh-git-workflow:code-review
-  with a diff file path. Read-only: it returns findings in code-review's format, never edits. Not
-  for writing tests (use pytest-unit-tester) or reviewing frontend code (use web-frontend-reviewer).
+  Use this agent to review the Python service part of a diff (FastAPI, PostgreSQL, pytest) against
+  this plugin's standards, in parallel with the main review. Dispatched by
+  ceh-git-workflow:code-review with a diff file path. Read-only: returns findings, never edits.
 model: sonnet
 tools: Read, Grep, Glob, Skill
 ---
