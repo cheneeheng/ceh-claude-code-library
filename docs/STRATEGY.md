@@ -106,7 +106,10 @@ follow the usual rules in `CLAUDE.md`, still bound by the vision.
 The likely order, judged from the current gaps and not yet confirmed by a run:
 
 1. **Prove writes the evidence report.** The checks exist (`ceh-testing`, `ceh-security-audit`,
-   `ceh-usability-audit`). What is missing is the one committed file Tell can read.
+   `ceh-usability-audit`). What is missing is the one committed file Tell can read. A new roll-up
+   skill in `ceh-testing` writes it from the reports the checks leave, because `ceh-testing` is the
+   Prove plugin every build bundle already installs. Tell reads that one file, never the separate
+   reports.
 2. **Tell reads Shape and Prove.** `ceh-blog` and `ceh-seo` draft from `BUSINESS_PLAN.md` and the
    evidence report instead of from scratch.
 3. **The learning loop catches recurring overrides.** The vision says an override that keeps
@@ -135,6 +138,10 @@ A scenario bundle is still a manifest and a README, with no skills of its own. I
 describes its route in stage order: which handoff files it produces and which skill fires at each
 step. It shows the route without enforcing it.
 
+A bundle may reach one step past its stage when that is the step its users take next.
+`ceh-scenario-ideation` is a Shape bundle, and it keeps `ceh-build-planning` as the bridge into
+Build: whoever has just shaped an idea usually wants the first plan straight after.
+
 ## What not to do
 
 - **No mandatory router or orchestrator for the sake of cohesion.** Both conflict with "moments,
@@ -154,18 +161,15 @@ This list shrinks as the gaps close. Remove a line in the PR that closes it.
 - `ceh-codebase-explanation:document-architecture` writes `.agents_workspace/ARCHITECTURE.md`. It is
   a handoff file, read by later planning and the destination of distilled plan decisions, so it
   belongs in the committed repo.
-- Prove writes four separate reports, dated, in `.agents_workspace/`. There is no evidence report.
+- Prove writes four separate reports, dated, in `.agents_workspace/`. There is no evidence report,
+  and no `ceh-testing` skill to roll them up.
 - `ceh-blog` and `ceh-seo` read neither `BUSINESS_PLAN.md` nor an evidence report.
 - The scenario bundle READMEs list plugins but describe no route.
 
 ## Open questions
 
-- **The evidence report.** Does one skill roll the Prove reports into it, or does Tell read each
-  report? Which plugin owns it?
-- **The reference run's product.** It must be small enough to finish in days, use a stack with a
-  plugin, and be something worth publishing, so Tell has a real audience.
-- **`ceh-scenario-ideation`.** Its description covers "planning the build". With build planning in
-  Build, does the bundle drop `ceh-build-planning` or keep it as the bridge into Build?
+- **The reference run's product.** Deferred. It must be small enough to finish in days, use a
+  stack with a plugin, and be something worth publishing, so Tell has a real audience.
 - **Handoff schemas.** The minimal fields each handoff file must carry, settled by the reference
   run.
 
