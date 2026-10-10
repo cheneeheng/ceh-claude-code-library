@@ -11,14 +11,23 @@ chain through the committed files each one writes.
 
 ## Let Claude set you up
 
-Open Claude Code in the folder you are about to work in, a git repo or any plain folder, and paste:
+Open Claude Code in the folder you are about to work in, a git repo or any plain folder, and type:
+
+```
+setup https://github.com/cheneeheng/ceh-claude-code-library
+```
+
+The repo's README tells Claude how to run the setup. If Claude does not pick that up, paste the
+longer form instead:
 
 ```
 Set me up with the ceh-claude-code-library Claude Code plugins, following
 https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md
 Ask me what you need to know first. Run the install commands yourself with the `claude plugin` CLI.
+Do not clone the repository.
 ```
 
+Claude does not clone the repo: it reads this guide from the web and adds the marketplace by name.
 Claude asks what you are about to do, then installs the core and only the plugins that moment
 needs. Run `/reload-plugins` when it finishes: the new skills do not load until you do. Steps 1 to
 5 are the same route by hand, and the route Claude follows.
