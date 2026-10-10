@@ -21,10 +21,10 @@ a removed plugin loses its row.
 | `ceh-business-plan`            | 1.1.3   | `2026-10-10` |
 | `ceh-check-build-against-plan` | 1.0.3   | `2026-10-10` |
 | `ceh-codebase-explanation`     | 1.2.3   | `2026-10-10` |
-| `ceh-coding-conduct`           | 2.2.3   | `2026-10-10` |
+| `ceh-coding-conduct`           | 2.2.4   | `2026-10-10` |
 | `ceh-competitor-analysis`      | 1.1.7   | `2026-10-10` |
 | `ceh-documentation`            | 1.0.5   | `2026-10-10` |
-| `ceh-every-session`            | 2.4.2   | `2026-10-10` |
+| `ceh-every-session`            | 2.5.0   | `2026-10-10` |
 | `ceh-git-datastore`            | 1.0.5   | `2026-10-10` |
 | `ceh-git-workflow`             | 1.2.4   | `2026-10-10` |
 | `ceh-orchestration-lab`        | 1.0.1   | `2026-10-10` |
