@@ -51,7 +51,9 @@ Before any question, gather everything that already constrains the plan.
    plans folder the repo's `CLAUDE.md` names). If found, read them. Their Goal (what it does,
    who it's for, the key flow), Scope, and Design carry your product, target-user hint, and
    solution detail. A plan whose Goal points to a `BUSINESS_PLAN.md` was written from this plan:
-   read it for its Scope and Design only. Record their paths in `derived_from`.
+   read it for its Scope and Design only. Record their paths in `derived_from`. Built plans are
+   deleted once their decisions move to `docs/ARCHITECTURE.md`, so for an app already built, read
+   that file's Overview and Key Decisions, plus the README, in place of the plans.
 2. **Anything the user provided** — a PRD, pitch deck, spec, README, landing page, a pasted
    description. Read it directly. A GitHub URL: fetch the README.
 3. **Other plan-shaped files** — `PRD.md`, `BRIEF.md`, `docs/` product notes. Use them as input,

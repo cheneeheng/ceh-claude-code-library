@@ -31,6 +31,23 @@ them at the same scope.
 | `ceh-build-from-plan`          |
 | `ceh-check-build-against-plan` |
 
+## Route
+
+The Build and Prove stages of the lifecycle in [`docs/STRATEGY.md`](../../../docs/STRATEGY.md).
+Each step writes a committed file the next one reads. Nothing enforces the order.
+
+| Stage | Skill that fires                                        | Reads                           | Writes                                                       |
+| ----- | ------------------------------------------------------- | ------------------------------- | ------------------------------------------------------------ |
+| Build | `ceh-build-planning:write-build-plan`                   | `BUSINESS_PLAN.md` when present | `docs/plans/<slug>.md`                                       |
+| Build | `ceh-build-from-plan:implement-from-plan`               | the plan                        | the code, with `ceh-python-library` skills                   |
+| Prove | `ceh-check-build-against-plan:check-build-against-plan` | the plan, the code              | a report in the session                                      |
+| Build | `ceh-build-from-plan:implement-from-plan`, retire step  | the built plan                  | Key Decisions in `docs/ARCHITECTURE.md`; the plan is deleted |
+| Prove | `ceh-usability-audit:simulate-newcomer-first-run`       | the README and the package      | a report in `.agents_workspace/`                             |
+| Prove | `ceh-testing:write-evidence-report`                     | the test run, that report       | `docs/EVIDENCE.md`                                           |
+
+Before: `BUSINESS_PLAN.md` comes from `ceh-scenario-ideation`. After: `ceh-scenario-editorial`
+reads `docs/EVIDENCE.md` for the launch.
+
 ## Notes
 
 - Disabling any plugin above is refused while this bundle is enabled. Disable the bundle first.

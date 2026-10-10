@@ -23,7 +23,7 @@
     {
       "name": "ceh-codebase-explanation",
       "source": "./plugins/standalone/ceh-codebase-explanation",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, the living architecture document, and why code is the way it is, traced through git history."
     },
     {
@@ -35,7 +35,7 @@
     {
       "name": "ceh-testing",
       "source": "./plugins/standalone/ceh-testing",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "description": "CEH testing techniques: stack-agnostic test design and verification moments — write the failing test before new code, reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, explore the running app for bugs, and close the risk gaps functional tests structurally miss."
     },
     {
@@ -65,31 +65,31 @@
     {
       "name": "ceh-seo",
       "source": "./plugins/standalone/ceh-seo",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "description": "CEH SEO: discoverability standards for anything exposed to the internet — technical SEO/GEO for public web pages (meta tags, structured data, sitemap, rendering strategy), authoring the llms.txt agent index, and findability of public-facing text (README first screen, package descriptions and keywords, repo topics, landing copy)."
     },
     {
       "name": "ceh-blog",
       "source": "./plugins/standalone/ceh-blog",
-      "version": "1.0.5",
+      "version": "1.0.6",
       "description": "CEH blog: turn a half-formed idea into a compelling, publishable blog post in a personal, series-first voice via structured interview; repurpose finished posts for Twitter/X, LinkedIn, TL;DR, and newsletters."
     },
     {
       "name": "ceh-build-planning",
       "source": "./plugins/standalone/ceh-build-planning",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "description": "CEH build planning: decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check, then review the plan before anyone builds from it."
     },
     {
       "name": "ceh-build-from-plan",
       "source": "./plugins/standalone/ceh-build-from-plan",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "CEH build from plan: build a written plan phase by phase, test first, implementing only what each phase names and proving it with the phase's own check, with the evidence recorded in the plan."
     },
     {
       "name": "ceh-check-build-against-plan",
       "source": "./plugins/standalone/ceh-check-build-against-plan",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "CEH check build against plan: check whether finished code is what its plan said to build, reporting every gap, deviation, and unplanned extra with quoted evidence, and rerunning each phase's check."
     },
     {
@@ -113,7 +113,7 @@
     {
       "name": "ceh-business-plan",
       "source": "./plugins/standalone/ceh-business-plan",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "description": "CEH business plan: turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop — draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes. Then harden it: a report-only board review, and specialist passes on strategy, unit economics, go-to-market, premortem, the 90-day operating plan, and investor materials."
     },
     {
@@ -167,31 +167,31 @@
     {
       "name": "ceh-scenario-service",
       "source": "./plugins/scenarios/ceh-scenario-service",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "description": "CEH scenario bundle: working on a Python backend service — features, fixes, tests, docs, releases."
     },
     {
       "name": "ceh-scenario-library",
       "source": "./plugins/scenarios/ceh-scenario-library",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "description": "CEH scenario bundle: working on a Python library — features, fixes, tests, docs, releases."
     },
     {
       "name": "ceh-scenario-webapp",
       "source": "./plugins/scenarios/ceh-scenario-webapp",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "description": "CEH scenario bundle: working on a web frontend — features, fixes, tests, docs, releases."
     },
     {
       "name": "ceh-scenario-ideation",
       "source": "./plugins/scenarios/ceh-scenario-ideation",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "description": "CEH scenario bundle: shaping an idea before a stack is chosen — testing it for product-market fit and planning the build."
     },
     {
       "name": "ceh-scenario-editorial",
       "source": "./plugins/scenarios/ceh-scenario-editorial",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "description": "CEH scenario bundle: writing and publishing what readers see — blog posts, user and operator docs, discoverability."
     }
   ]

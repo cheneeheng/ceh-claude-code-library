@@ -24,6 +24,21 @@ them at the same scope.
 | `ceh-business-plan`  |
 | `ceh-build-planning` |
 
+## Route
+
+The Shape stage of the lifecycle in [`docs/STRATEGY.md`](../../../docs/STRATEGY.md), plus the
+first step of Build. Each step writes a committed file the next one reads. Nothing enforces the
+order.
+
+| Stage | Skill that fires                            | Reads                    | Writes              |
+| ----- | ------------------------------------------- | ------------------------ | ------------------- |
+| Shape | `ceh-business-plan:find-product-market-fit` | the idea, a conversation | `BUSINESS_PLAN.md`  |
+| Build | `ceh-build-planning:write-build-plan`       | `BUSINESS_PLAN.md`       | `docs/plans/mvp.md` |
+
+Next: a build bundle (`ceh-scenario-service`, `ceh-scenario-library`, or `ceh-scenario-webapp`)
+builds from the plan. `ceh-build-planning` is here as the bridge, because whoever has just shaped
+an idea usually wants the first plan straight after.
+
 ## Notes
 
 - Disabling any plugin above is refused while this bundle is enabled. Disable the bundle first.

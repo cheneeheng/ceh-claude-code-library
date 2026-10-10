@@ -37,20 +37,21 @@ dependency (see `docs/PLUGIN_DEPENDENCIES.md`), so the technique skill is always
 
 ## Routing: what you say to what runs
 
-| Moment                                                                              | Loads                                                                |
-| ----------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Opening or creating a test file                                                     | Stack testing skill (passive)                                        |
-| "write tests for this", "what should I test", "cover the edge cases"                | `design-test-cases` + stack skill                                    |
-| "write unit/integration/system tests" (many at once)                                | Tester agents + stack skill + `design-test-cases`                    |
-| "fix this bug", a pasted stack trace, "this worked last week"                       | `test-a-bug-fix`                                                     |
-| "debug this", "why is this failing", a fix that did not hold                        | `ceh-coding-conduct:find-root-cause`, then `test-a-bug-fix`          |
-| "implement this", "add a feature", "TDD"                                            | `write-test-first` + `design-test-cases` + stack skill               |
-| "refactor this", "extract this", "upgrade this dependency"                          | `verify-behavior-preserved`                                          |
-| "shrink the diff", "simplify the branch before the PR"                              | `verify-behavior-preserved` **and** `ceh-coding-conduct:shrink-diff` |
-| "is this ready", "before I open the PR", "race condition", "is this migration safe" | `close-test-risk-gaps`                                               |
-| "are these tests any good", "why didn't the tests catch this", "flaky test"         | `audit-test-suite`, in report-only mode when the run is slow         |
-| "QA this", "click through the app and find bugs", "try to break it"                 | `explore-app-for-bugs`, report-only unless fix mode is asked for     |
-| "make sure it looks the same", "visual regression check"                            | `ceh-web-frontend:check-visual-parity`                               |
+| Moment                                                                              | Loads                                                                    |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Opening or creating a test file                                                     | Stack testing skill (passive)                                            |
+| "write tests for this", "what should I test", "cover the edge cases"                | `design-test-cases` + stack skill                                        |
+| "write unit/integration/system tests" (many at once)                                | Tester agents + stack skill + `design-test-cases`                        |
+| "fix this bug", a pasted stack trace, "this worked last week"                       | `test-a-bug-fix`                                                         |
+| "debug this", "why is this failing", a fix that did not hold                        | `ceh-coding-conduct:find-root-cause`, then `test-a-bug-fix`              |
+| "implement this", "add a feature", "TDD"                                            | `write-test-first` + `design-test-cases` + stack skill                   |
+| "refactor this", "extract this", "upgrade this dependency"                          | `verify-behavior-preserved`                                              |
+| "shrink the diff", "simplify the branch before the PR"                              | `verify-behavior-preserved` **and** `ceh-coding-conduct:shrink-diff`     |
+| "is this ready", "before I open the PR", "race condition", "is this migration safe" | `close-test-risk-gaps`                                                   |
+| "are these tests any good", "why didn't the tests catch this", "flaky test"         | `audit-test-suite`, in report-only mode when the run is slow             |
+| "QA this", "click through the app and find bugs", "try to break it"                 | `explore-app-for-bugs`, report-only unless fix mode is asked for         |
+| "make sure it looks the same", "visual regression check"                            | `ceh-web-frontend:check-visual-parity`                                   |
+| "are we ready to launch", "what have we proven", before a post about the product    | `write-evidence-report`, which rolls up the reports the rows above leave |
 
 ## Scenario A: tests for a new feature
 

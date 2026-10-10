@@ -77,13 +77,17 @@ How it asks:
 A plugin belongs here when it helps shape, build, prove, or tell people about a product. The
 cross-cutting plugins hold the disciplines that apply at every stage.
 
-| Stage      | What happens                                                             | Plugins today                                                                                                                                                                             |
-| ---------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Shape      | Decide what to build and whether it is worth it                          | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-build-planning`                                                                                                                      |
-| Build      | Write the code, the UI, and the docs                                     | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-git-datastore`, `ceh-documentation`, `ceh-codebase-explanation`, `ceh-build-from-plan` |
-| Prove      | Show it works and that a person can use it                               | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                                                |
-| Tell       | Get it in front of the people who should find it                         | `ceh-blog`, `ceh-seo`                                                                                                                                                                     |
-| Every step | How the agent behaves, commits, spends context, and runs repeatable work | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`, `ceh-session-diagnosis`                             |
+| Stage      | What happens                                                             | Plugins today                                                                                                                                                                                                   |
+| ---------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shape      | Decide what to build and whether it is worth it                          | `ceh-business-plan`, `ceh-competitor-analysis`                                                                                                                                                                  |
+| Build      | Decide how to build it, then write the code, the UI, and the docs        | `ceh-build-planning`, `ceh-build-from-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-git-datastore`, `ceh-documentation`, `ceh-codebase-explanation` |
+| Prove      | Show it works and that a person can use it                               | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                                                                      |
+| Tell       | Get it in front of the people who should find it                         | `ceh-blog`, `ceh-seo`                                                                                                                                                                                           |
+| Every step | How the agent behaves, commits, spends context, and runs repeatable work | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`, `ceh-session-diagnosis`                                                   |
+
+The stages are a route, not only a filing system: each one writes committed handoff files the next
+one reads, so installed plugins chain without a router. How they chain, and how the next piece of
+work is chosen, is in [`STRATEGY.md`](STRATEGY.md).
 
 The test for a new plugin or skill: **does it help an agent ship a product, or get one in front of
 people?** If not, it does not belong here, however useful it is. General productivity, chat
@@ -228,7 +232,7 @@ every run would pay for the extra install, so standards are duplicated (3 beats 
 This list shrinks as the gaps close. Remove a line in the PR that closes it. Add one when a change
 here, or a new finding, opens a gap the same PR cannot close.
 
-No known gaps as of 2026-10-09.
+No known gaps as of 2026-10-10.
 
 ## Changing this file
 

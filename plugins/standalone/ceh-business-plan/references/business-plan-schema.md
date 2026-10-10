@@ -23,7 +23,9 @@ pmf_gate: 0/8 # criteria met out of 8 (see PMF Readiness Gate below)
 ---
 ```
 
-`derived_from` names `ceh-build-planning` plans by their repo-relative path.
+`derived_from` names `ceh-build-planning` plans by their repo-relative path. A plan is deleted once
+built, so a listed path may no longer exist: it stays valid in git history
+(`git log --all -- <path>`), and its lasting decisions are in `docs/ARCHITECTURE.md`. Keep the path.
 
 ## Sections
 

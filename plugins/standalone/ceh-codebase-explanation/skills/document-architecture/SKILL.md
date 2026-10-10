@@ -14,13 +14,15 @@ license: Apache-2.0
 
 # Document architecture
 
-Maintain one living `.agents_workspace/ARCHITECTURE.md` — the always-current picture of the system.
+Maintain one living, committed `docs/ARCHITECTURE.md` — the always-current picture of the system.
 It opens with a 3-second **Overview**, then is **mainly Mermaid diagrams**, then a
 **Key Decisions** log that holds the durable, cross-version "why".
 
 This is the durable counterpart to a plan's §02 architecture diagram. The plan visualizes one
 version's _change_; `ARCHITECTURE.md` shows the _whole current system_ and the decision trail behind
-it. It absorbs what used to be standalone ADRs — there is no separate `docs/adr/` tree.
+it. It absorbs what used to be standalone ADRs — there is no separate `docs/adr/` tree. When a
+built plan is retired, its lasting Design decisions land here as Key Decisions entries, so this
+file is where the reasoning of deleted plans survives.
 
 ## Rules
 
@@ -146,7 +148,10 @@ Append entries to a `## Key Decisions` section at the bottom of `ARCHITECTURE.md
 
 ## Storage
 
-`.agents_workspace/ARCHITECTURE.md`. For a large system, the diagram set may
-move to `.agents_workspace/architecture/` with one file per view, but the `## Overview` and
+`docs/ARCHITECTURE.md` in the target repo, committed, unless the repo's `CLAUDE.md` names another
+path. Later planning reads it and a fresh clone must keep the decision trail, so it never lives in
+a git-ignored folder. When a `.agents_workspace/ARCHITECTURE.md` from an earlier version exists and
+`docs/ARCHITECTURE.md` does not, move it there first and say so. For a large system, the diagram
+set may move to `docs/architecture/` with one file per view, but the `## Overview` and
 `## Key Decisions` sections stay in `ARCHITECTURE.md` itself — the spine and the decision trail must
 remain readable and greppable in one place.

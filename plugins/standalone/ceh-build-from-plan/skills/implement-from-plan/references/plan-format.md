@@ -8,7 +8,9 @@ This file is copied word for word into all three plugins, so each works installe
 
 `docs/plans/<slug>.md` in the target repo, committed, unless the repo's `CLAUDE.md` names another
 plans folder. A plan shapes the repo for whoever builds next, so it lives where a fresh clone and a
-reviewer can read it. `<slug>` is kebab-case from the goal: `mvp`, `checkout-flow`.
+reviewer can read it. `<slug>` is kebab-case from the goal: `mvp`, `checkout-flow`. The folder
+holds only plans not yet built: a built plan is deleted (see Changing a plan), so it never bloats
+the repo or the context of the next planning run.
 
 ## Frontmatter
 
@@ -72,4 +74,8 @@ Each unsettled question, with the assumption taken until it is answered. "None" 
 
 - A builder that departs from Design edits the Design line and gives the reason in that phase's
   Status, so the plan stays true to the code.
-- A `built` plan is history. New work gets a new plan file.
+- A `built` plan is distilled, then deleted, in one commit, once any check of the build against it
+  has run. Each Design decision a later reader still needs becomes a Key Decisions entry in
+  `docs/ARCHITECTURE.md`, the change gets a changelog entry when the repo keeps one, and the plan
+  file is removed. Git history keeps the full plan: `git log --all -- docs/plans/<slug>.md`. New
+  work gets a new plan file.

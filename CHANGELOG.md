@@ -19,14 +19,66 @@ Build, sets which files a target repo commits (whatever a later stage reads, wit
 distilled and deleted), and makes fixing a break on that route the test for new work. No plugin
 changes yet. The gaps it opens are listed in its own "Where the repo does not match yet" section.
 
+A second PR the same day closes every one of those gaps, so the route now runs end to end. The
+vision moves build planning to Build and links the strategy. It lands in this PR rather than its
+own because the user asked for one PR. Plans now leave the repo once built: their lasting decisions
+move to a committed `docs/ARCHITECTURE.md` and the file is deleted, so `docs/plans/` holds only
+work in flight. A new `ceh-testing` skill rolls the scattered Prove reports into one committed
+`docs/EVIDENCE.md`, which the blog and listing skills read with `BUSINESS_PLAN.md`, so a launch
+post claims only what was proven. Each scenario bundle README now shows its route.
+
+### Plugin versions
+
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-blog`                     | 1.0.6   |
+| `ceh-build-from-plan`          | 1.0.1   |
+| `ceh-build-planning`           | 1.1.1   |
+| `ceh-business-plan`            | 1.1.2   |
+| `ceh-check-build-against-plan` | 1.0.2   |
+| `ceh-codebase-explanation`     | 1.2.2   |
+| `ceh-scenario-editorial`       | 1.1.1   |
+| `ceh-scenario-ideation`        | 1.2.1   |
+| `ceh-scenario-library`         | 1.2.1   |
+| `ceh-scenario-service`         | 1.2.1   |
+| `ceh-scenario-webapp`          | 1.2.1   |
+| `ceh-seo`                      | 1.1.2   |
+| `ceh-testing`                  | 1.4.0   |
+
 ### Added
 
 - `docs/STRATEGY.md`: the stages, the handoff files between them, where they live, how work is
   chosen, and the reference run that will measure progress.
+- `ceh-testing:write-evidence-report`: runs the test suite once and rolls the latest QA,
+  performance, security, usability, and plan results into a committed `docs/EVIDENCE.md`. Each
+  area is marked passed, open issues, stale, or not run, and the report lists the claims a launch
+  may make.
+- A Route section in every scenario bundle README: the skill that fires at each stage, and what it
+  reads and writes.
 
 ### Changed
 
 - `CLAUDE.md`: lists `docs/STRATEGY.md` in Structure and Key Files.
+- `docs/VISION.md`: `ceh-build-planning` moves from Shape to Build, and the scope section links
+  `docs/STRATEGY.md`.
+- Plan format, in all three copies: `docs/plans/` holds only plans not yet built. A built plan is
+  distilled into `docs/ARCHITECTURE.md` Key Decisions and deleted, once any check against it has
+  run.
+- `ceh-build-from-plan:implement-from-plan`: a new Retire step runs the check against the plan when
+  that plugin is installed, then distills and deletes the plan. The changelog entry it adds is
+  conditional on the repo keeping one, here and in the plan format.
+- `ceh-business-plan`: `derived_from` keeps a retired plan's path, which stays valid in git
+  history, and `find-product-market-fit` reads `docs/ARCHITECTURE.md` and the README for an app
+  whose plans are already retired.
+- `ceh-testing:write-evidence-report`: with no plan in flight, the Plan area reads `none in flight`
+  rather than `not run`.
+- `ceh-codebase-explanation:document-architecture`: writes a committed `docs/ARCHITECTURE.md`
+  instead of `.agents_workspace/ARCHITECTURE.md`, and moves an existing one there on first run.
+- `ceh-blog:draft-post` and `ceh-seo:write-project-listing-text`: read `BUSINESS_PLAN.md` and
+  `docs/EVIDENCE.md` first, and make no claim about an area the evidence marks stale, not run, or
+  open.
+- `docs/TESTING_WORKFLOW.md`, `docs/CROSS_REFERENCES.md`: the new skill's trigger row, and a new
+  entry for the handoff paragraph the blog and SEO skills share.
 
 ## 2026-10-09
 
