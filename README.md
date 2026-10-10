@@ -6,6 +6,9 @@ are written for agents first and people second. An agent follows them with no hu
 person using Claude Code gets the same guidance and can override it with an explicit instruction.
 Plugins are organized around **use cases**: load the ones that match what you are building.
 
+**New here?** Start with [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md): which plugins to
+install first, and which to leave until you need them.
+
 **Vision:** [`docs/VISION.md`](docs/VISION.md) — the identity, scope, and principles that settle
 decisions about this repo.
 
@@ -20,11 +23,6 @@ stack testing skills route between each other, with the trigger phrases and sequ
 
 | Plugin                   | Install as                     | Contents                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | ------------------------ | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Scenario: Service        | `ceh-scenario-service`         | Install entry point for a Python backend service: every-session, coding-conduct, codebase-explanation, git-workflow, testing, documentation, python-service, usability-audit, build-planning, build-from-plan, check-build-against-plan, git-datastore. Manifest only                                                                                                                                                                                    |
-| Scenario: Library        | `ceh-scenario-library`         | Install entry point for a Python library: every-session, coding-conduct, codebase-explanation, git-workflow, testing, documentation, python-library, usability-audit, build-planning, build-from-plan, check-build-against-plan. Manifest only                                                                                                                                                                                                           |
-| Scenario: Web app        | `ceh-scenario-webapp`          | Install entry point for a web frontend: every-session, coding-conduct, codebase-explanation, git-workflow, testing, documentation, web-frontend, usability-audit, build-planning, build-from-plan, check-build-against-plan, ag-ui. Manifest only                                                                                                                                                                                                        |
-| Scenario: Ideation       | `ceh-scenario-ideation`        | Install entry point for shaping an idea before a stack is chosen: every-session, git-workflow, business-plan, build-planning. Manifest only                                                                                                                                                                                                                                                                                                              |
-| Scenario: Editorial      | `ceh-scenario-editorial`       | Install entry point for writing and publishing what readers see: every-session, git-workflow, blog, documentation, seo. Manifest only                                                                                                                                                                                                                                                                                                                    |
 | Every Session            | `ceh-every-session`            | Standards every session loads, however Claude Code is used: session save and load (`hand-off-session`); questions for someone outside the session (`write-questionnaire`); cited research notes (`write-research-note`); plan stress-tests (`stress-test-plan`); fixes for repeated mistakes (`prevent-repeat-mistake`); usage-limit guard + handoff (`usage-limit-handoff`); context economy (`delegate-bulk-reads`, `bulk-reader`, opt-in read guards) |
 | Coding Conduct           | `ceh-coding-conduct`           | Behavioral contract for coding agents (always-on via SessionStart hook); write-less-code minimalism (always-on via hooks); retroactive refactoring (`shrink-diff`, `refactor-repo`); debugging before fixing (`find-root-cause`); design before code (`sketch-design`); the `CEH Coding Conduct` output style (always-on via `force-for-plugin`)                                                                                                         |
 | Codebase Explanation     | `ceh-codebase-explanation`     | Leave a codebase understood: explaining a subsystem, design, or diff until it lands (`explain-until-understood`); whole-repo orientation (`explain-codebase`); the living architecture document (`document-architecture`); why code is the way it is, from history (`trace-code-rationale`); a committed glossary (`maintain-glossary`)                                                                                                                  |
@@ -52,19 +50,21 @@ stack testing skills route between each other, with the trigger phrases and sequ
 | Competitor Analysis      | `ceh-competitor-analysis`      | Study a competitor's repo or product and learn from it: one evidence-anchored report each (breakdown, inventory, "oh wow" mechanisms, what to incorporate), then a side-by-side comparison with your own work. Repos are read as untrusted data, never run                                                                                                                                                                                               |
 | Orchestration Lab        | `ceh-orchestration-lab`        | **Experimental.** Run real coding tasks under one of two orchestration strategies (plan then implement, or a supervised orchestrate loop) with a cheaper worker model, and log every run with its base commit, token usage by model, and your verdict                                                                                                                                                                                                    |
 
-### Categorization
+### By lifecycle stage
 
-| Tier                  | Loaded            | Plugins                                                                                                                                                                                                                                                                                                                                                                                                         |
-| --------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scenario bundle**   | one per situation | `ceh-scenario-service`, `ceh-scenario-library`, `ceh-scenario-webapp`, `ceh-scenario-ideation`, `ceh-scenario-editorial`                                                                                                                                                                                                                                                                                        |
-| **Cross-cutting**     | most sessions     | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                                                                                                                                                                                                    |
-| **Use-case workflow** | per activity      | `ceh-seo`, `ceh-blog`, `ceh-build-planning`, `ceh-build-from-plan`, `ceh-check-build-against-plan`, `ceh-documentation`, `ceh-usability-audit`, `ceh-business-plan`, `ceh-git-datastore`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`, `ceh-session-diagnosis`, `ceh-security-audit`, `ceh-competitor-analysis`, `ceh-ui-design`, `ceh-codebase-explanation`, `ceh-orchestration-lab` |
-| **Stack / build**     | per project type  | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                                                                                                                                                                                                     |
+| Stage      | Question it answers                                    | Plugins                                                                                                                                                                                                         |
+| ---------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shape      | What should exist, for whom, and is it worth building? | `ceh-business-plan`, `ceh-competitor-analysis`                                                                                                                                                                  |
+| Build      | How is it built? Then build it: code, UI, docs         | `ceh-build-planning`, `ceh-build-from-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-git-datastore`, `ceh-documentation`, `ceh-codebase-explanation` |
+| Prove      | Does it work, is it safe, and can a person use it?     | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                                                                      |
+| Tell       | Who should find it, and what do they read?             | `ceh-blog`, `ceh-seo`                                                                                                                                                                                           |
+| Every step | How the agent behaves, commits, and runs repeated work | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`, `ceh-session-diagnosis`, `ceh-orchestration-lab` (experimental)           |
 
 Each plugin is self-contained: a foundational standard needed by more than one plugin is duplicated
-into each instead of extracted into a shared base, so one plugin per use case is all you load.
-Cross-cutting plugins are the orthogonal tier. They hold a discipline that applies whatever you are
-building, so they load _alongside_ a use-case plugin, not instead of one.
+into each instead of extracted into a shared base, so you install only the stage you are in. The
+every-step plugins hold a discipline that applies whatever you are building, so they load
+_alongside_ a stage plugin, not instead of one. Which to install first is in
+[`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md).
 
 ---
 
@@ -396,21 +396,11 @@ Environment variables the plugins read are indexed in
 /plugin marketplace add cheneeheng/ceh-claude-code-library
 ```
 
-### Step 2 — Install a scenario bundle
+### Step 2 — Install what you need now
 
-Pick the bundle that matches your situation. Each installs its plugins as dependencies.
-
-```
-/plugin install ceh-scenario-service@ceh-claude-code-library --scope user
-/plugin install ceh-scenario-library@ceh-claude-code-library --scope user
-/plugin install ceh-scenario-webapp@ceh-claude-code-library --scope user
-/plugin install ceh-scenario-ideation@ceh-claude-code-library --scope user
-/plugin install ceh-scenario-editorial@ceh-claude-code-library --scope user
-```
-
-What each bundle installs is listed in [`docs/PLUGIN_DEPENDENCIES.md`](docs/PLUGIN_DEPENDENCIES.md).
-
-### Or install plugins individually
+Do not install everything. Follow [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md): a small
+core once at user scope, then one plugin per stage at project scope as you reach it. The full list,
+for reference:
 
 ```
 /plugin install ceh-every-session@ceh-claude-code-library --scope user
@@ -442,14 +432,10 @@ What each bundle installs is listed in [`docs/PLUGIN_DEPENDENCIES.md`](docs/PLUG
 ```
 
 Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-web-frontend`,
-`ceh-ag-ui` and `ceh-competitor-analysis` bring `ceh-ui-design`. `ceh-workflow-builder` and `ceh-workflow-runner` are in no bundle, so install
-them on their own: the builder where you author a flow, the runner wherever a flow runs.
-`ceh-session-to-skill` is in no bundle either: install it where you want finished tasks turned
-into skills.
-`ceh-competitor-analysis`, `ceh-session-diagnosis`, and `ceh-security-audit` are in no bundle
-either: install each when you need it.
-`ceh-orchestration-lab` is experimental and in no bundle: install it in the projects where you
-want to try orchestration strategies. Add `--scope project` instead of `--scope user` for a project-specific install.
+`ceh-ag-ui` and `ceh-competitor-analysis` bring `ceh-ui-design`. Install `ceh-workflow-builder`
+where you author a flow and `ceh-workflow-runner` wherever a flow runs: neither brings the other.
+`ceh-orchestration-lab` is experimental: install it only in the projects where you want to try
+orchestration strategies. Add `--scope project` instead of `--scope user` for a project-specific install.
 
 ### Step 3 — Verify
 
@@ -470,21 +456,6 @@ Then add plugin paths to your Claude Code settings (`~/.claude/settings.json`):
 ```json
 {
   "plugins": [
-    {
-      "path": "~/ceh-claude-code-library/plugins/scenarios/ceh-scenario-service"
-    },
-    {
-      "path": "~/ceh-claude-code-library/plugins/scenarios/ceh-scenario-library"
-    },
-    {
-      "path": "~/ceh-claude-code-library/plugins/scenarios/ceh-scenario-webapp"
-    },
-    {
-      "path": "~/ceh-claude-code-library/plugins/scenarios/ceh-scenario-ideation"
-    },
-    {
-      "path": "~/ceh-claude-code-library/plugins/scenarios/ceh-scenario-editorial"
-    },
     {
       "path": "~/ceh-claude-code-library/plugins/standalone/ceh-every-session"
     },

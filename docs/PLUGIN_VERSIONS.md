@@ -10,16 +10,6 @@ Each plugin has its own semantic version in `plugin.json`, mirrored in
 **Version** and set **Changed in** to the PR's changelog section date. A new plugin gains a row, and
 a removed plugin loses its row.
 
-## Scenario bundles
-
-| Plugin                   | Version | Changed in   |
-| ------------------------ | ------- | ------------ |
-| `ceh-scenario-editorial` | 1.1.1   | `2026-10-10` |
-| `ceh-scenario-ideation`  | 1.2.1   | `2026-10-10` |
-| `ceh-scenario-library`   | 1.2.1   | `2026-10-10` |
-| `ceh-scenario-service`   | 1.2.1   | `2026-10-10` |
-| `ceh-scenario-webapp`    | 1.2.1   | `2026-10-10` |
-
 ## Standalone plugins
 
 | Plugin                         | Version | Changed in   |
@@ -31,13 +21,13 @@ a removed plugin loses its row.
 | `ceh-business-plan`            | 1.1.2   | `2026-10-10` |
 | `ceh-check-build-against-plan` | 1.0.2   | `2026-10-10` |
 | `ceh-codebase-explanation`     | 1.2.2   | `2026-10-10` |
-| `ceh-coding-conduct`           | 2.2.1   | `2026-10-09` |
+| `ceh-coding-conduct`           | 2.2.2   | `2026-10-10` |
 | `ceh-competitor-analysis`      | 1.1.5   | `2026-10-08` |
 | `ceh-documentation`            | 1.0.4   | `2026-10-08` |
 | `ceh-every-session`            | 2.4.0   | `2026-10-09` |
 | `ceh-git-datastore`            | 1.0.3   | `2026-10-08` |
 | `ceh-git-workflow`             | 1.2.3   | `2026-10-09` |
-| `ceh-orchestration-lab`        | 1.0.0   | `2026-10-09` |
+| `ceh-orchestration-lab`        | 1.0.1   | `2026-10-10` |
 | `ceh-python-library`           | 1.0.2   | `2026-10-08` |
 | `ceh-python-service`           | 1.1.1   | `2026-10-09` |
 | `ceh-security-audit`           | 1.0.0   | `2026-10-09` |

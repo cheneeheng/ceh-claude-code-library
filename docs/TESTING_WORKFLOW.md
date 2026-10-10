@@ -195,7 +195,6 @@ core logic (Python) and 70% for `src/lib/` (frontend).
 ## Install combinations
 
 Each stack plugin depends on `ceh-testing`, so installing one brings the technique skills with it.
-The `ceh-scenario-service`, `ceh-scenario-library`, and `ceh-scenario-webapp` bundles install both.
 
 | Building                    | Install                                   |
 | --------------------------- | ----------------------------------------- |

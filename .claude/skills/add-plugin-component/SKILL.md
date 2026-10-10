@@ -214,7 +214,7 @@ Same gate CI runs via `.github/workflows/validate.yml`. It checks:
 - no `TEMPLATE-GUIDANCE` comment left from a template
 - `references/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references}/...`, and `${CLAUDE_SKILL_DIR}/...` mentions
   resolve to real files, and `ceh-<plugin>:<component>` mentions resolve
-- `dependencies` resolve, the graph is acyclic, scenario bundles hold only a manifest and README
+- `dependencies` resolve and the graph is acyclic
 - every `Invoke the Skill tool with skill="..."` call is resolvable, declared, and invocable
 - bundled `*.sh` / `*.py` scripts parse
 
@@ -256,10 +256,10 @@ Report any check you did not run as not run. Do not imply it passed.
 
 Only when step 1 finds no plugin that owns the use case. The layout is fixed by this section and
 the Structure section of `CLAUDE.md`, so do not load `plugin-dev:plugin-structure`. Decide the
-tier (scenario bundle, cross-cutting, use-case workflow, stack/build — see `CLAUDE.md`) and plan
-every component with the step 1 table before creating anything, then:
+tier (cross-cutting, use-case workflow, stack/build — see `CLAUDE.md`) and the lifecycle stage,
+and plan every component with the step 1 table before creating anything, then:
 
-1. `plugins/standalone/ceh-<name>/.claude-plugin/plugin.json`, under `plugins/standalone/` with no tier folder (a scenario bundle goes in `plugins/scenarios/`):
+1. `plugins/standalone/ceh-<name>/.claude-plugin/plugin.json`, under `plugins/standalone/` with no tier folder:
 
    ```json
    {
@@ -279,13 +279,13 @@ every component with the step 1 table before creating anything, then:
 3. `.claude-plugin/marketplace.json` — a new entry whose `source` (`./plugins/standalone/ceh-<name>`),
    `version`, and `description` mirror `plugin.json`. `validate.py` fails on a plugin missing from
    the marketplace or a version mismatch.
-4. Root `README.md` — a row in the **Plugins** table, the plugin in the **Categorization** tier
+4. Root `README.md` — a row in the **Plugins** table, the plugin in the **By lifecycle stage**
    table, its Skills/Agents rows, and a line in both install lists (`/plugin install` and the
    manual `path` list).
 5. `CLAUDE.md` — the plugin in the tier table.
-6. A `ceh-scenario-*` bundle, only if the plugin belongs in that situation's install set. A bundle
-   holds `plugin.json` (with `dependencies`) and `README.md` and nothing else — `validate.py`
-   enforces it. Record any new edge in `docs/PLUGIN_DEPENDENCIES.md`.
+6. `docs/GETTING_STARTED.md` — a row for the moment it serves, in step 3 if it is on the
+   lifecycle route or step 4 if users add it only when that moment arrives. Record any new
+   dependency edge in `docs/PLUGIN_DEPENDENCIES.md`.
 
 In the same PR, `CHANGELOG.md` lists the plugin at `1.0.0` under `### Added` and
 `docs/PLUGIN_VERSIONS.md` gains its row.

@@ -84,8 +84,8 @@ To switch one off without uninstalling the plugin, list its script name in `CEH_
 (comma-separated, no extension): `load-contract`, `inject-less-code-reminder`.
 
 Both hooks fire in every session where the plugin is enabled, including ones that write no code.
-The cost lands only where it should: among the scenario bundles, only `ceh-scenario-service`,
-`ceh-scenario-library`, and `ceh-scenario-webapp` install this plugin.
+So install it only where you write code: `docs/GETTING_STARTED.md` tells writers and planners to
+skip it.
 
 ## What the contract enforces
 

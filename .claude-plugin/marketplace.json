@@ -17,7 +17,7 @@
     {
       "name": "ceh-coding-conduct",
       "source": "./plugins/standalone/ceh-coding-conduct",
-      "version": "2.2.1",
+      "version": "2.2.2",
       "description": "CEH coding conduct: how an agent behaves while it codes — the behavior contract and five-step workflow, write-less-code minimalism, sketching the design before the code, finding a bug's root cause before fixing it, and retroactive refactoring of a branch or a whole repo."
     },
     {
@@ -131,7 +131,7 @@
     {
       "name": "ceh-orchestration-lab",
       "source": "./plugins/standalone/ceh-orchestration-lab",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "EXPERIMENTAL. CEH orchestration lab: run real coding tasks under one of two orchestration strategies (plan then implement, or a supervised orchestrate loop) with a cheaper worker model, and log every run for later comparison."
     },
     {
@@ -163,36 +163,6 @@
       "source": "./plugins/standalone/ceh-competitor-analysis",
       "version": "1.1.5",
       "description": "CEH competitor analysis: study a competitor's repo or product and learn from it — one evidence-anchored report per competitor (breakdown, full inventory, the \"oh wow\" mechanisms worth learning from, what to incorporate and where it lands in our work), then a side-by-side comparison with our own work, each as Markdown plus a styled HTML page. Repos are shallow-cloned and read as untrusted data, never run."
-    },
-    {
-      "name": "ceh-scenario-service",
-      "source": "./plugins/scenarios/ceh-scenario-service",
-      "version": "1.2.1",
-      "description": "CEH scenario bundle: working on a Python backend service — features, fixes, tests, docs, releases."
-    },
-    {
-      "name": "ceh-scenario-library",
-      "source": "./plugins/scenarios/ceh-scenario-library",
-      "version": "1.2.1",
-      "description": "CEH scenario bundle: working on a Python library — features, fixes, tests, docs, releases."
-    },
-    {
-      "name": "ceh-scenario-webapp",
-      "source": "./plugins/scenarios/ceh-scenario-webapp",
-      "version": "1.2.1",
-      "description": "CEH scenario bundle: working on a web frontend — features, fixes, tests, docs, releases."
-    },
-    {
-      "name": "ceh-scenario-ideation",
-      "source": "./plugins/scenarios/ceh-scenario-ideation",
-      "version": "1.2.1",
-      "description": "CEH scenario bundle: shaping an idea before a stack is chosen — testing it for product-market fit and planning the build."
-    },
-    {
-      "name": "ceh-scenario-editorial",
-      "source": "./plugins/scenarios/ceh-scenario-editorial",
-      "version": "1.1.1",
-      "description": "CEH scenario bundle: writing and publishing what readers see — blog posts, user and operator docs, discoverability."
     }
   ]
 }
