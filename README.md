@@ -11,7 +11,8 @@ Plugins are organized around **use cases**: load the ones that match what you ar
 > Do not clone this repository: read the guide at that URL, and add the marketplace by name with
 > `claude plugin marketplace add cheneeheng/ceh-claude-code-library`, which needs no local copy.
 > The "From a local clone" section below is not for this setup.
-> Ask the user what they are about to do before you install anything. Then install the core and
+> Ask the user what they are about to do and which scopes to install at before you install
+> anything, as the guide's note to Claude describes. Then install the core and
 > only the plugins that moment needs, running each install yourself with the `claude plugin` CLI,
 > not the `/plugin` slash command. Do not install every plugin. When you finish, tell the user to
 > run `/reload-plugins`.
@@ -110,7 +111,8 @@ Environment variables the plugins read are indexed in
 ### Step 2 — Install what you need now
 
 Do not install everything. Follow [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md): a small
-core once at user scope, then one plugin per stage at project scope as you reach it. The guide has
+core once, then one plugin per stage as you reach it, at the scopes you pick (recommended: the core
+at user scope, the rest at project scope). The guide has
 the commands, and every plugin is listed in the [Plugins](#plugins) table above.
 
 Dependencies install automatically: each stack plugin brings `ceh-testing`, and `ceh-web-frontend`,

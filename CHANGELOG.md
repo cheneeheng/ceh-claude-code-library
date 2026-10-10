@@ -144,6 +144,14 @@ never reach that listing, so the advisor names them in a table of its own, and `
 when a user-only skill is missing from it. The skill is model- and user-invocable, so "what's next?"
 in plain words loads it, at the cost of one 277-character description.
 
+An eighteenth PR the same day leaves the install scope to the user. In a live setup, Claude
+installed the core at user scope and the rest at project scope without asking, because the guide
+said so. Scope depends on how the user works, and a committed project scope puts plugins and their
+hooks on everyone who clones the repo, so it is the user's call. The setup now asks for the scopes
+in the same round as "what are you about to do", with the old split as the recommended answer, and
+a new "Pick the scopes" section explains `user`, `project`, and `local`. `whats-next` stops
+hard-coding `--scope project` in its install suggestion.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -158,7 +166,7 @@ in plain words loads it, at the cost of one 277-character description.
 | `ceh-coding-conduct`           | 2.2.4   |
 | `ceh-competitor-analysis`      | 1.1.7   |
 | `ceh-documentation`            | 1.0.5   |
-| `ceh-every-session`            | 2.6.0   |
+| `ceh-every-session`            | 2.6.1   |
 | `ceh-git-datastore`            | 1.0.5   |
 | `ceh-git-workflow`             | 1.2.4   |
 | `ceh-orchestration-lab`        | 1.0.1   |
@@ -302,6 +310,11 @@ in plain words loads it, at the cost of one 277-character description.
 - `validate.py`: every user-only skill must be named in `whats-next`, and the description-total
   ratchet rises from 26,768 to 27,045 for its description. `plugins/CLAUDE.md` and
   `tools/validate-plugins/README.md` say the same.
+- `docs/GETTING_STARTED.md` and the README note: Claude asks which scopes to install at, with the
+  core at user and the rest at project as the recommended answer. A new "Pick the scopes" section
+  covers `user`, `project`, and `local`, and steps 2 and 3 call their scope "recommended".
+- `ceh-every-session:whats-next`: the install suggestion leaves `--scope` to the user, recommending
+  `project`.
 
 ### Fixed
 

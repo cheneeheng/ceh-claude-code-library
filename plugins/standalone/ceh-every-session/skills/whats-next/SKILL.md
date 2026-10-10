@@ -34,8 +34,10 @@ has one to three suggestions, each with the exact way to start it, and the choic
    `marketplaceName`. Match the descriptions against the goal and keep at most two, looking first
    at plugins whose `name` starts with `ceh-`, then at other marketplaces the user added, and at
    `claude-plugins-official` last. Mark each "not installed", with
-   `claude plugin install <pluginId> --scope project` and then `/reload-plugins` as the way to
-   start it.
+   `claude plugin install <pluginId> --scope <user|project|local>` and then `/reload-plugins` as
+   the way to start it. Leave the scope to the user, recommending `project`: `user` turns the
+   plugin on in every folder, and a committed `project` scope turns it on for everyone who clones
+   the repo.
 5. Answer in the Output format and stop.
 
 ## Rules
