@@ -152,6 +152,13 @@ in the same round as "what are you about to do", with the old split as the recom
 a new "Pick the scopes" section explains `user`, `project`, and `local`. `whats-next` stops
 hard-coding `--scope project` in its install suggestion.
 
+A nineteenth PR the same day records an idea in `docs/IDEAS.md`: a living product page for target
+products, one high-level page per product that shows where it stands as it evolves. It is
+regenerated from the committed handoff files rather than edited by hand, so it cannot drift from
+them. The entry stays open because two questions are unsettled: which plugin it belongs to, since
+it reads all four stages, and whether a real run shows the orientation need that would justify it
+under the strategy's spine rule. No plugin changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -206,6 +213,8 @@ hard-coding `--scope project` in its install suggestion.
   the repo state, or a not-yet-installed plugin, `ceh-` first, when nothing installed fits. It runs
   none of them. Named in the root README, `docs/CATALOG.md`, and the
   guide's core table.
+- `docs/IDEAS.md`: an open Living product page entry, a per-product status page regenerated from
+  the handoff files, with its vision check, the open placement question, and the rebuild trigger.
 
 ### Changed
 
