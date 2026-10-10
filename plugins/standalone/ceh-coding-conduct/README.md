@@ -12,7 +12,8 @@ for a whole codebase.
 > itself while coding.
 >
 > `usage-limit-handoff`, `delegate-bulk-reads`, and the `bulk-reader` agent moved to the
-> `ceh-every-session` plugin: they hold however Claude Code is used, not only when coding.
+> `ceh-every-session` plugin: they hold however Claude Code is used, not only when coding. The
+> output style followed, rewritten without its coding-specific rules, as `CEH Every Session`.
 >
 > The plan-driven workflow skills moved out to one plugin per stage: `ceh-build-planning`,
 > `ceh-build-from-plan` (`implement-from-plan`), and `ceh-check-build-against-plan`.
@@ -36,17 +37,6 @@ for a whole codebase.
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
 - `find-root-cause` — `/find-root-cause`, or say `"debug this"` / `"why is this failing"`.
 - `sketch-design` — `/sketch-design`, or say `"design this first"` / `"sketch the types"`.
-
-## Output style
-
-| Output style                                                 | When it applies                                                      | What it does                                                                                                                                                                                                                                                                                                                  |
-| ------------------------------------------------------------ | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CEH Coding Conduct` (`output-styles/ceh-coding-conduct.md`) | Every session while the plugin is enabled (`force-for-plugin: true`) | Response format and honesty rules: a Topic / Outcome / Status summary table for 2+ topics, code before prose, one complete thought per bullet, plain "I don't know", and reporting what was verified versus assumed. Sets `keep-coding-instructions: true`, so Claude Code's built-in engineering instructions stay in place. |
-
-`force-for-plugin` overrides any `outputStyle` the user set, and if several enabled plugins force a
-style, Claude Code uses the first one loaded. Output styles reach the main conversation and forks
-only. Other subagents run their own system prompt, so rules that must hold there stay in
-`CLAUDE.md` or the contract.
 
 ## How the skills auto-load
 

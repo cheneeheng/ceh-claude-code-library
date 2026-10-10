@@ -1,6 +1,6 @@
 {
   "name": "ceh-coding-conduct",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "CEH coding conduct: how an agent behaves while it codes — the behavior contract and five-step workflow, write-less-code minimalism, sketching the design before the code, finding a bug's root cause before fixing it, and retroactive refactoring of a branch or a whole repo.",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/ceh-claude-code-library",

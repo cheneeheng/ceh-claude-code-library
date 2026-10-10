@@ -23,8 +23,8 @@ what you are about to do, then installs the core and only the plugins that momen
 same route by hand, and the route Claude follows.
 
 > **For Claude Code, running this setup:** this file is all you need, so do not clone the
-> repository. Ask the user what they are about to do before you install anything. Then follow
-> steps 1 to 4 for that moment only, running each install yourself with the `claude plugin` CLI,
+> repository. Ask the user what they are about to do before you install anything. Always install
+> `ceh-every-session` in step 2, whatever the answer. Then follow steps 1 to 4 for that moment only, running each install yourself with the `claude plugin` CLI,
 > not the `/plugin` slash command. Do not install every plugin. When you finish, tell the user to
 > run `/reload-plugins`.
 
@@ -49,27 +49,26 @@ again is safe.
 User scope installs a plugin for you in every folder you open Claude Code in. A hook is a script Claude Code
 runs at fixed points, such as before each file edit, so a plugin with hooks acts on every session.
 
-| Plugin               | Install when                  | What you get                                                                                                          |
-| -------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `ceh-git-workflow`   | you work in git repos         | branches, commits, pull requests from open to merge, changelog, code review, and a hook that blocks edits on `main`   |
-| `ceh-coding-conduct` | you write code with Claude    | the coding contract, write-less-code, root-cause debugging, design before code. Always on, through hooks              |
-| `ceh-every-session`  | optional, any kind of session | session handoff, research notes, questionnaires, plan stress-tests, and a usage-limit guard. Always on, through hooks |
+| Plugin               | Install when               | What you get                                                                                                                                                                |
+| -------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ceh-every-session`  | always, whatever you do    | the response style every other plugin is written for, session handoff, research notes, questionnaires, plan stress-tests, and a usage-limit guard. Always on, through hooks |
+| `ceh-git-workflow`   | you work in git repos      | branches, commits, pull requests from open to merge, changelog, code review, and a hook that blocks edits on `main`                                                         |
+| `ceh-coding-conduct` | you write code with Claude | the coding contract, write-less-code, root-cause debugging, design before code. Always on, through hooks                                                                    |
 
-Install only the rows whose "Install when" fits you. If you neither write code nor use git, for
-example you only write business plans or posts, skip the first block: `ceh-every-session` is the
-only core plugin that may apply.
+Install `ceh-every-session` first, every time. It is not a dependency of any other plugin, so
+nothing installs it for you. Then install only the other rows whose "Install when" fits you. If
+you neither write code nor use git, for example you only write business plans or posts,
+`ceh-every-session` is the whole core.
 
-If you write code in git repos:
+```
+/plugin install ceh-every-session@ceh-claude-code-library --scope user
+```
+
+If you write code in git repos, add:
 
 ```
 /plugin install ceh-git-workflow@ceh-claude-code-library --scope user
 /plugin install ceh-coding-conduct@ceh-claude-code-library --scope user
-```
-
-To add the optional one:
-
-```
-/plugin install ceh-every-session@ceh-claude-code-library --scope user
 ```
 
 ## 3. Add the plugin for what you are about to do, at project scope

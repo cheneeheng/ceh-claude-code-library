@@ -115,6 +115,17 @@ the repo, into the project folder, and deleted it afterwards. The decision to cl
 clone. The guide gets its own note to Claude, which replaces the long paste-in prompt. The README
 note stays for anyone who still types the repo URL. No plugin changes.
 
+A fifteenth PR the same day moves the output style from `ceh-coding-conduct` to
+`ceh-every-session`. Its response format and honesty rules hold however Claude Code is used, so
+they pass the every-session admission test better than a coding plugin. The style drops its coding
+rules ("code first", "reading code is inferred", the bug-fix example) for activity-neutral ones,
+and is renamed `CEH Every Session`. It keeps `keep-coding-instructions: true`, because `false` would
+strip Claude Code's engineering instructions from every coding session. The getting-started guide
+now makes `ceh-every-session` the one install for everyone, instead of an optional row, so the style
+reaches every user. A hard dependency from every plugin on it was considered and rejected: it breaks
+the every-run rule for edges and VISION principle 6, and it would force the plugin's hooks onto users
+who never chose them.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -126,10 +137,10 @@ note stays for anyone who still types the repo URL. No plugin changes.
 | `ceh-business-plan`            | 1.1.3   |
 | `ceh-check-build-against-plan` | 1.0.3   |
 | `ceh-codebase-explanation`     | 1.2.3   |
-| `ceh-coding-conduct`           | 2.2.3   |
+| `ceh-coding-conduct`           | 2.2.4   |
 | `ceh-competitor-analysis`      | 1.1.7   |
 | `ceh-documentation`            | 1.0.5   |
-| `ceh-every-session`            | 2.4.2   |
+| `ceh-every-session`            | 2.5.0   |
 | `ceh-git-datastore`            | 1.0.5   |
 | `ceh-git-workflow`             | 1.2.4   |
 | `ceh-orchestration-lab`        | 1.0.1   |
@@ -258,6 +269,12 @@ note stays for anyone who still types the repo URL. No plugin changes.
   fallback.
 - `docs/GETTING_STARTED.md`: the user types "install the Claude Code plugins from" the raw guide
   URL, and a note to Claude in the guide replaces the long paste-in prompt.
+- The output style moves from `ceh-coding-conduct` to `ceh-every-session`, renamed from
+  `CEH Coding Conduct` to `CEH Every Session`. Its rules and example no longer assume code, and the
+  summary table gains a leading `#` column so rows can be referred to by number. Both
+  plugin READMEs, the root README, and `docs/IDEAS.md` follow.
+- `docs/GETTING_STARTED.md`: `ceh-every-session` is installed by everyone, first, and the note to
+  Claude says to install it whatever the user is about to do.
 
 ### Fixed
 
