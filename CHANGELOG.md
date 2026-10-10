@@ -35,6 +35,15 @@ stage as the user reaches it, at project scope. The vision, strategy, `CLAUDE.md
 the validator change with it, in this one PR at the user's request. Anyone who installed a bundle
 keeps its plugins: uninstall the bundle and reinstall from the guide.
 
+A fourth PR the same day fixes where a newcomer gets stuck in the guide. Five cold persona walkers
+read it, and every one had to assemble the stack-plugin command from the README by hand. Nothing
+told them how to check what was installed, whether a re-run was safe, or that new skills need a
+reload. The guide now opens with a prompt to paste into Claude Code, which asks what you are about
+to do and installs only that. The user tested it live in a fresh config: Claude asked first,
+installed only the core and the plugin for the stated moment, and the skills appeared after
+`/reload-plugins`. A setup script was considered and rejected: a session needs nothing installed
+first, and a script would need four copies to keep in sync. No plugin changes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -84,6 +93,11 @@ keeps its plugins: uninstall the bundle and reinstall from the guide.
 - `add-plugin-component`: a new plugin gets a row in the guide instead of a place in a bundle.
 - `ceh-coding-conduct` and `ceh-orchestration-lab` READMEs: bundle mentions replaced with install
   guidance.
+- `docs/GETTING_STARTED.md`: a "Let Claude set you up" section with a paste-in prompt, and a worked
+  example for a new Python service with the planning install now and the build installs later. Step
+  3 says project scope writes `.claude/settings.json`. Step 5 adds `/reload-plugins`,
+  `claude plugin list`, safe re-runs, the `--scope project` uninstall, and that removing the
+  marketplace removes its plugins.
 
 - `CLAUDE.md`: lists `docs/STRATEGY.md` in Structure and Key Files.
 - `docs/VISION.md`: `ceh-build-planning` moves from Shape to Build, and the scope section links
