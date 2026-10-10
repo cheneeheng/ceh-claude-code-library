@@ -132,6 +132,18 @@ remembers every installed skill, and which stage to enter next is the person's i
 they hold. Stopping at the suggestion keeps it clear of the router the strategy rules out. The
 advisor itself lands in a separate PR, as the vision requires. No plugin changes.
 
+A seventeenth PR the same day adds that advisor, `ceh-every-session:whats-next`. It reads the
+request and the repo state, the git status and the lifecycle handoff files, and suggests one to
+three installed skills or agents with why each fits now and how to start it. It runs none of them.
+It works from the session's own skill and agent listings rather than a copy of the catalog, because
+the user may have installed only a few plugins and the catalog lists them all. When nothing
+installed fits, it runs `claude plugin list --available --json`, which lists only plugins not yet
+installed, and suggests up to two with their install command, `ceh-` plugins first. That reads the
+live marketplace, so it never goes stale the way a copied catalog would. User-only skills
+never reach that listing, so the advisor names them in a table of its own, and `validate.py` fails
+when a user-only skill is missing from it. The skill is model- and user-invocable, so "what's next?"
+in plain words loads it, at the cost of one 277-character description.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -146,7 +158,7 @@ advisor itself lands in a separate PR, as the vision requires. No plugin changes
 | `ceh-coding-conduct`           | 2.2.4   |
 | `ceh-competitor-analysis`      | 1.1.7   |
 | `ceh-documentation`            | 1.0.5   |
-| `ceh-every-session`            | 2.5.0   |
+| `ceh-every-session`            | 2.6.0   |
 | `ceh-git-datastore`            | 1.0.5   |
 | `ceh-git-workflow`             | 1.2.4   |
 | `ceh-orchestration-lab`        | 1.0.1   |
@@ -182,6 +194,10 @@ advisor itself lands in a separate PR, as the vision requires. No plugin changes
   moments in stage order naming the plugin, the skill that fires, and the file it writes, the
   stack plugins, and the plugins to add only when their moment arrives. Linked from the top of the
   README.
+- `ceh-every-session:whats-next`: suggests the installed skills or agents that fit the request and
+  the repo state, or a not-yet-installed plugin, `ceh-` first, when nothing installed fits. It runs
+  none of them. Named in the root README, `docs/CATALOG.md`, and the
+  guide's core table.
 
 ### Changed
 
@@ -283,6 +299,9 @@ advisor itself lands in a separate PR, as the vision requires. No plugin changes
   Claude says to install it whatever the user is about to do.
 - `docs/VISION.md`: the scope test admits an advisor that points a person at the installed skill
   or agent that fits, and runs nothing.
+- `validate.py`: every user-only skill must be named in `whats-next`, and the description-total
+  ratchet rises from 26,768 to 27,045 for its description. `plugins/CLAUDE.md` and
+  `tools/validate-plugins/README.md` say the same.
 
 ### Fixed
 

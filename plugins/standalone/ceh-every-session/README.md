@@ -12,7 +12,8 @@ back. `write-research-note`, `stress-test-plan`, and `prevent-repeat-mistake` re
 with cited sources, question a plan before anyone acts on it, and turn a repeated mistake into a
 fix that stops it, whatever the files are: code, notes, plans, or strategy documents.
 `record-project-decisions` writes the decisions that bind a project, one short rule file each, so
-every session follows them whatever the task.
+every session follows them whatever the task. `whats-next` suggests which installed skill or agent
+fits the user's situation, and leaves the choice to them.
 
 ## Skills
 
@@ -25,6 +26,7 @@ every session follows them whatever the task.
 | `write-research-note`      | On demand — "research X", "look into how Y works", "find out whether Z"                | A background agent reads primary sources and writes one note to `.agents_workspace/research/` in which every claim is cited, then the session re-fetches the two or three citations the answer rests on. It's working if every sentence in the note carries a `[n]` or an "Inference:" label, and the note has a Checked line and a Not found section.                                                                                                                                                                                                                                                                      |
 | `stress-test-plan`         | On demand — "grill me on this plan", "stress-test this", "poke holes in this"          | Lists every open decision and untested assumption in a plan, fetches facts with a subagent, and asks the rest in rounds of at most four, each with a recommended answer that "yes" accepts. Writes `## Decisions` and `## Open` back into the plan. It's working if no question asks for a fact the files could answer, and each round asks only questions whose prerequisites are settled.                                                                                                                                                                                                                                 |
 | `prevent-repeat-mistake`   | On demand — "you did X again", "make sure this never happens again", "session retro"   | Names the mistake from quoted evidence, climbs a ladder from removing the cause through a Claude Code setting and checks to written guidance last, proves the fix fails on the real mistake, and only drafts changes to `CLAUDE.md`, settings, memory, or hooks for approval. Works on code, notes, plans, or any files. It's working if the report quotes the mistake and says why each higher rung did not fit.                                                                                                                                                                                                           |
+| `whats-next`               | On demand — "what's next", "what should I do now", "which skill do I use"              | Reads the request, then the repo state (git status, the lifecycle handoff files, the newest session handoff), and suggests one to three installed skills or agents that fit, each with why it fits now and how to start it. Runs none of them. Knows the user-only skills the session listing hides. When nothing installed fits, it suggests up to two plugins not yet installed from `claude plugin list --available`, `ceh-` plugins first, each with its install command. It's working if the answer is a table of suggestions whose reasons cite files it read, and nothing ran.                                       |
 | `record-project-decisions` | On demand — "we decided X", "from now on we use Y", "set up the project decisions"     | Record: write one decision as its own rule file, `.claude/rules/decision-<topic>.md`, which Claude Code loads in every session. Seed: collect the choices installed skills leave open, the decisions already in the project's documents, and a short list of areas, infer what the files answer, and ask the rest up front. It's working if each decision lands in its own file with a `Why:` line, and an inferred one names the file it came from.                                                                                                                                                                        |
 
 **Manual triggers**
@@ -35,6 +37,7 @@ every session follows them whatever the task.
 - `stress-test-plan` — `/stress-test-plan [plan-file]`, or say `"grill me on this plan"`.
 - `prevent-repeat-mistake` — `/prevent-repeat-mistake [the mistake | retro]`, or say `"make sure this never happens again"`.
 - `record-project-decisions` — `/record-project-decisions [record <decision> | seed]`, or say `"we decided to use SvelteKit"`.
+- `whats-next` — `/whats-next [what you want to do]`, or say `"what's next?"`.
 - `usage-limit-handoff` — no slash command (hidden from the `/` menu), loaded by the usage-limit guard hook.
 - `delegate-bulk-reads` — no slash command (hidden from the `/` menu), loaded before dispatching `bulk-reader` or when a read guard names it.
 
