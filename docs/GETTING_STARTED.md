@@ -14,23 +14,19 @@ chain through the committed files each one writes.
 Open Claude Code in the folder you are about to work in, a git repo or any plain folder, and type:
 
 ```
-setup https://github.com/cheneeheng/ceh-claude-code-library
+install the Claude Code plugins from https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md
 ```
 
-The repo's README tells Claude how to run the setup. If Claude does not pick that up, paste the
-longer form instead:
+The link is this guide, not the repo, so Claude reads it instead of cloning anything. Claude asks
+what you are about to do, then installs the core and only the plugins that moment needs. Run
+`/reload-plugins` when it finishes: the new skills do not load until you do. Steps 1 to 5 are the
+same route by hand, and the route Claude follows.
 
-```
-Set me up with the ceh-claude-code-library Claude Code plugins, following
-https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md
-Ask me what you need to know first. Run the install commands yourself with the `claude plugin` CLI.
-Do not clone the repository.
-```
-
-Claude does not clone the repo: it reads this guide from the web and adds the marketplace by name.
-Claude asks what you are about to do, then installs the core and only the plugins that moment
-needs. Run `/reload-plugins` when it finishes: the new skills do not load until you do. Steps 1 to
-5 are the same route by hand, and the route Claude follows.
+> **For Claude Code, running this setup:** this file is all you need, so do not clone the
+> repository. Ask the user what they are about to do before you install anything. Then follow
+> steps 1 to 4 for that moment only, running each install yourself with the `claude plugin` CLI,
+> not the `/plugin` slash command. Do not install every plugin. When you finish, tell the user to
+> run `/reload-plugins`.
 
 ## 1. Add the marketplace
 
