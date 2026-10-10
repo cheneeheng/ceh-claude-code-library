@@ -1,12 +1,10 @@
 ---
 name: release
 description: >-
-  Load this skill when shipping a version: bump it, write the changelog section, land the bump
-  through a PR, then tag the merge commit on main and publish the GitHub release. Trigger on "cut a
-  release", "bump the version", "tag a release", "publish a release", "run the release flow", and on
-  an urgent production fix that must ship now ("hotfix"). Auto-load whenever a version field changes
-  in a project manifest (pyproject.toml, package.json, plugin.json, Cargo.toml) or a git tag is
-  being created. Not for landing a branch with no version (use ceh-git-workflow:pull-request).
+  Load this skill when shipping a version: bump, changelog, land it, tag, publish the GitHub
+  release. Trigger on "cut a release", "bump the version", "tag a release", "hotfix", or a version
+  field changing in a project manifest. Not for a branch with no version (use
+  ceh-git-workflow:pull-request).
 argument-hint: "[version]"
 disable-model-invocation: false
 user-invocable: true

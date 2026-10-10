@@ -3,7 +3,7 @@ name: <skill-name>
 description: >-
   Load this skill when <the moment, as a verb phrase: "opening a PR", "writing a migration">:
   <what it makes Claude do, key use case first>. Trigger on "<user phrase>", "<user phrase>",
-  "<user phrase>". Not for <near-miss task> (use ceh-<plugin>:<other-skill>).
+  "<user phrase>". Not for <nearest look-alike> (use ceh-<plugin>:<other-skill>).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -16,14 +16,16 @@ Frontmatter
   arguments, disable-model-invocation, user-invocable, allowed-tools, disallowed-tools, model,
   effort, context, agent, background, paths, hooks, shell, compatibility, license, metadata.
   Exception: disable-model-invocation, user-invocable, and license are always present, even at
-  their defaults, so every skill states who invokes it. Model-only (hook-loaded):
-  user-invocable: false. User-only (side effects): disable-model-invocation: true.
+  their defaults, so every skill states who invokes it. Only the model loads it (a standard, a
+  hook, a router, or another skill calls it): user-invocable: false. Only the user may start it
+  (an experiment, or a campaign that waits on approval): disable-model-invocation: true.
   license is Apache-2.0 unless the skill came from another repo under its own license.
 - name: lowercase letters, digits, single hyphens, max 64 chars, equal to the directory name. Use a
   verb phrase (`draft-post`, `make-page-crawlable`): a skill is something you do at a moment.
   Agents are nouns (`bulk-reader`). Exempt: model-only standards and established terms of art.
-- description: always `>-`, 2-space indent, no blank lines, max 600 chars (validate.py).
-  Triggers live here, not in `when_to_use` and not in the body.
+- description: always `>-`, 2-space indent, no blank lines, max 300 chars (validate.py): the
+  moment, two or three trigger phrases, and at most one "Not for" pointer to the nearest
+  look-alike. Triggers live here, not in `when_to_use` and not in the body.
 - Any other value containing ": " gets single quotes: argument-hint: '[plan-file]'.
 - Add `compatibility: >-` only when the skill needs software the machine may lack. Name the
   runtime, its minimum version, and what fails without it.

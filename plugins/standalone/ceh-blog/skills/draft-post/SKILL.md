@@ -1,13 +1,9 @@
 ---
 name: draft-post
 description: >-
-  Load this skill when drafting a new blog post from whatever the author has: only a topic, idea,
-  repo, or experience (interview first), or raw notes, bullets, an outline, or fragments (draft
-  straight away). Produces a complete, publishable draft in a personal, series-first voice. Trigger
-  on "help me write a blog post about this repo", "turn these notes into a post", "write a post
-  about X", "interview me for a blog post", "draft a post from this outline". Not for an existing
-  draft (use ceh-blog:edit-post) and not for adapting a finished post to other channels (use
-  ceh-blog:repurpose-post).
+  Load this skill when drafting a new blog post from a topic, repo, or idea (interview first) or
+  from notes or an outline (draft straight away). Trigger on "write a blog post about this repo",
+  "turn these notes into a post", "interview me for a blog post". Not for an existing draft.
 argument-hint: "[topic, repo URL or path, or notes file] [blog posts path]"
 disable-model-invocation: false
 user-invocable: true

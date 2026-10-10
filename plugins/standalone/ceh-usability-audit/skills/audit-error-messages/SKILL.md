@@ -1,14 +1,11 @@
 ---
 name: audit-error-messages
 description: >-
-  Load this skill when writing or reviewing anything a user reads when something goes wrong:
-  exception text, validation copy, CLI failures, toasts, HTTP error bodies. Triages each error
-  string against the three-part rule (what happened, what was wrong, what to do next) and produces a
-  rewrite table. Trigger on "improve the error messages", "this error is useless", "unhelpful
-  error". Not for logging plumbing (use ceh-python-service:write-fastapi-endpoints) or general copy
-  (use ceh-usability-audit:write-plain-language).
+  Load this skill when writing or reviewing text a user reads when something goes wrong: exception
+  text, validation copy, CLI failures, toasts, HTTP error bodies. Trigger on "improve the error
+  messages", "this error is useless", "unhelpful error".
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 license: Apache-2.0
 ---
 

@@ -1,6 +1,6 @@
 {
   "name": "ceh-security-audit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CEH security audit: audit a whole codebase, not one diff, by mapping the attack surface and tracing each entry point to its sinks, and report every exploitable finding with the attack it enables, its severity, and a fix.",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/ceh-claude-code-library",

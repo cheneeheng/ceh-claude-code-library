@@ -1,12 +1,9 @@
 ---
 name: sketch-design
 description: >-
-  Load this skill before writing the code for a feature that adds a type, a module, or a function
-  other code will call: sketch the types, signatures, and module boundaries first, with no bodies,
-  then check the sketch for illegal states, operations that may run twice, and shared state.
-  Trigger on "design this first", "sketch the types", "how should this be structured", or a
-  request that adds a new module or data model. Not for a one-file edit with no new interface, or
-  restructuring code that already exists (use ceh-coding-conduct:refactor-repo).
+  Load this skill before coding a feature that adds a type, module, or function other code calls:
+  sketch types, signatures, and boundaries with no bodies, then check for illegal states. Trigger on
+  "design this first", "sketch the types", "how should this be structured".
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

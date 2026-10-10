@@ -1,12 +1,9 @@
 ---
 name: test-a-bug-fix
 description: >-
-  Load this skill when a bug, defect, crash, regression, or incident is being fixed, before writing
-  the fix. Enforces reproduce-first: write the smallest failing test, confirm it fails for the real
-  reason, fix, then prove the test goes red again without the fix. Trigger on "fix this bug", "this
-  is broken", "regression", "this worked last week", or a pasted stack trace. Also load when
-  reviewing a bug-fix PR that ships no test. Not for choosing inputs for new feature tests (use
-  ceh-testing:design-test-cases) or judging an existing suite (use ceh-testing:audit-test-suite).
+  Load this skill when a bug, crash, or regression is being fixed, before writing the fix: the
+  smallest failing test first, proven red without the fix. Trigger on "fix this bug", "this is
+  broken", "this worked last week", a pasted stack trace, or a bug-fix PR with no test.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

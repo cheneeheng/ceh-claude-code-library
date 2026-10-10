@@ -1,14 +1,11 @@
 ---
 name: write-plain-language
 description: >-
-  Load this skill when writing or rewriting words a user reads inside the product: button and field
-  labels, empty states, onboarding copy, tooltips, confirmation dialogs, CLI help text. Supplies the
-  vocabulary swap table, sentence rules, and what must never be simplified. Trigger on "make this
-  clearer", "plain English", "reword this label", "write the empty state". Not for error text (use
-  ceh-usability-audit:audit-error-messages), whole-interface structure (use
-  ceh-usability-audit:audit-interface), or marketing copy (use ceh-seo:write-project-listing-text).
+  Load this skill when writing words a user reads inside the product: labels, empty states,
+  onboarding copy, tooltips, confirmation dialogs, CLI help. Trigger on "make this clearer", "plain
+  English", "reword this label". Not for error text (use ceh-usability-audit:audit-error-messages).
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 license: Apache-2.0
 ---
 

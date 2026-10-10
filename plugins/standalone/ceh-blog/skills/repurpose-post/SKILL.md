@@ -3,8 +3,7 @@ name: repurpose-post
 description: >-
   Load this skill when adapting a finished blog post into a Twitter/X thread, LinkedIn post, TL;DR,
   or newsletter blurb. Trigger on "make a thread from this", "turn this into a LinkedIn post",
-  "write a TL;DR", "newsletter blurb for this post". Requires a complete draft. Otherwise use
-  ceh-blog:draft-post or ceh-blog:edit-post first.
+  "write a TL;DR". Not for an unfinished draft (use ceh-blog:edit-post).
 argument-hint: "[post file or URL] [thread | linkedin | tldr | newsletter]"
 disable-model-invocation: false
 user-invocable: true

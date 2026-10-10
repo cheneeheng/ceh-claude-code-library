@@ -2,13 +2,10 @@
 name: design-test-cases
 description: >-
   Load this skill when deciding which inputs and scenarios a test should cover, not how to wire the
-  runner. Supplies the input-selection ladder: equivalence partitions, boundaries, decision tables,
-  state transitions, pairwise, property-based tests, metamorphic relations, fuzzing, and forced
-  failure of every dependency. Trigger on "write tests for this", "what should I test", "cover the
-  edge cases", "property-based", or when a test file has only a happy path. Pairs with the stack
-  testing skills, which own the runner, fixtures, and mocking library.
+  runner: partitions, boundaries, state transitions, properties, fuzzing, failing dependencies.
+  Trigger on "what should I test", "cover the edge cases", or a test file with only a happy path.
 disable-model-invocation: false
-user-invocable: true
+user-invocable: false
 license: Apache-2.0
 ---
 

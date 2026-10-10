@@ -1,12 +1,9 @@
 ---
 name: build-ag-ui-agent
 description: >-
-  Load this skill when building or fixing the agent server behind an AG-UI generative-UI canvas: an
-  HTTP endpoint that takes RunAgentInput, calls an LLM with the canvas's frontend tools, and streams
-  AG-UI events over SSE. Trigger on "build the AG-UI server", "connect Claude to my canvas",
-  "replace the mock agent", or "the agent calls a component but nothing renders". Ships a FastAPI +
-  Claude server that ends the run on a frontend tool call. Not for the canvas itself (use
-  ceh-ag-ui:build-ag-ui) or a general FastAPI service.
+  Load this skill when building or fixing the agent server behind an AG-UI canvas: an endpoint that
+  calls an LLM with the canvas's frontend tools and streams AG-UI events over SSE. Trigger on "build
+  the AG-UI server", "connect Claude to my canvas", "replace the mock agent".
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

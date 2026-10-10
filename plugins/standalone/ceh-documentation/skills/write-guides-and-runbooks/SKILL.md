@@ -1,12 +1,9 @@
 ---
 name: write-guides-and-runbooks
 description: >-
-  Load this skill when writing or revising end-user or operator-facing documentation: user guides,
-  manuals, getting-started guides, operator runbooks, installation guides, and troubleshooting
-  references. Trigger on "write a user guide", "ops runbook", "getting-started guide", or when
-  ceh-documentation:write-project-docs delegates its guide step. Not for API reference docs (use
-  write-api-reference), a whole docs set (use write-project-docs), blog posts (the ceh-blog plugin
-  owns those), or README files (use ceh-git-workflow:update-readme).
+  Load this skill when writing or revising task docs for users or operators: user guides,
+  getting-started and install guides, runbooks, troubleshooting. Trigger on "write a user guide",
+  "ops runbook", "getting-started guide". Not for a whole docs set (use write-project-docs).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

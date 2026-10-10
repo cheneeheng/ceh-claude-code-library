@@ -1,12 +1,9 @@
 ---
 name: make-page-crawlable
 description: >-
-  Load this skill when shipping or creating a public-facing web page or route: a landing page,
-  marketing page, docs site, blog page, or any HTML surface that crawlers and AI engines will see.
-  Trigger on "add SEO", "make this page discoverable", "meta tags", "open graph", "structured data",
-  "sitemap", or when a new public route is created in a SvelteKit or React app. Not for README or
-  repo text (use ceh-seo:write-project-listing-text), authoring llms.txt (use
-  ceh-seo:write-llms-txt), or the page's content (use ceh-blog).
+  Load this skill when creating or shipping a public web page or route that crawlers and AI engines
+  will see: a landing, docs, or blog page. Trigger on "add SEO", "meta tags", "open graph",
+  "structured data", "sitemap", or a new public route. Not for README text.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

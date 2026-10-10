@@ -1,12 +1,9 @@
 ---
 name: write-engineering-retro
 description: >-
-  Load this skill when looking back over a period of work in a repository: summarise what shipped,
-  how work flowed (time to merge, reverts, churn hotspots), and at most three concrete changes, all
-  from git history and every claim tied to a commit or PR. Trigger on "write a retro", "what did we
-  ship this week", "sprint retrospective", "how did the last month go". Not for a changelog (use
-  ceh-git-workflow:update-changelog) or a lesson from one session (use
-  ceh-every-session:prevent-repeat-mistake).
+  Load this skill when looking back over a period of work in a repo: what shipped, how work flowed,
+  and at most three changes, every claim tied to a commit or PR. Trigger on "write a retro", "what
+  did we ship this week", "sprint retrospective", "how did the last month go".
 argument-hint: "[since] [until]"
 disable-model-invocation: false
 user-invocable: true

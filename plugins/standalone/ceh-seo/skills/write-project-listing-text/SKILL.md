@@ -1,12 +1,10 @@
 ---
 name: write-project-listing-text
 description: >-
-  Load this skill when writing or revising the public-facing text of a repo, package, or product:
-  the README first screen, GitHub repo description and topics, package description and keywords,
-  marketplace listings, landing-page copy. Trigger on "make this repo findable", "improve the
-  pitch", "package description", "GitHub topics", "SEO for the README", or when publishing a repo,
-  library, or plugin for the first time. Not for keeping the README accurate after code changes (use
-  ceh-git-workflow:update-readme) and not for HTML page markup (use ceh-seo:make-page-crawlable).
+  Load this skill when writing the public pitch of a repo, package, or product: README first
+  screen, repo description and topics, package keywords, listings. Trigger on "make this repo
+  findable", "improve the pitch", "GitHub topics", or a first publish. Not for keeping a README
+  accurate.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

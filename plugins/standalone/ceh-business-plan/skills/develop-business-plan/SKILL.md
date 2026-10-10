@@ -1,12 +1,9 @@
 ---
 name: develop-business-plan
 description: >-
-  Load this skill when anything about a business plan comes up, since it is the single entry point
-  of the plugin: it finds `BUSINESS_PLAN.md`, works out which moment this is, and routes to the
-  specialist skill that owns it. Trigger on "write a business plan", "validate my product idea",
-  "who would pay for this", "review my business plan", "do the numbers work", "go-to-market plan",
-  "run a premortem", "set our OKRs", or "write a pitch deck". Not for the technical build plan of
-  the app itself (use ceh-build-planning) and not for a marketing blog post (use ceh-blog).
+  Load this skill when anything about a business plan comes up: the single entry point that routes
+  to the specialist skill for the moment. Trigger on "write a business plan", "validate my product
+  idea", "do the numbers work", "run a premortem", "write a pitch deck".
 argument-hint: "[plan-or-idea]"
 disable-model-invocation: false
 user-invocable: true

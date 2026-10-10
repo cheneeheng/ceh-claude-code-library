@@ -1,12 +1,9 @@
 ---
 name: write-fastapi-endpoints
 description: >-
-  Load this skill when designing or writing FastAPI endpoints, services, or middleware: URL paths,
-  HTTP methods and status codes, error response shapes, dependency injection, lifespan, exception
-  handlers, or route/service/database layer boundaries. Also covers structured logs, metrics,
-  /health, correlation ID middleware, CORS, rate limiting, and input validation. Auto-load whenever
-  a route handler is written, a status code is chosen, a domain exception is added, or a log call or
-  metric is written. Not for frontend or browser code.
+  Load this skill when writing FastAPI endpoints, services, or middleware: paths, status codes,
+  error shapes, dependency injection, layer boundaries, logs, metrics, /health, CORS, rate limits.
+  Auto-load when a route handler, domain exception, or log call is written.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-

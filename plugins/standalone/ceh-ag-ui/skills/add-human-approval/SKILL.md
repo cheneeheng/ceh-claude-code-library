@@ -1,13 +1,9 @@
 ---
 name: add-human-approval
 description: >-
-  Load this skill when an AG-UI agent must stop and get the user's decision before it acts:
-  confirming a delete, a payment, a send, or any irreversible or costly step. Covers AG-UI 1.0
-  interrupts: RUN_FINISHED outcome "interrupt", a fixed approval card from agent.pendingInterrupts,
-  and a resume entry per interrupt. Trigger on "ask the user before", "human in the loop", "approval
-  step", or "interrupt and resume". Builds on a canvas from ceh-ag-ui:build-ag-ui. Not for live
-  progress (use ceh-ag-ui:add-live-state-panel) or placing components (use
-  ceh-ag-ui:add-canvas-component).
+  Load this skill when an AG-UI agent must stop for the user's decision before an irreversible or
+  costly step (a delete, a payment, a send), using AG-UI 1.0 interrupts and resume. Trigger on "ask
+  the user before", "human in the loop", "approval step".
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

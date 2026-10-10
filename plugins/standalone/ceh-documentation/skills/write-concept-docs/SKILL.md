@@ -1,13 +1,9 @@
 ---
 name: write-concept-docs
 description: >-
-  Load this skill when writing user-facing concept pages for a project in Markdown: the mental model
-  a user needs (core objects, lifecycle, data flow, error model) and why it is built that way.
-  Trigger on "explain how this works in the docs", "write a concepts section", or when
-  ceh-documentation:write-project-docs delegates its concepts step. Not for a maintainer
-  architecture doc (use ceh-codebase-explanation:document-architecture), a codebase walkthrough (use
-  ceh-codebase-explanation:explain-codebase), task steps (use write-guides-and-runbooks), or lookups
-  (use write-api-reference).
+  Load this skill when writing user-facing concept pages: the mental model a user needs (core
+  objects, lifecycle, data flow, error model) and why. Trigger on "explain how this works in the
+  docs", "write a concepts section". Not for a maintainer architecture doc.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

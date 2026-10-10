@@ -1,12 +1,9 @@
 ---
 name: add-canvas-component
 description: >-
-  Load this skill when adding a new component to, or changing one in, the catalogue of an AG-UI
-  generative-UI canvas: a card, chart, form, timeline, or any other piece of UI the agent should be
-  able to place on screen. Trigger on "add a component the agent can show", "new catalogue
-  component", "let the agent render a <thing>", or an edit under `catalogue/` in a canvas built by
-  ceh-ag-ui:build-ag-ui. Covers the tool name, a content-only zod schema, and the example that
-  doubles as the test fixture. Not for setting up the canvas itself (use ceh-ag-ui:build-ag-ui).
+  Load this skill when adding or changing a component in an AG-UI canvas catalogue: a card, chart,
+  or form the agent can place on screen. Trigger on "add a component the agent can show", "let the
+  agent render a <thing>", or an edit under `catalogue/`.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

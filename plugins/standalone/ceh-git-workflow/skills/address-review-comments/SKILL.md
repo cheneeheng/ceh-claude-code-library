@@ -1,11 +1,9 @@
 ---
 name: address-review-comments
 description: >-
-  Load this skill when acting on review feedback someone left on your change: verify each comment
-  against the current code before changing anything, fix what holds, push back with evidence on
-  what does not, and reply to every thread. Trigger on "address these review comments", "fix the
-  review feedback", "respond to the PR review", "the reviewer said". Not for reviewing someone
-  else's PR (use ceh-git-workflow:code-review).
+  Load this skill when acting on review feedback left on your change: verify each comment, fix what
+  holds, push back with evidence on what does not, reply to every thread. Trigger on "address these
+  review comments", "fix the review feedback", "the reviewer said".
 argument-hint: "[PR number or URL]"
 disable-model-invocation: false
 user-invocable: true

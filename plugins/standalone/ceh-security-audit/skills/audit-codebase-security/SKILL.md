@@ -1,12 +1,9 @@
 ---
 name: audit-codebase-security
 description: >-
-  Load this skill when a whole codebase, not one diff, needs a security audit: map the attack
-  surface, trace each entry point to the sinks it reaches, and report every exploitable finding
-  with the attack it enables, its severity, and a fix. Report-only unless asked to fix. Trigger on
-  "security audit", "audit this repo for vulnerabilities", "is this codebase secure", "find the
-  security holes". Not for pending changes (use Claude Code's built-in /security-review) or
-  reviewing a PR (use ceh-git-workflow:code-review).
+  Load this skill when a whole codebase, not one diff, needs a security audit: attack surface, entry
+  points traced to sinks, each exploitable finding with severity and fix. Trigger on "security
+  audit", "is this codebase secure". Not for pending changes (use the built-in /security-review).
 argument-hint: "[path or service]"
 disable-model-invocation: false
 user-invocable: true

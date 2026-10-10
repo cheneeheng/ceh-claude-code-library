@@ -1,13 +1,9 @@
 ---
 name: trace-code-rationale
 description: >-
-  Load this skill when the question is why code is the way it is, not what it does: trace a line,
-  function, or file back through git log, blame, and the linked PRs and issues, and answer with
-  every claim cited to a commit, PR, or issue. Trigger on "why is it like this", "why was this
-  added", "what was the reasoning behind this", or "is this safe to remove". Not for what the code
-  does now (use
-  ceh-codebase-explanation:explain-codebase or ceh-codebase-explanation:explain-until-understood)
-  or recording a new decision (use ceh-codebase-explanation:document-architecture).
+  Load this skill when the question is why code is the way it is, not what it does: trace it
+  through git log, blame, PRs, and issues, citing each claim. Trigger on "why is it like this", "why
+  was this added", "is this safe to remove".
 argument-hint: "<file>[:<line>-<line>] | <symbol>"
 disable-model-invocation: false
 user-invocable: true

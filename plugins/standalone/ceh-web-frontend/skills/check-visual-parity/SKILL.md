@@ -1,12 +1,9 @@
 ---
 name: check-visual-parity
 description: >-
-  Load this skill when a UI change must not change how the UI looks, or must change it only where
-  intended: a framework migration, a CSS or design-token refactor, a component-library upgrade, a
-  restyle of one area. Captures Playwright screenshots of the old version as the baseline,
-  compares the new version against them, and explains every diff. Trigger on "make sure it looks
-  the same", "pixel parity", "visual regression check", "did the migration change anything
-  visually". Not for choosing the design itself (use ceh-ui-design:design-ui).
+  Load this skill when a UI change must not change how it looks, or only where intended (a
+  migration, CSS refactor, or library upgrade): Playwright baselines, then explain every diff.
+  Trigger on "make sure it looks the same", "pixel parity", "visual regression check".
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

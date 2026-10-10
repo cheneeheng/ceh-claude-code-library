@@ -57,25 +57,54 @@ works in any plain folder, which was checked in an isolated config, so the guide
 guidance on skipping the coding plugins now comes before their install commands rather than
 after. No plugin changes.
 
+A seventh PR the same day cuts every skill description to 300 characters or fewer. The skill
+listing has a budget of 1% of the context window, and Claude Code drops whole descriptions once it
+overflows: in a session with nine of these plugins installed, nine skills showed up with a name and
+no description, so nothing could trigger them. The skill descriptions totalled about 44,000
+characters, and over 9,000 of those went on "Not for X (use Y)" clauses, many pointing at plugins
+the user may not have installed. Each description now keeps the moment, two or three trigger phrases,
+and at most one pointer to its nearest look-alike. The skill bodies still carry the full routing.
+`validate.py` enforces the cap. The same PR states a rule for the invocation flags: a skill only the
+model loads sets `user-invocable: false`, and a skill only the user may start sets
+`disable-model-invocation: true`. That moves `design-test-cases`, `write-plain-language`, and
+`audit-error-messages` to model-only. No new user-only skill was added, because the library is
+agents-first and a user-only skill cannot be loaded by a request, an agent, or a workflow stage.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog`                     | 1.0.6   |
-| `ceh-build-from-plan`          | 1.0.1   |
-| `ceh-build-planning`           | 1.1.1   |
-| `ceh-business-plan`            | 1.1.2   |
-| `ceh-check-build-against-plan` | 1.0.2   |
-| `ceh-codebase-explanation`     | 1.2.2   |
-| `ceh-coding-conduct`           | 2.2.2   |
+| `ceh-ag-ui`                    | 1.1.2   |
+| `ceh-blog`                     | 1.0.7   |
+| `ceh-build-from-plan`          | 1.0.2   |
+| `ceh-build-planning`           | 1.1.2   |
+| `ceh-business-plan`            | 1.1.3   |
+| `ceh-check-build-against-plan` | 1.0.3   |
+| `ceh-codebase-explanation`     | 1.2.3   |
+| `ceh-coding-conduct`           | 2.2.3   |
+| `ceh-competitor-analysis`      | 1.1.6   |
+| `ceh-documentation`            | 1.0.5   |
+| `ceh-every-session`            | 2.4.1   |
+| `ceh-git-datastore`            | 1.0.4   |
+| `ceh-git-workflow`             | 1.2.4   |
 | `ceh-orchestration-lab`        | 1.0.1   |
+| `ceh-python-library`           | 1.0.3   |
+| `ceh-python-service`           | 1.1.2   |
 | `ceh-scenario-editorial`       | 1.1.1   |
 | `ceh-scenario-ideation`        | 1.2.1   |
 | `ceh-scenario-library`         | 1.2.1   |
 | `ceh-scenario-service`         | 1.2.1   |
 | `ceh-scenario-webapp`          | 1.2.1   |
-| `ceh-seo`                      | 1.1.2   |
-| `ceh-testing`                  | 1.4.0   |
+| `ceh-security-audit`           | 1.0.1   |
+| `ceh-seo`                      | 1.1.3   |
+| `ceh-session-diagnosis`        | 1.0.1   |
+| `ceh-session-to-skill`         | 1.0.1   |
+| `ceh-testing`                  | 1.4.1   |
+| `ceh-ui-design`                | 1.0.5   |
+| `ceh-usability-audit`          | 1.1.4   |
+| `ceh-web-frontend`             | 1.3.2   |
+| `ceh-workflow-builder`         | 1.3.6   |
+| `ceh-workflow-runner`          | 1.0.4   |
 
 ### Added
 
@@ -151,6 +180,17 @@ after. No plugin changes.
   open.
 - `docs/TESTING_WORKFLOW.md`, `docs/CROSS_REFERENCES.md`: the new skill's trigger row, and a new
   entry for the handoff paragraph the blog and SEO skills share.
+- Every skill description over 300 characters, in 25 plugins: cut to the moment, two or three
+  trigger phrases, and at most one "Not for" pointer. The skill descriptions total about 23,500
+  characters, down from about 44,000.
+- `validate.py`: a 300-character cap on skill descriptions (agents keep 600), and the
+  description-total ratchet lowered from 51,186 to 30,010.
+- `ceh-testing:design-test-cases`, `ceh-usability-audit:write-plain-language`, and
+  `ceh-usability-audit:audit-error-messages` are model-only (`user-invocable: false`). The model
+  still loads them on a request; they leave the `/` menu.
+- `plugins/CLAUDE.md`: the description cap and its reason, and a three-row table for the invocation
+  flags (model only, user only, both). The `add-plugin-component` skill template and checklist and
+  `tools/validate-plugins/README.md` say the same.
 
 ## 2026-10-09
 

@@ -1,12 +1,9 @@
 ---
 name: measure-performance
 description: >-
-  Load this skill when speed, memory, or size is the task: something is slow, a benchmark is being
-  written or read, a change might have regressed performance, or the goal is to make a number
-  better. Vet the measurement before trusting it, record a baseline, profile before changing, keep
-  one change per measurement and one commit per win. Trigger on "make this faster", "is this a
-  regression", "benchmark this", "why is this slow", "reduce memory". Not for load or capacity
-  planning of a deployed system.
+  Load this skill when speed, memory, or size is the task: something is slow, a benchmark is
+  written or read, or a change may have regressed performance. Trigger on "make this faster", "is
+  this a regression", "benchmark this", "why is this slow", "reduce memory".
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

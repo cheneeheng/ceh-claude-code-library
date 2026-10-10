@@ -1,13 +1,9 @@
 ---
 name: design-ui
 description: >-
-  Load this skill when making any frontend UI visual design decision: laying out a page or app
-  shell, placing navigation, establishing hierarchy and spacing, picking a theme or brand, or
-  restyling an existing app. Auto-load on: design the UI, lay out this page, make it look
-  professional, polish this UI. Not for accessibility (use ceh-web-frontend:make-ui-accessible),
-  tooling (use ceh-web-frontend:configure-bun-vite-env), component logic (use
-  ceh-web-frontend:write-react-vite-code or ceh-web-frontend:write-sveltekit-code), or API/DB schema
-  design.
+  Load this skill when making any frontend visual design decision: page or app-shell layout,
+  navigation, hierarchy and spacing, a theme or brand, or a restyle. Trigger on "design the UI", "lay
+  out this page", "make it look professional", "polish this UI".
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

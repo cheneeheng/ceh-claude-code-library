@@ -1,12 +1,9 @@
 ---
 name: update-readme
 description: >-
-  Load this skill when keeping README.md accurate after a significant change: shipping a new
-  feature, adding a command/script/endpoint, changing install or setup steps, adding or removing
-  dependencies, introducing environment variables, or changing the public API surface. Trigger on
-  "update the readme", "refresh the docs", "document this feature", "I just shipped X — update
-  docs". Not for bug fixes, refactors, or any change that does not affect how someone installs,
-  runs, or configures the project, and not for changelogs (use ceh-git-workflow:update-changelog).
+  Load this skill when a change alters how someone installs, runs, or configures the project (a new
+  feature, command, setup step, dependency, environment variable, or public API) and README.md must
+  catch up. Trigger on "update the readme", "document this feature". Not for bug fixes or refactors.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

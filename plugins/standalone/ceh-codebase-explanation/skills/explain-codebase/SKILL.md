@@ -1,13 +1,9 @@
 ---
 name: explain-codebase
 description: >-
-  Load this skill when the ask is to understand a whole repository and leave the understanding
-  behind in a file: walk it component by component and write it to
-  .agents_workspace/CODEBASE_EXPLAINED.md. Covers code repos and Markdown or text knowledge bases.
-  Trigger on "explain this codebase", "explain this repo", "what is in these notes", "walk me
-  through this project", or "I inherited this repo". Component level by default. Not for design diagrams and decision records
-  (ceh-codebase-explanation:document-architecture), and not for end-user or operator documentation
-  (ceh-documentation).
+  Load this skill when a whole repo or knowledge base must be understood and the understanding
+  written to .agents_workspace/CODEBASE_EXPLAINED.md, component by component. Trigger on "explain
+  this codebase", "walk me through this project", "I inherited this repo".
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

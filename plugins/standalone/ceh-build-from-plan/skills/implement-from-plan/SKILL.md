@@ -1,12 +1,9 @@
 ---
 name: implement-from-plan
 description: >-
-  Load this skill when building from a written plan: work through its phases in order, write the
-  failing test first, implement only what the phase names, run the phase's check, and record the
-  evidence in the plan. Works without a plan by writing a minimal one first. Trigger on "implement
-  the plan", "build from the plan", "build phase 2", "start building docs/plans/mvp.md". Not for
-  writing the plan (use ceh-build-planning:write-build-plan) or checking finished code against it
-  (use ceh-check-build-against-plan:check-build-against-plan).
+  Load this skill when building from a written plan: phase by phase, failing test first, only what
+  the phase names, with each phase's check run and its evidence recorded. Trigger on "implement the
+  plan", "build phase 2", "start building docs/plans/mvp.md".
 argument-hint: "[plan-file] [phase]"
 disable-model-invocation: false
 user-invocable: true

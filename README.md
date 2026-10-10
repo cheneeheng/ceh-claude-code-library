@@ -123,7 +123,7 @@ _alongside_ a stage plugin, not instead of one. Which to install first is in
 | Skill                     | Invoke                                   | When                                                                                                                                                      |
 | ------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Test a Bug Fix            | `/ceh-testing:test-a-bug-fix`            | A bug, crash, or regression is being fixed: failing test first, prove it goes red without the fix, bisect on it                                           |
-| Design Test Cases         | `/ceh-testing:design-test-cases`         | Deciding which inputs and scenarios to cover: partitions, boundaries, decision tables, state transitions, properties, fuzzing                             |
+| Design Test Cases         | Model-only, no slash command             | Deciding which inputs and scenarios to cover: partitions, boundaries, decision tables, state transitions, properties, fuzzing                             |
 | Audit Test Suite          | `/ceh-testing:audit-test-suite`          | Finding out whether a passing suite would catch a defect: assertion quality, mutation testing on the diff, flakiness                                      |
 | Verify Behavior Preserved | `/ceh-testing:verify-behavior-preserved` | Before a refactor, extraction, dependency or runtime upgrade, or port: characterization tests, golden files, a differential run                           |
 | Close Test Risk Gaps      | `/ceh-testing:close-test-risk-gaps`      | Pre-completion gate: concurrency, contract drift, performance, authorization, and migration/rollout gaps                                                  |
@@ -228,8 +228,8 @@ _alongside_ a stage plugin, not instead of one. Which to install first is in
 | --------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Simulate Newcomer First Run | `/ceh-usability-audit:simulate-newcomer-first-run` | Can a stranger reach first success: install, sign-up, setup, onboarding; cold persona walkers, milestones capped by an action budget, looped to a 5-point gate |
 | Audit Interface             | `/ceh-usability-audit:audit-interface`             | They are already in: the five questions every web UI/CLI/API/screen must answer unasked, an anti-pattern sweep, the naming test, and the persona battery       |
-| Audit Error Messages        | `/ceh-usability-audit:audit-error-messages`        | Anything a user reads when something goes wrong: the three-part rule (what happened, what was wrong, what to do next) over every user-reachable string         |
-| Write Plain Language        | `/ceh-usability-audit:write-plain-language`        | Labels, help text, empty states, confirmation dialogs, onboarding copy: vocabulary floor, sentence rules, and an explicit never-simplify list                  |
+| Audit Error Messages        | Model-only, no slash command                       | Anything a user reads when something goes wrong: the three-part rule (what happened, what was wrong, what to do next) over every user-reachable string         |
+| Write Plain Language        | Model-only, no slash command                       | Labels, help text, empty states, confirmation dialogs, onboarding copy: vocabulary floor, sentence rules, and an explicit never-simplify list                  |
 
 ### Business Plan (`ceh-business-plan`)
 

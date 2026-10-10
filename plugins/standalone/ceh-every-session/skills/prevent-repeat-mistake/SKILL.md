@@ -1,12 +1,9 @@
 ---
 name: prevent-repeat-mistake
 description: >-
-  Load this skill when the same mistake has happened more than once and a correction in chat is no
-  longer enough: name the mistake from evidence, pick the strongest fix that would have caught it
-  (remove the cause, a Claude Code setting, a check, written guidance last), prove the fix fails on
-  the real mistake, and propose anything that changes future sessions. Works on code, notes, plans,
-  or any file. Trigger on "you did X again", "I keep telling you", "make sure this never happens
-  again", "session retro".
+  Load this skill when the same mistake has happened more than once: pick the strongest fix that
+  would have caught it (a setting or check before written guidance) and prove it on the real
+  mistake. Trigger on "you did X again", "I keep telling you", "make sure this never happens again".
 argument-hint: "[the mistake | retro]"
 disable-model-invocation: false
 user-invocable: true
