@@ -1,12 +1,9 @@
 ---
 name: write-examples
 description: >-
-  Load this skill when writing new runnable example programs for the project under examples/: a
-  short feature tour for new users and copy-paste recipes for their own project. Every example is
-  run before it is kept. Trigger on "write examples for this project", "add usage examples", "we
-  need an examples folder", or "the examples are missing or broken". Not for documenting existing
-  examples as docs pages (use ceh-documentation:write-project-docs), how-to prose (use
-  write-guides-and-runbooks), or a README refresh (use ceh-git-workflow:update-readme).
+  Load this skill when writing runnable example programs under examples/: a feature tour and
+  copy-paste recipes, each run before it is kept. Trigger on "write examples for this project", "add
+  usage examples", "the examples are missing or broken".
 argument-hint: "[project-path]"
 disable-model-invocation: false
 user-invocable: true

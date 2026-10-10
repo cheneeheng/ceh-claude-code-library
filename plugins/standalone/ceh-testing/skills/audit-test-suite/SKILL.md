@@ -1,12 +1,9 @@
 ---
 name: audit-test-suite
 description: >-
-  Load this skill to find out whether a passing test suite would actually catch a defect: assertion
-  quality, mutation testing on the diff, flaky and order-dependent tests, tests that mirror the
-  implementation, and tests that pass with the code removed. Trigger on "are these tests any good",
-  "do I trust this suite", "audit the tests", "mutation testing", "flaky test", "tests pass but the
-  bug shipped", or after generating a batch of tests. Not for choosing new test cases (use
-  ceh-testing:design-test-cases) or for testing a specific bug fix (use ceh-testing:test-a-bug-fix).
+  Load this skill to find out whether a passing suite would catch a defect: assertion quality,
+  mutation testing, flaky tests, tests that mirror the code. Trigger on "are these tests any good",
+  "mutation testing", "flaky test", "tests pass but the bug shipped", or after generating tests.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

@@ -1,11 +1,9 @@
 ---
 name: configure-bun-vite-env
 description: >-
-  Load this skill when setting up a web frontend project, running scripts, managing dependencies,
-  writing TypeScript, or configuring linting and formatting in a Bun + Vite project (SvelteKit or
-  React). Auto-load whenever bun install/add/run or package.json scripts are used, a
-  .ts/.tsx/.svelte file is written, or eslint.config.js / .prettierrc / tsconfig.json is created or
-  modified.
+  Load this skill when setting up or configuring a Bun + Vite frontend: scripts, dependencies,
+  TypeScript, linting, formatting. Auto-load when bun runs, or eslint.config.js, .prettierrc, or
+  tsconfig.json is created or modified.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-

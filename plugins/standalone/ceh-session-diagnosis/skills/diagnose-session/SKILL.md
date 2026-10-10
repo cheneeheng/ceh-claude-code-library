@@ -2,11 +2,8 @@
 name: diagnose-session
 description: >-
   Load this skill when a Claude Code session went wrong and the cause should be found from its
-  transcript: parallel analysts read it through four lenses, every finding cites a transcript
-  line, and each root cause is routed to a fix. Scrubs the report before it is shared. Trigger on
-  "diagnose this session", "why did that session go wrong", "what went wrong last time", "the
-  agent kept doing X". Not for turning a session that worked into a skill (use
-  ceh-session-to-skill:turn-session-into-skill).
+  transcript, every finding cited and each root cause routed to a fix. Trigger on "diagnose this
+  session", "why did that session go wrong", "the agent kept doing X".
 argument-hint: "[session-id] [symptom]"
 disable-model-invocation: false
 user-invocable: true

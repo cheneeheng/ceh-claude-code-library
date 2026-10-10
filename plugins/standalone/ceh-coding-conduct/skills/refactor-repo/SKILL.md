@@ -1,12 +1,9 @@
 ---
 name: refactor-repo
 description: >-
-  Audit a whole codebase (or one named module) for accumulated complexity and shrink it through a
-  propose-then-apply refactor campaign: a read-only inventory of candidates (duplication, dead code,
-  over-abstraction), a ranked proposal with payoff, risk, and diff size, then, only after explicit
-  approval of specific clusters, apply them on refactor/ branches under a behavior-preservation
-  gate. Not for simplifying one branch's diff before a PR (use shrink-diff) or write-time minimalism
-  (use write-less-code).
+  Audit a whole codebase or one module for accumulated complexity and shrink it: a read-only
+  inventory, a ranked proposal, then, only after approval, refactor/ branches under a
+  behavior-preservation gate. Not for one branch's diff (use shrink-diff).
 argument-hint: "[module-or-path]"
 disable-model-invocation: true
 user-invocable: true

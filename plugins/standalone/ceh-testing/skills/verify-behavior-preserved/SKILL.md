@@ -1,12 +1,9 @@
 ---
 name: verify-behavior-preserved
 description: >-
-  Load this skill before a change that is supposed to alter no observable behavior: refactoring,
-  renaming, deleting duplication, swapping an implementation, upgrading a dependency, or porting
-  code. Establishes a baseline first: characterization tests, golden files, and a differential run
-  of old versus new. Trigger on "refactor this", "clean this up", "upgrade this dependency", "make
-  sure nothing broke". Not for changes that intentionally change behavior, which need new tests (use
-  ceh-testing:design-test-cases).
+  Load this skill before a change meant to alter no behavior (a refactor, rename, dependency
+  upgrade, or port): pin a baseline first, then diff old against new. Trigger on "refactor this",
+  "clean this up", "upgrade this dependency", "make sure nothing broke".
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

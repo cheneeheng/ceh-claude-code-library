@@ -1,12 +1,9 @@
 ---
 name: visualize-graph-cytoscape
 description: >-
-  Load this skill when building a UI that draws entities as connected nodes and edges with
-  Cytoscape.js: a network diagram, dependency map, knowledge graph, org chart, or call graph the
-  user can click, drag, zoom, and explore. Trigger on "visualize this graph", "draw a network",
-  "make a dependency map", or any mention of cytoscape. Covers choosing a layout, converting real
-  data into elements JSON, and when a node-link diagram is the wrong answer. Not for a fixed diagram
-  (Mermaid), charts, or architecture diagrams (use ceh-codebase-explanation:document-architecture).
+  Load this skill when building an interactive node-and-edge graph UI with Cytoscape.js: a network,
+  dependency map, knowledge graph, or org chart. Trigger on "visualize this graph", "draw a
+  network", or any mention of cytoscape. Not for a fixed diagram (use Mermaid).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

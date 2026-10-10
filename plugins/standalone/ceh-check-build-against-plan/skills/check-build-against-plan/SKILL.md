@@ -1,12 +1,9 @@
 ---
 name: check-build-against-plan
 description: >-
-  Load this skill when checking whether finished code is what a plan said to build: every planned
-  item built, nothing built that the plan left out, and each phase's check still passing.
-  Report-only unless asked to fix. Trigger on "check the build against the plan", "does the code
-  match the plan", "did we build what we planned", "audit against the spec". Not for reviewing a
-  diff (use ceh-git-workflow:code-review) or finding bugs in working code (use
-  ceh-testing:explore-app-for-bugs).
+  Load this skill when checking whether finished code is what a plan said to build: every item
+  built, nothing unplanned added, each phase's check still passing. Report-only unless asked to fix.
+  Trigger on "check the build against the plan", "did we build what we planned".
 argument-hint: "[plan-file]"
 disable-model-invocation: false
 user-invocable: true

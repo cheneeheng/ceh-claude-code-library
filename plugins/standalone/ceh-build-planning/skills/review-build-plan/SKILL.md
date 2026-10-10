@@ -1,13 +1,9 @@
 ---
 name: review-build-plan
 description: >-
-  Load this skill when a build plan or spec exists and nobody has built from it yet: review it
-  through scope, engineering, design, and developer-experience lenses, quote the plan line behind
-  each finding, and end with a verdict. Trigger on "review this plan", "is this plan ready to
-  build", "check the plan before we build", "review the spec". Not for writing the plan (use
-  ceh-build-planning:write-build-plan), questioning the user about it (use
-  ceh-every-session:stress-test-plan), or checking built code (use
-  ceh-check-build-against-plan:check-build-against-plan).
+  Load this skill when a build plan or spec exists and nobody has built from it yet: review it on
+  scope, engineering, design, and developer experience, and end with a verdict. Trigger on "review
+  this plan", "is this plan ready to build", "review the spec".
 argument-hint: "[plan-file]"
 disable-model-invocation: false
 user-invocable: true

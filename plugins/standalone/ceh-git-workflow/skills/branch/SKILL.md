@@ -1,10 +1,8 @@
 ---
 name: branch
 description: >-
-  Load this skill when creating or naming a branch: choosing the correct prefix (feat/, fix/,
-  chore/, docs/, test/, refactor/), formatting the short description, or starting new work from
-  main. Auto-load whenever a new git branch is being created, a branch name is being chosen, or work
-  is being started from the main branch.
+  Load this skill when creating or naming a git branch, or starting new work from main: the prefix
+  (feat/, fix/, chore/, docs/, test/, refactor/) and the short description.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-

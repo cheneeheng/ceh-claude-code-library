@@ -1,12 +1,9 @@
 ---
 name: configure-python-service-env
 description: >-
-  Load this skill when setting up or configuring the Python environment: installing dependencies
-  with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming conventions,
-  configuring ruff/mypy, or handling secrets: loading settings from environment variables, .env and
-  .env.example, generating tokens, or auditing dependencies. Auto-load whenever a pyproject.toml is
-  edited, a uv command is run, a secret or API key is added, a BaseSettings class is written, or a
-  question arises about code style, type annotations, or import ordering. Not for frontend secrets.
+  Load this skill when setting up a Python service's environment, code style, or secrets: uv,
+  pyproject.toml, type hints, ruff/mypy, settings from environment variables and .env. Auto-load
+  when pyproject.toml is edited, a uv command runs, or a secret or BaseSettings class is added.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-

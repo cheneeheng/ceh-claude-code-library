@@ -37,8 +37,8 @@ frustration. Every report this plugin writes says so, and none of them say "vali
 | ----------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `simulate-newcomer-first-run` | `/ceh-usability-audit:simulate-newcomer-first-run` | Can a stranger get from "just arrived" to first success: install, sign-up, setup, onboarding, first task |
 | `audit-interface`             | `/ceh-usability-audit:audit-interface`             | They are already in: is the web UI, CLI, API, or screen comprehensible                                   |
-| `audit-error-messages`        | `/ceh-usability-audit:audit-error-messages`        | Writing or reviewing anything a user reads when something goes wrong                                     |
-| `write-plain-language`        | `/ceh-usability-audit:write-plain-language`        | Writing or rewriting labels, help text, empty states, confirmation dialogs, onboarding copy              |
+| `audit-error-messages`        | Model-only, no slash command                       | Writing or reviewing anything a user reads when something goes wrong                                     |
+| `write-plain-language`        | Model-only, no slash command                       | Writing or rewriting labels, help text, empty states, confirmation dialogs, onboarding copy              |
 
 ### `simulate-newcomer-first-run`
 

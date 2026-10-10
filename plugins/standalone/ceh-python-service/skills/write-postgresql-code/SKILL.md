@@ -1,12 +1,9 @@
 ---
 name: write-postgresql-code
 description: >-
-  Load this skill when writing PostgreSQL database code in a Python service: designing tables,
-  columns, and indexes, choosing entity ID formats and status enums, writing asyncpg queries and
-  transactions, tenant isolation, connection pool configuration, or creating and running Alembic
-  migrations with their deploy-safety rules. Auto-load whenever a table or column is added, a new
-  entity ID or status enum is defined, asyncpg is imported, a SQL query or database transaction is
-  written, or alembic commands are run or migration files are created or edited.
+  Load this skill when writing PostgreSQL code in a Python service: tables, indexes, entity IDs,
+  status enums, asyncpg queries and transactions, tenant isolation, pools, Alembic migrations.
+  Auto-load when a table is added, asyncpg is imported, SQL is written, or alembic runs.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-

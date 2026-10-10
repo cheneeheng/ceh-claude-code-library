@@ -1,6 +1,6 @@
 {
   "name": "ceh-session-to-skill",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CEH session to skill: right after a task is done, turn the steps that worked in this session into a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments.",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/ceh-claude-code-library",

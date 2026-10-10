@@ -205,7 +205,8 @@ python tools/validate-plugins/validate.py
 Same gate CI runs via `.github/workflows/validate.yml`. It checks:
 
 - manifests: `plugin.json` ↔ `marketplace.json` sync, semver, `name` matching the directory
-- frontmatter: `name` format and match, `description` present, `>-`, ≤ 600 chars;
+- frontmatter: `name` format and match, `description` present, `>-`, ≤ 300 chars on a skill
+  and ≤ 600 on an agent;
   `compatibility` ≤ 500 chars; only documented keys; no plugin-agent keys Claude Code ignores;
   `disable-model-invocation`, `user-invocable`, and `license` stated on every skill
 - `docs/PLUGIN_VERSIONS.md` matches every `plugin.json`, and so does each plugin's newest

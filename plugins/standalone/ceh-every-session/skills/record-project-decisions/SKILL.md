@@ -1,12 +1,9 @@
 ---
 name: record-project-decisions
 description: >-
-  Load this skill when a decision binds a whole project, or a project's decisions need writing
-  down: write each as its own short rule file, .claude/rules/decision-<topic>.md, which Claude Code
-  loads in every session, so code, planning, and writing tasks all follow it. Seeds from the
-  choices installed skills leave open and the project's own documents. Trigger on "we decided",
-  "from now on we use", "record this decision", "set up the project decisions", "starting a new
-  project". Not for architecture history (use ceh-codebase-explanation:document-architecture).
+  Load this skill when a decision binds a whole project: write it as a rule file,
+  .claude/rules/decision-<topic>.md, that every session loads. Trigger on "we decided", "from now on
+  we use", "record this decision", "starting a new project".
 argument-hint: "[record <decision> | seed]"
 disable-model-invocation: false
 user-invocable: true

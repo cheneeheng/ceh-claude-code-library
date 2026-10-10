@@ -1,12 +1,9 @@
 ---
 name: explore-app-for-bugs
 description: >-
-  Load this skill when the running app itself must be tried for bugs, not its test suite: launch
-  it, explore the changed areas under written charters, and report each bug with steps that
-  reproduce it twice. Report-only by default, fix mode on request. Trigger on "QA this", "click
-  through the app and find bugs", "try to break it", "smoke-test the feature before the PR". Not
-  for whether a newcomer can use it (use ceh-usability-audit:simulate-newcomer-first-run) or
-  writing automated tests (use ceh-testing:design-test-cases).
+  Load this skill when the running app itself must be tried for bugs: launch it, explore the
+  changed areas, report each bug with repro steps. Report-only unless asked to fix. Trigger on "QA
+  this", "click through the app and find bugs", "try to break it", "smoke-test the feature".
 argument-hint: "[report | fix] [area]"
 disable-model-invocation: false
 user-invocable: true

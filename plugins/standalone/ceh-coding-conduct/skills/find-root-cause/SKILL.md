@@ -1,12 +1,9 @@
 ---
 name: find-root-cause
 description: >-
-  Load this skill when something is broken and its cause is not yet known, before any fix is
-  written: reproduce the symptom with one command, list falsifiable hypotheses, gather evidence
-  to kill them, and name the cause with the chain from cause to symptom. Trigger on "debug this",
-  "why is this failing", "figure out what's wrong", a stack trace with no obvious cause, or a
-  second fix attempt that did not hold. Not for writing the regression test once the cause is
-  known (use ceh-testing:test-a-bug-fix).
+  Load this skill when something is broken and its cause is not yet known, before any fix: reproduce
+  it, kill hypotheses with evidence, name the cause. Trigger on "debug this", "why is this failing",
+  a stack trace with no obvious cause, or a second fix that did not hold.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

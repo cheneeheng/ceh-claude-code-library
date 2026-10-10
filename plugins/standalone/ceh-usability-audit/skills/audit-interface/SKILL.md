@@ -1,13 +1,9 @@
 ---
 name: audit-interface
 description: >-
-  Load this skill to audit whether an existing interface is comprehensible to a non-expert, whether
-  a web UI, CLI, library API, or app screen, after someone is already inside it. Runs the five
-  questions every surface must answer, an anti-pattern sweep, and a persona battery. Trigger on
-  "this feels confusing", "users keep getting stuck", "is this intuitive", or before shipping a
-  screen or public API. Not for the install path (use
-  ceh-usability-audit:simulate-newcomer-first-run), visual design (use ceh-ui-design:design-ui), or
-  WCAG (use ceh-web-frontend:make-ui-accessible).
+  Load this skill to audit whether an existing UI, CLI, or API makes sense to a non-expert already
+  inside it, or before shipping a screen or public API. Trigger on "this feels confusing", "users
+  keep getting stuck", "is this intuitive". Not for the install path or first run.
 disable-model-invocation: false
 user-invocable: true
 effort: high

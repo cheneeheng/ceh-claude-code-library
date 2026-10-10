@@ -1,12 +1,9 @@
 ---
 name: run-agentic-workflow
 description: >-
-  Load this skill when repeated product work runs from its `flow.yaml`: walk the stages in order,
-  pause for approvals, check every gate, keep run state on disk and end with a `FLOW STATUS:` line.
-  Works interactively and headless (`claude -p`). Trigger on "run the flow.yaml", or when a
-  generated `<name>-flow` skill hands over its config. Not for building a workflow (use
-  ceh-workflow-builder:build-agentic-workflow) and not for writing a flow's spec (use
-  ceh-workflow-builder:interview-workflow-task).
+  Load this skill when repeated work runs from its `flow.yaml`: stages in order, approvals, gates,
+  run state on disk, interactive or headless. Trigger on "run the flow.yaml", or when a generated
+  `<name>-flow` skill hands over its config.
 argument-hint: "config=<path> [mode=interactive|headless] [resume=latest|new] [approve=<stage-id>,...] [<input>=<value> ...]"
 disable-model-invocation: false
 user-invocable: true

@@ -54,6 +54,12 @@ plugins and scripts. A plugin is named for its use case (`ceh-coding-conduct`, n
 **`description` is always a folded block scalar (`>-`), never quoted and never plain.** Enforced by
 `validate.py`.
 
+**A skill `description` is at most 300 characters**, also enforced by `validate.py`. The skill
+listing has a budget of 1% of the context window, and once it overflows Claude Code drops whole
+descriptions, so one long description costs another skill its trigger. Write the moment, two or
+three trigger phrases, and at most one "Not for" pointer to the nearest look-alike. The skill body
+carries the rest of the routing.
+
 ```yaml
 ---
 name: my-skill
@@ -83,12 +89,25 @@ what fails without it. A skill that only reads files and emits Markdown gets no 
 ### `user-invocable` and hook-loaded skills
 
 Every skill states `disable-model-invocation`, `user-invocable`, and `license` explicitly, even at
-their defaults, so the frontmatter says who invokes it. This is a review rule, not a validator check.
+their defaults, so the frontmatter says who invokes it. The validator checks that all three are
+present. Which values they take is a review rule, and every skill falls into one of three cases:
 
-`user-invocable: false` on any skill the user will not call by name, which includes every skill a
-hook names (`agent-coding-contract`, `write-less-code`, `usage-limit-handoff`,
-`delegate-bulk-reads`, `branch`). Its root `README.md` Invoke cell reads
-`Model-only, no slash command`.
+| Who starts it  | `disable-model-invocation` | `user-invocable` | Use it for                                                                                          |
+| -------------- | -------------------------- | ---------------- | --------------------------------------------------------------------------------------------------- |
+| Model only     | `false`                    | `false`          | Standards and gates the model applies at a moment, and skills a hook, router, agent, or skill calls |
+| User only      | `true`                     | `true`           | Runs that are the human's decision to start: experiments, campaigns that wait on approval           |
+| Model and user | `false`                    | `true`           | Everything else, the default: a task the user names that the model also starts at its moment        |
+
+Model only is the usual choice when the user would never type the name. That covers every skill a
+hook names (`agent-coding-contract`, `write-less-code`, `usage-limit-handoff`, `delegate-bulk-reads`,
+`branch`), the router-called `ceh-business-plan` specialists, the path-scoped stack standards, and
+standards like `design-test-cases` and `write-plain-language`. Its root `README.md` Invoke cell
+reads `Model-only, no slash command`.
+
+User only is rare because the library is agents-first. Such a skill drops out of the skill listing
+entirely, so a natural-language request no longer loads it, and no agent, workflow stage, or
+`Invoke the Skill tool` call can start it. Today it covers `refactor-repo` and the two
+`ceh-orchestration-lab` skills.
 
 When a hook names the skill on every firing, the description is **one line**: what the skill is,
 with no trigger phrases and no mention of the hook. Keep the full description only when the model

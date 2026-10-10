@@ -2,12 +2,8 @@
 name: build-agentic-workflow
 description: >-
   Load this skill when product work repeats in the same shape (a weekly SEO pass, a pre-release
-  check) and an agent should run it: decide one skill or a gated workflow, and emit it into the
-  target repo's `.claude/skills/`. Trigger on "turn this into a workflow", "we run the same check
-  every release". Delegates to ceh-workflow-builder:interview-workflow-task when the task is not
-  yet described. Not for a task just done in this session (use
-  ceh-session-to-skill:turn-session-into-skill) or running a built workflow (use
-  ceh-workflow-runner:run-agentic-workflow).
+  check) and an agent should run it: emit one skill or a gated workflow into `.claude/skills/`.
+  Trigger on "turn this into a workflow", "we run the same check every release".
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

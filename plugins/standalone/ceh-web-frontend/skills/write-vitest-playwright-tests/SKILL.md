@@ -1,10 +1,8 @@
 ---
 name: write-vitest-playwright-tests
 description: >-
-  Load this skill when writing Vitest unit tests, Testing Library component tests, MSW mocks, or
-  Playwright E2E tests for any web frontend. Auto-load whenever a .test.ts, .test.tsx, or .spec.ts
-  file is created or modified, or MSW handlers are being written. Framework-agnostic — Vitest,
-  Testing Library, MSW, and Playwright serve SvelteKit and React alike.
+  Load this skill when writing Vitest, Testing Library, MSW, or Playwright tests for a web
+  frontend. Auto-load when a .test.ts, .test.tsx, or .spec.ts file is created or modified.
 disable-model-invocation: false
 user-invocable: false
 paths:

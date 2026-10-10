@@ -1,12 +1,9 @@
 ---
 name: stress-test-plan
 description: >-
-  Load this skill when a plan, design, strategy, or roadmap should be questioned before anyone acts
-  on it: ask every open question in rounds, only once its prerequisites are settled, each with a
-  recommended answer a plain "yes" accepts, and fetch facts with a subagent instead of asking.
-  Trigger on "grill me on this plan", "stress-test this", "poke holes in this", "what am I
-  missing", "challenge this design". Not for questions to someone outside the session (use
-  ceh-every-session:write-questionnaire).
+  Load this skill when a plan, design, or strategy should be questioned before anyone acts on it:
+  every open question in rounds, each with a recommended answer. Trigger on "grill me on this plan",
+  "stress-test this", "poke holes in this", "what am I missing".
 argument-hint: "[plan-file]"
 disable-model-invocation: false
 user-invocable: true

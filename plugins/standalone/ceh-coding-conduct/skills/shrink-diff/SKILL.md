@@ -1,12 +1,9 @@
 ---
 name: shrink-diff
 description: >-
-  Retroactively simplify what a feature branch added by applying the write-less-code standard to the
-  accumulated diff against main. Finds duplication the branch introduced, single-caller wrappers,
-  code the changes made dead, and custom code a smaller ladder rung replaces. Load when a branch is
-  functionally complete and its diff should shrink before review, and on "shrink the diff",
-  "consolidate the branch". Not for whole-codebase cleanup (use refactor-repo), write-time
-  minimalism (use write-less-code), or reviewing a PR (use ceh-git-workflow:code-review).
+  Load this skill when a feature branch works and its diff against main should shrink before
+  review: duplication it added, single-caller wrappers, code it made dead. Trigger on "shrink the
+  diff", "consolidate the branch". Not for whole-codebase cleanup (use refactor-repo).
 argument-hint: "[base-branch]"
 disable-model-invocation: false
 user-invocable: true

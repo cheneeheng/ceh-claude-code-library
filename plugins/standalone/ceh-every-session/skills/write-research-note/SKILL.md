@@ -1,11 +1,9 @@
 ---
 name: write-research-note
 description: >-
-  Load this skill when a question needs an answer from outside the session, written down with
-  sources: a background agent reads primary sources and writes one note in which every claim is
-  cited, then the session spot-checks the citations. Trigger on "research X", "look into how Y
-  works", "find out whether Z", "what do the docs say about", "write up what you find". Not for
-  questions the local files answer (use ceh-every-session:bulk-reader).
+  Load this skill when a question needs an answer from outside sources, written down: a background
+  agent writes one note with every claim cited, then the citations are spot-checked. Trigger on
+  "research X", "look into how Y works", "what do the docs say about".
 argument-hint: "<question>"
 disable-model-invocation: false
 user-invocable: true

@@ -1,12 +1,9 @@
 ---
 name: build-git-datastore
 description: >-
-  Load this skill when an app needs persistence but not a database yet: a prototype, MVP, or
-  internal tool, per-project isolation without provisioning anything, or versioned data with history
-  and undo for free. Trigger on "databaseless", "no-DB", "just use files", "git as a database", or
-  "how do we defer the database decision". Load it even when git is never mentioned, since it first
-  runs a gate that often says no. Not for leaving the store once it stops fitting (use
-  ceh-git-datastore:migrate-git-datastore), and not for schema design in a real database.
+  Load this skill when an app needs persistence but not a database yet (a prototype, MVP, or
+  internal tool), even if git is never mentioned: its gate often says no. Trigger on "no-DB", "just
+  use files", "git as a database", "how do we defer the database decision".
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

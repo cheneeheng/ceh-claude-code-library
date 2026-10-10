@@ -1,12 +1,9 @@
 ---
 name: maintain-glossary
 description: >-
-  Load this skill when the words a project uses need pinning down: a term is used in two senses,
-  two words name one thing, or a new domain concept needs a name. Challenge each term against its
-  real usages, settle one word and one definition, and record it in a committed GLOSSARY.md. Works
-  for code repos and for notes or documents. Trigger on "what do we call X", "define our terms",
-  "add this to the glossary", "these two words mean the same thing". Not for design decisions (use
-  ceh-codebase-explanation:document-architecture).
+  Load this skill when a project's words need pinning down: a term with two senses, two words for
+  one thing, or a new concept to name, settled in a committed GLOSSARY.md. Trigger on "what do we
+  call X", "define our terms", "add this to the glossary", "these two words mean the same thing".
 argument-hint: "[term ...]"
 disable-model-invocation: false
 user-invocable: true

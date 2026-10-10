@@ -1,10 +1,9 @@
 ---
 name: make-ui-accessible
 description: >-
-  Load this skill when writing component markup with interactive elements, images, forms, or
-  navigation in any web frontend. Auto-load whenever a .svelte or .tsx file is created or modified
-  and HTML structure is being written or reviewed. Accessibility rules are framework-agnostic — they
-  apply to SvelteKit and React alike.
+  Load this skill when writing or reviewing component markup with interactive elements, images,
+  forms, or navigation in any web frontend. Auto-load when a .svelte or .tsx file's HTML structure
+  is written.
 disable-model-invocation: false
 user-invocable: false
 paths:

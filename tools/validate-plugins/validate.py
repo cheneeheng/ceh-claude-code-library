@@ -9,7 +9,7 @@ Checks:
   manifests  - plugin.json valid, name matches dir, semver version; marketplace.json
                lists every plugin with a matching version and an existing source path.
   skills     - every skills/<name>/SKILL.md has name + description frontmatter, name == dir,
-               description <= 600 chars, optional compatibility <= 500 chars, and states
+               description <= 300 chars, optional compatibility <= 500 chars, and states
                disable-model-invocation, user-invocable and license explicitly.
   agents     - every agents/<name>.md has name + description + model frontmatter, name == file
                stem, description <= 600 chars.
@@ -56,9 +56,12 @@ MAX_NAME_LEN = 64
 # Claude Code allows 1024. The repo budget is lower because every description is paid for in
 # context on every session that installs the plugin (docs/VISION.md, goal 4).
 MAX_DESCRIPTION_LEN = 600
+# Skills are tighter: the skill listing has a budget of 1% of the context window, and Claude Code
+# drops whole descriptions once it overflows, so a skill past this cap costs another its trigger.
+MAX_SKILL_DESCRIPTION_LEN = 300
 # Ratchet on the sum of every skill and agent description. Lower it when the total drops; raise it
 # only in the PR that adds a component, by that component's description length.
-MAX_TOTAL_DESCRIPTION_LEN = 51186
+MAX_TOTAL_DESCRIPTION_LEN = 30010
 MAX_COMPATIBILITY_LEN = 500
 TEMPLATE_MARKER = "TEMPLATE-GUIDANCE"
 
@@ -308,6 +311,12 @@ def check_skills() -> None:
                 continue
             check_frontmatter_doc(sm, skill_dir.name, SKILL_KEYS)
             fm = parse_frontmatter(sm) or {}
+            if len(fm.get("description", "")) > MAX_SKILL_DESCRIPTION_LEN:
+                fail(
+                    rel(sm),
+                    f"skill description is {len(fm['description'])} chars, "
+                    f"exceeds {MAX_SKILL_DESCRIPTION_LEN} limit",
+                )
             for key in EXPLICIT_SKILL_KEYS:
                 if key not in fm:
                     fail(rel(sm), f"frontmatter must state '{key}' explicitly")

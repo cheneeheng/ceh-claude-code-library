@@ -1,12 +1,9 @@
 ---
 name: update-changelog
 description: >-
-  Load this skill when generating a changelog, updating CHANGELOG.md, documenting recent changes,
-  writing release notes, or logging a change under Unreleased. Trigger on "update the changelog",
-  "generate a changelog", "document this release", "write release notes", "log this under
-  unreleased", "what changed since the last release". Follows Semantic Versioning and the Keep a
-  Changelog format, and writes either a versioned section or an Unreleased entry. Not for tagging or
-  publishing the release itself (use ceh-git-workflow:release).
+  Load this skill when updating CHANGELOG.md or writing release notes, as a versioned section or an
+  Unreleased entry in Keep a Changelog format. Trigger on "update the changelog", "write release
+  notes", "log this under unreleased", "what changed since the last release".
 disable-model-invocation: false
 user-invocable: true
 allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/scripts/check-semver.py *)

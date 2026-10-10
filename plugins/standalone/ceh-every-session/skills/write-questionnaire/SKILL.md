@@ -1,12 +1,10 @@
 ---
 name: write-questionnaire
 description: >-
-  Load this skill when open questions must go to someone who is not in the session: turn them into
-  a self-contained questionnaire file another person answers later, then read the answers back and
-  continue. Each question carries its context, options with a recommended default, and what it
-  blocks. Trigger on "write these up as questions for X", "make a questionnaire", "I need to ask
-  the team", "send these questions to the client", "read the answers back". Not for asking the user
-  in this session (use AskUserQuestion).
+  Load this skill when open questions must go to someone not in the session: write a
+  self-contained questionnaire file, then read the answers back. Trigger on "write these up as
+  questions for X", "I need to ask the team", "read the answers back". Not for the user in this
+  session.
 argument-hint: "[write | read [path]]"
 disable-model-invocation: false
 user-invocable: true

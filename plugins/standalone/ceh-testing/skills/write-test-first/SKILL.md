@@ -1,12 +1,9 @@
 ---
 name: write-test-first
 description: >-
-  Load this skill when about to write production code that adds or changes behavior, whether or
-  not tests were asked for: drive each slice red, green, refactor, with the failing run seen
-  before the code exists. Trigger on "implement", "add a feature", "build this", "add support
-  for", "TDD", "test-first". Not for bug fixes (use ceh-testing:test-a-bug-fix), refactors that
-  keep behavior (use ceh-testing:verify-behavior-preserved), or choosing which inputs to cover
-  (use ceh-testing:design-test-cases).
+  Load this skill when about to write code that adds or changes behavior, whether or not tests were
+  asked for: red, green, refactor, failing run seen first. Trigger on "implement", "add a feature",
+  "build this", "TDD". Not for bug fixes (use ceh-testing:test-a-bug-fix).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

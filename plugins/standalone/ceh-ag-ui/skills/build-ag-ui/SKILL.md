@@ -1,12 +1,9 @@
 ---
 name: build-ag-ui
 description: >-
-  Load this skill when starting a generative-UI frontend for an agent that speaks AG-UI: a canvas
-  where the agent answers by placing components from a predefined catalogue. Trigger on "build a UI
-  with AG-UI", "ag-ui frontend", "generative UI for my agent", or any mention of @ag-ui/client when
-  no canvas exists yet. Not for one component (use ceh-ag-ui:add-canvas-component), the agent server
-  (use ceh-ag-ui:build-ag-ui-agent), live state (use ceh-ag-ui:add-live-state-panel), or approvals
-  (use ceh-ag-ui:add-human-approval).
+  Load this skill when starting a generative-UI frontend for an AG-UI agent: a canvas where the agent
+  answers by placing components from a catalogue. Trigger on "build a UI with AG-UI", "generative UI
+  for my agent", or @ag-ui/client with no canvas yet.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

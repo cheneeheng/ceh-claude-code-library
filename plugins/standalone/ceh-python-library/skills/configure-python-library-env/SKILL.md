@@ -1,11 +1,9 @@
 ---
 name: configure-python-library-env
 description: >-
-  Load this skill when setting up or configuring the Python environment for a library: installing
-  dependencies with uv, editing pyproject.toml, writing type hints or docstrings, choosing naming
-  conventions, or configuring ruff/mypy. Auto-load whenever a pyproject.toml is edited, a uv command
-  is run, or a question arises about code style, type annotations, or import ordering. Not for web
-  service environments with uvicorn or asyncpg (use ceh-python-service:configure-python-service-env).
+  Load this skill when setting up a Python library's environment or code style: uv dependencies,
+  pyproject.toml, type hints, docstrings, naming, ruff/mypy. Auto-load when pyproject.toml is edited
+  or a uv command runs.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-

@@ -1,12 +1,9 @@
 ---
 name: close-test-risk-gaps
 description: >-
-  Load this skill as a pre-completion gate when a feature is functionally working and about to be
-  called done. It triages five failure classes a passing functional suite cannot catch: concurrency
-  and retries, contract drift, performance regression, broken authorization, and migration
-  incompatibility. Trigger on "is this ready", "before I open the PR", "race condition". Not for
-  new-test selection (ceh-testing:design-test-cases), suite trust (ceh-testing:audit-test-suite),
-  one bug (ceh-testing:test-a-bug-fix), or refactor safety (ceh-testing:verify-behavior-preserved).
+  Load this skill when a feature works and is about to be called done: triage what a passing suite
+  misses (concurrency, contract drift, performance, authorization, migrations). Trigger on "is this
+  ready", "before I open the PR", "race condition".
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

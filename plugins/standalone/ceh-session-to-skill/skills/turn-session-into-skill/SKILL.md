@@ -1,12 +1,9 @@
 ---
 name: turn-session-into-skill
 description: >-
-  Load this skill right after a task was done in this session and the user wants it repeatable:
-  turn the steps that worked into one SKILL.md in the target repo's `.claude/skills/`, with the
-  user's corrections as rules and per-run values as arguments, with no interview. Trigger on "turn
-  what we just did into a skill", "save this as a skill", "make this repeatable", "skillify this".
-  Not for a task not yet done in this session (use ceh-workflow-builder:build-agentic-workflow) or
-  adding a component to the ceh plugin repo.
+  Load this skill right after a task was done in this session and should be repeatable: turn the
+  steps that worked into one SKILL.md in `.claude/skills/`, with no interview. Trigger on "turn what
+  we just did into a skill", "save this as a skill", "skillify this".
 argument-hint: "[skill-name]"
 disable-model-invocation: false
 user-invocable: true

@@ -1,10 +1,9 @@
 ---
 name: write-pytest-library-tests
 description: >-
-  Load this skill when writing Python tests for a library: adding unit tests, tests that exercise
-  the public API, fixtures, or mocks. Auto-load whenever a test file is created or modified, a
-  pytest fixture is written, or a decision is made about what to mock vs what to test for real. Not
-  for web service testing with a real DB or HTTP (use ceh-python-service:write-pytest-service-tests).
+  Load this skill when writing pytest tests for a Python library: unit tests, public-API tests,
+  fixtures, and what to mock versus test for real. Auto-load when a test file is created or
+  modified.
 disable-model-invocation: false
 user-invocable: false
 paths:

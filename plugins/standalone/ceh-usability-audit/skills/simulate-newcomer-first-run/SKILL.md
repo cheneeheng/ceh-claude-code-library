@@ -1,13 +1,9 @@
 ---
 name: simulate-newcomer-first-run
 description: >-
-  Load this skill to find out whether a stranger with no context can get from "just arrived" to
-  "first real success" on their own: install, sign-up, setup, onboarding, or the first task.
-  Dispatches cold persona-constrained subagents, ranks the stalls by observed outcome, and loops fix
-  and re-run until a 5-point gate passes. Trigger on "can a new user figure this out", "test the
-  onboarding", "try this with fresh eyes", "time to first success". Not for an interface already
-  entered (use ceh-usability-audit:audit-interface) or WCAG (use
-  ceh-web-frontend:make-ui-accessible).
+  Load this skill to find out whether a stranger can get from "just arrived" to a first success
+  alone (install, setup, onboarding), using cold persona subagents. Trigger on "can a new user
+  figure this out", "test the onboarding", "try this with fresh eyes".
 disable-model-invocation: false
 user-invocable: true
 effort: high

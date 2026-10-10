@@ -1,12 +1,9 @@
 ---
 name: hand-off-session
 description: >-
-  Load this skill when a session's working state must survive into a later session: save writes a
-  handoff file (goal, done, in flight, open, decisions pending, resume line) and indexes it, load
-  reads one back and resumes from its first open step. Trigger on "save the session", "save where
-  we are", "write a handoff", "I'll continue this tomorrow", "load the handoff", "pick this up",
-  "resume from the handoff". Not for the usage-limit stop protocol (ceh-every-session:usage-limit-handoff
-  calls this skill itself).
+  Load this skill when a session's working state must survive into a later one: save writes a
+  handoff file, load reads one back and resumes. Trigger on "save where we are", "write a handoff",
+  "I'll continue this tomorrow", "load the handoff", "pick this up".
 argument-hint: "[save | load [path]]"
 disable-model-invocation: false
 user-invocable: true

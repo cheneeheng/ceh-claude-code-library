@@ -1,12 +1,9 @@
 ---
 name: write-build-plan
 description: >-
-  Load this skill when deciding how to build something before writing code: a new app to its MVP,
-  or one feature in an existing codebase. Writes one committed plan file with scope, the design
-  decisions the build needs, and phases that each end in a runnable check. Trigger on "plan this
-  app", "plan the next feature", "write a build plan", "how should we build this". Not for whether
-  the product is worth building (use ceh-business-plan:develop-business-plan) or building from a
-  plan (use ceh-build-from-plan:implement-from-plan).
+  Load this skill when deciding how to build an app or feature before writing code: one committed
+  plan file with scope, design decisions, and phases that each end in a runnable check. Trigger on
+  "plan this app", "plan the next feature", "how should we build this".
 argument-hint: "[what to build]"
 disable-model-invocation: false
 user-invocable: true

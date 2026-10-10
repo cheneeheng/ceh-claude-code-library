@@ -1,12 +1,9 @@
 ---
 name: write-evidence-report
 description: >-
-  Load this skill when someone needs to know what has been proven about a product before it is
-  launched or written about: roll the latest test, QA, performance, security, and usability results
-  into one committed docs/EVIDENCE.md, each area passed, open issues, stale, or not run, plus the
-  claims a launch post may make. Trigger on "are we ready to launch", "what have we proven", "write
-  the evidence report", or before a blog post or listing about the product. Not for running the
-  checks themselves (use ceh-testing:explore-app-for-bugs or ceh-testing:measure-performance).
+  Load this skill before a product is launched or written about: roll the latest test, QA,
+  performance, security, and usability results into docs/EVIDENCE.md. Trigger on "are we ready to
+  launch", "what have we proven", or before a blog post or listing about the product.
 argument-hint: "[product or path]"
 disable-model-invocation: false
 user-invocable: true

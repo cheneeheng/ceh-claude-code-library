@@ -1,12 +1,9 @@
 ---
 name: write-project-docs
 description: >-
-  Load this skill when writing a complete documentation set for a project as Markdown under docs/:
-  quickstart, guides, concepts, API reference, examples, and troubleshooting. Trigger on "document
-  this project", "write the docs for this library", "build out the docs folder". Delegates to
-  write-api-reference, write-concept-docs, and write-guides-and-runbooks. Not for one guide alone
-  (use write-guides-and-runbooks), a README refresh (use ceh-git-workflow:update-readme), or a
-  maintainer architecture doc (use ceh-codebase-explanation:document-architecture).
+  Load this skill when writing a complete docs set under docs/: quickstart, guides, concepts, API
+  reference, examples, troubleshooting. Trigger on "document this project", "write the docs for
+  this library", "build out the docs folder". Not for a README refresh.
 argument-hint: "[project-path]"
 disable-model-invocation: false
 user-invocable: true

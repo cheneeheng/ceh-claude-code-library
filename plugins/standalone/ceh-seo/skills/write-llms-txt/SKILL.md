@@ -1,13 +1,9 @@
 ---
 name: write-llms-txt
 description: >-
-  Load this skill when creating or updating an llms.txt file: the markdown index at a site or docs
-  root that tells AI agents what a product is and which pages to read. Trigger on "write an
-  llms.txt", "add llms.txt", "llms-full.txt", "make the docs readable by AI agents", "AI agent
-  index for this site", or when public pages or docs sections are added to a site that already
-  ships one. Not for per-page head tags, sitemap.xml, or robots.txt (use
-  ceh-seo:make-page-crawlable) and not for README or package-listing text (use
-  ceh-seo:write-project-listing-text).
+  Load this skill when creating or updating llms.txt, the index that tells AI agents what a product
+  is and which pages to read, or when pages are added to a site that ships one. Trigger on "write an
+  llms.txt", "llms-full.txt", "make the docs readable by AI agents".
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
