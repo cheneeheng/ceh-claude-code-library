@@ -136,7 +136,10 @@ A seventeenth PR the same day adds that advisor, `ceh-every-session:whats-next`.
 request and the repo state, the git status and the lifecycle handoff files, and suggests one to
 three installed skills or agents with why each fits now and how to start it. It runs none of them.
 It works from the session's own skill and agent listings rather than a copy of the catalog, because
-the user may have installed only a few plugins and the catalog lists them all. User-only skills
+the user may have installed only a few plugins and the catalog lists them all. When nothing
+installed fits, it runs `claude plugin list --available --json`, which lists only plugins not yet
+installed, and suggests up to two with their install command, `ceh-` plugins first. That reads the
+live marketplace, so it never goes stale the way a copied catalog would. User-only skills
 never reach that listing, so the advisor names them in a table of its own, and `validate.py` fails
 when a user-only skill is missing from it. The skill is model- and user-invocable, so "what's next?"
 in plain words loads it, at the cost of one 277-character description.
@@ -192,7 +195,8 @@ in plain words loads it, at the cost of one 277-character description.
   stack plugins, and the plugins to add only when their moment arrives. Linked from the top of the
   README.
 - `ceh-every-session:whats-next`: suggests the installed skills or agents that fit the request and
-  the repo state, and runs none of them. Named in the root README, `docs/CATALOG.md`, and the
+  the repo state, or a not-yet-installed plugin, `ceh-` first, when nothing installed fits. It runs
+  none of them. Named in the root README, `docs/CATALOG.md`, and the
   guide's core table.
 
 ### Changed

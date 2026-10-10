@@ -29,15 +29,23 @@ has one to three suggestions, each with the exact way to start it, and the choic
 3. If the request and the repo still leave the goal open, ask one round with `AskUserQuestion`: at
    most four questions, each with a recommended answer. With no human present, skip the question,
    assume the most likely goal, and say so in the answer.
-4. Answer in the Output format and stop.
+4. If no installed candidate fits, run `claude plugin list --available --json`. Its `available`
+   array holds only plugins not yet installed, each with `pluginId`, `description`, and
+   `marketplaceName`. Match the descriptions against the goal and keep at most two, looking first
+   at plugins whose `name` starts with `ceh-`, then at other marketplaces the user added, and at
+   `claude-plugins-official` last. Mark each "not installed", with
+   `claude plugin install <pluginId> --scope project` and then `/reload-plugins` as the way to
+   start it.
+5. Answer in the Output format and stop.
 
 ## Rules
 
 - Run nothing: no Skill tool call, no subagent dispatch, no install, no file write. The user
   chooses what runs, so a suggestion that starts itself takes that choice away.
-- Suggest only what is installed. When nothing installed fits, say so and point to the install
-  guide, https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md,
-  rather than naming a plugin from memory, which may be stale.
+- Suggest an installed skill or agent first, and a plugin to install only through step 4. Never
+  name a plugin from memory, which may be stale or not in any marketplace the user added. When
+  step 4's command fails, point to the install guide,
+  https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md.
 - Rank by fit to the moment, not by breadth: the skill whose trigger matches what the user is about
   to do comes first.
 - Give the reason for each suggestion from what was read ("`docs/plans/auth.md` exists and no code
@@ -65,4 +73,5 @@ Read: <what the advice rests on, one line>. Assumed: <the goal, if it was assume
 ```
 
 For an agent, "Start it" is the request that makes Claude dispatch it, such as "ask the
-bulk-reader agent which files call X".
+bulk-reader agent which files call X". For a plugin from step 4, "Suggestion" is
+`<plugin> (not installed)` and "Start it" is the install command plus `/reload-plugins`.
