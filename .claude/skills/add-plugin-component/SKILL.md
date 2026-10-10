@@ -15,7 +15,7 @@ license: Apache-2.0
 
 Every new `SKILL.md` or `agents/*.md` starts as a copy of its template, then gets registered in
 the same commit. The content is the easy half. The half that gets forgotten is registration: the
-same fact lives in both READMEs, both manifests, and sometimes `docs/CROSS_REFERENCES.md`, and CI
+same fact lives in the plugin README and `docs/CATALOG.md`, both manifests, and sometimes `docs/CROSS_REFERENCES.md`, and CI
 fails when they drift.
 
 ## 1. Pick the plugin and the component type
@@ -159,9 +159,9 @@ is set in `settings.json` — and their changes stay in the worktree rather than
 checkout. Under this repo's feature-branch rule that hands an agent a copy of `main` without your
 work, so no agent sets it.
 
-## 3. Update both README tables
+## 3. Update the catalog and the plugin README
 
-- Root `README.md` — add a row under the correct plugin group in **Skills** or **Agents**. If the
+- `docs/CATALOG.md` — add a row under the correct plugin group in **Skills** or **Agents**. If the
   plugin has no group there yet, add a `### <Plugin> (\`ceh-<plugin>\`)` subsection.
 - `plugins/standalone/ceh-<plugin>/README.md` — add a row to that plugin's own table. The plugin README also
   carries anything a user must do before the component works: prerequisites, when a hook fires,
@@ -272,9 +272,9 @@ and plan every component with the step 1 table before creating anything, then:
 3. `.claude-plugin/marketplace.json` — a new entry whose `source` (`./plugins/standalone/ceh-<name>`),
    `version`, and `description` mirror `plugin.json`. `validate.py` fails on a plugin missing from
    the marketplace or a version mismatch.
-4. Root `README.md` — a row in the **Plugins** table, the plugin in the **By lifecycle stage**
-   table, its Skills/Agents rows, and a line in the manual installation `path` list. Install
-   commands live only in `docs/GETTING_STARTED.md`.
+4. Root `README.md` — a row in the **Plugins** table and the plugin in the **By lifecycle stage**
+   table. Its Skills/Agents rows go in `docs/CATALOG.md`. Install commands live only in
+   `docs/GETTING_STARTED.md`.
 5. `CLAUDE.md` — the plugin in the tier table.
 6. `docs/GETTING_STARTED.md` — an entry for the moment it serves, under its stage in step 3
    (with the slash command that starts it) if it is on the lifecycle route, or a row in step 4 if
