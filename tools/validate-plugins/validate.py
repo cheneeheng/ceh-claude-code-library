@@ -29,7 +29,8 @@ Checks:
                CHANGELOG.md Plugin versions row matches it too, under the section
                PLUGIN_VERSIONS.md dates it to; no marketplace entry
                declares dependencies; a cross-cutting plugin (CLAUDE.md tier table) depends only
-               on cross-cutting plugins; a skill a hook script names sets user-invocable: false.
+               on cross-cutting plugins; a skill a hook script names sets user-invocable: false;
+               every user-only skill is named in ceh-every-session:whats-next.
   hygiene    - no invisible Unicode or personal absolute path in tracked text; every skill and
                agent is named in its plugin README.
   scripts    - *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
@@ -59,7 +60,7 @@ MAX_NAME_LEN = 64
 MAX_DESCRIPTION_LEN = 300
 # Ratchet on the sum of every skill and agent description. Lower it when the total drops; raise it
 # only in the PR that adds a component, by that component's description length.
-MAX_TOTAL_DESCRIPTION_LEN = 26768
+MAX_TOTAL_DESCRIPTION_LEN = 27045
 MAX_COMPATIBILITY_LEN = 500
 TEMPLATE_MARKER = "TEMPLATE-GUIDANCE"
 
@@ -820,6 +821,19 @@ def check_repo_rules(versions: dict[str, str]) -> None:
                         rel(sm),
                         f"named by hook script {script}, so set 'user-invocable: false'",
                     )
+
+    # A user-only skill never reaches the session's skill listing, so whats-next names each one.
+    advisor = REPO / "plugins/standalone/ceh-every-session/skills/whats-next/SKILL.md"
+    named = advisor.read_text(encoding="utf-8") if advisor.exists() else ""
+    for d in plugin_dirs():
+        for sm in sorted(d.glob("skills/*/SKILL.md")):
+            fm = parse_frontmatter(sm) or {}
+            ref = f"{d.name}:{sm.parent.name}"
+            if (
+                fm.get("disable-model-invocation", "").lower() == "true"
+                and f"`{ref}`" not in named
+            ):
+                fail(rel(advisor), f"user-only skill '{ref}' missing from its table")
 
 
 def main() -> int:

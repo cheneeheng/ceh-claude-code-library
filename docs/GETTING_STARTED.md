@@ -49,11 +49,11 @@ again is safe.
 User scope installs a plugin for you in every folder you open Claude Code in. A hook is a script Claude Code
 runs at fixed points, such as before each file edit, so a plugin with hooks acts on every session.
 
-| Plugin               | Install when               | What you get                                                                                                                                                                |
-| -------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ceh-every-session`  | always, whatever you do    | the response style every other plugin is written for, session handoff, research notes, questionnaires, plan stress-tests, and a usage-limit guard. Always on, through hooks |
-| `ceh-git-workflow`   | you work in git repos      | branches, commits, pull requests from open to merge, changelog, code review, and a hook that blocks edits on `main`                                                         |
-| `ceh-coding-conduct` | you write code with Claude | the coding contract, write-less-code, root-cause debugging, design before code. Always on, through hooks                                                                    |
+| Plugin               | Install when               | What you get                                                                                                                                                                                                                                  |
+| -------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ceh-every-session`  | always, whatever you do    | the response style every other plugin is written for, session handoff, research notes, questionnaires, plan stress-tests, a usage-limit guard, and `/ceh-every-session:whats-next` when you forget which skill fits. Always on, through hooks |
+| `ceh-git-workflow`   | you work in git repos      | branches, commits, pull requests from open to merge, changelog, code review, and a hook that blocks edits on `main`                                                                                                                           |
+| `ceh-coding-conduct` | you write code with Claude | the coding contract, write-less-code, root-cause debugging, design before code. Always on, through hooks                                                                                                                                      |
 
 Install `ceh-every-session` first, every time. It is not a dependency of any other plugin, so
 nothing installs it for you. Then install only the other rows whose "Install when" fits you. If

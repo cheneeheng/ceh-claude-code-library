@@ -109,7 +109,8 @@ reads `Model-only, no slash command`.
 User only is rare because the library is agents-first. Such a skill drops out of the skill listing
 entirely, so a natural-language request no longer loads it, and no agent, workflow stage, or
 `Invoke the Skill tool` call can start it. Today it covers `refactor-repo` and the two
-`ceh-orchestration-lab` skills.
+`ceh-orchestration-lab` skills. A new one also gets a row in the User-only skills table of
+`ceh-every-session:whats-next`, which cannot see it otherwise. `validate.py` checks that row.
 
 When a hook names the skill on every firing, the description is **one line**: what the skill is,
 with no trigger phrases and no mention of the hook. Keep the full description only when the model
