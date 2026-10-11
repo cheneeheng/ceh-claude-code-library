@@ -79,6 +79,12 @@ A seventh PR the same day fixes the `fold-replies` mod for a Topic whose body op
 code block. The splitter read the fence as a paragraph, so the bullets after the block fell outside
 the fold and showed below it. A fenced block now leaves the body's shape as it found it.
 
+An eighth PR the same day narrows the `ceh-git-workflow` branch guard to the session's own
+repository. It checked the branch of whatever repository held the edited file, so with this repo on
+`main` an edit to a file in another repository on its default branch was denied too, though that
+repository was not the work at hand. The guard now compares the file's repository with the
+session's, by the shared `.git` directory so the session's worktrees still count as its own.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -91,7 +97,7 @@ the fold and showed below it. A fenced block now leaves the body's shape as it f
 | `ceh-codebase-explanation`     | 1.2.4   |
 | `ceh-coding-conduct`           | 2.2.5   |
 | `ceh-every-session`            | 2.7.4   |
-| `ceh-git-workflow`             | 1.2.6   |
+| `ceh-git-workflow`             | 1.2.7   |
 | `ceh-seo`                      | 1.1.4   |
 | `ceh-testing`                  | 1.4.2   |
 
@@ -150,6 +156,9 @@ the fold and showed below it. A fenced block now leaves the body's shape as it f
   `folded replies (mod)` in place of the status entry the engine drew as a warning.
 - `ceh-every-session` `fold-replies` mod: bullets after a fenced code block stay inside their
   Topic's fold, and a bold line inside a fence no longer starts a Topic.
+- `ceh-git-workflow` branch guard: denies edits only in the session's own repository and its
+  worktrees, so a file in another repository on its default branch can be edited. Two new
+  `validate.py` fixtures cover a file in another repository and a session outside any repository.
 
 ## 2026-10-10
 
