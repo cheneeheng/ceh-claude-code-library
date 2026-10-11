@@ -9,6 +9,9 @@ CLAUDE.local.md
 # Claude Code worktrees
 .claude/worktrees/
 
+# Mod API types the engine writes beside a mod it loads from this checkout
+plugins/*/*/.claude-plugin/types/
+
 # claude plugin eval run output
 plugins/*/*/evals/results/
 

@@ -27,12 +27,30 @@ one. `pull-request` could not merge or clean up from inside a worktree, because 
 fails there. It now merges on a detached `HEAD` and leaves removal to Claude Code's exit prompt.
 Automated orchestration of several sessions stays parked on the Parallel ticket frontier idea.
 
+A third PR the same day gives `ceh-every-session` its first mod, now that Claude Code ships mods.
+The output style already opens every multi-topic reply with a summary table, but the details
+under it still filled the screen. The mod redraws such a reply as the table with each Topic folded
+into a box the user opens on demand, and it changes the drawing only, never what the model reads.
+The same PR adds decision blocks to the style: a choice that can wait on the user closes the reply
+as numbered options, which the mod draws as buttons that fill the prompt box. Unlike
+`AskUserQuestion`, the turn ends first, so the user answers on their next message. Guessing a
+question from the prose was rejected, because ordinary text would grow buttons: the style fixes the
+shape and the mod matches only that shape.
+
 ### Plugin versions
 
 | Plugin               | Version |
 | -------------------- | ------- |
 | `ceh-coding-conduct` | 2.2.5   |
+| `ceh-every-session`  | 2.7.0   |
 | `ceh-git-workflow`   | 1.2.5   |
+
+### Added
+
+- `ceh-every-session`: the `fold-replies` mod (`hooks/fold-replies.tsx`, named under `modules` in
+  `hooks/hooks.json`). It folds each Topic of a summary-table reply behind a button, draws closing
+  decision blocks as options that fill the prompt box, and adds `/details on|off`. Six tests in
+  `tests/fold-replies.test.tsx` run under `claude plugin test`.
 
 ### Changed
 
@@ -50,6 +68,11 @@ Automated orchestration of several sessions stays parked on the Parallel ticket 
 - `add-plugin-component` (repo-local) and its agent template: the rule against
   `isolation: worktree` now covers agent frontmatter only, so it no longer contradicts the
   contract's per-run `isolation: "worktree"` on the `Agent` call.
+- `ceh-every-session` output style: a closing `**Decision: <question>**` block with 2 to 4
+  numbered options for a choice that can wait on the user, its row's Status "your call", and text
+  that belongs to no Topic stands as its own paragraph after the last Topic.
+- `CLAUDE.md` Structure: a plugin's `hooks/` may hold a mod's hooks module, with its `tests/` and
+  `types/`.
 
 ## 2026-10-10
 
