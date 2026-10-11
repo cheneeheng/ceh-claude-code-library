@@ -26,8 +26,9 @@ export const split = (text: string): { table: string; sections: Section[] } | nu
   const sections: Section[] = []
   let current: Section | undefined
   let shape: 'empty' | 'list' | 'paragraph' | 'paragraphEnded' | 'ended' = 'empty'
+  let inFence = false
   for (const line of lines.slice(end)) {
-    const topic = /^\*\*(.+)\*\*\s*$/.exec(line)?.[1]
+    const topic = inFence ? undefined : /^\*\*(.+)\*\*\s*$/.exec(line)?.[1]
     if (topic !== undefined) {
       current = { number: rowNumber.get(topic), topic, body: '', after: '' }
       sections.push(current)
@@ -40,9 +41,15 @@ export const split = (text: string): { table: string; sections: Section[] } | nu
       sections.push(current)
     }
 
+    // A fenced code block goes where the line before it went and leaves the
+    // shape as it found it, so bullets after a code block stay in the body.
+    const isFence = /^\s*(```|~~~)/.test(line)
+    if (isFence) inFence = !inFence
     const isBlank = !line.trim()
     const isListLine: boolean = /^\s*([-*+]|\d+[.)])\s/.test(line) || (shape === 'list' && /^\s+\S/.test(line))
-    if (shape === 'empty' && !isBlank) shape = isListLine ? 'list' : 'paragraph'
+    if (isFence || inFence) {
+      // the shape stays as it was
+    } else if (shape === 'empty' && !isBlank) shape = isListLine ? 'list' : 'paragraph'
     else if (shape === 'paragraph' && isBlank) shape = 'paragraphEnded'
     else if (!isBlank && (shape === 'paragraphEnded' || (shape === 'list' && !isListLine))) shape = 'ended'
 
