@@ -12,7 +12,7 @@ this is, and calls the specialist skill that owns it. With no plan on disk it al
 `find-product-market-fit`, which is a loop, not a one-shot generator:
 
 ```
-Intake   → read build plans (docs/plans/*.md) or any PRD/spec/pitch you provide
+Intake   → read build plans (product/plans/*.md) or any PRD/spec/pitch you provide
 Draft v0 → write BUSINESS_PLAN.md from what's known; score the PMF gate
 Interview→ attack the lowest-scoring gate criterion — one sharp question at a time
 Revise   → fold the answer in, re-tag confidence, re-score the gate
@@ -79,8 +79,8 @@ A single living `BUSINESS_PLAN.md` (13 sections: problem, target customer, value
 competition, market math, business model, go-to-market, traction, financials, risks, milestones),
 revised in place across the loop, with a `pmf_gate: N/8` score in its frontmatter. The schema and
 the 8-point gate live in `references/business-plan-schema.md`, shared by all nine skills.
-`write-investor-materials` writes `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` beside the plan
-and leaves the plan itself unchanged.
+`write-investor-materials` writes `product/INVESTOR_DECK.md` and `product/INVESTOR_OUTREACH.md`
+beside the plan and leaves the plan itself unchanged.
 
 ## The PMF readiness gate
 

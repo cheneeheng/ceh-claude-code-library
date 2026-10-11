@@ -57,11 +57,13 @@ before asking anything.
 - **Pasted content**: read it directly.
 
 **Product handoff files.** When the repo has them, read them before inferring anything, because
-they hold what earlier stages settled. `BUSINESS_PLAN.md` gives who the product is for, the problem,
-and the differentiator: take them from it rather than asking. `docs/EVIDENCE.md` bounds every claim
-about what the product does or how well it does it (tested, fast, secure, usable): state only what
-its Claims section lists, and nothing about an area it marks `stale`, `not run`, or `open issues`.
-When either file is missing, carry on from the repo and say which claims rest on nothing proven.
+they hold what earlier stages settled. `product/BUSINESS_PLAN.md` gives who the product is for,
+the problem, and the differentiator: take them from it rather than asking. `product/EVIDENCE.md`
+bounds every claim about what the product does or how well it does it (tested, fast, secure,
+usable). Read only its newest section, the first one, because earlier sections describe older
+commits. State only what that section's Claims list, and nothing about an area it marks `stale`,
+`not run`, or `open issues`. When either file is missing, carry on from the repo and say which
+claims rest on nothing proven.
 
 Infer without asking: **what it does** (README, module names, entry points); **who it's for**
 (docs, example usage); **stack and key design decisions** (structure, dependencies); **current

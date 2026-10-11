@@ -52,8 +52,9 @@ installed.
      plugin's directory from its `installPath` in `~/.claude/plugins/installed_plugins.json`, not
      from `~/.claude/plugins/cache/`, which keeps every version ever installed and would surface
      choices that no longer exist. Project skills live in `.claude/skills/`.
-   - **Decisions already written down:** the README, `ARCHITECTURE.md` Key Decisions, plans under
-     `docs/plans/`, ADRs (`docs/adr/`, `docs/decisions/`), business plan files, `GLOSSARY.md`, and
+   - **Decisions already written down:** the README, `product/ARCHITECTURE.md` Key Decisions, plans
+     under `product/plans/`, ADRs (`docs/adr/`, `docs/decisions/`), business plan files
+     (`product/BUSINESS_PLAN.md`), `GLOSSARY.md`, and
      manifests (`package.json`, `pyproject.toml`) as evidence of the stack.
    - **Areas no skill asks about:** who the product is for, market, language and locale, what is
      out of scope, stack, hosting, data and authentication, product name and voice. Take only the

@@ -43,22 +43,22 @@ of the vision's Every step row) sit outside the route. They apply at every stage
 A build plan decides how, and it recurs for every feature inside the build loop:
 `ceh-build-planning:write-build-plan` itself triggers on "how should we build this". Keeping it in
 Shape would send "add a feature to my app" through the business-plan stage, the wrong door for a
-new user. The two stay connected through the handoff: the build plan reads `BUSINESS_PLAN.md` when
+new user. The two stay connected through the handoff: the build plan reads `product/BUSINESS_PLAN.md` when
 one exists.
 
 ## The spine: handoff files
 
-| Stage | Reads                                     | Writes                                                          |
-| ----- | ----------------------------------------- | --------------------------------------------------------------- |
-| Shape | an idea, a conversation                   | `BUSINESS_PLAN.md`                                              |
-| Build | `BUSINESS_PLAN.md` when present, the repo | `docs/plans/<slug>.md`, the code, `docs/ARCHITECTURE.md`        |
-| Prove | the plan, the code                        | `docs/EVIDENCE.md`: tests, QA, security, usability, performance |
-| Tell  | `BUSINESS_PLAN.md`, `docs/EVIDENCE.md`    | posts, listings, SEO pages                                      |
+| Stage | Reads                                             | Writes                                                             |
+| ----- | ------------------------------------------------- | ------------------------------------------------------------------ |
+| Shape | an idea, a conversation                           | `product/BUSINESS_PLAN.md`                                         |
+| Build | `product/BUSINESS_PLAN.md` when present, the repo | `product/plans/<slug>.md`, the code, `product/ARCHITECTURE.md`     |
+| Prove | the plan, the code                                | `product/EVIDENCE.md`: tests, QA, security, usability, performance |
+| Tell  | `product/BUSINESS_PLAN.md`, `product/EVIDENCE.md` | posts, listings, SEO pages                                         |
 
-Shape to Build: `ceh-business-plan` writes `BUSINESS_PLAN.md`, and `ceh-build-planning` reads it
-and writes the plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read. Prove to
-Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `docs/EVIDENCE.md`, and
-`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `BUSINESS_PLAN.md`.
+Shape to Build: `ceh-business-plan` writes `product/BUSINESS_PLAN.md`, and `ceh-build-planning` reads
+it and writes the plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read. Prove to
+Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.md`, and
+`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `product/BUSINESS_PLAN.md`.
 
 Three rules hold for every handoff file:
 
@@ -81,18 +81,22 @@ The test is who reads the file.
 - **Local in `.agents_workspace/`:** what only one session or its author reads. The decision log,
   session handoffs, research notes, questionnaires, competitor analyses, and scratch work.
 
+**`product/` for the builders, `docs/` for users.** Committed handoff files go in `product/` in the
+target repo. `docs/` holds only what users of the product read, so a docs site built from it never
+publishes a plan or a business plan.
+
 Committing every file a stage writes would bloat the repo, so committed handoff files have a
 lifecycle:
 
-- **Plans are deleted once built.** `docs/plans/` holds only plans in flight. When a plan reaches
-  `status: built` and the build has been checked against it, the decisions that still matter move
-  to the Key Decisions log in `docs/ARCHITECTURE.md`, the change goes to the changelog, and the plan
-  file is deleted in the same commit. Git history keeps the full plan. This also keeps planning cheap:
-  `ceh-build-planning:write-build-plan` reads every plan in the folder, so finished plans would add
-  to the context of every later run.
-- **Reports are overwritten, not dated.** `docs/EVIDENCE.md` is one file per product, rewritten
-  on each run. Git history holds the earlier runs. The separate QA, performance, security, and
-  usability reports stay local: only the roll-up is read by another stage.
+- **Plans are kept.** A built plan stays in `product/plans/` with `status: built` and an append-only
+  Record of how it was planned, reviewed, built, checked, proven, and merged, so the plan is the
+  audit trail of its change. Its lasting decisions are also copied to the Key Decisions log in
+  `product/ARCHITECTURE.md`. Planning stays cheap because `ceh-build-planning:write-build-plan` reads
+  only the frontmatter of built plans.
+- **The evidence report is append-only.** `product/EVIDENCE.md` is one file per product, and each run
+  adds a dated section at the top, so the section a plan's Record cites never changes. The separate
+  QA, performance, security, and usability reports stay local: only the roll-up is read by another
+  stage.
 
 ## How work is chosen
 

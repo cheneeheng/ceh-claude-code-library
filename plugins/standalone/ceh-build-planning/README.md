@@ -12,7 +12,7 @@ plugins works installed alone, and they share the plan format in `references/pla
 
 | Skill               | When it loads                                                 | What it does                                                                                                                                                                                                                                                                                                                                    |
 | ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `write-build-plan`  | Before building an app or feature, to decide how              | Triages the work as spike, bounded, or architectural, draws In and Out scope, plans in detail only as far as the build is foreseeable, and writes phases that each end in a runnable check. It's working if it announces the triage label first and saves `docs/plans/<slug>.md`.                                                               |
+| `write-build-plan`  | Before building an app or feature, to decide how              | Triages the work as spike, bounded, or architectural, draws In and Out scope, plans in detail only as far as the build is foreseeable, and writes phases that each end in a runnable check. It's working if it announces the triage label first and saves `product/plans/<slug>.md`.                                                            |
 | `review-build-plan` | After a plan or spec is written, before anyone builds from it | Reviews it from a fresh context through scope, engineering, design, and developer-experience lenses, checks it for gaps, quotes the plan line behind each blocking or advisory finding, and gives a verdict. Report-only unless asked to fix. It's working if the reply opens with `Plan review:` and a verdict, and names any lens it skipped. |
 
 **Manual trigger:** `/ceh-build-planning:write-build-plan [what to build]`, or say
@@ -27,6 +27,6 @@ is a file. Use plan mode to explore an unfamiliar codebase first, then leave it 
 ## Not this plugin
 
 - Whether the product is worth building, and who pays: use `ceh-business-plan`. When a
-  `BUSINESS_PLAN.md` exists, the build plan points to it for the goal and target user instead of
-  restating them.
+  `product/BUSINESS_PLAN.md` exists, the build plan points to it for the goal and target user
+  instead of restating them.
 - Building or checking the plan: `ceh-build-from-plan` and `ceh-check-build-against-plan`.

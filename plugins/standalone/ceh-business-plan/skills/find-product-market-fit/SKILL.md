@@ -47,13 +47,13 @@ Each loop closes one gap. Never run the interview as a fixed questionnaire — t
 
 Before any question, gather everything that already constrains the plan.
 
-1. **Build plans in the repo** — the `ceh-build-planning` plans in `docs/plans/*.md` (or the
+1. **Build plans in the repo** — the `ceh-build-planning` plans in `product/plans/*.md` (or the
    plans folder the repo's `CLAUDE.md` names). If found, read them. Their Goal (what it does,
    who it's for, the key flow), Scope, and Design carry your product, target-user hint, and
    solution detail. A plan whose Goal points to a `BUSINESS_PLAN.md` was written from this plan:
-   read it for its Scope and Design only. Record their paths in `derived_from`. Built plans are
-   deleted once their decisions move to `docs/ARCHITECTURE.md`, so for an app already built, read
-   that file's Overview and Key Decisions, plus the README, in place of the plans.
+   read it for its Scope and Design only. Record their paths in `derived_from`. Built plans stay in
+   the folder with `status: built`: read them too, and `product/ARCHITECTURE.md` Overview and Key
+   Decisions when it exists.
 2. **Anything the user provided** — a PRD, pitch deck, spec, README, landing page, a pasted
    description. Read it directly. A GitHub URL: fetch the README.
 3. **Other plan-shaped files** — `PRD.md`, `BRIEF.md`, `docs/` product notes. Use them as input,

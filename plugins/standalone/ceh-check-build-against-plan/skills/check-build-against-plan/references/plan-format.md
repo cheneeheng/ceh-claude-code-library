@@ -6,11 +6,14 @@ This file is copied word for word into all three plugins, so each works installe
 
 ## Location
 
-`docs/plans/<slug>.md` in the target repo, committed, unless the repo's `CLAUDE.md` names another
+`product/plans/<slug>.md` in the target repo, committed, unless the repo's `CLAUDE.md` names another
 plans folder. A plan shapes the repo for whoever builds next, so it lives where a fresh clone and a
-reviewer can read it. `<slug>` is kebab-case from the goal: `mvp`, `checkout-flow`. The folder
-holds only plans not yet built: a built plan is deleted (see Changing a plan), so it never bloats
-the repo or the context of the next planning run.
+reviewer can read it. `<slug>` is kebab-case from the goal: `mvp`, `checkout-flow`. Plans are never
+deleted: a built plan stays where it is, with `status: built`, as the record of how that change was
+planned, built, and proven, and every path that cites it stays valid. A skill that looks for work in
+the folder reads only the frontmatter of a `built` plan, and its full text only when the new work
+touches what it built, so finished plans stay cheap to keep. `product/` holds the files the people
+and agents building the product read. `docs/` is left to what users of the product read.
 
 ## Frontmatter
 
@@ -19,7 +22,7 @@ the repo or the context of the next planning run.
 title: <what this plan builds, one line>
 status: draft # draft | ready | building | built
 created: YYYY-MM-DD
-business_plan: <path to BUSINESS_PLAN.md> # omit when there is none
+business_plan: <path to product/BUSINESS_PLAN.md> # omit when there is none
 ---
 ```
 
@@ -59,6 +62,10 @@ to it.
 ## Open
 
 Each unsettled question, with the assumption taken until it is answered. "None" when empty.
+
+## Record
+
+Append-only, oldest first: one dated line per lifecycle event. See Record rules.
 ```
 
 ## Phase rules
@@ -70,12 +77,32 @@ Each unsettled question, with the assumption taken until it is answered. "None" 
   built), or `done` followed by its evidence: the commit, or the check's command, and one line of
   its passing output.
 
+## Record rules
+
+Each skill that acts on the plan appends its own line. A line is never edited or removed, and lines
+are appended in any status, including after `built`.
+
+| Event          | Appended by                | Line                                                                                     |
+| -------------- | -------------------------- | ---------------------------------------------------------------------------------------- |
+| Planned        | `write-build-plan`         | `- YYYY-MM-DD Planned: status <ready or draft>`                                          |
+| Reviewed       | `review-build-plan`        | `- YYYY-MM-DD Reviewed: <verdict>, <n> blocking (<the blocking findings, short>)`        |
+| Built Phase    | `implement-from-plan`      | `- YYYY-MM-DD Built Phase <n>: <commit or check command>, <one line of passing output>`  |
+| Design changed | `implement-from-plan`      | `- YYYY-MM-DD Design changed: was "<old line>", now "<new line>", because <reason>`      |
+| Checked        | `check-build-against-plan` | `- YYYY-MM-DD Checked: <count per status>, <each item not Built>`                        |
+| Evidence       | `write-evidence-report`    | `- YYYY-MM-DD Evidence: product/EVIDENCE.md section <date> at <sha>, <areas not passed>` |
+| PR             | `pull-request`             | `- YYYY-MM-DD PR: #<n> <url>`                                                            |
+
+- Phase **Status** holds the current state of a phase. Record holds the history, so a phase built
+  twice shows both runs.
+- A log that is edited cannot be trusted as a trail, and the fixed event word first makes each kind
+  of line easy to find with grep.
+- A line whose facts a skill cannot get (no git, no PR number) is left out, never guessed.
+
 ## Changing a plan
 
-- A builder that departs from Design edits the Design line and gives the reason in that phase's
-  Status, so the plan stays true to the code.
-- A `built` plan is distilled, then deleted, in one commit, once any check of the build against it
-  has run. Each Design decision a later reader still needs becomes a Key Decisions entry in
-  `docs/ARCHITECTURE.md`, the change gets a changelog entry when the repo keeps one, and the plan
-  file is removed. Git history keeps the full plan: `git log --all -- docs/plans/<slug>.md`. New
-  work gets a new plan file.
+- A builder that departs from Design edits the Design line, gives the reason in that phase's
+  Status, and appends a Design changed line to Record quoting the old line, so the plan stays true
+  to the code and the original decision survives in the file.
+- A `built` plan is kept. Once any check of the build against it has run, each Design decision a
+  later reader still needs is copied to the Key Decisions log in `product/ARCHITECTURE.md`, and the
+  change gets a changelog entry when the repo keeps one. New work gets a new plan file.

@@ -20,9 +20,9 @@ has one to three suggestions, each with the exact way to start it, and the choic
 1. Take the goal from the request or the argument. When there is none, read the situation, using
    read-only commands only:
    - in a git repo: `git status`, the current branch, and `git log --oneline -10`
-   - the lifecycle handoff files, each of which marks a stage reached: `BUSINESS_PLAN.md` (Shape
-     done), `docs/plans/*.md` (a build plan in flight), `docs/ARCHITECTURE.md` (built),
-     `docs/EVIDENCE.md` (proven)
+   - the lifecycle handoff files, each of which marks a stage reached: `product/BUSINESS_PLAN.md`
+     (Shape done), `product/plans/*.md` (a plan not `built` is in flight), `product/ARCHITECTURE.md`
+     (built), `product/EVIDENCE.md` (proven)
    - the newest file in `.agents_workspace/handoff/`, if any, for work a past session left open
 2. Collect the candidates: every skill and agent in this session's listings, any plugin's, plus
    each user-only skill in the table below whose plugin `claude plugin list` shows as enabled.
@@ -50,7 +50,7 @@ has one to three suggestions, each with the exact way to start it, and the choic
   https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md.
 - Rank by fit to the moment, not by breadth: the skill whose trigger matches what the user is about
   to do comes first.
-- Give the reason for each suggestion from what was read ("`docs/plans/auth.md` exists and no code
+- Give the reason for each suggestion from what was read ("`product/plans/auth.md` exists and no code
   matches it yet"), never a generic one ("planning is useful").
 
 ## User-only skills

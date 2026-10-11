@@ -117,14 +117,14 @@ Each moment names the plugin, the command that starts it, and the file it writes
 **Shape**
 
 - Test whether an idea is worth building: install `ceh-business-plan`, start with
-  `/ceh-business-plan:develop-business-plan`. Writes `BUSINESS_PLAN.md`.
+  `/ceh-business-plan:develop-business-plan`. Writes `product/BUSINESS_PLAN.md`.
 - Learn from a competitor's repo or product: install `ceh-competitor-analysis`, start with
   `/ceh-competitor-analysis:analyze-competitor`. Writes reports in `.agents_workspace/`.
 
 **Build**
 
 - Plan a new app or one feature: install `ceh-build-planning`, start with
-  `/ceh-build-planning:write-build-plan`. Writes `docs/plans/<slug>.md`.
+  `/ceh-build-planning:write-build-plan`. Writes `product/plans/<slug>.md`.
 - Build from that plan: install `ceh-build-from-plan` and your stack plugin (below), start with
   `/ceh-build-from-plan:implement-from-plan`. Writes the code and the plan's evidence.
 - Write the user and operator docs: install `ceh-documentation`, start with
@@ -136,7 +136,7 @@ Each moment names the plugin, the command that starts it, and the file it writes
   `/ceh-check-build-against-plan:check-build-against-plan`. Reports in the session.
 - Test it and roll up the evidence: `ceh-testing` (a stack plugin already brings it), start with
   `/ceh-testing:explore-app-for-bugs`, then `/ceh-testing:write-evidence-report`. Writes
-  `docs/EVIDENCE.md`.
+  `product/EVIDENCE.md`.
 - Check a stranger can use it: install `ceh-usability-audit`, start with
   `/ceh-usability-audit:simulate-newcomer-first-run`. Writes a report in `.agents_workspace/`.
 - Audit the whole codebase for security: install `ceh-security-audit`, start with
@@ -171,7 +171,7 @@ Then, when you build from the plan:
 /plugin install ceh-python-service@ceh-claude-code-library --scope project
 ```
 
-The Tell stage reads `BUSINESS_PLAN.md` and `docs/EVIDENCE.md` when they exist. Without them it
+The Tell stage reads `product/BUSINESS_PLAN.md` and `product/EVIDENCE.md` when they exist. Without them it
 still runs, and says which claims rest on nothing proven.
 
 ## 4. Add these only when the moment arrives

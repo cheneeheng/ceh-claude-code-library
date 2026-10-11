@@ -39,10 +39,10 @@ feature that was never built. Done means every plan item has a status and the re
    Run every phase Check that can run. A phase marked `done` is evidence of when it passed, not
    that it passes now.
 
-4. **Fix only on request.** By default the check reports and changes nothing, because filling a
-   gap is building and belongs to whoever owns the build. When asked to fix, fix Gaps and
-   Deviations whose correct form the plan states, rerun the affected Checks, and leave the rest
-   reported.
+4. **Fix only on request.** By default the check reports and changes no code and no plan content
+   (step 6 only appends its Record line), because filling a gap is building and belongs to whoever
+   owns the build. When asked to fix, fix Gaps and Deviations whose correct form the plan states,
+   rerun the affected Checks, and leave the rest reported.
 5. **Gate the fix with two reviewers, when asked** ("gate it", "two reviewers", "don't trust one
    pass"). It costs two extra checks per round, so it runs only on request. After the fixes,
    dispatch two background subagents in parallel on the most capable model, each with the same
@@ -52,6 +52,10 @@ feature that was never built. Done means every plan item has a status and the re
    the fix touched. Otherwise fix exactly the items either one flagged, quoting its finding, and
    nothing else, then gate again with two fresh reviewers. Stop after three rounds and report what
    is still flagged, by which reviewer, and the fixes each round tried.
+6. **Record the check in the plan.** Append one Checked line to the plan's `## Record`: the count
+   per status and each item that is not Built. It is the one write a report-only check makes, so
+   the plan keeps how its build was checked. After a gated fix, record the final round. Checking
+   against a spec that is not a plan writes nothing.
 
 ## Rules
 

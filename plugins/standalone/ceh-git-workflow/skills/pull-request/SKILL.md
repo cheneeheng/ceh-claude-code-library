@@ -44,7 +44,12 @@ Pick the path from the request, then run only that path:
    gh api repos/{owner}/{repo} --jq .delete_branch_on_merge   # false: the branch survives
    ```
 
-3. Open as a **draft** while CI runs or the work is still settling, and mark it ready only once the
+3. **Record the PR in its build plan.** When the branch changes a plan in `product/plans/`
+   (`git diff --name-only origin/main...HEAD -- product/plans/`), append
+   `- YYYY-MM-DD PR: #<n> <url>` to the `## Record` section at the end of that plan, then commit and
+   push it to the same branch. The plan then traces its change to the review that landed it. With
+   no plan in the diff, skip this step.
+4. Open as a **draft** while CI runs or the work is still settling, and mark it ready only once the
    self-review passes. A draft is safe to queue: auto-merge waits until the PR is marked ready.
    Request the reviewers the [approval rules](#approvals-and-merge-strategy) require.
 

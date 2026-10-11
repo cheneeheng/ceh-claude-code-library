@@ -6,7 +6,8 @@ was proven.
 
 It reads the plan format `ceh-build-planning` writes, copied into
 `skills/implement-from-plan/references/plan-format.md`. Without a plan, it writes a minimal one from
-the request first, so it works installed alone.
+the request first, so it works installed alone. A built plan stays in `product/plans/` with an
+append-only `## Record`, so the build keeps its history.
 
 ## Skills
 
