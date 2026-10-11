@@ -72,7 +72,21 @@ Pick the path from the request, then run only that path:
    git push origin main
    ```
 
-3. Clean up once merged:
+   In a worktree (`git rev-parse --git-dir` differs from `git rev-parse --git-common-dir`),
+   `git checkout main` fails because the main checkout holds `main`. Build the merge on a detached
+   `HEAD` instead:
+
+   ```bash
+   git fetch origin && git rebase origin/main
+   git checkout --detach origin/main
+   git merge --no-ff <branch-name>
+   git push origin HEAD:main
+   ```
+
+3. Clean up once merged. In a worktree, skip this block: run only `git fetch --prune`, and tell
+   the user to pick remove at Claude Code's exit prompt. A branch that survives it, or a raw
+   `git worktree add` worktree, is cleaned up by this block run later from the main checkout.
+   Otherwise:
 
    ```bash
    git checkout main && git pull origin main

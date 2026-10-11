@@ -37,13 +37,20 @@ another feature branch. Delete branches after merge.
 
    Do this before opening the PR and again if `main` moves ahead while the PR is in review.
 
-3. For a long run that edits many files (a multi-task plan, an autonomous workflow) while the user
-   keeps working in the same checkout, offer an isolated worktree before starting. Prefer Claude
-   Code's own worktree (the `EnterWorktree` tool, or `claude --worktree <name>`) over a raw
-   `git worktree add`, because Claude Code tracks it and cleans it up on exit. The worktree still
-   gets a `<type>/<short-description>` branch. A Claude Code worktree branches from the default
-   branch, not from the current `HEAD`, unless `worktree.baseRef` is `"head"` in `settings.json`,
-   so check its base before building on unmerged work.
+3. When work runs alongside another session or agent in the same checkout (a multi-task plan
+   while the user keeps editing, or a second, independent task started next to one in progress),
+   isolate it in a worktree before the first edit. Two routes keep the user in the session:
+   - To isolate this session, call the `EnterWorktree` tool.
+   - For a second parallel session, tell the user to open another terminal and run
+     `claude --worktree <name>`, and to open it in its own editor window
+     (`code .claude/worktrees/<name>`). Never launch it yourself: a `claude -p` run from Bash is
+     headless, so the user cannot talk to it and it skips the cleanup prompt on exit.
+
+   Prefer these over a raw `git worktree add`, because Claude Code tracks the worktree and offers
+   to remove it on exit. It names the branch `worktree-<name>`: rename it with
+   `git branch -m <type>/<short-description>` before the first push. A Claude Code worktree
+   branches from the default branch, not from the current `HEAD`, unless `worktree.baseRef` is
+   `"head"` in `settings.json`, so check its base before building on unmerged work.
 
 ### Naming
 
