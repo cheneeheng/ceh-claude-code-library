@@ -47,6 +47,9 @@ Automated orchestration of several sessions stays parked on the Parallel ticket 
   one branch at a time with checks after each.
 - `docs/IDEAS.md`: the Parallel ticket frontier row records the 2026-10-11 decision on worktrees
   for separate sessions.
+- `add-plugin-component` (repo-local) and its agent template: the rule against
+  `isolation: worktree` now covers agent frontmatter only, so it no longer contradicts the
+  contract's per-run `isolation: "worktree"` on the `Agent` call.
 
 ## 2026-10-10
 

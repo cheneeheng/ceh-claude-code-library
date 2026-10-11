@@ -153,11 +153,14 @@ from _every_ subagent, foreground or background — an agent can never stop to a
 skipped with only a debug-log warning. The preload is also the only route a hook-loaded standard
 has into an agent: `SessionStart` hooks never fire for subagents.
 
-**`isolation: worktree` is deliberately unused in this repo.** Subagent worktrees branch from the
+**No agent sets `isolation: worktree` in its frontmatter.** Subagent worktrees branch from the
 repository's **default branch**, not the parent session's `HEAD`, unless `worktree.baseRef: "head"`
 is set in `settings.json` — and their changes stay in the worktree rather than landing in your
-checkout. Under this repo's feature-branch rule that hands an agent a copy of `main` without your
-work, so no agent sets it.
+checkout. In frontmatter it would apply to every run, and under this repo's feature-branch rule
+that hands the agent a copy of `main` without your work. Isolation is the dispatcher's call per
+run instead: `ceh-coding-conduct:agent-coding-contract` passes `isolation: "worktree"` on the
+`Agent` call when parallel subagents edit files, checks each worktree's base, and merges the
+branches back.
 
 ## 3. Update the catalog and the plugin README
 

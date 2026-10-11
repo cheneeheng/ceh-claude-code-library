@@ -30,7 +30,8 @@ Frontmatter
 - skills: fully qualified `ceh-<plugin>:<skill>` entries, one per line. This is the only way a
   standard reaches the agent: SessionStart hooks do not fire for subagents.
 - Never set permissionMode, hooks, mcpServers, or initialPrompt: Claude Code ignores them on plugin
-  agents. Never set isolation: worktree (see add-plugin-component step 2).
+  agents. Never set isolation: worktree here: the dispatcher passes it per run (see
+  add-plugin-component step 2).
 
 Body
 - The body is the whole system prompt. The agent does not get the Claude Code system prompt or
