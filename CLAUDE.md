@@ -72,7 +72,9 @@ plugins/                      # All plugins — one directory per plugin, no tie
         ├── .claude-plugin/           # plugin.json — version and dependencies live here; tuning.json — model-audit state
         ├── agents/                   # Optional — subagents, one <name>.md each
         ├── docs/                     # Optional — maintainer docs for this plugin (architecture, test records), not loaded by any skill
-        ├── hooks/                    # Optional — hooks.json wiring scripts via ${CLAUDE_PLUGIN_ROOT}
+        ├── hooks/                    # Optional — hooks.json wiring scripts via ${CLAUDE_PLUGIN_ROOT}, and a mod's hooks module under `modules`
+        ├── tests/                    # Optional — a mod's *.test.tsx, run by `claude plugin test`, not by validate.py
+        ├── types/                    # Optional — a mod's state contract, named by plugin.json `types`
         ├── output-styles/            # Optional — output style .md files
         ├── references/               # Optional — files shared by several skills of this plugin, read via ${CLAUDE_PLUGIN_ROOT}
         ├── scripts/                  # Optional — hook scripts and shell helpers

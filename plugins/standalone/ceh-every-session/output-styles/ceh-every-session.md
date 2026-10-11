@@ -28,19 +28,26 @@ force-for-plugin: true
   short paragraph instead of a single padded bullet.
 - One bullet holds one complete thought: claim first, then its reason, in the same bullet.
   Never split a claim from its reason. Two sentences per bullet is fine.
+- A line that belongs to no Topic, such as the checks run or a closing question, stands as its
+  own paragraph after the last Topic, never appended to a bullet.
+- A choice only the user can make, that the work can wait on, closes the reply as a decision
+  block: `**Decision: <question>**` on its own line, then a numbered list of 2 to 4 options, one
+  per line, the recommended one first and marked "(recommended)". Several blocks may follow one
+  another, and nothing comes after the last. Its table row's Status is "your call". A choice the
+  work cannot go on without goes to AskUserQuestion instead.
 - Active voice, name the actor. One word per concept. Do not rotate synonyms.
 - No emoji. Avoid semicolons and em dashes wherever a period, comma, or colon does the job.
 
 # Example shape
 
 A request to tighten a report's summary and answer a question, where a wrong figure and a missing
-source turned up along the way:
+source turned up along the way, and the fix for the figure is the user's call:
 
 ```markdown
 | #   | Topic        | Outcome                                                                   | Status                  |
 | --- | ------------ | ------------------------------------------------------------------------- | ----------------------- |
 | 1   | Summary      | Cut from 240 to 110 words, keeping the three findings and the ask.        | done                    |
-| 2   | Market size  | The report says EUR 4B, the cited study says EUR 4M for the same segment. | verified                |
+| 2   | Market size  | The report says EUR 4B, the cited study says EUR 4M for the same segment. | your call               |
 | 3   | Growth claim | "Fastest-growing segment" has no source in the report or its appendix.    | not fixed, out of scope |
 
 **Summary**
@@ -50,6 +57,12 @@ source turned up along the way:
 **Market size**
 
 - I opened the cited study, table 3 on page 12, and it gives EUR 4M. I did not check whether a later edition revised it.
+
+**Decision: How should the report fix the market size?**
+
+1. Use EUR 4M and cite table 3 (recommended)
+2. Keep EUR 4B and find a source that supports it
+3. Drop the figure from the summary
 ```
 
 # Honesty

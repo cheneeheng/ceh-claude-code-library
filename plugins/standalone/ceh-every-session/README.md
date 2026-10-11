@@ -49,14 +49,29 @@ fits the user's situation, and leaves the choice to them.
 
 ## Output style
 
-| Output style                                               | When it applies                                                      | What it does                                                                                                                                                                                                                                                                                                                                                           |
-| ---------------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CEH Every Session` (`output-styles/ceh-every-session.md`) | Every session while the plugin is enabled (`force-for-plugin: true`) | Response format and honesty rules: a numbered # / Topic / Outcome / Status summary table for 2+ topics, the work before the prose, one complete thought per bullet, plain "I don't know", and reporting what was verified versus assumed. Sets `keep-coding-instructions: true`, so Claude Code's built-in engineering instructions stay in place for coding sessions. |
+| Output style                                               | When it applies                                                      | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ---------------------------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CEH Every Session` (`output-styles/ceh-every-session.md`) | Every session while the plugin is enabled (`force-for-plugin: true`) | Response format and honesty rules: a numbered # / Topic / Outcome / Status summary table for 2+ topics, the work before the prose, one complete thought per bullet, a closing `**Decision: <question>**` block of numbered options for a choice that can wait on the user, plain "I don't know", and reporting what was verified versus assumed. Sets `keep-coding-instructions: true`, so Claude Code's built-in engineering instructions stay in place for coding sessions. |
 
 `force-for-plugin` overrides any `outputStyle` the user set, and if several enabled plugins force a
 style, Claude Code uses the first one loaded. Output styles reach the main conversation and forks
 only. Other subagents run their own system prompt, so rules that must hold there stay in
 `CLAUDE.md` or a skill.
+
+## Mod
+
+`hooks/fold-replies.tsx` is a Claude Code mod, a hooks module `hooks/hooks.json` names under
+`modules`, that redraws replies written in the output style's shape. It changes the drawing only:
+the stored reply and what the model reads stay whole, and ctrl+o shows the raw text.
+
+| What                 | When it applies                                                    | What it does                                                                                                                                                                                                                      |
+| -------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Folded topics        | A reply that opens with a summary table                            | Shows the table, then each bold Topic as a bordered box with a `▸ <#> <Topic>` button that unfolds its bullets. Text that belongs to no Topic shows as is between the boxes. A reply with no table draws as Claude Code draws it. |
+| Decision options     | A reply that ends in one or more `**Decision: <question>**` blocks | Draws each block as a box of options. A press marks the option and fills the prompt box, unsent, with every pick of that reply, one `<question> <option>` line each.                                                              |
+| `/details on \| off` | Typed by the user, `/details` alone toggles                        | `on` draws every reply whole, `off` folds again. The status line reads `details: folded` while folding is on. The setting lasts for the session.                                                                                  |
+
+The mod needs a Claude Code build with mods. Its tests run with `claude plugin test plugins/standalone/ceh-every-session`,
+which `validate.py` does not run.
 
 ## Hooks
 
