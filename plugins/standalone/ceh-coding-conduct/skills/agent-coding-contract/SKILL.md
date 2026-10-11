@@ -56,6 +56,8 @@ For large tasks:
 - Never silently combine unrelated changes into a single subtask
 - When independent subtasks have no ordering dependency or shared state, spawn parallel subagents via the built-in `Agent` tool rather than executing sequentially
 - A subagent starts with none of this conversation, so each prompt carries its scope (what it may and may not touch), its inputs as file paths rather than pasted content, the decisions already made that bind it, and the exact shape of what it returns
+- When parallel subagents edit files, dispatch each with `isolation: "worktree"` so their edits cannot collide. That worktree branches from the default branch unless `worktree.baseRef` is `"head"` in `settings.json`, and holds only committed work either way, so commit what the subtasks build on and check each worktree's base before trusting its result
+- Merge the subagents' branches back into yours one at a time, running the checks the change touches after each merge. Resolve a conflict or a failing check before merging the next branch
 
 ## Rules
 
