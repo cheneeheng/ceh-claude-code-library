@@ -127,3 +127,26 @@ test('/details on shows every reply whole, /details off folds again', async ($, 
   expect(await folded.find({ key: 'reply-1#1' })).toBeDefined()
   await folded.unmount()
 })
+
+test('the hint line says details are folded while folding is on', async ($, on) => {
+  on('ui.render', { component: 'PromptHint' }, ($, e) => {
+    const { Text } = $.ui.resolve(e)
+
+    return <Text>{`${e.props.hint} ${e.props.tail ?? ''}`}</Text>
+  })
+  const hint = {
+    plugin: 'ceh-every-session',
+    component: 'PromptHint' as const,
+    requestId: 'hint',
+    props: { hint: '? for shortcuts', isDraft: false, isWorking: false },
+  }
+
+  const folded = await $.ui.mount({ surface: 'terminal', ...hint })
+  expect(await folded.find({ type: 'Text', text: /details folded/ })).toBeDefined()
+  await folded.unmount()
+
+  await $.command.run(details('on'))
+  const shown = await $.ui.mount({ surface: 'terminal', ...hint })
+  expect(await shown.find({ type: 'Text', text: /details folded/ })).toBeUndefined()
+  await shown.unmount()
+})

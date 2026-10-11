@@ -46,12 +46,16 @@ because its option buttons shorten the very stops the vision allows. The decisio
 tightened to match: it holds only a fact the user alone has or a yes before an irreversible
 action, so an agent cannot use it to hand back a choice it should have made.
 
+A fifth PR the same day moves the mod's folded indicator off the status line. Claude Code draws a
+plugin's `$.ui.status` with a warning mark and the plugin's name, so `details: folded` read as an
+error. The indicator is now a dim tail on the hint line under the prompt, which has no mark.
+
 ### Plugin versions
 
 | Plugin               | Version |
 | -------------------- | ------- |
 | `ceh-coding-conduct` | 2.2.5   |
-| `ceh-every-session`  | 2.7.1   |
+| `ceh-every-session`  | 2.7.2   |
 | `ceh-git-workflow`   | 1.2.5   |
 
 ### Added
@@ -86,6 +90,12 @@ action, so an agent cannot use it to hand back a choice it should have made.
   that person give a fact or a yes, or judge the evidence.
 - `ceh-every-session` output style: a decision block holds only a fact the user alone has or a yes
   before an irreversible action, never a choice the agent can make itself.
+
+### Fixed
+
+- `ceh-every-session` `fold-replies` mod: while replies are folded, the hint line under the prompt
+  ends with `· details folded (/details)` in place of the status entry the engine drew as a
+  warning.
 
 ## 2026-10-10
 
