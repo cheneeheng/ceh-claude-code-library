@@ -9,6 +9,30 @@ before this repo live in
 
 ---
 
+## 2026-10-11
+
+The contract now covers parallel subagents that edit files. It already said to fan out
+independent subtasks, but not how to keep their edits apart or bring them back together. Claude
+Code already creates the worktrees natively, so the contract adds only the delta: dispatch each
+editing subagent into its own worktree, check the worktree's base, and merge the branches back one
+at a time with the checks run after each. A generic worktree skill was rejected as a restatement of
+native features. The multi-session case, separate Claude Code sessions each in a worktree, is parked
+on the Parallel ticket frontier idea until a run needs it.
+
+### Plugin versions
+
+| Plugin               | Version |
+| -------------------- | ------- |
+| `ceh-coding-conduct` | 2.2.5   |
+
+### Changed
+
+- `ceh-coding-conduct:agent-coding-contract`: two Task decomposition rules for parallel subagents
+  that edit files: `isolation: "worktree"` with a check of each worktree's base, then a merge back
+  one branch at a time with checks after each.
+- `docs/IDEAS.md`: the Parallel ticket frontier row records the 2026-10-11 decision on worktrees
+  for separate sessions.
+
 ## 2026-10-10
 
 The repo gets a strategy, `docs/STRATEGY.md`, to sit beside the vision. The plugins were a
