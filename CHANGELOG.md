@@ -75,6 +75,10 @@ git mv INVESTOR_OUTREACH.md product/INVESTOR_OUTREACH.md
 A `.agents_workspace/ARCHITECTURE.md` is still moved automatically by
 `ceh-codebase-explanation:document-architecture`.
 
+A seventh PR the same day fixes the `fold-replies` mod for a Topic whose body opens with a fenced
+code block. The splitter read the fence as a paragraph, so the bullets after the block fell outside
+the fold and showed below it. A fenced block now leaves the body's shape as it found it.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -86,7 +90,7 @@ A `.agents_workspace/ARCHITECTURE.md` is still moved automatically by
 | `ceh-check-build-against-plan` | 1.0.4   |
 | `ceh-codebase-explanation`     | 1.2.4   |
 | `ceh-coding-conduct`           | 2.2.5   |
-| `ceh-every-session`            | 2.7.3   |
+| `ceh-every-session`            | 2.7.4   |
 | `ceh-git-workflow`             | 1.2.6   |
 | `ceh-seo`                      | 1.1.4   |
 | `ceh-testing`                  | 1.4.2   |
@@ -144,6 +148,8 @@ A `.agents_workspace/ARCHITECTURE.md` is still moved automatically by
 
 - `ceh-every-session` `fold-replies` mod: while replies are folded, the prompt footer shows the mode
   `folded replies (mod)` in place of the status entry the engine drew as a warning.
+- `ceh-every-session` `fold-replies` mod: bullets after a fenced code block stay inside their
+  Topic's fold, and a bold line inside a fence no longer starts a Topic.
 
 ## 2026-10-10
 

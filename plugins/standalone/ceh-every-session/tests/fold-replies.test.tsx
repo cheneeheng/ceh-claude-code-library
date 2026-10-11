@@ -80,6 +80,19 @@ test('closing text after the last topic shows as is, outside its fold', async $ 
   await ui.unmount()
 })
 
+test('a code block and the bullets after it stay inside their fold', async $ => {
+  const reply = REPLY.replace('- alpha detail', '```\ntree/\n  **leaf**\n```\n\n- alpha detail')
+  const ui = await $.ui.mount({ surface: 'terminal', ...message(reply) })
+  expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
+  expect(await ui.find({ text: /tree\// })).toBeUndefined()
+
+  await ui.press({ key: 'reply-1#0' })
+  const alpha = await ui.find({ type: 'Markdown', text: /tree\// })
+  expect(alpha?.text).toMatch(/\*\*leaf\*\*[\s\S]*alpha detail/)
+  expect(await ui.find({ key: 'reply-1#1' })).toBeDefined()
+  await ui.unmount()
+})
+
 test('decision blocks become options, and a pick fills the prompt box with every pick', async ($, on) => {
   const filled: string[] = []
   on('prompt.fill', (_$, e) => {
