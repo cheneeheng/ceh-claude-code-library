@@ -511,8 +511,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         h = str(tmp / name)
         return {"HOME": h, "USERPROFILE": h}
 
-    def edit(path: str) -> dict:
-        return {"tool_name": "Edit", "tool_input": {"file_path": path}}
+    def edit(path: str, cwd: str | None = None) -> dict:
+        # The session's cwd defaults to the file's own repo.
+        cwd = cwd or str(Path(path).parent)
+        return {"tool_name": "Edit", "tool_input": {"file_path": path}, "cwd": cwd}
 
     def read(path: str, **extra) -> dict:
         return {"tool_name": "Read", "tool_input": {"file_path": path, **extra}}
@@ -523,9 +525,12 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     bulk = {"BULK_READER_MIN_LINES": "350"}
     any_tool = {"tool_name": "Read", "tool_input": {}, "transcript_path": "t.jsonl"}
     return [
-        # branch-guard: deny on the default branch, allow elsewhere or when switched off.
+        # branch-guard: deny on the session repo's default branch, allow elsewhere, in another
+        # repo, or when switched off.
         {"script": "branch-guard.py", "stdin": edit(repos["main"]), "out": "On the default branch"},
         {"script": "branch-guard.py", "stdin": edit(repos["feat/x"]), "out": ""},
+        {"script": "branch-guard.py", "stdin": edit(repos["main"], str(tmp / "feat-x")), "out": ""},
+        {"script": "branch-guard.py", "stdin": edit(repos["main"], str(tmp)), "out": ""},
         {"script": "branch-guard.py", "stdin": edit(repos["main"]), "env": {"CEH_BRANCH_GUARD": "off"}, "out": ""},
         {"script": "branch-guard.py", "stdin": edit(repos["main"]), "env": {"CEH_DISABLED_HOOKS": "x, branch-guard"}, "out": ""},
         {"script": "branch-guard.py", "stdin": edit(repos["main"]), "repeat": 4, "out": "denial 4"},

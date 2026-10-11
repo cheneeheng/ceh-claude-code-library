@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """PreToolUse hook: deny file edits on the default branch, so work branches first.
 
-Matches Edit|Write|MultiEdit|NotebookEdit. Files outside a git work tree pass
-(scratchpads, ~/.claude config). CEH_BRANCH_GUARD=off disables it, for the
+Matches Edit|Write|MultiEdit|NotebookEdit. Only files in the session's own
+repository are guarded (its worktrees included): files outside a git work tree
+(scratchpads, ~/.claude config) and files in other repositories pass, whatever
+branch those repositories are on. CEH_BRANCH_GUARD=off disables it, for the
 times editing the default branch in place is what the user asked for.
 
 Fails open: anything unexpected allows the edit, because a guard that blocked
@@ -22,6 +24,12 @@ def git(cwd, *args):
         ["git", "-C", cwd, *args], capture_output=True, text=True, timeout=5
     )
     return out.stdout.strip() if out.returncode == 0 else ""
+
+
+def repo_id(cwd):
+    """The repository's shared .git directory, the same for all its worktrees; "" outside one."""
+    common = git(cwd, "rev-parse", "--path-format=absolute", "--git-common-dir")
+    return os.path.normcase(os.path.normpath(common)) if common else ""
 
 
 def denial_number(payload):
@@ -63,6 +71,9 @@ def main():
         parent = os.path.dirname(cwd)
         cwd = "" if parent == cwd else parent
     if not cwd or git(cwd, "rev-parse", "--is-inside-work-tree") != "true":
+        return
+    # Another repository's branch is not this session's business.
+    if repo_id(cwd) != repo_id(payload.get("cwd") or os.getcwd()):
         return
 
     branch = git(cwd, "rev-parse", "--abbrev-ref", "HEAD")

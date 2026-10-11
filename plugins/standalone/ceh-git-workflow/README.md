@@ -54,7 +54,9 @@ branch (`origin/HEAD`, or `main` / `master`), and tells the agent to create a fe
 `branch` first. Uncommitted work carries over with `git checkout -b`. This turns "branch before
 implementing" from an instruction the model can forget into one it cannot skip.
 
-Files outside a git work tree pass, as do detached and unborn `HEAD`s. The guard covers the file
+Only the session's own repository is guarded, its worktrees included: files outside a git work
+tree pass, as do files in any other repository, whatever branch it is on, and detached and unborn
+`HEAD`s. The guard covers the file
 tools only: a `Bash` write (`sed -i`, `>`) on the default branch still goes through, so it is a
 nudge with teeth rather than a sandbox. It fails open: unparseable input, a missing `git`, or a
 crashed interpreter allows the edit. After three full denials in a session it sends one line with
