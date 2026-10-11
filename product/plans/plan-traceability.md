@@ -236,3 +236,4 @@ the product move to one `product/` folder, so `docs/` holds only what users of t
 - 2026-10-11 Checked: 31 Built, 2 Deviation (Design Record example lines for Planned and Evidence
   differ from the plan format's line shapes), 2 Extra (Record sentence added to the
   ceh-build-from-plan and ceh-check-build-against-plan READMEs)
+- 2026-10-11 PR: #92 https://github.com/cheneeheng/ceh-claude-code-library/pull/92
