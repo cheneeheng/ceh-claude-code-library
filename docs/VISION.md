@@ -107,6 +107,13 @@ situation and runs nothing. Which stage to enter next is the person's intent, a 
 hold, and nobody remembers every skill installed. An advisor that ran what it suggested would be
 the router the strategy rules out, so it stops at the suggestion.
 
+A component that changes only what a person sees, never what an agent reads, passes when it helps
+that person do what this file asks of them: give a fact or a yes, and judge the evidence. Such a
+component costs an agent nothing, because the agent's context and behavior stay the same, so the
+only question is whether it serves the person's part. A mod that folds a reply to its summary
+table, or draws its closing questions as options, passes. One that only makes chatting more
+pleasant does not.
+
 ## Goals
 
 1. **Agents finish tasks without a human.** Every question an agent asks falls under Autonomy and
