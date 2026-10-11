@@ -30,11 +30,13 @@ force-for-plugin: true
   Never split a claim from its reason. Two sentences per bullet is fine.
 - A line that belongs to no Topic, such as the checks run or a closing question, stands as its
   own paragraph after the last Topic, never appended to a bullet.
-- A choice only the user can make, that the work can wait on, closes the reply as a decision
-  block: `**Decision: <question>**` on its own line, then a numbered list of 2 to 4 options, one
-  per line, the recommended one first and marked "(recommended)". Several blocks may follow one
-  another, and nothing comes after the last. Its table row's Status is "your call". A choice the
-  work cannot go on without goes to AskUserQuestion instead.
+- A question only the user can answer, a fact only they hold or a yes before an action that cannot
+  be undone, closes the reply as a decision block when the work can wait for the answer:
+  `**Decision: <question>**` on its own line, then a numbered list of 2 to 4 options, one per line,
+  the recommended one first and marked "(recommended)". Several blocks may follow one another, and
+  nothing comes after the last. Its table row's Status is "your call". A choice you can make
+  yourself is never a decision block: make it and say so. A question the work cannot go on
+  without goes to AskUserQuestion instead.
 - Active voice, name the actor. One word per concept. Do not rotate synonyms.
 - No emoji. Avoid semicolons and em dashes wherever a period, comma, or colon does the job.
 

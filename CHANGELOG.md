@@ -37,12 +37,21 @@ as numbered options, which the mod draws as buttons that fill the prompt box. Un
 question from the prose was rejected, because ordinary text would grow buttons: the style fixes the
 shape and the mod matches only that shape.
 
+A fourth PR the same day squares that mod with the vision, which it landed against: the scope test
+asks whether a component helps an agent ship, and folding a reply only helps the person reading it.
+The vision now admits a component that changes only what a person sees, never what an agent reads,
+when it helps that person give a fact or a yes, or judge the evidence. Such a component costs an
+agent nothing, so that is the only question left. Moving the mod out of the repo was rejected,
+because its option buttons shorten the very stops the vision allows. The decision block rule is
+tightened to match: it holds only a fact the user alone has or a yes before an irreversible
+action, so an agent cannot use it to hand back a choice it should have made.
+
 ### Plugin versions
 
 | Plugin               | Version |
 | -------------------- | ------- |
 | `ceh-coding-conduct` | 2.2.5   |
-| `ceh-every-session`  | 2.7.0   |
+| `ceh-every-session`  | 2.7.1   |
 | `ceh-git-workflow`   | 1.2.5   |
 
 ### Added
@@ -73,6 +82,10 @@ shape and the mod matches only that shape.
   that belongs to no Topic stands as its own paragraph after the last Topic.
 - `CLAUDE.md` Structure: a plugin's `hooks/` may hold a mod's hooks module, with its `tests/` and
   `types/`.
+- `docs/VISION.md` Scope: a component that changes only what a person sees passes when it helps
+  that person give a fact or a yes, or judge the evidence.
+- `ceh-every-session` output style: a decision block holds only a fact the user alone has or a yes
+  before an irreversible action, never a choice the agent can make itself.
 
 ## 2026-10-10
 
