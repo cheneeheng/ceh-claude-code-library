@@ -203,8 +203,8 @@ editing both.
 | ----------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------ |
 | `plugins/standalone/ceh-seo/skills/write-project-listing-text/SKILL.md` | § Procedure, 1. Read the product handoff files | a numbered step, not a paragraph; same sentences |
 
-**Shared:** what Tell takes from `BUSINESS_PLAN.md` (user, problem, differentiator), that
-`docs/EVIDENCE.md` bounds every product claim to its Claims section with nothing said about a
+**Shared:** what Tell takes from `product/BUSINESS_PLAN.md` (user, problem, differentiator), that
+`product/EVIDENCE.md` bounds every product claim to the Claims of its newest section with nothing said about a
 `stale`, `not run`, or `open issues` area, and the missing-file fallback. The file names and
 statuses must match `ceh-testing:write-evidence-report` and `docs/STRATEGY.md`.
 
@@ -318,7 +318,7 @@ shared there by `write-build-plan` and `review-build-plan`
 | `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-format.md`               | whole file | none     |
 | `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-format.md` | whole file | none     |
 
-**Shared:** the whole plan format, byte for byte: the `docs/plans/<slug>.md` location, the
+**Shared:** the whole plan format, byte for byte: the `product/plans/<slug>.md` location, the
 frontmatter and its four statuses, the Goal, Scope, Design, Phases, and Open sections, the phase
 rules (a runnable Check, `todo` / `unplanned` / `done` with evidence), and the rules for changing
 a plan. Each of the three plugins carries a copy so it works installed alone. `diff` the three

@@ -1,9 +1,9 @@
 ---
 name: write-evidence-report
 description: >-
-  Load this skill before a product is launched or written about: roll the latest test, QA,
-  performance, security, and usability results into docs/EVIDENCE.md. Trigger on "are we ready to
-  launch", "what have we proven", or before a blog post or listing about the product.
+  Load before a product is launched or written about: roll the latest test, QA,
+  performance, security, and usability results into product/EVIDENCE.md. Trigger on "are we ready
+  to launch", "what have we proven", or before a blog post or listing about the product.
 argument-hint: "[product or path]"
 disable-model-invocation: false
 user-invocable: true
@@ -15,9 +15,9 @@ license: Apache-2.0
 
 # Write the evidence report
 
-Roll every Prove result into one committed file, `docs/EVIDENCE.md`, that a later stage reads
-instead of the scattered reports. Done means the file is rewritten for the current commit, every
-area has a status, and every claim under Claims cites the result behind it.
+Roll every Prove result into one committed file, `product/EVIDENCE.md`, that a later stage reads
+instead of the scattered reports. Done means a dated section for the current commit sits at the top
+of the file, every area has a status, and every claim under Claims cites the result behind it.
 
 The checks leave their reports in the git-ignored `.agents_workspace/`, dated, one folder each. A
 blog post or a listing that needs "is it tested, fast, safe, usable?" cannot use them: they vanish
@@ -34,16 +34,16 @@ on a fresh clone and none answers for the product as a whole. This file is the o
 3. **Collect the latest result per area.** Read, newest first, and take one per area (per metric
    for performance, per target for usability):
 
-   | Area        | Source                                                                                       |
-   | ----------- | -------------------------------------------------------------------------------------------- |
-   | QA          | `.agents_workspace/qa/<timestamp>/QA_REPORT.md`                                              |
-   | Performance | `.agents_workspace/perf/<metric>.md`                                                         |
-   | Security    | `.agents_workspace/security-audit/SECURITY_AUDIT-<date>.md`                                  |
-   | Usability   | `.agents_workspace/ux-audits/<target>/run-<NNN>/UX_AUDIT.md` and `ERROR_MESSAGES.md`         |
-   | Plan        | each plan in `docs/plans/`: phases `done` with evidence, and any check-against-plan findings |
+   | Area        | Source                                                                                                                                                                                    |
+   | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | QA          | `.agents_workspace/qa/<timestamp>/QA_REPORT.md`                                                                                                                                           |
+   | Performance | `.agents_workspace/perf/<metric>.md`                                                                                                                                                      |
+   | Security    | `.agents_workspace/security-audit/SECURITY_AUDIT-<date>.md`                                                                                                                               |
+   | Usability   | `.agents_workspace/ux-audits/<target>/run-<NNN>/UX_AUDIT.md` and `ERROR_MESSAGES.md`                                                                                                      |
+   | Plan        | each plan in `product/plans/` with status `building`, plus each `built` plan whose `## Record` has no Evidence line yet: phases `done` with evidence, and any check-against-plan findings |
 
-   With no plan in flight, the Plan area reads `none in flight` (built plans are retired to
-   `docs/ARCHITECTURE.md`), not `not run`: nothing was skipped. Any other area with no source is
+   With no such plan, the Plan area reads `none in flight`, not `not run`: nothing was skipped.
+   Any other area with no source is
    `not run`, and names the skill that produces it: QA
    `ceh-testing:explore-app-for-bugs`, performance `ceh-testing:measure-performance`, security
    `ceh-security-audit:audit-codebase-security`, usability
@@ -56,8 +56,13 @@ on a fresh clone and none answers for the product as a whole. This file is the o
    with the area and figure behind it: "All 212 tests pass at a1b2c3d", "p95 search latency 38 ms
    on <machine>". A `stale`, `not run`, or `open issues` area yields no positive claim about the
    thing it checks.
-6. **Rewrite `docs/EVIDENCE.md` whole** in the Output format, and commit it with the change it
-   describes or on its own. Git history holds earlier runs, so never append or date the file.
+6. **Add a dated section at the top of `product/EVIDENCE.md`**, below its `# Evidence: <product>`
+   title, in the Output format. Never edit an earlier section: each one is what was proven at its
+   commit, and a plan's Record cites it by date. With no file, create it with the title. A file in
+   the older single-run layout keeps its content, under a section heading dated from its **Written**
+   line. Commit it with the change it describes or on its own.
+7. **Record the evidence in each plan.** Append an Evidence line to the `## Record` of each plan in
+   the Plan area: the section date, the short SHA, and every area that is not `passed`.
 
 ## Rules
 
@@ -73,9 +78,11 @@ on a fresh clone and none answers for the product as a whole. This file is the o
 ## Output
 
 ```markdown
-# Evidence: <product> at <short-sha>
+# Evidence: <product>
 
-**Written:** YYYY-MM-DD **Tree:** clean | dirty (<n> files)
+## YYYY-MM-DD at <short-sha>
+
+**Tree:** clean | dirty (<n> files)
 
 | Area        | Status                                          | Result                         | Checked at    |
 | ----------- | ----------------------------------------------- | ------------------------------ | ------------- |
@@ -86,17 +93,19 @@ on a fresh clone and none answers for the product as a whole. This file is the o
 | Usability   | ...                                             | <blockers / friction counts>   | ...           |
 | Plan        | ...                                             | <items built / missing>        | ...           |
 
-## Open issues
+### Open issues
 
 - <area>: <issue, severity where the report gives one>. "None" when empty.
 
-## Claims
+### Claims
 
 - <one sentence a launch post may state> (<area>, <figure>)
 
-## Not run
+### Not run
 
 - <area>: <reason, and the skill that produces it>
+
+<earlier sections follow, unchanged, newest first>
 ```
 
 ## Stop conditions

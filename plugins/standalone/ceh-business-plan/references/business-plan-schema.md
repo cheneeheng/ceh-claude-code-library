@@ -1,9 +1,8 @@
 # Business Plan Document Schema
 
-The artifact every skill of this plugin reads and writes. One file, `BUSINESS_PLAN.md`, written to
-the repo root. It is a **living document**: each
-interview loop revises it in place, not a fresh copy. When it derives from app plans, it carries a
-`derived_from` field naming the plan stems it was built on.
+The artifact every skill of this plugin reads and writes. One file, `product/BUSINESS_PLAN.md`. It
+is a **living document**: each interview loop revises it in place, not a fresh copy. When it
+derives from app plans, it carries a `derived_from` field naming the plan stems it was built on.
 
 `find-product-market-fit` creates the file and owns all 13 sections. The specialist skills each
 deepen named sections with one subsection, listed under [Specialist subsections](#specialist-subsections).
@@ -18,14 +17,13 @@ created: YYYY-MM-DD
 updated: YYYY-MM-DD
 product: <one-line product name>
 stage: <idea | prototype | launched | revenue>
-derived_from: [] # build plans this was built on, e.g. [docs/plans/mvp.md]; [] if none
+derived_from: [] # build plans this was built on, e.g. [product/plans/mvp.md]; [] if none
 pmf_gate: 0/8 # criteria met out of 8 (see PMF Readiness Gate below)
 ---
 ```
 
-`derived_from` names `ceh-build-planning` plans by their repo-relative path. A plan is deleted once
-built, so a listed path may no longer exist: it stays valid in git history
-(`git log --all -- <path>`), and its lasting decisions are in `docs/ARCHITECTURE.md`. Keep the path.
+`derived_from` names `ceh-build-planning` plans by their repo-relative path. Built plans are kept, so
+the path stays valid.
 
 ## Sections
 
@@ -126,7 +124,7 @@ created: 2026-03-02
 updated: 2026-03-09
 product: Ledgerline
 stage: idea
-derived_from: [docs/plans/mvp.md]
+derived_from: [product/plans/mvp.md]
 pmf_gate: 5/8
 ---
 
@@ -150,7 +148,7 @@ The month-end match done in ten minutes instead of a day [hypothesis-to-test]
 
 ## §05 Solution / Product
 
-Upload the statement, get the mismatches. Technical detail: see `docs/plans/mvp.md`.
+Upload the statement, get the mismatches. Technical detail: see `product/plans/mvp.md`.
 
 ## §06 Alternatives & Competition
 

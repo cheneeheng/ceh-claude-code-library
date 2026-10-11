@@ -20,10 +20,11 @@ states its scope facts explicitly. This skill governs findability, not accuracy.
 ## Procedure
 
 1. **Read the product handoff files.** When the repo has them, read them before writing, because
-   they hold what earlier stages settled. `BUSINESS_PLAN.md` gives who the product is for, the
-   problem, and the differentiator: take them from it rather than asking. `docs/EVIDENCE.md`
+   they hold what earlier stages settled. `product/BUSINESS_PLAN.md` gives who the product is for,
+   the problem, and the differentiator: take them from it rather than asking. `product/EVIDENCE.md`
    bounds every claim about what the product does or how well it does it (tested, fast, secure,
-   usable): state only what its Claims section lists, and nothing about an area it marks `stale`,
+   usable). Read only its newest section, the first one, because earlier sections describe older
+   commits. State only what that section's Claims list, and nothing about an area it marks `stale`,
    `not run`, or `open issues`. When either file is missing, carry on from the repo and say which
    claims rest on nothing proven.
 2. Write the excerpt: the first ~160 characters of any description, and the first paragraph of any

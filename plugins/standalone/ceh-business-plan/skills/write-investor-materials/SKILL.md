@@ -11,9 +11,9 @@ license: Apache-2.0
 # Write investor materials
 
 Turn the plan into what an investor reads: a slide-by-slide deck outline and the outreach notes
-that get it opened. Done is `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` beside the plan, where
-every slide's claim cites the plan section it comes from with its confidence tag, and the ask
-states the amount, the months of runway it buys, and the milestones it reaches.
+that get it opened. Done is `product/INVESTOR_DECK.md` and `product/INVESTOR_OUTREACH.md` beside
+the plan, where every slide's claim cites the plan section it comes from with its confidence tag,
+and the ask states the amount, the months of runway it buys, and the milestones it reaches.
 
 ## Procedure
 
@@ -66,7 +66,7 @@ states the amount, the months of runway it buys, and the milestones it reaches.
 
 ## Output
 
-`INVESTOR_DECK.md`, beside `BUSINESS_PLAN.md`:
+`product/INVESTOR_DECK.md`, beside `product/BUSINESS_PLAN.md`:
 
 ```markdown
 # <Company>: <one-liner>
@@ -80,7 +80,7 @@ Plan: <path>, pmf_gate <N>/8, updated <date>
 Source: §<NN>
 ```
 
-`INVESTOR_OUTREACH.md`, beside it:
+`product/INVESTOR_OUTREACH.md`, beside it:
 
 ```markdown
 # Investor outreach

@@ -3,7 +3,7 @@ name: implement-from-plan
 description: >-
   Load this skill when building from a written plan: phase by phase, failing test first, only what
   the phase names, with each phase's check run and its evidence recorded. Trigger on "implement the
-  plan", "build phase 2", "start building docs/plans/mvp.md".
+  plan", "build phase 2", "start building product/plans/mvp.md".
 argument-hint: "[plan-file] [phase]"
 disable-model-invocation: false
 user-invocable: true
@@ -38,31 +38,32 @@ reason recorded.
       it `todo`, and report. A third blind fix rarely works, and the next session needs the
       record.
    5. Set the phase's Status to `done` with its evidence: the commit, or the check command and
-      one line of its passing output.
+      one line of its passing output. Append a Built Phase line to the plan's `## Record`.
 4. **Close the plan.** When every phase is `done`, set `status: built`.
-5. **Retire the plan.** A built plan left in the plans folder is read by every later planning run,
-   so it does not stay. When `ceh-check-build-against-plan` is installed, run
-   `ceh-check-build-against-plan:check-build-against-plan` first, because it reads the plan. Then,
-   in one commit: add each Design decision a later reader still needs to the Key Decisions log in
-   `docs/ARCHITECTURE.md` (the format is in `ceh-codebase-explanation:document-architecture` when
-   installed, otherwise a dated heading with Context, Decision, and Consequences), add a
-   changelog entry when the repo keeps a changelog, and delete the plan file. Say which decisions moved and that
-   `git log --all -- <plan path>` restores the plan.
+5. **Copy the lasting decisions.** The built plan stays in the plans folder as the record of this
+   change: later planning runs read only its frontmatter. When `ceh-check-build-against-plan` is
+   installed, run `ceh-check-build-against-plan:check-build-against-plan` first, because it adds
+   its Checked line to the plan. Then, in one commit: copy each Design decision a later reader
+   still needs to the Key Decisions log in `product/ARCHITECTURE.md` (the format is in
+   `ceh-codebase-explanation:document-architecture` when installed, otherwise a dated heading with
+   Context, Decision, and Consequences), and add a changelog entry when the repo keeps a
+   changelog. Say which decisions were copied.
 
 ## Rules
 
 - Build only what the phase names. A gap you find in the plan goes under Open with the
   assumption you took, never into code as unplanned scope.
-- When the code has to depart from Design, edit the Design line in the plan and give the reason in
-  the phase's Status, so the plan stays true to the code.
+- When the code has to depart from Design, edit the Design line, give the reason in the phase's
+  Status, and append a Design changed line to the plan's `## Record` quoting the old line, so the
+  plan stays true to the code and the original decision survives.
 - A phase is `done` only on a passing Check run after its last edit. A check you could not run
   leaves the phase `todo`, with the reason in its Status.
 
 ## Output
 
 After the run, report per phase: done or stopped, the Check command and its result, assumptions
-taken, and anything not verified with the command the user should run. When the plan was retired,
-list the decisions moved to `docs/ARCHITECTURE.md`.
+taken, and anything not verified with the command the user should run. List the decisions copied
+to `product/ARCHITECTURE.md`.
 
 ## Stop conditions
 

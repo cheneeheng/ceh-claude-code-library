@@ -29,11 +29,13 @@ summarized under Output.
    The label may move up mid-session, never down: a spike that turns into a keeper gets a plan, and
    architectural work keeps its plan when it shrinks.
 
-2. **Read what exists before asking.** Read the format file, the repo, every plan already in the
-   plans folder, the README, and any issue or spec the user named. When a `BUSINESS_PLAN.md`
-   exists, set `business_plan` and take the goal and target user from it rather than restating
-   them. Put whatever is still unclear into **one round** of questions, each with a recommended
-   answer. With no human to answer, take each recommended answer and list it under Open.
+2. **Read what exists before asking.** Read the format file, the repo, every plan in the plans
+   folder that is not `built`, and only the frontmatter of each `built` one (read its full text
+   only when the new work touches what it built), the README, and any issue or spec the user
+   named. When `product/BUSINESS_PLAN.md` exists, set `business_plan` and take the goal and target
+   user from it rather than restating them. Put whatever is still unclear into **one round** of
+   questions, each with a recommended answer. With no human to answer, take each recommended
+   answer and list it under Open.
 
 3. **Draw the scope.** Write In and Out. For each candidate item ask: _is this needed to build
    what was asked, now?_ If not, it goes under Out with its reason. For a new app, In is the MVP:
@@ -73,7 +75,8 @@ summarized under Output.
      field the plan does not define, and no field named differently in two places.
 
    Save to the plans folder with `status: ready`, or `status: draft` when an Open question blocks
-   building.
+   building. Add the Planned line to the plan's `## Record`, in the format the plan format file
+   gives.
 
 ## Rules
 

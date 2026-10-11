@@ -47,8 +47,10 @@ quotes the plan, and the verdict is delivered.
    settled nor deferred.
 6. **Grade each finding.** **Blocking**: the build would stop, go wrong, or build the wrong thing.
    **Advisory**: the build succeeds, but worse than it could. Then give the verdict (see Output).
-7. **Fix only on request.** By default the review reports and edits nothing, because the plan
-   belongs to its author. When asked to fix, edit the plan for each blocking finding whose fix the
+7. **Fix only on request.** By default the review edits no plan content, because the plan belongs
+   to its author. It always appends one Reviewed line to the plan's `## Record` (format in the plan
+   format file), so the review stays part of the plan's trail. A spec that is not a plan gets no
+   Record line. When asked to fix, edit the plan for each blocking finding whose fix the
    plan or the code already settles, put a finding that would change In or Out under Open as a
    question with a recommended answer, and set `status: draft` while any blocking finding is open.
 
@@ -67,7 +69,7 @@ quotes the plan, and the verdict is delivered.
 ## Output
 
 ```markdown
-## Plan review: docs/plans/<slug>.md
+## Plan review: product/plans/<slug>.md
 
 **Verdict:** Revise first
 **Lenses:** Scope, Engineering, Design. Skipped developer experience: no developer callers.

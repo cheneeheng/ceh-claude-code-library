@@ -52,13 +52,44 @@ error. The indicator is now a mode label at the right of the prompt footer, wher
 modes and no mark is drawn. A dim tail on the hint line was tried first and rejected: it appended
 to a line Claude Code owns, and it did not say it came from a mod.
 
+The product lifecycle now keeps an audit trail. The files a lifecycle stage writes for the people and
+agents building a product move from `docs/` and the repo root to a `product/` folder, so `docs/`
+holds only what users of the product read. Build plans are no longer deleted once built: each plan
+ends with an append-only `## Record` that the planning, review, build, check, evidence, and
+pull-request skills each add a dated line to, so the plan traces its change from plan to merge.
+`product/EVIDENCE.md` becomes append-only, one dated section per run, newest first, so the section a
+plan cites never changes. The plan is `product/plans/plan-traceability.md`.
+
+Repos that already have these files move them once, since skills look only at the new paths. Run
+`mkdir product` first, then these moves:
+
+```sh
+git mv docs/plans product/plans
+git mv docs/EVIDENCE.md product/EVIDENCE.md
+git mv docs/ARCHITECTURE.md product/ARCHITECTURE.md
+git mv BUSINESS_PLAN.md product/BUSINESS_PLAN.md
+git mv INVESTOR_DECK.md product/INVESTOR_DECK.md
+git mv INVESTOR_OUTREACH.md product/INVESTOR_OUTREACH.md
+```
+
+A `.agents_workspace/ARCHITECTURE.md` is still moved automatically by
+`ceh-codebase-explanation:document-architecture`.
+
 ### Plugin versions
 
-| Plugin               | Version |
-| -------------------- | ------- |
-| `ceh-coding-conduct` | 2.2.5   |
-| `ceh-every-session`  | 2.7.2   |
-| `ceh-git-workflow`   | 1.2.5   |
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-blog`                     | 1.0.8   |
+| `ceh-build-from-plan`          | 1.0.3   |
+| `ceh-build-planning`           | 1.1.3   |
+| `ceh-business-plan`            | 1.1.4   |
+| `ceh-check-build-against-plan` | 1.0.4   |
+| `ceh-codebase-explanation`     | 1.2.4   |
+| `ceh-coding-conduct`           | 2.2.5   |
+| `ceh-every-session`            | 2.7.3   |
+| `ceh-git-workflow`             | 1.2.6   |
+| `ceh-seo`                      | 1.1.4   |
+| `ceh-testing`                  | 1.4.2   |
 
 ### Added
 
@@ -92,6 +123,22 @@ to a line Claude Code owns, and it did not say it came from a mod.
   that person give a fact or a yes, or judge the evidence.
 - `ceh-every-session` output style: a decision block holds only a fact the user alone has or a yes
   before an irreversible action, never a choice the agent can make itself.
+- Plan format, in all three copies of `plan-format.md`: plans live in `product/plans/`, are never
+  deleted, and end with an append-only `## Record`. A Design change keeps the old line in a Design
+  changed entry.
+- `ceh-build-planning`: `write-build-plan` reads only the frontmatter of built plans and adds a
+  Planned entry. `review-build-plan` adds a Reviewed entry.
+- `ceh-build-from-plan:implement-from-plan`: adds Built Phase and Design changed entries. The Retire
+  step becomes Copy the lasting decisions, and the plan is kept.
+- `ceh-check-build-against-plan`: adds a Checked entry after each check.
+- `ceh-testing:write-evidence-report`: writes `product/EVIDENCE.md`, adds a dated section at the top
+  instead of rewriting the file, and adds an Evidence entry to each plan it covers.
+- `ceh-git-workflow:pull-request`: the Open path adds a PR entry to the plan the branch changes.
+- `ceh-blog:draft-post` and `ceh-seo:write-project-listing-text`: read `product/` paths and only the
+  newest evidence section.
+- `ceh-business-plan`, `ceh-codebase-explanation`, and `ceh-every-session`: use the `product/` paths.
+- `docs/STRATEGY.md`, `docs/GETTING_STARTED.md`, `docs/CROSS_REFERENCES.md`, `docs/CATALOG.md`, and
+  `docs/IDEAS.md`: use the `product/` paths, keep plans, and make evidence append-only.
 
 ### Fixed
 

@@ -37,7 +37,7 @@ its prerequisites, hooks, and environment variables.
 | ------------------------ | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Explain Until Understood | `/ceh-codebase-explanation:explain-until-understood`     | Explaining a subsystem, design, or diff to the person in the session: stated floor, foundations first, verified claims, ASCII pictures, one walked case, and the escalation ladder when an explanation misses |
 | Explain Codebase         | `/ceh-codebase-explanation:explain-codebase`             | Go through a whole repo, code or knowledge base, and write what each component does, how they connect, and key flows into the ignored `.agents_workspace/CODEBASE_EXPLAINED.md`                               |
-| Document Architecture    | `/ceh-codebase-explanation:document-architecture`        | Writing or updating the living, committed `docs/ARCHITECTURE.md`: 3-second Overview, Mermaid diagrams, Key Decisions log; also when a re-plan changes system shape                                            |
+| Document Architecture    | `/ceh-codebase-explanation:document-architecture`        | Writing or updating the living, committed `product/ARCHITECTURE.md`: 3-second Overview, Mermaid diagrams, Key Decisions log; also when a re-plan changes system shape                                         |
 | Trace Code Rationale     | `/ceh-codebase-explanation:trace-code-rationale`         | "Why is it like this", or before removing code that looks pointless: trace it through git log, blame, PRs, and issues, and answer with every claim cited and the unrecorded parts named                       |
 | Maintain Glossary        | `/ceh-codebase-explanation:maintain-glossary [term ...]` | A term is used two ways or two words name one thing: settle one word and definition in a committed `GLOSSARY.md`, list files still using a rejected alias                                                     |
 
@@ -57,17 +57,17 @@ its prerequisites, hooks, and environment variables.
 
 ### Testing (`ceh-testing`)
 
-| Skill                     | Invoke                                   | When                                                                                                                                                      |
-| ------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Test a Bug Fix            | `/ceh-testing:test-a-bug-fix`            | A bug, crash, or regression is being fixed: failing test first, prove it goes red without the fix, bisect on it                                           |
-| Design Test Cases         | Model-only, no slash command             | Deciding which inputs and scenarios to cover: partitions, boundaries, decision tables, state transitions, properties, fuzzing                             |
-| Audit Test Suite          | `/ceh-testing:audit-test-suite`          | Finding out whether a passing suite would catch a defect: assertion quality, mutation testing on the diff, flakiness                                      |
-| Verify Behavior Preserved | `/ceh-testing:verify-behavior-preserved` | Before a refactor, extraction, dependency or runtime upgrade, or port: characterization tests, golden files, a differential run                           |
-| Close Test Risk Gaps      | `/ceh-testing:close-test-risk-gaps`      | Pre-completion gate: concurrency, contract drift, performance, authorization, and migration/rollout gaps                                                  |
-| Write Test First          | `/ceh-testing:write-test-first`          | About to write code that adds or changes behavior: red, green, refactor per slice, by default and not only when asked                                     |
-| Measure Performance       | `/ceh-testing:measure-performance`       | Speed, memory, or size is the task: vet the measurement against its noise, baseline, profile, one change per measurement and one commit per win           |
-| Explore App for Bugs      | `/ceh-testing:explore-app-for-bugs`      | Try the running app for bugs: written charters over the changed areas, each bug reproduced twice, report-only by default and fix mode on request          |
-| Write Evidence Report     | `/ceh-testing:write-evidence-report`     | Before a launch or a post about the product: roll the latest test, QA, performance, security, and usability results into one committed `docs/EVIDENCE.md` |
+| Skill                     | Invoke                                   | When                                                                                                                                                         |
+| ------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Test a Bug Fix            | `/ceh-testing:test-a-bug-fix`            | A bug, crash, or regression is being fixed: failing test first, prove it goes red without the fix, bisect on it                                              |
+| Design Test Cases         | Model-only, no slash command             | Deciding which inputs and scenarios to cover: partitions, boundaries, decision tables, state transitions, properties, fuzzing                                |
+| Audit Test Suite          | `/ceh-testing:audit-test-suite`          | Finding out whether a passing suite would catch a defect: assertion quality, mutation testing on the diff, flakiness                                         |
+| Verify Behavior Preserved | `/ceh-testing:verify-behavior-preserved` | Before a refactor, extraction, dependency or runtime upgrade, or port: characterization tests, golden files, a differential run                              |
+| Close Test Risk Gaps      | `/ceh-testing:close-test-risk-gaps`      | Pre-completion gate: concurrency, contract drift, performance, authorization, and migration/rollout gaps                                                     |
+| Write Test First          | `/ceh-testing:write-test-first`          | About to write code that adds or changes behavior: red, green, refactor per slice, by default and not only when asked                                        |
+| Measure Performance       | `/ceh-testing:measure-performance`       | Speed, memory, or size is the task: vet the measurement against its noise, baseline, profile, one change per measurement and one commit per win              |
+| Explore App for Bugs      | `/ceh-testing:explore-app-for-bugs`      | Try the running app for bugs: written charters over the changed areas, each bug reproduced twice, report-only by default and fix mode on request             |
+| Write Evidence Report     | `/ceh-testing:write-evidence-report`     | Before a launch or a post about the product: roll the latest test, QA, performance, security, and usability results into one committed `product/EVIDENCE.md` |
 
 ### Python Service (`ceh-python-service`)
 
