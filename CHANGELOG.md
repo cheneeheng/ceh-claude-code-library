@@ -19,13 +19,28 @@ at a time with the checks run after each. A generic worktree skill was rejected 
 native features. The multi-session case, separate Claude Code sessions each in a worktree, is parked
 on the Parallel ticket frontier idea until a run needs it.
 
+A second change covers the part of that case a person drives by hand: two independent tasks run
+side by side, each in its own interactive session. `branch` step 3 now fires on work that runs
+alongside another session in the same checkout, not only on long runs. It tells the user to start
+the second session with `claude --worktree <name>`, because an agent can only launch a headless
+one. `pull-request` could not merge or clean up from inside a worktree, because `git checkout main`
+fails there. It now merges on a detached `HEAD` and leaves removal to Claude Code's exit prompt.
+Automated orchestration of several sessions stays parked on the Parallel ticket frontier idea.
+
 ### Plugin versions
 
 | Plugin               | Version |
 | -------------------- | ------- |
 | `ceh-coding-conduct` | 2.2.5   |
+| `ceh-git-workflow`   | 1.2.5   |
 
 ### Changed
+
+- `ceh-git-workflow:branch`: step 3 isolates any work that runs alongside another session or
+  agent, through `EnterWorktree` or a user-started `claude --worktree <name>` session, and renames
+  the `worktree-<name>` branch to the repo's `<type>/` convention.
+- `ceh-git-workflow:pull-request`: a local merge from a worktree builds the merge commit on a
+  detached `HEAD`, and post-merge cleanup in a worktree defers to Claude Code's exit prompt.
 
 - `ceh-coding-conduct:agent-coding-contract`: two Task decomposition rules for parallel subagents
   that edit files: `isolation: "worktree"` with a check of each worktree's base, then a merge back
