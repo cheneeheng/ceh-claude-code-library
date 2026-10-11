@@ -127,3 +127,26 @@ test('/details on shows every reply whole, /details off folds again', async ($, 
   expect(await folded.find({ key: 'reply-1#1' })).toBeDefined()
   await folded.unmount()
 })
+
+test('the footer shows a folded replies mode while folding is on', async ($, on) => {
+  on('ui.render', { component: 'SessionMode' }, ($, e) => {
+    const { Text } = $.ui.resolve(e)
+
+    return <Text>{e.props.modes.join(' & ')}</Text>
+  })
+  const footer = {
+    plugin: 'ceh-every-session',
+    component: 'SessionMode' as const,
+    requestId: 'modes',
+    props: { modes: ['focus'] },
+  }
+
+  const folded = await $.ui.mount({ surface: 'terminal', ...footer })
+  expect(await folded.find({ type: 'Text', text: 'focus & folded replies (mod)' })).toBeDefined()
+  await folded.unmount()
+
+  await $.command.run(details('on'))
+  const shown = await $.ui.mount({ surface: 'terminal', ...footer })
+  expect(await shown.find({ type: 'Text', text: 'focus' })).toBeDefined()
+  await shown.unmount()
+})
