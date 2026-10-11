@@ -9,8 +9,8 @@ const open = atom({ plugin: 'ceh-every-session', key: 'open' } as const, [] as S
 const picked = atom({ plugin: 'ceh-every-session', key: 'picked' } as const, {} as Record<string, number>)
 const showAll = atom({ plugin: 'ceh-every-session', key: 'showAll' } as const, false)
 
-// A dim tail on the hint line, not $.ui.status: the engine draws a status with a warning mark.
-const FOLDED = '· details folded (/details)'
+// A footer mode label, not $.ui.status: the engine draws a status with a warning mark.
+const FOLDED = 'folded replies (mod)'
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
@@ -30,8 +30,8 @@ export const register: Register = on => {
     return { text: isAll ? 'Details shown under summary tables.' : 'Details folded under summary tables.' }
   })
 
-  on('ui.render', { component: 'PromptHint' }, async ($, e, next) =>
-    (await read($, showAll)) ? next(e) : next({ ...e, props: { ...e.props, tail: FOLDED } }),
+  on('ui.render', { component: 'SessionMode' }, async ($, e, next) =>
+    (await read($, showAll)) ? next(e) : next({ ...e, props: { modes: [...e.props.modes, FOLDED] } }),
   )
 
   on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) => {

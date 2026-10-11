@@ -128,25 +128,25 @@ test('/details on shows every reply whole, /details off folds again', async ($, 
   await folded.unmount()
 })
 
-test('the hint line says details are folded while folding is on', async ($, on) => {
-  on('ui.render', { component: 'PromptHint' }, ($, e) => {
+test('the footer shows a folded replies mode while folding is on', async ($, on) => {
+  on('ui.render', { component: 'SessionMode' }, ($, e) => {
     const { Text } = $.ui.resolve(e)
 
-    return <Text>{`${e.props.hint} ${e.props.tail ?? ''}`}</Text>
+    return <Text>{e.props.modes.join(' & ')}</Text>
   })
-  const hint = {
+  const footer = {
     plugin: 'ceh-every-session',
-    component: 'PromptHint' as const,
-    requestId: 'hint',
-    props: { hint: '? for shortcuts', isDraft: false, isWorking: false },
+    component: 'SessionMode' as const,
+    requestId: 'modes',
+    props: { modes: ['focus'] },
   }
 
-  const folded = await $.ui.mount({ surface: 'terminal', ...hint })
-  expect(await folded.find({ type: 'Text', text: /details folded/ })).toBeDefined()
+  const folded = await $.ui.mount({ surface: 'terminal', ...footer })
+  expect(await folded.find({ type: 'Text', text: 'focus & folded replies (mod)' })).toBeDefined()
   await folded.unmount()
 
   await $.command.run(details('on'))
-  const shown = await $.ui.mount({ surface: 'terminal', ...hint })
-  expect(await shown.find({ type: 'Text', text: /details folded/ })).toBeUndefined()
+  const shown = await $.ui.mount({ surface: 'terminal', ...footer })
+  expect(await shown.find({ type: 'Text', text: 'focus' })).toBeDefined()
   await shown.unmount()
 })

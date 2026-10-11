@@ -48,7 +48,9 @@ action, so an agent cannot use it to hand back a choice it should have made.
 
 A fifth PR the same day moves the mod's folded indicator off the status line. Claude Code draws a
 plugin's `$.ui.status` with a warning mark and the plugin's name, so `details: folded` read as an
-error. The indicator is now a dim tail on the hint line under the prompt, which has no mark.
+error. The indicator is now a mode label at the right of the prompt footer, where plugins add
+modes and no mark is drawn. A dim tail on the hint line was tried first and rejected: it appended
+to a line Claude Code owns, and it did not say it came from a mod.
 
 ### Plugin versions
 
@@ -93,9 +95,8 @@ error. The indicator is now a dim tail on the hint line under the prompt, which 
 
 ### Fixed
 
-- `ceh-every-session` `fold-replies` mod: while replies are folded, the hint line under the prompt
-  ends with `· details folded (/details)` in place of the status entry the engine drew as a
-  warning.
+- `ceh-every-session` `fold-replies` mod: while replies are folded, the prompt footer shows the mode
+  `folded replies (mod)` in place of the status entry the engine drew as a warning.
 
 ## 2026-10-10
 
