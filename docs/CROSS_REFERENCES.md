@@ -326,6 +326,22 @@ files after an edit: they must stay identical. `ceh-business-plan:find-product-m
 plans too, but carries no copy: it reads only the plans folder and the Goal, Scope, and Design
 sections.
 
+## Fix record format
+
+**Canonical:** `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/references/fix-record-format.md`
+— whole file
+
+| Copy                                                                                   | Section    | Diverges |
+| -------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record-format.md` | whole file | none     |
+
+**Shared:** the whole fix record format, byte for byte: the `product/fixes/<slug>.md` location and
+slug rule, the write-only-for-repo-causes rule, the frontmatter with its three statuses and the
+`plan:` and `previous:` rules, the sections each status keeps, and the same-commit and
+committed-alone rules. `find-root-cause` writes the record and `test-a-bug-fix` completes or creates
+it, and each plugin carries a copy so it works installed alone. `diff` the two files after an edit:
+they must stay identical.
+
 ## Business-plan "No human to answer" clause
 
 **Canonical:** `plugins/standalone/ceh-business-plan/skills/develop-business-plan/SKILL.md` — § Rules, "No human to answer"

@@ -24,7 +24,9 @@ predict one observation you have not made yet that then comes true.
    `ceh-testing:test-a-bug-fix` "When it will not reproduce deterministically".
 2. **Read the whole failure.** The first error, not the last: later errors are often fallout. In
    a stack trace, find the deepest frame in this repo's code, and read that code before going
-   further.
+   further. Then grep `product/fixes/` for that file or function, or with no stack trace, for the
+   one the step 1 command calls. An earlier fix record's Cause becomes one of the hypotheses in
+   step 3, because a bug that came back often came back the same way.
 3. **Write 3 to 5 hypotheses, each with what would refute it.** "The cache returns a stale row"
    is refuted by "the row read at line 40 matches the database". A hypothesis no observation can
    refute is a mood, so rewrite it or drop it. Order them by how cheap they are to test, then by
@@ -39,6 +41,11 @@ predict one observation you have not made yet that then comes true.
 6. **Confirm by prediction.** From the cause, predict something new: another input that must
    also fail, or one that must pass. Run it. A cause that predicts nothing new is still a guess.
 7. **Remove the instrumentation** you added, then hand over with the Output below.
+8. **Write the fix record** when the cause is in this repo's code or config. Save the hand-over to
+   `product/fixes/<slug>.md` with `status: diagnosed`, in the format in
+   `references/fix-record-format.md`, setting `plan:` and `previous:` as it says. The chat ends
+   with the session, and the record is how a later reader learns why the fix exists. The fix commit
+   carries it. When no fix will land here, the record is committed alone and stays `diagnosed`.
 
 ## Rules
 
@@ -52,7 +59,8 @@ predict one observation you have not made yet that then comes true.
 - **Evidence is output you ran.** A conclusion from reading code is a hypothesis until a command
   confirms it, and the report labels it inferred.
 - **A cause in a dependency is reported, not patched.** Name the package, version, and upstream
-  issue if one exists, and propose the workaround in this repo's code.
+  issue if one exists, and propose the workaround in this repo's code. When no workaround lands,
+  the fix record names the package in its Cause and is committed alone.
 
 ## Output
 
@@ -73,7 +81,8 @@ predict one observation you have not made yet that then comes true.
 ## Stop conditions
 
 - The symptom does not reproduce after a loop and forced timing → report what was tried and
-  what each attempt showed. Do not ship a speculative fix.
+  what each attempt showed, and save it as a fix record with `status: unreproduced`, committed
+  alone. Do not ship a speculative fix.
 - Confirming the cause needs a production system, real customer data, or a paid service → stop
   and name the exact check the user should run.
 
@@ -81,4 +90,5 @@ predict one observation you have not made yet that then comes true.
 
 Once the cause is confirmed, `ceh-testing:test-a-bug-fix` turns the step 1 command into a
 regression test and drives the fix, when `ceh-testing` is installed. Otherwise write the failing
-test before the fix yourself.
+test before the fix yourself, then complete the fix record's Fix section, set `status: fixed`, and
+commit the record with the fix and the test.

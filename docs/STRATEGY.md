@@ -93,6 +93,11 @@ lifecycle:
   audit trail of its change. Its lasting decisions are also copied to the Key Decisions log in
   `product/ARCHITECTURE.md`. Planning stays cheap because `ceh-build-planning:write-build-plan` reads
   only the frontmatter of built plans.
+- **Fix records are kept.** A bug fix does not go through a build plan, because the bug already
+  says what to build. What it needs is the reason, so every fix commits
+  `product/fixes/<slug>.md` with its symptom, diagnosis, cause, and regression tests, written by
+  `ceh-coding-conduct:find-root-cause` and `ceh-testing:test-a-bug-fix`. A fix that changes a
+  contract or the design is a feature, and goes through `ceh-build-planning:write-build-plan`.
 - **The evidence report is append-only.** `product/EVIDENCE.md` is one file per product, and each run
   adds a dated section at the top, so the section a plan's Record cites never changes. The separate
   QA, performance, security, and usability reports stay local: only the roll-up is read by another
