@@ -88,6 +88,14 @@ In the hand-over, give the reproducer and each sibling a value line: `<test> —
 <behavior>; fails_when: <the defect returns>; why_new: <why no existing test caught it>`. The
 reproducer's `why_new` is the gap that let the bug ship.
 
+The same commit carries the fix record, `product/fixes/<slug>.md`, in the format in
+`references/fix-record-format.md`, when the cause is in this repo's code or config. Look for an
+uncommitted record with `status: diagnosed` (`git status --porcelain product/fixes/`), which
+`ceh-coding-conduct:find-root-cause` leaves: fill its Fix section with the value lines and set
+`status: fixed`. With none, create one with `status: fixed`, the reproducer as the Symptom, the
+cause as known from the report, and `plan:` set from the fixed `file:line` as the format says. The
+commit says what changed, and the record keeps why, for whoever touches this code next.
+
 ### When it used to work — bisect on the reproducer
 
 A reproducer is not only a test; it is a decision procedure. If the behavior was correct at some

@@ -9,6 +9,36 @@ before this repo live in
 
 ---
 
+## 2026-10-13
+
+Bug fixes now leave a committed record. A fix skips the build plan, because the bug already says
+what to build, but its reason lived only in the chat: `find-root-cause` printed its diagnosis and
+saved nothing. Every fix now commits `product/fixes/<slug>.md` with the symptom, the hypotheses and
+the evidence that decided them, the cause, and the regression tests. `find-root-cause` writes it,
+and `test-a-bug-fix` completes it, or creates it when the cause was known from the report. The
+record rides in the fix commit, so `git log` on the file finds the fix. A record whose fix never
+lands here, because the bug did not reproduce or the cause is in a dependency, is committed alone
+so the investigation is not lost. Records are written only for causes in the repo's code or
+config, name the built plan that delivered the broken code in `plan:`, and link an earlier record
+of the same bug in `previous:`, which `find-root-cause` now searches for before it forms
+hypotheses. A fix that changes a contract or the design still goes through a build plan. The
+change was planned in `product/plans/fix-records.md`.
+
+### Plugin versions
+
+| Plugin               | Version |
+| -------------------- | ------- |
+| `ceh-coding-conduct` | 2.2.6   |
+| `ceh-testing`        | 1.4.3   |
+
+### Changed
+
+- `ceh-coding-conduct:find-root-cause` searches `product/fixes/` for earlier records, and saves
+  its hand-over as a fix record, with `status: unreproduced` when the symptom never goes red.
+- `ceh-testing:test-a-bug-fix` commits the fix record with the fix and its tests.
+- `docs/STRATEGY.md` lists fix records among the kept files, and `docs/CROSS_REFERENCES.md`
+  registers the shared `fix-record-format.md`.
+
 ## 2026-10-11
 
 The contract now covers parallel subagents that edit files. It already said to fan out

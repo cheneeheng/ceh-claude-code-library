@@ -22,14 +22,14 @@ its prerequisites, hooks, and environment variables.
 
 ### Coding Conduct (`ceh-coding-conduct`)
 
-| Skill                 | Invoke                                | When                                                                                                                                       |
-| --------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Agent Coding Contract | Model-only, no slash command          | Start of any coding session (auto via SessionStart hook) — core rules, five-step workflow, stop conditions, non-goals                      |
-| Write Less Code       | Model-only, no slash command          | Every coding session (auto — per-turn digest via hook) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line)        |
-| Shrink Diff           | `/ceh-coding-conduct:shrink-diff`     | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main`                            |
-| Refactor Repo         | `/ceh-coding-conduct:refactor-repo`   | Manual only — propose-then-apply refactor campaign over the whole repo or a named module                                                   |
-| Find Root Cause       | `/ceh-coding-conduct:find-root-cause` | Something is broken and the cause is unknown, before any fix: reproduce, falsifiable hypotheses, evidence, a cause confirmed by prediction |
-| Sketch Design         | `/ceh-coding-conduct:sketch-design`   | Before the code for a feature that adds a type, module, or called function: types, signatures, boundaries, then four checks on the sketch  |
+| Skill                 | Invoke                                | When                                                                                                                                                                                  |
+| --------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Agent Coding Contract | Model-only, no slash command          | Start of any coding session (auto via SessionStart hook) — core rules, five-step workflow, stop conditions, non-goals                                                                 |
+| Write Less Code       | Model-only, no slash command          | Every coding session (auto — per-turn digest via hook) — the minimalism ladder (YAGNI → stdlib → native → installed dep → one line)                                                   |
+| Shrink Diff           | `/ceh-coding-conduct:shrink-diff`     | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main`                                                                       |
+| Refactor Repo         | `/ceh-coding-conduct:refactor-repo`   | Manual only — propose-then-apply refactor campaign over the whole repo or a named module                                                                                              |
+| Find Root Cause       | `/ceh-coding-conduct:find-root-cause` | Something is broken and the cause is unknown, before any fix: reproduce, falsifiable hypotheses, evidence, a cause confirmed by prediction, saved as a fix record in `product/fixes/` |
+| Sketch Design         | `/ceh-coding-conduct:sketch-design`   | Before the code for a feature that adds a type, module, or called function: types, signatures, boundaries, then four checks on the sketch                                             |
 
 ### Codebase Explanation (`ceh-codebase-explanation`)
 
@@ -59,7 +59,7 @@ its prerequisites, hooks, and environment variables.
 
 | Skill                     | Invoke                                   | When                                                                                                                                                         |
 | ------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Test a Bug Fix            | `/ceh-testing:test-a-bug-fix`            | A bug, crash, or regression is being fixed: failing test first, prove it goes red without the fix, bisect on it                                              |
+| Test a Bug Fix            | `/ceh-testing:test-a-bug-fix`            | A bug, crash, or regression is being fixed: failing test first, prove it goes red without the fix, bisect on it, commit the fix record with the fix          |
 | Design Test Cases         | Model-only, no slash command             | Deciding which inputs and scenarios to cover: partitions, boundaries, decision tables, state transitions, properties, fuzzing                                |
 | Audit Test Suite          | `/ceh-testing:audit-test-suite`          | Finding out whether a passing suite would catch a defect: assertion quality, mutation testing on the diff, flakiness                                         |
 | Verify Behavior Preserved | `/ceh-testing:verify-behavior-preserved` | Before a refactor, extraction, dependency or runtime upgrade, or port: characterization tests, golden files, a differential run                              |
