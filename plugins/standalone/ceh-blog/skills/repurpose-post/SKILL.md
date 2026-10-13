@@ -118,11 +118,13 @@ overrides the format rules above.
 - **Endings:** each format ends on the post's open thread or a plain link to it, never a lesson and never an engagement prompt. A bare `[link]` is a link, not a CTA.
 - **Highly technical post**: keep the technical language, don't dumb it down.
 - **Personal or emotional post**: preserve the honest voice, don't make it corporate.
-- **Post is on disk**: read it from the file, offer to save the outputs next to it, and don't overwrite the post.
+- **Post is on disk**: read it from the file, and don't overwrite the post.
 
 ## Output
 
 Single format: output directly with a format label. Multiple: `##` heading per format in the order above.
+
+Save each format to its own file, `<slug>-<format>.md` (`thread`, `linkedin`, `tldr`, `newsletter`): next to the post when it is on disk, otherwise in `.agents_workspace/blog/` with the slug from the post's title in kebab case. A re-run overwrites the format files, never the post. Say where they were saved.
 
 After delivering, ask: _"Anything you'd like adjusted — tone, length, a specific tweet, the LinkedIn opener?"_ Also offer **one proactive observation**, something you'd refine even if they're satisfied. Common candidates: opening tweet reads as summary rather than a moment; LinkedIn opener starts with backstory; a banned tell crept in during compression; blurb gives away too much.
 

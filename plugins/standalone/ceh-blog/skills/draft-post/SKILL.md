@@ -307,7 +307,7 @@ they cost the author, not warnings issued to the reader.
 
 **Final draft**: complete post, ready to copy-paste — title; body (subheadings only if length warrants); one-line meta description `> **Meta:** [description]` — ~150 chars, specific angle, readable without the title.
 
-**Where it goes:** inside a blog repo (a posts directory was found), write the post as a new file there, matching the existing posts' filename pattern and front matter; the title and meta description go into the front matter fields the other posts use (`title`, `description`, or equivalent) instead of the `> **Meta:**` line. Mark it as a draft if the front matter has a draft flag. Otherwise output the draft in chat.
+**Where it goes:** inside a blog repo (a posts directory was found), write the post as a new file there, matching the existing posts' filename pattern and front matter; the title and meta description go into the front matter fields the other posts use (`title`, `description`, or equivalent) instead of the `> **Meta:**` line. Mark it as a draft if the front matter has a draft flag. Otherwise save the draft to `.agents_workspace/blog/<YYYY-MM-DD>-<slug>.md`, the slug from the title in kebab case, and show it in chat too, so an interview's post outlives the session.
 
 ## Hands off to
 
