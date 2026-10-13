@@ -35,13 +35,28 @@ The README and the catalog now link every plugin, skill, and agent name to its f
 reader can open a component from the table that lists it. The Invoke column keeps its slash commands
 as plain text, because they are copied, not followed.
 
+Retros now end in fixes, not only in a report. There are two: `diagnose-session` looks back over
+one session and `review-recent-work`, renamed from `write-engineering-retro` because the old name
+did not say it covers a span of time, looks back over a period of git history. Each now names an
+issue and its evidence but leaves the fix to the skill that owns it, and routes every issue by
+kind: a bug to `find-root-cause`, a design change to `write-build-plan`, an agent mistake to
+`prevent-repeat-mistake`, a working rule to `record-project-decisions`. The agent acts on every
+route inside the repo in the same session, and only fixes outside it, such as user settings or an
+installed plugin, are left to the user. Issues fixed here are committed to `product/retros/`,
+because the routed work reads them, and the rest stay local in `.agents_workspace/retros/`.
+`prevent-repeat-mistake` loses its `retro` mode, which duplicated `diagnose-session`, and now saves
+its drafts awaiting approval to `.agents_workspace/repeat-mistakes/`, so a later session can pick
+them up instead of losing them with the chat.
+
 ### Plugin versions
 
-| Plugin               | Version |
-| -------------------- | ------- |
-| `ceh-coding-conduct` | 2.2.6   |
-| `ceh-every-session`  | 2.7.5   |
-| `ceh-testing`        | 1.4.3   |
+| Plugin                  | Version |
+| ----------------------- | ------- |
+| `ceh-coding-conduct`    | 2.2.6   |
+| `ceh-every-session`     | 2.7.6   |
+| `ceh-git-workflow`      | 1.3.0   |
+| `ceh-session-diagnosis` | 1.0.3   |
+| `ceh-testing`           | 1.4.3   |
 
 ### Changed
 
@@ -51,6 +66,17 @@ as plain text, because they are copied, not followed.
 - `docs/STRATEGY.md` lists fix records among the kept files, and `docs/CROSS_REFERENCES.md`
   registers the shared `fix-record-format.md`.
 - `README.md` and `docs/CATALOG.md` link each plugin, skill, and agent name to its folder or file.
+- `ceh-git-workflow:write-engineering-retro` is renamed `ceh-git-workflow:review-recent-work`. Its
+  "at most three changes" become at most three issues, each with evidence and a route, and the
+  retro saves to `product/retros/<date>-period.md`. A typed `/write-engineering-retro` no longer
+  resolves.
+- `ceh-session-diagnosis:diagnose-session` routes each root cause by the same table, acts on the
+  in-scope routes, and saves to `product/retros/` (scrubbed) and `.agents_workspace/retros/`
+  instead of `.agents_workspace/session-diagnosis/`.
+- `ceh-every-session:prevent-repeat-mistake` drops its `retro` mode, starts by listing drafts
+  still awaiting approval, and saves to `.agents_workspace/repeat-mistakes/<date>.md`.
+- `docs/STRATEGY.md` lists retro reports among the kept files, and `docs/CROSS_REFERENCES.md`
+  registers the shared route table.
 
 ### Fixed
 

@@ -501,6 +501,21 @@ names what would settle it.
 signposting, the default em dash, the restating closer) and "replace with the specific thing, or
 delete".
 
+## Retro routing and report location
+
+**Canonical:** `plugins/standalone/ceh-git-workflow/skills/review-recent-work/SKILL.md` — § Procedure step 6 + § Output, first paragraph
+
+| Copy                                                                        | Section                                        | Diverges                                                                                                                                    |
+| --------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-session-diagnosis/skills/diagnose-session/SKILL.md` | § Procedure step 6 + § Output, first paragraph | routes root causes, not issues; a Claude Code cause is always out of scope; the committed file is scrubbed; file kind `session-<id-prefix>` |
+
+**Shared:** the route table word for word (bug to `find-root-cause`, feature or design to
+`write-build-plan`, agent mistake to `prevent-repeat-mistake`, working rule to
+`record-project-decisions`, anything else in the repo fixed directly, outside the repo left for the
+user), acting on every in-scope route in the same session, an uninstalled route left open, and the
+split save: in-scope issues committed to `product/retros/<YYYY-MM-DD>-<kind>.md`, out-of-scope ones
+local in `.agents_workspace/retros/`, each file linking the other.
+
 ---
 
 ## Update protocol

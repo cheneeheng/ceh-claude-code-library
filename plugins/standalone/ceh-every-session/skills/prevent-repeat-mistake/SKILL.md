@@ -4,7 +4,7 @@ description: >-
   Load this skill when the same mistake has happened more than once: pick the strongest fix that
   would have caught it (a setting or check before written guidance) and prove it on the real
   mistake. Trigger on "you did X again", "I keep telling you", "make sure this never happens again".
-argument-hint: "[the mistake | retro]"
+argument-hint: "[the mistake]"
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -19,12 +19,14 @@ waiting for the user's approval.
 
 ## Procedure
 
-1. **Name the mistake from evidence.** Quote what went wrong: the tool call, the file and line,
+1. **Pick up pending drafts.** Read `.agents_workspace/repeat-mistakes/` and list every fix still
+   `awaiting approval` before taking a new mistake, so a draft from an earlier session is not lost.
+2. **Name the mistake from evidence.** Quote what went wrong: the tool call, the file and line,
    the wrong output, and the correction that preceded it. "Was sloppy" is not a mistake, "wrote
    dates as `10/09/2026` in `roadmap.md:14` after being told ISO dates" is. If you cannot quote it,
-   stop: there is nothing to fix yet. In `retro` mode, list every correction from this session that
-   happened twice or more, then run steps 2 to 5 on each, most costly first, at most five.
-2. **Climb the ladder, strongest first.** Stop at the first rung that would have caught this exact
+   stop: there is nothing to fix yet. To find the mistakes in a whole session rather than one,
+   `ceh-session-diagnosis:diagnose-session` reads its transcript and routes each one here.
+3. **Climb the ladder, strongest first.** Stop at the first rung that would have caught this exact
    mistake:
 
    | Rung                    | In code                                          | In notes, plans, or documents                                       |
@@ -38,15 +40,15 @@ waiting for the user's approval.
    Rung 5 is for judgment calls nothing mechanical can check. Choosing it for a mistake that a
    pattern match would catch is choosing the rung that already failed.
 
-3. **Build or draft the fix.** Build rungs 3 and 4 when they live in the current repository and
+4. **Build or draft the fix.** Build rungs 3 and 4 when they live in the current repository and
    touch nothing else: they are checks that prove work, and the contract allows them. Draft, do
    not apply, anything that changes how later sessions behave or rewrites the user's content:
    rung 1, rung 2, a hook, and every rung 5 edit (`CLAUDE.md`, memory, a skill, a plugin). Show the
    draft and wait for approval.
-4. **Prove it.** Replay the real mistake against the fix and show it fails, then show the correct
+5. **Prove it.** Replay the real mistake against the fix and show it fails, then show the correct
    version passes. Keep the failing case as a test or fixture where the repo has a place for one.
    A rung 5 fix cannot be proven this way: say so, and say why no higher rung fit.
-5. **Report** in the format under Output.
+6. **Save and report** in the format under Output.
 
 ## Rules
 
@@ -59,10 +61,16 @@ waiting for the user's approval.
 
 ## Output
 
+Save to `.agents_workspace/repeat-mistakes/<YYYY-MM-DD>.md`, appending when the file exists, and
+reply with the same table. Each fix `awaiting approval` carries its full draft below the table, so
+a later session can apply it from the file alone. When a draft is applied or rejected, update its
+Status in the file it was saved in.
+
 ```markdown
-| Mistake    | Evidence                        | Rung  | Fix                         | Proof                                           | Status                        |
-| ---------- | ------------------------------- | ----- | --------------------------- | ----------------------------------------------- | ----------------------------- |
-| <one line> | <path:line or quoted tool call> | <1-5> | <what was added or drafted> | <fails on the real mistake: yes / not provable> | <applied / awaiting approval> |
+| Mistake    | Evidence                        | Rung  | Fix                         | Proof                                           | Status                                   |
+| ---------- | ------------------------------- | ----- | --------------------------- | ----------------------------------------------- | ---------------------------------------- |
+| <one line> | <path:line or quoted tool call> | <1-5> | <what was added or drafted> | <fails on the real mistake: yes / not provable> | <applied / awaiting approval / rejected> |
 ```
 
-Below the table, for each rung chosen, one line on why the rungs above it did not fit.
+Below the table, for each rung chosen, one line on why the rungs above it did not fit, then each
+pending draft in full.
