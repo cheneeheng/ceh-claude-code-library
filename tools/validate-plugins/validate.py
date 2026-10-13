@@ -599,7 +599,8 @@ def check_hooks() -> None:
                 continue
             if script.suffix == ".sh" and not bash:
                 continue
-            cmd = [sys.executable] if script.suffix == ".py" else [bash]
+            # -I -S as in hooks.json, so a script that needs site-packages fails here too.
+            cmd = [sys.executable, "-I", "-S"] if script.suffix == ".py" else [bash]
             stdin = json.dumps({"session_id": f"fixture-{i}", **f["stdin"]})
             env = {**base_env, **f.get("env", {})}
             for _ in range(f.get("repeat", 1)):

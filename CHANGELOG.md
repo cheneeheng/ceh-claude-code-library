@@ -55,6 +55,16 @@ its settled answers when there was no plan file. The reviews (`code-review` with
 lost the findings their author still had to act on. Each now writes to a folder in the git-ignored
 `.agents_workspace/`, because only its author reads it, and names the path in the reply.
 
+The tool hooks now cost less on every edit. Each `Edit` waited about 560 ms for `branch-guard`
+before it and `usage-limit-watch` after it, almost all of it Python start-up, not the scripts'
+work. The hooks now run `python3 -I -S`, which skips `site` and any `.pth` finders it loads: the
+scripts use only the stdlib. `branch-guard` now spawns git once on a feature branch instead of five
+times. It asks one `rev-parse` for the work tree, the shared git directory, and the branch, and it
+reads `origin/HEAD` as a file. It checks the session's repository only when the branch is a default
+one. Measured on Windows with the real `python.exe`, the two hooks went from about 300 ms each to
+about 175 ms. The `python3` App execution alias adds about 130 ms more per hook, which only the
+user's PATH can remove.
+
 ### Plugin versions
 
 | Plugin                  | Version |
@@ -63,8 +73,8 @@ lost the findings their author still had to act on. Each now writes to a folder 
 | `ceh-build-planning`    | 1.1.4   |
 | `ceh-business-plan`     | 1.1.5   |
 | `ceh-coding-conduct`    | 2.2.7   |
-| `ceh-every-session`     | 2.7.8   |
-| `ceh-git-workflow`      | 1.3.1   |
+| `ceh-every-session`     | 2.7.9   |
+| `ceh-git-workflow`      | 1.3.2   |
 | `ceh-session-diagnosis` | 1.0.3   |
 | `ceh-testing`           | 1.4.4   |
 
@@ -103,6 +113,9 @@ lost the findings their author still had to act on. Each now writes to a folder 
 - `ceh-every-session` folded replies keep every line up to the next Topic inside the Topic's
   fold, tables and later paragraphs included. Closing text goes below a `---` line, which the
   output style now requires.
+- `ceh-every-session` and `ceh-git-workflow` hooks start faster: they run `python3 -I -S`, and
+  `ceh-git-workflow`'s `branch-guard.py` spawns git once instead of up to five times.
+  `validate.py` runs the hook fixtures with the same flags.
 
 ## 2026-10-11
 

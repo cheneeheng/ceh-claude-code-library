@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/branch-guard.py\"",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/branch-guard.py\"",
             "timeout": 10
           }
         ]
