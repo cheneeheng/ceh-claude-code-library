@@ -131,7 +131,7 @@
     {
       "name": "ceh-orchestration-lab",
       "source": "./plugins/standalone/ceh-orchestration-lab",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "EXPERIMENTAL. CEH orchestration lab: run real coding tasks under one of two orchestration strategies (plan then implement, or a supervised orchestrate loop) with a cheaper worker model, and log every run for later comparison."
     },
     {

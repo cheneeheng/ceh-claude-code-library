@@ -58,7 +58,7 @@ Do this before reading any code for the task.
 
 ## Ledger
 
-<one line per dispatch: time, worker, what it was asked, what it reported>
+<filled at close by dispatch_ledger.py>
 
 ## Token usage
 
@@ -74,8 +74,11 @@ Do this before reading any code for the task.
 
 ## While the run is open
 
-- Add a Ledger line after every dispatch and every report, at the time it happens. A ledger
-  rebuilt at the end from memory loses the failures.
+- Do not write Ledger lines as you go. Every edit to `run.md` is one more step for this session,
+  and each step re-reads its whole context. The transcript already records every dispatch,
+  resume, and report, failures included, and the close turns it into the Ledger.
+- Write to `run.md` mid-run only what the transcript cannot show: a change to the plan or split,
+  with its reason.
 - Count every time the user steers the work (a correction, a hint, a "stop") as a user
   intervention, and note what they said. An intervention means the strategy did not carry the
   task alone, which is exactly what the comparison needs to know.
@@ -90,10 +93,13 @@ abandoned.
    user decides what lands.
 2. Run `python <plugin root>/scripts/token_usage.py <session id> --since <started>` and paste its table under Token usage. It covers this session and its subagents from the
    start of the run. If it fails, write the error there instead.
-3. Fill Finished, End, Outcome (`solved`, `partial`, `failed`, or `abandoned`, plus one line on
-   why), Dispatches (the number of worker dispatches and resumes), and User interventions.
-4. Ask the user with `AskUserQuestion` for a verdict from 1 (worse than doing it without the
+3. Run `python <plugin root>/scripts/dispatch_ledger.py <session id> --since <started>` and paste
+   its output under Ledger: one line per dispatch, resume, report, and project edit this session
+   made itself. If it fails, write the error there instead.
+4. Fill Finished, End, Outcome (`solved`, `partial`, `failed`, or `abandoned`, plus one line on
+   why), Dispatches (the ledger's count line), and User interventions.
+5. Ask the user with `AskUserQuestion` for a verdict from 1 (worse than doing it without the
    skill) to 5 (clearly better), with an optional note. Write it to Verdict. If they skip it,
    write `not given`.
-5. Update the run's row in `runs.md` with Outcome and Verdict.
-6. Tell the user the run folder path and the outcome in two lines.
+6. Update the run's row in `runs.md` with Outcome and Verdict.
+7. Tell the user the run folder path and the outcome in two lines.

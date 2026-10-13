@@ -65,6 +65,18 @@ one. Measured on Windows with the real `python.exe`, the two hooks went from abo
 about 175 ms. The `python3` App execution alias adds about 130 ms more per hook, which only the
 user's PATH can remove.
 
+`ceh-orchestration-lab:orchestrate` now costs the main session less per run. In the
+tool-directory batch, Opus orchestrating Haiku used 42 main messages and 3.0M cache-read tokens
+against solo Opus's 27 and 1.6M, for work of the same quality. The briefs were the main reason:
+they held the finished text, so Haiku typed what Opus had already written. Eighteen run-log edits
+added more, each one a step that re-read the whole context. A Haiku `Explore` scout now maps the
+code before the split, so the orchestrator no longer reads the files itself. The work goes out as
+two or three pieces, and the orchestrator makes a piece itself when the brief would be more than a
+quarter of the change. Briefs point at files and carry only decisions, constraints, and the check.
+Pieces of similar size go out together in the foreground, so their reports arrive in one step.
+Reviews start from the check result and `git diff --stat`. A new `dispatch_ledger.py` writes the
+Ledger from the transcript at close, so neither skill edits `run.md` per dispatch.
+
 ### Plugin versions
 
 | Plugin                  | Version |
@@ -75,10 +87,17 @@ user's PATH can remove.
 | `ceh-coding-conduct`    | 2.2.7   |
 | `ceh-every-session`     | 2.7.9   |
 | `ceh-git-workflow`      | 1.3.2   |
+| `ceh-orchestration-lab` | 1.0.2   |
 | `ceh-session-diagnosis` | 1.0.3   |
 | `ceh-testing`           | 1.4.4   |
 
 ### Changed
+
+- `ceh-orchestration-lab:orchestrate` scouts first, splits into two or three pieces, makes a piece
+  itself when briefing it costs more, briefs by reference, dispatches same-size pieces in the
+  foreground, and reviews by check and diffstat first. `ceh-orchestration-lab:plan-then-implement`
+  no longer logs dispatches as it goes. `scripts/dispatch_ledger.py` writes the Ledger for both at
+  close.
 
 - `ceh-coding-conduct:find-root-cause` searches `product/fixes/` for earlier records, and saves
   its hand-over as a fix record, with `status: unreproduced` when the symptom never goes red.
