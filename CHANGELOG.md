@@ -31,6 +31,10 @@ mod a format it can parse without guessing: a Topic's body runs to the next bold
 closing text that belongs to no Topic sits below a `---` line. The record is
 `product/fixes/folded-topic-keeps-its-whole-body.md`.
 
+The README and the catalog now link every plugin, skill, and agent name to its folder or file, so a
+reader can open a component from the table that lists it. The Invoke column keeps its slash commands
+as plain text, because they are copied, not followed.
+
 ### Plugin versions
 
 | Plugin               | Version |
@@ -46,6 +50,7 @@ closing text that belongs to no Topic sits below a `---` line. The record is
 - `ceh-testing:test-a-bug-fix` commits the fix record with the fix and its tests.
 - `docs/STRATEGY.md` lists fix records among the kept files, and `docs/CROSS_REFERENCES.md`
   registers the shared `fix-record-format.md`.
+- `README.md` and `docs/CATALOG.md` link each plugin, skill, and agent name to its folder or file.
 
 ### Fixed
 
