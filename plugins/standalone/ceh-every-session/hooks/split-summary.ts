@@ -20,19 +20,25 @@ export const split = (text: string): { table: string; sections: Section[] } | nu
     if (cells[1] && cells[2]) rowNumber.set(cells[2], cells[1])
   }
 
-  // A section's body is what the style puts under a Topic: a run of bullets,
-  // or one paragraph. The first line past it ends the body, and everything
-  // from there to the next Topic is `after`, drawn as is outside the fold.
+  // A section's body is everything from its Topic to the next Topic, tables and
+  // code blocks included. A `---` line, the style's marker for closing text,
+  // ends the body: what follows it up to the next Topic is `after`, drawn as is
+  // outside the fold. Text before the first Topic folds under "Details".
   const sections: Section[] = []
   let current: Section | undefined
-  let shape: 'empty' | 'list' | 'paragraph' | 'paragraphEnded' | 'ended' = 'empty'
+  let isClosed = false
   let inFence = false
   for (const line of lines.slice(end)) {
+    if (/^\s*(```|~~~)/.test(line)) inFence = !inFence
     const topic = inFence ? undefined : /^\*\*(.+)\*\*\s*$/.exec(line)?.[1]
     if (topic !== undefined) {
       current = { number: rowNumber.get(topic), topic, body: '', after: '' }
       sections.push(current)
-      shape = 'empty'
+      isClosed = false
+      continue
+    }
+    if (!inFence && /^\s*---+\s*$/.test(line)) {
+      isClosed = true
       continue
     }
     if (!current) {
@@ -41,19 +47,7 @@ export const split = (text: string): { table: string; sections: Section[] } | nu
       sections.push(current)
     }
 
-    // A fenced code block goes where the line before it went and leaves the
-    // shape as it found it, so bullets after a code block stay in the body.
-    const isFence = /^\s*(```|~~~)/.test(line)
-    if (isFence) inFence = !inFence
-    const isBlank = !line.trim()
-    const isListLine: boolean = /^\s*([-*+]|\d+[.)])\s/.test(line) || (shape === 'list' && /^\s+\S/.test(line))
-    if (isFence || inFence) {
-      // the shape stays as it was
-    } else if (shape === 'empty' && !isBlank) shape = isListLine ? 'list' : 'paragraph'
-    else if (shape === 'paragraph' && isBlank) shape = 'paragraphEnded'
-    else if (!isBlank && (shape === 'paragraphEnded' || (shape === 'list' && !isListLine))) shape = 'ended'
-
-    if (shape === 'ended') current.after += `${line}\n`
+    if (isClosed) current.after += `${line}\n`
     else current.body += `${line}\n`
   }
   if (sections.length === 0) return null

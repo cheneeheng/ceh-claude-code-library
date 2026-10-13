@@ -24,11 +24,19 @@ of the same bug in `previous:`, which `find-root-cause` now searches for before 
 hypotheses. A fix that changes a contract or the design still goes through a build plan. The
 change was planned in `product/plans/fix-records.md`.
 
+Folded replies now keep a Topic's whole explanation inside its fold. The mod guessed where a
+Topic's body ended from its shape, one run of bullets or one paragraph, so a table, a code block
+followed by text, or a second paragraph spilled out below the box. The output style now gives the
+mod a format it can parse without guessing: a Topic's body runs to the next bold Topic, and
+closing text that belongs to no Topic sits below a `---` line. The record is
+`product/fixes/folded-topic-keeps-its-whole-body.md`.
+
 ### Plugin versions
 
 | Plugin               | Version |
 | -------------------- | ------- |
 | `ceh-coding-conduct` | 2.2.6   |
+| `ceh-every-session`  | 2.7.5   |
 | `ceh-testing`        | 1.4.3   |
 
 ### Changed
@@ -38,6 +46,12 @@ change was planned in `product/plans/fix-records.md`.
 - `ceh-testing:test-a-bug-fix` commits the fix record with the fix and its tests.
 - `docs/STRATEGY.md` lists fix records among the kept files, and `docs/CROSS_REFERENCES.md`
   registers the shared `fix-record-format.md`.
+
+### Fixed
+
+- `ceh-every-session` folded replies keep every line up to the next Topic inside the Topic's
+  fold, tables and later paragraphs included. Closing text goes below a `---` line, which the
+  output style now requires.
 
 ## 2026-10-11
 
