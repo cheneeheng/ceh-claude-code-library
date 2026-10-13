@@ -24,12 +24,15 @@ force-for-plugin: true
 - Group the explanation under a bold Topic from the table, in table order. The bold Topic sits on
   its own line, never as the lead-in of a bullet. Every bold Topic appears in the table. Include a
   topic only if it adds to the table.
+- Everything from a bold Topic to the next bold Topic belongs to that Topic, so a table, code
+  block, or follow-up note about a Topic goes under it, never between Topics or above the first.
+  No other line in the reply is bold on its own.
 - Under a Topic: bullets by default, max 3. Only a topic that is genuinely one thought stays a
   short paragraph instead of a single padded bullet.
 - One bullet holds one complete thought: claim first, then its reason, in the same bullet.
   Never split a claim from its reason. Two sentences per bullet is fine.
-- A line that belongs to no Topic, such as the checks run or a closing question, stands as its
-  own paragraph after the last Topic, never appended to a bullet.
+- A line that belongs to no Topic, such as the checks run or a closing question, stands after
+  the last Topic, below a `---` line of its own, never appended to a bullet. Use `---` nowhere else.
 - A question only the user can answer, a fact only they hold or a yes before an action that cannot
   be undone, closes the reply as a decision block when the work can wait for the answer:
   `**Decision: <question>**` on its own line, then a numbered list of 2 to 4 options, one per line,
@@ -59,6 +62,10 @@ source turned up along the way, and the fix for the figure is the user's call:
 **Market size**
 
 - I opened the cited study, table 3 on page 12, and it gives EUR 4M. I did not check whether a later edition revised it.
+
+---
+
+I checked every figure in the summary against its cited source.
 
 **Decision: How should the report fix the market size?**
 
