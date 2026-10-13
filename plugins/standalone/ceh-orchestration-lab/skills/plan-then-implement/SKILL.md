@@ -36,8 +36,8 @@ no task, the task is the user's most recent request.
 3. **Hand off.** Dispatch one `ceh-orchestration-lab:implementer` with the Agent tool, `model`
    set to the worker model. Its prompt is the task verbatim, then the plan, then this line:
    "Follow the plan, but trust the code and the task over the plan where they disagree, and
-   report every disagreement." Log the dispatch in the Ledger.
-4. **Check.** When it reports, log the report, then run the plan's proving command yourself and
+   report every disagreement."
+4. **Check.** When it reports, run the plan's proving command yourself and
    read `git diff --stat`. Passing means the command passes and the diff touches what the plan
    named.
 5. **Fix up once, at most.** If the check fails, resume the same implementer with `SendMessage`,

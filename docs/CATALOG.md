@@ -231,10 +231,10 @@ its prerequisites, hooks, and environment variables.
 
 Experimental, and user-invoked only.
 
-| Skill                                                                                                  | Invoke                                       | When                                                                                                                                           |
-| ------------------------------------------------------------------------------------------------------ | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Plan Then Implement](../plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/SKILL.md) | `/ceh-orchestration-lab:plan-then-implement` | Trying a task as one plan and one handoff: this session plans, one implementer on a cheaper model carries it out, the run is logged            |
-| [Orchestrate](../plugins/standalone/ceh-orchestration-lab/skills/orchestrate/SKILL.md)                 | `/ceh-orchestration-lab:orchestrate`         | Trying a task as a supervised loop: this session briefs and reviews, implementers on a cheaper model do every edit and test, the run is logged |
+| Skill                                                                                                  | Invoke                                       | When                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Plan Then Implement](../plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/SKILL.md) | `/ceh-orchestration-lab:plan-then-implement` | Trying a task as one plan and one handoff: this session plans, one implementer on a cheaper model carries it out, the run is logged                                                   |
+| [Orchestrate](../plugins/standalone/ceh-orchestration-lab/skills/orchestrate/SKILL.md)                 | `/ceh-orchestration-lab:orchestrate`         | Trying a task as a supervised loop: a scout maps the code, this session splits, briefs and reviews, implementers on a cheaper model do the pieces worth delegating, the run is logged |
 
 ---
 

@@ -17,10 +17,10 @@ strategies.
 
 Both are user-invoked only, so a run is always a deliberate choice.
 
-| Skill                 | When to run it                                  | What it does                                                                                                                                                        | It's working if                                                                                                              |
-| --------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `plan-then-implement` | A task you want to try as one plan, one handoff | This session reads the code and writes a complete plan, one `implementer` on the worker model (default `sonnet`) carries it out, with at most one fix-up resume     | A run folder appears before any code is read, the plan is written into `run.md`, and this session never edits a project file |
-| `orchestrate`         | A task you want to try as a supervised loop     | This session splits the work into briefs and reviews each report, `implementer` workers (default `haiku`) do every edit and every test run, resumed when incomplete | A run folder appears first, the Ledger gains a line per dispatch, and the token table shows most output on the worker model  |
+| Skill                 | When to run it                                  | What it does                                                                                                                                                                                                                                                                                                 | It's working if                                                                                                                      |
+| --------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `plan-then-implement` | A task you want to try as one plan, one handoff | This session reads the code and writes a complete plan, one `implementer` on the worker model (default `sonnet`) carries it out, with at most one fix-up resume                                                                                                                                              | A run folder appears before any code is read, the plan is written into `run.md`, and this session never edits a project file         |
+| `orchestrate`         | A task you want to try as a supervised loop     | An `Explore` scout maps the code, this session splits the work into two or three pieces, briefs the ones worth delegating by pointing at files rather than copying them, and reviews each report by its check and diffstat. `implementer` workers (default `haiku`) do those pieces, resumed when incomplete | A run folder appears first, the plan marks each piece `worker` or `self`, and briefs carry constraints and checks, not finished text |
 
 **Manual trigger:** `/ceh-orchestration-lab:plan-then-implement [model] [task]` or
 `/ceh-orchestration-lab:orchestrate [model] [task]`, where `[model]` is `haiku`, `sonnet`,
@@ -58,7 +58,7 @@ Each run writes to the target project, not this repo:
 .agents_workspace/orchestration-lab/
 ├── runs.md                                   # one row per run: started, project, strategy, models, outcome, verdict
 └── 20261009-140211_<session-id>/
-    ├── run.md                                # fields, task, plan or briefs, ledger, token usage, notes
+    ├── run.md                                # fields, task, plan or briefs, ledger (written at close), token usage, notes
     ├── base.diff                             # only when the tree was dirty at the start
     └── final.diff                            # git diff from the base commit at the end
 ```
@@ -66,11 +66,15 @@ Each run writes to the target project, not this repo:
 The folder name sorts by start time and carries the session ID, which also names the transcript
 at `~/.claude/projects/<project>/<session-id>.jsonl`. At the close of a run,
 `scripts/token_usage.py` reads that transcript and its subagent transcripts and writes the token
-counts by model, from the run's start time on, into `run.md`. You can run it by hand on any
-session:
+counts by model, from the run's start time on, into `run.md`. `scripts/dispatch_ledger.py` reads
+the same transcript and writes the Ledger: every dispatch with its model, mode, and brief length,
+every resume and report, and every project edit the main session made itself. The session writes
+no Ledger lines while the run is open, because each edit is one more step that re-reads its whole
+context. You can run both by hand on any session:
 
 ```bash
 python scripts/token_usage.py <session-id> [--since 2026-10-09T14:02:11Z]
+python scripts/dispatch_ledger.py <session-id> [--since 2026-10-09T14:02:11Z]
 ```
 
 The skills never commit. If `.agents_workspace/` is not git-ignored in the target project, add it,
@@ -78,8 +82,12 @@ or the run folders show up as untracked files.
 
 ## Reading the results
 
-- **Output share by model** is the delegation check. If an `orchestrate` run shows most output on
-  the main model, delegation did not happen and the run says little about the strategy.
+- **Output share by model** is the delegation check. `orchestrate` lets the main session make a
+  piece itself when briefing it would cost more than doing it, so compare the share with the
+  ledger's self-edits: a high main share with no self-edits means the briefs carried the work.
+- **Main-session messages and cache reads** are the overhead check. Every step the main session
+  takes re-reads its context, so an `orchestrate` run with more main messages than a solo run of
+  the same task spent its savings on coordination.
 - **User interventions** count every time you had to steer. A strategy that solves tasks only with
   your help is not carrying them.
 - **Verdict** is your 1 to 5 judgment against doing the task without the skill. It is the one
