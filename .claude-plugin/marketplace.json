@@ -11,7 +11,7 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.7.8",
+      "version": "2.7.9",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, context economy via delegated bulk reads, and replies folded to their summary table."
     },
     {
@@ -29,7 +29,7 @@
     {
       "name": "ceh-git-workflow",
       "source": "./plugins/standalone/ceh-git-workflow",
-      "version": "1.3.1",
+      "version": "1.3.2",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, code review, and addressing review comments. Stack-agnostic."
     },
     {

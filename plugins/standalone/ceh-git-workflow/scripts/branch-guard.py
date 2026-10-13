@@ -70,19 +70,40 @@ def main():
     while cwd and not os.path.isdir(cwd):
         parent = os.path.dirname(cwd)
         cwd = "" if parent == cwd else parent
-    if not cwd or git(cwd, "rev-parse", "--is-inside-work-tree") != "true":
+    if not cwd:
         return
-    # Another repository's branch is not this session's business.
-    if repo_id(cwd) != repo_id(payload.get("cwd") or os.getcwd()):
+    # One git spawn for all three answers: each spawn costs ~30 ms on Windows, every edit.
+    # Fails outside a work tree and on an unborn HEAD, so the list comes back short.
+    info = git(
+        cwd,
+        "rev-parse",
+        "--is-inside-work-tree",
+        "--path-format=absolute",
+        "--git-common-dir",
+        "--abbrev-ref",
+        "HEAD",
+    ).splitlines()
+    if len(info) != 3 or info[0] != "true":
+        return
+    common, branch = info[1], info[2]
+    if branch == "HEAD":  # detached
         return
 
-    branch = git(cwd, "rev-parse", "--abbrev-ref", "HEAD")
-    if not branch or branch == "HEAD":  # detached or unborn
-        return
-
-    default = git(cwd, "symbolic-ref", "--quiet", "refs/remotes/origin/HEAD")
+    # origin/HEAD is a plain file in the files backend: reading it saves a spawn.
+    try:
+        default = (Path(common) / "refs/remotes/origin/HEAD").read_text(
+            encoding="utf-8"
+        )
+        default = default.strip().removeprefix("ref: ")
+    except OSError:
+        default = git(cwd, "symbolic-ref", "--quiet", "refs/remotes/origin/HEAD")
     default = default.removeprefix("refs/remotes/origin/")
     if branch not in (default, "main", "master"):
+        return
+
+    # Another repository's branch is not this session's business.
+    session_repo = repo_id(payload.get("cwd") or os.getcwd())
+    if os.path.normcase(os.path.normpath(common)) != session_repo:
         return
 
     n = denial_number(payload)
