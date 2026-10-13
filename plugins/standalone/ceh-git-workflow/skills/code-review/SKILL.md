@@ -141,3 +141,8 @@ threads.
 | **Request changes** | One or more `[blocking]` comments. Say what must change to flip to approve.        |
 | **Comment**         | Questions outstanding, or not your call to approve — no verdict yet.               |
 | **Cannot verify**   | Correctness rests on code, config, or data outside the diff. Name what settles it. |
+
+When the comments are posted on a PR, the PR is the record. Otherwise (a local diff, or comments
+not posted) save the summary, the line comments, and the verdict to
+`.agents_workspace/code-reviews/<branch>-<YYYY-MM-DD>.md`, so the author can work through them in a
+later session, and name the path in the reply.

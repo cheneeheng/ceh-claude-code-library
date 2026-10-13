@@ -48,15 +48,25 @@ because the routed work reads them, and the rest stay local in `.agents_workspac
 its drafts awaiting approval to `.agents_workspace/repeat-mistakes/`, so a later session can pick
 them up instead of losing them with the chat.
 
+Nine skills that answered only in chat now also save what they produce, so the work outlives the
+session. The blog skills lost a whole post when no blog repo was found, and `stress-test-plan` lost
+its settled answers when there was no plan file. The reviews (`code-review` without a PR,
+`review-build-plan`, `review-business-plan`, `audit-test-suite`) and the `refactor-repo` report
+lost the findings their author still had to act on. Each now writes to a folder in the git-ignored
+`.agents_workspace/`, because only its author reads it, and names the path in the reply.
+
 ### Plugin versions
 
 | Plugin                  | Version |
 | ----------------------- | ------- |
-| `ceh-coding-conduct`    | 2.2.6   |
-| `ceh-every-session`     | 2.7.6   |
-| `ceh-git-workflow`      | 1.3.0   |
+| `ceh-blog`              | 1.0.9   |
+| `ceh-build-planning`    | 1.1.4   |
+| `ceh-business-plan`     | 1.1.5   |
+| `ceh-coding-conduct`    | 2.2.7   |
+| `ceh-every-session`     | 2.7.7   |
+| `ceh-git-workflow`      | 1.3.1   |
 | `ceh-session-diagnosis` | 1.0.3   |
-| `ceh-testing`           | 1.4.3   |
+| `ceh-testing`           | 1.4.4   |
 
 ### Changed
 
@@ -73,6 +83,14 @@ them up instead of losing them with the chat.
 - `ceh-session-diagnosis:diagnose-session` routes each root cause by the same table, acts on the
   in-scope routes, and saves to `product/retros/` (scrubbed) and `.agents_workspace/retros/`
   instead of `.agents_workspace/session-diagnosis/`.
+- Chat-only output is now saved under `.agents_workspace/`: `ceh-blog:draft-post`,
+  `ceh-blog:edit-post`, and `ceh-blog:repurpose-post` in `blog/` (repurposed formats next to the
+  post when it is on disk), `ceh-every-session:stress-test-plan` with no plan file in
+  `stress-tests/`, `ceh-git-workflow:code-review` with no PR in `code-reviews/`,
+  `ceh-build-planning:review-build-plan` in `plan-reviews/`,
+  `ceh-business-plan:review-business-plan` in `business-plan-reviews/`,
+  `ceh-testing:audit-test-suite` in `test-audits/`, and `ceh-coding-conduct:refactor-repo` in
+  `refactor/`. `docs/STRATEGY.md` lists them among the local files.
 - `ceh-every-session:prevent-repeat-mistake` drops its `retro` mode, starts by listing drafts
   still awaiting approval, and saves to `.agents_workspace/repeat-mistakes/<date>.md`.
 - `docs/STRATEGY.md` lists retro reports among the kept files, and `docs/CROSS_REFERENCES.md`

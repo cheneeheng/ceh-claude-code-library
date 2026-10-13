@@ -89,6 +89,10 @@ quotes the plan, and the verdict is delivered.
 Below the table: the questions for the plan's owner, each with a recommended answer, the
 Unverified findings, and, in fix mode, what was edited and what was left open.
 
+Save the whole review to `.agents_workspace/plan-reviews/<slug>-<YYYY-MM-DD>.md`, because the
+Record line keeps only the verdict and counts, and the author fixing the plan in a later session
+needs the findings. Reply with the verdict, the blocking findings, and the path.
+
 ## Hands off to
 
 - On **Ready to build**, when `ceh-build-from-plan` is installed,

@@ -164,14 +164,15 @@ Thought Leadership, Personal Story), each ending on **The Open Thread**.
 
 **Canonical:** `plugins/standalone/ceh-blog/skills/draft-post/SKILL.md` — § Procedure, 1. Read the blog first ("Finding the blog") + § Output ("Where it goes")
 
-| Copy                                                    | Section                                                                 | Diverges                                                                                                                                                       |
-| ------------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-blog/skills/edit-post/SKILL.md` | § Procedure, 3. Edit ("Series continuity") + § Output ("Where it goes") | looks for earlier posts in the draft's own directory first, and writes the revision back to the draft's file instead of a new one; the diagnosis stays in chat |
+| Copy                                                    | Section                                                                 | Diverges                                                                                                                                                                                                    |
+| ------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-blog/skills/edit-post/SKILL.md` | § Procedure, 3. Edit ("Series continuity") + § Output ("Where it goes") | looks for earlier posts in the draft's own directory first, and writes the revision back to the draft's file instead of a new one, or to `<slug>-edited.md` for a pasted draft; the diagnosis stays in chat |
 
 **Shared:** the lookup order for the blog (a path or URL the user gave, then a posts directory in the
 current repo: `content/`, `posts/`, `_posts/`, `src/content/`, `blog/`), and the destination rule:
 inside a blog repo the post is a file matching the existing posts' filename pattern and front matter,
-with the title and meta description in the front matter, and chat output otherwise.
+with the title and meta description in the front matter, and otherwise a file in
+`.agents_workspace/blog/` named `<YYYY-MM-DD>-<slug>`, shown in chat too.
 
 ## Blog repurpose handoff line
 

@@ -82,6 +82,10 @@ test.
 **Run next:** <skill> for <lens>, then <skill> for <lens>.
 ```
 
+Save the review to `.agents_workspace/business-plan-reviews/<YYYY-MM-DD>.md`, never into the plan,
+which this skill only reads, so the scores survive into the session that runs the next skill. Name
+the path in the reply.
+
 ## Stop conditions
 
 - No plan exists, only an idea → say there is nothing to review yet and name

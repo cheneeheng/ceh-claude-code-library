@@ -79,7 +79,9 @@ The test is who reads the file.
   This follows vision principle 2: a decision that shapes the repo for others belongs in a
   committed file.
 - **Local in `.agents_workspace/`:** what only one session or its author reads. The decision log,
-  session handoffs, research notes, questionnaires, competitor analyses, and scratch work.
+  session handoffs, research notes, questionnaires, competitor analyses, reviews and audits whose
+  author acts on them (plan, code, and test-suite reviews, blog drafts outside a blog repo), and
+  scratch work. A skill whose output would be lost with the chat saves it here.
 
 **`product/` for the builders, `docs/` for users.** Committed handoff files go in `product/` in the
 target repo. `docs/` holds only what users of the product read, so a docs site built from it never
