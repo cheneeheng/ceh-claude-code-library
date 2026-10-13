@@ -67,10 +67,26 @@ test('a reply with a summary table folds each topic behind its own button', asyn
   }
 })
 
-test('closing text below a --- line shows as is, outside its fold', async $ => {
+test('a lead-in line before the summary table shows as is, and the topics still fold', async $ => {
+  const ui = await $.ui.mount({ surface: 'terminal', ...message(`I agree, with one caveat.\n\n${REPLY}`) })
+  expect(await ui.find({ type: 'Markdown', text: /^I agree, with one caveat\.$/ })).toBeDefined()
+  expect(await ui.find({ type: 'Markdown', text: /\| 1 +\| Alpha/ })).toBeDefined()
+  expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
+  expect((await ui.find({ key: 'reply-1#0' }))?.text).toMatch(/▸ 1 Alpha/)
+  await ui.unmount()
+})
+
+test('a reply with two paragraphs before its first table is drawn whole by the engine', async ($, on) => {
+  engineDraws(on)
+  const ui = await $.ui.mount({ surface: 'terminal', ...message(`First point.\n\nSecond point.\n\n${REPLY}`) })
+  expect(await ui.find({ type: 'Button' })).toBeUndefined()
+  await ui.unmount()
+})
+
+test('closing text below a --- line shows open in its own box, outside its fold', async $ => {
   const reply = `${REPLY}\n\nA beta note.\n  continued beta line\n\n---\n\nDo you want me to go on?\n\nTests: 3 of 3 pass.`
   const ui = await $.ui.mount({ surface: 'terminal', ...message(reply) })
-  expect(await ui.find({ type: 'Markdown', text: /Do you want me to go on\?\s+Tests: 3 of 3 pass\./ })).toBeDefined()
+  expect((await ui.find({ key: 'reply-1#1a' }))?.text).toMatch(/Do you want me to go on\?\s+Tests: 3 of 3 pass\./)
   expect(await ui.find({ text: /continued beta line/ })).toBeUndefined()
 
   await ui.press({ key: 'reply-1#1' })

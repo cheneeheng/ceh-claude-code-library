@@ -59,6 +59,7 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column">
         {!parts && rest.trim() && <Markdown text={rest.trim()} />}
+        {parts?.lead && <Markdown text={parts.lead} />}
         {parts && <Markdown text={parts.table} />}
         {parts?.sections.map((section, index) => {
           const id = `${e.requestId}#${index}`
@@ -73,13 +74,13 @@ export const register: Register = on => {
                   <Text dimColor>{isOpen ? '▾' : '▸'}</Text> {section.number && `${section.number} `}
                   <Text bold={isOpen}>{section.topic}</Text>
                 </Button>
-                {isOpen && (
-                  <Box marginTop={1}>
-                    <Markdown text={section.body.trim()} />
-                  </Box>
-                )}
+                {isOpen && <Markdown text={section.body.trim()} />}
               </Box>
-              {section.after.trim() && <Markdown text={section.after.trim()} />}
+              {section.after.trim() && (
+                <Box key={`${id}a`} flexDirection="column" borderStyle="round" borderDimColor paddingX={1}>
+                  <Markdown text={section.after.trim()} />
+                </Box>
+              )}
             </>
           )
         })}
