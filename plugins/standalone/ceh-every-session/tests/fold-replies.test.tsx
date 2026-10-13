@@ -83,10 +83,10 @@ test('a reply with two paragraphs before its first table is drawn whole by the e
   await ui.unmount()
 })
 
-test('closing text below a --- line shows open in its own box, outside its fold', async $ => {
+test('closing text below a --- line shows open in its own Notes box, outside its fold', async $ => {
   const reply = `${REPLY}\n\nA beta note.\n  continued beta line\n\n---\n\nDo you want me to go on?\n\nTests: 3 of 3 pass.`
   const ui = await $.ui.mount({ surface: 'terminal', ...message(reply) })
-  expect((await ui.find({ key: 'reply-1#1a' }))?.text).toMatch(/Do you want me to go on\?\s+Tests: 3 of 3 pass\./)
+  expect((await ui.find({ key: 'reply-1#1a' }))?.text).toMatch(/^Notes\s*Do you want me to go on\?\s+Tests: 3 of 3 pass\./)
   expect(await ui.find({ text: /continued beta line/ })).toBeUndefined()
 
   await ui.press({ key: 'reply-1#1' })
