@@ -1,7 +1,7 @@
 ---
 name: prevent-repeat-mistake
 description: >-
-  Load this skill when the same mistake has happened more than once: pick the strongest fix that
+  Load this skill when a mistake must not happen again: pick the strongest fix that
   would have caught it (a setting or check before written guidance) and prove it on the real
   mistake. Trigger on "you did X again", "I keep telling you", "make sure this never happens again".
 argument-hint: "[the mistake]"
@@ -12,8 +12,10 @@ license: Apache-2.0
 
 # Prevent a repeat mistake
 
-Turn a mistake that keeps coming back into a fix that stops it, placed at the strongest level that
-works. The files can be anything: code, a knowledge base of notes, plans, a roadmap, a business
+Turn a mistake that must not come back into a fix that stops it, placed at the strongest level that
+works. The mistake may have repeated already, or a retro (`diagnose-session`, `review-recent-work`)
+may have found it once and routed it here: either way, one occurrence quoted from evidence is
+enough to start. The files can be anything: code, a knowledge base of notes, plans, a roadmap, a business
 strategy. Done means each mistake has a fix that is either in place and proven, or drafted and
 waiting for the user's approval.
 
