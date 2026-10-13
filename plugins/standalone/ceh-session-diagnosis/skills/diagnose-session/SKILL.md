@@ -14,8 +14,8 @@ license: Apache-2.0
 
 Find why a session went wrong from its transcript, not from memory of it, and turn each cause into
 a fix. Memory of a session is the agent's own summary, and the summary is where a wrong turn hides.
-Done means every symptom has a root cause backed by cited transcript lines and a routed fix, and
-the report is saved.
+Done means every symptom has a root cause backed by cited transcript lines and a route, every
+route in this repo's scope has been acted on, and the report is saved.
 
 ## Procedure
 
@@ -42,9 +42,21 @@ the report is saved.
    | Model       | Clear, loaded guidance said otherwise and the agent did not follow it | A stronger form: a check or hook, not more prose     |
    | Claude Code | The harness misbehaved: a tool, compaction, or a hook not firing      | A bug report with the cited lines                    |
 
-6. **Route each fix.** Name the file and the change. When the same mistake has happened before
-   and `ceh-every-session` is installed, `ceh-every-session:prevent-repeat-mistake` places the fix
-   at the strongest level that would have caught it.
+6. **Route each root cause**, then act on every route in this repo's scope, in this session. Name
+   the issue and its evidence, not the fix: the routed skill designs the fix.
+
+   | Issue is                                                                                          | Route                                                             |
+   | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+   | A bug in this repo's code or config                                                               | `ceh-coding-conduct:find-root-cause`, which writes the fix record |
+   | A feature or design change in this repo                                                           | `ceh-build-planning:write-build-plan`                             |
+   | An agent mistake a check or guidance in this repo should have stopped                             | `ceh-every-session:prevent-repeat-mistake`                        |
+   | A rule for how work is done in this repo                                                          | `ceh-every-session:record-project-decisions`                      |
+   | Anything else in this repo                                                                        | Fix it directly, with the check that proves it                    |
+   | Outside this repo: user settings or memory, an installed plugin, Claude Code itself, another repo | Left in the report for the user                                   |
+
+   A route whose plugin is not installed stays open in the report, with the route named. A Claude
+   Code root cause is always out of scope: filing its bug report is outward-facing.
+
 7. **Save the report** (see Output).
 
 ## Sharing
@@ -72,7 +84,12 @@ Only when the report will leave this machine (an issue, a bug report, a message 
 
 ## Output
 
-Save to `.agents_workspace/session-diagnosis/<YYYY-MM-DD>-<session-id-prefix>.md`:
+Save by where each fix lands, creating the directory if needed. In-scope root causes go to
+`product/retros/<YYYY-MM-DD>-session-<session-id-prefix>.md`, committed with the first fix it
+routes, because the routed work reads it. Scrub and audit that file first, per Sharing steps 1
+and 2: a committed file leaves the machine on the next push. Out-of-scope root causes, other
+findings, and hypotheses go to `.agents_workspace/retros/<YYYY-MM-DD>-session-<session-id-prefix>.md`,
+local, because only the user acts on them. When both files exist, each links the other.
 
 ```markdown
 # Session diagnosis: <session-id>, <YYYY-MM-DD>
@@ -86,7 +103,8 @@ Save to `.agents_workspace/session-diagnosis/<YYYY-MM-DD>-<session-id-prefix>.md
 
 - **First wrong turn:** `<transcript>:<line>` "<quote>"
 - **Chain:** <first wrong turn> → <step> → <visible failure>, each with its line
-- **Fix:** <file and change>
+- **Route:** <skill, or "user: <where the fix lands>">
+- **Status:** <handed off: <plan, fix record, or commit> / open: <why>>
 
 ## Other findings
 
@@ -97,4 +115,4 @@ One line each, with the lens and citation, for findings no symptom needed.
 Causes believed but not cited, each with what would confirm it.
 ```
 
-Reply with the root causes one line each, their fixes, and the report path.
+Reply with the root causes one line each, their routes and status, and the report paths.

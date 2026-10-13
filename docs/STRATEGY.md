@@ -98,6 +98,14 @@ lifecycle:
   `product/fixes/<slug>.md` with its symptom, diagnosis, cause, and regression tests, written by
   `ceh-coding-conduct:find-root-cause` and `ceh-testing:test-a-bug-fix`. A fix that changes a
   contract or the design is a feature, and goes through `ceh-build-planning:write-build-plan`.
+- **Retro reports are kept when their fixes land here.** A retro looks back over one session
+  (`ceh-session-diagnosis:diagnose-session`) or a period (`ceh-git-workflow:review-recent-work`)
+  and routes each issue to the skill that fixes it: a bug to `find-root-cause`, a design change to
+  `write-build-plan`, an agent mistake to `prevent-repeat-mistake`, a working rule to
+  `record-project-decisions`. The agent acts on every route in the repo in the same session, and
+  commits those issues to `product/retros/<date>-<kind>.md`, scrubbed when they quote a transcript,
+  because the routed work reads them. Issues whose fix lands outside the repo, in user settings,
+  an installed plugin, or Claude Code, stay local in `.agents_workspace/retros/` for the user.
 - **The evidence report is append-only.** `product/EVIDENCE.md` is one file per product, and each run
   adds a dated section at the top, so the section a plan's Record cites never changes. The separate
   QA, performance, security, and usability reports stay local: only the roll-up is read by another
@@ -121,7 +129,8 @@ The likely order next, judged from the current gaps and not yet confirmed by a r
 
 1. **The learning loop catches recurring overrides.** The vision says an override that keeps
    recurring is a plugin defect. `ceh-every-session:prevent-repeat-mistake` fixes one once a human
-   names it, but nothing detects one.
+   names it, and `ceh-session-diagnosis:diagnose-session` finds one inside a session, but nothing
+   notices one recurring across sessions.
 2. **Parallel builds.** Only what Claude Code's native worktrees and subagents lack, per the
    vision's non-goal on rebuilding Claude Code.
 
