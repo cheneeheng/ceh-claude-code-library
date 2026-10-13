@@ -4,12 +4,18 @@ const isTableRow = (line: string) => line.trimStart().startsWith('|')
 const isSeparator = (line: string) => /^\s*\|[\s:|-]+\|\s*$/.test(line)
 
 // A reply that opens with a summary table, split into the table and one
-// section per bold Topic line below it. Null when the reply opens with no
-// table or has nothing below it, so the caller draws the reply whole.
-export const split = (text: string): { table: string; sections: Section[] } | null => {
-  const lines = text.trimStart().split('\n')
-  if (!isTableRow(lines[0] ?? '') || !isSeparator(lines[1] ?? '')) return null
+// section per bold Topic line below it. One paragraph before the table, which
+// the style forbids but the model sometimes writes, is kept as `lead`. Null
+// when the reply opens with no table or has nothing below it, so the caller
+// draws the reply whole.
+export const split = (text: string): { lead: string; table: string; sections: Section[] } | null => {
+  const all = text.trimStart().split('\n')
+  const start = all.findIndex((line, at) => isTableRow(line) && isSeparator(all[at + 1] ?? ''))
+  if (start === -1) return null
+  const lead = all.slice(0, start).join('\n').trim()
+  if (/\n\s*\n/.test(lead)) return null
 
+  const lines = all.slice(start)
   const end = lines.findIndex(line => !isTableRow(line))
   if (end === -1) return null
 
@@ -52,5 +58,5 @@ export const split = (text: string): { table: string; sections: Section[] } | nu
   }
   if (sections.length === 0) return null
 
-  return { table: lines.slice(0, end).join('\n'), sections }
+  return { lead, table: lines.slice(0, end).join('\n'), sections }
 }
