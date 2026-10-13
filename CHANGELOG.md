@@ -63,7 +63,7 @@ lost the findings their author still had to act on. Each now writes to a folder 
 | `ceh-build-planning`    | 1.1.4   |
 | `ceh-business-plan`     | 1.1.5   |
 | `ceh-coding-conduct`    | 2.2.7   |
-| `ceh-every-session`     | 2.7.7   |
+| `ceh-every-session`     | 2.7.8   |
 | `ceh-git-workflow`      | 1.3.1   |
 | `ceh-session-diagnosis` | 1.0.3   |
 | `ceh-testing`           | 1.4.4   |
@@ -91,6 +91,8 @@ lost the findings their author still had to act on. Each now writes to a folder 
   `ceh-business-plan:review-business-plan` in `business-plan-reviews/`,
   `ceh-testing:audit-test-suite` in `test-audits/`, and `ceh-coding-conduct:refactor-repo` in
   `refactor/`. `docs/STRATEGY.md` lists them among the local files.
+- `ceh-every-session:prevent-repeat-mistake` loads when a mistake must not happen again, not only
+  once it has happened twice, because the retros now route a mistake found once to it.
 - `ceh-every-session:prevent-repeat-mistake` drops its `retro` mode, starts by listing drafts
   still awaiting approval, and saves to `.agents_workspace/repeat-mistakes/<date>.md`.
 - `docs/STRATEGY.md` lists retro reports among the kept files, and `docs/CROSS_REFERENCES.md`
