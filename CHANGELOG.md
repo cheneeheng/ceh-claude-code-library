@@ -39,6 +39,12 @@ drops the blank line between an open Topic's title and its text, and puts the cl
 `---` in a dim rounded box like the Topics, so it no longer sits bare between the boxes. The
 record is `product/fixes/folded-reply-with-a-lead-in-line.md`.
 
+A third PR the same day refines that layout. With the blank line gone, an open Topic's text ran
+straight on from its title and read as one block. A terminal draws whole rows, so the gap cannot
+shrink to half a row: the text now starts right below the title, indented two columns, which
+sets the title apart without the extra row. The closing-text box had no title, so it read as an
+unlabelled Topic. It is now titled Notes, with its text indented the same way.
+
 The README and the catalog now link every plugin, skill, and agent name to its folder or file, so a
 reader can open a component from the table that lists it. The Invoke column keeps its slash commands
 as plain text, because they are copied, not followed.
@@ -93,7 +99,7 @@ Ledger from the transcript at close, so neither skill edits `run.md` per dispatc
 | `ceh-build-planning`    | 1.1.4   |
 | `ceh-business-plan`     | 1.1.5   |
 | `ceh-coding-conduct`    | 2.2.7   |
-| `ceh-every-session`     | 2.7.10  |
+| `ceh-every-session`     | 2.7.11  |
 | `ceh-git-workflow`      | 1.3.2   |
 | `ceh-orchestration-lab` | 1.0.2   |
 | `ceh-session-diagnosis` | 1.0.3   |
@@ -143,6 +149,8 @@ Ledger from the transcript at close, so neither skill edits `run.md` per dispatc
 - `ceh-every-session` folded replies still fold when one paragraph comes before the summary
   table. An open Topic's text starts on the line below its title, and the closing text sits in a
   dim rounded box.
+- `ceh-every-session` folded replies indent an open Topic's text two columns under its title, and
+  title the closing-text box Notes.
 - `ceh-every-session` and `ceh-git-workflow` hooks start faster: they run `python3 -I -S`, and
   `ceh-git-workflow`'s `branch-guard.py` spawns git once instead of up to five times.
   `validate.py` runs the hook fixtures with the same flags.

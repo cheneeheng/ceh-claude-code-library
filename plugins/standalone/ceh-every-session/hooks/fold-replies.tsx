@@ -74,11 +74,18 @@ export const register: Register = on => {
                   <Text dimColor>{isOpen ? '▾' : '▸'}</Text> {section.number && `${section.number} `}
                   <Text bold={isOpen}>{section.topic}</Text>
                 </Button>
-                {isOpen && <Markdown text={section.body.trim()} />}
+                {isOpen && (
+                  <Box paddingLeft={2}>
+                    <Markdown text={section.body.trim()} />
+                  </Box>
+                )}
               </Box>
               {section.after.trim() && (
                 <Box key={`${id}a`} flexDirection="column" borderStyle="round" borderDimColor paddingX={1}>
-                  <Markdown text={section.after.trim()} />
+                  <Text bold>Notes</Text>
+                  <Box paddingLeft={2}>
+                    <Markdown text={section.after.trim()} />
+                  </Box>
                 </Box>
               )}
             </>
