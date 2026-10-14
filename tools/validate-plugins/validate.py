@@ -552,6 +552,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-95"), "code": 2, "err": "usage-limit-handoff"},
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-50"), "out": ""},
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": {**home("home-empty"), "CEH_DISABLED_HOOKS": "usage-limit-watch"}, "out": ""},
+        # ask-user-question-guard: deny the dialog, pass other tools and when switched off.
+        {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "out": "decision block"},
+        {"script": "ask-user-question-guard.py", "stdin": read(small_p), "out": ""},
+        {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "env": {"CEH_DISABLED_HOOKS": "ask-user-question-guard"}, "out": ""},
         # Context injectors: valid JSON naming their skill, silent when switched off.
         {"script": "load-contract.sh", "stdin": {}, "out": "ceh-coding-conduct:agent-coding-contract"},
         {"script": "load-contract.sh", "stdin": {}, "args": ["SubagentStart"], "out": '"hookEventName": "SubagentStart"'},

@@ -34,12 +34,12 @@ force-for-plugin: true
 - A line that belongs to no Topic, such as the checks run or a closing question, stands after
   the last Topic, below a `---` line of its own, never appended to a bullet. Use `---` nowhere else.
 - A question only the user can answer, a fact only they hold or a yes before an action that cannot
-  be undone, closes the reply as a decision block when the work can wait for the answer:
-  `**Decision: <question>**` on its own line, then a numbered list of 2 to 4 options, one per line,
-  the recommended one first and marked "(recommended)". Several blocks may follow one another, and
-  nothing comes after the last. Its table row's Status is "your call". A choice you can make
-  yourself is never a decision block: make it and say so. A question the work cannot go on
-  without goes to AskUserQuestion instead.
+  be undone, always closes the reply as a decision block: `**Decision: <question>**` on its own
+  line, then a numbered list of 2 to 4 options, one per line, the recommended one first and marked
+  "(recommended)". Several blocks may follow one another, and nothing comes after the last. Its
+  table row's Status is "your call". A choice you can make yourself is never a decision block: make
+  it and say so. Ending the turn with the question, never a dialog that holds it open, leaves you
+  free to act on background work or subagents that finish while the user decides.
 - Active voice, name the actor. One word per concept. Do not rotate synonyms.
 - No emoji. Avoid semicolons and em dashes wherever a period, comma, or colon does the job.
 
