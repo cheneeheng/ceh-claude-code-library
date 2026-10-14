@@ -9,6 +9,45 @@ before this repo live in
 
 ---
 
+## 2026-10-14
+
+A question for the user now always ends the reply as a decision block, never an `AskUserQuestion`
+dialog. The dialog holds the turn open: in a test, a background command finished while the dialog
+waited, and the model learned of it only after the answer came back. The output style had routed
+by situation, a decision block when the work could wait and the dialog when it could not. Every
+new source of work that runs on while the user decides, such as background tasks, subagents, or a
+future Claude Code feature, would have needed its own exception. A question that ends the turn
+never blocks, so the rule no longer has to list them. A new `PreToolUse` guard,
+`ask-user-question-guard.py`, denies `AskUserQuestion` and tells the model to write a decision
+block instead. Skills in other plugins that name the tool keep working through that redirect, and
+still use the dialog where `ceh-every-session` is not installed.
+
+The guard was added at the user's explicit instruction, before any session showed the model
+breaking the prose rule, which `docs/VISION.md` principle 7 otherwise asks for. The reason: the
+built-in `AskUserQuestion` description, which this repo cannot edit, and `agent-coding-contract`'s
+stop conditions both send the model to the tool, so the prose rule competes with two instructions
+pointing the other way. The panel deliberately copies part of what `AskUserQuestion` does, which
+is not rebuilding Claude Code: what Claude Code lacks is a question that does not hold the turn
+open. The change was planned in `product/plans/decision-blocks-only.md`.
+
+### Plugin versions
+
+| Plugin              | Version |
+| ------------------- | ------- |
+| `ceh-every-session` | 2.7.12  |
+
+### Added
+
+- `ceh-every-session`: `scripts/ask-user-question-guard.py`, a `PreToolUse` guard on
+  `AskUserQuestion`, on by default, switched off by `CEH_DISABLED_HOOKS=ask-user-question-guard`.
+  Three fixtures in `validate.py` cover it.
+
+### Changed
+
+- `ceh-every-session` output style: every user-only question closes the reply as a decision
+  block, with the reason. The "when the work can wait" condition and the `AskUserQuestion`
+  fallback are gone.
+
 ## 2026-10-13
 
 Bug fixes now leave a committed record. A fix skips the build plan, because the bug already says

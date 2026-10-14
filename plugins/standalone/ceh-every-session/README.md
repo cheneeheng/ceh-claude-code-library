@@ -49,9 +49,9 @@ fits the user's situation, and leaves the choice to them.
 
 ## Output style
 
-| Output style                                               | When it applies                                                      | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| ---------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `CEH Every Session` (`output-styles/ceh-every-session.md`) | Every session while the plugin is enabled (`force-for-plugin: true`) | Response format and honesty rules: a numbered # / Topic / Outcome / Status summary table for 2+ topics, the work before the prose, one complete thought per bullet, a closing `**Decision: <question>**` block of numbered options for a fact only the user holds or a yes before an irreversible action, plain "I don't know", and reporting what was verified versus assumed. Sets `keep-coding-instructions: true`, so Claude Code's built-in engineering instructions stay in place for coding sessions. |
+| Output style                                               | When it applies                                                      | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CEH Every Session` (`output-styles/ceh-every-session.md`) | Every session while the plugin is enabled (`force-for-plugin: true`) | Response format and honesty rules: a numbered # / Topic / Outcome / Status summary table for 2+ topics, the work before the prose, one complete thought per bullet, a closing `**Decision: <question>**` block of numbered options for every fact only the user holds or yes before an irreversible action, never an `AskUserQuestion` dialog, plain "I don't know", and reporting what was verified versus assumed. Sets `keep-coding-instructions: true`, so Claude Code's built-in engineering instructions stay in place for coding sessions. |
 
 `force-for-plugin` overrides any `outputStyle` the user set, and if several enabled plugins force a
 style, Claude Code uses the first one loaded. Output styles reach the main conversation and forks
@@ -79,14 +79,15 @@ The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the
 Each hook script is stdlib-only Python, needs `python3` on PATH, and fails open: a hook that blocked
 work on its own bugs would cost more than it saves. One subsection per guard below.
 
-| Guard                                   | Event                         | Script(s)                                       | Default |
-| --------------------------------------- | ----------------------------- | ----------------------------------------------- | ------- |
-| [Usage-limit guard](#usage-limit-guard) | `PostToolUse` (every tool)    | `usage-limit-watch.py`                          | on      |
-| [Bulk-read guards](#bulk-read-guards)   | `PreToolUse` (`Read`, `Bash`) | `bulk-read-guard.py`, `bulk-read-bash-guard.py` | opt-in  |
+| Guard                                   | Event                            | Script(s)                                       | Default |
+| --------------------------------------- | -------------------------------- | ----------------------------------------------- | ------- |
+| [Usage-limit guard](#usage-limit-guard) | `PostToolUse` (every tool)       | `usage-limit-watch.py`                          | on      |
+| [Bulk-read guards](#bulk-read-guards)   | `PreToolUse` (`Read`, `Bash`)    | `bulk-read-guard.py`, `bulk-read-bash-guard.py` | opt-in  |
+| [Question guard](#question-guard)       | `PreToolUse` (`AskUserQuestion`) | `ask-user-question-guard.py`                    | on      |
 
 To switch one hook off without uninstalling the plugin, list its script name in
 `CEH_DISABLED_HOOKS` (comma-separated, no extension): `usage-limit-watch`, `bulk-read-guard`,
-`bulk-read-bash-guard`.
+`bulk-read-bash-guard`, `ask-user-question-guard`.
 
 ### Usage-limit guard
 
@@ -138,6 +139,16 @@ it saves. `BULK_READER_ALLOW` takes colon-separated globs that are never blocked
 (`*.lock:*/migrations/*`) on top of the built-in exclusions for lockfiles, minified assets, images
 and archives. `BULK_READER_MIN_LINES=999999` suspends enforcement for a session without
 unregistering the hooks — useful when doing the very things the skill warns against.
+
+### Question guard
+
+**Before a question dialog** — a `PreToolUse` hook (`scripts/ask-user-question-guard.py`) denies
+every `AskUserQuestion` call and tells the agent to end the reply with a `**Decision: <question>**`
+block instead, which the mod draws as options. The dialog holds the turn open: a background task or
+subagent that finishes while it waits goes unread until the user answers. A decision block ends the
+turn, so the agent is free to act on that result. Skills in other plugins that name
+`AskUserQuestion` keep working, because the denial redirects them. List `ask-user-question-guard`
+in `CEH_DISABLED_HOOKS` to get the dialog back.
 
 Targeted reads always pass: `Read` with `offset`/`limit`, piped or redirected bash
 (`cat f | grep x`), and `head`/`tail` that genuinely print a small window. The bash guard resolves
