@@ -30,6 +30,10 @@ pointing the other way. The panel deliberately copies part of what `AskUserQuest
 is not rebuilding Claude Code: what Claude Code lacks is a question that does not hold the turn
 open. The change was planned in `product/plans/decision-blocks-only.md`.
 
+The VoltAgent awesome-claude-code-subagents analysis adds seven open ideas to `docs/IDEAS.md`,
+each checked against `docs/VISION.md`. Its Skip list, including the agent "Communication
+Protocol", is not added, as with the earlier analyses.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -47,6 +51,9 @@ open. The change was planned in `product/plans/decision-blocks-only.md`.
 - `ceh-every-session` output style: every user-only question closes the reply as a decision
   block, with the reason. The "when the work can wait" condition and the `AskUserQuestion`
   fallback are gone.
+- `docs/IDEAS.md`: seven open entries from the VoltAgent analysis: Disprove before reporting,
+  Reviewer failure modes, Tools by agent role, Docs drift beyond the README, Webhooks and
+  websockets, Auth flows for a service, and Dependency upgrade pass.
 
 ## 2026-10-13
 
