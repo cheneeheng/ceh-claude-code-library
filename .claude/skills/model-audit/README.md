@@ -6,8 +6,8 @@ Each per-model guide on that page is written as a diff from its predecessor, so 
 tracks which guides each plugin has been checked against. It never compares model releases itself.
 
 The entry point is this repo-local skill, `/model-audit`, or the weekly
-`.github/workflows/model-audit.yml`, which calls the same scripts. Both produce a draft PR on `audit/<date>`. Nothing is
-merged and no eval runs without the user.
+`.github/workflows/model-audit.yml`, which calls the same scripts. Both produce a draft PR (the
+workflow's is on `audit/<date>`). Nothing is merged and no eval runs without the user.
 
 ## Files
 
