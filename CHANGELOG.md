@@ -9,6 +9,20 @@ before this repo live in
 
 ---
 
+## 2026-10-15
+
+The repo-local `model-audit` skill now follows the component template: Procedure, Rules, Output and
+Stop conditions sections, a `compatibility` field, and a description under 300 characters. The
+skill no longer creates an `audit/<date>` branch. It commits and opens the draft PR from the branch
+the session is on, so the user chooses where the audit lands. The weekly workflow still opens its
+PR on `audit/<date>`. No plugin changed, so no versions moved.
+
+### Changed
+
+- `.claude/skills/model-audit/SKILL.md` restructured to the template, with `argument-hint` quoted
+  so YAML no longer reads its leading `[` as a list, and the branch step removed.
+- `.claude/skills/model-audit/README.md` says only the workflow's PR is on `audit/<date>`.
+
 ## 2026-10-14
 
 A question for the user now always ends the reply as a decision block, never an `AskUserQuestion`
