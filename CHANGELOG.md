@@ -30,7 +30,6 @@ audit also recorded the newly published `haiku-5-5` guide.
 ### Changed
 
 - `.claude/skills/model-audit/assets/known-model-guides.json` lists `haiku-5-5`.
-
 - `.claude/skills/model-audit/SKILL.md` restructured to the template, with `argument-hint` quoted
   so YAML no longer reads its leading `[` as a list, and the branch step removed.
 - `.claude/skills/model-audit/README.md` says only the workflow's PR is on `audit/<date>`.
