@@ -1,0 +1,45 @@
+{
+  "targets": "general",
+  "checked-against": [
+    "fable-5",
+    "fable-5-1",
+    "opus-5",
+    "opus-5-5",
+    "sonnet-5",
+    "sonnet-5-5"
+  ],
+  "pinned": {
+    "agents/pytest-integration-tester.md": {
+      "model": "sonnet-5-5",
+      "tuned-for": null,
+      "proposed-for": "sonnet-5-5",
+      "tuned-by-model": "opus-5-5",
+      "tuned-by-model-effort": "high"
+    },
+    "agents/pytest-system-tester.md": {
+      "model": "sonnet-5-5",
+      "tuned-for": null,
+      "proposed-for": "sonnet-5-5",
+      "tuned-by-model": "opus-5-5",
+      "tuned-by-model-effort": "high"
+    },
+    "agents/pytest-unit-tester.md": {
+      "model": "sonnet-5-5",
+      "tuned-for": null,
+      "proposed-for": "sonnet-5-5",
+      "tuned-by-model": "opus-5-5",
+      "tuned-by-model-effort": "high"
+    },
+    "agents/python-service-reviewer.md": {
+      "model": "sonnet-5-5",
+      "tuned-for": null,
+      "proposed-for": "sonnet-5-5",
+      "tuned-by-model": "opus-5-5",
+      "tuned-by-model-effort": "high"
+    }
+  },
+  "last-audited": "2026-10-15",
+  "audited-with": "claude-code 2.1.301",
+  "audit-model": "sonnet-5-5",
+  "audit-model-effort": "medium"
+}
