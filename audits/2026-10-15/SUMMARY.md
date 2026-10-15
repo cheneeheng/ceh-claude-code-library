@@ -9,6 +9,11 @@ claude-code 2.1.301. Edits applied: no.
 | ceh-build-planning | [ceh-build-planning.md](ceh-build-planning.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
 | ceh-business-plan | [ceh-business-plan.md](ceh-business-plan.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
 | ceh-check-build-against-plan | [ceh-check-build-against-plan.md](ceh-check-build-against-plan.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
+| ceh-competitor-analysis | [ceh-competitor-analysis.md](ceh-competitor-analysis.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
+| ceh-git-datastore | [ceh-git-datastore.md](ceh-git-datastore.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
+| ceh-orchestration-lab | [ceh-orchestration-lab.md](ceh-orchestration-lab.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | agents/implementer.md | pass |
+| ceh-python-library | [ceh-python-library.md](ceh-python-library.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
+| ceh-python-service | [ceh-python-service.md](ceh-python-service.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | agents/pytest-integration-tester.md, agents/pytest-system-tester.md, agents/pytest-unit-tester.md, agents/python-service-reviewer.md | pass |
 
 `validate.py`: pass.
 

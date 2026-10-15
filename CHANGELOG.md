@@ -22,6 +22,11 @@ A model audit covered five plugins that had never been audited: `ceh-ag-ui`, `ce
 in `audits/2026-10-15/`, and none of their proposed edits were applied, so no versions moved. The
 audit also recorded the newly published `haiku-5-5` guide.
 
+A second audit round covered `ceh-competitor-analysis`, `ceh-git-datastore`,
+`ceh-orchestration-lab`, `ceh-python-library`, and `ceh-python-service`, including a tuning pass on
+their five pinned agents. Its reports join the first round's in `audits/2026-10-15/`, and none of
+its edits were applied, so these plugins' versions did not move.
+
 A follow-up applied the audit's 17 kept edits to the five plugins. Most rewrite a negative
 instruction as the positive one it implies, and four `ceh-ag-ui` skills gain a sentence that says
 when the work is done. Two fix contradictions: `implement-from-plan` set `status: building` before
@@ -41,7 +46,7 @@ specialist touches `status` when `find-product-market-fit` sets it to `validated
 ### Added
 
 - `audits/2026-10-15/`: one report and one raw `/doctor` output per audited plugin, plus `SUMMARY.md`.
-- `.claude-plugin/tuning.json` in each of the five plugins, recording the guides checked.
+- `.claude-plugin/tuning.json` in each plugin of both audit rounds, recording the guides checked.
 
 ### Changed
 
