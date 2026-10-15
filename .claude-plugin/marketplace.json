@@ -77,19 +77,19 @@
     {
       "name": "ceh-build-planning",
       "source": "./plugins/standalone/ceh-build-planning",
-      "version": "1.1.4",
+      "version": "1.1.5",
       "description": "CEH build planning: decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check, then review the plan before anyone builds from it."
     },
     {
       "name": "ceh-build-from-plan",
       "source": "./plugins/standalone/ceh-build-from-plan",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "description": "CEH build from plan: build a written plan phase by phase, test first, implementing only what each phase names and proving it with the phase's own check, with the evidence recorded in the plan."
     },
     {
       "name": "ceh-check-build-against-plan",
       "source": "./plugins/standalone/ceh-check-build-against-plan",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "description": "CEH check build against plan: check whether finished code is what its plan said to build, reporting every gap, deviation, and unplanned extra with quoted evidence, and rerunning each phase's check."
     },
     {
@@ -101,7 +101,7 @@
     {
       "name": "ceh-ag-ui",
       "source": "./plugins/standalone/ceh-ag-ui",
-      "version": "1.1.2",
+      "version": "1.1.3",
       "description": "CEH AG-UI: generative-UI canvases for agents that speak the AG-UI protocol — a React + Vite canvas where the agent places components from a fixed, themed catalogue (Tidewater by default), adding catalogue components, a Claude-backed FastAPI agent server, live shared state, and human approval steps."
     },
     {
@@ -113,7 +113,7 @@
     {
       "name": "ceh-business-plan",
       "source": "./plugins/standalone/ceh-business-plan",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "description": "CEH business plan: turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop — draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes. Then harden it: a report-only board review, and specialist passes on strategy, unit economics, go-to-market, premortem, the 90-day operating plan, and investor materials."
     },
     {

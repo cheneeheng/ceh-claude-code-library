@@ -80,8 +80,8 @@ summarized under Output.
 
 ## Rules
 
-- One plan per request. Never rewrite a `built` plan: new work gets a new plan file.
-- Write no file besides the plan.
+- One plan per request. Leave a `built` plan as written: new work gets a new plan file.
+- Write only the plan file.
 - Leave every decision that is not needed now under Out or Open, not in Design.
 
 ## Output

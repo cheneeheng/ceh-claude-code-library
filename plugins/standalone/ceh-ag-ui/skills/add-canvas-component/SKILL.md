@@ -16,7 +16,8 @@ license: Apache-2.0
 
 A catalogue entry does three jobs: it is a **tool** the agent can call, a **schema** the canvas
 enforces, and a **component** the theme styles. Get all three right, or the agent calls the wrong
-component, sends content it cannot render, or ends up controlling how it looks.
+component, sends content it cannot render, or ends up controlling how it looks. The work is done when the five checks in step 3 pass and
+`bun run typecheck` is clean.
 
 ## Procedure
 

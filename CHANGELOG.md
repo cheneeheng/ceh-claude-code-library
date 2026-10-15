@@ -22,6 +22,22 @@ A model audit covered five plugins that had never been audited: `ceh-ag-ui`, `ce
 in `audits/2026-10-15/`, and none of their proposed edits were applied, so no versions moved. The
 audit also recorded the newly published `haiku-5-5` guide.
 
+A follow-up applied the audit's 17 kept edits to the five plugins. Most rewrite a negative
+instruction as the positive one it implies, and four `ceh-ag-ui` skills gain a sentence that says
+when the work is done. Two fix contradictions: `implement-from-plan` set `status: building` before
+any phase was done, against the plan format's definition, and `develop-business-plan` said no
+specialist touches `status` when `find-product-market-fit` sets it to `validated`.
+
+### Plugin versions
+
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-ag-ui`                    | 1.1.3   |
+| `ceh-build-from-plan`          | 1.0.4   |
+| `ceh-build-planning`           | 1.1.5   |
+| `ceh-business-plan`            | 1.1.6   |
+| `ceh-check-build-against-plan` | 1.0.5   |
+
 ### Added
 
 - `audits/2026-10-15/`: one report and one raw `/doctor` output per audited plugin, plus `SUMMARY.md`.
@@ -33,6 +49,23 @@ audit also recorded the newly published `haiku-5-5` guide.
 - `.claude/skills/model-audit/SKILL.md` restructured to the template, with `argument-hint` quoted
   so YAML no longer reads its leading `[` as a list, and the branch step removed.
 - `.claude/skills/model-audit/README.md` says only the workflow's PR is on `audit/<date>`.
+- `ceh-ag-ui`: `build-ag-ui-agent`, `add-human-approval`, `add-live-state-panel` and
+  `add-canvas-component` open with a done statement tied to their Verify step, and three
+  "never"/"do not" lines become positive instructions.
+- `ceh-build-planning`: `write-build-plan` and `review-build-plan` state three rules positively.
+- `ceh-business-plan`: `find-product-market-fit` states two rules positively, and `run-premortem`
+  drops a redundant "Do not pad."
+- `ceh-check-build-against-plan`: `check-build-against-plan` step 3 starts independent Checks, and
+  the code reads for independent items, in one response.
+- `ceh-build-from-plan`: `implement-from-plan` leaves a phase with a skipped Check `todo`, in place
+  of "never mark it `done`".
+
+### Fixed
+
+- `ceh-build-from-plan`: `implement-from-plan` sets `status: building` when the first phase is
+  `done`, not before any code, matching `plan-format.md`.
+- `ceh-business-plan`: `develop-business-plan` names `find-product-market-fit` as the one
+  specialist that sets `status`.
 
 ## 2026-10-14
 
