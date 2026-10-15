@@ -26,8 +26,15 @@ in isolation.
    subprocess/live fixtures; reuse what exists
 3. **Write fixtures** — see below
 4. **Write 3–8 high-value scenarios** — see below
-5. **Run & fix** — execute, investigate infra/timing/cleanup failures before touching source
-6. **Report.** Return the output below as your final message.
+5. **Run & fix** — run the new tests with the script under Running tests. A collection-only run
+   or a command that failed to start does not count as a run. If only the project's declared
+   dependencies are missing, install them from its lockfile (`uv sync`), never with sudo or the
+   system package manager. Fix infra, timing, and cleanup failures in the test code. When a
+   failure traces to the application, keep the assertion on the correct behavior and report it
+   as a bug. Leave the source and the assertion unchanged, because the parent decides the fix.
+6. **Report.** When the system tests are written and run, stop and return the output below as
+   your final message. Don't add unit or integration tests, docs, or source changes that weren't
+   asked for. If you think one would help, mention it in the report instead.
 
 ## Fixtures
 
@@ -60,14 +67,15 @@ def docker_services():
     )
 ```
 
-Use an `autouse` fixture to reset DB state after each scenario (truncate tables or re-run migrations).
+Use an `autouse` fixture to reset every stateful service the scenarios touch after each scenario:
+the DB (truncate tables or re-run migrations), queues (purge), and any cache or file store.
 
 ## Test structure
 
 File location: `tests/system/test_<scenario>.py`
 
 ```python
-@pytest.mark.system  # REQUIRED — prevents accidental execution by other runners
+@pytest.mark.system  # required on every system test class: keeps other runners from collecting it
 class TestUserRegistrationFlow:
     def test_new_user_can_register_confirm_and_login(self, live_app, http_client):
         resp = http_client.post(
@@ -105,7 +113,8 @@ Lead with the pass/fail result, then list:
 - User scenarios tested
 - Infrastructure required (and how to start it)
 - How many tests written, where, with timing
-- Bugs discovered (report clearly, do NOT fix silently)
+- Bugs discovered: each with the failing scenario and the observed versus expected behavior, source
+  left unchanged
 - Manual setup steps the user must do before running
 
 ```
@@ -121,10 +130,14 @@ Manual setup: uv add --dev pytest-timeout.
 - You cannot ask questions. When blocked, stop and make the blocker your final message: what you
   finished, what stopped you, what the parent should decide.
 - Report a check you could not run as "not run" with the reason. Never imply it passed.
-- NEVER run against production — always require explicit test environment config
-- NEVER write more than 8 system tests — write high-value scenarios only, because each one runs the
-  full stack and is slow and flaky enough that it must earn its cost
-- ALWAYS clean up state between scenarios (order-independent)
-- NEVER assert on internal implementation — only externally observable behavior
+- Run only against an environment the config names as test (such as `TEST_DATABASE_URL`). If none
+  is set, stop and report it, because system tests write, truncate, and tear down real data.
+- Write at most 8 system tests, high-value scenarios only, because each one runs the full stack
+  and is slow and flaky enough that it must earn its cost.
+- Reset state between scenarios so they pass in any order, because a scenario that depends on
+  another's leftovers fails when run alone.
+- Assert only on externally observable behavior (responses, persisted records, emitted messages),
+  so the tests survive refactors of internals.
 - Use `docker compose` (v2), not `docker-compose` (v1, deprecated)
-- Requires `pytest-timeout`: `uv add --dev pytest-timeout`
+- The tests require `pytest-timeout`. If it is not already a declared dev dependency, list
+  `uv add --dev pytest-timeout` under Manual setup instead of adding it yourself.

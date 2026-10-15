@@ -88,11 +88,11 @@ asyncio_mode = "auto"
 
 ### Coding style
 
-- Line length: **88 characters** — follow Google Python Style Guide
+- Line length: **88 characters** — ruff/Black default, set in `pyproject.toml`
 - Type hints required on all function signatures and class attributes
-- Use Python 3.12 built-in generics: `list[str]`, not `List[str]`
-- Do not use `Any` without a comment explaining why
+- Use `Any` only with a comment explaining why
 - All `async def` route handlers; all I/O calls use `await`
+- Blocking calls stall the event loop: use `await asyncio.sleep()`, never `time.sleep()`
 
 **Docstrings** (Google style, required on all public symbols):
 
@@ -135,7 +135,7 @@ from pydantic import BaseModel
 from app.models.session import SessionState
 ```
 
-**Pydantic v2:** Use `BaseModel` for all API request/response types and domain entities. Never use `time.sleep()` — use `await asyncio.sleep()`.
+**Pydantic v2:** Use `BaseModel` for all API request/response types and domain entities.
 
 ### Linting and type checking
 
@@ -149,7 +149,7 @@ uv run ruff format --check .
 uv run mypy .
 ```
 
-Do not use `# type: ignore` without a comment. Do not downgrade `strict = true` to silence errors.
+Give every `# type: ignore` a comment. Keep `strict = true` when errors appear.
 
 ### Pre-commit hooks
 

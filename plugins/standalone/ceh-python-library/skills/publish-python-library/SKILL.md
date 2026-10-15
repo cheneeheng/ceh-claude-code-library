@@ -18,7 +18,8 @@ license: Apache-2.0
 
 A library's outward surface is three things that change together: what the package exports, what
 version number that earns, and how it is built and uploaded. The public API decides the version,
-and the version decides the release.
+and the version decides the release. Done when the wheel and sdist build, `uvx twine check` passes,
+and a TestPyPI install imports the public API.
 
 ## Procedure
 
@@ -47,15 +48,9 @@ __all__ = ["RetryPolicy", "parse_duration"]
 
 ### Semantic versioning (driven by the public API)
 
-For a library, the version contract is about the public API, not internal changes.
-
-| Increment | When                                                                                                               |
-| --------- | ------------------------------------------------------------------------------------------------------------------ |
-| `MAJOR`   | Breaking change to the public API: removed/renamed symbol, changed signature, changed behavior consumers depend on |
-| `MINOR`   | Backward-compatible addition: new public symbol, new optional parameter with a default                             |
-| `PATCH`   | Bug fixes and internal changes with no public API effect                                                           |
-
-When in doubt, bump the higher level — a surprise break is worse than a cautious bump. Never re-use or lower a version.
+The public API decides the level: a removed or renamed symbol, a changed signature, or changed
+behavior consumers depend on is MAJOR, a new symbol or optional parameter is MINOR, anything with no
+public effect is PATCH. When in doubt, bump the higher level. Never re-use or lower a version.
 
 ### Deprecation before removal
 
@@ -123,7 +118,7 @@ Always ship `py.typed` so consumers get your type hints.
 
 ```bash
 uv build                      # produces dist/*.whl and dist/*.tar.gz (wheel + sdist)
-uv run twine check dist/*     # validate metadata before upload
+uvx twine check dist/*        # validate metadata before upload
 uv publish --publish-url https://test.pypi.org/legacy/   # TestPyPI dry run first
 uv publish                    # then the real PyPI
 ```

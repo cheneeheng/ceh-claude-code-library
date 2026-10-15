@@ -80,10 +80,9 @@ asyncio_mode = "auto"
 
 ### Coding style
 
-- Line length: **88 characters** — follow Google Python Style Guide
+- Line length: **88 characters** — ruff/Black default, set in `pyproject.toml`
 - Type hints required on all function signatures and class attributes
-- Use Python 3.12 built-in generics: `list[str]`, not `List[str]`
-- Do not use `Any` without a comment explaining why
+- Use `Any` only with a comment explaining why
 
 **Docstrings** (Google style, required on all public symbols):
 
@@ -102,30 +101,6 @@ def parse_duration(text: str) -> timedelta:
 
 One-line summary, then `Args` / `Returns` / `Raises` sections as needed. Omit sections that don't apply.
 
-**Naming:**
-
-| Kind                 | Convention            | Example                         |
-| -------------------- | --------------------- | ------------------------------- |
-| Variables, functions | `snake_case`          | `parse_duration`, `max_retries` |
-| Classes              | `PascalCase`          | `RetryPolicy`                   |
-| Constants            | `UPPER_SNAKE_CASE`    | `DEFAULT_TIMEOUT`               |
-| Private members      | `_leading_underscore` | `_normalize`                    |
-
-**Imports** (three groups, separated by blank lines):
-
-```python
-# 1. Standard library
-import asyncio
-
-# 2. Third-party
-from pydantic import BaseModel
-
-# 3. Local package
-from your_library.core import RetryPolicy
-```
-
-Never use `time.sleep()` in async code — use `await asyncio.sleep()`.
-
 ### Linting and type checking
 
 **ruff** for linting and formatting (do not add flake8, pylint, isort, or Black: one tool and one config cannot disagree with itself). **mypy** for type checking.
@@ -138,7 +113,7 @@ uv run ruff format --check .
 uv run mypy .
 ```
 
-Do not use `# type: ignore` without a comment. Do not downgrade `strict = true` to silence errors.
+Give every `# type: ignore` a comment. Keep `strict = true` when errors appear.
 
 ### Pre-commit hooks
 

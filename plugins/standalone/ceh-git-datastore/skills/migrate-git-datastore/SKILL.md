@@ -20,6 +20,9 @@ The git store was a deliberate stage. This is how to leave it without downtime,
 without losing writes, and without discovering the data was messier than
 expected halfway through a backfill.
 
+The task is done when the "is it time" verdict is stated. If a trigger has fired, it is also done
+when `verify.py` passes for every project, each project is cut over, and the archive bundle exists.
+
 Assumed source layout (what `ceh-git-datastore:build-git-datastore` produces):
 
 ```
@@ -187,7 +190,7 @@ Each of these was observed on a realistic test store, not hypothesised:
 
 ### Working style
 
-Not a batch job that ends with "migrated". Report at each phase what was found,
+Work in phases. Report at each phase what was found,
 what it implies, and what needs a decision — the inventory and profile outputs
 frequently change the plan, because a store that is 90% one project, or has a
 field carrying three types, wants a different sequence. And keep saying the

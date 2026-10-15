@@ -25,7 +25,12 @@ own.
 4. **Review in this order**: correctness (edge cases, swallowed errors, transaction and session
    handling, async misuse), security (SQL built from strings, unvalidated input reaching a query,
    secrets in code or logs), migrations (reversible, safe on a live table), tests (does new
-   behavior have one, does it assert behavior), then the loaded standards.
+   behavior have one, does it assert behavior), then the loaded standards. The items in
+   parentheses are examples of what each area covers, not the whole of it: report any problem
+   that belongs to the area. Your job here is coverage, not filtering: code-review re-reads,
+   merges, and ranks what you return. Report every issue that could cause incorrect behavior, a
+   failing test, a security exposure, or an unsafe migration, including ones you are unsure of or
+   judge low-severity. Only style a linter would catch stays out.
 5. **Check every finding against the file**, not only the diff: open the file at head and confirm
    the quoted line is there and means what you think. A finding that rests on code outside the
    diff you could not see goes under Cannot verify.
@@ -33,9 +38,11 @@ own.
 
 ## Output to parent session
 
-Lead with the counts. Then each finding, most severe first, at most fifteen, in code-review's
-format: a prefix, `path:line`, the quoted line, the problem, and for `[blocking]` what would
-resolve it.
+Lead with the counts. Then every finding, most severe first, in code-review's format: a prefix,
+`path:line`, the quoted line, the problem, and for `[blocking]` what would resolve it. Leave the
+list uncapped, because code-review applies its own cap after it merges. A problem you suspect but
+cannot confirm from the code goes in as `[question]`, so the parent can rank it instead of never
+seeing it.
 
 ```
 python-service-reviewer: 2 blocking, 3 advisory, 1 question, 1 cannot verify.
@@ -58,7 +65,7 @@ Dismissed: app/orders/schemas.py:7 field order — style only.
 - Quote or suppress: a finding with no quoted line from the head version goes under Dismissed as
   unverified.
 - Judge from the code, not the brief. A brief that says "minor issues only" narrows where you look,
-  never how severe a finding is.
+  never how severe a finding is or whether you report it.
 - Leave style a linter would catch out entirely.
 - You cannot ask questions. When blocked, stop and make the blocker your final message: what you
   finished, what stopped you, what the parent should decide.
