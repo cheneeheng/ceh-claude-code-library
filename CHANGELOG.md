@@ -17,8 +17,19 @@ skill no longer creates an `audit/<date>` branch. It commits and opens the draft
 the session is on, so the user chooses where the audit lands. The weekly workflow still opens its
 PR on `audit/<date>`. No plugin changed, so no versions moved.
 
+A model audit covered five plugins that had never been audited: `ceh-ag-ui`, `ceh-build-from-plan`,
+`ceh-build-planning`, `ceh-business-plan`, and `ceh-check-build-against-plan`. The audit reports are
+in `audits/2026-10-15/`, and none of their proposed edits were applied, so no versions moved. The
+audit also recorded the newly published `haiku-5-5` guide.
+
+### Added
+
+- `audits/2026-10-15/`: one report and one raw `/doctor` output per audited plugin, plus `SUMMARY.md`.
+- `.claude-plugin/tuning.json` in each of the five plugins, recording the guides checked.
+
 ### Changed
 
+- `.claude/skills/model-audit/assets/known-model-guides.json` lists `haiku-5-5`.
 - `.claude/skills/model-audit/SKILL.md` restructured to the template, with `argument-hint` quoted
   so YAML no longer reads its leading `[` as a list, and the branch step removed.
 - `.claude/skills/model-audit/README.md` says only the workflow's PR is on `audit/<date>`.
