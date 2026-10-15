@@ -1,79 +1,61 @@
 ---
 name: model-audit
 description: >-
-  Audit this repo's ceh-* plugins against Claude's per-model prompting guides and hand the results
-  over as a draft PR. Runs the detector, a headless /doctor prompt-audit per stale plugin, the
-  pinned-agent tuning passes, strict validation, then commits to audit/<date> and opens the PR.
-  User-invoked only, because every audit is a billed model call.
+  Audit the ceh-* plugins against Claude's per-model prompting guides and open the results as a
+  draft PR. Trigger on "/model-audit", "audit the plugins for the new model". User-invoked only:
+  every audit is a billed model call.
 argument-hint: "[budget] | [--plugins plugins/standalone/ceh-a ...] [--model M --effort E] [--tune-model M --tune-effort E] [--apply]"
 disable-model-invocation: true
 user-invocable: true
+compatibility: >-
+  Needs python 3, git, gh (authenticated), and Claude Code v2.1.283+ for `/doctor prompt-audit`.
+  The bundled `/claude-api` skill must stay enabled. Without them audit.py errors out.
 license: Apache-2.0
 ---
 
 # Model audit
 
-Every step below runs inside this skill. The user reviews the draft PR and nothing else. The
-scripts and their state files are documented in `${CLAUDE_SKILL_DIR}/README.md`.
+Run the audit scripts and hand the results over as one draft PR, so the user reviews that PR and
+nothing else. The scripts, their arguments, and their state files are in
+`${CLAUDE_SKILL_DIR}/README.md`.
 
-Arguments: `$ARGUMENTS`. Pass them through to `audit.py` unchanged. `--plugins` audits the given
-plugins even when they are not stale, each as its path from the repo root, and `--model`/`--effort` override the default audit pair in
-`${CLAUDE_SKILL_DIR}/assets/config.json`. What each argument does is in the README's Arguments
-section.
+`$ARGUMENTS` passes to `audit.py` unchanged.
 
-**Context budget only.** When `$ARGUMENTS` is `budget`, run
-`python "${CLAUDE_SKILL_DIR}/scripts/context_budget.py"`, reply with its table and the three
-plugins that cost the most, and stop: no branch, no model call, no PR. The table shows what each
-plugin's descriptions and context-injecting hooks add to every session, every prompt, and every
-subagent.
+## Procedure
 
-## 1. Branch
+1. **Budget only.** When `$ARGUMENTS` is `budget`, run
+   `python "${CLAUDE_SKILL_DIR}/scripts/context_budget.py"`, reply with its table and the three
+   plugins that cost the most, and stop: no model call, no PR. The table shows what each
+   plugin's descriptions and context-injecting hooks add to every session, prompt, and subagent.
+2. **Detect.** Check the working tree is clean apart from untracked files, then run
+   `python "${CLAUDE_SKILL_DIR}/scripts/detect.py" --write`. It prints JSON. If `stale` is empty
+   and `--plugins` was not passed, report "nothing stale" and stop. Otherwise tell the user which
+   plugins are stale and how many runs that makes: two per plugin with missing guides (`/doctor`
+   plus the filter pass), plus one per pinned file with `"stale": true`.
+3. **Audit.** Run `python "${CLAUDE_SKILL_DIR}/scripts/audit.py" $ARGUMENTS` in the background and
+   wait for it to exit. Read only `audits/<date>/SUMMARY.md`. A non-zero exit means a plugin
+   errored or failed validation: the summary says which. Carry on to the PR anyway, so the failure
+   is reviewed with everything else.
+4. **Commit.** Stage `${CLAUDE_SKILL_DIR}/assets/known-model-guides.json`, `audits/`, and
+   `plugins/`. Commit with `chore(model-audit): audit reports for <date>` plus the attribution
+   line. If the pre-commit hook reformats files and aborts, stage them again and commit again.
+5. **Open the PR.** Chain with `&&`:
+   `git push -u origin HEAD && gh pr create --draft --title "chore(model-audit): audit <date>" --body-file <body>`.
+   `<body>` is a scratch copy of `SUMMARY.md` with the PR attribution line appended.
+6. **Reply** in the shape under Output.
 
-The working tree must be clean apart from untracked files. If it is not, stop and say so. From
-`main`, create `audit/<YYYY-MM-DD>` with today's date. On another branch, ask before continuing.
+## Rules
 
-## 2. Detect
+- Do not read the per-plugin reports into this session. They are large, and the user reviews them
+  in the PR.
+- Do not bump versions or write the changelog. Which edits survive is the user's decision, and the
+  summary's reviewer checklist covers both.
 
-```bash
-python "${CLAUDE_SKILL_DIR}/scripts/detect.py" --write
-```
+## Output
 
-It prints JSON. If `stale` is empty and `--plugins` was not passed, report "nothing stale",
-delete the branch you created, and stop. Otherwise tell the user which plugins are stale and how
-many runs that makes: two per plugin with missing guides (`/doctor` plus the filter pass), plus
-one per pinned file with `"stale": true`.
-
-## 3. Audit
-
-```bash
-python "${CLAUDE_SKILL_DIR}/scripts/audit.py" $ARGUMENTS
-```
-
-Run it in the background and wait for it to exit. It can take a long time. Do not read the
-per-plugin reports into this session. Read only `audits/<date>/SUMMARY.md`. A non-zero exit means
-a plugin errored or failed validation: the summary says which. Carry on to the PR anyway, so the
-failure is reviewed with everything else.
-
-## 4. Hand off
-
-Stage `${CLAUDE_SKILL_DIR}/assets/known-model-guides.json`, `audits/`, and `plugins/`, then commit with
-the message `chore(model-audit): audit reports for <date>` plus the attribution line. If the
-pre-commit hook reformats files and aborts, stage them again and commit again. Then push and open
-the draft PR, chaining with `&&`:
-
-```bash
-git push -u origin audit/<date> && gh pr create --draft --title "chore(model-audit): audit <date>" --body-file <body>
-```
-
-`<body>` is a scratch copy of `SUMMARY.md` with the PR attribution line appended. Do not bump
-versions or write the changelog here: which edits survive is the user's decision, and the
-summary's reviewer checklist covers both.
-
-Reply with the PR URL, the summary table, any errors or validation failures, and the next steps
-below, trimmed to what this run needs: drop the pinned-tuning step when nothing was tuned, the
-version steps when no edit was kept.
-
-## 5. Next steps for the user
+Reply with the PR URL, the summary table, any errors or validation failures, and these next steps,
+trimmed to what the run needs: drop step 3 when nothing was tuned, steps 5 and 6 when no edit was
+kept.
 
 1. **Review the reports.** Read each `audits/<date>/<plugin>.md` and check that every kept change
    cites a guide that actually backs it. `<plugin>.doctor.md` is the raw `/doctor` output it
@@ -97,3 +79,8 @@ version steps when no edit was kept.
 8. **Verify and merge.** Run `python tools/validate-plugins/validate.py`, optionally
    `claude plugin eval` from a plugin root, tick the PR checklist, mark it ready, and merge with a
    merge commit per the root `CLAUDE.md` "Landing a branch".
+
+## Stop conditions
+
+- Working tree has tracked changes → stop and say so. Do not stash or discard them.
+- `gh` is not authenticated or the push fails → report the failure and leave the commit in place.
