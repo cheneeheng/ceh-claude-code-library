@@ -21,9 +21,8 @@ product-market fit is found by repeatedly attacking the plan's weakest assumptio
 if wrong, kills the business — and revising until the load-bearing claims are evidenced or have a
 cheap test attached. This skill is that loop, made disciplined.
 
-The core stance: **draft proactively, then interrogate**. Do not interview from a blank page when
-you can infer a v0 from what already exists. A concrete draft gives the user something to react
-to, and correction is faster and sharper than composition.
+The core stance: **draft proactively, then interrogate**. Infer a v0 from what already exists and
+interview against it. A concrete draft gives the user something to react to, and correction is faster and sharper than composition.
 
 ---
 
@@ -38,8 +37,8 @@ Phase 3  Revise      → fold the answer in; re-tag confidence; re-score the gat
 Phase 4  Validate    → flip status to validated; hand off next steps
 ```
 
-Each loop closes one gap. Never run the interview as a fixed questionnaire — the gate score
-**chooses the next question**.
+Each loop closes one gap. The gate score **chooses the next question**, so the interview is never
+a fixed questionnaire.
 
 ---
 

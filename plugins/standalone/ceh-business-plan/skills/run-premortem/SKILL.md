@@ -73,7 +73,7 @@ honoured.
   so every story ends with a guard.
 - Do not soften a ruinous risk. If the downside includes personal guarantees, debt against a home,
   or a legal exposure, name it in the first line of the report.
-- Do not pad. Three guarded risks are worth more than fifteen listed ones.
+- Three guarded risks are worth more than fifteen listed ones.
 - For legal, tax, licensing, or regulatory risks, state that the plan needs a qualified
   professional's review and record that as the test. Do not give the ruling yourself.
 - Keep the confidence tags. A risk with a scheduled test becomes `[hypothesis-to-test]`.

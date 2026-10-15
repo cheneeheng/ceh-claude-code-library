@@ -17,7 +17,7 @@ license: Apache-2.0
 Catalogue components are **snapshots**: once placed, a component never changes. Shared state is for
 the opposite case, a **value that changes while the user watches**. A progress tracker ticks, a
 plan gets rewritten, a counter climbs. The agent owns the value and streams its changes, and one
-fixed panel on the canvas renders it.
+fixed panel on the canvas renders it. The work is done when the three checks in step 5 pass.
 
 ## Procedure
 
@@ -151,7 +151,7 @@ prompt: rewriting the prompt on every run breaks the prompt cache and the append
 - **Never copy state into a second store.** Render from the hook's `state`. A copy goes stale on
   the next delta.
 - **Announce progress without flooding screen readers.** `role="progressbar"` with `aria-valuenow`
-  reports the value when asked. Do not put a fast-changing panel inside an `aria-live` region.
+  reports the value when asked. Keep a fast-changing panel outside any `aria-live` region.
 
 ## Hands off to
 

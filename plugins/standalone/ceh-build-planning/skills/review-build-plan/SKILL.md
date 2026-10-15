@@ -63,8 +63,8 @@ quotes the plan, and the verdict is delivered.
 - Review only what is unbuilt. In a `building` plan, review the phases still `todo` or
   `unplanned`. A `built` plan is checked against its code by
   `ceh-check-build-against-plan:check-build-against-plan`, not reviewed.
-- Ask the user nothing during the review. A question only the plan's owner can answer becomes a
-  finding with a recommended answer.
+- During the review, turn a question only the plan's owner can answer into a finding with a
+  recommended answer.
 
 ## Output
 

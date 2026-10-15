@@ -55,7 +55,8 @@ this moment has run and the plan's frontmatter agrees with its content.
 - When a specialist stops on a missing input (no price, no ranked risks, no named customer), it
   names the skill that supplies it. Offer that skill as the next step.
 - The status rule in step 4 runs after every specialist, because several of them re-score
-  `pmf_gate` and none of them touches `status`.
+  `pmf_gate` and only `find-product-market-fit` sets `status`, to `validated` when the gate
+  passes.
 - **No human to answer** (a headless run, or called by another agent): when several plans exist,
   take the most recently updated and say which. The specialist drafts and revises from what exists,
   asks nothing, and ends with the questions it would have asked, in order, each with the assumption

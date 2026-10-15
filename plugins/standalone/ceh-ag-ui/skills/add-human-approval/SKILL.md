@@ -17,6 +17,7 @@ license: Apache-2.0
 An approval is a **pause the protocol knows about**, not a chat message asking "are you sure?". The
 agent ends the run with an interrupt. The canvas shows a card whose look it controls. The user's
 decision comes back as a `resume` entry on the next run, and the agent acts only on that.
+The work is done when the five checks in step 3 pass.
 
 ## Procedure
 
@@ -218,7 +219,7 @@ run 2  ←  RunAgentInput.resume = [ { interruptId, status: "resolved", payload:
   `message` ("delete 3 archived records"), because a vague "Proceed?" gets approved without being
   read.
 - **Use `role="group"` with `aria-labelledby`**, so a screen reader announces the question with the
-  buttons. Do not make it `role="alert"` unless the run truly cannot continue without it.
+  buttons. Use `role="alert"` only when the run truly cannot continue without it.
 
 ## Hands off to
 

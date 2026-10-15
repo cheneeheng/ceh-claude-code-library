@@ -25,7 +25,7 @@ reason recorded.
    format: Goal, Scope, and phases with checks, every assumption under Open. Say that you did,
    because the user may have expected a plan to exist.
 2. **Read the whole plan before any code.** Design is binding. An Open item marked as blocking
-   stops the run before it starts. Set `status: building`.
+   stops the run before it starts.
 3. **Build each targeted phase in order.** The target is the named phase, or by default every
    `todo` phase. Skip `done` phases. At an `unplanned` phase, stop: it needs planning first.
    For each phase:
@@ -38,7 +38,8 @@ reason recorded.
       it `todo`, and report. A third blind fix rarely works, and the next session needs the
       record.
    5. Set the phase's Status to `done` with its evidence: the commit, or the check command and
-      one line of its passing output. Append a Built Phase line to the plan's `## Record`.
+      one line of its passing output. Append a Built Phase line to the plan's `## Record`. When
+      this is the plan's first `done` phase, set `status: building`.
 4. **Close the plan.** When every phase is `done`, set `status: built`.
 5. **Copy the lasting decisions.** The built plan stays in the plans folder as the record of this
    change: later planning runs read only its frontmatter. When `ceh-check-build-against-plan` is
@@ -70,5 +71,5 @@ to `product/ARCHITECTURE.md`.
 - An Open item blocks building, or the next phase is `unplanned` → stop and name it. With
   `ceh-build-planning` installed, `ceh-build-planning:write-build-plan` plans it.
 - A Check needs a secret, a service, or a device the session cannot reach → stop at that phase,
-  record what it needs, and report. Never mark it `done` on a skipped check.
+  record what it needs, leave it `todo`, and report.
 - The same check failure survives two fixes → stop as in step 3.4.

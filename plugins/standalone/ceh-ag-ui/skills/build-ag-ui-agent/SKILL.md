@@ -18,7 +18,8 @@ license: Apache-2.0
 
 The canvas owns what the user sees, and this server owns what the model sees. Most bugs in an
 AG-UI backend come from mixing the two up: building the model's history out of the UI's messages,
-or running a tool that belongs to the canvas.
+or running a tool that belongs to the canvas. The work is done when every check in Procedure step 3
+passes.
 
 ## Procedure
 
@@ -102,8 +103,8 @@ POST /agent  RunAgentInput{threadId, runId, messages, tools, state, resume}
   leaves the canvas spinning. The template wraps the whole loop, so any exception becomes
   `RUN_ERROR`, and nothing follows it.
 - **Stream as you go.** Map each model content block onto the matching AG-UI event as it arrives
-  (`content_block_start`, then `delta`, then `stop`). Track which kind of block each index is. Never
-  guess it from an id prefix.
+  (`content_block_start`, then `delta`, then `stop`). Take each index's block kind from its
+  `content_block_start` event.
 
 ### The six rules
 

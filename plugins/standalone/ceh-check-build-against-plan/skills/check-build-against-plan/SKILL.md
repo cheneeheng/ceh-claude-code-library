@@ -36,8 +36,9 @@ feature that was never built. Done means every plan item has a status and the re
    | **Failing**       | A phase marked `done` whose Check fails now                               |
    | **Cannot verify** | The code cannot settle it, such as a check that needs a service you lack  |
 
-   Run every phase Check that can run. A phase marked `done` is evidence of when it passed, not
-   that it passes now.
+   Run every phase Check that can run. Start the Checks that depend on no other's result and share
+   no state (a database, a port) in one response, and read the code for independent items the same
+   way. A phase marked `done` is evidence of when it passed, not that it passes now.
 
 4. **Fix only on request.** By default the check reports and changes no code and no plan content
    (step 6 only appends its Record line), because filling a gap is building and belongs to whoever
