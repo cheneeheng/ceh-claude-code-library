@@ -216,13 +216,13 @@ statuses must match `ceh-testing:write-evidence-report` and `docs/STRATEGY.md`.
 
 | Copy                                                                                 | Section     | Diverges                                                                                                                                                                                                                                |
 | ------------------------------------------------------------------------------------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-python-library/skills/configure-python-library-env/SKILL.md` | entire file | drops `fastapi`/`uvicorn[standard]`/`asyncpg` from the deps example and the uvicorn dev-server command; `dependencies = []`; `known-first-party` is the library; library docstring example; omits the service-only § Secrets management |
+| `plugins/standalone/ceh-python-library/skills/configure-python-library-env/SKILL.md` | entire file | drops `fastapi`/`uvicorn[standard]`/`asyncpg` from the deps example and the uvicorn dev-server command; `dependencies = []`; `known-first-party` is the library; library docstring example; omits the service-only § Secrets management; drops the naming table, the three-group imports block, and the `time.sleep` rule |
 
 **Shared:** Python 3.12 + uv + `pyproject.toml`/`uv.lock` workflow, the uv command table, the ruff
 (line-length 88, `select = [E,F,I,UP,N,B]`) + mypy (`strict = true`) + pytest
-(`asyncio_mode = "auto"`) config, the coding-style rules (type hints, built-in generics, no `Any`
-without a comment), the naming table, three-group imports, and the "ruff only, no `# type: ignore`
-without a comment" linting rules. The § Pre-commit hooks block has its own entry below.
+(`asyncio_mode = "auto"`) config, the coding-style rules (88 columns as the ruff default, type
+hints, `Any` only with a comment), and the "ruff only, every `# type: ignore` gets a comment"
+linting rules. The § Pre-commit hooks block has its own entry below.
 
 ## Python testing foundation (pytest core)
 
@@ -230,13 +230,13 @@ without a comment" linting rules. The § Pre-commit hooks block has its own entr
 
 | Copy                                                                               | Section     | Diverges                                                                                                                                  |
 | ---------------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-python-library/skills/write-pytest-library-tests/SKILL.md` | entire file | replaces the real-database integration tier and the system tier with an `api/` tier that imports the package as a consumer; no DB or HTTP |
+| `plugins/standalone/ceh-python-library/skills/write-pytest-library-tests/SKILL.md` | entire file | replaces the real-database integration tier and the system tier with an `api/` tier that imports the package as a consumer; no DB or HTTP; coverage rows named `Library package` and `Public API and core logic` |
 
 **Shared:** pytest + pytest-asyncio (`asyncio_mode = "auto"`), `tests/unit/` structure,
 `test_<what>_<expected_behavior>.py` naming, the one-behavior-per-test rule, the mocking rules (mock
 external boundaries, `unittest.mock` or `pytest-mock`), and the Coverage floor block — the
-two-sentence floor-not-goal intro and two rows, word for word: `Python application package | 80%`
-and `Core business logic / domain services | 95%`.
+two-sentence floor-not-goal intro and two rows at 80% and 95%. The service copy names them
+`Python application package` and `Core business logic / domain services`.
 The service copy adds the `--cov=app` command, the library copy `--cov=your_library`.
 
 ## What waits for a request (proof by default)
@@ -471,8 +471,8 @@ finding you cannot anchor to quoted code is reported as unverified, outside the 
 | Copy                                                                                       | Section                      | Diverges                                                                                   |
 | ------------------------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------ |
 | `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules + § Procedure step 3 | example brief names a part of the app; Cannot verify is a per-item status, not a verdict   |
-| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`                  | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict |
-| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules + § Output      | same as `python-service-reviewer`                                                          |
+| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`                  | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict; the brief cannot change whether a finding is reported |
+| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict |
 
 **Shared:** a brief that says "don't flag X" or "minor issues only" narrows where to look, never
 how severe a finding is; every finding at its real severity; and a **Cannot verify** outcome that

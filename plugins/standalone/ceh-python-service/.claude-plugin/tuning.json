@@ -11,28 +11,28 @@
   "pinned": {
     "agents/pytest-integration-tester.md": {
       "model": "sonnet-5-5",
-      "tuned-for": null,
+      "tuned-for": "sonnet-5-5",
       "proposed-for": "sonnet-5-5",
       "tuned-by-model": "opus-5-5",
       "tuned-by-model-effort": "high"
     },
     "agents/pytest-system-tester.md": {
       "model": "sonnet-5-5",
-      "tuned-for": null,
+      "tuned-for": "sonnet-5-5",
       "proposed-for": "sonnet-5-5",
       "tuned-by-model": "opus-5-5",
       "tuned-by-model-effort": "high"
     },
     "agents/pytest-unit-tester.md": {
       "model": "sonnet-5-5",
-      "tuned-for": null,
+      "tuned-for": "sonnet-5-5",
       "proposed-for": "sonnet-5-5",
       "tuned-by-model": "opus-5-5",
       "tuned-by-model-effort": "high"
     },
     "agents/python-service-reviewer.md": {
       "model": "sonnet-5-5",
-      "tuned-for": null,
+      "tuned-for": "sonnet-5-5",
       "proposed-for": "sonnet-5-5",
       "tuned-by-model": "opus-5-5",
       "tuned-by-model-effort": "high"

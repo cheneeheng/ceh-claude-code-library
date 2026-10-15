@@ -20,6 +20,9 @@ A bare git repo as the data layer for an app that does not have a database yet.
 One repo per deployed instance; one **orphan branch per project**; JSON records
 in trees under that branch.
 
+The task is done when the gate verdict is stated. If the gate passes, it is also done when the
+store sits behind the store interface, backup is wired, and the migration trigger is in the README.
+
 The design is sound but narrow. Most of the value of this skill is in applying
 the gate honestly first, and in never touching a working tree second.
 

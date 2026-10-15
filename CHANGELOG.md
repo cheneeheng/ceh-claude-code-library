@@ -27,6 +27,13 @@ A second audit round covered `ceh-competitor-analysis`, `ceh-git-datastore`,
 their five pinned agents. Its reports join the first round's in `audits/2026-10-15/`, and none of
 its edits were applied, so these plugins' versions did not move.
 
+A follow-up applied the second round's kept edits and accepted the tuning of all five pinned
+agents, whose `tuned-for` is now `sonnet-5-5`. The tuned agents run a real check before reporting
+done, keep to the work they were asked for, and state each hard rule with its reason in place of
+capitalised NEVER and ALWAYS. The python-service reviewer now reports every finding uncapped, since
+`code-review` caps after it merges. Shared Python env and testing text moved in both plugin copies,
+and `docs/CROSS_REFERENCES.md` records where the library copy now diverges.
+
 A follow-up applied the audit's 17 kept edits to the five plugins. Most rewrite a negative
 instruction as the positive one it implies, and four `ceh-ag-ui` skills gain a sentence that says
 when the work is done. Two fix contradictions: `implement-from-plan` set `status: building` before
@@ -42,6 +49,11 @@ specialist touches `status` when `find-product-market-fit` sets it to `validated
 | `ceh-build-planning`           | 1.1.5   |
 | `ceh-business-plan`            | 1.1.6   |
 | `ceh-check-build-against-plan` | 1.0.5   |
+| `ceh-competitor-analysis`      | 1.1.8   |
+| `ceh-git-datastore`            | 1.0.6   |
+| `ceh-orchestration-lab`        | 1.0.3   |
+| `ceh-python-library`           | 1.0.4   |
+| `ceh-python-service`           | 1.1.4   |
 
 ### Added
 
@@ -64,6 +76,18 @@ specialist touches `status` when `find-product-market-fit` sets it to `validated
   the code reads for independent items, in one response.
 - `ceh-build-from-plan`: `implement-from-plan` leaves a phase with a skipped Check `todo`, in place
   of "never mark it `done`".
+- `ceh-competitor-analysis`: `competitor-analyst` gains a done statement and a parallel-reads line,
+  and trades its 150-line cap for a rule to keep sections to what the parent needs.
+- `ceh-git-datastore`: `build-git-datastore` and `migrate-git-datastore` open with a done statement.
+- `ceh-orchestration-lab`: `implementer` tuned for Sonnet 5.5: fix the code, not the check; no
+  syntax-only checks; no unrequested additions; read-only git; scratch files deleted.
+- `ceh-python-library`: `publish-python-library` folds the semver table into one paragraph and gains
+  a done statement. `configure-python-library-env` drops the PEP 8 naming table, the imports block,
+  and the `time.sleep` line.
+- `ceh-python-service`: the four pinned agents are tuned for Sonnet 5.5. `write-pytest-service-tests`
+  examples use one orders domain, and `write-postgresql-code` gains a done statement.
+- Both Python env skills give 88 columns its real reason (the ruff default), drop the redundant
+  built-in generics line, and state the `Any` and `# type: ignore` rules positively.
 
 ### Fixed
 
@@ -71,6 +95,14 @@ specialist touches `status` when `find-product-market-fit` sets it to `validated
   `done`, not before any code, matching `plan-format.md`.
 - `ceh-business-plan`: `develop-business-plan` names `find-product-market-fit` as the one
   specialist that sets `status`.
+- `ceh-competitor-analysis`: `competitor-analyst` reports missing inputs under "Not read / gaps",
+  not on the first line the identity table must hold. The README lists only the trigger phrases the
+  skill descriptions carry.
+- `ceh-python-library`: `publish-python-library` runs `uvx twine check`, since nothing installs
+  `twine` into the project. `write-pytest-library-tests` coverage rows name library parts, not
+  domain services.
+- `ceh-python-service`: `write-pytest-service-tests` examples no longer use undefined names, and the
+  app-specific "Mock the LLM API client" line is gone.
 
 ## 2026-10-14
 

@@ -41,13 +41,13 @@
     {
       "name": "ceh-python-service",
       "source": "./plugins/standalone/ceh-python-service",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "description": "CEH Python service: FastAPI, asyncpg, PostgreSQL schema, Alembic migrations, uv, and testing (unit/integration/system) standards for web services."
     },
     {
       "name": "ceh-python-library",
       "source": "./plugins/standalone/ceh-python-library",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "description": "CEH Python library: packaging and publishing, public API surface discipline, semantic versioning, uv environment, and pytest testing standards for distributable libraries (no web dependencies)."
     },
     {
@@ -119,7 +119,7 @@
     {
       "name": "ceh-git-datastore",
       "source": "./plugins/standalone/ceh-git-datastore",
-      "version": "1.0.5",
+      "version": "1.0.6",
       "description": "CEH git-backed datastore: run an app on a bare git repo instead of a database while that still fits — a gate that talks you out of it when it does not, a working plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite when a trigger fires."
     },
     {
@@ -131,7 +131,7 @@
     {
       "name": "ceh-orchestration-lab",
       "source": "./plugins/standalone/ceh-orchestration-lab",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "description": "EXPERIMENTAL. CEH orchestration lab: run real coding tasks under one of two orchestration strategies (plan then implement, or a supervised orchestrate loop) with a cheaper worker model, and log every run for later comparison."
     },
     {
@@ -161,7 +161,7 @@
     {
       "name": "ceh-competitor-analysis",
       "source": "./plugins/standalone/ceh-competitor-analysis",
-      "version": "1.1.7",
+      "version": "1.1.8",
       "description": "CEH competitor analysis: study a competitor's repo or product and learn from it — one evidence-anchored report per competitor (breakdown, full inventory, the \"oh wow\" mechanisms worth learning from, what to incorporate and where it lands in our work), then a side-by-side comparison with our own work, each as Markdown plus a styled HTML page. Repos are shallow-cloned and read as untrusted data, never run."
     }
   ]

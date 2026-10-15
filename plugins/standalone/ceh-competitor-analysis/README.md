@@ -18,8 +18,7 @@ per-competitor reports.
 
 ### `analyze-competitor`
 
-**Auto-triggers on:** "competitor analysis", "analyze this repo", "what can we learn from X", "how
-does X compare to us", "study this competitor", or a pasted GitHub URL with "investigate".
+**Auto-triggers on:** "competitor analysis", "analyze this repo", "what can we learn from X".
 
 The skill classifies each target as a repo or a product. It shallow-clones repos into a scratch
 directory as **untrusted data** and never installs, builds, or runs them. Products are read from
@@ -37,8 +36,8 @@ for the detail.
 
 ### `compare-competitors`
 
-**Auto-triggers on:** "compare them with us", "comparison report", "master report", "how do we
-stack up", "side by side with our work".
+**Auto-triggers on:** "compare them with us", "how do we stack up", or after several competitors
+were analysed.
 
 The skill reads the per-competitor reports and re-measures your side with commands instead of
 trusting your README. It writes an at-a-glance table, an inventory by capability with `—` where a

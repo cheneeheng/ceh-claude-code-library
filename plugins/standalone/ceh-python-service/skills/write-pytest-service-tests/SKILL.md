@@ -54,25 +54,22 @@ Test files mirror source structure. Naming: `test_<what>_<expected_behavior>.py`
 ### Unit tests: no I/O
 
 ```python
-class TestReasoningEngine:
-    async def test_validate_rejects_unknown_event_type(self):
-        engine = ReasoningEngine()
-        event = ReasoningEvent(event_type="invented_type", ...)
-        result = await engine.validate(event, state)
+class TestOrderService:
+    async def test_reserve_rejects_qty_above_stock(self):
+        service = OrderService(stock={"A-1": 1})
+        result = await service.reserve("A-1", qty=2)
         assert result.is_invalid
-        assert "invalid event type" in result.reason
+        assert "insufficient stock" in result.reason
 ```
 
 ### Integration tests: real database, never mocked
 
 ```python
-class TestSessionsAPI:
-    async def test_post_message_creates_event(self, async_client: AsyncClient, test_db):
-        response = await async_client.post(
-            f"/sessions/{session_id}/message",
-            json={"content": "I think we should rewrite in Rust"},
-        )
-        assert response.status_code == 200
+class TestOrdersAPI:
+    async def test_post_order_persists_row(self, async_client: AsyncClient, test_db):
+        response = await async_client.post("/orders", json={"sku": "A-1", "qty": 2})
+        assert response.status_code == 201
+        order_id = response.json()["order_id"]
         row = await test_db.fetchrow(
             "SELECT * FROM orders WHERE order_id = $1", order_id
         )
@@ -83,7 +80,6 @@ Each test that writes data must run in a transaction that rolls back after the t
 
 ### Mocking rules
 
-- Mock the LLM API client in all tests (no real API calls)
 - Mock external HTTP services
 - Do **not** mock PostgreSQL in integration tests: a mock cannot catch bad SQL, a constraint
   violation, or migration drift, which are this tier's main risks

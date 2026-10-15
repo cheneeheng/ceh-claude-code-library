@@ -20,7 +20,11 @@ for individual functions and classes.
 2. **Match conventions** — use Glob/Grep to find existing test files; match their import style,
    fixture patterns, and assertion style
 3. **Write tests** — see rules below
-4. **Run & fix** — execute tests, fix failures, then run the full suite to confirm no regressions
+4. **Run & fix** — run the new tests with the script below, fix failures, then run the full suite
+   to confirm no regressions. A run counts only when pytest collected and executed the tests. An
+   import check, or a command that failed to start, does not count. If all that is missing is the
+   project's declared dependencies, install them with its own package manager and lockfile (e.g.
+   `uv sync`, `pip install -r requirements.txt`), never via sudo or the system package manager.
 5. **Report.** Return the output below as your final message.
 
 ## Test file layout
@@ -37,9 +41,11 @@ for individual functions and classes.
 
 ## Mocking
 
-- Mock ALL external dependencies (DB, HTTP, filesystem, time)
+- Mock every external dependency (DB, HTTP, filesystem, time), so each test runs fast and gives
+  the same result on every machine
 - Use `unittest.mock.patch` or `pytest-mock`'s `mocker` fixture
-- Mock at the point of use, not definition
+- Patch the name where the module under test looks it up (`patch("app.pricing.requests.get")`),
+  not where it is defined, because `patch` replaces a name in one namespace only
 
 ## Running tests
 
@@ -51,8 +57,10 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-unit-tests.sh" <test_file_path>
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-unit-tests.sh"
 ```
 
-If tests fail: fix the test, not the source, unless a genuine bug is confirmed. Report bugs
-clearly; do not silently change source.
+If a test fails, decide from the signature, docstring, and callers whether the test or the source
+is wrong. Fix a wrong test. Leave wrong source as it is: keep the test asserting the documented
+behavior and report the bug under Bugs. Never change an expected value only to match what the code
+returns, because then the test pins the bug instead of catching it.
 
 ## Output to parent session
 
@@ -70,11 +78,18 @@ Needs context: rounding rule for currencies without minor units.
 
 ## Hard rules
 
-- You cannot ask questions. When blocked, stop and make the blocker your final message: what you
-  finished, what stopped you, what the parent should decide.
+- You cannot ask questions, so keep working until every test you were asked for is written and
+  run. Stop early only when you can't go on, and then make the blocker your final message: what
+  you finished, what stopped you, what the parent should decide.
+- When the requested tests are written and the suite has run, stop and report. Don't add tests for
+  code you were not asked to cover, docs, helpers, or refactors of existing tests.
 - Report a check you could not run as "not run" with the reason. Never imply it passed.
-- NEVER modify source files (only test files)
-- NEVER write tests that depend on each other
-- NEVER leave trivially-passing tests (`assert True`)
-- NEVER test implementation details — test behavior and contracts
+- Change only test files, `conftest.py` included. Report source bugs instead, because the parent
+  session decides how source changes.
+- Give each test its own setup through fixtures, so it passes alone and in any order.
+- Make every assertion able to fail: check a return value, a raised exception, or a mock's call.
+  An `assert True` test proves nothing.
+- Assert on behavior a caller can see (return values, raised exceptions, calls to mocked
+  dependencies), not private attributes or internal call order, so a refactor that keeps behavior
+  keeps the tests green.
 - One logical behavior per test; descriptive names that read like sentences

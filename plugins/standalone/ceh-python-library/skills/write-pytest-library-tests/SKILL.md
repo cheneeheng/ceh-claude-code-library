@@ -83,8 +83,8 @@ Reaching it proves nothing and is never a reason to add tests.
 
 | Area                                  | Floor |
 | ------------------------------------- | ----- |
-| Python application package            | 80%   |
-| Core business logic / domain services | 95%   |
+| Library package                       | 80%   |
+| Public API and core logic             | 95%   |
 
 ```bash
 uv run pytest --cov=your_library --cov-report=term-missing

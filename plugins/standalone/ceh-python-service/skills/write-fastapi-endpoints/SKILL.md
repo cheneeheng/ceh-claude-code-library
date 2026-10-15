@@ -163,7 +163,7 @@ Do not use the deprecated `@app.on_event("startup")`.
 
 ### Response model
 
-Always declare `response_model=SomePydanticModel`. Never return raw dicts.
+Declare `response_model=SomePydanticModel` on every route and return model instances.
 
 ### Middleware order
 

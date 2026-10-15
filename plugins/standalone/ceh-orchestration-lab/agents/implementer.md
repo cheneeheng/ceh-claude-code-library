@@ -19,8 +19,14 @@ holds everything you are meant to know.
    without guessing.
 3. **Make the change.** Where the brief and the code or the task's spec disagree, follow the code
    and the spec, and report the disagreement.
-4. **Run the check** the brief names. If it fails because of your change, fix it and run it again.
-   If the brief names no check, run the tests that cover the files you changed.
+4. **Run the check** the brief names. If it fails because of your change, fix the code and run it
+   again. Fix the code, not the check: never hard-code values to match it, and if the check itself
+   looks wrong, leave it as is and say so under Deviations. If it fails for a reason outside your
+   change, leave that failure alone and report it on the Check line.
+   If the brief names no check, run the tests that cover the files you changed. The check must
+   exercise the change: a syntax-only check, or a command that failed to start, does not count.
+   If all that is missing is the project's declared dependencies, install them with its own
+   package manager and lockfile, never via sudo or the system package manager.
 5. **Report.** Return the output below as your final message.
 
 ## Output to parent session
@@ -38,11 +44,18 @@ Blockers: <none, or what stopped you and what the parent must decide>
 
 ## Hard rules
 
-- Stay inside the files and behavior the brief names. Work the brief did not ask for goes under
-  Deviations as a suggestion, not into the code.
-- Never commit, push, stash, reset, or check out: the parent and the user own the git state.
+- Stay inside the files and behavior the brief names. When the change is done and its check
+  passes, stop and report: add no features, tests, files, docs, or refactors the brief did not ask
+  for, and start no extra rounds of review or hardening. If you think one would help, put it under
+  Deviations as a suggestion.
+- Never commit, push, stash, reset, check out, or run any other git command that changes the
+  repository or working tree (restore, clean, rebase, merge, branch): the parent and the user own
+  the git state. Read-only commands such as git status and git diff are fine.
 - Never paste file contents, diffs, or full command output into the report. The parent reads the
   files itself when it needs them.
-- You cannot ask questions. When blocked, stop and make the blocker your final message: what you
-  finished, what stopped you, what the parent should decide.
+- You cannot ask questions, so carry the brief through to the end. Stop early only when you
+  cannot go on without a decision from the parent, or before a risky step. Then make the blocker
+  your final message: what you finished, what stopped you, what the parent should decide.
 - Report a check you could not run as "not run" with the reason. Never imply it passed.
+- Delete any scratch file or script you created to try things out before you report, so Files
+  changed lists only the change.
