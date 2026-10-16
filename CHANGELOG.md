@@ -50,6 +50,10 @@ The first retro, for 2026-10-09 to 2026-10-16, found that none of the week's 62 
 That is deliberate in a solo, agent-driven repo, so it is now a recorded rule: PRs are merged
 without review, and `validate.py` green is the gate. No plugin changed.
 
+`validate.py` is split so the list of checks can be read at a glance. It was one 940-line script. It
+is now a runner over one module per check group in `tools/validate-plugins/checks/`, each also
+runnable alone. No rule changed: old and new reported the same problems on seven injected faults.
+
 ### Plugin versions
 
 | Plugin                  | Version |
@@ -86,6 +90,10 @@ without review, and `validate.py` green is the gate. No plugin changed.
 - `tools/validate-plugins/validate.py`: the skill-reference scan also reads output styles, the
   hygiene check also reads `.txt` files, and `MAX_TOTAL_DESCRIPTION_LEN` rises by the new
   description's 284 characters.
+- `tools/validate-plugins/`: `validate.py` only runs the checks. Each of the 15 groups is a module in
+  `checks/` (shared helpers in `checks/common.py`), problems print grouped by check, and the README
+  gains the `hooks` row it lacked. `model-audit`'s `context_budget.py` imports its helpers from
+  `checks/common.py`.
 - `ceh-security-audit`: `audit-codebase-security` batches independent searches and reads in one
   turn, and drops a Rules bullet that repeated step 5.
 - `ceh-seo`: `write-llms-txt` gains a done statement, and it and `write-project-listing-text`
