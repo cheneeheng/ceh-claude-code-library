@@ -20,16 +20,16 @@ Cytoscape.js is a canvas-rendering graph theory library. It is a building block,
 app: it gives you a graph model, a stylesheet, layouts, algorithms, and an event system.
 Everything else — panels, search boxes, legends, detail views — is your own code.
 
-The API below is based on version **v3.34.2**
+The examples pin Cytoscape.js 3.34.2.
 
 Done when the graph renders with readable labels and passes `references/checklist.md`.
 
 ## Procedure
 
-Follow these steps in order. Do not skip step 1 — picking the wrong layout is the difference between
-a legible diagram and a hairball. Read the checklist in step 0 before writing any code.
+Follow these steps in order. Do not skip step 1: picking the wrong layout is the difference between
+a legible diagram and a hairball.
 
-### 0. Rule zero: read the checklist before writing code
+### 0. Rule zero: the ten failures that break most builds
 
 Most broken Cytoscape.js builds fail for one of ten reasons. Check every one of these
 before you consider a visualizer finished. They are listed in the order they usually bite.
@@ -84,14 +84,9 @@ l.one('layoutstop', fn); l.run();`. Use the second whenever the handler must als
    children into it. If taps land at the wrong offset, this or a missing `cy.resize()`
    is why.
 
-9. **`cy.fit()` on the whole graph stops working past a few dozen nodes.** Fitting
-   computes a zoom that makes everything visible, which for a wide or large graph is a
-   zoom nobody can read. A 116-node org chart fits at zoom 0.47, which renders a
-   `font-size: 10` label at 4.6px — under `min-zoomed-font-size`, so Cytoscape draws no
-   labels at all and the user sees grey confetti. The test is `zoom × font-size` in
-   pixels, never a zoom constant. Measure it and decide: fit to a _subset_, start at a
-   fixed readable zoom and let the user pan, or show fewer elements. See "Sizing and
-   readable defaults" below.
+9. **`cy.fit()` on a large graph can leave every label unreadable.** When `zoom × font-size`
+   falls under `min-zoomed-font-size`, Cytoscape draws no labels at all. Gate on that pixel
+   size, never a zoom constant. See "Sizing and readable defaults" below.
 
 10. **On live or polling data, never `remove()` then `add()`.** It silently resets the
     user's zoom, pan, and selection on every refresh. Diff into the existing instance
@@ -293,7 +288,7 @@ camelCase** — `cytoscape-fcose` exposes `cytoscapeFcose`, `cytoscape-cose-bilk
 exposes `cytoscapeCoseBilkent`. That rule covers every extension, including ones not
 listed below. What you cannot derive is the load order, which is what the table carries.
 
-Pin the core exactly — the API notes above track a specific release. Pin extensions to a
+Pin the core exactly. Pin extensions to a
 major range: their patch releases are not tracked here, and a stale exact pin is worse
 than a range.
 

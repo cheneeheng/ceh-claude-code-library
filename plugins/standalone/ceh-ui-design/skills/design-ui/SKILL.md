@@ -324,9 +324,10 @@ input. Motion that explains nothing is decoration, and it gets cut.
 - **Pick the easing by direction.** Entering or settling uses `--ease-out`, so it starts fast and
   lands soft. Moving between two on-screen positions uses `--ease-standard`. An exit runs at the
   next shorter duration than its enter, because the user has already moved on.
-- **Animate `transform` and `opacity` only.** Animating `width`, `height`, `top`, or `margin`
-  reflows the page on every frame and jank shows first on slow hardware. Expand a panel with a
-  `transform` or a `grid-template-rows` transition, not `height: auto` hacks.
+- **Move and resize with `transform` and `opacity`.** Animating `width`, `height`, `top`, or
+  `margin` reflows the page on every frame and jank shows first on slow hardware. Expand a panel
+  with a `transform` or a `grid-template-rows` transition, not `height: auto` hacks. Color,
+  background, and shadow transitions at `--dur-fast` do not reflow and are fine.
 - **Keep the layout still.** Content that appears pushes nothing that the user is reading or about
   to click: reserve its space or overlay it.
 - **Show progress, not suspense.** A skeleton or `.spinner` after about 300 ms of waiting; no
@@ -371,7 +372,9 @@ Before calling the UI done, verify:
 3. **Spacing audit:** within-group < between-group everywhere; only token values.
 4. **One primary action** per view; active nav state visible; title rule applied.
 5. **State coverage:** empty, loading, error, overflow all handled.
-6. **Token compliance:** no hardcoded hex, px sizes, or shadows — `var(--token)` everywhere.
+6. **Token compliance:** no hardcoded hex, shadows, or font sizes, and spacing only from
+   `--space-*`. A px value is allowed for a fixed component dimension no token covers (a stepper
+   node, a monogram tile, a content-column cap).
 7. **Finish audit:** depth ladder distinct (chrome vs command surfaces vs clickable cards); table
    cells read as words with lifecycle colors consistent across every representation; section
    eyebrows share one vocabulary; global state and its action appear exactly once.
@@ -391,8 +394,9 @@ bundled style over a generic component library (shadcn/ui, MUI, Mantine) for one
 
 - **Choose:** let the user pick via `AskUserQuestion` (single-select) unless they already named one.
   With no human to answer, take Meridian, the neutral default, and say so. Both templates ship
-  the same token names and component classes, so the choice is purely look-and-feel — swap later
-  by replacing one CSS file, with no markup changes. To preview, open
+  the same token names and component classes except Meridian's `--shadow-lg` and `--weight-heavy`,
+  so the choice is look-and-feel — swap later by replacing one CSS file, and keep markup off those
+  two tokens so it survives the swap. To preview, open
   `references/<name>/brand-guide.html` in a browser or send it with `SendUserFile`.
 - **Install:** copy `references/<name>/brand.css` to the project's global stylesheet location
   (follow the project's existing convention) and load it **first**, before any app styles —
@@ -404,8 +408,9 @@ bundled style over a generic component library (shadcn/ui, MUI, Mantine) for one
 
 #### Build UI against the contract
 
-Use the tokens and classes below — never hardcode a hex, px size, or shadow. Anything the template
-does not cover, build with `var(--token)` values so it re-themes with the rest.
+Use the tokens and classes below — never hardcode a hex, shadow, or font size, and take spacing
+from `--space-*`. A px value is fine for a fixed component dimension no token covers. Anything the
+template does not cover, build with `var(--token)` values so it re-themes with the rest.
 
 ##### Tokens (CSS custom properties)
 
@@ -441,4 +446,5 @@ Accessibility is built in: `:focus-visible` rings and `prefers-reduced-motion` a
 template. Keep semantic HTML (`<button>`, `<nav>`, `<main>`) — see `ceh-web-frontend:make-ui-accessible`.
 
 To restyle the whole app later: replace the project's `brand.css` with the other template's — the
-shared token + class contract means markup does not change.
+shared token + class contract means markup does not change, provided it avoids Meridian's
+`--shadow-lg` and `--weight-heavy`.

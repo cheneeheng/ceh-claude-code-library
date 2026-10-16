@@ -74,8 +74,7 @@ are not comparable, and a reader cannot judge a finding without it.
 
 ### 3. Freeze the artifact set
 
-List **exactly** what a newcomer has, and nothing else. This is the single most important step —
-everything after it is only as honest as this list.
+List **exactly** what a newcomer has, and nothing else. Everything after this step is only as honest as this list.
 
 | Surface        | Typical frozen set                                                                                 |
 | -------------- | -------------------------------------------------------------------------------------------------- |
@@ -136,8 +135,8 @@ skipping one is recorded as a skip, not omitted.
 
 ### 5. Score by observed outcome, not by appearance
 
-**This is the anti-inflation rule and it is not optional.** Severity comes from what actually
-happened to a walker, never from how bad something looks to you. Assign each stall one of the four
+Severity comes from what actually happened to a walker, never from how bad something looks to
+you, so the report records observed outcomes instead of the auditor's preferences. Assign each stall one of the four
 severities (Blocker, Detour, Friction, Polish) by the conditions in
 `${CLAUDE_PLUGIN_ROOT}/references/personas-and-severity.md`.
 

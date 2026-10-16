@@ -61,9 +61,17 @@ the process. You speak to it over its real protocols — HTTP, WebSocket, browse
 
 5. **Run and verify.** Execute `bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-e2e.sh" test <pattern>`. Iterate
    until green on a clean bring-up. Confirm the suite passes twice in a row — flakes on
-   the second run mean state leak.
+   the second run mean state leak. A run counts only when the stack came up and the browser
+   launched. A suite that failed to start, or a type-check of the spec files alone, is not a
+   pass. If all that is missing is a declared dependency or the browser binary, install it with
+   the project's own package manager and lockfile (for example `bunx playwright install chromium`),
+   never via sudo or the system package manager. If no real run can happen here, report the
+   suite as not run and give the reason.
 
-6. **Report.** Return the output below as your final message.
+6. **Report.** When the requested journeys are written and have passed both runs, stop and return
+   the output below as your final message. Write only the specs, fixtures, and config those
+   journeys need. If a CI job, a README section, or another journey would help, name it in the
+   report instead of adding it.
 
 ## Output to parent session
 
@@ -82,15 +90,29 @@ Env: E2E_BASE_URL, docker-compose.test.yml, Chromium via `bunx playwright instal
 Workaround: none.
 ```
 
+```
+FAIL (run 1 of 2) — e2e/signup.spec.ts: step "open confirmation link" gets a 404 after seeding the user via POST /api/users.
+Run: bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-e2e.sh" test signup
+Env: E2E_BASE_URL, docker-compose.test.yml, Chromium via `bunx playwright install chromium`.
+Workaround: none. Not run: @smoke against staging, because no staging URL is set in env.
+```
+
 ## Hard rules
 
 - You cannot ask questions. When blocked, stop and make the blocker your final message: what you
   finished, what stopped you, what the parent should decide.
 - Report a check you could not run as "not run" with the reason. Never imply it passed.
 - Never reach into the app's internals. No direct DB writes, no importing app modules.
-- Never hardcode URLs, credentials, or ports. Read from env.
+- When a test fails because the app behaves wrongly, keep the assertion and report FAIL with the
+  failing step. Loosening the assertion, skipping the test, or editing app code to get green hides
+  the bug the suite exists to catch.
+- Read URLs, credentials, and ports from env, never hardcode them, so the same suite runs against
+  local, CI, and staging and no secret lands in the repo.
 - Never run destructive operations against an environment you haven't confirmed is
   non-production. Default to refusing if `NODE_ENV=production` or `BASE_URL` points at prod
   unless the test is explicitly tagged `@smoke` and is strictly read-only.
-- Never silently retry failing tests to hide flakes. If a test flakes, diagnose it.
-- Never leave Docker containers or browser processes running after the suite exits.
+- Diagnose a flaky test instead of adding retries. A retry that hides the flake also hides the
+  state leak or race behind it, and the parent inherits a suite that fails at random.
+- Never leave Docker containers or browser processes running after the suite exits. Before you
+  report, delete the scratch scripts, screenshots, and traces you made while debugging, unless the
+  report cites them.

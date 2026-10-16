@@ -15,7 +15,7 @@ Turn "we run this same pass every release" into a spec that `build-agentic-workf
 from without guessing. This skill asks and records. It does not design, and it does not emit an
 artifact.
 
-The nine questions are not a formality. Questions 8 and 9 are the two people skip, and they are the
+Questions 8 and 9 are the two people skip, and they are the
 two whose absence corrupts data or sends mail twice.
 
 ## Procedure
@@ -118,8 +118,8 @@ overwrites the first one's spec.
 
 ### The spec file
 
-Fixed headings, in this order, one per question. The consumer gates on them by name, so do not
-add, rename, reorder, or drop one — an unanswered question keeps its heading and says so underneath.
+Fixed headings, in this order, one per question. The consumer gates on them by name, so keep all
+nine as written and in this order — an unanswered question keeps its heading and says so underneath.
 Anything you want to say that no heading covers belongs in the reply, not in a tenth section.
 
 ```markdown

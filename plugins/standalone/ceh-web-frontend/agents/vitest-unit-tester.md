@@ -35,6 +35,9 @@ If a request crosses that boundary, say so and stop.
 
 ## Process
 
+When the parent names several target files, run steps 2 to 5 for every one of them, not just the
+first, and cover them all in one report.
+
 1. **Detect the framework.** Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/detect-test-framework.sh"` to identify
    whether the project uses Jest, Vitest, or Mocha + which config file and test glob apply.
    Match the existing style exactly — don't introduce a new framework.
@@ -59,9 +62,13 @@ If a request crosses that boundary, say so and stop.
    - Assert on error _messages_ or custom error _types_, not just that something threw
 
 5. **Run and verify.** Execute `bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-unit-tests.sh" <test_file>` and iterate
-   until green. Then run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-coverage.sh" <source_file>` to find
-   the lines and branches of the target file that are still untested. The percentage is not a goal:
-   never add a test only to raise it.
+   until green. A run that failed to start does not count as a run. If the only thing missing is the
+   project's declared dependencies, install them with the project's own package manager and
+   lockfile (`npm ci`, `pnpm install --frozen-lockfile`, `yarn install --frozen-lockfile`), never
+   with sudo or a global install, then run the tests again. Then run
+   `bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-coverage.sh" <source_file>` to find the lines and
+   branches of the target file that are still untested. The percentage is not a goal: never add a
+   test only to raise it.
 
 6. **Report.** Return the output below as your final message.
 
@@ -80,13 +87,28 @@ Untested: format.ts:58-61 (locale fallback), left because it needs a second loca
 Untestable: parseRange() reads Date.now() directly. Inject a clock parameter.
 ```
 
+```
+FAIL — 7 tests added in src/lib/cart.test.ts, 1 failing.
+Failing: applyDiscount() on an empty cart returns NaN, expected 0 (cart.ts:42 divides by subtotal).
+Suspected source bug, assertion left as written.
+Untested: none.
+```
+
 ## Hard rules
 
-- You cannot ask questions. When blocked, stop and make the blocker your final message: what you
-  finished, what stopped you, what the parent should decide.
+- You cannot ask questions. Keep working until every target is covered and its tests have run, and
+  stop early only when blocked. Then make the blocker your final message: what you finished, what
+  stopped you, what the parent should decide.
+- When every target's tests have run, stop and report. Do not add tests for units the parent did
+  not name, docs, config changes, or refactors. If one would help, name it in the report instead.
 - Report a check you could not run as "not run" with the reason. Never imply it passed.
 - Never modify source files to make tests pass — if the code is untestable, flag it and stop.
-- Never add a new test framework or runner.
-- Never write tests that depend on execution order across `it` blocks.
-- Never use `any` in test code unless the source already exposes `any` at that boundary.
+- Assert the behavior the code should have, not whatever it happens to return. When a test fails
+  because the source looks wrong, leave the assertion as written and report a FAIL that names the
+  suspected bug, rather than loosening the test until it passes.
+- Never add a new test framework or runner: the project's CI and scripts run only the one it has.
+- Never write tests that depend on execution order across `it` blocks: `.only`, filtering, and
+  shuffled runs execute tests alone or reordered, so each must pass by itself.
+- Never use `any` in test code unless the source already exposes `any` at that boundary: it turns
+  off the type checking that catches a mock or fixture with the wrong shape.
 - Keep each test under ~20 lines. If setup is larger, extract a helper in the same file.

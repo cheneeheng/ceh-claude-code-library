@@ -29,6 +29,13 @@ including a tuning pass on their five pinned agents. Its reports join the others
 `audits/2026-10-16/`, and none of its edits were applied, so these plugins' versions did not move.
 Every plugin in the repo now has a `tuning.json`.
 
+A second follow-up applied that round's kept edits and accepted the tuning of its five pinned
+agents, `newcomer-simulator` and the four `ceh-web-frontend` agents, whose `tuned-for` is now
+`sonnet-5-5`. Several edits fix contradictions: `design-ui` banned all px sizes and non-transform
+animation while its own examples used both, `vitest-integration-tester` reset state in `afterEach`
+while its rules said `beforeEach`, and `run-agentic-workflow` ended preflight failures "before step
+1" when steps 1 to 3 are the preflight.
+
 ### Plugin versions
 
 | Plugin                  | Version |
@@ -38,6 +45,11 @@ Every plugin in the repo now has a `tuning.json`.
 | `ceh-session-diagnosis` | 1.0.4   |
 | `ceh-session-to-skill`  | 1.0.2   |
 | `ceh-testing`           | 1.4.5   |
+| `ceh-ui-design`         | 1.0.6   |
+| `ceh-usability-audit`   | 1.1.6   |
+| `ceh-web-frontend`      | 1.3.4   |
+| `ceh-workflow-builder`  | 1.3.7   |
+| `ceh-workflow-runner`   | 1.0.5   |
 
 ### Added
 
@@ -57,6 +69,18 @@ Every plugin in the repo now has a `tuning.json`.
 - `ceh-testing`: `audit-test-suite`, `close-test-risk-gaps`, `design-test-cases`,
   `test-a-bug-fix` and `verify-behavior-preserved` open with a done statement.
   `audit-test-suite` replaces its 15-finding cap with a concrete bar.
+- `ceh-usability-audit`: `newcomer-simulator` tuned for Sonnet 5.5: three named stopping points,
+  "Interrupted" after each milestone, one positive allowlist rule, and a blocker that returns the
+  walk report rather than a free-form message. `audit-error-messages` and `write-plain-language`
+  gain done statements, and `simulate-newcomer-first-run` drops two emphasis lines.
+- `ceh-web-frontend`: the three tester agents and `web-frontend-reviewer` tuned for Sonnet 5.5:
+  real-run rules, no loosened assertions, scoped reports, FAIL examples, and reasons on every hard
+  rule. The reviewer writes fifteen findings in full and lists the rest under Dismissed.
+  `visualize-graph-cytoscape` shortens rule 9 to the pixel-size gate, and `configure-bun-vite-env`
+  states the strict-mode rule positively.
+- `ceh-workflow-builder`: `build-agentic-workflow` gains a done statement, and both skills state a
+  rule positively.
+- `ceh-workflow-runner`: `run-agentic-workflow` states its headless-asking rule positively.
 
 ### Fixed
 
@@ -65,6 +89,15 @@ Every plugin in the repo now has a `tuning.json`.
   with its run-in-order rule.
 - `ceh-session-to-skill`: `turn-session-into-skill` counts a handed-off or stopped run as done
   once the user is told which and why.
+- `ceh-ui-design`: `design-ui` allows color, background, and shadow transitions, and allows px for
+  a fixed component dimension no token covers, matching its examples. The theme-swap promise names
+  Meridian's two extra tokens. An example's off-grid `2px` padding is now `--space-1`.
+- `ceh-web-frontend`: `vitest-integration-tester`'s example resets state in `beforeEach`, as its
+  rules say. `web-frontend-reviewer`'s example count line matches its findings.
+  `visualize-graph-cytoscape` no longer points at the API notes cut on 2026-10-08 or says step 0
+  is the checklist.
+- `ceh-workflow-runner`: `run-agentic-workflow` ends a preflight failure before any stage runs, and
+  no longer calls the world check the stage's first action.
 
 ## 2026-10-15
 

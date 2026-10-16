@@ -69,7 +69,7 @@ restate it.
    2. **Approval.** If the stage has `approval` and is not covered by an earlier approval, see
       Approvals below.
    3. **World check.** If `unsafe_to_rerun`, evaluate `world_check` now, on every attempt and every
-      resume. It is the stage's first action, ahead of the run state, because state is only a record.
+      resume. It runs before dispatch and ahead of the run state, because state is only a record.
       When it is false the effect may already exist: stop with `failed <id> world-check-failed`. Do
       not skip the stage and do not guess that it finished.
    4. **Dispatch** per `run.kind`, below.
@@ -165,7 +165,7 @@ is to edit those files.
 - **Never imitate an absent tool and never fall back after a denial.**
 - **One level deep.** A stage may not run this skill, and a stage you dispatch is told so.
 - **No secrets on disk.** Run artifacts and `run-state.md` hold references to secrets, never values.
-- **Do not stop to ask in headless mode,** except through the approval path above.
+- **In headless mode, ask only through the approval path above.**
 
 ## Output
 
@@ -182,7 +182,7 @@ file too. Say nothing after it.
 ## Stop conditions
 
 - The config fails a validation rule, an input is missing or a capability is absent → end before
-  step 1 with `FLOW STATUS: failed - <reason>`.
+  any stage runs with `FLOW STATUS: failed - <reason>`.
 - A gate is red and stops the run, a retry makes no progress, a stage edited its own gate's check,
   a world check fails, an input file is missing or an approval is declined →
   `FLOW STATUS: failed <stage-id> <reason>`.

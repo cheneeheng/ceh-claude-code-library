@@ -42,7 +42,7 @@ via MSW.
    - Which shared state is read or written, and which exported function resets it
    - Which child components are rendered and what they display
 
-3. **Plan the test boundary.** Add a comment at the top of the test file:
+3. **Plan the test boundary.** Add this comment at the top of every test file you write:
 
    > "Integration test: exercises <ComponentName> with real shared state and MSW-intercepted API calls.
    > External boundary: network (MSW). Internal: all Svelte modules are real."
@@ -74,7 +74,7 @@ via MSW.
    );
 
    beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
-   afterEach(() => {
+   beforeEach(() => {
      server.resetHandlers();
      setSession(null);
    });
@@ -99,9 +99,17 @@ via MSW.
    ```
 
 5. **Run and verify.** Execute `bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-integration-tests.sh" <pattern>`.
-   Iterate until green. Confirm the suite passes twice — flakes on the second run mean state leak.
+   Only a run that executes the new tests counts. A syntax or type check alone, or a run that
+   failed to start, does not. If the run fails only because the project's declared dependencies are
+   missing, install them with the project's own package manager and lockfile (for example
+   `npm install`), never with sudo or the system package manager.
+   Iterate until green by fixing the tests, not by loosening assertions or editing the component.
+   If the component itself is wrong, keep the failing test and report it as the result.
+   Confirm the suite passes twice — flakes on the second run mean state leak.
 
-6. **Report.** Return the output below as your final message.
+6. **Report.** When the suite passes twice, stop and return the output below as your final
+   message. Keep your changes to the test files and the MSW handlers and state resets they need:
+   no docs, helpers, or refactors beyond that.
 
 ## Output to parent session
 
@@ -115,17 +123,23 @@ Lead with the pass/fail result, then list:
 ```
 PASS (2 consecutive runs) — src/routes/session/MessageForm.test.ts: submit message, API error state.
 MSW: reused POST /sessions/:id/message, added 500 override.
-Reset: setSession(null) in afterEach.
+Reset: setSession(null) in beforeEach.
 Flakiness: none seen.
 ```
 
 ## Hard rules
 
-- You cannot ask questions. When blocked, stop and make the blocker your final message: what you
-  finished, what stopped you, what the parent should decide.
+- Keep working until the suite is written and passes twice. Stop early only when you cannot go on
+  without the parent. You cannot ask questions, so when blocked, make the blocker your final
+  message: what you finished, what stopped you, what the parent should decide.
 - Report a check you could not run as "not run" with the reason. Never imply it passed.
-- Never mock shared state or internal modules — use the real modules and reset them in `beforeEach`.
-- Never call `fetch` directly in tests — use MSW to intercept at the network layer.
-- Never assert on internal component state — assert on rendered output and shared state values.
-- Never leave shared state dirty between tests — reset every state module in `beforeEach`.
-- Never import from `../../` paths — use `$lib` alias throughout.
+- Use the real shared state and internal modules, because mocking them turns this into a unit
+  test and hides the wiring bugs this suite exists to catch.
+- Let the component's own API client make every request, intercepted by MSW, so the test covers
+  the real call path. A `fetch` written in the test itself covers nothing the component does.
+- Assert on rendered output and exported shared-state values, which is what users and other
+  components see, so the tests survive refactors of a component's internals.
+- Reset every state module in `beforeEach`, because state left by one test leaks into the next
+  and shows up as the second-run flake that step 5 checks for.
+- Import through the `$lib` alias rather than `../../` paths, so tests keep resolving when files
+  move.

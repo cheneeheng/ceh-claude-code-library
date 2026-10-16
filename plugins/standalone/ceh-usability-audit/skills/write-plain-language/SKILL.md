@@ -11,9 +11,9 @@ license: Apache-2.0
 
 # Write in plain language
 
-The instruction "write simply" is not the useful part — every writer already agrees with it and
-still ships "Configure your workspace to initiate synchronization." What produces clear copy is a
-**floor you can check a word against**, and a list of the things you must not simplify.
+Clear copy comes from a **floor you can check a word against**, and a list of the things you must
+not simplify. The work is done when every harvested string has a row in the rewrite table and the
+one-name check has passed.
 
 The failure is rarely that the writer chose a hard word on purpose. It is that the implementation's
 vocabulary is the vocabulary they have been living in for weeks, and it reads as ordinary to them.
