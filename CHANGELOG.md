@@ -46,6 +46,10 @@ records the install method apart from what the entry is, because a skill or an M
 the user by more than one method. The plan is `product/plans/capability-lookup.md`. The hook that
 would start the lookup on every prompt is not built, and waits on a measured miss.
 
+The first retro, for 2026-10-09 to 2026-10-16, found that none of the week's 62 PRs had a review.
+That is deliberate in a solo, agent-driven repo, so it is now a recorded rule: PRs are merged
+without review, and `validate.py` green is the gate. No plugin changed.
+
 ### Plugin versions
 
 | Plugin                  | Version |
@@ -72,6 +76,8 @@ would start the lookup on every prompt is not built, and waits on a measured mis
 - `tools/validate-plugins/validate.py`: a `registry` check on every registry line (eight cells, known
   kind and method, `https` source, real past date, no repeated name and install pair).
 - `product/plans/capability-lookup.md`: the build plan, with its review.
+- `.claude/rules/decision-pr-review.md`: merge PRs without review, with `validate.py` as the gate.
+- `product/retros/2026-10-16-period.md`: the retro for 2026-10-09 to 2026-10-16.
 
 ### Changed
 
