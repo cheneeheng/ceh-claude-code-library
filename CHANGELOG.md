@@ -23,6 +23,12 @@ does not exist, `audit-test-suite` said to run mutation testing last against its
 rule, and `turn-session-into-skill` defined done so that a handed-off or stopped run could never
 reach it.
 
+A third audit round covered the last five plugins never audited: `ceh-ui-design`,
+`ceh-usability-audit`, `ceh-web-frontend`, `ceh-workflow-builder`, and `ceh-workflow-runner`,
+including a tuning pass on their five pinned agents. Its reports join the others in
+`audits/2026-10-16/`, and none of its edits were applied, so these plugins' versions did not move.
+Every plugin in the repo now has a `tuning.json`.
+
 ### Plugin versions
 
 | Plugin                  | Version |
@@ -36,7 +42,7 @@ reach it.
 ### Added
 
 - `audits/2026-10-16/`: one report and one raw `/doctor` output per audited plugin, plus `SUMMARY.md`.
-- `.claude-plugin/tuning.json` in each of the five plugins, recording the guides checked.
+- `.claude-plugin/tuning.json` in each plugin of both audit rounds, recording the guides checked.
 
 ### Changed
 

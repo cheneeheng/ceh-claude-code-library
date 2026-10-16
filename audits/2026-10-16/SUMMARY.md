@@ -9,6 +9,11 @@ claude-code 2.1.301. Edits applied: no.
 | ceh-session-diagnosis | [ceh-session-diagnosis.md](ceh-session-diagnosis.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | agents/transcript-analyst.md | pass |
 | ceh-session-to-skill | [ceh-session-to-skill.md](ceh-session-to-skill.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
 | ceh-testing | [ceh-testing.md](ceh-testing.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
+| ceh-ui-design | [ceh-ui-design.md](ceh-ui-design.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
+| ceh-usability-audit | [ceh-usability-audit.md](ceh-usability-audit.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | agents/newcomer-simulator.md | pass |
+| ceh-web-frontend | [ceh-web-frontend.md](ceh-web-frontend.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | agents/playwright-system-tester.md, agents/vitest-integration-tester.md, agents/vitest-unit-tester.md, agents/web-frontend-reviewer.md | pass |
+| ceh-workflow-builder | [ceh-workflow-builder.md](ceh-workflow-builder.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
+| ceh-workflow-runner | [ceh-workflow-runner.md](ceh-workflow-runner.md) | fable-5, fable-5-1, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | - | pass |
 
 `validate.py`: pass.
 
