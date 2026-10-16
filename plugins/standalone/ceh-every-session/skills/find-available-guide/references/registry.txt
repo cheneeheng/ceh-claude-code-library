@@ -1,0 +1,1 @@
+pydantic | pydantic,basemodel | plugin | writing Pydantic models and validation from memory | plugin | claude plugin marketplace add pydantic/skills && claude plugin install pydantic@pydantic-skills | https://github.com/pydantic/skills | 2026-10-16
