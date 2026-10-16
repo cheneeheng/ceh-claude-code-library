@@ -16,6 +16,9 @@ The runner, fixtures, and mocking library belong to your stack's testing skill
 `ceh-web-frontend:write-vitest-playwright-tests`). This skill answers the question those do not: **which inputs,
 and which scenarios.**
 
+The task is done when every rung has its tests or a stated skip, and no test lacks a nameable
+`fails_when`.
+
 ## Two failure modes, not one
 
 - **Too few:** one happy path plus a null check. Passes on code that is wrong in every way a real
@@ -123,9 +126,9 @@ Reach for this whenever a function is pure and total: parsers, formatters, seria
 money and date arithmetic, sanitizers, diffing, pagination math.
 
 One property replaces a dozen example tests — delete the examples it subsumes, keeping only the
-boundary cases from rung 2. Do **not** write an oracle by re-implementing the function in the test
-file unless a genuinely independent reference already exists: a re-implementation shares your
-misreading of the spec and doubles what has to change when the spec moves.
+boundary cases from rung 2. Write an oracle only against a genuinely independent reference that
+already exists, because a re-implementation in the test file shares your misreading of the spec and
+doubles what has to change when the spec moves.
 
 Record any failing case the generator finds as its own explicit test — generators are not
 guaranteed to produce it again.

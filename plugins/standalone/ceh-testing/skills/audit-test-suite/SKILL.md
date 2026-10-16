@@ -19,6 +19,9 @@ license: Apache-2.0
 Green means the tests ran, not that they check anything. A suite generated in bulk — by a person in
 a hurry or by a model — reliably contains tests that pass on broken code. This skill finds them.
 
+The task is done when checks 1 and 2 have run, every later check has run or is named as unrun with
+its command, and each finding in the report quotes the code it is about.
+
 Run the checks in order: each is cheaper than the one after it, and the cheap ones find most of it.
 
 ## What waits for a request
@@ -121,9 +124,9 @@ If the tool is not installed, do not install it unprompted: report the one-line 
 (`uv add --dev mutmut`, `bun add -d @stryker-mutator/core`) and continue with the other checks.
 Installing edits the lockfile, which an audit has no mandate to change.
 
-Cap the run, for example `timeout 900 mutmut run ...`. Run it last so a timeout still leaves the
-cheap findings intact, and if it does not finish, report partial results and say the run was
-truncated.
+Cap the run, for example `timeout 900 mutmut run ...`. Run it after checks 1 and 2 so a timeout
+still leaves the cheap findings intact, and if it does not finish, report partial results and say
+the run was truncated.
 
 For a large or slow suite, delegate the whole audit to a background subagent with this skill loaded
 and tell it to use report-only mode (below) — the run is long and high-output, which is exactly what
@@ -222,8 +225,8 @@ subagent cannot ask the parent anything, so the report has to stand alone.
 
 - Skip check 2 (it breaks source on purpose), never edit any file, and never install a package or
   change a lockfile or CI config.
-- Cap the list at about 15 findings and cut the tail rather than listing everything, because a
-  long tail buries the few fixes that matter.
+- Keep the list to findings that let a suite pass on broken code or let a real failure go
+  unnoticed, ranked worst-first, because a long tail buries the few fixes that matter.
 - After the list, add: the commands run and their verdicts, including checks skipped and why (tool
   missing, timed out, not run); the zero-coverage files the diff touches; the 2–3 fixes worth making
   first, as concrete suggestions; and any bug found in source, reported and never fixed.

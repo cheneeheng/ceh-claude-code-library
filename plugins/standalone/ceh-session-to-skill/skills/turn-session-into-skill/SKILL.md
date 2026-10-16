@@ -15,7 +15,8 @@ license: Apache-2.0
 Write one `SKILL.md` that lets a later session repeat the task this session just finished, built
 from what actually ran rather than from an interview. Done when the file exists under
 `.claude/skills/<name>/`, every step in it traces to a step that succeeded in this session, and
-the user has the list of what came from where.
+the user has the list of what came from where. A run that Step 5 hands off, or that a stop
+condition ends, is done once the user has been told which and why.
 
 The session is better evidence than anyone's memory of the task: it holds the exact commands and
 flags that worked, the order, and every correction the user made. An interview reconstructs that
@@ -53,8 +54,8 @@ less accurately and asks questions the transcript already answers.
 
 ## Rules
 
-- **Only what ran.** Add no step, branch, or option this session never exercised. One observed run
-  shows one path, and a branch nobody ran is a guess that will mislead the next run.
+- **Only what ran.** Include only steps, branches, and options this session exercised. One observed
+  run shows one path, and a branch nobody ran is a guess that will mislead the next run.
 - **No secrets.** A token, password, or key that appeared in the session never goes into the file.
   Name the environment variable or the place it is read from instead.
 - **Irreversible steps pause.** A step that pushed, published, deployed, sent, or deleted gets an

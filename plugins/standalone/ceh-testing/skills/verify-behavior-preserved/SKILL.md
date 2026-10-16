@@ -22,6 +22,9 @@ almost nobody uses it.
 The failure mode is refactoring against a thin suite, watching it stay green, and shipping a silent
 behavior change. Green on a suite that never covered the region proves nothing.
 
+The task is done when the pins were committed before the change, the suite is green with no test
+edits, and the differential run shows no divergence or each divergence is declared.
+
 ## What waits for a request
 
 Writing and running the tests that prove the refactor preserved behavior is part of the refactor, so

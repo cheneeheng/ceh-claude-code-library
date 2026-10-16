@@ -17,6 +17,8 @@ sitemap. A sitemap enumerates every URL for a crawler with unlimited patience; `
 
 The spec is [llmstxt.org](https://llmstxt.org/). It is small, and the parts that get it wrong are
 the ordering rules and the curation, not the markdown.
+Done means the file has an H1 and a summary blockquote, every link points at a page that resolves,
+and the links are ordered by what a newcomer needs first.
 
 ## Procedure
 
@@ -85,11 +87,11 @@ the ordering rules and the curation, not the markdown.
 
 ## Rules
 
-- **Do not dump the sitemap into it.** A file listing 200 URLs has made zero decisions and is
+- **Select the links that earn a place.** A file listing 200 URLs has made zero decisions and is
   strictly worse than the sitemap it copied.
-- **Do not write marketing copy in the blockquote.** The agent is deciding what to read, not
+- **Write the blockquote as a plain factual summary.** The agent is deciding what to read, not
   whether to buy.
-- **Do not duplicate page content inline.** `llms.txt` links; it does not host. That is what
+- **Keep page content on its own page.** `llms.txt` links; it does not host. That is what
   `llms-full.txt` is for.
 - **Do not treat it as a substitute for the HTML head surface.** `llms.txt` has no bearing on
   search indexing or link previews — those still need `ceh-seo:make-page-crawlable`.

@@ -35,7 +35,7 @@
     {
       "name": "ceh-testing",
       "source": "./plugins/standalone/ceh-testing",
-      "version": "1.4.4",
+      "version": "1.4.5",
       "description": "CEH testing techniques: stack-agnostic test design and verification moments — write the failing test before new code, reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, explore the running app for bugs, and close the risk gaps functional tests structurally miss."
     },
     {
@@ -65,7 +65,7 @@
     {
       "name": "ceh-seo",
       "source": "./plugins/standalone/ceh-seo",
-      "version": "1.1.4",
+      "version": "1.1.5",
       "description": "CEH SEO: discoverability standards for anything exposed to the internet — technical SEO/GEO for public web pages (meta tags, structured data, sitemap, rendering strategy), authoring the llms.txt agent index, and findability of public-facing text (README first screen, package descriptions and keywords, repo topics, landing copy)."
     },
     {
@@ -137,19 +137,19 @@
     {
       "name": "ceh-session-to-skill",
       "source": "./plugins/standalone/ceh-session-to-skill",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "CEH session to skill: right after a task is done, turn the steps that worked in this session into a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments."
     },
     {
       "name": "ceh-session-diagnosis",
       "source": "./plugins/standalone/ceh-session-diagnosis",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "description": "CEH session diagnosis: find why a Claude Code session went wrong from its transcript, with parallel analysts whose every finding cites a transcript line, each root cause routed to a fix, and a scrubbed copy for sharing."
     },
     {
       "name": "ceh-security-audit",
       "source": "./plugins/standalone/ceh-security-audit",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "CEH security audit: audit a whole codebase, not one diff, by mapping the attack surface and tracing each entry point to its sinks, and report every exploitable finding with the attack it enables, its severity, and a fix."
     },
     {
