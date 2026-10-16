@@ -16,10 +16,49 @@ A model audit covered five more plugins that had never been audited: `ceh-securi
 pass on the pinned `transcript-analyst` agent. The reports are in `audits/2026-10-16/`, and none of
 their edits were applied, so no versions moved.
 
+A follow-up applied the round's kept edits and accepted the tuning of `transcript-analyst`, whose
+`tuned-for` is now `sonnet-5-5`. Most edits add a statement of when the task is done or restate a
+negative rule positively. Three fix defects: a `test-a-bug-fix` bisect command named a test that
+does not exist, `audit-test-suite` said to run mutation testing last against its own run-in-order
+rule, and `turn-session-into-skill` defined done so that a handed-off or stopped run could never
+reach it.
+
+### Plugin versions
+
+| Plugin                  | Version |
+| ----------------------- | ------- |
+| `ceh-security-audit`    | 1.0.2   |
+| `ceh-seo`               | 1.1.5   |
+| `ceh-session-diagnosis` | 1.0.4   |
+| `ceh-session-to-skill`  | 1.0.2   |
+| `ceh-testing`           | 1.4.5   |
+
 ### Added
 
 - `audits/2026-10-16/`: one report and one raw `/doctor` output per audited plugin, plus `SUMMARY.md`.
 - `.claude-plugin/tuning.json` in each of the five plugins, recording the guides checked.
+
+### Changed
+
+- `ceh-security-audit`: `audit-codebase-security` batches independent searches and reads in one
+  turn, and drops a Rules bullet that repeated step 5.
+- `ceh-seo`: `write-llms-txt` gains a done statement, and it and `write-project-listing-text`
+  state six rules positively.
+- `ceh-session-diagnosis`: `transcript-analyst` tuned for Sonnet 5.5: every transcript in scope, a
+  concrete ranking bar under the 12-finding cap, an `Other lens` line in the template, and secrets
+  masked everywhere. `diagnose-session` states its read-only rules positively.
+- `ceh-session-to-skill`: `turn-session-into-skill` states "only what ran" positively.
+- `ceh-testing`: `audit-test-suite`, `close-test-risk-gaps`, `design-test-cases`,
+  `test-a-bug-fix` and `verify-behavior-preserved` open with a done statement.
+  `audit-test-suite` replaces its 15-finding cap with a concrete bar.
+
+### Fixed
+
+- `ceh-testing`: `test-a-bug-fix`'s bisect example names `test_parse_duration_rejects_bare_number`,
+  the test step 1 defines. `audit-test-suite` runs mutation testing after checks 1 and 2, in step
+  with its run-in-order rule.
+- `ceh-session-to-skill`: `turn-session-into-skill` counts a handed-off or stopped run as done
+  once the user is told which and why.
 
 ## 2026-10-15
 

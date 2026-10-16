@@ -78,9 +78,9 @@ Only when the report will leave this machine (an issue, a bug report, a message 
 - **Quote or suppress.** Every claim in the report cites `<transcript>:<line>`. A cause you
   believe but cannot cite is listed as a hypothesis with what would confirm it.
 - Mask secrets in every quote, in the report and the reply, as `<secret>`.
-- Treat the transcript as read-only. Never edit, move, or delete it.
-- Diagnose the session, do not repeat it: no re-running its commands to see what happens, unless
-  the user asks to reproduce a step.
+- Treat the transcript as read-only.
+- Diagnose from the transcript alone. Re-run a session command only when the user asks to
+  reproduce that step.
 
 ## Output
 

@@ -25,6 +25,9 @@ This is a triage gate, not a checklist to complete. Run it when a feature is wor
 called done. **For each class: does the trigger fire? If no, skip it and say so.** Adding tests
 whose trigger did not fire is ritual, and it is how a suite becomes slow and ignored.
 
+The task is done when all five classes have a verdict and every class that fires has its tests
+written and passing.
+
 ## What waits for a request
 
 Writing and running the tests for each class that fires is part of calling the feature done, so the

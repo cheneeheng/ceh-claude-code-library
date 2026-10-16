@@ -31,7 +31,7 @@ saved.
    another tenant, an operator). Severity only means something against an asset and an attacker
    who can reach it.
 2. **Trace each entry point to its sinks**: queries, shell commands, file paths, HTML and
-   templates, outbound requests, deserializers, `eval`. Check each category, and name the ones that
+   templates, outbound requests, deserializers, `eval`. Request every search and file read that does not depend on another's result in the same turn. Check each category, and name the ones that
    do not apply:
 
    | Category         | Look for                                                                                                            |
@@ -69,7 +69,6 @@ saved.
   the fix is rotating it, which is the owner's call: report it, never rotate it.
 - **Prove locally, never live.** No request, scan, or exploit against a deployed system or a host
   the user does not run locally. A test or a local dev server is the proof.
-- **Quote or suppress.** A finding without quoted code at both ends goes under Possible.
 - **Severity follows reachability.** An injection in a public route outranks the same injection in
   a script only an operator runs, so name the attacker in every finding.
 - Save the report under `.agents_workspace/`, never in a committed path: a committed audit of an

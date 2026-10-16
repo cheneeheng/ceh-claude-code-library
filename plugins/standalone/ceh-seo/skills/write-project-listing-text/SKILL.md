@@ -63,9 +63,9 @@ and zero external dependencies.`
 
 ## Rules
 
-- No badge wall before the pitch — the excerpt window fills with shield URLs.
-- No marketing adjectives without a verifiable fact attached.
+- Put the pitch before any badges — otherwise the excerpt window fills with shield URLs.
+- Attach a verifiable fact to every marketing adjective.
 - No keyword-stuffed descriptions — package indexes and engines both derank them.
-- No different pitches on different surfaces (see step 3).
+- Use the one canonical one-liner from step 3 on every surface.
 - Post-change accuracy of the README belongs to `ceh-git-workflow:update-readme`. Head tags,
   sitemaps, and structured data on HTML pages belong to `ceh-seo:make-page-crawlable`.

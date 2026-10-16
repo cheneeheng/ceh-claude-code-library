@@ -19,6 +19,9 @@ A bug is proof that a test was missing. The fix is the cheap half; the test that
 it is the deliverable. Write it **first** — a test written after the fix is written against the new
 code, not against the bug, and routinely passes on the broken version too.
 
+The task is done when the reproducer failed with the bug's symptom before the fix, passes with it,
+fails again with the fix removed, and ships in the same commit as the fix.
+
 ## What waits for a request
 
 Writing and running the tests that prove the fix is part of the fix, so the procedure below applies
@@ -57,7 +60,7 @@ the input is not the triggering one, or the bug needs state the test does not se
 
 ### 3. Fix the source
 
-Minimal change that turns the test green. Resist fixing anything the reproducer does not cover.
+Minimal change that turns the test green. Fix only what the reproducer covers.
 
 ### 4. Prove the test is coupled to the fix
 
@@ -103,7 +106,7 @@ earlier point, do not read the diff hoping to spot the cause — let git find th
 
 ```bash
 git bisect start HEAD <last-known-good-tag-or-sha>
-git bisect run pytest tests/unit/test_parse_duration.py::test_rejects_bare_number
+git bisect run pytest tests/unit/test_parse_duration.py::test_parse_duration_rejects_bare_number
 git bisect reset
 ```
 

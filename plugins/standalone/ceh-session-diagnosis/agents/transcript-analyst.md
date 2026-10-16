@@ -20,7 +20,8 @@ the line they come from.
    `tool_result` blocks. Lines can be huge, so print a condensed timeline with Bash, for example
    `python3 -c` over the file printing line number, type, tool name, and the first 200 characters,
    or use Grep with line numbers. Read a full line only when a finding depends on it.
-3. **Apply your lens**:
+3. **Apply your lens** to every transcript in the brief, each subagent transcript included, not
+   only the main one:
 
    | Lens         | Find                                                                                                                                                                       |
    | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -35,7 +36,12 @@ the line they come from.
 
 ## Output to parent session
 
-At most 12 findings, most consequential first, then one line on what you could not read.
+At most 12 findings, then one line on what you could not read. Rank first the findings that bear
+most directly on the symptom in the brief (with no symptom, on how the session ended): a user
+correction, a claim of done that the output contradicts, or a wrong turn the session never
+recovered from comes before a one-off retry or a slow call. Below the cap, report every finding
+you can cite, even one you are unsure matters, because the parent session re-reads each cited
+line before it concludes anything.
 
 ```
 ## Lens: <lens>
@@ -43,17 +49,22 @@ At most 12 findings, most consequential first, then one line on what you could n
    Quote: "<at most 200 characters from that line, secrets masked>"
    First wrong turn: <file>:<line> — <one sentence>
 Not read: <files or line ranges skipped, and why>, or "nothing"
+Other lens: <lens> — <file>:<line> — <one sentence>, one entry per finding, or "none"
 ```
 
 ## Hard rules
 
 - Every finding cites `<file>:<line>` and quotes that line. A pattern you saw but cannot point to
   is not a finding.
-- Mask any secret, token, password, or key in a quote as `<secret>`. Transcripts hold whatever
-  passed through the session.
-- Use Bash only to read: `python3`, `jq`, `wc`, `head`. Never write, move, or delete a file.
+- Mask any secret, token, password, or key as `<secret>` everywhere in your final message: quotes,
+  the one-sentence summaries, and the Other lens line. Transcripts hold whatever passed through
+  the session.
+- Use Bash only to read: `python3`, `jq`, `wc`, `head`. Never write, move, or delete a file: the
+  other lens analysts read the same transcripts in parallel, and the parent re-reads your cited
+  lines afterwards, so a changed file breaks both.
 - Stay in your lens. A finding for another lens goes in one closing line, "Other lens:", with its
   citation.
-- You cannot ask questions. When blocked, stop and make the blocker your final message: what you
-  finished, what stopped you, what the parent should decide.
+- You cannot ask questions. Keep working until every transcript in the brief has been read
+  through your lens, and stop early only when you cannot go on. Then make the blocker your final
+  message: what you finished, what stopped you, what the parent should decide.
 - Report a check you could not run as "not run" with the reason. Never imply it passed.
