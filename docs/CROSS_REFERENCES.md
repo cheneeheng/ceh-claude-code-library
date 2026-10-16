@@ -109,7 +109,7 @@ the other. Each hook is a standalone script with no shared module, so the list i
 
 **Shared:** `CEH_DISABLED_HOOKS` is a comma-separated list of hook script names without the
 extension, spaces ignored, and a listed script exits 0 with no output before reading its input.
-Every hook script carries the check, and `validate.py` has a fixture proving it for each.
+Every hook script carries the check, and `checks/hooks.py` in `tools/validate-plugins/` has a fixture proving it for each.
 
 ## Denial dampening (`denial_number`)
 
@@ -214,8 +214,8 @@ statuses must match `ceh-testing:write-evidence-report` and `docs/STRATEGY.md`.
 
 **Canonical:** `plugins/standalone/ceh-python-service/skills/configure-python-service-env/SKILL.md` — entire file
 
-| Copy                                                                                 | Section     | Diverges                                                                                                                                                                                                                                |
-| ------------------------------------------------------------------------------------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Copy                                                                                 | Section     | Diverges                                                                                                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `plugins/standalone/ceh-python-library/skills/configure-python-library-env/SKILL.md` | entire file | drops `fastapi`/`uvicorn[standard]`/`asyncpg` from the deps example and the uvicorn dev-server command; `dependencies = []`; `known-first-party` is the library; library docstring example; omits the service-only § Secrets management; drops the naming table, the three-group imports block, and the `time.sleep` rule |
 
 **Shared:** Python 3.12 + uv + `pyproject.toml`/`uv.lock` workflow, the uv command table, the ruff
@@ -228,8 +228,8 @@ linting rules. The § Pre-commit hooks block has its own entry below.
 
 **Canonical:** `plugins/standalone/ceh-python-service/skills/write-pytest-service-tests/SKILL.md` — entire file
 
-| Copy                                                                               | Section     | Diverges                                                                                                                                  |
-| ---------------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Copy                                                                               | Section     | Diverges                                                                                                                                                                                                         |
+| ---------------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `plugins/standalone/ceh-python-library/skills/write-pytest-library-tests/SKILL.md` | entire file | replaces the real-database integration tier and the system tier with an `api/` tier that imports the package as a consumer; no DB or HTTP; coverage rows named `Library package` and `Public API and core logic` |
 
 **Shared:** pytest + pytest-asyncio (`asyncio_mode = "auto"`), `tests/unit/` structure,
@@ -468,11 +468,11 @@ finding you cannot anchor to quoted code is reported as unverified, outside the 
 
 **Canonical:** `plugins/standalone/ceh-git-workflow/skills/code-review/SKILL.md` — § Rules + § Output (Cannot verify)
 
-| Copy                                                                                       | Section                      | Diverges                                                                                   |
-| ------------------------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------ |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules + § Procedure step 3 | example brief names a part of the app; Cannot verify is a per-item status, not a verdict   |
+| Copy                                                                                       | Section                      | Diverges                                                                                                                                          |
+| ------------------------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules + § Procedure step 3 | example brief names a part of the app; Cannot verify is a per-item status, not a verdict                                                          |
 | `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`                  | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict; the brief cannot change whether a finding is reported |
-| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict |
+| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict                                                        |
 
 **Shared:** a brief that says "don't flag X" or "minor issues only" narrows where to look, never
 how severe a finding is; every finding at its real severity; and a **Cannot verify** outcome that

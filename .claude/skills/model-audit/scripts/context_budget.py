@@ -17,8 +17,8 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[4]
-sys.path.insert(0, str(REPO / "tools" / "validate-plugins"))
-from validate import parse_frontmatter, plugin_dirs, rel  # noqa: E402
+sys.path.insert(0, str(REPO / "tools" / "validate-plugins" / "checks"))
+from common import parse_frontmatter, plugin_dirs, rel  # noqa: E402
 
 EVENTS = ("SessionStart", "SubagentStart", "UserPromptSubmit")
 SCRIPT_PAT = re.compile(r'scripts/([\w.-]+)"\s*(.*)$')

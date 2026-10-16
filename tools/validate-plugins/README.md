@@ -9,6 +9,17 @@ python tools/validate-plugins/validate.py
 
 Exits non-zero and prints a grouped list of problems if any check fails.
 
+`validate.py` only runs the checks. Each group below is one module in `checks/`, listed in order in
+`validate.py` (`CHECKS`, where `skill_refs` is the `skill-refs` group), and runs alone too:
+
+```bash
+python tools/validate-plugins/checks/skills.py
+```
+
+`checks/common.py` holds what the checks share: repo paths, the error collector, and the
+frontmatter and manifest readers. A new check is a new module with a `check()` function, one line
+in `CHECKS`, and a row below.
+
 ## Checks
 
 | Group         | What it verifies                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
@@ -27,6 +38,7 @@ Exits non-zero and prints a grouped list of problems if any check fails.
 | `registry`    | Every line of the `find-available-guide` registry has eight non-empty cells, a known kind and method, an `https://` source, a real past `checked` date, and no repeated name and install pair.                                                                                                                                                                                                                                                                   |
 | `hygiene`     | Root `*.md` files and text files under `plugins/`, `docs/`, `tools/`, `.claude/`, and `.github/` hold no invisible Unicode (zero-width, bidi, BOM) and no personal absolute path (a Windows or macOS `Users` folder, a Linux `home` folder). Every skill and agent on disk is named in backticks in its plugin `README.md`.                                                                                                                                      |
 | `scripts`     | `*.sh` pass `bash -n` (and `shellcheck` when available); `*.py` pass `py_compile`.                                                                                                                                                                                                                                                                                                                                                                               |
+| `hooks`       | Every script a `hooks.json` runs has fixtures in `checks/hooks.py`. Each fixture pipes a hand-built payload into the script and checks its exit code and output. No model call.                                                                                                                                                                                                                                                                                  |
 
 `shellcheck` and `bash` are used when present and skipped otherwise, so a missing tool never
 causes a false failure — CI runs them because GitHub-hosted Ubuntu runners ship both.
