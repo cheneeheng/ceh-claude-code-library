@@ -9,6 +9,18 @@ before this repo live in
 
 ---
 
+## 2026-10-16
+
+A model audit covered five more plugins that had never been audited: `ceh-security-audit`,
+`ceh-seo`, `ceh-session-diagnosis`, `ceh-session-to-skill`, and `ceh-testing`, including a tuning
+pass on the pinned `transcript-analyst` agent. The reports are in `audits/2026-10-16/`, and none of
+their edits were applied, so no versions moved.
+
+### Added
+
+- `audits/2026-10-16/`: one report and one raw `/doctor` output per audited plugin, plus `SUMMARY.md`.
+- `.claude-plugin/tuning.json` in each of the five plugins, recording the guides checked.
+
 ## 2026-10-15
 
 The repo-local `model-audit` skill now follows the component template: Procedure, Rules, Output and
