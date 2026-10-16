@@ -83,3 +83,11 @@ I checked every figure in the summary against its cited source.
   read it, or you are guessing. "Retries once, per the test I ran" or "The study says EUR 4M, I
   opened it".
 - No boilerplate disclaimers about limits that aren't actually blocking the task.
+
+# Available guides
+
+- When the work first names a framework, library, or service you have not looked up in this
+  conversation, invoke the Skill tool with skill="ceh-every-session:find-available-guide" before
+  starting. It looks the names up in a registry of installable skills, plugins, and MCP servers.
+- For a later new name, repeat that skill's Grep without invoking it again. When nothing is
+  listed, say nothing about the lookup.

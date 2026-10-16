@@ -27,6 +27,7 @@ fits the user's situation, and leaves the choice to them.
 | `stress-test-plan`         | On demand — "grill me on this plan", "stress-test this", "poke holes in this"          | Lists every open decision and untested assumption in a plan, fetches facts with a subagent, and asks the rest in rounds of at most four, each with a recommended answer that "yes" accepts. Writes `## Decisions` and `## Open` back into the plan. It's working if no question asks for a fact the files could answer, and each round asks only questions whose prerequisites are settled.                                                                                                                                                                                                                                 |
 | `prevent-repeat-mistake`   | On demand — "you did X again", "make sure this never happens again"                    | Names the mistake from quoted evidence, climbs a ladder from removing the cause through a Claude Code setting and checks to written guidance last, proves the fix fails on the real mistake, and only drafts changes to `CLAUDE.md`, settings, memory, or hooks for approval, saved to `.agents_workspace/repeat-mistakes/` so a later session can pick them up. Works on code, notes, plans, or any files. It's working if the report quotes the mistake and says why each higher rung did not fit.                                                                                                                        |
 | `whats-next`               | On demand — "what's next", "what should I do now", "which skill do I use"              | Reads the request, then the repo state (git status, the lifecycle handoff files, the newest session handoff), and suggests one to three installed skills or agents that fit, each with why it fits now and how to start it. Runs none of them. Knows the user-only skills the session listing hides. When nothing installed fits, it suggests up to two plugins not yet installed from `claude plugin list --available`, `ceh-` plugins first, each with its install command. It's working if the answer is a table of suggestions whose reasons cite files it read, and nothing ran.                                       |
+| `find-available-guide`     | When the work first names a framework, library, or service                             | Looks the names up with one Grep in `references/registry.txt`, a list of pointers to installable skills, plugins, and MCP servers with one line per install method. It finishes the task first, then adds one line per hit below the reply's `---` with the install command, a recommended scope, and the other methods. It installs nothing and says nothing on a miss. It's working if a hit shows a note under `---` with an install command copied word for word from the registry, and a name with no entry shows nothing.                                                                                             |
 | `record-project-decisions` | On demand — "we decided X", "from now on we use Y", "set up the project decisions"     | Record: write one decision as its own rule file, `.claude/rules/decision-<topic>.md`, which Claude Code loads in every session. Seed: collect the choices installed skills leave open, the decisions already in the project's documents, and a short list of areas, infer what the files answer, and ask the rest up front. It's working if each decision lands in its own file with a `Why:` line, and an inferred one names the file it came from.                                                                                                                                                                        |
 
 **Manual triggers**
@@ -40,6 +41,7 @@ fits the user's situation, and leaves the choice to them.
 - `whats-next` — `/whats-next [what you want to do]`, or say `"what's next?"`.
 - `usage-limit-handoff` — no slash command (hidden from the `/` menu), loaded by the usage-limit guard hook.
 - `delegate-bulk-reads` — no slash command (hidden from the `/` menu), loaded before dispatching `bulk-reader` or when a read guard names it.
+- `find-available-guide` — no slash command (hidden from the `/` menu), loaded by the output style when the work first names a framework, library, or service.
 
 ## Agents
 
@@ -57,6 +59,25 @@ fits the user's situation, and leaves the choice to them.
 style, Claude Code uses the first one loaded. Output styles reach the main conversation and forks
 only. Other subagents run their own system prompt, so rules that must hold there stay in
 `CLAUDE.md` or a skill.
+
+The style's last section, Available guides, is what starts `find-available-guide`. It tells the
+agent to invoke the skill once when the work first names a framework, library, or service, and to
+say nothing about the lookup when the registry lists nothing.
+
+## Registry
+
+`skills/find-available-guide/references/registry.txt` lists pointers to skills, plugins, and MCP
+servers worth installing, one line per install method:
+`name | aliases | kind | beats | method | install | source | checked`. `kind` is what the entry is
+(`skill`, `plugin`, `mcp`) and `method` is how it installs (`plugin`, `mcp-add`, `skill-copy`).
+An entry with several ways to install has several lines, the preferred one first. Each column is
+described in `skills/find-available-guide/references/registry.schema.md`, which sits beside the
+registry because the registry itself takes no header or comment lines.
+
+To add an entry, read the install command at its source, write the line with today's date as
+`checked`, and run `python tools/validate-plugins/validate.py`, which checks every cell. Entries
+are our own pointers, never text copied from a third party, and cover only help for building,
+proving, or telling people about a product. The skill shows the install command and never runs it.
 
 ## Mod
 

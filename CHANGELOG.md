@@ -36,10 +36,21 @@ animation while its own examples used both, `vitest-integration-tester` reset st
 while its rules said `beforeEach`, and `run-agentic-workflow` ended preflight failures "before step
 1" when steps 1 to 3 are the preflight.
 
+A new `ceh-every-session` skill, `find-available-guide`, closes the gap where an installable skill or
+MCP server exists and the agent never learns of it. When the work first names a framework, library,
+or service, the output style has the agent look the name up in a plain-text registry. On a hit it
+finishes the task, then tells the user what exists and how to install it. It installs nothing and
+says nothing on a miss. Claude Code's own plugin suggestions need an administrator to allowlist a
+marketplace, so they do not reach an individual user, and they cover plugins only. The registry
+records the install method apart from what the entry is, because a skill or an MCP server can reach
+the user by more than one method. The plan is `product/plans/capability-lookup.md`. The hook that
+would start the lookup on every prompt is not built, and waits on a measured miss.
+
 ### Plugin versions
 
 | Plugin                  | Version |
 | ----------------------- | ------- |
+| `ceh-every-session`     | 2.8.0   |
 | `ceh-security-audit`    | 1.0.2   |
 | `ceh-seo`               | 1.1.5   |
 | `ceh-session-diagnosis` | 1.0.4   |
@@ -55,9 +66,20 @@ while its rules said `beforeEach`, and `run-agentic-workflow` ended preflight fa
 
 - `audits/2026-10-16/`: one report and one raw `/doctor` output per audited plugin, plus `SUMMARY.md`.
 - `.claude-plugin/tuning.json` in each plugin of both audit rounds, recording the guides checked.
+- `ceh-every-session`: the `find-available-guide` skill and its registry
+  (`skills/find-available-guide/references/registry.txt`), seeded with the Pydantic plugin read at
+  its source on 2026-10-16, and `references/registry.schema.md`, which describes each column.
+- `tools/validate-plugins/validate.py`: a `registry` check on every registry line (eight cells, known
+  kind and method, `https` source, real past date, no repeated name and install pair).
+- `product/plans/capability-lookup.md`: the build plan, with its review.
 
 ### Changed
 
+- `ceh-every-session`: the `CEH Every Session` output style gains an Available guides section that
+  starts `find-available-guide`.
+- `tools/validate-plugins/validate.py`: the skill-reference scan also reads output styles, the
+  hygiene check also reads `.txt` files, and `MAX_TOTAL_DESCRIPTION_LEN` rises by the new
+  description's 284 characters.
 - `ceh-security-audit`: `audit-codebase-security` batches independent searches and reads in one
   turn, and drops a Rules bullet that repeated step 5.
 - `ceh-seo`: `write-llms-txt` gains a done statement, and it and `write-project-listing-text`

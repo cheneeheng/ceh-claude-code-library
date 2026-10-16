@@ -21,7 +21,8 @@ Checks:
   references - `references/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references}/...` and `${CLAUDE_SKILL_DIR}/...`
                mentions in SKILL.md/agent files resolve to a real file.
   budget     - the sum of all skill and agent descriptions stays under MAX_TOTAL_DESCRIPTION_LEN.
-  skill-refs - `plugin:component` references resolve to a real skill or agent.
+  skill-refs - `plugin:component` references in skills, agents, and output styles resolve to a
+               real skill or agent.
   deps       - every `dependencies` entry names a plugin in this repo and the graph is acyclic.
   invocations- every `Invoke the Skill tool with skill="X"` resolves, is in-plugin or in a
                declared dependency, and does not set `disable-model-invocation: true`.
@@ -31,6 +32,9 @@ Checks:
                declares dependencies; a cross-cutting plugin (CLAUDE.md tier table) depends only
                on cross-cutting plugins; a skill a hook script names sets user-invocable: false;
                every user-only skill is named in ceh-every-session:whats-next.
+  registry   - every line of ceh-every-session's find-available-guide registry has eight
+               non-empty cells, a known kind and method, an https source, and a real past
+               checked date, and no name and install pair repeats.
   hygiene    - no invisible Unicode or personal absolute path in tracked text; every skill and
                agent is named in its plugin README.
   scripts    - *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
@@ -40,6 +44,7 @@ Checks:
 
 from __future__ import annotations
 
+import datetime
 import json
 import os
 import re
@@ -60,7 +65,7 @@ MAX_NAME_LEN = 64
 MAX_DESCRIPTION_LEN = 300
 # Ratchet on the sum of every skill and agent description. Lower it when the total drops; raise it
 # only in the PR that adds a component, by that component's description length.
-MAX_TOTAL_DESCRIPTION_LEN = 27045
+MAX_TOTAL_DESCRIPTION_LEN = 27329
 MAX_COMPATIBILITY_LEN = 500
 TEMPLATE_MARKER = "TEMPLATE-GUIDANCE"
 
@@ -367,6 +372,10 @@ def check_references() -> None:
                 fail(where, f"skill-dir reference '{rec}' not found")
 
 
+def output_style_files() -> list[Path]:
+    return sorted(p for d in plugin_dirs() for p in (d / "output-styles").glob("*.md"))
+
+
 def check_description_budget() -> None:
     total = sum(
         len((parse_frontmatter(doc) or {}).get("description", ""))
@@ -380,12 +389,69 @@ def check_description_budget() -> None:
         )
 
 
+# --- find-available-guide registry -----------------------------------------
+
+REGISTRY = (
+    REPO
+    / "plugins/standalone/ceh-every-session/skills/find-available-guide/references/registry.txt"
+)
+REGISTRY_KINDS = {"skill", "plugin", "mcp"}
+REGISTRY_METHODS = {"plugin", "mcp-add", "skill-copy"}
+
+
+def check_registry() -> None:
+    """name | aliases | kind | beats | method | install | source | checked, one entry per line."""
+    if not REGISTRY.exists():
+        if (REGISTRY.parent.parent / "SKILL.md").exists():
+            fail(rel(REGISTRY), "registry is missing but find-available-guide exists")
+        return
+    today = datetime.datetime.now(datetime.timezone.utc).date()
+    seen: set[tuple[str, str]] = set()
+    for n, line in enumerate(REGISTRY.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        where = f"{rel(REGISTRY)}:{n}"
+        cells = [c.strip() for c in line.split("|")]
+        if len(cells) != 8 or not all(cells):
+            fail(
+                where,
+                "needs 8 non-empty cells: name | aliases | kind | beats | method | install | source | checked",
+            )
+            continue
+        name, _, kind, _, method, install, source, checked = cells
+        if kind not in REGISTRY_KINDS:
+            fail(where, f"kind '{kind}' is not one of {sorted(REGISTRY_KINDS)}")
+        if method not in REGISTRY_METHODS:
+            fail(where, f"method '{method}' is not one of {sorted(REGISTRY_METHODS)}")
+        if not source.startswith("https://"):
+            fail(where, f"source '{source}' must start with https://")
+        try:
+            if datetime.date.fromisoformat(checked) > today:
+                fail(where, f"checked date {checked} is in the future")
+        except ValueError:
+            fail(where, f"checked '{checked}' is not a YYYY-MM-DD date")
+        key = (name.lower(), install.lower())
+        if key in seen:
+            fail(where, f"name '{name}' with this install command is listed twice")
+        seen.add(key)
+
+
 # --- repo hygiene ----------------------------------------------------------
 
 INVISIBLE_PAT = re.compile("[\u200b-\u200f\u202a-\u202e\u2060-\u2064\ufeff]")
 USER_PATH_PAT = re.compile(r"[A-Za-z]:[\\/]Users[\\/]\w|/Users/\w|/home/\w")
 HYGIENE_ROOTS = ("plugins", "docs", "tools", ".claude", ".github")
-HYGIENE_SUFFIXES = {".md", ".json", ".py", ".sh", ".ps1", ".yml", ".yaml", ".html"}
+HYGIENE_SUFFIXES = {
+    ".md",
+    ".json",
+    ".py",
+    ".sh",
+    ".ps1",
+    ".yml",
+    ".yaml",
+    ".html",
+    ".txt",
+}
 
 
 def check_hygiene() -> None:
@@ -432,7 +498,7 @@ def check_skill_refs() -> None:
     comps = known_components()
     plugins = {d.name for d in plugin_dirs()}
     ref_pat = re.compile(r"\bceh-[a-z0-9-]+:[a-z0-9-]+\b")
-    for doc in doc_files():
+    for doc in doc_files() + output_style_files():
         where = rel(doc)
         text = doc.read_text(encoding="utf-8")
         for ref in dict.fromkeys(ref_pat.findall(text)):
@@ -856,6 +922,7 @@ def main() -> int:
     check_dependencies()
     check_invocations()
     check_repo_rules(versions)
+    check_registry()
     check_hygiene()
     check_scripts()
     check_hooks()
