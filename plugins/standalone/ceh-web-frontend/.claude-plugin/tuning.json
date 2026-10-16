@@ -11,28 +11,28 @@
   "pinned": {
     "agents/playwright-system-tester.md": {
       "model": "sonnet-5-5",
-      "tuned-for": null,
+      "tuned-for": "sonnet-5-5",
       "proposed-for": "sonnet-5-5",
       "tuned-by-model": "opus-5-5",
       "tuned-by-model-effort": "high"
     },
     "agents/vitest-integration-tester.md": {
       "model": "sonnet-5-5",
-      "tuned-for": null,
+      "tuned-for": "sonnet-5-5",
       "proposed-for": "sonnet-5-5",
       "tuned-by-model": "opus-5-5",
       "tuned-by-model-effort": "high"
     },
     "agents/vitest-unit-tester.md": {
       "model": "sonnet-5-5",
-      "tuned-for": null,
+      "tuned-for": "sonnet-5-5",
       "proposed-for": "sonnet-5-5",
       "tuned-by-model": "opus-5-5",
       "tuned-by-model-effort": "high"
     },
     "agents/web-frontend-reviewer.md": {
       "model": "sonnet-5-5",
-      "tuned-for": null,
+      "tuned-for": "sonnet-5-5",
       "proposed-for": "sonnet-5-5",
       "tuned-by-model": "opus-5-5",
       "tuned-by-model-effort": "high"

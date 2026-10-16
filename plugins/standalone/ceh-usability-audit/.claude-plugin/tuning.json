@@ -11,7 +11,7 @@
   "pinned": {
     "agents/newcomer-simulator.md": {
       "model": "sonnet-5-5",
-      "tuned-for": null,
+      "tuned-for": "sonnet-5-5",
       "proposed-for": "sonnet-5-5",
       "tuned-by-model": "opus-5-5",
       "tuned-by-model-effort": "high"

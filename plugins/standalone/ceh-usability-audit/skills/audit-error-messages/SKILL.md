@@ -18,6 +18,8 @@ who least needs them — which is why "an error occurred" survives to production
 This applies to **libraries as much as UIs**. A library's usability _is_ its signatures, its
 defaults, and its error text; a `ValueError` with no offending value is the same defect as a toast
 saying "failed".
+The work is done when every harvested message has a triage row marked rewritten, or left alone with
+a stated reason, and the file under Output exists.
 
 ## Procedure
 

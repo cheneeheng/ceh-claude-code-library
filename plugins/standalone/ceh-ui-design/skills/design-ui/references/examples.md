@@ -29,7 +29,7 @@ stays brand + nav on `--bg` so the chrome recedes.
       Round 2
       <a
         class="mono"
-        style="font-size: var(--fs-50); border: 1px solid var(--border); border-radius: var(--radius-full); padding: 2px var(--space-2); text-decoration: none;"
+        style="font-size: var(--fs-50); border: 1px solid var(--border); border-radius: var(--radius-full); padding: var(--space-1) var(--space-2); text-decoration: none;"
         href="#/round"
         >2 orders</a
       >

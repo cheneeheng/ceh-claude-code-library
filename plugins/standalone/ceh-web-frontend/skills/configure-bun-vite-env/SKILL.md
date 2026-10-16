@@ -58,7 +58,7 @@ when `lint`, `format:check`, `typecheck`, and (SvelteKit) `check` all pass.
 - Prefer `undefined` over `null` for optional values: optional properties and default parameters
   already produce `undefined`, so one "absent" value avoids mismatches
 - Use `?.` and `??`; do not use `||` for defaults on falsy inputs (it collapses `0`, `''`, `false`)
-- `strict: true` in `tsconfig.json` is non-negotiable. Never use `// @ts-ignore` — fix the type error.
+- Set `strict: true` in `tsconfig.json`. Fix a type error instead of suppressing it with `// @ts-ignore`.
 
 #### `type` is the default, `interface` is the exception
 

@@ -23,12 +23,16 @@ decision this skill makes:
   `${CLAUDE_PLUGIN_ROOT}/references/flow-config-schema.md`. Read it before Phase 3. This skill does
   not restate it.
 
-Target runtime is Claude Code only. Do not water the output down for portability.
+Target runtime is Claude Code only. Use its capabilities directly.
 
 **Two build modes.** With a person in the session, the build ends with files written after they
 agree to the file list. With no one to answer (`claude -p`, or called by another agent), it ends
 with a draft and the questions a person must answer, per Headless build. The emitted workflow runs
 in both modes.
+
+The build is done when the user has agreed to the file list, the files are written under
+`.claude/skills/`, and the Final checklist items that apply to the output pass. A headless build is
+done when the draft and `QUESTIONS.md` are written to `<build-dir>/<name>-draft/`.
 
 ## Procedure
 

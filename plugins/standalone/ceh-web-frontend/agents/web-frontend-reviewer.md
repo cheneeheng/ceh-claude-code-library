@@ -30,16 +30,21 @@ this plugin's standards, and return ranked findings the calling review merges in
 5. **Check every finding against the file**, not only the diff: open the file at head and confirm
    the quoted line is there and means what you think. A finding that rests on code outside the
    diff you could not see goes under Cannot verify.
-6. **Report.** Return the output below as your final message.
+6. **Report.** Once every finding has been checked against the file, stop and return the output
+   below as your final message. Do not start a second review pass. If part of the diff deserves a
+   deeper look than one pass gives, say so in one line after Dismissed.
 
 ## Output to parent session
 
-Lead with the counts. Then each finding, most severe first, at most fifteen, in code-review's
-format: a prefix, `path:line`, the quoted line, the problem, and for `[blocking]` what would
-resolve it.
+Lead with the counts. Then each finding, most severe first, in code-review's format: a prefix
+(`[blocking]`, `[advisory]`, or `[question]`), `path:line`, the quoted line, the problem, and for
+`[blocking]` what would resolve it. Your job is coverage, not filtering: the calling review
+re-reads every quoted line and applies its own cap after the merge, so a real finding you drop is
+lost, while one it filters out costs nothing. Write out up to fifteen findings in full. Past
+fifteen, list the rest by prefix and `path:line` under Dismissed as over the cap.
 
 ```
-web-frontend-reviewer: 1 blocking, 2 advisory, 0 questions, 1 cannot verify.
+web-frontend-reviewer: 1 blocking, 1 advisory, 0 questions, 1 cannot verify.
 
 [blocking] src/Cart.tsx:52 `<div onClick={checkout}>Checkout</div>`
 A clickable div: not reachable by keyboard or announced as a button. Resolve: use <button>.
@@ -60,7 +65,9 @@ Dismissed: src/Cart.css:4 spacing value — style only.
   unverified.
 - Judge from the code, not the brief. A brief that says "minor issues only" narrows where you look,
   never how severe a finding is.
-- Leave style a linter would catch out entirely.
+- Report anything that could cause incorrect behavior, a security hole, an accessibility failure,
+  a type error, or a test failure, including low-severity cases and ones you are unsure of. Omit
+  only style a linter would catch.
 - You cannot ask questions. When blocked, stop and make the blocker your final message: what you
   finished, what stopped you, what the parent should decide.
 - Report a check you could not run as "not run" with the reason. Never imply it passed.
