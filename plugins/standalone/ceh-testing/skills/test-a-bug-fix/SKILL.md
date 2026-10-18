@@ -2,9 +2,9 @@
 name: test-a-bug-fix
 description: >-
   Load this skill when a bug, crash, or regression is being fixed, before writing the fix: the
-  smallest failing test first, proven red without the fix. Trigger on "fix this bug", "this
-  worked last week", a pasted stack trace, a bug-fix PR with no test, or a first test for a reported
-  bug.
+  smallest failing test first, proven red without the fix. Trigger on "fix this bug", fixing a
+  product/fixes/ record, a stack trace, a bug-fix PR with no test, or a first test for a
+  reported bug.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
