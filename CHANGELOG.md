@@ -9,6 +9,30 @@ before this repo live in
 
 ---
 
+## 2026-10-18
+
+Two drafted skills, `file-organization` and `testing-strategy`, were reviewed against the vision
+and not added. Most of their content was either something the model already does or already
+covered by `ceh-testing`, and their topic-style triggers would have competed with `write-test-first`
+and `test-a-bug-fix`. The few lines that were new went into existing skills instead.
+
+### Plugin versions
+
+| Plugin               | Version |
+| -------------------- | ------- |
+| `ceh-coding-conduct` | 2.2.8   |
+| `ceh-testing`        | 1.4.6   |
+
+### Changed
+
+- `ceh-coding-conduct:sketch-design`: a rule to place each new type and function in a file named
+  for its one concern, never a catch-all, without giving a single-caller function its own file.
+  It gives the agent-specific reasons: Grep and Glob find code by name, and long mixed files cost
+  chunked reads and ambiguous Edit matches.
+- `ceh-testing:write-test-first`: never weaken, skip, or delete a test to get green, and every
+  feature gets at least one integration test through the real components it touches. The hand-over
+  now lists each changed test with its reason.
+
 ## 2026-10-16
 
 A model audit covered five more plugins that had never been audited: `ceh-security-audit`,
