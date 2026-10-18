@@ -41,7 +41,7 @@ backticks, because a Button takes only plain text spans: code spans now draw as 
 | --------------------- | ------- |
 | `ceh-build-from-plan` | 1.0.5   |
 | `ceh-coding-conduct`  | 2.2.10  |
-| `ceh-every-session`   | 2.8.2   |
+| `ceh-every-session`   | 2.8.3   |
 | `ceh-git-workflow`    | 1.3.3   |
 | `ceh-testing`         | 1.4.7   |
 
@@ -76,6 +76,9 @@ backticks, because a Button takes only plain text spans: code spans now draw as 
 - `ceh-every-session:prevent-repeat-mistake`: saves to
   `.agents_workspace/retros/<date>-repeat-mistake.md` instead of `.agents_workspace/repeat-mistakes/`,
   beside the other retros, because fixing a mistake after the session it happened in is retro work.
+- `ceh-every-session:prevent-repeat-mistake`: splits its save like the other retros. Fixes that land
+  in the repo go to `product/retros/<date>-repeat-mistake.md`, committed with the first fix applied,
+  and the rest stay local in `.agents_workspace/retros/`.
 
 ### Fixed
 

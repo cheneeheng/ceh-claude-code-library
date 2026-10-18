@@ -21,8 +21,9 @@ waiting for the user's approval.
 
 ## Procedure
 
-1. **Pick up pending drafts.** Read `.agents_workspace/retros/*-repeat-mistake.md` and list every fix still
-   `awaiting approval` before taking a new mistake, so a draft from an earlier session is not lost.
+1. **Pick up pending drafts.** Read `*-repeat-mistake.md` in `product/retros/` and
+   `.agents_workspace/retros/` and list every fix still `awaiting approval` before taking a new
+   mistake, so a draft from an earlier session is not lost.
 2. **Name the mistake from evidence.** Quote what went wrong: the tool call, the file and line,
    the wrong output, and the correction that preceded it. "Was sloppy" is not a mistake, "wrote
    dates as `10/09/2026` in `roadmap.md:14` after being told ISO dates" is. If you cannot quote it,
@@ -63,8 +64,13 @@ waiting for the user's approval.
 
 ## Output
 
-Save to `.agents_workspace/retros/<YYYY-MM-DD>-repeat-mistake.md`, appending when the file exists, and
-reply with the same table. Each fix `awaiting approval` carries its full draft below the table, so
+Save by where each fix lands, appending when the file exists and creating the directory if needed.
+Fixes that land in the current repository go to `product/retros/<YYYY-MM-DD>-repeat-mistake.md`,
+committed with the first fix applied, because a later session working in the repo reads it. Mask
+secrets in its quotes as `<secret>`: a committed file leaves the machine on the next push. Fixes
+outside it (user settings, the global `CLAUDE.md`, memory, an installed plugin) go to
+`.agents_workspace/retros/<YYYY-MM-DD>-repeat-mistake.md`, local, because only the user acts on
+them. When both files exist, each links the other. Reply with the same table. Each fix `awaiting approval` carries its full draft below the table, so
 a later session can apply it from the file alone. When a draft is applied or rejected, update its
 Status in the file it was saved in.
 
