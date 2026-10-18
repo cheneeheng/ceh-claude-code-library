@@ -21,12 +21,12 @@ a removed plugin loses its row.
 | `ceh-business-plan`            | 1.1.6   | `2026-10-15` |
 | `ceh-check-build-against-plan` | 1.0.5   | `2026-10-15` |
 | `ceh-codebase-explanation`     | 1.2.4   | `2026-10-11` |
-| `ceh-coding-conduct`           | 2.2.9   | `2026-10-18` |
+| `ceh-coding-conduct`           | 2.2.10  | `2026-10-18` |
 | `ceh-competitor-analysis`      | 1.1.8   | `2026-10-15` |
 | `ceh-documentation`            | 1.0.5   | `2026-10-10` |
 | `ceh-every-session`            | 2.8.0   | `2026-10-16` |
 | `ceh-git-datastore`            | 1.0.6   | `2026-10-15` |
-| `ceh-git-workflow`             | 1.3.2   | `2026-10-13` |
+| `ceh-git-workflow`             | 1.3.3   | `2026-10-18` |
 | `ceh-orchestration-lab`        | 1.0.3   | `2026-10-15` |
 | `ceh-python-library`           | 1.0.4   | `2026-10-15` |
 | `ceh-python-service`           | 1.1.4   | `2026-10-15` |
@@ -34,7 +34,7 @@ a removed plugin loses its row.
 | `ceh-seo`                      | 1.1.5   | `2026-10-16` |
 | `ceh-session-diagnosis`        | 1.0.4   | `2026-10-16` |
 | `ceh-session-to-skill`         | 1.0.2   | `2026-10-16` |
-| `ceh-testing`                  | 1.4.6   | `2026-10-18` |
+| `ceh-testing`                  | 1.4.7   | `2026-10-18` |
 | `ceh-ui-design`                | 1.0.6   | `2026-10-16` |
 | `ceh-usability-audit`          | 1.1.6   | `2026-10-16` |
 | `ceh-web-frontend`             | 1.3.4   | `2026-10-16` |

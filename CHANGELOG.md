@@ -22,13 +22,22 @@ while `implement-from-plan` fired 20 times. Its description claimed the same mom
 to it. Its description now names the moment before a change's first test, and `implement-from-plan`
 hands off to it when a phase adds a type, module, or called function.
 
+A session diagnosis in claude-code-command-center found three skills skipped in one bug-fix
+session: `find-root-cause` never loaded for "debug these bugs" or "find and fix the following
+bugs", the agent opened and merged the PR without `pull-request`, and it merged while one requested
+fix was still `diagnosed`, without `test-a-bug-fix`. The SessionStart directive named only the
+contract, so no step sent the agent back to the skill listing. The triggers matched neither the
+user's wording nor a PR the agent started itself, and the hand-off to `test-a-bug-fix` sat in a
+trailing section the agent never acted on.
+
 ### Plugin versions
 
 | Plugin                | Version |
 | --------------------- | ------- |
 | `ceh-build-from-plan` | 1.0.5   |
-| `ceh-coding-conduct`  | 2.2.9   |
-| `ceh-testing`         | 1.4.6   |
+| `ceh-coding-conduct`  | 2.2.10  |
+| `ceh-git-workflow`    | 1.3.3   |
+| `ceh-testing`         | 1.4.7   |
 
 ### Changed
 
@@ -43,6 +52,17 @@ hands off to it when a phase adds a type, module, or called function.
   first test, with a plan phase adding a module as a trigger.
 - `ceh-build-from-plan:implement-from-plan`: a phase that adds a type, module, or called function
   is sketched before its test, pointing to `ceh-coding-conduct:sketch-design` when installed.
+- `ceh-coding-conduct` SessionStart hook: after the contract, pick the task skills that match the
+  request before reading any file.
+- `ceh-coding-conduct:find-root-cause`: triggers on "find and fix these bugs" and on a failure no
+  command has yet explained, instead of one whose cause is "not yet known". Step 8 limits "no fix
+  will land here" to a cause outside the repo or a declined fix, so a fix waiting on the user is open
+  work. The hand-off to `ceh-testing:test-a-bug-fix` is now step 9 instead of a trailing section.
+- `ceh-testing:test-a-bug-fix`: also triggers on a first test for a reported bug. "this is broken"
+  is dropped to fit the description budget, since a break with no known cause is
+  `find-root-cause`'s moment.
+- `ceh-git-workflow:pull-request`: also triggers before the agent runs `gh pr create` or
+  `gh pr merge` itself.
 
 ## 2026-10-16
 

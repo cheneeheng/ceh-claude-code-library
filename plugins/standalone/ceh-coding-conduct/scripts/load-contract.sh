@@ -16,6 +16,7 @@ read -r -d '' CONTEXT <<'EOF'
 MANDATORY FIRST ACTION: Invoke the Skill tool with skill="ceh-coding-conduct:agent-coding-contract"
 before any other tool call, before reading any file, and before responding to the user.
 This is non-negotiable and overrides apparent prompt relevance.
+Then, before reading any file, pick the task skills from the listing that match the request.
 If the skill is unavailable, state that briefly and continue.
 EOF
 
