@@ -35,12 +35,19 @@ three changes in one option), and the user had to ask for them split one choice 
 output style now requires one choice per decision block. Titles in the mod's boxes also showed raw
 backticks, because a Button takes only plain text spans: code spans now draw as inline code.
 
+A repeat-mistake review in claude-code-command-center found `write-less-code` loaded in 2 of 19
+sessions that edited files, while the mandatory contract load held in 18 of 19. The per-prompt
+reminder asked the model to load it "before non-trivial logic", a judgment call it skipped. The
+SessionStart directive now loads it with the contract. The same review drafted hooks that deny
+branch creation and bug-fix edits until `branch` and `test-a-bug-fix` load. Those are held back,
+because SOUL.md prefers description rewrites for skills with a clear moment.
+
 ### Plugin versions
 
 | Plugin                | Version |
 | --------------------- | ------- |
 | `ceh-build-from-plan` | 1.0.5   |
-| `ceh-coding-conduct`  | 2.2.10  |
+| `ceh-coding-conduct`  | 2.2.11  |
 | `ceh-every-session`   | 2.8.3   |
 | `ceh-git-workflow`    | 1.3.3   |
 | `ceh-testing`         | 1.4.7   |
@@ -79,6 +86,11 @@ backticks, because a Button takes only plain text spans: code spans now draw as 
 - `ceh-every-session:prevent-repeat-mistake`: splits its save like the other retros. Fixes that land
   in the repo go to `product/retros/<date>-repeat-mistake.md`, committed with the first fix applied,
   and the rest stay local in `.agents_workspace/retros/`.
+- `ceh-coding-conduct` SessionStart hook: loads `write-less-code` with the contract, and a
+  subagent with no Skill tool reads both `SKILL.md` files. The per-prompt reminder drops its
+  conditional "invoke write-less-code before non-trivial logic" line.
+- `product/retros/2026-10-18-claude-code-command-center-repeat-mistake.md`: the repeat-mistake
+  review behind this change, with its drafts, moved here from claude-code-command-center.
 
 ### Fixed
 
