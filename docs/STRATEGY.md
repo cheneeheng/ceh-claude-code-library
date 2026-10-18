@@ -108,6 +108,7 @@ lifecycle:
   commits those issues to `product/retros/<date>-<kind>.md`, scrubbed when they quote a transcript,
   because the routed work reads them. Issues whose fix lands outside the repo, in user settings,
   an installed plugin, or Claude Code, stay local in `.agents_workspace/retros/` for the user.
+  `prevent-repeat-mistake` saves its own report the same way, split by where each fix lands.
 - **The evidence report is append-only.** `product/EVIDENCE.md` is one file per product, and each run
   adds a dated section at the top, so the section a plan's Record cites never changes. The separate
   QA, performance, security, and usability reports stay local: only the roll-up is read by another

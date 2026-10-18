@@ -507,9 +507,10 @@ delete".
 
 **Canonical:** `plugins/standalone/ceh-git-workflow/skills/review-recent-work/SKILL.md` — § Procedure step 6 + § Output, first paragraph
 
-| Copy                                                                        | Section                                        | Diverges                                                                                                                                    |
-| --------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-session-diagnosis/skills/diagnose-session/SKILL.md` | § Procedure step 6 + § Output, first paragraph | routes root causes, not issues; a Claude Code cause is always out of scope; the committed file is scrubbed; file kind `session-<id-prefix>` |
+| Copy                                                                          | Section                                        | Diverges                                                                                                                                    |
+| ----------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-session-diagnosis/skills/diagnose-session/SKILL.md`   | § Procedure step 6 + § Output, first paragraph | routes root causes, not issues; a Claude Code cause is always out of scope; the committed file is scrubbed; file kind `session-<id-prefix>` |
+| `plugins/standalone/ceh-every-session/skills/prevent-repeat-mistake/SKILL.md` | § Output, first paragraph                      | split save only, no route table; splits by where the fix lands; the committed file masks secrets; file kind `repeat-mistake`                |
 
 **Shared:** the route table word for word (bug to `find-root-cause`, feature or design to
 `write-build-plan`, agent mistake to `prevent-repeat-mistake`, working rule to
