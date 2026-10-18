@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # UserPromptSubmit hook - injects the write-less-code reflex before every prompt. This is
 # the primary delivery of the minimalism ladder: it carries the reflex on every turn,
-# reliably from turn one, and survives long-session context drift. The full write-less-code
-# skill loads on demand when non-trivial code is actually being written. Runs unconditionally
+# reliably from turn one, and survives long-session context drift. The full skill loads
+# at session start with the contract (load-contract.sh). Runs unconditionally
 # whenever the plugin is enabled. Pure-shell (bash), no Node required. Inspired by ponytail
 # (MIT, DietrichGebert). The payload below is static text, JSON-escaped at runtime.
 # Also wired to SubagentStart, which passes the event name as $1: UserPromptSubmit never
@@ -21,7 +21,6 @@ WRITE LESS CODE — the best code is the code never written. Before writing any 
 6. Only then: the minimum code that works.
 Never simplify away: trust-boundary validation, data-loss handling, security, accessibility, anything explicitly requested.
 Mark deliberate shortcuts with a `// less-code:` comment naming the ceiling and upgrade path.
-Before implementing a feature or non-trivial logic, invoke the Skill tool with skill="ceh-coding-conduct:write-less-code" for the full rules.
 EOF
 
 # JSON-escape: backslashes first, then double quotes, then newlines.

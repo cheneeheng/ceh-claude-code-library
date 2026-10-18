@@ -32,7 +32,7 @@ for a whole codebase.
 **Manual triggers**
 
 - `agent-coding-contract` — no slash command (hidden from the `/` menu), loaded by the SessionStart hook.
-- `write-less-code` — no slash command (hidden from the `/` menu), named by the per-prompt reminder hook.
+- `write-less-code` — no slash command (hidden from the `/` menu), loaded by the SessionStart hook with the contract.
 - `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
 - `find-root-cause` — `/find-root-cause`, or say `"debug this"` / `"find and fix these bugs"` / `"why is this failing"`.
@@ -44,19 +44,20 @@ The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the
 no global `settings.json` change or env var required.
 
 **At session start** — a `SessionStart` hook (`scripts/load-contract.sh`) injects a **mandatory**
-directive to load `agent-coding-contract` before any other action, then to pick the task skills
+directive to load `agent-coding-contract` and `write-less-code` before any other action, then to pick the task skills
 that match the request before reading any file. It fires on `startup`, `resume`, `clear`, and
 `compact` (so a fresh, resumed, or reset session has it loaded, and it is re-injected after
 compaction).
 
 **Every turn** — a `UserPromptSubmit` hook (`scripts/inject-less-code-reminder.sh`) re-injects a compact digest
 of the `write-less-code` ladder before each prompt. This carries the minimalism reflex on every turn,
-reliably from turn one; the full `write-less-code` skill loads on demand when non-trivial code is
-actually being written.
+reliably from turn one. It no longer asks the model to load the full skill "before non-trivial
+logic": that conditional load was followed in 2 of 19 sessions, against 18 of 19 for the mandatory
+contract load, so the full skill now loads at session start instead.
 
 **When a subagent starts** — a `SubagentStart` hook runs the same two scripts, because neither
 `SessionStart` nor `UserPromptSubmit` fires inside a subagent. An agent with a restricted tool list
-has no Skill tool, so the directive points it at the contract's `SKILL.md` to read instead. The
+has no Skill tool, so the directive points it at both skills' `SKILL.md` files to read instead. The
 read-only agents `Explore`, `Plan`, and `bulk-reader` are skipped.
 
 ### Why each hook exists
