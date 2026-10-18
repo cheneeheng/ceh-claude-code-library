@@ -41,7 +41,7 @@ backticks, because a Button takes only plain text spans: code spans now draw as 
 | --------------------- | ------- |
 | `ceh-build-from-plan` | 1.0.5   |
 | `ceh-coding-conduct`  | 2.2.10  |
-| `ceh-every-session`   | 2.8.1   |
+| `ceh-every-session`   | 2.8.2   |
 | `ceh-git-workflow`    | 1.3.3   |
 | `ceh-testing`         | 1.4.7   |
 
@@ -73,6 +73,9 @@ backticks, because a Button takes only plain text spans: code spans now draw as 
   an earlier answer opens with "Only if you answer ...".
 - `product/retros/2026-10-18-session-6f65e2d1.md`: the session diagnosis behind these changes,
   moved here from claude-code-command-center for reference.
+- `ceh-every-session:prevent-repeat-mistake`: saves to
+  `.agents_workspace/retros/<date>-repeat-mistake.md` instead of `.agents_workspace/repeat-mistakes/`,
+  beside the other retros, because fixing a mistake after the session it happened in is retro work.
 
 ### Fixed
 

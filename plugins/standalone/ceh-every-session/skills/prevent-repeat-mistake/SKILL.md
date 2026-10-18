@@ -21,7 +21,7 @@ waiting for the user's approval.
 
 ## Procedure
 
-1. **Pick up pending drafts.** Read `.agents_workspace/repeat-mistakes/` and list every fix still
+1. **Pick up pending drafts.** Read `.agents_workspace/retros/*-repeat-mistake.md` and list every fix still
    `awaiting approval` before taking a new mistake, so a draft from an earlier session is not lost.
 2. **Name the mistake from evidence.** Quote what went wrong: the tool call, the file and line,
    the wrong output, and the correction that preceded it. "Was sloppy" is not a mistake, "wrote
@@ -63,7 +63,7 @@ waiting for the user's approval.
 
 ## Output
 
-Save to `.agents_workspace/repeat-mistakes/<YYYY-MM-DD>.md`, appending when the file exists, and
+Save to `.agents_workspace/retros/<YYYY-MM-DD>-repeat-mistake.md`, appending when the file exists, and
 reply with the same table. Each fix `awaiting approval` carries its full draft below the table, so
 a later session can apply it from the file alone. When a draft is applied or rejected, update its
 Status in the file it was saved in.
