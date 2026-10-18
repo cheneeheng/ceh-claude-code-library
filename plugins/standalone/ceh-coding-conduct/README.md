@@ -20,14 +20,14 @@ for a whole codebase.
 
 ## Skills
 
-| Skill                   | When it loads                                                                                        | What it does                                                                                                                                                                                                                                                                                                                                                                                       |
-| ----------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `agent-coding-contract` | Every coding session (auto, via hook)                                                                | The full behavioral contract — core rules, five-step workflow, stop conditions, decision logging.                                                                                                                                                                                                                                                                                                  |
-| `write-less-code`       | Every coding session (auto, via hook)                                                                | The minimalism reflex — the ladder (YAGNI → stdlib → native → installed dep → one line), native-platform-first, the `// less-code:` shortcut convention. The positive half of the contract's minimal-change rules.                                                                                                                                                                                 |
-| `shrink-diff`           | On demand — when a feature branch is functionally done and its diff should get smaller before review | Retroactive minimalism — applies the write-less-code standard to the accumulated diff vs `main`, across all the commits and sessions that produced it: dedupe against existing code, delete dead weight, collapse over-built structure. Diff-scoped, with three narrow causes for touching unchanged code.                                                                                         |
-| `refactor-repo`         | Manual only (`/refactor-repo`) — never auto-fires                                                    | Whole-codebase (or per-module) refactor campaign: read-only inventory, ranked proposal with payoff/risk/diff-size estimates, then apply only user-approved clusters on `refactor/` branches under a behavior-preservation gate. Shallow modules worth deepening are proposed with their before and after interface, and settled one question round at a time before any code.                      |
-| `sketch-design`         | Before the code for a feature that adds a type, a module, or a function other code calls             | Design before code: types that make illegal states unrepresentable, signatures with no bodies, the decision each module owns, then four checks (illegal states, runs twice, shared state, smallest interface). It's working if the reply shows a Types / Signatures / Boundaries / Checks block before the first file edit.                                                                        |
-| `find-root-cause`       | Something is broken and its cause is unknown, before any fix — or after a fix that did not hold      | Debugging before fixing: one command red on the exact symptom, 3 to 5 falsifiable hypotheses, evidence that kills them one variable at a time, then a cause confirmed by a prediction. After two failed fixes it attacks the shared premise. It's working if the hand-over has a hypotheses table and a Prediction line, is saved to `product/fixes/<slug>.md`, and no fix lands before the cause. |
+| Skill                   | When it loads                                                                                           | What it does                                                                                                                                                                                                                                                                                                                                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `agent-coding-contract` | Every coding session (auto, via hook)                                                                   | The full behavioral contract — core rules, five-step workflow, stop conditions, decision logging.                                                                                                                                                                                                                                                                                                  |
+| `write-less-code`       | Every coding session (auto, via hook)                                                                   | The minimalism reflex — the ladder (YAGNI → stdlib → native → installed dep → one line), native-platform-first, the `// less-code:` shortcut convention. The positive half of the contract's minimal-change rules.                                                                                                                                                                                 |
+| `shrink-diff`           | On demand — when a feature branch is functionally done and its diff should get smaller before review    | Retroactive minimalism — applies the write-less-code standard to the accumulated diff vs `main`, across all the commits and sessions that produced it: dedupe against existing code, delete dead weight, collapse over-built structure. Diff-scoped, with three narrow causes for touching unchanged code.                                                                                         |
+| `refactor-repo`         | Manual only (`/refactor-repo`) — never auto-fires                                                       | Whole-codebase (or per-module) refactor campaign: read-only inventory, ranked proposal with payoff/risk/diff-size estimates, then apply only user-approved clusters on `refactor/` branches under a behavior-preservation gate. Shallow modules worth deepening are proposed with their before and after interface, and settled one question round at a time before any code.                      |
+| `sketch-design`         | Before the code for a feature that adds a type, a module, or a function other code calls                | Design before code: types that make illegal states unrepresentable, signatures with no bodies, the decision each module owns, then four checks (illegal states, runs twice, shared state, smallest interface). It's working if the reply shows a Types / Signatures / Boundaries / Checks block before the first file edit.                                                                        |
+| `find-root-cause`       | Something is broken and no command has yet shown why, before any fix — or after a fix that did not hold | Debugging before fixing: one command red on the exact symptom, 3 to 5 falsifiable hypotheses, evidence that kills them one variable at a time, then a cause confirmed by a prediction. After two failed fixes it attacks the shared premise. It's working if the hand-over has a hypotheses table and a Prediction line, is saved to `product/fixes/<slug>.md`, and no fix lands before the cause. |
 
 **Manual triggers**
 
@@ -35,7 +35,7 @@ for a whole codebase.
 - `write-less-code` — no slash command (hidden from the `/` menu), named by the per-prompt reminder hook.
 - `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
-- `find-root-cause` — `/find-root-cause`, or say `"debug this"` / `"why is this failing"`.
+- `find-root-cause` — `/find-root-cause`, or say `"debug this"` / `"find and fix these bugs"` / `"why is this failing"`.
 - `sketch-design` — `/sketch-design`, or say `"design this first"` / `"sketch the types"`.
 
 ## How the skills auto-load
@@ -44,9 +44,10 @@ The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the
 no global `settings.json` change or env var required.
 
 **At session start** — a `SessionStart` hook (`scripts/load-contract.sh`) injects a **mandatory**
-directive to load `agent-coding-contract` before any other action, firing on `startup`, `resume`,
-`clear`, and `compact` (so a fresh, resumed, or reset session has it loaded, and it is re-injected
-after compaction).
+directive to load `agent-coding-contract` before any other action, then to pick the task skills
+that match the request before reading any file. It fires on `startup`, `resume`, `clear`, and
+`compact` (so a fresh, resumed, or reset session has it loaded, and it is re-injected after
+compaction).
 
 **Every turn** — a `UserPromptSubmit` hook (`scripts/inject-less-code-reminder.sh`) re-injects a compact digest
 of the `write-less-code` ladder before each prompt. This carries the minimalism reflex on every turn,
@@ -64,7 +65,9 @@ Hooks are enforcement, so each one is kept on a failure that guidance alone did 
 
 - **The contract loads first, unconditionally.** A directive to load the contract "when you write
   code" was tried, and the model never invoked it later in the session. The contract is model-only
-  with a one-line description, so nothing else triggers it.
+  with a one-line description, so nothing else triggers it. The same directive sends the agent
+  back to the skill listing: with only the contract named, two debugging sessions loaded it and no
+  task skill, and read code for dozens of steps without `find-root-cause`.
 - **The less-code reminder repeats every prompt.** Write-less-code is a standard that holds the
   whole session, not a moment, so no description fires it: an agent starting to write code does not
   stop to look for it. Loaded once, the ladder also drifted out of effect in long sessions and the

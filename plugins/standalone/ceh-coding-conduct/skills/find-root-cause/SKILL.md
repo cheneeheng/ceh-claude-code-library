@@ -1,9 +1,10 @@
 ---
 name: find-root-cause
 description: >-
-  Load this skill when something is broken and its cause is not yet known, before any fix: reproduce
-  it, kill hypotheses with evidence, name the cause. Trigger on "debug this", "why is this failing",
-  a stack trace with no obvious cause, or a second fix that did not hold.
+  Load this skill when something is broken and no command has yet shown why, before any fix:
+  reproduce it, kill hypotheses with evidence, name the cause. Trigger on "debug this", "find and
+  fix these bugs", "why is this failing", an unexplained stack trace, or a second fix that did not
+  hold.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -45,7 +46,14 @@ predict one observation you have not made yet that then comes true.
    `product/fixes/<slug>.md` with `status: diagnosed`, in the format in
    `references/fix-record-format.md`, setting `plan:` and `previous:` as it says. The chat ends
    with the session, and the record is how a later reader learns why the fix exists. The fix commit
-   carries it. When no fix will land here, the record is committed alone and stays `diagnosed`.
+   carries it. No fix will land here when the cause is outside this repo or the user declined the
+   fix: then the record is committed alone and stays `diagnosed`. A fix that waits on a user
+   decision is open work, and nothing reports the bug as done.
+9. **Hand over the fix.** When the fix lands in this session, load `ceh-testing:test-a-bug-fix`
+   before writing it: it turns the step 1 command into a regression test and drives the fix.
+   Without `ceh-testing` installed, write the failing test before the fix yourself, then complete
+   the fix record's Fix section, set `status: fixed`, and commit the record with the fix and the
+   test.
 
 ## Rules
 
@@ -85,10 +93,3 @@ predict one observation you have not made yet that then comes true.
   alone. Do not ship a speculative fix.
 - Confirming the cause needs a production system, real customer data, or a paid service → stop
   and name the exact check the user should run.
-
-## Hands off to
-
-Once the cause is confirmed, `ceh-testing:test-a-bug-fix` turns the step 1 command into a
-regression test and drives the fix, when `ceh-testing` is installed. Otherwise write the failing
-test before the fix yourself, then complete the fix record's Fix section, set `status: fixed`, and
-commit the record with the fix and the test.

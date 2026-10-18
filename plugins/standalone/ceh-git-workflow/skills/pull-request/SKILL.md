@@ -1,9 +1,9 @@
 ---
 name: pull-request
 description: >-
-  Load this skill when a branch is heading into main, any phrasing: open a PR, push for review,
-  "merge it", "land this", "get this branch into main". Covers the PR body, pre-merge gate, merge,
-  and cleanup, with no version bump. Not for shipping a version (use ceh-git-workflow:release).
+  Load this skill when a branch is heading into main: open a PR, "merge it", "land this", or before
+  you run `gh pr create` or `gh pr merge` yourself. Covers the PR body, pre-merge gate, merge, and
+  cleanup. Not for shipping a version (use ceh-git-workflow:release).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
