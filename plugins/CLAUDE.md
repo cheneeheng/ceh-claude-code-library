@@ -40,7 +40,7 @@ name when a skill is specific to one** (`write-fastapi-endpoints`, `write-postgr
 do at a moment (`commit`, `shrink-diff`, `draft-post`, `make-page-crawlable`), an agent is something
 you delegate to (`bulk-reader`). Pick the word you would say out loud, not a generic one like `optimize`. Two
 exemptions: model-only standards named for what they carry (`agent-coding-contract`,
-`usage-limit-handoff`, `branch`), and established terms of art (`pull-request`, `release`).
+`usage-limit-handoff`), and established terms of art (`pull-request`, `release`).
 `validate.py` cannot check part of speech, so this is a review rule.
 
 These are the how of principle 10 in `docs/VISION.md`, "Names say what they do": anyone who has
@@ -101,8 +101,8 @@ review rule, and every skill falls into one of three cases:
 | Model and user | `false`                    | `true`           | Everything else, the default: a task the user names that the model also starts at its moment        |
 
 Model only is the usual choice when the user would never type the name. That covers every skill a
-hook names (`agent-coding-contract`, `write-less-code`, `usage-limit-handoff`, `delegate-bulk-reads`,
-`branch`), the router-called `ceh-business-plan` specialists, the path-scoped stack standards, and
+hook names (`agent-coding-contract`, `write-less-code`, `usage-limit-handoff`, `delegate-bulk-reads`),
+the router-called `ceh-business-plan` specialists, the path-scoped stack standards, and
 standards like `design-test-cases` and `write-plain-language`. Its `docs/CATALOG.md` Invoke cell
 reads `Model-only, no slash command`.
 
@@ -114,6 +114,6 @@ entirely, so a natural-language request no longer loads it, and no agent, workfl
 
 When a hook names the skill on every firing, the description is **one line**: what the skill is,
 with no trigger phrases and no mention of the hook. Keep the full description only when the model
-also loads the skill unprompted at a moment of its own (`branch`). A standard that holds the whole
+also loads the skill unprompted at a moment of its own. A standard that holds the whole
 session, such as `write-less-code`, has no such moment: no description fires it, so the hook is
 its delivery and trigger phrases only cost listing space.

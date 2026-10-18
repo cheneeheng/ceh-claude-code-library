@@ -43,14 +43,21 @@ branch creation and bug-fix edits until `branch` and `test-a-bug-fix` load. Both
 because SOUL.md prefers description rewrites for skills with a clear moment. `test-a-bug-fix`
 now triggers on fixing a `product/fixes/` record, the prompt the session skipped it on.
 
+Looking at the branch gate raised a further question: what `ceh-git-workflow:branch` added at all.
+Its naming table and rules restated standard trunk-based branching, which the agent followed
+without loading it, and `pull-request` already covers rebasing. Only its worktree guidance was
+repo-specific. The skill is retired to `archive/`. The prefix list stays in `branch-guard.py`'s
+deny message, and the worktree guidance joins the subagent worktree rule in the contract's Task
+decomposition, which loads every session, so it no longer waits on a trigger.
+
 ### Plugin versions
 
 | Plugin                | Version |
 | --------------------- | ------- |
 | `ceh-build-from-plan` | 1.0.5   |
-| `ceh-coding-conduct`  | 2.2.11  |
+| `ceh-coding-conduct`  | 2.2.12  |
 | `ceh-every-session`   | 2.8.3   |
-| `ceh-git-workflow`    | 1.3.3   |
+| `ceh-git-workflow`    | 1.4.0   |
 | `ceh-testing`         | 1.4.8   |
 
 ### Changed
@@ -94,6 +101,14 @@ now triggers on fixing a `product/fixes/` record, the prompt the session skipped
   review behind this change, with its drafts, moved here from claude-code-command-center.
 - `ceh-testing:test-a-bug-fix`: triggers on fixing a `product/fixes/` record. "this worked last
   week" is dropped to fit the description budget, since "regression" already covers it.
+- `ceh-coding-conduct:agent-coding-contract`: Task decomposition covers work that runs beside
+  another session in the same checkout: `EnterWorktree` for this session, `claude --worktree` for
+  a second one, and renaming the `worktree-<name>` branch before the first push.
+- `ceh-git-workflow` branch guard: the deny message names the prefixes without pointing at a skill.
+
+### Removed
+
+- `ceh-git-workflow:branch`, moved to `archive/ceh-git-workflow/skills/branch/`.
 
 ### Fixed
 

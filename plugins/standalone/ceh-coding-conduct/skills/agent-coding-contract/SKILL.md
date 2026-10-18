@@ -57,6 +57,7 @@ For large tasks:
 - When independent subtasks have no ordering dependency or shared state, spawn parallel subagents via the built-in `Agent` tool rather than executing sequentially
 - A subagent starts with none of this conversation, so each prompt carries its scope (what it may and may not touch), its inputs as file paths rather than pasted content, the decisions already made that bind it, and the exact shape of what it returns
 - When parallel subagents edit files, dispatch each with `isolation: "worktree"` so their edits cannot collide. That worktree branches from the default branch unless `worktree.baseRef` is `"head"` in `settings.json`, and holds only committed work either way, so commit what the subtasks build on and check each worktree's base before trusting its result
+- When this session's work runs alongside another session in the same checkout (the user keeps editing, or a second, independent task starts next to one in progress), call the `EnterWorktree` tool before the first edit. For a second session, tell the user to run `claude --worktree <name>` in another terminal, never launch `claude -p` from Bash: it runs headless, so the user cannot talk to it, and it skips the cleanup prompt on exit. Both name the branch `worktree-<name>`, so rename it with `git branch -m <type>/<short-description>` before the first push
 - Merge the subagents' branches back into yours one at a time, running the checks the change touches after each merge. Resolve a conflict or a failing check before merging the next branch
 
 ## Rules

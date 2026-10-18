@@ -85,8 +85,8 @@ unapplied.
 
 ### Phase 3 — Apply approved clusters
 
-- One `refactor/<cluster>` branch per approved cluster, branched from `main`
-  (`ceh-git-workflow:branch`); many small PRs beat one big one.
+- One `refactor/<cluster>` branch per approved cluster, branched from `main`, because many
+  small PRs beat one big one.
 - Behavior preservation (below) gates every edit. In areas with no coverage the rule is
   skip-and-report, not apply-carefully — careful is not a gate.
 - A cluster that grows past its estimated diff size mid-apply gets split or stopped, not pushed
