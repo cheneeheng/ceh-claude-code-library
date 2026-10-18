@@ -20,7 +20,6 @@ Auto-trigger on context; each loads only the relevant content.
 
 | Skill                     | Auto-loads when                                                                                                                                                                                                                                                                                                                                  |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `branch`                  | Creating or naming a branch                                                                                                                                                                                                                                                                                                                      |
 | `commit`                  | Writing or reviewing a commit message                                                                                                                                                                                                                                                                                                            |
 | `pull-request`            | A branch is heading into `main`: opening a PR, merging one (or a local branch), or landing the branch in one pass — changelog under `[Unreleased]` → commit → PR → merge → cleanup                                                                                                                                                               |
 | `release`                 | Shipping a version: bump → changelog → PR → merge → tag → GitHub release. Also covers tag-only and the hotfix variant                                                                                                                                                                                                                            |
@@ -50,8 +49,8 @@ The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the
 ### Branch guard
 
 Denies a file edit when the file sits in a git work tree whose checked-out branch is the default
-branch (`origin/HEAD`, or `main` / `master`), and tells the agent to create a feature branch per
-`branch` first. Uncommitted work carries over with `git checkout -b`. This turns "branch before
+branch (`origin/HEAD`, or `main` / `master`), and tells the agent to create a feature branch first, naming the
+prefixes (`feat/`, `fix/`, `chore/`, `docs/`, `test/`, `refactor/`). Uncommitted work carries over with `git checkout -b`. This turns "branch before
 implementing" from an instruction the model can forget into one it cannot skip.
 
 Only the session's own repository is guarded, its worktrees included: files outside a git work

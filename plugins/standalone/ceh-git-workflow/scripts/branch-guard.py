@@ -110,7 +110,7 @@ def main():
     if n <= 3:
         reason = (
             f"On the default branch ({branch}). Create a feature branch first "
-            "(ceh-git-workflow:branch: feat/ fix/ chore/ docs/ test/ refactor/), then retry "
+            "(feat/ fix/ chore/ docs/ test/ refactor/ plus a short description), then retry "
             "this edit. Uncommitted work carries over via 'git checkout -b <name>'. If the "
             f"user explicitly asked to edit {branch} in place, tell them to set "
             "CEH_BRANCH_GUARD=off."
