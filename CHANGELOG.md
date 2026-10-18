@@ -39,8 +39,9 @@ A repeat-mistake review in claude-code-command-center found `write-less-code` lo
 sessions that edited files, while the mandatory contract load held in 18 of 19. The per-prompt
 reminder asked the model to load it "before non-trivial logic", a judgment call it skipped. The
 SessionStart directive now loads it with the contract. The same review drafted hooks that deny
-branch creation and bug-fix edits until `branch` and `test-a-bug-fix` load. Those are held back,
-because SOUL.md prefers description rewrites for skills with a clear moment.
+branch creation and bug-fix edits until `branch` and `test-a-bug-fix` load. Both are rejected,
+because SOUL.md prefers description rewrites for skills with a clear moment. `test-a-bug-fix`
+now triggers on fixing a `product/fixes/` record, the prompt the session skipped it on.
 
 ### Plugin versions
 
@@ -50,7 +51,7 @@ because SOUL.md prefers description rewrites for skills with a clear moment.
 | `ceh-coding-conduct`  | 2.2.11  |
 | `ceh-every-session`   | 2.8.3   |
 | `ceh-git-workflow`    | 1.3.3   |
-| `ceh-testing`         | 1.4.7   |
+| `ceh-testing`         | 1.4.8   |
 
 ### Changed
 
@@ -91,6 +92,8 @@ because SOUL.md prefers description rewrites for skills with a clear moment.
   conditional "invoke write-less-code before non-trivial logic" line.
 - `product/retros/2026-10-18-claude-code-command-center-repeat-mistake.md`: the repeat-mistake
   review behind this change, with its drafts, moved here from claude-code-command-center.
+- `ceh-testing:test-a-bug-fix`: triggers on fixing a `product/fixes/` record. "this worked last
+  week" is dropped to fit the description budget, since "regression" already covers it.
 
 ### Fixed
 
