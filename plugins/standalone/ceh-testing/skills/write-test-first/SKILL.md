@@ -48,6 +48,14 @@ state what stays unverified.
   can pass on a broken version too.
 - **One failing test at a time.** Two red tests mean two slices in flight, and the code that turns
   one green can hide the other.
+- **Never weaken a test to get green.** Do not loosen an assertion, skip or delete a test, or change
+  an expected value to match what the code returns, because a test bent to the code proves nothing.
+  When a test is genuinely wrong, fix it as its own change, record why in the decision log, and
+  list it in the hand-over.
+- **Every feature gets at least one integration test** on its main path through the real
+  components it touches (another module, the database, a test server), not only tests of its
+  parts. New code is integrated as it lands, and the seams are where it breaks. Fake only what is
+  slow, paid, or outside the process.
 - **Skip test-first only for what has no behavior to assert:** docs, a config value, a rename, or
   a spike the user called throwaway. Say `skip: <reason>` in the hand-over rather than skipping
   silently.
@@ -65,4 +73,4 @@ For each slice, in the hand-over:
 ```
 
 Then name what stayed unrun, such as the full suite, with the command that runs it, and list any
-`skip: <reason>` lines.
+`skip: <reason>` lines and any `test changed: <test name>: <reason>` lines.

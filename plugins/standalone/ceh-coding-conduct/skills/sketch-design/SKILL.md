@@ -45,6 +45,13 @@ either fixed in the sketch or named as accepted, and only then does implementati
   under a lock or a transaction, rather than mutating shared state as the work goes.
 - **Check: smallest interface.** Count each module's public names. A module that exposes most of
   what it contains hides nothing, so merge it into its caller or cut the interface down.
+- **One concern per file, named for it.** Place each new type and function in the file whose name
+  already states its concern, or in a new file named for what it does, never in a catch-all
+  (`utils`, `helpers`, `common`). Do not give one small function with one caller its own file. An
+  agent finds code by Grep and Glob on names and reads a long file in chunks, so a mixed file costs
+  context and makes an Edit match ambiguous, while a feature scattered across tiny files costs the
+  same context in reads. An existing catch-all stays as it is: splitting it is a refactor nobody
+  asked for.
 - Keep the sketch to what this change needs. A type or parameter for a requirement nobody stated
   fails `ceh-coding-conduct:write-less-code` rung 1, sketch or not.
 
