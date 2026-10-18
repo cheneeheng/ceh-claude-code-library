@@ -30,12 +30,18 @@ contract, so no step sent the agent back to the skill listing. The triggers matc
 user's wording nor a PR the agent started itself, and the hand-off to `test-a-bug-fix` sat in a
 trailing section the agent never acted on.
 
+The same session's decision panel asked bundled questions ("Which fixes should I land first?" with
+three changes in one option), and the user had to ask for them split one choice per question. The
+output style now requires one choice per decision block. Titles in the mod's boxes also showed raw
+backticks, because a Button takes only plain text spans: code spans now draw as inline code.
+
 ### Plugin versions
 
 | Plugin                | Version |
 | --------------------- | ------- |
 | `ceh-build-from-plan` | 1.0.5   |
 | `ceh-coding-conduct`  | 2.2.10  |
+| `ceh-every-session`   | 2.8.1   |
 | `ceh-git-workflow`    | 1.3.3   |
 | `ceh-testing`         | 1.4.7   |
 
@@ -63,6 +69,15 @@ trailing section the agent never acted on.
   `find-root-cause`'s moment.
 - `ceh-git-workflow:pull-request`: also triggers before the agent runs `gh pr create` or
   `gh pr merge` itself.
+- `ceh-every-session` output style: one choice per decision block. A block that applies only after
+  an earlier answer opens with "Only if you answer ...".
+- `product/retros/2026-10-18-session-6f65e2d1.md`: the session diagnosis behind these changes,
+  moved here from claude-code-command-center for reference.
+
+### Fixed
+
+- `ceh-every-session` mod: a `code` span in a Topic title, a decision question, or an option draws
+  as inline code instead of showing its backticks (options used to drop them).
 
 ## 2026-10-16
 

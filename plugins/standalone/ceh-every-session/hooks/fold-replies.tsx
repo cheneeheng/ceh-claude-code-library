@@ -43,6 +43,15 @@ export const register: Register = on => {
     const picks = await read($, picked)
     const { Box, Button, Markdown, Text } = $.ui.resolve(e)
     const decisionId = (index: number) => `${e.requestId}#d${index}`
+    // A one-line title drawn as `Text` spans, since a Button takes no Markdown:
+    // each `code` span in the color a reply draws inline code in. An unpaired
+    // backtick leaves the line as written.
+    const inline = (line: string) => {
+      const parts = line.split('`')
+      return parts.length % 2 === 0
+        ? line
+        : parts.map((part, at) => (at % 2 ? <Text color="permission">{part}</Text> : part))
+    }
 
     // A pick fills the prompt box with every pick of this reply, unsent, so the
     // person can add to it or pick again before pressing Enter.
@@ -72,7 +81,7 @@ export const register: Register = on => {
               <Box flexDirection="column" borderStyle="round" borderDimColor paddingX={1}>
                 <Button key={id} plain onPress={toggle}>
                   <Text dimColor>{isOpen ? '▾' : '▸'}</Text> {section.number && `${section.number} `}
-                  <Text bold={isOpen}>{section.topic}</Text>
+                  <Text bold={isOpen}>{inline(section.topic)}</Text>
                 </Button>
                 {isOpen && (
                   <Box paddingLeft={2}>
@@ -96,11 +105,11 @@ export const register: Register = on => {
 
           return (
             <Box flexDirection="column" borderStyle="round" borderDimColor paddingX={1}>
-              <Text bold>{decision.question}</Text>
+              <Text bold>{inline(decision.question)}</Text>
               {decision.options.map((option, at) => (
                 <Button key={`${decisionId(index)}o${at}`} plain onPress={() => pick(index, at)}>
                   <Text dimColor={chosen !== at}>{chosen === at ? '●' : '○'}</Text> {at + 1}.{' '}
-                  {option.replaceAll('`', '')}
+                  {inline(option)}
                 </Button>
               ))}
             </Box>

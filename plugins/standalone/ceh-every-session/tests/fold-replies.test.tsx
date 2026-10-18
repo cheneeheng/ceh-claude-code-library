@@ -140,6 +140,20 @@ test('decision blocks become options, and a pick fills the prompt box with every
   await ui.unmount()
 })
 
+test('backticks in a topic, a question, or an option draw as code, with no backticks shown', async $ => {
+  const reply = `${REPLY.replaceAll('Alpha', '`alpha.sh` hook')}\n\n**Decision: Keep \`alpha.sh\`?**\n\n1. Yes, keep \`alpha.sh\` (recommended)\n2. No`
+  const ui = await $.ui.mount({ surface: 'terminal', ...message(reply) })
+  for (const key of ['reply-1#0', 'reply-1#d0o0']) {
+    const found = await ui.find({ key })
+    expect(found?.text).toMatch(/alpha\.sh/)
+    expect(found?.text).not.toMatch(/`/)
+  }
+  const spans = await ui.findAll({ type: 'Text', text: 'alpha.sh' })
+  const code = spans.filter(one => one.props.color === 'permission')
+  expect(code.map(one => one.text)).toEqual(['alpha.sh', 'alpha.sh', 'alpha.sh'])
+  await ui.unmount()
+})
+
 test('a decision line in the middle of a reply stays text', async ($, on) => {
   engineDraws(on)
   const ui = await $.ui.mount({ surface: 'terminal', ...message(`Intro.\n\n${DECISIONS}\n\nMore text.`) })
