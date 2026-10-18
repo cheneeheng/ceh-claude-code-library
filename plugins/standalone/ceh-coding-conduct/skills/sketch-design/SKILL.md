@@ -1,9 +1,9 @@
 ---
 name: sketch-design
 description: >-
-  Load this skill before coding a feature that adds a type, module, or function other code calls:
-  sketch types, signatures, and boundaries with no bodies, then check for illegal states. Trigger on
-  "design this first", "sketch the types", "how should this be structured".
+  Load this skill when the next change adds a type, module, or function other code will call, before
+  its first test: sketch types, signatures, and module boundaries with no bodies, then check them.
+  Trigger on a plan phase adding a module, "design this first", "sketch the types".
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

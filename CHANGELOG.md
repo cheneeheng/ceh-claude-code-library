@@ -16,12 +16,19 @@ and not added. Most of their content was either something the model already does
 covered by `ceh-testing`, and their topic-style triggers would have competed with `write-test-first`
 and `test-a-bug-fix`. The few lines that were new went into existing skills instead.
 
+`ceh-coding-conduct:sketch-design` was invoked in none of 236 session transcripts over nine days,
+while `implement-from-plan` fired 20 times. Its description claimed the same moment as
+`write-test-first` and `implement-from-plan`, which name it more specifically, and no skill pointed
+to it. Its description now names the moment before a change's first test, and `implement-from-plan`
+hands off to it when a phase adds a type, module, or called function.
+
 ### Plugin versions
 
-| Plugin               | Version |
-| -------------------- | ------- |
-| `ceh-coding-conduct` | 2.2.8   |
-| `ceh-testing`        | 1.4.6   |
+| Plugin                | Version |
+| --------------------- | ------- |
+| `ceh-build-from-plan` | 1.0.5   |
+| `ceh-coding-conduct`  | 2.2.9   |
+| `ceh-testing`         | 1.4.6   |
 
 ### Changed
 
@@ -32,6 +39,10 @@ and `test-a-bug-fix`. The few lines that were new went into existing skills inst
 - `ceh-testing:write-test-first`: never weaken, skip, or delete a test to get green, and every
   feature gets at least one integration test through the real components it touches. The hand-over
   now lists each changed test with its reason.
+- `ceh-coding-conduct:sketch-design`: description rewritten around the moment before a change's
+  first test, with a plan phase adding a module as a trigger.
+- `ceh-build-from-plan:implement-from-plan`: a phase that adds a type, module, or called function
+  is sketched before its test, pointing to `ceh-coding-conduct:sketch-design` when installed.
 
 ## 2026-10-16
 

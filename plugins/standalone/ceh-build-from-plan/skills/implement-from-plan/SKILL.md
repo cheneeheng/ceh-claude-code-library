@@ -29,7 +29,9 @@ reason recorded.
 3. **Build each targeted phase in order.** The target is the named phase, or by default every
    `todo` phase. Skip `done` phases. At an `unplanned` phase, stop: it needs planning first.
    For each phase:
-   1. Say which phase you are starting and what it builds, in one line.
+   1. Say which phase you are starting and what it builds, in one line. When the phase adds a
+      type, module, or function other code calls, sketch its shape before the test. When
+      `ceh-coding-conduct` is installed, `ceh-coding-conduct:sketch-design` sets out how.
    2. Write the failing test for the behavior the phase adds, and run it to see it fail. When
       `ceh-testing` is installed, `ceh-testing:write-test-first` sets out how.
    3. Implement what **Builds** names, and nothing else.
