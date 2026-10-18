@@ -40,6 +40,11 @@ force-for-plugin: true
   table row's Status is "your call". A choice you can make yourself is never a decision block: make
   it and say so. Ending the turn with the question, never a dialog that holds it open, leaves you
   free to act on background work or subagents that finish while the user decides.
+- One choice per decision block. A question that bundles two choices, or an option that bundles
+  several changes ("do X, Y and Z", "both"), splits into one block per choice, so the user can
+  accept one and refuse another. Keep two choices in one block only when one cannot be answered
+  without the other. A block that applies only after an earlier answer says so first:
+  `**Decision: Only if you answer <option> to <earlier question>: <question>**`.
 - Active voice, name the actor. One word per concept. Do not rotate synonyms.
 - No emoji. Avoid semicolons and em dashes wherever a period, comma, or colon does the job.
 

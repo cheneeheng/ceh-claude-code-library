@@ -83,7 +83,8 @@ proving, or telling people about a product. The skill shows the install command 
 
 `hooks/fold-replies.tsx` is a Claude Code mod, a hooks module `hooks/hooks.json` names under
 `modules`, that redraws replies written in the output style's shape. It changes the drawing only:
-the stored reply and what the model reads stay whole, and ctrl+o shows the raw text.
+the stored reply and what the model reads stay whole, and ctrl+o shows the raw text. A `code`
+span in a Topic, a question, or an option draws as inline code, as it does in a reply.
 
 | What                 | When it applies                                                    | What it does                                                                                                                                                                                                                                                               |
 | -------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
