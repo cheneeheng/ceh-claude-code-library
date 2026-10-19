@@ -1,0 +1,19 @@
+site_name: CEH Claude Code Library
+site_description: Claude Code plugins for autonomous agents. Experimental docs site covering three plugins.
+site_url: https://cheneeheng.github.io/ceh-claude-code-library/
+repo_url: https://github.com/cheneeheng/ceh-claude-code-library
+
+docs_dir: pages
+site_dir: site
+hooks:
+  - hooks.py
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Plugins:
+      - ceh-every-session: plugins/ceh-every-session.md
+      - ceh-coding-conduct: plugins/ceh-coding-conduct.md
+      - ceh-git-workflow: plugins/ceh-git-workflow.md
