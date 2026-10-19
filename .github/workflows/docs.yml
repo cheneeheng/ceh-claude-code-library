@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "docs/mkdocs/**"
+      - "docs/starlight/**"
       - "plugins/standalone/ceh-every-session/README.md"
       - "plugins/standalone/ceh-coding-conduct/README.md"
       - "plugins/standalone/ceh-git-workflow/README.md"
@@ -33,6 +34,15 @@ jobs:
           python-version: "3.13"
       - run: pip install -r docs/mkdocs/requirements.txt
       - run: mkdocs build --strict -f docs/mkdocs/mkdocs.yml
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: docs/starlight/package-lock.json
+      - run: npm ci && npm run build
+        working-directory: docs/starlight
+      # One Pages deployment per repo: Starlight rides inside the MkDocs artifact at /starlight/.
+      - run: cp -r docs/starlight/dist docs/mkdocs/site/starlight
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

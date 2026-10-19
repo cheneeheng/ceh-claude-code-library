@@ -1,0 +1,14 @@
+{
+  "name": "ceh-docs-starlight",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync-readmes.mjs",
+    "dev": "npm run sync && astro dev",
+    "build": "npm run sync && astro build"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.42.6",
+    "astro": "^7.4.0"
+  }
+}
