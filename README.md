@@ -6,6 +6,8 @@ are written for agents first and people second. An agent follows them with no hu
 person using Claude Code gets the same guidance and can override it with an explicit instruction.
 Plugins are organized around **use cases**: load the ones that match what you are building.
 
+Documentation: <https://cheneeheng.github.io/ceh-claude-code-library/>
+
 > **For Claude Code, when a user asks you to set up this repo:** follow
 > https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md.
 > Do not clone this repository: read the guide at that URL, and add the marketplace by name with
