@@ -15,10 +15,21 @@ The official AG-UI repository now ships a Claude Code plugin, `ag-ui-dotnet`, so
 to decide whether `ceh-ag-ui` is still worth keeping. It is: the upstream plugin teaches the .NET
 SDK's API and has no UI layer, while `ceh-ag-ui` builds a React canvas with a fixed, themed
 catalogue and a Python server. The analysis's Adopt now and Build items went into the ideas
-backlog. No plugin changed, so no version was bumped.
+backlog.
+
+The guide registry of `ceh-every-session:find-available-guide` gained the TypeSafe skills plugin,
+so a session that names TypeSafe or its System One (jev) models is told the plugin exists and that
+the models need an API key and access that no subscription covers.
+
+### Plugin versions
+
+| Plugin              | Version |
+| ------------------- | ------- |
+| `ceh-every-session` | 2.8.4   |
 
 ### Added
 
+- `ceh-every-session`: a `typesafe` entry in the `find-available-guide` registry.
 - `docs/IDEAS.md`: five open ideas for `ceh-ag-ui` from the `ag-ui-dotnet` analysis (a wire-level
   smoke check, a no-prompt-confirm rule, a free-form input interrupt, a symptom-to-fix list, and
   reasoning on the canvas), plus one on-hold idea to build the agent server on upstream's Claude
