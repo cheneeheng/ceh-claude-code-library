@@ -9,6 +9,23 @@ before this repo live in
 
 ---
 
+## 2026-10-19
+
+The official AG-UI repository now ships a Claude Code plugin, `ag-ui-dotnet`, so it was analysed
+to decide whether `ceh-ag-ui` is still worth keeping. It is: the upstream plugin teaches the .NET
+SDK's API and has no UI layer, while `ceh-ag-ui` builds a React canvas with a fixed, themed
+catalogue and a Python server. The analysis's Adopt now and Build items went into the ideas
+backlog. No plugin changed, so no version was bumped.
+
+### Added
+
+- `docs/IDEAS.md`: five open ideas for `ceh-ag-ui` from the `ag-ui-dotnet` analysis (a wire-level
+  smoke check, a no-prompt-confirm rule, a free-form input interrupt, a symptom-to-fix list, and
+  reasoning on the canvas), plus one on-hold idea to build the agent server on upstream's Claude
+  Agent SDK adapter once it can take several frontend calls in one turn.
+
+---
+
 ## 2026-10-18
 
 Two drafted skills, `file-organization` and `testing-strategy`, were reviewed against the vision
