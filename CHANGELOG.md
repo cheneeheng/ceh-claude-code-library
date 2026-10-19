@@ -61,6 +61,12 @@ marketplace, and what each core plugin changes in every session.
 
 ### Changed
 
+- `docs/starlight`: publishes `docs/VISION.md` as Why this library and `docs/STRATEGY.md` as How the
+  plugins fit together, under an Understand group between Get started and Plugins. The home page
+  routes to both.
+- `docs/starlight`: themed with Meridian from `ceh-ui-design`. The tokens are vendored in
+  `src/styles/meridian-tokens.css` and mapped onto Starlight's variables in `theme.css`. The current page
+  carries the amber active-edge, and the home page has one primary button.
 - `docs/starlight`: covers all plugins and six repo docs, served at the root of the project page
   instead of `/starlight/`. `docs.yml` builds only this site and also reruns when a synced doc or
   plugin manifest changes.
