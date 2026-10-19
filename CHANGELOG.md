@@ -35,11 +35,17 @@ the environment variables, the plugin dependencies, the plugin versions, and the
 all published from their repo files so the site cannot drift from them. A plugin hub groups the
 plugins by the lifecycle stage in the root `README.md`, and the home page routes by task.
 
+A four-persona newcomer walk of that site reached its goal every time but failed one gate criterion:
+the branch-guard setting had no stated location, undo, or check. The onboarding docs now say where
+`CEH_BRANCH_GUARD` goes and how to undo it, what happens when you install before adding the
+marketplace, and what each core plugin changes in every session.
+
 ### Plugin versions
 
 | Plugin              | Version |
 | ------------------- | ------- |
 | `ceh-every-session` | 2.8.4   |
+| `ceh-git-workflow`  | 1.4.1   |
 
 ### Added
 
@@ -59,6 +65,16 @@ plugins by the lifecycle stage in the root `README.md`, and the home page routes
   instead of `/starlight/`. `docs.yml` builds only this site and also reruns when a synced doc or
   plugin manifest changes.
 - `README.md`: links the docs site under the tagline.
+
+### Fixed
+
+- `docs/ENVIRONMENT_VARIABLES.md`: drops the "never a settings file" contradiction, says which
+  settings file to use, to merge into an existing `env` block, and how to undo and check a setting.
+- `docs/GETTING_STARTED.md`: names the error from installing before adding the marketplace, what
+  each core plugin changes in every session and which interpreter their hooks need, how to allow
+  edits on the default branch, and how to discard a plan.
+- `ceh-git-workflow`: the README links the environment variables page from the branch guard
+  variables.
 
 ### Removed
 

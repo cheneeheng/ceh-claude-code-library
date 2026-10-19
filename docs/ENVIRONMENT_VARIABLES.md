@@ -1,12 +1,19 @@
 # Environment Variables
 
-Every environment variable a plugin reads, in one place. Plugins are configured through environment
-variables only, never a settings file. Set them under `env` in `~/.claude/settings.json` (user) or
-`.claude/settings.json` (project):
+Every environment variable a plugin reads, in one place. Plugins have no config file of their own:
+each setting is an environment variable. Set it under `env` in a Claude Code settings file,
+`~/.claude/settings.json` (user: every folder you open Claude Code in) or `.claude/settings.json`
+(project: this folder, and everyone who clones it, because that file is committed):
 
 ```json
 { "env": { "CEH_BRANCH_GUARD": "off" } }
 ```
+
+If the file already has an `env` block, add the key to it instead of pasting the whole line over
+it. If the file or the block does not exist, create it with the line above. To undo a setting, delete its key: every variable here has a default, shown in the table. To
+check `CEH_BRANCH_GUARD`, ask Claude to create a throwaway file such as `scratch.txt` while the
+default branch is checked out, then delete it. The write is allowed once the setting applies and
+denied while the guard is on.
 
 Each plugin README documents its own variables in full. This file is the index across plugins, so
 a name collision or an undocumented variable is visible at a glance. Add a row in the same commit

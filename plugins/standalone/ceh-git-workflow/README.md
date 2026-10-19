@@ -61,6 +61,9 @@ nudge with teeth rather than a sandbox. It fails open: unparseable input, a miss
 crashed interpreter allows the edit. After three full denials in a session it sends one line with
 the denial's number, because repeating an identical block pushes the model into loops.
 
+Set a variable under `env` in a Claude Code settings file. The
+[environment variables page](../../../docs/ENVIRONMENT_VARIABLES.md) shows which file and how to undo it.
+
 | Variable             | Default              | Effect                                                                                |
 | -------------------- | -------------------- | ------------------------------------------------------------------------------------- |
 | `CEH_BRANCH_GUARD`   | unset (guard on)     | `off` allows edits on the default branch, for when the user asked to edit it in place |
