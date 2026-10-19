@@ -4,11 +4,16 @@ on:
   push:
     branches: [main]
     paths:
-      - "docs/mkdocs/**"
       - "docs/starlight/**"
-      - "plugins/standalone/ceh-every-session/README.md"
-      - "plugins/standalone/ceh-coding-conduct/README.md"
-      - "plugins/standalone/ceh-git-workflow/README.md"
+      - "README.md"
+      - "docs/GETTING_STARTED.md"
+      - "docs/TESTING_WORKFLOW.md"
+      - "docs/CATALOG.md"
+      - "docs/ENVIRONMENT_VARIABLES.md"
+      - "docs/PLUGIN_DEPENDENCIES.md"
+      - "docs/PLUGIN_VERSIONS.md"
+      - "plugins/standalone/*/README.md"
+      - "plugins/standalone/*/.claude-plugin/plugin.json"
       - ".github/workflows/docs.yml"
   workflow_dispatch:
 
@@ -29,11 +34,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - run: pip install -r docs/mkdocs/requirements.txt
-      - run: mkdocs build --strict -f docs/mkdocs/mkdocs.yml
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -41,11 +41,9 @@ jobs:
           cache-dependency-path: docs/starlight/package-lock.json
       - run: npm ci && npm run build
         working-directory: docs/starlight
-      # One Pages deployment per repo: Starlight rides inside the MkDocs artifact at /starlight/.
-      - run: cp -r docs/starlight/dist docs/mkdocs/site/starlight
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/mkdocs/site
+          path: docs/starlight/dist
       - id: deployment
         uses: actions/deploy-pages@v4

@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "sync": "node scripts/sync-readmes.mjs",
+    "sync": "node scripts/sync-docs.mjs",
     "dev": "npm run sync && astro dev",
     "build": "npm run sync && astro build"
   },

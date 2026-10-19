@@ -20,4 +20,3 @@ plugins/*/*/evals/results/
 
 # Python bytecode
 __pycache__/
-docs/mkdocs/site/

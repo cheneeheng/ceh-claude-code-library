@@ -29,6 +29,12 @@ An experimental Starlight site under `docs/starlight` covers the same three plug
 the MkDocs one. A repo has one Pages deployment, so `docs.yml` now builds both and publishes Starlight
 at `/starlight/` inside the MkDocs artifact, which keeps the MkDocs URL unchanged.
 
+The comparison is done, so the MkDocs site is removed and Starlight now serves the root of the
+project page. It covers every plugin: each plugin's README, plus the Get started guide, the Catalog,
+the environment variables, the plugin dependencies, the plugin versions, and the testing workflow,
+all published from their repo files so the site cannot drift from them. A plugin hub groups the
+plugins by the lifecycle stage in the root `README.md`, and the home page routes by task.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -46,6 +52,17 @@ at `/starlight/` inside the MkDocs artifact, which keeps the MkDocs URL unchange
   smoke check, a no-prompt-confirm rule, a free-form input interrupt, a symptom-to-fix list, and
   reasoning on the canvas), plus one on-hold idea to build the agent server on upstream's Claude
   Agent SDK adapter once it can take several frontend calls in one turn.
+
+### Changed
+
+- `docs/starlight`: covers all plugins and six repo docs, served at the root of the project page
+  instead of `/starlight/`. `docs.yml` builds only this site and also reruns when a synced doc or
+  plugin manifest changes.
+- `README.md`: links the docs site under the tagline.
+
+### Removed
+
+- `docs/mkdocs`: the MkDocs site, replaced by Starlight.
 
 ---
 
