@@ -10,9 +10,10 @@ each setting is an environment variable. Set it under `env` in a Claude Code set
 ```
 
 If the file already has an `env` block, add the key to it instead of pasting the whole line over
-it. To undo a setting, delete its key: every variable here has a default, shown in the table. To
-check `CEH_BRANCH_GUARD`, ask Claude to edit a file while the default branch is checked out. It is
-allowed once the setting applies and denied while the guard is on.
+it. If the file or the block does not exist, create it with the line above. To undo a setting, delete its key: every variable here has a default, shown in the table. To
+check `CEH_BRANCH_GUARD`, ask Claude to create a throwaway file such as `scratch.txt` while the
+default branch is checked out, then delete it. The write is allowed once the setting applies and
+denied while the guard is on.
 
 Each plugin README documents its own variables in full. This file is the index across plugins, so
 a name collision or an undocumented variable is visible at a glance. Add a row in the same commit

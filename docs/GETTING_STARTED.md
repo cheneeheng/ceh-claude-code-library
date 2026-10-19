@@ -96,6 +96,10 @@ What each core plugin changes in every session, so you can decide before you ins
 - [`ceh-coding-conduct`](../plugins/standalone/ceh-coding-conduct/) loads its coding contract at the
   start of every session.
 
+Their hooks need `python3` on your `PATH` (`ceh-every-session`, `ceh-git-workflow`) and `bash`
+(`ceh-coding-conduct`). `python3 --version` and `bash --version` show whether they are there. Without `python3` the guards do nothing instead of blocking you, and
+installing a plugin never installs `python3` for you.
+
 ```
 /plugin install ceh-every-session@ceh-claude-code-library --scope user
 ```
@@ -186,6 +190,8 @@ Then, when you build from the plan:
 /plugin install ceh-build-from-plan@ceh-claude-code-library --scope project
 /plugin install ceh-python-service@ceh-claude-code-library --scope project
 ```
+
+Run `/reload-plugins` after each install, so the new skills load.
 
 The Tell stage reads `product/BUSINESS_PLAN.md` and `product/EVIDENCE.md` when they exist. Without them it
 still runs, and says which claims rest on nothing proven.

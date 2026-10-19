@@ -71,8 +71,8 @@ marketplace, and what each core plugin changes in every session.
 - `docs/ENVIRONMENT_VARIABLES.md`: drops the "never a settings file" contradiction, says which
   settings file to use, to merge into an existing `env` block, and how to undo and check a setting.
 - `docs/GETTING_STARTED.md`: names the error from installing before adding the marketplace, what
-  each core plugin changes in every session, how to allow edits on the default branch, and how to
-  discard a plan.
+  each core plugin changes in every session and which interpreter their hooks need, how to allow
+  edits on the default branch, and how to discard a plan.
 - `ceh-git-workflow`: the README links the environment variables page from the branch guard
   variables.
 
