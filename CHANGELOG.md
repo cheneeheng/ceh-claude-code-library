@@ -25,6 +25,10 @@ An experimental MkDocs site under `docs/mkdocs` covers three plugins (`ceh-every
 `ceh-coding-conduct`, `ceh-git-workflow`) to test whether a docs site deployed as a GitHub Pages
 project page works for this repo. Its plugin pages are the plugins' own READMEs, so they cannot drift.
 
+An experimental Starlight site under `docs/starlight` covers the same three plugins, to compare it with
+the MkDocs one. A repo has one Pages deployment, so `docs.yml` now builds both and publishes Starlight
+at `/starlight/` inside the MkDocs artifact, which keeps the MkDocs URL unchanged.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -36,6 +40,8 @@ project page works for this repo. Its plugin pages are the plugins' own READMEs,
 - `ceh-every-session`: a `typesafe` entry in the `find-available-guide` registry.
 - `docs/mkdocs`: an experimental MkDocs Material site for three plugins, and
   `.github/workflows/docs.yml`, which builds it with `--strict` and deploys it to GitHub Pages.
+- `docs/starlight`: an experimental Astro Starlight site for the same three plugins. `docs.yml` builds it
+  and publishes it at `/starlight/` beside the MkDocs site.
 - `docs/IDEAS.md`: five open ideas for `ceh-ag-ui` from the `ag-ui-dotnet` analysis (a wire-level
   smoke check, a no-prompt-confirm rule, a free-form input interrupt, a symptom-to-fix list, and
   reasoning on the canvas), plus one on-hold idea to build the agent server on upstream's Claude
