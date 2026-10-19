@@ -67,6 +67,10 @@ Every `/plugin ...` command typed in a Claude Code session also runs in a termin
 Interrupted partway? `claude plugin list` shows what is already installed, and running an install
 again is safe.
 
+Installing before this step fails with `Plugin "<name>" not found in marketplace`, which is the
+message Claude Code gives for a marketplace it does not know. Run the command above, then repeat
+the install.
+
 ## 2. Install the core once, recommended at user scope
 
 User scope installs a plugin for you in every folder you open Claude Code in. A hook is a script Claude Code
@@ -82,6 +86,15 @@ Install `ceh-every-session` first, every time. It is not a dependency of any oth
 nothing installs it for you. Then install only the other rows whose "Install when" fits you. If
 you neither write code nor use git, for example you only write business plans or posts,
 `ceh-every-session` is the whole core.
+
+What each core plugin changes in every session, so you can decide before you install:
+
+- [`ceh-every-session`](../plugins/standalone/ceh-every-session/) forces its response style over
+  any `outputStyle` you set, and turns Claude's question dialogs into a decision block in the reply.
+- [`ceh-git-workflow`](../plugins/standalone/ceh-git-workflow/) denies file edits while the default
+  branch is checked out.
+- [`ceh-coding-conduct`](../plugins/standalone/ceh-coding-conduct/) loads its coding contract at the
+  start of every session.
 
 ```
 /plugin install ceh-every-session@ceh-claude-code-library --scope user
@@ -103,7 +116,9 @@ clones the repo gets the same plugins.
 
 If you installed `ceh-git-workflow` and the repo is brand new, create a branch before the first
 skill writes anything: that plugin blocks file edits on the default branch.
-`git checkout -b <name>` works even before the first commit.
+`git checkout -b <name>` works even before the first commit. To edit the default branch anyway,
+set `CEH_BRANCH_GUARD` to `off`, as described in
+[Environment variables](ENVIRONMENT_VARIABLES.md).
 
 Install each plugin below in a Claude Code session opened in that folder, putting its name in place
 of `<plugin>`:
@@ -124,7 +139,8 @@ Each moment names the plugin, the command that starts it, and the file it writes
 **Build**
 
 - Plan a new app or one feature: install `ceh-build-planning`, start with
-  `/ceh-build-planning:write-build-plan`. Writes `product/plans/<slug>.md`.
+  `/ceh-build-planning:write-build-plan`. Writes `product/plans/<slug>.md`, and deleting that file
+  discards the plan.
 - Build from that plan: install `ceh-build-from-plan` and your stack plugin (below), start with
   `/ceh-build-from-plan:implement-from-plan`. Writes the code and the plan's evidence.
 - Write the user and operator docs: install `ceh-documentation`, start with

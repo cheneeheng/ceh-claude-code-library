@@ -26,7 +26,7 @@ a removed plugin loses its row.
 | `ceh-documentation`            | 1.0.5   | `2026-10-10` |
 | `ceh-every-session`            | 2.8.4   | `2026-10-19` |
 | `ceh-git-datastore`            | 1.0.6   | `2026-10-15` |
-| `ceh-git-workflow`             | 1.4.0   | `2026-10-18` |
+| `ceh-git-workflow`             | 1.4.1   | `2026-10-19` |
 | `ceh-orchestration-lab`        | 1.0.3   | `2026-10-15` |
 | `ceh-python-library`           | 1.0.4   | `2026-10-15` |
 | `ceh-python-service`           | 1.1.4   | `2026-10-15` |
