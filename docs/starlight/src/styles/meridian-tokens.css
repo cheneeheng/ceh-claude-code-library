@@ -1,0 +1,211 @@
+/* Meridian tokens, vendored from the ceh-ui-design plugin (v1.0.6):
+   skills/design-ui/references/meridian/brand.css, sections 2 and 3 verbatim (light tokens, dark
+   tokens, color-scheme). Left out on purpose: the font @import (loaded by <link> in
+   astro.config.mjs), the legacy alias layer, and the reset and bare-element styles, which would
+   fight Starlight's own. To restyle, re-copy those sections from the plugin; theme.css maps them
+   onto Starlight. */
+
+:root {
+  /* — Type families ----------------------------------------------------- */
+  --font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-ui:      "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+ 
+  /* — Type scale  (anchored at a 16px root; rem so it stays predictable) - */
+  --fs-50:  0.6875rem;  /* 11px · eyebrows, micro-labels                   */
+  --fs-75:  0.75rem;    /* 12px · captions, table cells, badges           */
+  --fs-100: 0.8125rem;  /* 13px · secondary body, controls                */
+  --fs-200: 0.9375rem;  /* 15px · body default                            */
+  --fs-300: 1.0625rem;  /* 17px · emphasized body, lead-in                */
+  --fs-400: 1.375rem;   /* 22px · card / section heading                  */
+  --fs-500: 1.75rem;    /* 28px · stat values                             */
+  --fs-600: 2.25rem;    /* 36px · page heading                            */
+  --fs-700: 3.5rem;     /* 56px · hero                                    */
+ 
+  --lh-tight: 1.1;
+  --lh-snug:  1.3;
+  --lh-base:  1.55;
+ 
+  --tracking-tight:  -0.02em;
+  --tracking-flat:    0;
+  --tracking-wide:    0.04em;
+  --tracking-eyebrow: 0.06em;
+ 
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  --weight-heavy:    800;
+ 
+  /* — Spacing  (4px grid) ---------------------------------------------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+ 
+  /* — Radius  (softer than v1 — friendlier, mainstream) ----------------- */
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   14px;
+  --radius-full: 999px;
+ 
+  /* — Active-edge width (signature; tune in one place) ------------------ */
+  --edge: 5px;
+ 
+  /* — Elevation  (soft neutral shadows; depth, not atmosphere) ---------- */
+  --shadow-sm: 0 1px 2px rgba(16,24,40,.05), 0 1px 3px rgba(16,24,40,.06);
+  --shadow-md: 0 4px 16px rgba(16,24,40,.10), 0 2px 6px rgba(16,24,40,.06);
+  --shadow-lg: 0 12px 32px rgba(16,24,40,.14), 0 4px 12px rgba(16,24,40,.08); /* overlays */
+ 
+  /* — Motion ------------------------------------------------------------ */
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 130ms;
+  --dur-base: 180ms;
+  --dur-slow: 280ms;
+ 
+  /* — Surfaces  (true cool-gray neutrals) ------------------------------- */
+  --bg:        #FAFAFB;
+  --surface:   #FFFFFF;
+  --surface-2: #F4F4F6;
+ 
+  /* — Ink --------------------------------------------------------------- */
+  --fg:        #18181B;
+  --fg-muted:  #52525B;
+  --fg-subtle: #A1A1AA;   /* third tier: placeholders, disabled, inherited */
+ 
+  /* — Lines ------------------------------------------------------------- */
+  --border:        #E4E4E7;
+  --border-strong: #D4D4D8;
+ 
+  /* — Brand: blue (the workhorse — buttons, links, focus) --------------- */
+  --secondary:      #2563EB;
+  --secondary-hi:   #1D4ED8;
+  --secondary-wash: #E8F0FE;
+ 
+  /* — Brand: amber-gold accent (marks state — the active-edge, emphasis)  */
+  --accent:      #D97706;
+  --accent-hi:   #B45309;
+  --accent-wash: #FCEFCE;
+ 
+  /* — Text that sits on a brand fill ------------------------------------ */
+  --on-text: #FFFFFF;
+ 
+  /* — Semantic state ---------------------------------------------------- */
+  --success:      #16A34A; --success-wash: #E7F6EC;
+  --warning:      #EA580C; --warning-wash: #FCE8DD;
+  --danger:       #DC2626; --danger-wash:  #FBE9E9;
+  --error: var(--danger);  /* alias kept for legacy var(--error,…) usage   */
+ 
+  /* — Data visualization  (cohesive categorical ramp) ------------------- */
+  --data-1: #2563EB;  /* blue    */
+  --data-2: #0EA5E9;  /* sky     */
+  --data-3: #8B5CF6;  /* violet  */
+  --data-4: #14B8A6;  /* teal    */
+  --data-5: #F59E0B;  /* amber   */
+  --data-6: #EC4899;  /* pink    */
+ 
+  /* — App-specific neutrals (inherited / nested rows) ------------------- */
+  --inherited-fg: #A1A1AA;
+  --inherited-bg: #F1F1F3;
+ 
+  /* — Focus ------------------------------------------------------------- */
+  --focus-ring: var(--secondary);
+}
+ 
+/* ----------------------------------------------------------------------------
+   3. Tokens — dark  (designed as a peer on a near-black neutral ramp)
+   ------------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.40);
+    --shadow-md: 0 8px 24px rgba(0,0,0,.50), 0 2px 8px rgba(0,0,0,.40);
+    --shadow-lg: 0 16px 40px rgba(0,0,0,.60), 0 4px 14px rgba(0,0,0,.45);
+ 
+    --bg:        #0A0A0C;
+    --surface:   #1F1F24;
+    --surface-2: #2A2A30;
+ 
+    --fg:        #FAFAFA;
+    --fg-muted:  #A1A1AA;
+    --fg-subtle: #71717A;
+ 
+    --border:        #303036;
+    --border-strong: #41414A;
+ 
+    --secondary:      #60A5FA;
+    --secondary-hi:   #93BBFC;
+    --secondary-wash: rgba(96,165,250,.16);
+ 
+    --accent:      #FBBF24;
+    --accent-hi:   #FCD34D;
+    --accent-wash: rgba(251,191,36,.16);
+ 
+    --on-text: #0B1220;  /* dark text reads cleanly on the lighter brand fills */
+ 
+    --success: #4ADE80; --success-wash: rgba(74,222,128,.14);
+    --warning: #FB923C; --warning-wash: rgba(251,146,60,.16);
+    --danger:  #F87171; --danger-wash:  rgba(248,113,113,.14);
+ 
+    --data-1: #60A5FA;
+    --data-2: #38BDF8;
+    --data-3: #A78BFA;
+    --data-4: #2DD4BF;
+    --data-5: #FBBF24;
+    --data-6: #F472B6;
+ 
+    --inherited-fg: #71717A;
+    --inherited-bg: #232329;
+  }
+}
+ 
+:root[data-theme="dark"] {
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.40);
+  --shadow-md: 0 8px 24px rgba(0,0,0,.50), 0 2px 8px rgba(0,0,0,.40);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,.60), 0 4px 14px rgba(0,0,0,.45);
+ 
+  --bg:        #0A0A0C;
+  --surface:   #1F1F24;
+  --surface-2: #2A2A30;
+ 
+  --fg:        #FAFAFA;
+  --fg-muted:  #A1A1AA;
+  --fg-subtle: #71717A;
+ 
+  --border:        #303036;
+  --border-strong: #41414A;
+ 
+  --secondary:      #60A5FA;
+  --secondary-hi:   #93BBFC;
+  --secondary-wash: rgba(96,165,250,.16);
+ 
+  --accent:      #FBBF24;
+  --accent-hi:   #FCD34D;
+  --accent-wash: rgba(251,191,36,.16);
+ 
+  --on-text: #0B1220;
+ 
+  --success: #4ADE80; --success-wash: rgba(74,222,128,.14);
+  --warning: #FB923C; --warning-wash: rgba(251,146,60,.16);
+  --danger:  #F87171; --danger-wash:  rgba(248,113,113,.14);
+ 
+  --data-1: #60A5FA;
+  --data-2: #38BDF8;
+  --data-3: #A78BFA;
+  --data-4: #2DD4BF;
+  --data-5: #FBBF24;
+  --data-6: #F472B6;
+ 
+  --inherited-fg: #71717A;
+  --inherited-bg: #232329;
+}
+ 
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark;  }

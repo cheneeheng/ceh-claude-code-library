@@ -13,6 +13,8 @@ const read = (rel) => readFileSync(path.join(ROOT, rel), "utf8");
 // Repo file -> page slug and title. Plugin pages are added below.
 const PAGES = [
   ["docs/GETTING_STARTED.md", "get-started", "Get started"],
+  ["docs/VISION.md", "why", "Why this library"],
+  ["docs/STRATEGY.md", "concepts", "How the plugins fit together"],
   ["docs/TESTING_WORKFLOW.md", "guides/testing-workflow", "Testing workflow"],
   ["docs/CATALOG.md", "reference/catalog", "Catalog"],
   ["docs/ENVIRONMENT_VARIABLES.md", "reference/environment-variables", "Environment variables"],

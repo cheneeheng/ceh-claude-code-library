@@ -12,9 +12,25 @@ export default defineConfig({
     starlight({
       title: "CEH Claude Code Library",
       social: [{ icon: "github", label: "GitHub", href: REPO }],
+      customCss: ["./src/styles/meridian-tokens.css", "./src/styles/theme.css"],
+      expressiveCode: {
+        styleOverrides: { borderRadius: "var(--radius-md)", codeFontFamily: "var(--font-mono)" },
+      },
+      head: [
+        { tag: "link", attrs: { rel: "preconnect", href: "https://fonts.googleapis.com" } },
+        { tag: "link", attrs: { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" } },
+        {
+          tag: "link",
+          attrs: {
+            rel: "stylesheet",
+            href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap",
+          },
+        },
+      ],
       sidebar: [
         { label: "Home", link: "/" },
         { slug: "get-started" },
+        { label: "Understand", items: [{ slug: "why" }, { slug: "concepts" }] },
         { label: "Plugins", items: [{ slug: "plugins" }, ...stages] },
         { label: "Guides", items: [{ slug: "guides/testing-workflow" }] },
         {
