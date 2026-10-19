@@ -21,6 +21,10 @@ The guide registry of `ceh-every-session:find-available-guide` gained the TypeSa
 so a session that names TypeSafe or its System One (jev) models is told the plugin exists and that
 the models need an API key and access that no subscription covers.
 
+An experimental MkDocs site under `docs/mkdocs` covers three plugins (`ceh-every-session`,
+`ceh-coding-conduct`, `ceh-git-workflow`) to test whether a docs site deployed as a GitHub Pages
+project page works for this repo. Its plugin pages are the plugins' own READMEs, so they cannot drift.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -30,6 +34,8 @@ the models need an API key and access that no subscription covers.
 ### Added
 
 - `ceh-every-session`: a `typesafe` entry in the `find-available-guide` registry.
+- `docs/mkdocs`: an experimental MkDocs Material site for three plugins, and
+  `.github/workflows/docs.yml`, which builds it with `--strict` and deploys it to GitHub Pages.
 - `docs/IDEAS.md`: five open ideas for `ceh-ag-ui` from the `ag-ui-dotnet` analysis (a wire-level
   smoke check, a no-prompt-confirm rule, a free-form input interrupt, a symptom-to-fix list, and
   reasoning on the canvas), plus one on-hold idea to build the agent server on upstream's Claude
