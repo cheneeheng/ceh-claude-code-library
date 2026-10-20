@@ -33,6 +33,10 @@ Pass the arguments you have. Anything you leave out, the skill asks for or finds
 repo. The blog posts path is how the drafting skills find earlier episodes for series continuity,
 and where they save the new post.
 
+Whenever a skill interviews you or asks for feedback, it sends every question at once, numbered,
+each about one topic and each with lettered options. Answer them in one reply, for example
+`1B, 2A, 3 Other: ...`. The rules live in `references/ask-the-author.md`.
+
 The skills also load automatically when a request clearly matches ("help me write a blog post about
 this repo", "turn these notes into a post", "edit this draft", "make a thread from this"), but
 invoking them by name is the primary path.
