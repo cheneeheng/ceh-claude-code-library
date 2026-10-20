@@ -21,18 +21,22 @@ thread, saved or shown where the Output section says.
 
 ### 1. Read the blog first (series awareness)
 
-Read the blog, not just the repo, before the first question or the first word of the draft.
+Read the blog, not just the repo, before the first question or the first word of the draft. Every
+question this skill has goes into the one batch of step 3, per
+`${CLAUDE_PLUGIN_ROOT}/references/ask-the-author.md`. Read that file now.
 **Finding the blog:** use a path or URL the user gave; otherwise look in the current repo for a
 posts directory (`content/`, `posts/`, `_posts/`, `src/content/`, `blog/`); if neither turns one
-up, ask once where the blog lives. "No existing blog" is a valid answer and skips this step.
+up, add a question to the batch on where the blog lives. "No existing blog" is a valid answer and
+skips this step.
 
 Read the previous posts, especially the latest episode in the same series. Then:
 
 - **Pick up the thread**: if the last post ended on a live thread, open with it ("Last time I
-  said…") and cross-link it. When interviewing, ask _"the last post ended on X — is this the post
-  that answers it?"_
+  said…") and cross-link it. When interviewing, add a question to the batch: _"the last post
+  ended on X, is this the post that answers it?"_
 - **Pin chronology**: if the material does not say when this happened relative to the last post,
-  ask one timestamp question. It prevents continuity bugs (wrong versions, events out of order).
+  add one timestamp question to the batch. It prevents continuity bugs (wrong versions, events out
+  of order).
 - **Check continuity facts** against earlier episodes: versions, dates, what the reader already
   knows. Don't re-tell a story a previous episode owns — call back in a sentence and link.
 - **Leave a thread**: plan what this episode leaves open. Closure instead if the series is
@@ -68,37 +72,39 @@ claims rest on nothing proven.
 Infer without asking: **what it does** (README, module names, entry points); **who it's for**
 (docs, example usage); **stack and key design decisions** (structure, dependencies); **current
 state** (finished tool, experiment, WIP?). A repo usually supports several post types, so surface
-only the angles that fit:
+only the angles that fit, as one question in the batch:
 
-> _"I've read through the repo. There are a few directions this post could go:_
-> _- **Launch/showcase** — what it is, why you built it, how to use it_
-> _- **Tutorial/How-To** — walk readers through building something similar_
-> _- **Lessons Learned** — what you discovered, what surprised you, what you'd do differently_
->
-> _Which resonates, or is there a different angle you have in mind?"_
+> _Which angle should the post take?_
+> _A. **Launch/showcase** — what it is, why you built it, how to use it_
+> _B. **Tutorial/How-To** — walk readers through building something similar_
+> _C. **Lessons Learned** — what you discovered, what surprised you, what you'd do differently_
+> _D. Other: say what_
 
 If the repo can support multiple posts (complex system, long build journey, multiple use patterns),
-flag it: _"This project has enough depth for a short series — e.g. an intro post now, a deep-dive
-into [key decision] later, a retrospective once it's been out a while. One post to start, or plan
-a series?"_ For a series, plan the arc first (which post covers what), then one post at a time.
+add a second question: _"This project has enough depth for a short series, e.g. an intro post now,
+a deep-dive into [key decision] later, a retrospective once it's been out a while. A. One post to
+start (recommended) B. Plan a series C. Other: say what"_ For a series, plan the arc first (which
+post covers what), then one post at a time.
 
 **Notes, bullets, an outline, or fragments**: assess completeness.
 
 - **Rich material**: multiple specifics, a clear arc or argument. Draft immediately.
 - **Workable but sparse**: angle clear, some detail thin. Draft, and flag the gaps in the refinement offer rather than asking upfront.
-- **Genuinely incomplete**: a topic with no substance — no story, steps, or argument. The one case warranting a single question before drafting, the one that unlocks the most (e.g. "What was the moment this actually became a problem?"). Then draft without further questions.
+- **Genuinely incomplete**: a topic with no substance — no story, steps, or argument. The one case warranting a batch before drafting, built around the question that unlocks the most (e.g. "What was the moment this actually became a problem?"). Then draft without further questions.
 
 **Only a topic, idea, or experience** (verbal prompt, nothing written): infer **topic**, **post
 type**, **audience**, **goal** (credibility, lesson, traffic, entertainment, announcement), and
-**length/tone**. If genuinely uninferable, ask **one** question that unlocks the most — usually
-_"Who are you writing this for and what do you want them to take away?"_ Then interview (step 3).
+**length/tone**. Each one that is genuinely uninferable becomes its own question in the batch, the
+audience and takeaway ones first. Then interview (step 3).
 
 ### 3. Interview for what is missing
 
 Skip this step when the material is rich or the route was notes. Otherwise extract the **specific
 raw material** that makes the post real: stories, data points, moments, opinions, decisions. Only
-ask what you haven't inferred, and adapt to the post type. From a repo, the repo gives the _what_,
-so interview for the **human story**, 2–3 of these, only what the repo hasn't answered:
+ask what you haven't inferred, and adapt to the post type. Send every question from steps 1 to 3
+as one batch, in the format of `${CLAUDE_PLUGIN_ROOT}/references/ask-the-author.md`. From a repo,
+the repo gives the _what_, so interview for the **human story**, 2–3 of these, only what the repo
+hasn't answered:
 
 - Why build this instead of using an existing tool?
 - Hardest decision while building it?
@@ -111,7 +117,8 @@ the most surprising or counterintuitive thing about the topic; a specific moment
 event the post is really about.
 
 **The four story beats** are required for story-voice posts (Lessons Learned, Personal Story, most
-Launch and Opinion). Facts are not enough. Ask one at a time, skipping any the user already gave:
+Launch and Opinion). Facts are not enough. Ask each as its own question in the batch, skipping any
+the user already gave:
 
 1. **The turn** — what happened between not-knowing and knowing? How did the realization arrive?
 2. **The moment** — your reaction when it happened?
@@ -128,18 +135,20 @@ Launch and Opinion). Facts are not enough. Ask one at a time, skipping any the u
 **Tone:** technical and professional posts (How-To, Launch, Opinion) get direct questions for
 specifics, numbers, and decisions. Emotionally weighted topics (burnout, failure, grief,
 setbacks) open with curiosity, not diagnosis — "what was that like", not "what went wrong" —
-and ask for specifics once the author is in the story.
+and ask for specifics in the second batch, once the author is in the story.
 
 **Interview rules:**
 
-1. **One question per turn.** Wait for the answer.
-2. Follow up on vague or abstract answers: _"Can you give me a specific example?"_
-3. **Offer hypothesis options when you can form plausible guesses.** Instead of _"How did you figure it out?"_: _"Did Claude critique it, did you read something, or did it crystallize on its own?"_ Correcting a concrete guess is easier than composing from scratch and gets a sharper reply. Ask open questions when you have no good hypotheses.
-4. **Handle answer drift**: if the user answers a different question than asked, keep the answer — it's real material. Decide whether the original beat is still needed; if so, re-ask **once at most**, rephrased. Don't interrogate.
+1. **One batch, answered together.** Send all the questions at once and wait for the author's
+   answers to all of them. Never ask turn by turn.
+2. Follow up on vague or abstract answers in a second batch, only for the answers that stay too
+   vague to draft from: _"Can you give me a specific example?"_
+3. **Make every question's options plausible guesses.** Instead of _"How did you figure it out?"_: _"A. Claude critiqued it B. You read something C. It crystallized on its own D. Other: say what"_. Correcting a concrete guess is easier than composing from scratch and gets a sharper reply. Where you have no good guesses, the options are the broad kinds of answer, plus `Other: say what`.
+4. **Handle answer drift**: if the user answers a different question than asked, keep the answer — it's real material. Decide whether the original beat is still needed; if so, re-ask it **once at most**, rephrased, in the second batch. Don't interrogate.
 5. **Store quotable phrasing verbatim** as it arrives, and mark the lines to use nearly word-for-word.
-6. **If the first message already has strong specifics** (real numbers, named events, clear arc), draft after one confirming question — don't manufacture exchanges. The goal is a great post, not a thorough interview.
-7. When you have enough (typically 2–5 exchanges, sometimes 1), say so and draft. For story-voice posts, "enough" includes the four beats, or an explicit note that a beat is missing, never an invented one.
-8. If a tangent is more interesting than the stated topic: _"This angle — [X] — might be more compelling than [original]. Explore that instead?"_
+6. **If the first message already has strong specifics** (real numbers, named events, clear arc), draft after a batch of only the confirming questions — don't manufacture questions. The goal is a great post, not a thorough interview.
+7. When the answers are enough (typically one batch, sometimes two), say so and draft. For story-voice posts, "enough" includes the four beats, or an explicit note that a beat is missing, never an invented one.
+8. If a tangent is more interesting than the stated topic, make it a question: _"This angle, [X], might be more compelling than [original]. A. Explore that instead B. Stay with [original] C. Other: say what"_
 
 ### 4. Draft the post
 
@@ -230,8 +239,11 @@ The Open Thread: What's unresolved, what you'll watch for, what comes next
 
 ### 5. Refine
 
-After sharing the draft, ask: _"What's landing well and what feels off?"_ Also offer **one
-proactive observation** — something you'd fix even if they're happy. Watch for and raise:
+After sharing the draft, ask for feedback as one batch in the format of
+`${CLAUDE_PLUGIN_ROOT}/references/ask-the-author.md`. Turn every item below that applies into its
+own question, with the fix as an option. Always close with one general question, _"How does the
+draft read overall? A. Ready to use B. Needs the changes answered above C. Other: say what"_. These
+are things you'd fix even if they're happy. Watch for and raise:
 
 - **Opening too slow**: first paragraph is setup, not a moment — offer an alternative opening.
 - **Missing the specific**: draft generalizes where the material or interview has real numbers, names, or moments — insert them.
@@ -242,7 +254,7 @@ proactive observation** — something you'd fix even if they're happy. Watch for
 - **Paraphrased voice**: a quotable line got smoothed into generic prose — restore the user's phrasing.
 - **Generic title**: could describe dozens of posts — push for a specific claim or hook.
 - **Tone mismatch**: source casual, draft formal (or vice versa) — ask if they want the voice adjusted.
-- **Gaps flagged earlier**: surface thin spots as concrete invitations: _"The pitfalls section would be stronger with a real example — do you have one?"_
+- **Gaps flagged earlier**: surface thin spots as concrete questions: _"The pitfalls section would be stronger with a real example. A. I'll paste one B. Leave the pitfalls as drafted C. Other: say what"_
 
 If the user wants a different angle or structure, **re-draft** — a revision that fights the original structure reads like a revision.
 
@@ -282,7 +294,7 @@ they cost the author, not warnings issued to the reader.
 ### Working principles
 
 - **Infer first, ask second**: extract everything the user has already said, and only ask what you genuinely can't infer.
-- **At most one question at a time**: never dump a list, because a list lets the author answer the easy items and skip the one that unlocks the post. Ask the single most important thing you don't yet know. Notes with a workable angle get zero questions.
+- **All questions at once**: never ask turn by turn. Send every question in one numbered batch, each atomic and ending in options, and ask the author to answer all of them. Put the question that unlocks the post first. Notes with a workable angle get zero questions.
 - **Read everything before writing anything**: full material first, identify the angle, then one complete draft.
 - **Pick the strongest thread**: if the material sprawls, choose the sharpest angle rather than covering everything, and tell the user which thread you picked and why.
 - **Concrete over abstract**: push for specifics — real numbers, actual events, named people, exact moments.
@@ -293,15 +305,15 @@ they cost the author, not warnings issued to the reader.
 - **Wall of notes with multiple threads**: pick the strongest one — don't weave. Tell the user, then draft immediately without asking permission: _"Your notes cover a few directions. I've written about [angle X] because [reason]. If you'd rather have [angle Y], I'll re-draft."_
 - **Conflicting signals** (half story, half tutorial): pick the dominant signal and note the tension: _"Your notes mix story and tutorial. I've written this as a [type], which fits most of the material. If you want the other framing, I can re-draft."_
 - **How-To with abstract steps**: if real commands, config, or code are missing, draft with what's there and flag it in the refinement offer (_"drop in actual commands and I'll weave them in"_). Don't ask upfront if the rest is strong enough.
-- **No clear topic yet**: ask what they've been working on, thinking about, or frustrated by lately. The topic is in there.
+- **No clear topic yet**: ask what they've been working on, thinking about, or frustrated by lately, as a question with options for the likely areas. The topic is in there.
 - **Multiple posts wanted**: one at a time — complete the first interview and draft before starting the next.
 - **Expert writing for beginners**: push them to explain jargon, add examples, and not skip "obvious" steps.
 - **Listicle or generic SEO post**: write it well anyway, but flag a more compelling angle if one is hiding underneath.
-- **No human to answer** (a headless run, or called by another agent): draft from the material you have and never invent a personal moment, quote, or number. Put a bracketed placeholder where each missing specific belongs (`[the moment you noticed X]`), mark the post as a draft, and end with the interview questions you would have asked, in order. With only a bare topic and no material, stop and report that the post needs the author's story.
+- **No human to answer** (a headless run, or called by another agent): draft from the material you have and never invent a personal moment, quote, or number. Put a bracketed placeholder where each missing specific belongs (`[the moment you noticed X]`), mark the post as a draft, and end with the interview questions you would have asked, as the numbered batch with options. With only a bare topic and no material, stop and report that the post needs the author's story.
 
 ## Output
 
-**During an interview:** conversational, one question at a time, no lists, no preamble.
+**During an interview:** one numbered batch of every question, each with lettered options, no preamble.
 
 **Before drafting** (if noting thread selection or flagging a gap): one short paragraph, then the draft immediately.
 

@@ -18,31 +18,36 @@ produced, labelled, and ends on the post's open thread or a plain link to it.
 
 ## Procedure
 
-### 1. Identify the format(s)
-
-If the user specifies format(s), proceed immediately. Otherwise ask once:
-
-> _"Which format(s) would you like? I can produce:_
->
-> _1. **Twitter/X thread** — opening tweet + numbered thread (up to ~12 tweets) + link close_
-> _2. **LinkedIn post** — 150–300 words in the post's own voice, ends on its open thread_
-> _3. **TL;DR** — 2–3 sentences: what happened or the claim, what was found, what's still open_
-> _4. **Newsletter blurb** — 3–5 sentences teasing the post, ends with `[Read more →]`_
->
-> _Any combination."_
-
-With no human to answer (a headless run), produce all four, since each is cheap and dropping one
-is easier for the author than asking again later.
-
-### 2. Read the post
+### 1. Read the post
 
 Identify: **the thesis** (the single central claim); **the key takeaway**; **the audience**; **the tone**; **length** (enough content to thread, or short-form?).
 
 **Series awareness**: if the post is an episode in a series, the adaptation is the reader's entry point into the whole serial, so use that. The thread's closing link or the newsletter blurb can point at the series ("part 3 of the [X] build — start at part 1: [link]"), and the post's open thread (what's unresolved, what comes next) is natural enticement material: it promises a next episode without manufacturing a cliffhanger. Don't spoil an earlier episode's payoff in the adaptation.
 
-**No clear thesis**: flag before repurposing, because a fuzzy post produces fuzzy content. Offer to sharpen first (suggest `/ceh-blog:edit-post`) or proceed as-is, and wait for the answer.
+### 2. Ask what is open
 
-**Too short to thread** (under ~400 words or only 2–3 distinct points): flag it and recommend LinkedIn or TL;DR instead. If they insist, produce the best thread possible and note where it feels thin.
+Collect every open question, then send them as one batch in the format of
+`${CLAUDE_PLUGIN_ROOT}/references/ask-the-author.md` (read that file first) and wait for all the
+answers. If nothing is open, skip this step.
+
+**Format(s)**: if the user specified them, proceed with those. Otherwise add this question:
+
+> _Which format(s) would you like? Pick any combination._
+> _A. **Twitter/X thread** — opening tweet + numbered thread (up to ~12 tweets) + link close_
+> _B. **LinkedIn post** — 150–300 words in the post's own voice, ends on its open thread_
+> _C. **TL;DR** — 2–3 sentences: what happened or the claim, what was found, what's still open_
+> _D. **Newsletter blurb** — 3–5 sentences teasing the post, ends with `[Read more →]`_
+> _E. Other: say what_
+
+With no human to answer (a headless run), produce all four, since each is cheap and dropping one
+is easier for the author than asking again later.
+
+**No clear thesis**: flag before repurposing, because a fuzzy post produces fuzzy content. Add a
+question: _"A. Sharpen first with `/ceh-blog:edit-post` B. Proceed as-is C. Other: say what"_
+
+**Too short to thread** (under ~400 words or only 2–3 distinct points): flag it and add a
+question: _"A. LinkedIn or TL;DR instead (recommended) B. Thread anyway, noting where it feels thin
+C. Other: say what"_
 
 ### 3. Produce the output(s)
 
@@ -126,9 +131,13 @@ Single format: output directly with a format label. Multiple: `##` heading per f
 
 Save each format to its own file, `<slug>-<format>.md` (`thread`, `linkedin`, `tldr`, `newsletter`): next to the post when it is on disk, otherwise in `.agents_workspace/blog/` with the slug from the post's title in kebab case. A re-run overwrites the format files, never the post. Say where they were saved.
 
-After delivering, ask: _"Anything you'd like adjusted — tone, length, a specific tweet, the LinkedIn opener?"_ Also offer **one proactive observation**, something you'd refine even if they're satisfied. Common candidates: opening tweet reads as summary rather than a moment; LinkedIn opener starts with backstory; a banned tell crept in during compression; blurb gives away too much.
+After delivering, ask for feedback as one batch in the same format, one atomic question per
+adjustment: tone, length, a specific tweet, the LinkedIn opener, each with options (keep, a concrete
+alternative, `Other: say what`). Include a question for each thing you'd refine even if they're
+satisfied. Common candidates: opening tweet reads as summary rather than a moment; LinkedIn opener
+starts with backstory; a banned tell crept in during compression; blurb gives away too much.
 
 ## Stop conditions
 
-- No clear thesis → flag it, offer to sharpen first or proceed as-is, and wait.
-- Too short to thread → flag it and recommend LinkedIn or TL;DR instead.
+- No clear thesis → flag it, ask whether to sharpen first or proceed as-is, and wait.
+- Too short to thread → flag it and ask whether to switch to LinkedIn or TL;DR instead.

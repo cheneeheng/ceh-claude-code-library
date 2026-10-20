@@ -14,7 +14,10 @@ license: Apache-2.0
 # Edit post
 
 Diagnose an existing blog draft, then produce a full revised version that keeps the author's voice.
-Done means a short diagnosis followed by the complete revision, with one question asked after.
+Done means a short diagnosis followed by the complete revision, with one batch of feedback
+questions asked after. Every question this skill asks follows
+`${CLAUDE_PLUGIN_ROOT}/references/ask-the-author.md`: all at once, atomic, each with options. Read
+that file before the first question.
 
 ## Procedure
 
@@ -46,10 +49,14 @@ changes:
 
 > This draft is in good shape — the voice is clear, the structure holds, the thesis lands early. I made a few minor edits below, but there are no structural problems to fix.
 
-If it needs a full rewrite (wrong structure, absent thesis, material too thin to polish), flag it
-and **wait for their answer**:
+If it needs a full rewrite (wrong structure, absent thesis, material too thin to polish), flag it,
+ask the question, and **wait for their answer**:
 
-> This draft has structural issues that go beyond editing. [Why.] Editing would produce a patched result; a cleaner approach is to redraft using what's working. Proceed with a rewrite, or keep the shape and just clean up the language?
+> This draft has structural issues that go beyond editing. [Why.] Editing would produce a patched result; a cleaner approach is to redraft using what's working.
+> How should I proceed? A. Rewrite, using what's working (recommended) B. Keep the shape and just clean up the language C. Other: say what
+
+Any other question that must be answered before editing goes in the same batch: the thesis
+confirmation (see Rules) and where the earlier posts live (see Series continuity below).
 
 ### 3. Edit
 
@@ -84,7 +91,7 @@ checklist:
 Replace a tell with the specific thing it stood in for. A tell with nothing behind it is deleted,
 not reworded.
 
-**Series continuity**: if the draft is an episode in a series, find the earlier posts (the draft's own directory if it is a file, else a path or URL the user gave; ask once if neither exists) and check against them — versions, dates, what the reader already knows. It should pick up the previous episode's open thread (cross-linked) rather than re-telling a story an earlier post owns.
+**Series continuity**: if the draft is an episode in a series, find the earlier posts (the draft's own directory if it is a file, else a path or URL the user gave; if neither exists, add a question about it to the pre-edit batch) and check against them — versions, dates, what the reader already knows. It should pick up the previous episode's open thread (cross-linked) rather than re-telling a story an earlier post owns.
 
 **Structural fit**: does the post follow its type's natural shape (below)? Scattered steps or a buried story need reordering, not rewording.
 
@@ -158,11 +165,15 @@ The Open Thread: What's unresolved, what you'll watch for, what comes next
 
 ### 4. Invite feedback
 
-After sharing the edited draft, ask exactly this, one question and no menu of revision directions, because a menu sets the editor's agenda and an open question surfaces what the author feels is off:
+After sharing the edited draft, ask for feedback as one batch. Make each significant change an
+atomic question: _"I moved the thesis to paragraph 1. A. Keep it B. Revert it C. Other: say what"_.
+Add a question for each judgment call you made against the author's wording (a banned tell
+quieted, a `[specific needed]` marker, a cut paragraph). Always close with two general questions,
+one on what is working and one on what still feels off, each with options drawn from the sections
+of the draft (opening, middle, closing, title, tone) plus `Nothing` and `Other: say what`. The
+closing pair keeps the batch from setting the editor's agenda alone.
 
-> What's working and what still feels off?
-
-Wait for their answer, then address what they raise specifically.
+Wait for their answers, then address what they raise specifically.
 
 ## Rules
 
@@ -173,7 +184,7 @@ Wait for their answer, then address what they raise specifically.
 - **Specifics over generalities**: push concrete details into every abstraction that could hold one.
 - **Draft in another language**: edit in that language with the same framework. Don't translate unless asked.
 - **Very long draft (3,000+ words)**: same process, and be especially aggressive about padding. Flag if it would be stronger as two pieces.
-- **No identifiable thesis**: name it in the diagnosis, offer your best inference, and confirm before editing, because editing toward the wrong thesis polishes the wrong post.
+- **No identifiable thesis**: name it in the diagnosis, offer your best inference as a question with options, and confirm before editing, because editing toward the wrong thesis polishes the wrong post.
 - **Already published**: treat the same as unpublished. Updating a live post or learning for the next one is the same editing work.
 
 ## Output
@@ -192,9 +203,9 @@ Wait for their answer, then address what they raise specifically.
 
 ## Stop conditions
 
-- Draft needs a full rewrite → flag it before editing and wait for the author to choose between a rewrite and a language cleanup.
+- Draft needs a full rewrite → flag it before editing and wait for the author to choose between a rewrite and a language cleanup, in the batch with any other pre-edit question.
 
 ## Hands off to
 
 - Once the user is satisfied, mention: _"When you're ready to share this, `/ceh-blog:repurpose-post` can adapt it into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb."_
-- If the input is bullet notes rather than prose, offer to route: _"These look like notes rather than a draft. For turning notes into a post from scratch, `/ceh-blog:draft-post` is a better fit. Want me to switch, or did you have a draft in mind?"_
+- If the input is bullet notes rather than prose, offer to route: _"These look like notes rather than a draft. For turning notes into a post from scratch, `/ceh-blog:draft-post` is a better fit. A. Switch to `/ceh-blog:draft-post` (recommended) B. Stay here, I have a draft in mind C. Other: say what"_

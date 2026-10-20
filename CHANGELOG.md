@@ -9,6 +9,33 @@ before this repo live in
 
 ---
 
+## 2026-10-20
+
+The `ceh-blog` skills no longer interview or ask for feedback turn by turn. Each now sends every
+question at once, numbered, each about one topic (two only when the second cannot be answered
+before the first) and each ending in lettered options, so the author answers in one reply. The
+rules sit once in `references/ask-the-author.md`, which all three skills read.
+
+### Plugin versions
+
+| Plugin     | Version |
+| ---------- | ------- |
+| `ceh-blog` | 1.0.10  |
+
+### Changed
+
+- `ceh-blog:draft-post`: the interview, the blog-location, chronology, angle and series questions
+  go out as one batch, with a second batch only for answers too vague to draft from. The
+  refinement step asks one atomic question per observation, with the fix as an option.
+- `ceh-blog:edit-post`: the rewrite-or-cleanup question joins any other pre-edit question in one
+  batch. The closing feedback is a batch of one question per significant change, ending in a
+  "what is working" and a "what still feels off" question with options. This replaces the single
+  open question.
+- `ceh-blog:repurpose-post`: reads the post first, then asks the format, thesis and length
+  questions as one batch. The closing feedback is a batch of atomic questions.
+
+---
+
 ## 2026-10-19
 
 The official AG-UI repository now ships a Claude Code plugin, `ag-ui-dotnet`, so it was analysed
