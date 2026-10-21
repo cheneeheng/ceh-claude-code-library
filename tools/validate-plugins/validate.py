@@ -36,6 +36,7 @@ CHECKS = [
     "hygiene",
     "scripts",
     "hooks",
+    "templates",
 ]
 
 

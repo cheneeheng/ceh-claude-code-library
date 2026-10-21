@@ -96,15 +96,9 @@ installed.
 
 One file per decision, `.claude/rules/decision-<topic>.md`, directly in `.claude/rules/`. Name it
 for the topic, not the answer (`decision-ui-framework.md`, `decision-target-market.md`), so
-changing the decision edits the same file.
-
-```markdown
-# <Topic>
-
-<The rule: one or two imperative sentences.>
-
-Why: <one line>. Decided <YYYY-MM-DD>. Source: <path, or "conversation">.
-```
+changing the decision edits the same file. Each file fills
+`references/decision-rule.template.md`. An existing file without its `schema:` line gets the
+template's frontmatter when it is next edited.
 
 The report lists each file written, updated, or deleted, the open questions, and any override
 reported instead of written.

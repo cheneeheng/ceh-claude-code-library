@@ -47,9 +47,8 @@ reason recorded.
    change: later planning runs read only its frontmatter. When `ceh-check-build-against-plan` is
    installed, run `ceh-check-build-against-plan:check-build-against-plan` first, because it adds
    its Checked line to the plan. Then, in one commit: copy each Design decision a later reader
-   still needs to the Key Decisions log in `product/ARCHITECTURE.md` (the format is in
-   `ceh-codebase-explanation:document-architecture` when installed, otherwise a dated heading with
-   Context, Decision, and Consequences), and add a changelog entry when the repo keeps a
+   still needs to the Key Decisions log in `product/ARCHITECTURE.md`, in the entry shape of
+   `references/architecture.template.md` (a missing file starts as a copy of it), and add a changelog entry when the repo keeps a
    changelog. Say which decisions were copied.
 
 ## Rules

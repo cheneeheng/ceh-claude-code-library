@@ -71,7 +71,8 @@ a single grounding question — _"In one or two sentences: what's the product, a
 
 ## Phase 1 — Draft v0 proactively
 
-Write a complete `BUSINESS_PLAN.md` per the schema — all 13 sections, even the thin ones. Fill
+Write a complete `BUSINESS_PLAN.md` from `${CLAUDE_PLUGIN_ROOT}/references/business-plan.template.md`
+per the schema — all 13 sections, even the thin ones. Fill
 what the source material supports; for everything else, **write your best-guess hypothesis and tag
 it `[assumption]`**, not "TBD". A wrong, specific assumption is useful — it gives the interview a
 target. A blank is not.

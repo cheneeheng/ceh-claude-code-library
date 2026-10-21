@@ -21,56 +21,9 @@ Do this before reading any code for the task.
 4. Find the transcript: the file matching `~/.claude/projects/*/<session id>.jsonl`.
 5. Check whether `CLAUDE_CODE_SUBAGENT_MODEL` is set. It overrides the model of every subagent
    dispatch, so a set value makes the run's worker model meaningless. Record it either way.
-6. Write `run.md` from the template below, filling every field known now.
-7. Append one row to `.agents_workspace/orchestration-lab/runs.md`, creating it with the header
-   below if missing, with Outcome `running`.
-
-## `run.md` template
-
-```markdown
-# <task in a few words>
-
-| Field                        | Value                                 |
-| ---------------------------- | ------------------------------------- |
-| Started                      | <started>                             |
-| Finished                     |                                       |
-| Session                      | <session id>                          |
-| Transcript                   | <transcript path>                     |
-| Project                      | <repo name> (<project root>)          |
-| Strategy                     | <plan-then-implement or orchestrate>  |
-| Main model                   | <model id this session runs on>       |
-| Worker model                 | <haiku, sonnet, opus or fable>        |
-| `CLAUDE_CODE_SUBAGENT_MODEL` | <unset or its value>                  |
-| Base                         | <sha>, clean or dirty (see base.diff) |
-| End                          |                                       |
-| Outcome                      |                                       |
-| Dispatches                   |                                       |
-| User interventions           |                                       |
-| Verdict                      |                                       |
-
-## Task
-
-<the user's request, verbatim>
-
-## Plan or briefs
-
-<the skill fills this section>
-
-## Ledger
-
-<filled at close by dispatch_ledger.py>
-
-## Token usage
-
-## Notes
-```
-
-## `runs.md` header
-
-```markdown
-| Started | Project | Strategy | Main | Worker | Outcome | Verdict | Folder |
-| ------- | ------- | -------- | ---- | ------ | ------- | ------- | ------ |
-```
+6. Write `run.md` from `<plugin root>/references/run.template.md`, filling every field known now.
+7. Append one row to `.agents_workspace/orchestration-lab/runs.md`, creating it as a copy of
+   `<plugin root>/references/runs-index.template.md` if missing, with Outcome `running`.
 
 ## While the run is open
 

@@ -130,19 +130,9 @@ it also belongs here.
 
 Append to `.agents_workspace/DECISION_LOG.md` (the default convention). Create the file and any missing parent directories if they do not exist — creating and appending to this log is pre-authorized and never a scope violation. Use the next sequential integer as the entry ID (read the last entry's ID first). To use a different location, specify a `DECISION_LOG.md` path in your project `CLAUDE.md`; add the path to `.gitignore` if you do not want agent decision logs committed to the repo.
 
-```markdown
-### Entry <ID>
-
-**Type:** Decision
-**Mode:** Autonomous
-**Timestamp:** <ISO-8601>
-**Task:** <brief description>
-
-**Context:** What was ambiguous or why a choice was needed.
-**Decision:** What was chosen and why.
-**Impact / Risk:** Potential side effects.
-**Outcome:** Observed result (if applicable).
-```
+Each entry follows `references/decision-log.template.md`. A new log is a copy of it. An existing
+log without its `schema:` line gets the template's frontmatter added at the top, and its entries
+stay as they are.
 
 ## Stop conditions
 

@@ -181,9 +181,14 @@ The builder and the runner check these, in this order. Each failure names the ru
 
 ## `run-state.md`
 
-Written to `{run}/run-state.md` when `resumable: true`, updated after every stage change:
+Written to `{run}/run-state.md` when `resumable: true`, updated after every stage change. A new
+file is a copy of `run-state.template.md`, next to this file. A filled one reads:
 
 ```markdown
+---
+schema: run-state/v1
+---
+
 # Run state: prepublish/20261003-0930
 
 flow: prepublish
@@ -209,7 +214,7 @@ Each stage line is `<id>: <state> | <artifact paths or -> | <note>`, with `<stat
 `pending`, `done`, `awaiting-approval`, `failed`. The note carries the gate evidence in one line.
 The approvals section records the decision, its source (`interactive`, `approve=<id>`, or
 `resume-prompt`) and the time. When a stage reaches `awaiting-approval`, the runner also writes what
-`show` asks for to `{run}/approval-<stage-id>.md`, so the person approving sees the same thing the
+`show` asks for to `{run}/approval-<stage-id>.md`, filling `approval.template.md`, so the person approving sees the same thing the
 run would have asked about.
 
 ## The `FLOW STATUS` line

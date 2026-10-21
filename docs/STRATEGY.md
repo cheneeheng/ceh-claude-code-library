@@ -67,8 +67,13 @@ Three rules hold for every handoff file:
 2. **Reading a handoff file is not a plugin dependency.** It adds no `dependencies` entry, so it
    never forces an extra install. A format two plugins share is duplicated into both and registered
    in `docs/CROSS_REFERENCES.md`, as `plan-format.md` already is.
-3. **Runs settle the formats, not desk design.** The table above is a draft. The reference run
-   decides the exact files and their minimal schema.
+3. **Every saved output has a versioned template.** A skill that saves a file fills a
+   `<schema>.template.md` in a `references/` folder, whose frontmatter opens with
+   `schema: <schema>/v<N>`, and the saved file keeps that line, so a reader can tell which format a
+   file follows. The version goes up when a required field or heading is renamed or removed,
+   because that is the change that breaks a reader. `validate.py` checks that each template opens
+   with its schema line, is cited by its plugin, and matches its copies in other plugins. The
+   reference run may still revise a format, through a version bump.
 
 ## Where files live: commit what the next stage reads
 
@@ -181,8 +186,6 @@ No known gaps as of 2026-10-10.
 
 - **The reference run's product.** Deferred. It must be small enough to finish in days, use a
   stack with a plugin, and be something worth publishing, so Tell has a real audience.
-- **Handoff schemas.** The minimal fields each handoff file must carry, settled by the reference
-  run.
 
 ## Changing this file
 

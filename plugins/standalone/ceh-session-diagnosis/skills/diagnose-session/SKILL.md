@@ -89,30 +89,7 @@ Save by where each fix lands, creating the directory if needed. In-scope root ca
 routes, because the routed work reads it. Scrub and audit that file first, per Sharing steps 1
 and 2: a committed file leaves the machine on the next push. Out-of-scope root causes, other
 findings, and hypotheses go to `.agents_workspace/retros/<YYYY-MM-DD>-session-<session-id-prefix>.md`,
-local, because only the user acts on them. When both files exist, each links the other.
-
-```markdown
-# Session diagnosis: <session-id>, <YYYY-MM-DD>
-
-**Transcript:** <path> (+ <n> subagent transcripts)
-**Symptom:** <one line>
-
-## Root causes
-
-### 1. <Root cause class>: <one line>
-
-- **First wrong turn:** `<transcript>:<line>` "<quote>"
-- **Chain:** <first wrong turn> → <step> → <visible failure>, each with its line
-- **Route:** <skill, or "user: <where the fix lands>">
-- **Status:** <handed off: <plan, fix record, or commit> / open: <why>>
-
-## Other findings
-
-One line each, with the lens and citation, for findings no symptom needed.
-
-## Hypotheses
-
-Causes believed but not cited, each with what would confirm it.
-```
+local, because only the user acts on them. When both files exist, each links the other through
+`other_file`. Each file fills `references/session-retro.template.md`.
 
 Reply with the root causes one line each, their routes and status, and the report paths.

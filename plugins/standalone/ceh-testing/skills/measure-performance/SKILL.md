@@ -30,8 +30,8 @@ and either way the baseline and every attempt are recorded.
    - Explain the number. Check it moves the way it should: double the input and the time should
      change in the way the algorithm predicts. A number that does not move is measuring something
      else: a cache hit, lazy initialisation, work the compiler removed.
-3. **Record the baseline** in `.agents_workspace/perf/<metric>.md`: commit, command, machine,
-   input, and the numbers. Every later number is compared against this row and nothing else.
+3. **Record the baseline** in `.agents_workspace/perf/<metric>.md`, filling
+   `references/perf-report.template.md`: commit, command, machine, input, and the numbers. Every later number is compared against this row and nothing else.
 4. **Profile before changing anything.** Find where the time or memory goes with the stack's
    profiler. Change only what the profile points at. Guessing at a hotspot is how a day goes into
    a function that takes 2% of the time.
@@ -53,12 +53,8 @@ and either way the baseline and every attempt are recorded.
 
 ## Output
 
-```markdown
-| Attempt  | Change         | Median (spread)   | vs baseline | Kept          |
-| -------- | -------------- | ----------------- | ----------- | ------------- |
-| baseline | <commit>       | <n> (<min>-<max>) | —           | —             |
-| 1        | <what changed> | <n> (<min>-<max>) | <-x%>       | yes, <commit> |
-```
+The attempts table of `references/perf-report.template.md`, one row per attempt, in the file and
+in the reply.
 
 ## Stop conditions
 
