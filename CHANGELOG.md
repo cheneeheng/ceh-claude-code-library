@@ -9,6 +9,18 @@ before this repo live in
 
 ---
 
+## 2026-10-21
+
+`docs/IDEAS.md` records unwrapped Markdown prose as on hold, so the token saving gets revisited
+instead of rediscovered. No plugin changed.
+
+### Added
+
+- `docs/IDEAS.md`: "Unwrapped Markdown prose", prettier `proseWrap: never` to save roughly 4 to 5%
+  of prose tokens, on hold because it makes every later diff paragraph-wide.
+
+---
+
 ## 2026-10-20
 
 The `ceh-blog` skills no longer interview or ask for feedback turn by turn. Each now sends every
