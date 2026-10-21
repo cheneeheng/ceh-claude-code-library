@@ -70,15 +70,10 @@ committed with the first fix applied, because a later session working in the rep
 secrets in its quotes as `<secret>`: a committed file leaves the machine on the next push. Fixes
 outside it (user settings, the global `CLAUDE.md`, memory, an installed plugin) go to
 `.agents_workspace/retros/<YYYY-MM-DD>-repeat-mistake.md`, local, because only the user acts on
-them. When both files exist, each links the other. Reply with the same table. Each fix `awaiting approval` carries its full draft below the table, so
+them. When both files exist, each links the other through `other_file`. Reply with the same table. Each fix `awaiting approval` carries its full draft below the table, so
 a later session can apply it from the file alone. When a draft is applied or rejected, update its
 Status in the file it was saved in.
 
-```markdown
-| Mistake    | Evidence                        | Rung  | Fix                         | Proof                                           | Status                                   |
-| ---------- | ------------------------------- | ----- | --------------------------- | ----------------------------------------------- | ---------------------------------------- |
-| <one line> | <path:line or quoted tool call> | <1-5> | <what was added or drafted> | <fails on the real mistake: yes / not provable> | <applied / awaiting approval / rejected> |
-```
-
-Below the table, for each rung chosen, one line on why the rungs above it did not fit, then each
-pending draft in full.
+Each file fills `references/repeat-mistake.template.md`: the table, then for each rung chosen one
+line on why the rungs above it did not fit, then each pending draft in full. Appending to an
+existing file adds rows and drafts, and leaves its frontmatter as it is.

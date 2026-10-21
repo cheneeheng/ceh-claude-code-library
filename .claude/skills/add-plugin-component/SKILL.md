@@ -73,8 +73,9 @@ authoring skill. Where that skill's advice conflicts with this repo, this skill 
 **Skill** — copy `${CLAUDE_SKILL_DIR}/assets/SKILL.template.md` to
 `plugins/standalone/ceh-<plugin>/skills/<name>/SKILL.md`, `name` matching the directory. Fill every
 placeholder, then delete the `TEMPLATE-GUIDANCE` comment. Content stays inline. `references/` is
-for two cases only: a schema or template shared by several skills, or a standard too large to
-inline. A file shared by skills of the same plugin goes once in `plugins/standalone/ceh-<plugin>/references/`,
+for three cases only: a schema or template shared by several skills, a standard too large to
+inline, and the output template of every file the skill saves, `<schema>.template.md` opening with
+`schema: <schema>/v<N>` (see Skills in `plugins/CLAUDE.md`). A file shared by skills of the same plugin goes once in `plugins/standalone/ceh-<plugin>/references/`,
 cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`. A file used by one skill goes in that skill's
 own `references/`, cited as `${CLAUDE_SKILL_DIR}/references/<file>`.
 

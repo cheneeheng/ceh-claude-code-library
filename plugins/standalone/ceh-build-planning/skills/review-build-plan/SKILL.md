@@ -68,26 +68,14 @@ quotes the plan, and the verdict is delivered.
 
 ## Output
 
-```markdown
-## Plan review: product/plans/<slug>.md
-
-**Verdict:** Revise first
-**Lenses:** Scope, Engineering, Design. Skipped developer experience: no developer callers.
-
-| #   | Lens        | Severity | Plan line                     | Finding                                   | Fix                                         |
-| --- | ----------- | -------- | ----------------------------- | ----------------------------------------- | ------------------------------------------- |
-| 1   | Engineering | blocking | Phase 3 Check: "the app runs" | Proves nothing about the import it builds | `uv run pytest tests/test_import.py` passes |
-| 2   | Scope       | advisory | In: "CSV and XLSX import"     | XLSX serves no user named in Goal         | Move XLSX to Out until a user asks          |
-```
+The review fills `references/plan-review.template.md`. A row reads like
+`| 1 | Engineering | blocking | Phase 3 Check: "the app runs" | Proves nothing about the import it builds | uv run pytest tests/test_import.py passes |`.
 
 | Verdict            | When                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------- |
 | **Ready to build** | No blocking finding.                                                               |
 | **Revise first**   | Blocking findings, each fixable by editing the plan.                               |
 | **Rethink**        | A Scope finding changes what to build, or shows the Goal is out of reach as drawn. |
-
-Below the table: the questions for the plan's owner, each with a recommended answer, the
-Unverified findings, and, in fix mode, what was edited and what was left open.
 
 Save the whole review to `.agents_workspace/plan-reviews/<slug>-<YYYY-MM-DD>.md`, because the
 Record line keeps only the verdict and counts, and the author fixing the plan in a later session

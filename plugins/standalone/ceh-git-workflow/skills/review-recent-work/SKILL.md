@@ -83,34 +83,5 @@ Save by where each fix lands, creating the directory if needed. The retro and it
 go to `product/retros/<YYYY-MM-DD>-period.md`, committed with the first fix it routes, because the
 next retro and the routed work read it. Out-of-scope issues go to
 `.agents_workspace/retros/<YYYY-MM-DD>-period.md`, local, because only the user acts on them. When
-both files exist, each links the other.
-
-```markdown
-# Retro <since> to <until>
-
-## Shipped
-
-- <type(scope)>: <one line> — #<PR>, #<PR>
-
-## Flow
-
-| Measure              | Value | From                       |
-| -------------------- | ----- | -------------------------- |
-| PRs merged           | <n>   | `gh pr list ...` or merges |
-| Median time to merge | <d>   | PR createdAt to mergedAt   |
-| Reverts              | <n>   | `git log --grep='^Revert'` |
-
-Churn hotspots: `<path>` (<n> commits), ...
-
-## Issues
-
-### 1. <Kind>: <what went wrong>
-
-- **Evidence:** <commits or PRs>
-- **Route:** <skill, or "user: <where the fix lands>">
-- **Status:** <handed off: <plan, fix record, or commit> / open: <why>>
-
-## Questions the history cannot answer
-
-- <Question>
-```
+both files exist, each links the other through `other_file`. Each file fills
+`references/period-retro.template.md`.

@@ -164,8 +164,8 @@ The message being right is half of it; the other half is whether the reader sees
 
 `.agents_workspace/ux-audits/<target>/run-<NNN>/ERROR_MESSAGES.md` — the same run-folder convention
 the walkthrough skills use, zero-padded index so a re-run never overwrites the previous evidence.
-Create missing parents. It holds the triage table and, per row, whether the rewrite was applied or
-left with a reason.
+Create missing parents. It fills `references/error-messages-audit.template.md`: the triage table
+and, per row, whether the rewrite was applied or left with a reason.
 
 Two counts belong at the top, because they are what tells you whether the next pass is worth
 running: **messages harvested** and **how many satisfied all three parts before you touched

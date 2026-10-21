@@ -77,26 +77,6 @@ saved.
 ## Output
 
 Save to `.agents_workspace/security-audit/SECURITY_AUDIT-<YYYY-MM-DD>.md`, and reply with the
-counts by severity and the critical and high rows.
-
-```markdown
-# Security audit: <repo> at <short commit>, <YYYY-MM-DD>
-
-## Attack surface
-
-Entry points, trust boundaries, assets, and attackers from step 1.
-
-## Findings
-
-| #   | Severity | Confidence | Category       | Attacker  | Location               | Attack                                    | Fix                                     |
-| --- | -------- | ---------- | -------------- | --------- | ---------------------- | ----------------------------------------- | --------------------------------------- |
-| 1   | high     | confirmed  | Access control | signed-in | `app/api/orders.py:52` | GET /orders/{id} returns any user's order | Filter by `owner_id == current_user.id` |
-
-## Possible
-
-Leads that could not be traced end to end, each with what would settle it.
-
-## Not checked
-
-Each category or check not run, with the reason and the command that would run it.
-```
+counts by severity and the critical and high rows. The report fills
+`references/security-audit.template.md`. Its Findings row is a worked example, replaced by the
+audit's own.

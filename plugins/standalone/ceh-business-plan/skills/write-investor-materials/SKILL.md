@@ -66,36 +66,10 @@ and the ask states the amount, the months of runway it buys, and the milestones 
 
 ## Output
 
-`product/INVESTOR_DECK.md`, beside `product/BUSINESS_PLAN.md`:
+`product/INVESTOR_DECK.md`, beside `product/BUSINESS_PLAN.md`, fills
+`references/investor-deck.template.md`, one numbered `##` slide per headline claim.
 
-```markdown
-# <Company>: <one-liner>
-
-Plan: <path>, pmf_gate <N>/8, updated <date>
-
-## 1. <headline claim>
-
-- <proof line> [evidence | assumption | hypothesis-to-test]
-
-Source: §<NN>
-```
-
-`product/INVESTOR_OUTREACH.md`, beside it:
-
-```markdown
-# Investor outreach
-
-**Fit:** <stage>, <cheque size>, <sector>, <thesis this plan matches>
-**Investors:** <user-supplied names, or "none supplied">
-
-**Email** (≤ 120 words)
-
-Subject: <one-liner>
-
-<body: what it is, the traction number, the ask, the link>
-
-**Follow-up** (two weeks later): <one line with something new since the first email>
-```
+`product/INVESTOR_OUTREACH.md`, beside it, fills `references/investor-outreach.template.md`.
 
 ## Stop conditions
 

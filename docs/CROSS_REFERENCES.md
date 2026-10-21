@@ -173,7 +173,8 @@ Thought Leadership, Personal Story), each ending on **The Open Thread**.
 current repo: `content/`, `posts/`, `_posts/`, `src/content/`, `blog/`), and the destination rule:
 inside a blog repo the post is a file matching the existing posts' filename pattern and front matter,
 with the title and meta description in the front matter, and otherwise a file in
-`.agents_workspace/blog/` named `<YYYY-MM-DD>-<slug>`, shown in chat too.
+`.agents_workspace/blog/` named `<YYYY-MM-DD>-<slug>`, filling the plugin's
+`references/blog-draft.template.md`, shown in chat too.
 
 ## Blog repurpose handoff line
 
@@ -315,12 +316,15 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 **Canonical:** `plugins/standalone/ceh-build-planning/references/plan-format.md` — whole file,
 shared there by `write-build-plan` and `review-build-plan`
 
-| Copy                                                                                                        | Section    | Diverges |
-| ----------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-format.md`               | whole file | none     |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-format.md` | whole file | none     |
+| Copy                                                                                                          | Section    | Diverges |
+| ------------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-format.md`                 | whole file | none     |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-format.md`   | whole file | none     |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan.template.md`               | whole file | none     |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan.template.md` | whole file | none     |
 
-**Shared:** the whole plan format, byte for byte: the `product/plans/<slug>.md` location, the
+**Shared:** the whole plan format and its template `plan.template.md` (canonical next to
+`plan-format.md` in `ceh-build-planning/references/`), byte for byte: the `product/plans/<slug>.md` location, the
 frontmatter and its four statuses, the Goal, Scope, Design, Phases, and Open sections, the phase
 rules (a runnable Check, `todo` / `unplanned` / `done` with evidence), and the rules for changing
 a plan. Each of the three plugins carries a copy so it works installed alone. `diff` the three
@@ -328,16 +332,32 @@ files after an edit: they must stay identical. `ceh-business-plan:find-product-m
 plans too, but carries no copy: it reads only the plans folder and the Goal, Scope, and Design
 sections.
 
+## Architecture template
+
+**Canonical:** `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/references/architecture.template.md`
+— whole file
+
+| Copy                                                                                                    | Section    | Diverges |
+| ------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/architecture.template.md` | whole file | none     |
+
+**Shared:** the `product/ARCHITECTURE.md` layout: its `schema:` line, the Overview, the diagram
+sections, and the Key Decisions entry shape. `document-architecture` owns the file and
+`implement-from-plan` appends Key Decisions entries to it, so each plugin carries a copy to work
+installed alone. `validate.py` fails when the two differ.
+
 ## Fix record format
 
 **Canonical:** `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/references/fix-record-format.md`
 — whole file
 
-| Copy                                                                                   | Section    | Diverges |
-| -------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record-format.md` | whole file | none     |
+| Copy                                                                                     | Section    | Diverges |
+| ---------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record-format.md`   | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record.template.md` | whole file | none     |
 
-**Shared:** the whole fix record format, byte for byte: the `product/fixes/<slug>.md` location and
+**Shared:** the whole fix record format and its template `fix-record.template.md` (canonical next to
+the canonical format file), byte for byte: the `product/fixes/<slug>.md` location and
 slug rule, the write-only-for-repo-causes rule, the frontmatter with its three statuses and the
 `plan:` and `previous:` rules, the sections each status keeps, and the same-commit and
 committed-alone rules. `find-root-cause` writes the record and `test-a-bug-fix` completes or creates
@@ -414,9 +434,12 @@ fails. The doc carries the two stops as reading material.
 | Copy                                                                      | Section    | Diverges |
 | ------------------------------------------------------------------------- | ---------- | -------- |
 | `plugins/standalone/ceh-workflow-runner/references/flow-config-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/references/run-state.template.md` | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/references/approval.template.md`  | whole file | none     |
 
 **Shared:** the entire `flow.yaml` contract: keys, stage kinds, validation rules, the `run-state.md`
-layout and the `FLOW STATUS:` line. The builder writes and checks a config against it, the runner
+layout and its template, the approval file template, and the `FLOW STATUS:` line. The two
+templates' canonical copies sit next to the canonical schema in `ceh-workflow-builder/references/`. The builder writes and checks a config against it, the runner
 checks it again before running, so a rule present in only one copy lets the builder emit a config
 the runner rejects, or the reverse. Keep the two files byte-identical.
 
@@ -517,7 +540,9 @@ delete".
 `record-project-decisions`, anything else in the repo fixed directly, outside the repo left for the
 user), acting on every in-scope route in the same session, an uninstalled route left open, and the
 split save: in-scope issues committed to `product/retros/<YYYY-MM-DD>-<kind>.md`, out-of-scope ones
-local in `.agents_workspace/retros/`, each file linking the other.
+local in `.agents_workspace/retros/`, each file linking the other through its `other_file`
+frontmatter field. Each skill keeps its own report template (`period-retro`, `session-retro`,
+`repeat-mistake`), because the three reports differ.
 
 ---
 

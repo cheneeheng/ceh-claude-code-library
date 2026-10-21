@@ -283,31 +283,8 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
 ### Learning workspace
 
 Opt-in only. Keep one file per subject at `.agents_workspace/learning/<subject>.md`, so a later
-session starts from what the reader already knows instead of from zero:
-
-```markdown
-# Learning: <subject>
-
-**Goal:** <what the reader wants to be able to do, in their words>
-**Next:** <the one thing the next session explains first>
-
-## Terms
-
-| Term | Definition, as the reader put it back |
-| ---- | ------------------------------------- |
-
-## Rules of thumb
-
-- <each transferable rule an explanation closed on>
-
-## Self-test
-
-| Question | Last answer          | Date       |
-| -------- | -------------------- | ---------- |
-| <q>      | unaided / missed / — | YYYY-MM-DD |
-
-## Open questions
-```
+session starts from what the reader already knows instead of from zero. A new file is a copy of
+`references/learning.template.md`.
 
 - **On load**, read the file before explaining anything. Ask two Self-test questions first, the
   missed ones before the oldest, and record each answer. A term the reader cannot use unaided goes

@@ -12,12 +12,65 @@ before this repo live in
 ## 2026-10-21
 
 `docs/IDEAS.md` records unwrapped Markdown prose as on hold, so the token saving gets revisited
-instead of rediscovered. No plugin changed.
+instead of rediscovered.
+
+Every file a skill saves now has a versioned template. Each format moved out of its skill body
+into a `<schema>.template.md` in a `references/` folder, whose frontmatter opens with
+`schema: <schema>/v<N>`, and the saved file keeps that line, so a reader can tell which version of
+a format it holds. The version goes up when a required field or heading is renamed or removed. A
+new `templates` check in `validate.py` holds it: each template opens with its schema line, is
+cited by its plugin, and matches its copies in other plugins, and a skill whose Output names a
+saved file cites a template. No hook checks the saved files themselves. `docs/STRATEGY.md` rule 3
+now states this, replacing "Runs settle the formats", and its Handoff schemas open question is
+closed. Out of scope: what the user ships (code, docs pages, posts in a blog repo, generated
+`SKILL.md` files) and `flow.yaml`, which already carries `version: 1`.
+
+### Plugin versions
+
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-blog`                     | 1.0.11  |
+| `ceh-build-from-plan`          | 1.0.6   |
+| `ceh-build-planning`           | 1.1.6   |
+| `ceh-business-plan`            | 1.1.7   |
+| `ceh-check-build-against-plan` | 1.0.6   |
+| `ceh-codebase-explanation`     | 1.2.5   |
+| `ceh-coding-conduct`           | 2.2.13  |
+| `ceh-competitor-analysis`      | 1.1.9   |
+| `ceh-every-session`            | 2.8.5   |
+| `ceh-git-workflow`             | 1.4.2   |
+| `ceh-orchestration-lab`        | 1.0.4   |
+| `ceh-security-audit`           | 1.0.3   |
+| `ceh-session-diagnosis`        | 1.0.5   |
+| `ceh-testing`                  | 1.4.9   |
+| `ceh-usability-audit`          | 1.1.7   |
+| `ceh-workflow-builder`         | 1.3.8   |
+| `ceh-workflow-runner`          | 1.0.6   |
 
 ### Added
 
 - `docs/IDEAS.md`: "Unwrapped Markdown prose", prettier `proseWrap: never` to save roughly 4 to 5%
   of prose tokens, on hold because it makes every later diff paragraph-wide.
+- Output templates, one per saved format: `blog-draft`, `blog-voice`, `repurposed-post`
+  (`ceh-blog`); `plan` (in all three plan plugins), `plan-review`; `business-plan`,
+  `business-plan-review`, `investor-deck`, `investor-outreach`; `architecture` (also in
+  `ceh-build-from-plan`), `codebase-explained`, `learning`, `glossary`; `decision-log`,
+  `fix-record` (also in `ceh-testing`), `refactor-report`; `competitor-report`,
+  `competitor-comparison`; `handoff`, `repeat-mistake`, `decision-rule`, `stress-test`,
+  `questionnaire`, `research-note`; `code-review`, `period-retro`; `security-audit`;
+  `session-retro`; `test-audit`, `qa-report`, `perf-report`, `evidence`; `interface-audit`,
+  `first-run-audit`, `error-messages-audit`; `workflow-spec`, `draft-questions`, `run-state` and
+  `approval` (in both workflow plugins); `run` and `runs-index` (`ceh-orchestration-lab`).
+- `validate.py`: the `templates` check.
+
+### Changed
+
+- Each skill that saves a file cites its template instead of spelling the format inline. Files
+  that predate their template (a business plan with `artifact: BUSINESS_PLAN`, an existing
+  `ARCHITECTURE.md`, `GLOSSARY.md`, `EVIDENCE.md`, decision log, or rule file) get the template's
+  frontmatter on their next update.
+- `docs/STRATEGY.md` and its Starlight copy: rule 3 is the versioned-template rule. `plugins/CLAUDE.md`
+  and `add-plugin-component`: `references/` admits output templates as a third case.
 
 ---
 

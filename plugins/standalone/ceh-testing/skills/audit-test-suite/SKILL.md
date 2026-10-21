@@ -214,7 +214,8 @@ MEDIUM    tests/integration/test_orders.py  fails under --random-order (shared s
 LOW       tests/unit/test_parse.py:12   1.4s in tests/unit — real filesystem I/O
 ```
 
-Save the report to `.agents_workspace/test-audits/<YYYY-MM-DD>.md`, so the findings that need a
+Save the report to `.agents_workspace/test-audits/<YYYY-MM-DD>.md`, filling
+`references/test-audit.template.md`, so the findings that need a
 decision outlive the session, and name the path in the reply. A subagent in report-only mode
 returns the report instead, and its caller saves it.
 

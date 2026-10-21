@@ -28,7 +28,7 @@ spare handoff file costs nothing and a missing one loses the state.
    was already authorized. Saving a handoff authorizes no commit, stash, or push.
 3. **Write the handoff file** to
    `.agents_workspace/handoff/HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.md` in the working
-   directory, in the format under Output. Create the directory if needed. Take the timestamp from
+   directory, filling `references/handoff.template.md`. Create the directory if needed. Take the timestamp from
    a single `date` call and the session id prefix from the first 8 characters of
    `${CLAUDE_SESSION_ID}`. A caller that passes its own header lines (a usage window, a reason)
    gets them added under the title.
@@ -65,30 +65,4 @@ each save is a new file, never an edit of an old one.
 
 ## Output
 
-```markdown
-# Handoff — <YYYY-MM-DD HH:MM>
-
-**Repo / branch:** <path> / <branch or "no git">
-**Session:** <session-id-prefix>
-
-**Goal** — what this session set out to do:
-
-- <one or two lines>
-
-**Done** — completed and in what state (validated / not validated):
-
-- <item — files touched, what was verified>
-
-**In flight** — the step closed or reverted at the save:
-
-- <state of the working tree, anything half-planned>
-
-**Open** — remaining work, ordered; first item is the next actionable step:
-
-1. <next concrete step, specific enough to execute cold>
-2. <...>
-
-**Decisions pending** — forks the user still has to resolve, if any.
-
-**Resume with:** <one line: branch name, command to run, or file to open first>
-```
+The handoff file fills `references/handoff.template.md`.

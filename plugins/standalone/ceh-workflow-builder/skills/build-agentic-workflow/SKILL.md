@@ -254,7 +254,7 @@ leaves and writes nothing a person has not agreed to.
    in `.claude/skills/` loads in the next session, so a draft there is already live.
 4. **End with the questions**, in one round, each with a recommended answer: every open spec row,
    then every recorded assumption to confirm. Write them to `<build-dir>/<name>-draft/QUESTIONS.md`
-   as well, so the next session finds them.
+   as well, filling `references/draft-questions.template.md`, so the next session finds them.
 
 A later interactive run of this skill reads the spec, the draft and its questions, asks them, then
 runs Phase 5 as usual. The draft is input to Phase 5, never copied into the repo unchecked.

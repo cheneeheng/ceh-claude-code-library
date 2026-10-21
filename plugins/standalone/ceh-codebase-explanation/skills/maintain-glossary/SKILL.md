@@ -48,9 +48,5 @@ the code or text that still uses a rejected alias is reported.
 
 ## Output
 
-```markdown
-# Glossary
-
-**<Term>** — <one or two sentences: what it is, in domain words>.
-_Avoid:_ <alias>, <alias>. _Not to be confused with:_ **<Other term>**.
-```
+`GLOSSARY.md` follows `references/glossary.template.md`. A new file is a copy of it, and an
+existing one without its `schema:` line gets the template's frontmatter on the next edit.

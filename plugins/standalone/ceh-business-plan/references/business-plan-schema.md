@@ -7,20 +7,12 @@ derives from app plans, it carries a `derived_from` field naming the plan stems 
 `find-product-market-fit` creates the file and owns all 13 sections. The specialist skills each
 deepen named sections with one subsection, listed under [Specialist subsections](#specialist-subsections).
 
-## Frontmatter
+## Template
 
-```yaml
----
-artifact: BUSINESS_PLAN
-status: draft # draft | validated  (validated = PMF gate passed + user confirmed)
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-product: <one-line product name>
-stage: <idea | prototype | launched | revenue>
-derived_from: [] # build plans this was built on, e.g. [product/plans/mvp.md]; [] if none
-pmf_gate: 0/8 # criteria met out of 8 (see PMF Readiness Gate below)
----
-```
+A new plan is a copy of `business-plan.template.md`, next to this file: its frontmatter and the
+13 section headings. The `schema: business-plan/v1` line stays as written. A plan from before the
+template carries `artifact: BUSINESS_PLAN` instead: replace that line with the schema line on the
+next revision.
 
 `derived_from` names `ceh-build-planning` plans by their repo-relative path. Built plans are kept, so
 the path stays valid.
@@ -118,7 +110,7 @@ and frontmatter keys are literal.
 
 ```markdown
 ---
-artifact: BUSINESS_PLAN
+schema: business-plan/v1
 status: draft
 created: 2026-03-02
 updated: 2026-03-09
