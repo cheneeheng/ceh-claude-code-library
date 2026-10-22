@@ -36,7 +36,8 @@ export const register: Register = on => {
 
   on('ui.render', { component: 'AssistantMessage' }, async ($, e, next) => {
     const { rest, decisions } = takeDecisions(e.props.text)
-    const parts = (await read($, showAll)) ? null : split(rest)
+    const isAll = await read($, showAll)
+    const parts = split(rest)
     if (!parts && decisions.length === 0) return next(e)
 
     const opened = await read($, open)
@@ -69,12 +70,21 @@ export const register: Register = on => {
       <Box flexDirection="column">
         {!parts && rest.trim() && <Markdown text={rest.trim()} />}
         {parts?.lead && <Markdown text={parts.lead} />}
-        {parts && <Markdown text={parts.summary} />}
+        {parts && (
+          <Box key={`${e.requestId}#s`} flexDirection="column" borderStyle="round" borderDimColor paddingX={1}>
+            <Text bold>Summary</Text>
+            <Box paddingLeft={2}>
+              <Markdown text={parts.summary} />
+            </Box>
+          </Box>
+        )}
         {parts?.sections.map((section, index) => {
           const id = `${e.requestId}#${index}`
-          const isOpen = opened.includes(id)
+          // A listed topic is the exception to the mode: open when folding, folded under /details on.
+          const isListed = opened.includes(id)
+          const isOpen = isAll !== isListed
           const toggle = () =>
-            update($, open, list => (isOpen ? list.filter(one => one !== id) : [...list, id]))
+            update($, open, list => (isListed ? list.filter(one => one !== id) : [...list, id]))
 
           return (
             <>

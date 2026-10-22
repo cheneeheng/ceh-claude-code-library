@@ -44,6 +44,13 @@ which wraps on any width, and a `---` line separates the summary from the detail
 `fold-replies` mod reads the list in place of the table and drops that first `---`, so a later
 `---` still starts the closing notes.
 
+The `fold-replies` mod now draws the summary list in a box titled Summary that does not fold. On a
+desktop the bare list ran straight on from the tool-call lines above it with nothing to mark where
+the reply began, and it was the only part of the reply without a box. `/details on` now keeps the
+boxes and opens every Topic, where it used to draw the reply as raw text, and a press folds one
+Topic in that mode. The output style still writes the `---` after the list, which draws as a rule
+where the mod does not run, such as on a phone.
+
 `ceh-business-plan:write-investor-materials` saves the deck outline and outreach notes to
 `.agents_workspace/investor/` instead of `product/`. No other stage reads them, so by the strategy's
 "commit what the next stage reads" test they stay local, and the outreach notes may name investors
@@ -61,7 +68,7 @@ and contacts that do not belong in a committed repo.
 | `ceh-codebase-explanation`     | 1.2.7   |
 | `ceh-coding-conduct`           | 2.2.15  |
 | `ceh-competitor-analysis`      | 1.1.11  |
-| `ceh-every-session`            | 2.8.8   |
+| `ceh-every-session`            | 2.8.9   |
 | `ceh-git-workflow`             | 1.4.4   |
 | `ceh-orchestration-lab`        | 1.0.6   |
 | `ceh-security-audit`           | 1.0.5   |
@@ -83,6 +90,8 @@ and contacts that do not belong in a committed repo.
   the validator README state the template and schema pair.
 - `ceh-every-session`: the output style's summary is a numbered list closed by `---`, not a table,
   and the `fold-replies` mod folds replies that open with that list.
+- `ceh-every-session`: the `fold-replies` mod boxes the summary list under a Summary title, and
+  `/details on` opens every Topic in its box instead of drawing the reply raw.
 - `ceh-business-plan:write-investor-materials`: `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` save
   to `.agents_workspace/investor/`, not `product/`.
 
