@@ -56,21 +56,31 @@ where the mod does not run, such as on a phone.
 "commit what the next stage reads" test they stay local, and the outreach notes may name investors
 and contacts that do not belong in a committed repo.
 
+All business material now stays local: the business plan moves from `product/BUSINESS_PLAN.md` to
+`.agents_workspace/business/BUSINESS_PLAN.md`, and the investor files join it in
+`.agents_workspace/business/`. The plan holds pricing, unit economics, and kill criteria that do
+not belong in a repo others can read, and the stages that read it (Build and Tell) already work
+without it. Git-ignoring the `product/` file per repo was rejected, because nothing makes anyone
+remember it and it breaks when a file name changes. Every other handoff file stays committed in
+`product/`. A new rule, `.claude/rules/decision-artifact-locations.md`, records the split so it is
+not reopened, and `docs/STRATEGY.md` explains it.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog`                     | 1.0.13  |
-| `ceh-build-from-plan`          | 1.0.8   |
-| `ceh-build-planning`           | 1.1.9   |
-| `ceh-business-plan`            | 1.1.10  |
-| `ceh-check-build-against-plan` | 1.0.8   |
+| `ceh-blog`                     | 1.0.14  |
+| `ceh-build-from-plan`          | 1.0.9   |
+| `ceh-build-planning`           | 1.1.10  |
+| `ceh-business-plan`            | 1.1.11  |
+| `ceh-check-build-against-plan` | 1.0.9   |
 | `ceh-codebase-explanation`     | 1.2.7   |
 | `ceh-coding-conduct`           | 2.2.15  |
 | `ceh-competitor-analysis`      | 1.1.11  |
-| `ceh-every-session`            | 2.8.9   |
+| `ceh-every-session`            | 2.8.10  |
 | `ceh-git-workflow`             | 1.4.4   |
 | `ceh-orchestration-lab`        | 1.0.6   |
+| `ceh-seo`                      | 1.1.6   |
 | `ceh-security-audit`           | 1.0.5   |
 | `ceh-session-diagnosis`        | 1.0.7   |
 | `ceh-testing`                  | 1.4.11  |
@@ -94,6 +104,11 @@ and contacts that do not belong in a committed repo.
   `/details on` opens every Topic in its box instead of drawing the reply raw.
 - `ceh-business-plan:write-investor-materials`: `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` save
   to `.agents_workspace/investor/`, not `product/`.
+- Business material stays local: `BUSINESS_PLAN.md` and the investor files save to
+  `.agents_workspace/business/`. `develop-business-plan` looks there first and moves a plan found at
+  the old `product/` path. The plan schema, Build's plan intake, Tell's handoff reads, `whats-next`,
+  `record-project-decisions`, `docs/STRATEGY.md`, `docs/VISION.md`, and `docs/GETTING_STARTED.md`
+  name the new path.
 
 ### Fixed
 

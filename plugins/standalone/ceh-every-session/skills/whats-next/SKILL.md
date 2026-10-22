@@ -20,7 +20,7 @@ has one to three suggestions, each with the exact way to start it, and the choic
 1. Take the goal from the request or the argument. When there is none, read the situation, using
    read-only commands only:
    - in a git repo: `git status`, the current branch, and `git log --oneline -10`
-   - the lifecycle handoff files, each of which marks a stage reached: `product/BUSINESS_PLAN.md`
+   - the lifecycle handoff files, each of which marks a stage reached: `.agents_workspace/business/BUSINESS_PLAN.md`
      (Shape done), `product/plans/*.md` (a plan not `built` is in flight), `product/ARCHITECTURE.md`
      (built), `product/EVIDENCE.md` (proven)
    - the newest file in `.agents_workspace/handoff/`, if any, for work a past session left open
