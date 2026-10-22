@@ -48,7 +48,10 @@ Two skills migrated whole and carry bundled files that predate this rule:
 files, an `assets/template.html`, and a `scripts/to-elements.js` converter). The Cytoscape API and
 stylesheet references were cut on 2026-10-08 as material the model already knows. On the same day
 `design-ui`'s `examples.md` was cut to the finishing recipes, the markup the core rules' prose does
-not already carry.
+not already carry. Both stay because each is a catalog a run reads only part of: `design-ui`
+installs one of its two themes, and `visualize-graph-cytoscape` opens the topic file its task
+touches. A rule that applies on every run stays inline, because a model can skip a link and never
+see it. A new catalog skill argues its own exception in its PR.
 
 Scaffold or script bundles a skill executes or copies are not reference material and are allowed:
 `ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent` `assets/`) and `ceh-git-datastore`
