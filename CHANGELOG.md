@@ -18,13 +18,18 @@ skill, reference file, and doc that cites one now names the `assets/` path. The 
 in `validate.py` now requires an `assets/` folder, and the `references` check resolves `assets/`
 paths and `${CLAUDE_PLUGIN_ROOT}/assets/` the same way it resolves `references/`.
 
+`ceh-build-planning:write-build-plan` now triggers when someone asks to build or create a new app,
+tool, component, or feature that has no plan yet, not only when they ask to plan. A diagnosed
+session showed an agent asked to "create a new tool" write four files before any plan, because the
+old triggers were all planning phrases. The diagnosis and the fix record are in `product/retros/`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-blog`                     | 1.0.12  |
 | `ceh-build-from-plan`          | 1.0.7   |
-| `ceh-build-planning`           | 1.1.7   |
+| `ceh-build-planning`           | 1.1.8   |
 | `ceh-business-plan`            | 1.1.8   |
 | `ceh-check-build-against-plan` | 1.0.7   |
 | `ceh-codebase-explanation`     | 1.2.6   |
@@ -45,6 +50,11 @@ paths and `${CLAUDE_PLUGIN_ROOT}/assets/` the same way it resolves `references/`
 - Every `*.template.md` under a skill's or plugin's `references/` now lives in `assets/`.
 - `plugins/CLAUDE.md`, `add-plugin-component`, `docs/STRATEGY.md`, and the validator README say
   templates live in `assets/`.
+
+### Fixed
+
+- `ceh-build-planning:write-build-plan` loads on a request to build something with no plan yet,
+  so planning comes before the first code.
 
 ---
 
