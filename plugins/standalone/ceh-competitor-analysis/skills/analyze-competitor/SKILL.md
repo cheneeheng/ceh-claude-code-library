@@ -102,8 +102,7 @@ point at a glance, and the HTML page carries the same content as the Markdown.
 ## Output
 
 The decision comes first, so a reader who stops after section 1 still has the answer. The report
-fills `assets/competitor-report.template.md`. The HTML page renders the body, not the
-frontmatter.
+fills `assets/competitor-report.template.md`, per `references/competitor-report-schema.md`.
 
 ## Stop conditions
 

@@ -75,7 +75,8 @@ authoring skill. Where that skill's advice conflicts with this repo, this skill 
 placeholder, then delete the `TEMPLATE-GUIDANCE` comment. Content stays inline. `references/` is
 for two cases only: a schema shared by several skills and a standard too large to inline. The
 output template of every file the skill saves, `<schema>.template.md` opening with
-`schema: <schema>/v<N>`, goes in `assets/` (see Skills in `plugins/CLAUDE.md`). A file shared by
+`schema: <schema>/v<N>`, goes in `assets/`, and its schema, `<schema>-schema.md`, in the
+`references/` beside it (see Skills in `plugins/CLAUDE.md`). A file shared by
 skills of the same plugin goes once in `plugins/standalone/ceh-<plugin>/references/` (or `assets/`),
 cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`. A file used by one skill goes in that skill's
 own `references/` (or `assets/`), cited as `${CLAUDE_SKILL_DIR}/references/<file>`.

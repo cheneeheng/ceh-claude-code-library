@@ -2,33 +2,33 @@
 schema: period-retro/v1
 since: YYYY-MM-DD
 until: YYYY-MM-DD
-other_file: <path of the matching file in product/retros/ or .agents_workspace/retros/, or none>
+other_file: <path, or none>
 ---
 
 # Retro <since> to <until>
 
 ## Shipped
 
-- <type(scope)>: <one line> — #<PR>, #<PR>
+- <type(scope)>: <change> — #<PR>
 
 ## Flow
 
-| Measure              | Value | From                       |
-| -------------------- | ----- | -------------------------- |
-| PRs merged           | <n>   | `gh pr list ...` or merges |
-| Median time to merge | <d>   | PR createdAt to mergedAt   |
-| Reverts              | <n>   | `git log --grep='^Revert'` |
+| Measure              | Value | From     |
+| -------------------- | ----- | -------- |
+| PRs merged           | <n>   | <source> |
+| Median time to merge | <d>   | <source> |
+| Reverts              | <n>   | <source> |
 
-Churn hotspots: `<path>` (<n> commits), ...
+Churn hotspots: `<path>` (<n> commits)
 
 ## Issues
 
-### 1. <Kind>: <what went wrong>
+### 1. <Kind>: <issue>
 
 - **Evidence:** <commits or PRs>
-- **Route:** <skill, or "user: <where the fix lands>">
-- **Status:** <handed off: <plan, fix record, or commit> / open: <why>>
+- **Route:** <skill, or "user: <where>">
+- **Status:** <handed off: <artifact> | open: <why>>
 
 ## Questions the history cannot answer
 
-- <Question>
+- <question>

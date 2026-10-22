@@ -128,7 +128,7 @@ strategy, pick between fundamentally different patterns, plan a major dependency
 a prior decision in a new version.
 
 Append entries to a `## Key Decisions` section at the bottom of `ARCHITECTURE.md`, newest last, in
-the entry shape of `assets/architecture.template.md`.
+the entry shape of `assets/architecture.template.md`, per `references/architecture-schema.md`.
 
 - **Never delete a decision.** To change one, append a new entry and mark the old one
   `Superseded by <date title>`. The trail is the cross-version narrative.

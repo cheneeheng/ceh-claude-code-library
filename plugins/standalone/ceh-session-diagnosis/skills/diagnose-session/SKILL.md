@@ -90,6 +90,7 @@ routes, because the routed work reads it. Scrub and audit that file first, per S
 and 2: a committed file leaves the machine on the next push. Out-of-scope root causes, other
 findings, and hypotheses go to `.agents_workspace/retros/<YYYY-MM-DD>-session-<session-id-prefix>.md`,
 local, because only the user acts on them. When both files exist, each links the other through
-`other_file`. Each file fills `assets/session-retro.template.md`.
+`other_file`. Each file fills `assets/session-retro.template.md`, per
+`references/session-retro-schema.md`.
 
 Reply with the root causes one line each, their routes and status, and the report paths.

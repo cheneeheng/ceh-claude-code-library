@@ -9,7 +9,7 @@ date: YYYY-MM-DD HH:MM
 # QA report: <app> at <commit>
 
 **Launched with:** `<command>` → <url or entry point>
-**Mode:** report | fix
+**Mode:** <report | fix>
 
 ## Charters
 
@@ -19,16 +19,18 @@ date: YYYY-MM-DD HH:MM
 
 ## Bugs
 
-### <ID>: <Critical|Major|Minor|Cosmetic>: <one-line title>
+### <ID>: <Critical | Major | Minor | Cosmetic>: <title>
 
-- **Status:** confirmed (reproduced twice) | unconfirmed
-- **Steps:** 1. ... 2. ... 3. ...
-- **Expected / actual:** <...> / <...>
-- **Evidence:** <screenshot path, console line, response body>
-- **Fix (fix mode):** <commit and the re-run result>
+- **Status:** <confirmed (reproduced twice) | unconfirmed>
+- **Steps:** 1. <step>
+- **Expected / actual:** <expected> / <actual>
+- **Evidence:** <evidence>
+- **Fix:** <commit>, <re-run result>
 
 ## Usability notes (not bugs)
 
+- <note>
+
 ## Not explored
 
-<flows, roles, or environments no charter covered, and why>
+- <flow, role, or environment>: <why>

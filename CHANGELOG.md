@@ -23,38 +23,61 @@ tool, component, or feature that has no plan yet, not only when they ask to plan
 session showed an agent asked to "create a new tool" write four files before any plan, because the
 old triggers were all planning phrases. The diagnosis and the fix record are in `product/retros/`.
 
+Every output template now has a schema, and templates hold no explanation. Each
+`assets/<name>.template.md` gets a `references/<name>-schema.md` beside it that says where the file
+is saved and explains every field and section, and the template is cut to a skeleton that is copied
+and filled as is: short placeholders, choices as `<a | b>`, no comments, and worked examples moved
+into the schema. Three templates had a schema already. `business-plan-schema.md` keeps its name,
+and `plan-format.md` and `fix-record-format.md` are renamed `plan-schema.md` and
+`fix-record-schema.md` to pair with their templates. The `run-state.md` and approval formats move
+out of `flow-config-schema.md` into `run-state-schema.md` and `approval-schema.md`. Reference files said a template sat "next to this file" after the move to
+`assets/`, which was no longer true, so they now cite `../assets/<name>.template.md`. Each skill
+cites the template and its schema together. The `templates` check in `validate.py` now requires the
+schema, its citation, and byte-identical copies across plugins, and rejects a template carrying a
+frontmatter comment, an HTML comment, or a placeholder over 30 characters that is not a choice. The
+`references` check now resolves `../assets/` and `../references/` paths in reference files.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog`                     | 1.0.12  |
-| `ceh-build-from-plan`          | 1.0.7   |
-| `ceh-build-planning`           | 1.1.8   |
-| `ceh-business-plan`            | 1.1.8   |
-| `ceh-check-build-against-plan` | 1.0.7   |
-| `ceh-codebase-explanation`     | 1.2.6   |
-| `ceh-coding-conduct`           | 2.2.14  |
-| `ceh-competitor-analysis`      | 1.1.10  |
-| `ceh-every-session`            | 2.8.6   |
-| `ceh-git-workflow`             | 1.4.3   |
-| `ceh-orchestration-lab`        | 1.0.5   |
-| `ceh-security-audit`           | 1.0.4   |
-| `ceh-session-diagnosis`        | 1.0.6   |
-| `ceh-testing`                  | 1.4.10  |
-| `ceh-usability-audit`          | 1.1.8   |
-| `ceh-workflow-builder`         | 1.3.9   |
-| `ceh-workflow-runner`          | 1.0.7   |
+| `ceh-blog`                     | 1.0.13  |
+| `ceh-build-from-plan`          | 1.0.8   |
+| `ceh-build-planning`           | 1.1.9   |
+| `ceh-business-plan`            | 1.1.9   |
+| `ceh-check-build-against-plan` | 1.0.8   |
+| `ceh-codebase-explanation`     | 1.2.7   |
+| `ceh-coding-conduct`           | 2.2.15  |
+| `ceh-competitor-analysis`      | 1.1.11  |
+| `ceh-every-session`            | 2.8.7   |
+| `ceh-git-workflow`             | 1.4.4   |
+| `ceh-orchestration-lab`        | 1.0.6   |
+| `ceh-security-audit`           | 1.0.5   |
+| `ceh-session-diagnosis`        | 1.0.7   |
+| `ceh-testing`                  | 1.4.11  |
+| `ceh-usability-audit`          | 1.1.9   |
+| `ceh-workflow-builder`         | 1.3.10  |
+| `ceh-workflow-runner`          | 1.0.8   |
 
 ### Changed
 
 - Every `*.template.md` under a skill's or plugin's `references/` now lives in `assets/`.
 - `plugins/CLAUDE.md`, `add-plugin-component`, `docs/STRATEGY.md`, and the validator README say
   templates live in `assets/`.
+- Every output template is a bare skeleton, and its explanation lives in a new
+  `references/<name>-schema.md`. `plan-format.md` and `fix-record-format.md` are renamed
+  `plan-schema.md` and `fix-record-schema.md`.
+- `plugins/CLAUDE.md`, `add-plugin-component`, `docs/STRATEGY.md`, `docs/CROSS_REFERENCES.md`, and
+  the validator README state the template and schema pair.
 
 ### Fixed
 
 - `ceh-build-planning:write-build-plan` loads on a request to build something with no plan yet,
   so planning comes before the first code.
+- Schema files cite their template as `../assets/<name>.template.md` instead of "next to this
+  file", which pointed at `references/` after the templates moved.
+- `ceh-orchestration-lab`'s run log cites its templates relative to itself, so the validator checks
+  the paths.
 
 ---
 

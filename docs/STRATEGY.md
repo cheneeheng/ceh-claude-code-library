@@ -66,14 +66,16 @@ Three rules hold for every handoff file:
    from what exists and marks the gaps, so it still works installed alone (vision principle 6).
 2. **Reading a handoff file is not a plugin dependency.** It adds no `dependencies` entry, so it
    never forces an extra install. A format two plugins share is duplicated into both and registered
-   in `docs/CROSS_REFERENCES.md`, as `plan-format.md` already is.
-3. **Every saved output has a versioned template.** A skill that saves a file fills a
+   in `docs/CROSS_REFERENCES.md`, as `plan-schema.md` already is.
+3. **Every saved output has a versioned template and a schema.** A skill that saves a file fills a
    `<schema>.template.md` in an `assets/` folder, whose frontmatter opens with
    `schema: <schema>/v<N>`, and the saved file keeps that line, so a reader can tell which format a
-   file follows. The version goes up when a required field or heading is renamed or removed,
-   because that is the change that breaks a reader. `validate.py` checks that each template opens
-   with its schema line, is cited by its plugin, and matches its copies in other plugins. The
-   reference run may still revise a format, through a version bump.
+   file follows. The template is a bare skeleton to copy, and `references/<schema>-schema.md`
+   beside it explains every field and section. The version goes up when a required field or
+   heading is renamed or removed, because that is the change that breaks a reader. `validate.py`
+   checks that each template opens with its schema line, holds no explanation, has its schema, is
+   cited by its plugin, and matches its copies in other plugins. The reference run may still revise
+   a format, through a version bump.
 
 ## Where files live: commit what the next stage reads
 

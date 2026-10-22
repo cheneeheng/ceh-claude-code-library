@@ -1,12 +1,13 @@
 """references: `references/...`, `assets/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references,assets}/...` and
-`${CLAUDE_SKILL_DIR}/...` mentions in SKILL.md/agent files resolve to a real file."""
+`${CLAUDE_SKILL_DIR}/...` mentions in SKILL.md/agent files, and `../references/...` and
+`../assets/...` mentions in reference files, resolve to a real file."""
 
 from __future__ import annotations
 
 import re
 import sys
 
-from common import doc_files, fail, main, rel
+from common import doc_files, fail, main, plugin_dirs, rel
 
 
 def check() -> None:
@@ -38,6 +39,12 @@ def check() -> None:
         for rec in dict.fromkeys(skill_dir_pat.findall(text)):
             if not (base_dir / rec).resolve().exists():
                 fail(where, f"skill-dir reference '{rec}' not found")
+    # A reference file cites its template, or a sibling folder's file, relative to itself.
+    up_pat = re.compile(r"\.\./(?:references|assets)/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+")
+    for doc in (p for d in plugin_dirs() for p in d.rglob("references/*.md")):
+        for rec in dict.fromkeys(up_pat.findall(doc.read_text(encoding="utf-8"))):
+            if not (doc.parent / rec).resolve().exists():
+                fail(rel(doc), f"reference '{rec}' not found")
 
 
 if __name__ == "__main__":

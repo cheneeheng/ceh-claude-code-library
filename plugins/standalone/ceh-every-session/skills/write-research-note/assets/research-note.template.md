@@ -1,29 +1,28 @@
 ---
 schema: research-note/v1
-question: <the question>
-feeds: <the decision>
+question: <question>
+feeds: <decision>
 researched: YYYY-MM-DD
 ---
 
-# <Question>
+# <question>
 
-Feeds: <the decision>. Researched <YYYY-MM-DD>.
-Checked: <claims n, m re-fetched by the session; result>.
+Feeds: <decision>. Researched YYYY-MM-DD.
+Checked: claims <n, m> re-fetched; <result>.
 
 ## Answer
 
-<Three to five sentences, each with its [n].>
+<answer> [n]
 
 ## Findings
 
-- <Claim> [n]
-- <Claim, quoted where contested> [n] [m]
-- Inference: <what follows from the cited findings, labelled as such>
+- <claim> [n]
+- Inference: <inference>
 
 ## Not found
 
-- <What was searched for and where, with no result>
+- <searched for>: <where>
 
 ## Sources
 
-1. <Title>, <URL>, <published or updated date>, primary | secondary
+1. <title>, <URL>, <date>, <primary | secondary>

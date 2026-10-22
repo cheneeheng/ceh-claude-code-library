@@ -9,31 +9,36 @@ gate: <N>/5
 
 # Interface Audit — <target> (<surface>)
 
-**Goal(s) walked:** <the concrete in-product tasks, with the action budget for each>
-**Audience baseline:** <verbatim — what the intended audience already knows>
-**Allowlist:** <what walkers were permitted to read>
-**Walkers:** <personas run> (<skipped, and why>)
+**Goal(s) walked:** <goal> (<budget> actions)
+**Audience baseline:** <baseline>
+**Allowlist:** <allowlist>
+**Walkers:** <personas run> (<skipped: why>)
 **Method:** cold persona-constrained agents — proxy for a user test, not a user test
 **Gate:** <N>/5
 
 ## Five questions
 
-| Screen / command | Where am I | What for | Primary action | What happened | Way out |
-| ---------------- | ---------- | -------- | -------------- | ------------- | ------- |
+| Screen / command | Where am I | What for | Primary action | What happened | Way out  |
+| ---------------- | ---------- | -------- | -------------- | ------------- | -------- |
+| <screen>         | <answer>   | <answer> | <answer>       | <answer>      | <answer> |
 
 ## Findings
 
-### <ID> — <Blocker|Detour|Friction|Polish> — <title>
+### <ID> — <Blocker | Detour | Friction | Polish> — <title>
 
 - **Where:** <screen, command, or file:line>
-- **Persona:** <who stalled>
-- **Expected / got:** <what they thought would happen / what happened>
-- **Fix:** <the concrete change>
+- **Persona:** <persona>
+- **Expected / got:** <expected> / <got>
+- **Fix:** <fix>
 
 ## Hypotheses (no walker stalled — unranked)
 
+- <hypothesis>
+
 ## Delegated
 
-<what went to make-ui-accessible / design-ui / audit-error-messages>
+- <skill>: <what>
 
 ## Not covered
+
+- <what>

@@ -65,4 +65,4 @@ each save is a new file, never an edit of an old one.
 
 ## Output
 
-The handoff file fills `assets/handoff.template.md`.
+The handoff file fills `assets/handoff.template.md`, per `references/handoff-schema.md`.

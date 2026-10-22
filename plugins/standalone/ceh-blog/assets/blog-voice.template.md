@@ -1,28 +1,26 @@
 ---
 schema: blog-voice/v1
-blog: <path or URL of the blog the profile was taken from>
-posts_read: <how many posts the profile is based on>
+blog: <blog path or URL>
+posts_read: <N>
 date: YYYY-MM-DD
 ---
 
-Every point is backed by a line quoted from a post.
-
 ## Rhythm
 
-<Sentence length and rhythm.>
+- <point>: "<quoted line>"
 
 ## Register
 
-<How formal or casual the posts are.>
+- <point>: "<quoted line>"
 
 ## Recurring words and phrases
 
-<Words and phrases the author keeps using.>
+- <point>: "<quoted line>"
 
 ## Never used
 
-<Words and constructions the author never uses.>
+- <point>
 
 ## Openings and closings
 
-<How posts open and how they close.>
+- <point>: "<quoted line>"

@@ -52,4 +52,5 @@ in read mode, every answer is applied or listed as still open.
 
 ## Output
 
-The file fills `assets/questionnaire.template.md`, one numbered `##` section per question.
+The file fills `assets/questionnaire.template.md`, per `references/questionnaire-schema.md`, one
+numbered `##` section per question.

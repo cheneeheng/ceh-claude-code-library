@@ -1,23 +1,23 @@
 ---
 schema: refactor-report/v1
 date: YYYY-MM-DD
-commit: <sha the run started from>
+commit: <sha>
 ---
 
 # Refactor report
 
-## <Cluster name>
+## <cluster>
 
 **Applied:**
 
-| Candidate | Before (`git diff --stat`) | After    |
-| --------- | -------------------------- | -------- |
-| <what>    | <totals>                   | <totals> |
+| Candidate   | Before (`git diff --stat`) | After    |
+| ----------- | -------------------------- | -------- |
+| <candidate> | <totals>                   | <totals> |
 
 **Skipped:**
 
-| Candidate | Reason: coverage, size, or risk |
-| --------- | ------------------------------- |
-| <what>    | <reason>                        |
+| Candidate   | Reason   |
+| ----------- | -------- |
+| <candidate> | <reason> |
 
-**Bugs found, not fixed:** <each as `path:line` and one line, or none>
+**Bugs found, not fixed:** <`path:line`: bug, or none>

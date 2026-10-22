@@ -5,7 +5,7 @@ schema: run-state/v1
 # Run state: <flow>/<run id>
 
 flow: <flow>
-config: <path to flow.yaml>
+config: <flow.yaml path>
 mode: <interactive | headless>
 inputs: <name=value, ...>
 

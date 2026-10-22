@@ -77,7 +77,8 @@ on a fresh clone and none answers for the product as a whole. This file is the o
 
 ## Output
 
-`product/EVIDENCE.md` follows `assets/evidence.template.md`: a new file is a copy of it, and
+`product/EVIDENCE.md` follows `assets/evidence.template.md`, per
+`references/evidence-schema.md`: a new file is a copy of it, and
 each run adds one dated `##` section in its shape. A file without the `schema:` line gets the
 template's frontmatter on the next run, and its sections stay as they are.
 

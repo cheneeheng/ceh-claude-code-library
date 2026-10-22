@@ -5,7 +5,7 @@ This check shows whether what exists is what was planned: every planned item bui
 that the plan left out, and each phase's check still passing.
 
 It reads the plan format `ceh-build-planning` writes, copied into
-`skills/check-build-against-plan/references/plan-format.md`. Without a plan, it checks against the
+`skills/check-build-against-plan/references/plan-schema.md`. Without a plan, it checks against the
 spec you name, so it works installed alone.
 
 ## Skills

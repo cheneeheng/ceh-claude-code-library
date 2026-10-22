@@ -1,33 +1,32 @@
 ---
 schema: fix-record/v1
-status: diagnosed # diagnosed | fixed | unreproduced
+status: <diagnosed | fixed | unreproduced>
 date: YYYY-MM-DD
-issue: <link or ID> # omit when there is none
-plan: product/plans/<slug>.md # omit when no built plan delivered the broken code
-previous: product/fixes/<slug>.md # omit when no earlier record covers this behavior
+issue: <link or ID>
+plan: product/plans/<slug>.md
+previous: product/fixes/<slug>.md
 ---
 
-# <The behavior that was wrong, in one line>
+# <behavior that was wrong>
 
-**Symptom:** `<command>` → <the failing output line>
+**Symptom:** `<command>` → <failing output line>
 
 ## Diagnosis
 
-| Hypothesis | Refuted by                       | Result                                        |
-| ---------- | -------------------------------- | --------------------------------------------- |
-| <claim>    | <observation that would kill it> | refuted / confirmed: <output that decided it> |
+| Hypothesis | Refuted by    | Result                          |
+| ---------- | ------------- | ------------------------------- |
+| <claim>    | <observation> | <refuted / confirmed>: <output> |
 
-**Cause:** <file:line or condition>: <one sentence on the chain from cause to symptom>
+**Cause:** <file:line or condition>: <cause to symptom>
 
-**Prediction:** `<command>` → <result predicted and seen>
+**Prediction:** `<command>` → <result>
 
 ## Fix
 
-<One or two sentences: what changed and why that removes the cause.>
+<change and why>
 
 **Tests:**
 
-- `<test>` — protects: <behavior>; fails_when: <the defect returns>; why_new: <why no existing
-  test caught it>
+- `<test>` — protects: <behavior>; fails_when: <defect returns>; why_new: <reason>
 
-**Unverified:** <what stayed unrun and why, or none>
+**Unverified:** <what stayed unrun, or none>

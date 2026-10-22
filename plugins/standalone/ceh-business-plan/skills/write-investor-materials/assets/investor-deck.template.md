@@ -1,6 +1,6 @@
 ---
 schema: investor-deck/v1
-plan: <path to the business plan>
+plan: <plan path>
 pmf_gate: <N>/8
 plan_updated: YYYY-MM-DD
 ---
@@ -9,6 +9,6 @@ plan_updated: YYYY-MM-DD
 
 ## 1. <headline claim>
 
-- <proof line> [evidence | assumption | hypothesis-to-test]
+- <proof line> [<evidence | assumption | hypothesis-to-test>]
 
 Source: §<NN>

@@ -9,13 +9,23 @@ deepen named sections with one subsection, listed under [Specialist subsections]
 
 ## Template
 
-A new plan is a copy of `business-plan.template.md`, next to this file: its frontmatter and the
-13 section headings. The `schema: business-plan/v1` line stays as written. A plan from before the
-template carries `artifact: BUSINESS_PLAN` instead: replace that line with the schema line on the
-next revision.
+A new plan is a copy of `../assets/business-plan.template.md`, relative to this file: its
+frontmatter and the 13 section headings. The `schema: business-plan/v1` line stays as written. A
+plan from before the template carries `artifact: BUSINESS_PLAN` instead: replace that line with the
+schema line on the next revision.
 
-`derived_from` names `ceh-build-planning` plans by their repo-relative path. Built plans are kept, so
-the path stays valid.
+**Frontmatter:**
+
+- `status`: `draft`, or `validated` once the PMF Readiness Gate passes and the user confirms it.
+- `created`, `updated`: the date the plan was first saved and last revised.
+- `product`: the product name, one line.
+- `stage`: `idea`, `prototype`, `launched`, or `revenue`.
+- `derived_from`: the build plans this was built on, for example `[product/plans/mvp.md]`, or
+  `[]` when none. It names `ceh-build-planning` plans by their repo-relative path. Built plans are
+  kept, so the path stays valid.
+- `pmf_gate`: criteria met out of 8, per the PMF Readiness Gate below.
+
+Specialist subsections go under their section, after its content.
 
 ## Sections
 

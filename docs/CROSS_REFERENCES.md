@@ -313,56 +313,57 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 
 ## Build plan format
 
-**Canonical:** `plugins/standalone/ceh-build-planning/references/plan-format.md` — whole file,
+**Canonical:** `plugins/standalone/ceh-build-planning/references/plan-schema.md` — whole file,
 shared there by `write-build-plan` and `review-build-plan`
 
 | Copy                                                                                                        | Section    | Diverges |
 | ----------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-format.md`               | whole file | none     |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-format.md` | whole file | none     |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-schema.md`               | whole file | none     |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-schema.md` | whole file | none     |
 | `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/plan.template.md`                 | whole file | none     |
 | `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/assets/plan.template.md`   | whole file | none     |
 
-**Shared:** the whole plan format and its template `plan.template.md` (canonical next to
-`plan-format.md` in `ceh-build-planning/references/`), byte for byte: the `product/plans/<slug>.md` location, the
+**Shared:** the whole plan format and its template `plan.template.md` (canonical in
+`ceh-build-planning/assets/`, beside the `references/` holding `plan-schema.md`), byte for byte: the `product/plans/<slug>.md` location, the
 frontmatter and its four statuses, the Goal, Scope, Design, Phases, and Open sections, the phase
 rules (a runnable Check, `todo` / `unplanned` / `done` with evidence), and the rules for changing
-a plan. Each of the three plugins carries a copy so it works installed alone. `diff` the three
-files after an edit: they must stay identical. `ceh-business-plan:find-product-market-fit` reads
+a plan. Each of the three plugins carries a copy so it works installed alone. `validate.py` fails
+when a copy differs from the canonical file. `ceh-business-plan:find-product-market-fit` reads
 plans too, but carries no copy: it reads only the plans folder and the Goal, Scope, and Design
 sections.
 
-## Architecture template
+## Architecture template and schema
 
-**Canonical:** `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/assets/architecture.template.md`
-— whole file
+**Canonical:** `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/references/architecture-schema.md`
+and `.../assets/architecture.template.md` — whole files
 
-| Copy                                                                                                | Section    | Diverges |
-| --------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/architecture.template.md` | whole file | none     |
+| Copy                                                                                                  | Section    | Diverges |
+| ----------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/architecture-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/architecture.template.md`   | whole file | none     |
 
 **Shared:** the `product/ARCHITECTURE.md` layout: its `schema:` line, the Overview, the diagram
 sections, and the Key Decisions entry shape. `document-architecture` owns the file and
 `implement-from-plan` appends Key Decisions entries to it, so each plugin carries a copy to work
-installed alone. `validate.py` fails when the two differ.
+installed alone. `validate.py` fails when a copy differs from the canonical file.
 
 ## Fix record format
 
-**Canonical:** `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/references/fix-record-format.md`
+**Canonical:** `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/references/fix-record-schema.md`
 — whole file
 
 | Copy                                                                                   | Section    | Diverges |
 | -------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record-format.md` | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record-schema.md` | whole file | none     |
 | `plugins/standalone/ceh-testing/skills/test-a-bug-fix/assets/fix-record.template.md`   | whole file | none     |
 
-**Shared:** the whole fix record format and its template `fix-record.template.md` (canonical next to
-the canonical format file), byte for byte: the `product/fixes/<slug>.md` location and
+**Shared:** the whole fix record format and its template `fix-record.template.md` (canonical in
+`find-root-cause/assets/`, beside the canonical schema's `references/`), byte for byte: the `product/fixes/<slug>.md` location and
 slug rule, the write-only-for-repo-causes rule, the frontmatter with its three statuses and the
 `plan:` and `previous:` rules, the sections each status keeps, and the same-commit and
 committed-alone rules. `find-root-cause` writes the record and `test-a-bug-fix` completes or creates
-it, and each plugin carries a copy so it works installed alone. `diff` the two files after an edit:
-they must stay identical.
+it, and each plugin carries a copy so it works installed alone. `validate.py` fails when a copy
+differs from the canonical file.
 
 ## Business-plan "No human to answer" clause
 
@@ -434,12 +435,16 @@ fails. The doc carries the two stops as reading material.
 | Copy                                                                      | Section    | Diverges |
 | ------------------------------------------------------------------------- | ---------- | -------- |
 | `plugins/standalone/ceh-workflow-runner/references/flow-config-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/references/run-state-schema.md`   | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/references/approval-schema.md`    | whole file | none     |
 | `plugins/standalone/ceh-workflow-runner/assets/run-state.template.md`     | whole file | none     |
 | `plugins/standalone/ceh-workflow-runner/assets/approval.template.md`      | whole file | none     |
 
 **Shared:** the entire `flow.yaml` contract: keys, stage kinds, validation rules, the `run-state.md`
-layout and its template, the approval file template, and the `FLOW STATUS:` line. The two
-templates' canonical copies sit next to the canonical schema in `ceh-workflow-builder/references/`. The builder writes and checks a config against it, the runner
+layout (`run-state-schema.md`) and its template, the approval file (`approval-schema.md`) and its
+template, and the `FLOW STATUS:` line. The canonical schemas sit beside `flow-config-schema.md` in
+`ceh-workflow-builder/references/`, and the canonical templates in `ceh-workflow-builder/assets/`.
+`validate.py` fails when a template or schema differs from its copy. The builder writes and checks a config against it, the runner
 checks it again before running, so a rule present in only one copy lets the builder emit a config
 the runner rejects, or the reverse. Keep the two files byte-identical.
 
@@ -447,9 +452,10 @@ the runner rejects, or the reverse. Keep the two files byte-identical.
 
 **Canonical:** `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/SKILL.md` — § The nine questions, § How to ask, § The spec file
 
-| Copy                                                                             | Section            | Diverges                                                                                                                 |
-| -------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/SKILL.md` | § Phase 1 — Intake | compact gate: one label per question plus what does not satisfy it, because it checks answers rather than eliciting them |
+| Copy                                                                                                        | Section             | Diverges                                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/SKILL.md`                            | § Phase 1 — Intake  | compact gate: one label per question plus what does not satisfy it, because it checks answers rather than eliciting them      |
+| `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/references/workflow-spec-schema.md` | § Sections, § Rules | what each of the nine headings holds, one line each, plus the step-numbering and `Declined` rules: the format, not how to ask |
 
 **Shared:** the nine questions, their numbering, and that numbering carrying through to the spec's
 `## 1.` to `## 9.` headings. Later sections of `build-agentic-workflow` cite them as "spec question

@@ -4,28 +4,27 @@ saved: YYYY-MM-DD HH:MM
 session: <session-id-prefix>
 ---
 
-# Handoff — <YYYY-MM-DD HH:MM>
+# Handoff — YYYY-MM-DD HH:MM
 
 **Repo / branch:** <path> / <branch or "no git">
 **Session:** <session-id-prefix>
 
-**Goal** — what this session set out to do:
+**Goal:**
 
-- <one or two lines>
+- <goal>
 
-**Done** — completed and in what state (validated / not validated):
+**Done:**
 
-- <item — files touched, what was verified>
+- <item>: <files touched>, <validated | not validated>
 
-**In flight** — the step closed or reverted at the save:
+**In flight:**
 
-- <state of the working tree, anything half-planned>
+- <state>
 
-**Open** — remaining work, ordered; first item is the next actionable step:
+**Open:**
 
-1. <next concrete step, specific enough to execute cold>
-2. <...>
+1. <next step>
 
-**Decisions pending** — forks the user still has to resolve, if any.
+**Decisions pending:** <fork, or none>
 
-**Resume with:** <one line: branch name, command to run, or file to open first>
+**Resume with:** <branch, command, or file>

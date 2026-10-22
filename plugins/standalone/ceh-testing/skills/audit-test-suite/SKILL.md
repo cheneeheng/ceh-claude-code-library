@@ -215,7 +215,7 @@ LOW       tests/unit/test_parse.py:12   1.4s in tests/unit — real filesystem I
 ```
 
 Save the report to `.agents_workspace/test-audits/<YYYY-MM-DD>.md`, filling
-`assets/test-audit.template.md`, so the findings that need a
+`assets/test-audit.template.md` per `references/test-audit-schema.md`, so the findings that need a
 decision outlive the session, and name the path in the reply. A subagent in report-only mode
 returns the report instead, and its caller saves it.
 

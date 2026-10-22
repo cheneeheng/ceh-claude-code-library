@@ -53,8 +53,8 @@ and either way the baseline and every attempt are recorded.
 
 ## Output
 
-The attempts table of `assets/perf-report.template.md`, one row per attempt, in the file and
-in the reply.
+The attempts table of `assets/perf-report.template.md`, per `references/perf-report-schema.md`,
+one row per attempt, in the file and in the reply.
 
 ## Stop conditions
 

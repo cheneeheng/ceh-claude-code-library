@@ -1,4 +1,4 @@
-# Plan format
+# Plan schema
 
 A build plan is one Markdown file. `ceh-build-planning` writes it, `ceh-build-from-plan` builds
 from it and records evidence in it, and `ceh-check-build-against-plan` checks the code against it.
@@ -17,12 +17,35 @@ and agents building the product read. `docs/` is left to what users of the produ
 
 ## Template
 
-A new plan is a copy of `plan.template.md`, next to this file: its frontmatter, then its sections
-in that order. The `schema: plan/v1` line stays as written, so a reader can tell which version of
-the format a plan follows.
+A new plan is a copy of `../assets/plan.template.md`, relative to this file: its frontmatter, then
+its sections in that order. The `schema: plan/v1` line stays as written, so a reader can tell which
+version of the format a plan follows.
 
-- `draft`: an Open question blocks building. `ready`: buildable as written. `building`: at least
-  one phase is done. `built`: every phase is done, with evidence.
+**Frontmatter:**
+
+- `title`: what this plan builds, one line.
+- `status`: `draft` (an Open question blocks building), `ready` (buildable as written),
+  `building` (at least one phase is done), or `built` (every phase is done, with evidence).
+- `created`: the date the plan was first saved.
+- `business_plan`: the path to `product/BUSINESS_PLAN.md`. Omit the key when there is none.
+
+**Sections:**
+
+- **Goal:** one paragraph: what gets built, for whom, and the one user flow that matters most.
+  With `business_plan` set, one sentence plus a pointer to its product section instead.
+- **Scope:** **In** has one bullet per capability a user or caller can observe, and this list is
+  what done means. **Out** has one bullet per thing deliberately not built, with a one-line reason.
+- **Design:** only the decisions the phases need, each with its reason: stack, components (a
+  Mermaid diagram when there are more than two), data model (entities and key fields), and
+  interface (routes with method and path, CLI commands, or public functions). Each decision is
+  written once here, and phases refer to it.
+- **Phases:** one `### Phase <n>: <name>` per phase. **Builds** names what the phase adds by its
+  Scope and Design items. **Check** is the command that proves it and what passing looks like, for
+  example `uv run pytest tests/test_signup.py` passes. **Status** follows Phase rules below.
+- **Open:** each unsettled question, with the assumption taken until it is answered. `None` when
+  empty.
+- **Record:** append-only, oldest first, one dated line per lifecycle event, per Record rules
+  below.
 
 ## Phase rules
 

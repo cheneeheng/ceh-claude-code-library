@@ -9,25 +9,22 @@ mode: <fix | report-only>
 
 ## Findings
 
-<Worst-first, each quoting the code it is about as `path:line` plus the line.>
-
 ```
-CRITICAL  tests/unit/test_billing.py:41  no assertion — only checks no exception raised
-HIGH      src/discount.py               3 surviving mutants (boundary `>=` → `>` unnoticed)
+<SEVERITY>  <path:line>  <finding>
 ```
 
 ## Fixed
 
-<What this run fixed, each with the finding it closes. Report-only mode: omit.>
+- <fix>: closes <finding>
 
 ## Needs a decision
 
-<Each finding left for the user, with the options.>
+- <finding>: <options>
 
 ## Unverified
 
-<Findings that could not be anchored to quoted code. "None" when empty.>
+- <finding>
 
 ## Commands run
 
-<Each command and its verdict, including checks skipped and why.>
+- `<command>`: <verdict>

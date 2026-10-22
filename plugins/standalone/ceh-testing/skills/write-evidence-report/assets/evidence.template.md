@@ -7,27 +7,25 @@ product: <product>
 
 ## YYYY-MM-DD at <short-sha>
 
-**Tree:** clean | dirty (<n> files)
+**Tree:** <clean | dirty (<n> files)>
 
-| Area        | Status                                          | Result                         | Checked at    |
-| ----------- | ----------------------------------------------- | ------------------------------ | ------------- |
-| Tests       | passed \| failed \| not run                     | `<command>`: <summary line>    | <sha>         |
-| QA          | passed \| open issues \| stale (<n>) \| not run | <bugs found / fixed>           | <sha or date> |
-| Performance | ...                                             | <metric>: <value> on <machine> | ...           |
-| Security    | ...                                             | <counts by severity>           | ...           |
-| Usability   | ...                                             | <blockers / friction counts>   | ...           |
-| Plan        | ...                                             | <items built / missing>        | ...           |
+| Area        | Status   | Result                         | Checked at    |
+| ----------- | -------- | ------------------------------ | ------------- |
+| Tests       | <status> | `<command>`: <summary line>    | <sha>         |
+| QA          | <status> | <bugs found / fixed>           | <sha or date> |
+| Performance | <status> | <metric>: <value> on <machine> | <sha or date> |
+| Security    | <status> | <counts by severity>           | <sha or date> |
+| Usability   | <status> | <blockers / friction counts>   | <sha or date> |
+| Plan        | <status> | <items built / missing>        | <sha or date> |
 
 ### Open issues
 
-- <area>: <issue, severity where the report gives one>. "None" when empty.
+- <area>: <issue>
 
 ### Claims
 
-- <one sentence a launch post may state> (<area>, <figure>)
+- <claim> (<area>, <figure>)
 
 ### Not run
 
-- <area>: <reason, and the skill that produces it>
-
-<earlier sections follow, unchanged, newest first>
+- <area>: <reason>, <skill>
