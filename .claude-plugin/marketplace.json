@@ -11,7 +11,7 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.8.9",
+      "version": "2.8.10",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, context economy via delegated bulk reads, and replies folded to their summary."
     },
     {
@@ -65,31 +65,31 @@
     {
       "name": "ceh-seo",
       "source": "./plugins/standalone/ceh-seo",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "description": "CEH SEO: discoverability standards for anything exposed to the internet — technical SEO/GEO for public web pages (meta tags, structured data, sitemap, rendering strategy), authoring the llms.txt agent index, and findability of public-facing text (README first screen, package descriptions and keywords, repo topics, landing copy)."
     },
     {
       "name": "ceh-blog",
       "source": "./plugins/standalone/ceh-blog",
-      "version": "1.0.13",
+      "version": "1.0.14",
       "description": "CEH blog: turn a half-formed idea into a compelling, publishable blog post in a personal, series-first voice via structured interview; repurpose finished posts for Twitter/X, LinkedIn, TL;DR, and newsletters."
     },
     {
       "name": "ceh-build-planning",
       "source": "./plugins/standalone/ceh-build-planning",
-      "version": "1.1.9",
+      "version": "1.1.10",
       "description": "CEH build planning: decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check, then review the plan before anyone builds from it."
     },
     {
       "name": "ceh-build-from-plan",
       "source": "./plugins/standalone/ceh-build-from-plan",
-      "version": "1.0.8",
+      "version": "1.0.9",
       "description": "CEH build from plan: build a written plan phase by phase, test first, implementing only what each phase names and proving it with the phase's own check, with the evidence recorded in the plan."
     },
     {
       "name": "ceh-check-build-against-plan",
       "source": "./plugins/standalone/ceh-check-build-against-plan",
-      "version": "1.0.8",
+      "version": "1.0.9",
       "description": "CEH check build against plan: check whether finished code is what its plan said to build, reporting every gap, deviation, and unplanned extra with quoted evidence, and rerunning each phase's check."
     },
     {
@@ -113,7 +113,7 @@
     {
       "name": "ceh-business-plan",
       "source": "./plugins/standalone/ceh-business-plan",
-      "version": "1.1.10",
+      "version": "1.1.11",
       "description": "CEH business plan: turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop — draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes. Then harden it: a report-only board review, and specialist passes on strategy, unit economics, go-to-market, premortem, the 90-day operating plan, and investor materials."
     },
     {

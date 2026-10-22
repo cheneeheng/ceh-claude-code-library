@@ -16,7 +16,7 @@ scored, each score backed by a quote or "nothing found", and the next skill name
 
 ## Procedure
 
-1. Read the whole plan. Default to `product/BUSINESS_PLAN.md` (schema in
+1. Read the whole plan. Default to `.agents_workspace/business/BUSINESS_PLAN.md` (schema in
    `${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`). Any other plan, deck, or memo the
    user supplies is reviewed the same way.
 2. Score each lens 0, 1, or 2 using the table below. Quote the sentence in the plan that earns the

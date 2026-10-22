@@ -27,6 +27,6 @@ is a file. Use plan mode to explore an unfamiliar codebase first, then leave it 
 ## Not this plugin
 
 - Whether the product is worth building, and who pays: use `ceh-business-plan`. When a
-  `product/BUSINESS_PLAN.md` exists, the build plan points to it for the goal and target user
+  `.agents_workspace/business/BUSINESS_PLAN.md` exists, the build plan points to it for the goal and target user
   instead of restating them.
 - Building or checking the plan: `ceh-build-from-plan` and `ceh-check-build-against-plan`.

@@ -1,7 +1,7 @@
 # Investor outreach schema
 
 The outreach notes `write-investor-materials` saves to
-`.agents_workspace/investor/INVESTOR_OUTREACH.md`, beside the deck, local and not committed. A new file is a copy of `../assets/investor-outreach.template.md`, relative to this file. The
+`.agents_workspace/business/INVESTOR_OUTREACH.md`, beside the deck, local and not committed. A new file is a copy of `../assets/investor-outreach.template.md`, relative to this file. The
 `schema: investor-outreach/v1` line stays as written.
 
 ## Frontmatter

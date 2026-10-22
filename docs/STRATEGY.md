@@ -43,22 +43,22 @@ of the vision's Every step row) sit outside the route. They apply at every stage
 A build plan decides how, and it recurs for every feature inside the build loop:
 `ceh-build-planning:write-build-plan` itself triggers on "how should we build this". Keeping it in
 Shape would send "add a feature to my app" through the business-plan stage, the wrong door for a
-new user. The two stay connected through the handoff: the build plan reads `product/BUSINESS_PLAN.md` when
+new user. The two stay connected through the handoff: the build plan reads `.agents_workspace/business/BUSINESS_PLAN.md` when
 one exists.
 
 ## The spine: handoff files
 
-| Stage | Reads                                             | Writes                                                             |
-| ----- | ------------------------------------------------- | ------------------------------------------------------------------ |
-| Shape | an idea, a conversation                           | `product/BUSINESS_PLAN.md`                                         |
-| Build | `product/BUSINESS_PLAN.md` when present, the repo | `product/plans/<slug>.md`, the code, `product/ARCHITECTURE.md`     |
-| Prove | the plan, the code                                | `product/EVIDENCE.md`: tests, QA, security, usability, performance |
-| Tell  | `product/BUSINESS_PLAN.md`, `product/EVIDENCE.md` | posts, listings, SEO pages                                         |
+| Stage | Reads                                                                | Writes                                                             |
+| ----- | -------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Shape | an idea, a conversation                                              | `.agents_workspace/business/BUSINESS_PLAN.md`                      |
+| Build | `.agents_workspace/business/BUSINESS_PLAN.md` when present, the repo | `product/plans/<slug>.md`, the code, `product/ARCHITECTURE.md`     |
+| Prove | the plan, the code                                                   | `product/EVIDENCE.md`: tests, QA, security, usability, performance |
+| Tell  | `.agents_workspace/business/BUSINESS_PLAN.md`, `product/EVIDENCE.md` | posts, listings, SEO pages                                         |
 
-Shape to Build: `ceh-business-plan` writes `product/BUSINESS_PLAN.md`, and `ceh-build-planning` reads
+Shape to Build: `ceh-business-plan` writes `.agents_workspace/business/BUSINESS_PLAN.md`, and `ceh-build-planning` reads
 it and writes the plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read. Prove to
 Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.md`, and
-`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `product/BUSINESS_PLAN.md`.
+`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `.agents_workspace/business/BUSINESS_PLAN.md`.
 
 Three rules hold for every handoff file:
 
@@ -86,14 +86,19 @@ The test is who reads the file.
   This follows vision principle 2: a decision that shapes the repo for others belongs in a
   committed file.
 - **Local in `.agents_workspace/`:** what only one session or its author reads. The decision log,
-  session handoffs, research notes, questionnaires, competitor analyses, investor decks and
-  outreach notes, reviews and audits whose
+  session handoffs, research notes, questionnaires, competitor analyses, reviews and audits whose
   author acts on them (plan, code, and test-suite reviews, blog drafts outside a blog repo), and
   scratch work. A skill whose output would be lost with the chat saves it here.
+- **Business material stays local, even as a handoff file.** The business plan, the investor deck,
+  and the outreach notes go in `.agents_workspace/business/`, because they hold pricing, unit
+  economics, kill criteria, and investor contacts that do not belong in a repo others can read.
+  A stage that reads the business plan works without it (rule 1 above), so a fresh clone loses
+  context, not function. Git-ignoring a `product/` file per repo was rejected: nothing makes anyone
+  remember it, and it breaks silently when a file name changes.
 
 **`product/` for the builders, `docs/` for users.** Committed handoff files go in `product/` in the
 target repo. `docs/` holds only what users of the product read, so a docs site built from it never
-publishes a plan or a business plan.
+publishes a plan.
 
 Committing every file a stage writes would bloat the repo, so committed handoff files have a
 lifecycle:

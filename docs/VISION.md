@@ -90,7 +90,7 @@ orchestration strategies and logs each run, so the strategy that works can later
 It stays in the table while the experiment runs, and moves to `archive/` or loses its experimental
 label when the experiment ends.
 
-The stages are a route, not only a filing system: each one writes committed handoff files the next
+The stages are a route, not only a filing system: each one writes handoff files the next
 one reads, so installed plugins chain without a router. How they chain, and how the next piece of
 work is chosen, is in [`STRATEGY.md`](STRATEGY.md).
 

@@ -136,7 +136,7 @@ Each moment names the plugin, the command that starts it, and the file it writes
 **Shape**
 
 - Test whether an idea is worth building: install `ceh-business-plan`, start with
-  `/ceh-business-plan:develop-business-plan`. Writes `product/BUSINESS_PLAN.md`.
+  `/ceh-business-plan:develop-business-plan`. Writes `.agents_workspace/business/BUSINESS_PLAN.md`.
 - Learn from a competitor's repo or product: install `ceh-competitor-analysis`, start with
   `/ceh-competitor-analysis:analyze-competitor`. Writes reports in `.agents_workspace/`.
 
@@ -193,7 +193,7 @@ Then, when you build from the plan:
 
 Run `/reload-plugins` after each install, so the new skills load.
 
-The Tell stage reads `product/BUSINESS_PLAN.md` and `product/EVIDENCE.md` when they exist. Without them it
+The Tell stage reads `.agents_workspace/business/BUSINESS_PLAN.md` and `product/EVIDENCE.md` when they exist. Without them it
 still runs, and says which claims rest on nothing proven.
 
 ## 4. Add these only when the moment arrives
