@@ -79,8 +79,8 @@ A single living `BUSINESS_PLAN.md` (13 sections: problem, target customer, value
 competition, market math, business model, go-to-market, traction, financials, risks, milestones),
 revised in place across the loop, with a `pmf_gate: N/8` score in its frontmatter. The schema and
 the 8-point gate live in `references/business-plan-schema.md`, shared by all nine skills.
-`write-investor-materials` writes `product/INVESTOR_DECK.md` and `product/INVESTOR_OUTREACH.md`
-beside the plan and leaves the plan itself unchanged.
+`write-investor-materials` writes `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` to
+`.agents_workspace/investor/`, local and not committed, and leaves the plan itself unchanged.
 
 ## The PMF readiness gate
 
