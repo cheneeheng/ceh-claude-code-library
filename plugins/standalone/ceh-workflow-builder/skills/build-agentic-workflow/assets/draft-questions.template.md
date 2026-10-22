@@ -1,7 +1,7 @@
 ---
 schema: draft-questions/v1
 workflow: <name>
-spec: <path to the workflow spec>
+spec: <spec path>
 date: YYYY-MM-DD
 ---
 
@@ -9,8 +9,8 @@ date: YYYY-MM-DD
 
 ## Open spec rows
 
-1. <Spec row <n>: the question> — recommended: <answer>
+1. Spec row <n>: <question> — recommended: <answer>
 
 ## Assumptions to confirm
 
-1. <The assumption the draft took> — recommended: <keep it, or the alternative>
+1. <assumption> — recommended: <keep it, or the alternative>

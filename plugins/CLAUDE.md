@@ -13,7 +13,8 @@ one heading set, and one voice. Frontmatter uses only the fields in the official
 Each skill is self-contained with inline content. `references/` is for two cases only. Output
 templates (below) live in `assets/` instead:
 
-- **A schema used by several skills.** Skills of one plugin share a single copy in the
+- **A schema: the schema of an output template (below), or one used by several skills.** Skills
+  of one plugin share a single copy in the
   plugin's own `references/`, cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`, so it needs no
   `docs/CROSS_REFERENCES.md` entry. A file used by one skill lives in that skill's `references/`.
   Only a file needed by skills of different plugins is copied word-for-word into each and
@@ -25,13 +26,21 @@ Never for general reference material a model already knows.
 
 **Every file a skill saves has a versioned template**, `<schema>.template.md` in the skill's or
 the plugin's `assets/` (cited as `assets/<file>` or `${CLAUDE_PLUGIN_ROOT}/assets/<file>`), its
-frontmatter opening with `schema: <schema>/v<N>`. The skill body cites the template instead of spelling the format inline,
-so the format lives in one file and the saved file names its version. Bump `v<N>` when a required
-field or heading is renamed or removed. Out of scope: what the user ships (code, tests, docs
-pages, blog posts in a blog repo, `SKILL.md` files a skill generates) and `flow.yaml`, which carries
-its own `version: 1`. `validate.py` (the `templates` check) rejects a template without its schema
-line, one no file in its plugin cites, a copy that differs from its twin in another plugin, and a
-skill whose `## Output` names a saved `.agents_workspace/` or `product/` file but cites no template.
+frontmatter opening with `schema: <schema>/v<N>`. **Each template has a schema**,
+`<schema>-schema.md` in the `references/` beside that `assets/` folder: it says where the file is
+saved, names the template as `../assets/<schema>.template.md`, and explains every field and section.
+The template is a bare skeleton, copied and filled as is: short placeholders (`<title>`) and
+choices as `<a | b>`. Comments, explanation, and worked examples go in the schema. The skill body
+cites both instead of spelling the format inline (`fills assets/x.template.md, per
+references/x-schema.md`), so the format lives in one pair of files and the saved file names its
+version. A reference file cites a sibling folder's file relative to itself (`../assets/<file>`),
+never as "next to this file". Bump `v<N>` when a required field or heading is renamed or removed.
+Out of scope: what the user ships (code, tests, docs pages, blog posts in a blog repo, `SKILL.md`
+files a skill generates) and `flow.yaml`, which carries its own `version: 1`. `validate.py` (the
+`templates` check) rejects a template without its schema line or its schema file, a template that
+carries explanation, a template or schema no file in its plugin cites, a copy that differs from
+its twin in another plugin, and a skill whose `## Output` names a saved `.agents_workspace/` or
+`product/` file but cites no template.
 
 Two skills migrated whole and carry bundled files that predate this rule:
 `ceh-ui-design:design-ui` (two themes and `examples.md` under `references/`) and

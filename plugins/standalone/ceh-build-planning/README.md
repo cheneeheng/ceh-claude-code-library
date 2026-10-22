@@ -6,7 +6,7 @@ again.
 
 The plan is the handoff between the lifecycle stages. `ceh-build-from-plan` builds it phase by
 phase, and `ceh-check-build-against-plan` checks the finished code against it. Each of the three
-plugins works installed alone, and they share the plan format in `references/plan-format.md`.
+plugins works installed alone, and they share the plan format in `references/plan-schema.md`.
 
 ## Skills
 

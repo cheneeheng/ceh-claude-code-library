@@ -13,53 +13,45 @@ files_excluded: <K>
 
 ## What this repo is
 
-<2–4 sentences: what it does, who it is for, what kind of project it is, what stack it runs on. For
-a knowledge base: what subjects it covers, who it is written for, and how it is organized.>
+<summary>
 
 ## How it fits together
 
 ```mermaid
 flowchart LR
-    cli[cli.py] --> core[core/]
-    core --> store[(store/)]
+    <nodes>
 ```
 
-<One paragraph naming the moving parts and the direction things flow.>
+<moving parts and flow>
 
 ## Components
 
-### `src/api/` — HTTP surface
+### `<path>` — <role>
 
-**What it is.** Route handlers; no business logic.
-**What's inside.** `auth.py` issues the JWT every other route verifies; `deps.py` holds the FastAPI
-dependencies (DB session, current user). The remaining 9 modules are one resource each, all built on
-the same `deps.py` pair.
-**How it connects.** Registered by `main.py` on startup; calls `services/`. Owns no state.
-**Before you change it.** Route paths are duplicated in `tests/conftest.py`.
+**What it is.** <what>
+**What's inside.** <inside>
+**How it connects.** <connections>
+**Before you change it.** <caveats>
 
 ## Key flows
 
-### Authenticated request
+### <flow name>
 
-1. `main.py` → routes registered at startup
-2. `api/deps.py` verifies the token
-3. `services/user.py` loads the record
-4. `store/pg.py` runs the query
+1. `<file>` → <step>
 
 ## Repo meta
 
-<The support cast as group rules — CI workflows, packaging config, editor and lint config, license.>
+<group rules>
 
 ## Gaps and oddities
 
-<Factual observations only: dead code, missing CI, a component whose purpose could not be
-determined and what was checked.>
+<observations>
 
 ## Accounting
 
-|                                                      | Count |
-| ---------------------------------------------------- | ----- |
-| Files in inventory                                   | N     |
-| Assigned to a component                              | X     |
-| Covered by a group rule                              | Y     |
-| Excluded (`.agents_workspace/`, lockfiles, binaries) | Z     |
+|                         | Count |
+| ----------------------- | ----- |
+| Files in inventory      | <N>   |
+| Assigned to a component | <X>   |
+| Covered by a group rule | <Y>   |
+| Excluded                | <Z>   |

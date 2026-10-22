@@ -4,9 +4,9 @@ snapshot: YYYY-MM-DD
 competitors: [<a>, <b>]
 ---
 
-# Comparison: <competitor A> vs <competitor B> vs <ours>
+# Comparison: <A> vs <B> vs <ours>
 
-Detail per competitor: [<a>.md](<a>.md), [<b>.md](<b>.md). Snapshot date <YYYY-MM-DD>.
+Detail per competitor: [<a>.md](<a>.md), [<b>.md](<b>.md). Snapshot date YYYY-MM-DD.
 
 ## At a glance
 
@@ -19,28 +19,25 @@ Detail per competitor: [<a>.md](<a>.md), [<b>.md](<b>.md). Snapshot date <YYYY-M
 | Invocation / trigger |         |         |            |
 | Quality gate         |         |         |            |
 | Versioning           |         |         |            |
-| <added dimension>    |         |         |            |
 
 ## Inventory by capability
 
-`—` means there is no equivalent.
-
-| Capability | <A> | <B> | <ours> |
-| ---------- | --- | --- | ------ |
+| Capability   | <A> | <B> | <ours> |
+| ------------ | --- | --- | ------ |
+| <capability> |     |     |        |
 
 ## Scores
 
-1 to 5 per capability, evidence in the cell, `?` where there is none. No total.
-
-| Capability | <A>                  | <B> | <ours> |
-| ---------- | -------------------- | --- | ------ |
-| <row>      | 4 — <a>.md Inventory |     |        |
+| Capability   | <A>                  | <B> | <ours> |
+| ------------ | -------------------- | --- | ------ |
+| <capability> | <score> — <evidence> |     |        |
 
 ## Where each one is strongest
 
-| Repo | Strongest at | Weakest at |
-| ---- | ------------ | ---------- |
+| Repo   | Strongest at | Weakest at |
+| ------ | ------------ | ---------- |
+| <repo> | <strongest>  | <weakest>  |
 
 ## Positioning in one line
 
-<One or two sentences on how each one positions itself, ours included.>
+<positioning>

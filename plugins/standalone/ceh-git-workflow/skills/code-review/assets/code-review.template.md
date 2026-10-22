@@ -7,13 +7,12 @@ verdict: <Approve | Request changes | Comment | Cannot verify>
 
 # Code review: <branch>
 
-**Verdict:** <Approve | Request changes | Comment | Cannot verify> — <what must change to flip to
-approve, or what settles it>
+**Verdict:** <Approve | Request changes | Comment | Cannot verify> — <what flips or settles it>
 
 ## Summary
 
-<One or two sentences: what the change does and your overall read.>
+<summary>
 
 ## Line comments
 
-- `<path>:<line>` [blocking | advisory | question] <the comment>
+- `<path>:<line>` [<blocking | advisory | question>] <comment>

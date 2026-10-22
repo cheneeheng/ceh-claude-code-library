@@ -1,4 +1,4 @@
-# Fix record format
+# Fix record schema
 
 Every bug fix leaves one committed file, `product/fixes/<slug>.md` in the target repo. The commit
 message is written for reviewers of one change and the diagnosis in the chat ends with the session,
@@ -12,17 +12,30 @@ reader of the repo can act on. A cause on one machine, or a question nobody mean
 
 ## Format
 
-A record is a copy of `fix-record.template.md`, next to this file, keeping only the sections its
-status keeps (see Sections by status). The `schema: fix-record/v1` line stays as written.
+A record is a copy of `../assets/fix-record.template.md`, relative to this file, keeping only the
+sections its status keeps (see Sections by status). The `schema: fix-record/v1` line stays as
+written.
 
 ## Fields
 
+- **`status:`** `diagnosed`, `fixed`, or `unreproduced`, per Sections by status.
+- **`issue:`** the link or ID of the report. Omit the key when there is none.
+- **Title:** the behavior that was wrong, in one line.
+- **Symptom:** the command that fails and its failing output line.
+- **Diagnosis table:** one row per hypothesis: the claim, the observation that would kill it, and
+  whether it was refuted or confirmed, with the output that decided it.
+- **Cause:** the `file:line` or condition, then one sentence on the chain from cause to symptom.
+- **Prediction:** a command, and the result predicted and then seen.
+- **Fix:** one or two sentences: what changed and why that removes the cause.
+- **Tests:** one bullet per test: `protects` names the behavior, `fails_when` the defect
+  returning, `why_new` why no existing test caught it.
+- **Unverified:** what stayed unrun and why, or `none`.
 - **`plan:`** Grep the `status: built` plans in `product/plans/` for the file at the Cause's
   `file:line`, or at the fixed `file:line` when the record is created at fix time. With several
   matches, take the newest by `created:`. No match, or a tie on that date, leaves the field out:
   never guessed.
 - **`previous:`** The earlier record in `product/fixes/` whose Cause matches the confirmed one, so a
-  bug that came back shows its history.
+  bug that came back shows its history. Omit the key when no earlier record covers this behavior.
 
 ## Sections by status
 

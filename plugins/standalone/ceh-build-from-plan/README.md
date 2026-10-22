@@ -5,7 +5,7 @@ the next. The evidence goes back into the plan, so the plan always says what is 
 was proven.
 
 It reads the plan format `ceh-build-planning` writes, copied into
-`skills/implement-from-plan/references/plan-format.md`. Without a plan, it writes a minimal one from
+`skills/implement-from-plan/references/plan-schema.md`. Without a plan, it writes a minimal one from
 the request first, so it works installed alone. A built plan stays in `product/plans/` with an
 append-only `## Record`, so the build keeps its history.
 

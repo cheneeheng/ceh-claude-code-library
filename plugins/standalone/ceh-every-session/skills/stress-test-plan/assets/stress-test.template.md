@@ -4,12 +4,12 @@ date: YYYY-MM-DD
 topic: <topic>
 ---
 
-<One-line statement of the plan.>
+<plan>
 
 ## Decisions
 
-- <Question> — <answer>. <One-line reason.>
+- <question> — <answer>. <reason>
 
 ## Open
 
-- <Question> — assumed <recommendation>, not confirmed (or: blocked on <prerequisite>)
+- <question> — assumed <recommendation>, not confirmed

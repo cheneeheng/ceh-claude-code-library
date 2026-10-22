@@ -6,29 +6,26 @@ schema: architecture/v1
 
 ## Overview
 
-<One sentence: what the system does, and for whom, in problem-domain words.>
+<what the system does, for whom>
 
 ```mermaid
 flowchart LR
-    <3 to 6 domain nodes in one left-to-right line>
+    <nodes>
 ```
 
-## <Diagram name: System context, Components, Key flows, Data model, or State machines>
+## <diagram name>
 
-<One line stating what the diagram shows.>
+<what the diagram shows>
 
 ```mermaid
-<the diagram>
+<diagram>
 ```
 
 ## Key Decisions
 
-<Entries appended newest last, never deleted. A changed decision gets a new entry, and the old one
-is marked Superseded.>
+### YYYY-MM-DD — <title>
 
-### YYYY-MM-DD — <Short, Descriptive Title>
-
-**Status:** Accepted | Superseded by <date title>
-**Context:** <Problem, constraints, and options considered.>
-**Decision:** <What was decided, explicit and unambiguous.>
-**Consequences:** <Trade-offs, limitations, follow-ups.>
+**Status:** <Accepted | Superseded by <date title>>
+**Context:** <context>
+**Decision:** <decision>
+**Consequences:** <consequences>

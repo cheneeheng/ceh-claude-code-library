@@ -5,22 +5,25 @@ subject: <subject>
 
 # Learning: <subject>
 
-**Goal:** <what the reader wants to be able to do, in their words>
-**Next:** <the one thing the next session explains first>
+**Goal:** <goal>
+**Next:** <next>
 
 ## Terms
 
-| Term | Definition, as the reader put it back |
-| ---- | ------------------------------------- |
+| Term   | Definition, as the reader put it back |
+| ------ | ------------------------------------- |
+| <term> | <definition>                          |
 
 ## Rules of thumb
 
-- <each transferable rule an explanation closed on>
+- <rule>
 
 ## Self-test
 
-| Question | Last answer          | Date       |
-| -------- | -------------------- | ---------- |
-| <q>      | unaided / missed / — | YYYY-MM-DD |
+| Question   | Last answer              | Date       |
+| ---------- | ------------------------ | ---------- |
+| <question> | <unaided \| missed \| —> | YYYY-MM-DD |
 
 ## Open questions
+
+- <question>

@@ -21,7 +21,7 @@ quotes the plan, and the verdict is delivered.
 
 1. **Find the plan.** Take the path from the arguments, or the newest plan in the plans folder
    whose status is `draft` or `ready`, and say which. The format is in
-   `${CLAUDE_PLUGIN_ROOT}/references/plan-format.md`. With no plan but a spec (an issue, a PRD, a
+   `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md`. With no plan but a spec (an issue, a PRD, a
    spec file), review the spec with the Scope lens and the gap checks of step 5, and skip what
    concerns phases. With neither, stop: there is nothing to review.
 2. **Review from a fresh context when this session wrote the plan.** Dispatch one background
@@ -68,8 +68,7 @@ quotes the plan, and the verdict is delivered.
 
 ## Output
 
-The review fills `assets/plan-review.template.md`. A row reads like
-`| 1 | Engineering | blocking | Phase 3 Check: "the app runs" | Proves nothing about the import it builds | uv run pytest tests/test_import.py passes |`.
+The review fills `assets/plan-review.template.md`, per `references/plan-review-schema.md`.
 
 | Verdict            | When                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------- |

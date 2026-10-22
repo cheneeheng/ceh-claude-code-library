@@ -13,7 +13,7 @@ license: Apache-2.0
 # Write a Build Plan
 
 Turn a request into one plan file that an agent can build from without asking again, in the format
-in `${CLAUDE_PLUGIN_ROOT}/references/plan-format.md`. Done means the plan is saved, audited, and
+in `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md`. Done means the plan is saved, audited, and
 summarized under Output.
 
 ## Procedure

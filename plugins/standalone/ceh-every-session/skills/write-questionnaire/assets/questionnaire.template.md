@@ -1,19 +1,19 @@
 ---
 schema: questionnaire/v1
 topic: <topic>
-from: <who is asking, or "Claude Code session">
+from: <asker>
 date: YYYY-MM-DD
 ---
 
 # Questions on <topic>
 
-From: <who is asking, or "Claude Code session">, <YYYY-MM-DD>. Answer on the `Answer:` line under
-each question. Leave a line blank to skip it.
+From: <asker>, YYYY-MM-DD. Answer on the `Answer:` line under each question. Leave a line blank to
+skip it.
 
-## 1. <The question, one sentence>
+## 1. <question>
 
-**Context:** <two to four sentences: the facts needed to answer, in plain words>.
-**Blocks:** <what work waits on this>.
+**Context:** <context>.
+**Blocks:** <blocked work>.
 **Options:**
 
 - A. <option> — <consequence> (recommended)

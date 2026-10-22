@@ -44,7 +44,7 @@ predict one observation you have not made yet that then comes true.
 7. **Remove the instrumentation** you added, then hand over with the Output below.
 8. **Write the fix record** when the cause is in this repo's code or config. Save the hand-over to
    `product/fixes/<slug>.md` with `status: diagnosed`, in the format in
-   `references/fix-record-format.md`, setting `plan:` and `previous:` as it says. The chat ends
+   `references/fix-record-schema.md`, setting `plan:` and `previous:` as it says. The chat ends
    with the session, and the record is how a later reader learns why the fix exists. The fix commit
    carries it. No fix will land here when the cause is outside this repo or the user declined the
    fix: then the record is committed alone and stays `diagnosed`. A fix that waits on a user

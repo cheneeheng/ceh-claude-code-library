@@ -145,5 +145,5 @@ threads.
 When the comments are posted on a PR, the PR is the record. Otherwise (a local diff, or comments
 not posted) save the summary, the line comments, and the verdict to
 `.agents_workspace/code-reviews/<branch>-<YYYY-MM-DD>.md`, filling
-`assets/code-review.template.md`, so the author can work through them in a
+`assets/code-review.template.md` per `references/code-review-schema.md`, so the author can work through them in a
 later session, and name the path in the reply.

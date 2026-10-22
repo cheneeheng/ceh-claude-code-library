@@ -8,21 +8,20 @@ verdict: <Ready to build | Revise first | Rethink>
 ## Plan review: product/plans/<slug>.md
 
 **Verdict:** <Ready to build | Revise first | Rethink>
-**Lenses:** <the lenses run, e.g. Scope, Engineering, Design. Skipped developer experience: no
-developer callers.>
+**Lenses:** <lenses run>. Skipped <lens>: <reason>.
 
-| #   | Lens   | Severity              | Plan line               | Finding        | Fix        |
-| --- | ------ | --------------------- | ----------------------- | -------------- | ---------- |
-| 1   | <lens> | <blocking / advisory> | <the plan line, quoted> | <what's wrong> | <the edit> |
+| #   | Lens   | Severity               | Plan line | Finding   | Fix   |
+| --- | ------ | ---------------------- | --------- | --------- | ----- |
+| 1   | <lens> | <blocking \| advisory> | "<quote>" | <finding> | <fix> |
 
 ## Questions for the owner
 
-<Each question, with a recommended answer. "None" when empty.>
+- <question> Recommended: <answer>
 
 ## Unverified
 
-<Findings not checked against the code or the repo, each with why. "None" when empty.>
+- <finding>: <why unverified>
 
 ## Fixes made
 
-<Fix mode only: what was edited and what was left open. Omit outside fix mode.>
+- <edit made, or left open>

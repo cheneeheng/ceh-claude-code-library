@@ -13,7 +13,7 @@ license: Apache-2.0
 # Implement From a Plan
 
 Build a plan one phase at a time, and prove each phase with its own check before starting the
-next. The plan format is in `${CLAUDE_SKILL_DIR}/references/plan-format.md`. Done means every
+next. The plan format is in `${CLAUDE_SKILL_DIR}/references/plan-schema.md`. Done means every
 targeted phase is `done` with evidence in the plan, or the run stopped at a named phase with the
 reason recorded.
 
@@ -48,7 +48,8 @@ reason recorded.
    installed, run `ceh-check-build-against-plan:check-build-against-plan` first, because it adds
    its Checked line to the plan. Then, in one commit: copy each Design decision a later reader
    still needs to the Key Decisions log in `product/ARCHITECTURE.md`, in the entry shape of
-   `assets/architecture.template.md` (a missing file starts as a copy of it), and add a changelog entry when the repo keeps a
+   `assets/architecture.template.md`, per `references/architecture-schema.md` (a missing file
+   starts as a copy of the template), and add a changelog entry when the repo keeps a
    changelog. Say which decisions were copied.
 
 ## Rules
