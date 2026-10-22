@@ -1,30 +1,35 @@
 export type Section = { number?: string; topic: string; body: string; after: string }
 
-const isTableRow = (line: string) => line.trimStart().startsWith('|')
-const isSeparator = (line: string) => /^\s*\|[\s:|-]+\|\s*$/.test(line)
+// A summary item: `1. **Topic** · *status*`, its outcome on indented lines below.
+const ITEM = /^(\d+)\.\s+\*\*(.+?)\*\*\s+·/
+const isRule = (line: string) => /^\s*---+\s*$/.test(line)
 
-// A reply that opens with a summary table, split into the table and one
-// section per bold Topic line below it. One paragraph before the table, which
-// the style forbids but the model sometimes writes, is kept as `lead`. Null
-// when the reply opens with no table or has nothing below it, so the caller
+// A reply that opens with a summary list, split into the list and one section
+// per bold Topic line below it. One paragraph before the list, which the style
+// forbids but the model sometimes writes, is kept as `lead`. Null when the
+// reply opens with no summary list or has nothing below it, so the caller
 // draws the reply whole.
-export const split = (text: string): { lead: string; table: string; sections: Section[] } | null => {
+export const split = (text: string): { lead: string; summary: string; sections: Section[] } | null => {
   const all = text.trimStart().split('\n')
-  const start = all.findIndex((line, at) => isTableRow(line) && isSeparator(all[at + 1] ?? ''))
+  const start = all.findIndex(line => ITEM.test(line))
   if (start === -1) return null
   const lead = all.slice(0, start).join('\n').trim()
   if (/\n\s*\n/.test(lead)) return null
 
+  // The list runs over items, their indented outcome lines, and blank lines.
   const lines = all.slice(start)
-  const end = lines.findIndex(line => !isTableRow(line))
+  const end = lines.findIndex(line => line.trim() !== '' && !ITEM.test(line) && !/^\s/.test(line))
   if (end === -1) return null
 
-  // Topic cell -> "#" cell, so a section's button shows its row number.
+  // Topic -> item number, so a section's button shows its number.
   const rowNumber = new Map<string, string>()
-  for (const row of lines.slice(2, end)) {
-    const cells = row.split('|').map(cell => cell.trim())
-    if (cells[1] && cells[2]) rowNumber.set(cells[2], cells[1])
+  for (const line of lines.slice(0, end)) {
+    const [, number, topic] = ITEM.exec(line) ?? []
+    if (number && topic) rowNumber.set(topic, number)
   }
+  // The `---` right after the list separates it from the details, so it does
+  // not start closing text the way a later `---` does.
+  const below = isRule(lines[end] ?? '') ? end + 1 : end
 
   // A section's body is everything from its Topic to the next Topic, tables and
   // code blocks included. A `---` line, the style's marker for closing text,
@@ -34,7 +39,7 @@ export const split = (text: string): { lead: string; table: string; sections: Se
   let current: Section | undefined
   let isClosed = false
   let inFence = false
-  for (const line of lines.slice(end)) {
+  for (const line of lines.slice(below)) {
     if (/^\s*(```|~~~)/.test(line)) inFence = !inFence
     const topic = inFence ? undefined : /^\*\*(.+)\*\*\s*$/.exec(line)?.[1]
     if (topic !== undefined) {
@@ -43,7 +48,7 @@ export const split = (text: string): { lead: string; table: string; sections: Se
       isClosed = false
       continue
     }
-    if (!inFence && /^\s*---+\s*$/.test(line)) {
+    if (!inFence && isRule(line)) {
       isClosed = true
       continue
     }
@@ -58,5 +63,5 @@ export const split = (text: string): { lead: string; table: string; sections: Se
   }
   if (sections.length === 0) return null
 
-  return { lead, table: lines.slice(0, end).join('\n'), sections }
+  return { lead, summary: lines.slice(0, end).join('\n').trim(), sections }
 }

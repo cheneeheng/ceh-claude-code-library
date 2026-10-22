@@ -16,7 +16,7 @@ export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'details',
-      description: 'Fold or unfold the details under summary tables: /details on|off',
+      description: 'Fold or unfold the details under summaries: /details on|off',
     })
 
     return next(e)
@@ -27,7 +27,7 @@ export const register: Register = on => {
     const isAll = arg === 'on' ? true : arg === 'off' ? false : !(await read($, showAll))
     await update($, showAll, () => isAll)
 
-    return { text: isAll ? 'Details shown under summary tables.' : 'Details folded under summary tables.' }
+    return { text: isAll ? 'Details shown under summaries.' : 'Details folded under summaries.' }
   })
 
   on('ui.render', { component: 'SessionMode' }, async ($, e, next) =>
@@ -69,7 +69,7 @@ export const register: Register = on => {
       <Box flexDirection="column">
         {!parts && rest.trim() && <Markdown text={rest.trim()} />}
         {parts?.lead && <Markdown text={parts.lead} />}
-        {parts && <Markdown text={parts.table} />}
+        {parts && <Markdown text={parts.summary} />}
         {parts?.sections.map((section, index) => {
           const id = `${e.requestId}#${index}`
           const isOpen = opened.includes(id)
