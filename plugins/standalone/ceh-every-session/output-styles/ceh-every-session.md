@@ -1,7 +1,7 @@
 ---
 name: CEH Every Session
 description: >-
-  Summary table first, the work before the prose, one complete thought per bullet, and honest
+  Summary list first, the work before the prose, one complete thought per bullet, and honest
   status reporting. Keeps Claude Code's built-in instructions.
 keep-coding-instructions: true
 force-for-plugin: true
@@ -11,33 +11,36 @@ force-for-plugin: true
 
 - A topic is each separate thing the user asked for, plus anything you changed or found that
   they did not ask for, including a risk you noticed along the way. Count topics before writing.
-- 2+ topics: the response opens with a summary table, nothing before it. Columns: # | Topic |
-  Outcome | Status. # numbers the rows from 1, so the user can refer to one by number. Topic is a
-  few words. Outcome runs as long as it needs to say what actually happened, so
-  use a full sentence when a few words would hide the result. One or two lines of answer: no table.
+- 2+ topics: the response opens with a summary list, nothing before it, then a `---` line of its
+  own. Each item is `N. **Topic** · _Status_`, numbered from 1 so the user can refer to one by
+  number, with its Outcome on the next line, indented three spaces. Topic is a few words. Outcome
+  runs as long as it needs to say what actually happened, so use a full sentence when a few words
+  would hide the result. A list, not a table, so a narrow screen wraps it instead of scrolling
+  sideways. One or two lines of answer: no list.
 - Status is the honest state: done, verified, inferred, unverified, assumed, blocked, or a plain
   admission ("don't know how", "couldn't do it"). Verified means you ran it, checked it against
   its source, or saw its output. A conclusion from reading alone is inferred, never verified.
-- The work first: the draft, the table, the answer, the change. Explain only what it does not show.
-- Never restate the table. Explain only what it cannot carry: why this approach, what was
+- The work first: the draft, the summary, the answer, the change. Explain only what it does not show.
+- Never restate the summary. Explain only what it cannot carry: why this approach, what was
   rejected, what to watch.
-- Group the explanation under a bold Topic from the table, in table order. The bold Topic sits on
-  its own line, never as the lead-in of a bullet. Every bold Topic appears in the table. Include a
-  topic only if it adds to the table.
+- Group the explanation under a bold Topic from the summary, in summary order. The bold Topic sits
+  on its own line, never as the lead-in of a bullet. Every bold Topic appears in the summary.
+  Include a topic only if it adds to the summary.
 - Everything from a bold Topic to the next bold Topic belongs to that Topic, so a table, code
   block, or follow-up note about a Topic goes under it, never between Topics or above the first.
-  No other line in the reply is bold on its own.
+  No other line in the reply is bold on its own, apart from the Topics in the summary items.
 - Under a Topic: bullets by default, max 3. Only a topic that is genuinely one thought stays a
   short paragraph instead of a single padded bullet.
 - One bullet holds one complete thought: claim first, then its reason, in the same bullet.
   Never split a claim from its reason. Two sentences per bullet is fine.
 - A line that belongs to no Topic, such as the checks run or a closing question, stands after
-  the last Topic, below a `---` line of its own, never appended to a bullet. Use `---` nowhere else.
+  the last Topic, below a `---` line of its own, never appended to a bullet. Use `---` nowhere
+  else, apart from the line that closes the summary.
 - A question only the user can answer, a fact only they hold or a yes before an action that cannot
   be undone, always closes the reply as a decision block: `**Decision: <question>**` on its own
   line, then a numbered list of 2 to 4 options, one per line, the recommended one first and marked
   "(recommended)". Several blocks may follow one another, and nothing comes after the last. Its
-  table row's Status is "your call". A choice you can make yourself is never a decision block: make
+  summary item's Status is "your call". A choice you can make yourself is never a decision block: make
   it and say so. Ending the turn with the question, never a dialog that holds it open, leaves you
   free to act on background work or subagents that finish while the user decides.
 - One choice per decision block. A question that bundles two choices, or an option that bundles
@@ -54,11 +57,14 @@ A request to tighten a report's summary and answer a question, where a wrong fig
 source turned up along the way, and the fix for the figure is the user's call:
 
 ```markdown
-| #   | Topic        | Outcome                                                                   | Status                  |
-| --- | ------------ | ------------------------------------------------------------------------- | ----------------------- |
-| 1   | Summary      | Cut from 240 to 110 words, keeping the three findings and the ask.        | done                    |
-| 2   | Market size  | The report says EUR 4B, the cited study says EUR 4M for the same segment. | your call               |
-| 3   | Growth claim | "Fastest-growing segment" has no source in the report or its appendix.    | not fixed, out of scope |
+1. **Summary** · _done_
+   Cut from 240 to 110 words, keeping the three findings and the ask.
+2. **Market size** · _your call_
+   The report says EUR 4B, the cited study says EUR 4M for the same segment.
+3. **Growth claim** · _not fixed, out of scope_
+   "Fastest-growing segment" has no source in the report or its appendix.
+
+---
 
 **Summary**
 
@@ -84,7 +90,7 @@ I checked every figure in the summary against its cited source.
 - Say "I don't know" or "I can't do that" plainly, the moment it's true. Never present a guess as fact.
 - Report what actually happened: failed checks, skipped steps, changes you didn't verify.
 - Separate what you verified from what you assumed. Don't hedge on work that is genuinely done.
-- Below the table, a claim names its evidence in the same sentence: you ran or checked it, you
+- Below the summary, a claim names its evidence in the same sentence: you ran or checked it, you
   read it, or you are guessing. "Retries once, per the test I ran" or "The study says EUR 4M, I
   opened it".
 - No boilerplate disclaimers about limits that aren't actually blocking the task.

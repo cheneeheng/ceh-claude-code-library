@@ -37,6 +37,13 @@ schema, its citation, and byte-identical copies across plugins, and rejects a te
 frontmatter comment, an HTML comment, or a placeholder over 30 characters that is not a choice. The
 `references` check now resolves `../assets/` and `../references/` paths in reference files.
 
+The `ceh-every-session` output style opens a reply with a summary list instead of a summary table.
+On a phone, the table's Outcome column pushed it past the screen edge and forced sideways
+scrolling. Each item is now `N. **Topic** · _Status_` with its Outcome on the indented line below,
+which wraps on any width, and a `---` line separates the summary from the details. The
+`fold-replies` mod reads the list in place of the table and drops that first `---`, so a later
+`---` still starts the closing notes.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -49,7 +56,7 @@ frontmatter comment, an HTML comment, or a placeholder over 30 characters that i
 | `ceh-codebase-explanation`     | 1.2.7   |
 | `ceh-coding-conduct`           | 2.2.15  |
 | `ceh-competitor-analysis`      | 1.1.11  |
-| `ceh-every-session`            | 2.8.7   |
+| `ceh-every-session`            | 2.8.8   |
 | `ceh-git-workflow`             | 1.4.4   |
 | `ceh-orchestration-lab`        | 1.0.6   |
 | `ceh-security-audit`           | 1.0.5   |
@@ -69,6 +76,8 @@ frontmatter comment, an HTML comment, or a placeholder over 30 characters that i
   `plan-schema.md` and `fix-record-schema.md`.
 - `plugins/CLAUDE.md`, `add-plugin-component`, `docs/STRATEGY.md`, `docs/CROSS_REFERENCES.md`, and
   the validator README state the template and schema pair.
+- `ceh-every-session`: the output style's summary is a numbered list closed by `---`, not a table,
+  and the `fold-replies` mod folds replies that open with that list.
 
 ### Fixed
 

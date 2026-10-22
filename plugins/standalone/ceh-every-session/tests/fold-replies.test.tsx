@@ -2,10 +2,12 @@ import type { On } from 'claude-code'
 import { expect, test } from 'claude-code/testing'
 
 const REPLY = [
-  '| #   | Topic  | Outcome    | Status |',
-  '| --- | ------ | ---------- | ------ |',
-  '| 1   | Alpha  | Did alpha. | done   |',
-  '| 2   | Beta   | Did beta.  | done   |',
+  '1. **Alpha** · _done_',
+  '   Did alpha.',
+  '2. **Beta** · _done_',
+  '   Did beta.',
+  '',
+  '---',
   '',
   '**Alpha**',
   '',
@@ -50,10 +52,11 @@ const engineDraws = (on: On) =>
     return <Text>{e.props.text}</Text>
   })
 
-test('a reply with a summary table folds each topic behind its own button', async $ => {
+test('a reply with a summary list folds each topic behind its own button', async $ => {
   for (const surface of ['terminal', 'desktop'] as const) {
     const ui = await $.ui.mount({ surface, ...message(REPLY) })
-    expect(await ui.find({ type: 'Markdown', text: /\| 1 +\| Alpha/ })).toBeDefined()
+    const summary = await ui.find({ type: 'Markdown', text: /^1\. \*\*Alpha\*\*/ })
+    expect(summary?.text).toMatch(/Did beta\.$/)
     expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
     expect((await ui.find({ key: 'reply-1#0' }))?.text).toMatch(/▸ 1 Alpha/)
 
@@ -67,16 +70,16 @@ test('a reply with a summary table folds each topic behind its own button', asyn
   }
 })
 
-test('a lead-in line before the summary table shows as is, and the topics still fold', async $ => {
+test('a lead-in line before the summary list shows as is, and the topics still fold', async $ => {
   const ui = await $.ui.mount({ surface: 'terminal', ...message(`I agree, with one caveat.\n\n${REPLY}`) })
   expect(await ui.find({ type: 'Markdown', text: /^I agree, with one caveat\.$/ })).toBeDefined()
-  expect(await ui.find({ type: 'Markdown', text: /\| 1 +\| Alpha/ })).toBeDefined()
+  expect(await ui.find({ type: 'Markdown', text: /^1\. \*\*Alpha\*\*/ })).toBeDefined()
   expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
   expect((await ui.find({ key: 'reply-1#0' }))?.text).toMatch(/▸ 1 Alpha/)
   await ui.unmount()
 })
 
-test('a reply with two paragraphs before its first table is drawn whole by the engine', async ($, on) => {
+test('a reply with two paragraphs before its summary list is drawn whole by the engine', async ($, on) => {
   engineDraws(on)
   const ui = await $.ui.mount({ surface: 'terminal', ...message(`First point.\n\nSecond point.\n\n${REPLY}`) })
   expect(await ui.find({ type: 'Button' })).toBeUndefined()
@@ -161,7 +164,14 @@ test('a decision line in the middle of a reply stays text', async ($, on) => {
   await ui.unmount()
 })
 
-test('a reply with no summary table is drawn whole by the engine', async ($, on) => {
+test('a numbered list without a status is not a summary and is drawn whole', async ($, on) => {
+  engineDraws(on)
+  const ui = await $.ui.mount({ surface: 'terminal', ...message('1. **Install** the CLI\n2. **Run** it\n\n**Install**\n\n- detail') })
+  expect(await ui.find({ type: 'Button' })).toBeUndefined()
+  await ui.unmount()
+})
+
+test('a reply with no summary list is drawn whole by the engine', async ($, on) => {
   engineDraws(on)
   const ui = await $.ui.mount({ surface: 'terminal', ...message('Just a short answer.') })
   expect(await ui.find({ type: 'Text', text: /Just a short answer/ })).toBeDefined()
