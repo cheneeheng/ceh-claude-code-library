@@ -1,9 +1,9 @@
 ---
 name: write-build-plan
 description: >-
-  Load this skill when deciding how to build an app or feature before writing code: one committed
-  plan file with scope, design decisions, and phases that each end in a runnable check. Trigger on
-  "plan this app", "plan the next feature", "how should we build this".
+  Load this skill before the first code of a new app, tool, component, or feature that has no plan
+  yet, even when the user only says build or create it: one committed plan file with scope, design
+  decisions, and checked phases. Trigger on "create a new tool", "build me X", "plan this app".
 argument-hint: "[what to build]"
 disable-model-invocation: false
 user-invocable: true
