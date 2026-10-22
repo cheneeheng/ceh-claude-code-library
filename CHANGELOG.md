@@ -65,6 +65,12 @@ remember it and it breaks when a file name changes. Every other handoff file sta
 `product/`. A new rule, `.claude/rules/decision-artifact-locations.md`, records the split so it is
 not reopened, and `docs/STRATEGY.md` explains it.
 
+`plugins/CLAUDE.md` now says why `ceh-ui-design:design-ui` and
+`ceh-web-frontend:visualize-graph-cytoscape` may keep their `references/` files: each is a catalog a
+run reads only part of. A competitor analysis of diagram-design, which ships one router `SKILL.md`
+plus a reference file per diagram type, raised whether to allow that pattern generally. It stays an
+exception, because a rule that applies on every run can be skipped behind a link.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -109,6 +115,8 @@ not reopened, and `docs/STRATEGY.md` explains it.
   the old `product/` path. The plan schema, Build's plan intake, Tell's handoff reads, `whats-next`,
   `record-project-decisions`, `docs/STRATEGY.md`, `docs/VISION.md`, and `docs/GETTING_STARTED.md`
   name the new path.
+- `plugins/CLAUDE.md` gives the reason the two `references/` exceptions stay, and keeps rules that
+  apply on every run inline.
 
 ### Fixed
 
