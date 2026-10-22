@@ -174,7 +174,7 @@ current repo: `content/`, `posts/`, `_posts/`, `src/content/`, `blog/`), and the
 inside a blog repo the post is a file matching the existing posts' filename pattern and front matter,
 with the title and meta description in the front matter, and otherwise a file in
 `.agents_workspace/blog/` named `<YYYY-MM-DD>-<slug>`, filling the plugin's
-`references/blog-draft.template.md`, shown in chat too.
+`assets/blog-draft.template.md`, shown in chat too.
 
 ## Blog repurpose handoff line
 
@@ -316,12 +316,12 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 **Canonical:** `plugins/standalone/ceh-build-planning/references/plan-format.md` — whole file,
 shared there by `write-build-plan` and `review-build-plan`
 
-| Copy                                                                                                          | Section    | Diverges |
-| ------------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-format.md`                 | whole file | none     |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-format.md`   | whole file | none     |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan.template.md`               | whole file | none     |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan.template.md` | whole file | none     |
+| Copy                                                                                                        | Section    | Diverges |
+| ----------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-format.md`               | whole file | none     |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-format.md` | whole file | none     |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/plan.template.md`                 | whole file | none     |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/assets/plan.template.md`   | whole file | none     |
 
 **Shared:** the whole plan format and its template `plan.template.md` (canonical next to
 `plan-format.md` in `ceh-build-planning/references/`), byte for byte: the `product/plans/<slug>.md` location, the
@@ -334,12 +334,12 @@ sections.
 
 ## Architecture template
 
-**Canonical:** `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/references/architecture.template.md`
+**Canonical:** `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/assets/architecture.template.md`
 — whole file
 
-| Copy                                                                                                    | Section    | Diverges |
-| ------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/architecture.template.md` | whole file | none     |
+| Copy                                                                                                | Section    | Diverges |
+| --------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/architecture.template.md` | whole file | none     |
 
 **Shared:** the `product/ARCHITECTURE.md` layout: its `schema:` line, the Overview, the diagram
 sections, and the Key Decisions entry shape. `document-architecture` owns the file and
@@ -351,10 +351,10 @@ installed alone. `validate.py` fails when the two differ.
 **Canonical:** `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/references/fix-record-format.md`
 — whole file
 
-| Copy                                                                                     | Section    | Diverges |
-| ---------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record-format.md`   | whole file | none     |
-| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record.template.md` | whole file | none     |
+| Copy                                                                                   | Section    | Diverges |
+| -------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record-format.md` | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/assets/fix-record.template.md`   | whole file | none     |
 
 **Shared:** the whole fix record format and its template `fix-record.template.md` (canonical next to
 the canonical format file), byte for byte: the `product/fixes/<slug>.md` location and
@@ -434,8 +434,8 @@ fails. The doc carries the two stops as reading material.
 | Copy                                                                      | Section    | Diverges |
 | ------------------------------------------------------------------------- | ---------- | -------- |
 | `plugins/standalone/ceh-workflow-runner/references/flow-config-schema.md` | whole file | none     |
-| `plugins/standalone/ceh-workflow-runner/references/run-state.template.md` | whole file | none     |
-| `plugins/standalone/ceh-workflow-runner/references/approval.template.md`  | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/assets/run-state.template.md`     | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/assets/approval.template.md`      | whole file | none     |
 
 **Shared:** the entire `flow.yaml` contract: keys, stage kinds, validation rules, the `run-state.md`
 layout and its template, the approval file template, and the `FLOW STATUS:` line. The two

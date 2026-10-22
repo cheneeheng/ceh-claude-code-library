@@ -9,6 +9,45 @@ before this repo live in
 
 ---
 
+## 2026-10-22
+
+Output templates moved from `references/` to `assets/`. A template is a file the skill copies and
+fills, so it belongs with the other bundled files a skill copies, and `references/` goes back to
+material a skill reads. Every `<schema>.template.md` moved with its content unchanged, and every
+skill, reference file, and doc that cites one now names the `assets/` path. The `templates` check
+in `validate.py` now requires an `assets/` folder, and the `references` check resolves `assets/`
+paths and `${CLAUDE_PLUGIN_ROOT}/assets/` the same way it resolves `references/`.
+
+### Plugin versions
+
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-blog`                     | 1.0.12  |
+| `ceh-build-from-plan`          | 1.0.7   |
+| `ceh-build-planning`           | 1.1.7   |
+| `ceh-business-plan`            | 1.1.8   |
+| `ceh-check-build-against-plan` | 1.0.7   |
+| `ceh-codebase-explanation`     | 1.2.6   |
+| `ceh-coding-conduct`           | 2.2.14  |
+| `ceh-competitor-analysis`      | 1.1.10  |
+| `ceh-every-session`            | 2.8.6   |
+| `ceh-git-workflow`             | 1.4.3   |
+| `ceh-orchestration-lab`        | 1.0.5   |
+| `ceh-security-audit`           | 1.0.4   |
+| `ceh-session-diagnosis`        | 1.0.6   |
+| `ceh-testing`                  | 1.4.10  |
+| `ceh-usability-audit`          | 1.1.8   |
+| `ceh-workflow-builder`         | 1.3.9   |
+| `ceh-workflow-runner`          | 1.0.7   |
+
+### Changed
+
+- Every `*.template.md` under a skill's or plugin's `references/` now lives in `assets/`.
+- `plugins/CLAUDE.md`, `add-plugin-component`, `docs/STRATEGY.md`, and the validator README say
+  templates live in `assets/`.
+
+---
+
 ## 2026-10-21
 
 `docs/IDEAS.md` records unwrapped Markdown prose as on hold, so the token saving gets revisited

@@ -1,4 +1,4 @@
-"""references: `references/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references}/...` and
+"""references: `references/...`, `assets/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references,assets}/...` and
 `${CLAUDE_SKILL_DIR}/...` mentions in SKILL.md/agent files resolve to a real file."""
 
 from __future__ import annotations
@@ -12,9 +12,11 @@ from common import doc_files, fail, main, rel
 def check() -> None:
     # Anchor on a top-level `references/` token (not preceded by another path
     # segment) so example paths like `docs/references/...` are not matched.
-    ref_pat = re.compile(r"(?<![\w./-])references/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+")
+    ref_pat = re.compile(
+        r"(?<![\w./-])(?:references|assets)/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+"
+    )
     script_pat = re.compile(
-        r"\$\{CLAUDE_PLUGIN_ROOT\}/((?:scripts|references)/[A-Za-z0-9_./-]+)"
+        r"\$\{CLAUDE_PLUGIN_ROOT\}/((?:scripts|references|assets)/[A-Za-z0-9_./-]+)"
     )
     # ${CLAUDE_SKILL_DIR} is substituted by Claude Code with the skill's own directory,
     # so these resolve relative to the SKILL.md, not the plugin root.

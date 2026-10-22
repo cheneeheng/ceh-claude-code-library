@@ -67,9 +67,9 @@ and the ask states the amount, the months of runway it buys, and the milestones 
 ## Output
 
 `product/INVESTOR_DECK.md`, beside `product/BUSINESS_PLAN.md`, fills
-`references/investor-deck.template.md`, one numbered `##` slide per headline claim.
+`assets/investor-deck.template.md`, one numbered `##` slide per headline claim.
 
-`product/INVESTOR_OUTREACH.md`, beside it, fills `references/investor-outreach.template.md`.
+`product/INVESTOR_OUTREACH.md`, beside it, fills `assets/investor-outreach.template.md`.
 
 ## Stop conditions
 

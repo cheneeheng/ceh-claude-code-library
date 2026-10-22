@@ -128,7 +128,7 @@ strategy, pick between fundamentally different patterns, plan a major dependency
 a prior decision in a new version.
 
 Append entries to a `## Key Decisions` section at the bottom of `ARCHITECTURE.md`, newest last, in
-the entry shape of `references/architecture.template.md`.
+the entry shape of `assets/architecture.template.md`.
 
 - **Never delete a decision.** To change one, append a new entry and mark the old one
   `Superseded by <date title>`. The trail is the cross-version narrative.
@@ -138,7 +138,7 @@ the entry shape of `references/architecture.template.md`.
 ## Storage
 
 `product/ARCHITECTURE.md` in the target repo, committed, unless the repo's `CLAUDE.md` names another
-path. A new file starts as a copy of `references/architecture.template.md`, and an existing one
+path. A new file starts as a copy of `assets/architecture.template.md`, and an existing one
 without its `schema:` line gets the template's frontmatter on the next update. Later planning reads it and a fresh clone must keep the decision trail, so it never lives in
 a git-ignored folder. `product/` holds the files the people and agents building the product read,
 and `docs/` is left to users of the product. When a `.agents_workspace/ARCHITECTURE.md` from an

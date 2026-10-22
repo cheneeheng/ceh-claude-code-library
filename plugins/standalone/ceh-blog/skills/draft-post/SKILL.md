@@ -43,7 +43,7 @@ Read the previous posts, especially the latest episode in the same series. Then:
   finished.
 - **Capture the voice once**: if the blog has three or more posts, the target repo's `CLAUDE.md`
   defines no blog voice, and `.agents_workspace/blog-voice.md` does not exist yet, write that file
-  from the posts, filling `${CLAUDE_PLUGIN_ROOT}/references/blog-voice.template.md`, each point
+  from the posts, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-voice.template.md`, each point
   backed by a quoted line. On later
   runs read the file instead of re-deriving it, and offer once to move it into `CLAUDE.md` so it
   outlives the workspace. The profile governs vocabulary, register, and rhythm. The banned tells
@@ -319,7 +319,7 @@ they cost the author, not warnings issued to the reader.
 
 **Final draft**: complete post, ready to copy-paste — title; body (subheadings only if length warrants); one-line meta description `> **Meta:** [description]` — ~150 chars, specific angle, readable without the title.
 
-**Where it goes:** inside a blog repo (a posts directory was found), write the post as a new file there, matching the existing posts' filename pattern and front matter; the title and meta description go into the front matter fields the other posts use (`title`, `description`, or equivalent) instead of the `> **Meta:**` line. Mark it as a draft if the front matter has a draft flag. Otherwise save the draft to `.agents_workspace/blog/<YYYY-MM-DD>-<slug>.md`, the slug from the title in kebab case, filling `${CLAUDE_PLUGIN_ROOT}/references/blog-draft.template.md` (its `title` and `description` replace the title line and the `> **Meta:**` line), and show it in chat too, so an interview's post outlives the session. A post written into a blog repo follows that blog's front matter, never the template, because the template's fields would publish with it.
+**Where it goes:** inside a blog repo (a posts directory was found), write the post as a new file there, matching the existing posts' filename pattern and front matter; the title and meta description go into the front matter fields the other posts use (`title`, `description`, or equivalent) instead of the `> **Meta:**` line. Mark it as a draft if the front matter has a draft flag. Otherwise save the draft to `.agents_workspace/blog/<YYYY-MM-DD>-<slug>.md`, the slug from the title in kebab case, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-draft.template.md` (its `title` and `description` replace the title line and the `> **Meta:**` line), and show it in chat too, so an interview's post outlives the session. A post written into a blog repo follows that blog's front matter, never the template, because the template's fields would publish with it.
 
 ## Hands off to
 

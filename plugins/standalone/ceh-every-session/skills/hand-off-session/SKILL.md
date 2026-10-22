@@ -28,7 +28,7 @@ spare handoff file costs nothing and a missing one loses the state.
    was already authorized. Saving a handoff authorizes no commit, stash, or push.
 3. **Write the handoff file** to
    `.agents_workspace/handoff/HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.md` in the working
-   directory, filling `references/handoff.template.md`. Create the directory if needed. Take the timestamp from
+   directory, filling `assets/handoff.template.md`. Create the directory if needed. Take the timestamp from
    a single `date` call and the session id prefix from the first 8 characters of
    `${CLAUDE_SESSION_ID}`. A caller that passes its own header lines (a usage window, a reason)
    gets them added under the title.
@@ -65,4 +65,4 @@ each save is a new file, never an edit of an old one.
 
 ## Output
 
-The handoff file fills `references/handoff.template.md`.
+The handoff file fills `assets/handoff.template.md`.

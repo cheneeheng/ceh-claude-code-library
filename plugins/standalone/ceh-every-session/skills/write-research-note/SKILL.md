@@ -55,4 +55,4 @@ spot-checked, and its path and short answer are reported.
 ## Output
 
 Save to `.agents_workspace/research/<YYYYMMDD>-<topic>.md` in the working directory, creating the
-directory if needed, filling `references/research-note.template.md`.
+directory if needed, filling `assets/research-note.template.md`.

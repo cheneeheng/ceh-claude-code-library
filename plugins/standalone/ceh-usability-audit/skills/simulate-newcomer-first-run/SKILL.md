@@ -241,7 +241,7 @@ passing.
 Write `.agents_workspace/ux-audits/<target>/run-<NNN>/UX_AUDIT.md`, where `<NNN>` is a zero-padded
 sequential run index so a re-run never overwrites a prior run's evidence. Create missing parents.
 Keep raw walker transcripts in that run folder — a finding without its transcript is an opinion.
-The report fills `references/first-run-audit.template.md`.
+The report fills `assets/first-run-audit.template.md`.
 
 ## Stop conditions
 

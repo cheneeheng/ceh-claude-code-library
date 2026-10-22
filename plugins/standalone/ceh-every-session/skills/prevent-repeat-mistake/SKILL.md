@@ -74,6 +74,6 @@ them. When both files exist, each links the other through `other_file`. Reply wi
 a later session can apply it from the file alone. When a draft is applied or rejected, update its
 Status in the file it was saved in.
 
-Each file fills `references/repeat-mistake.template.md`: the table, then for each rung chosen one
+Each file fills `assets/repeat-mistake.template.md`: the table, then for each rung chosen one
 line on why the rungs above it did not fit, then each pending draft in full. Appending to an
 existing file adds rows and drafts, and leaves its frontmatter as it is.

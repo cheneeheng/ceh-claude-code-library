@@ -46,8 +46,8 @@ def check() -> None:
                 fail(where, f"must open with 'schema: {stem}/v<N>'")
             elif m.group(1) != stem:
                 fail(where, f"schema name '{m.group(1)}' != file name '{stem}'")
-            if t.parent.name != "references":
-                fail(where, "templates live in a references/ folder")
+            if t.parent.name != "assets":
+                fail(where, "templates live in an assets/ folder")
             if t.name not in cited:
                 fail(where, "no skill, agent, or reference file in its plugin cites it")
             by_name[t.name].append(t)

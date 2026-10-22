@@ -68,7 +68,7 @@ Three rules hold for every handoff file:
    never forces an extra install. A format two plugins share is duplicated into both and registered
    in `docs/CROSS_REFERENCES.md`, as `plan-format.md` already is.
 3. **Every saved output has a versioned template.** A skill that saves a file fills a
-   `<schema>.template.md` in a `references/` folder, whose frontmatter opens with
+   `<schema>.template.md` in an `assets/` folder, whose frontmatter opens with
    `schema: <schema>/v<N>`, and the saved file keeps that line, so a reader can tell which format a
    file follows. The version goes up when a required field or heading is renamed or removed,
    because that is the change that breaks a reader. `validate.py` checks that each template opens
