@@ -21,9 +21,9 @@ Do this before reading any code for the task.
 4. Find the transcript: the file matching `~/.claude/projects/*/<session id>.jsonl`.
 5. Check whether `CLAUDE_CODE_SUBAGENT_MODEL` is set. It overrides the model of every subagent
    dispatch, so a set value makes the run's worker model meaningless. Record it either way.
-6. Write `run.md` from `<plugin root>/references/run.template.md`, filling every field known now.
+6. Write `run.md` from `<plugin root>/assets/run.template.md`, filling every field known now.
 7. Append one row to `.agents_workspace/orchestration-lab/runs.md`, creating it as a copy of
-   `<plugin root>/references/runs-index.template.md` if missing, with Outcome `running`.
+   `<plugin root>/assets/runs-index.template.md` if missing, with Outcome `running`.
 
 ## While the run is open
 

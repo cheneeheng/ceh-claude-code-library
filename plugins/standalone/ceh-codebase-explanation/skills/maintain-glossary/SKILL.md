@@ -48,5 +48,5 @@ the code or text that still uses a rejected alias is reported.
 
 ## Output
 
-`GLOSSARY.md` follows `references/glossary.template.md`. A new file is a copy of it, and an
+`GLOSSARY.md` follows `assets/glossary.template.md`. A new file is a copy of it, and an
 existing one without its `schema:` line gets the template's frontmatter on the next edit.

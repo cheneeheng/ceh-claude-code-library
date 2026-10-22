@@ -160,7 +160,7 @@ utilities and who imports them. Write what the reader cannot guess.
 
 ### Template
 
-Fill `references/codebase-explained.template.md`: its frontmatter, then its sections in that
+Fill `assets/codebase-explained.template.md`: its frontmatter, then its sections in that
 order. The `src/api/` component and the Authenticated request flow in it are worked examples of
 the four-part shape and a key flow, replaced by the repo's own.
 

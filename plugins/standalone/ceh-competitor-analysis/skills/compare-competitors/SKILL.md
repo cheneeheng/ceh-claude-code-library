@@ -62,7 +62,7 @@ the Markdown.
 
 ## Output
 
-`comparison.md` fills `references/competitor-comparison.template.md`. The HTML page renders the
+`comparison.md` fills `assets/competitor-comparison.template.md`. The HTML page renders the
 body, not the frontmatter.
 
 ## Hands off to

@@ -121,7 +121,7 @@ overwrites the first one's spec.
 Fixed headings, in this order, one per question. The consumer gates on them by name, so keep all
 nine as written and in this order — an unanswered question keeps its heading and says so underneath.
 Anything you want to say that no heading covers belongs in the reply, not in a tenth section. A
-new spec is a copy of `references/workflow-spec.template.md`.
+new spec is a copy of `assets/workflow-spec.template.md`.
 
 Under 2, 3, and 4, keep the steps numbered and use the same number for the same step across all
 three — the next skill reads them as one table, and a step that is `3.` in one section and `4.` in

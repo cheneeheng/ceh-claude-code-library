@@ -284,7 +284,7 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
 
 Opt-in only. Keep one file per subject at `.agents_workspace/learning/<subject>.md`, so a later
 session starts from what the reader already knows instead of from zero. A new file is a copy of
-`references/learning.template.md`.
+`assets/learning.template.md`.
 
 - **On load**, read the file before explaining anything. Ask two Self-test questions first, the
   missed ones before the oldest, and record each answer. A term the reader cannot use unaided goes

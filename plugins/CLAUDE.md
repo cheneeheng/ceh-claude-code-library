@@ -10,10 +10,10 @@ one heading set, and one voice. Frontmatter uses only the fields in the official
 [skills](https://code.claude.com/docs/en/skills#frontmatter-reference) and
 [subagents](https://code.claude.com/docs/en/sub-agents#supported-frontmatter-fields) references.
 
-Each skill is self-contained with inline content. `references/` is for three cases only, the
-third being the output templates below:
+Each skill is self-contained with inline content. `references/` is for two cases only. Output
+templates (below) live in `assets/` instead:
 
-- **A schema or template used by several skills.** Skills of one plugin share a single copy in the
+- **A schema used by several skills.** Skills of one plugin share a single copy in the
   plugin's own `references/`, cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`, so it needs no
   `docs/CROSS_REFERENCES.md` entry. A file used by one skill lives in that skill's `references/`.
   Only a file needed by skills of different plugins is copied word-for-word into each and
@@ -24,8 +24,8 @@ third being the output templates below:
 Never for general reference material a model already knows.
 
 **Every file a skill saves has a versioned template**, `<schema>.template.md` in the skill's or
-the plugin's `references/`, its frontmatter opening with
-`schema: <schema>/v<N>`. The skill body cites the template instead of spelling the format inline,
+the plugin's `assets/` (cited as `assets/<file>` or `${CLAUDE_PLUGIN_ROOT}/assets/<file>`), its
+frontmatter opening with `schema: <schema>/v<N>`. The skill body cites the template instead of spelling the format inline,
 so the format lives in one file and the saved file names its version. Bump `v<N>` when a required
 field or heading is renamed or removed. Out of scope: what the user ships (code, tests, docs
 pages, blog posts in a blog repo, `SKILL.md` files a skill generates) and `flow.yaml`, which carries

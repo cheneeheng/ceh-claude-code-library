@@ -68,7 +68,7 @@ quotes the plan, and the verdict is delivered.
 
 ## Output
 
-The review fills `references/plan-review.template.md`. A row reads like
+The review fills `assets/plan-review.template.md`. A row reads like
 `| 1 | Engineering | blocking | Phase 3 Check: "the app runs" | Proves nothing about the import it builds | uv run pytest tests/test_import.py passes |`.
 
 | Verdict            | When                                                                               |

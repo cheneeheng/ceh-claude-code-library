@@ -199,7 +199,7 @@ Wait for their answers, then address what they raise specifically.
 > **Meta:** [~150-character description — the post's specific angle, not just the broad topic; readable without the title]
 ```
 
-**Where it goes:** if the draft came from a file, show the diagnosis in chat and write the revision back to that file, keeping its front matter and putting the meta description in the front matter's existing description field instead of the `> **Meta:**` line. A draft pasted into chat gets its revision in chat, also saved to `.agents_workspace/blog/<YYYY-MM-DD>-<slug>-edited.md`, the slug from the title in kebab case, filling `${CLAUDE_PLUGIN_ROOT}/references/blog-draft.template.md`, so the revision outlives the session.
+**Where it goes:** if the draft came from a file, show the diagnosis in chat and write the revision back to that file, keeping its front matter and putting the meta description in the front matter's existing description field instead of the `> **Meta:**` line. A draft pasted into chat gets its revision in chat, also saved to `.agents_workspace/blog/<YYYY-MM-DD>-<slug>-edited.md`, the slug from the title in kebab case, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-draft.template.md`, so the revision outlives the session.
 
 ## Stop conditions
 

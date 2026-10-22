@@ -78,5 +78,5 @@ saved.
 
 Save to `.agents_workspace/security-audit/SECURITY_AUDIT-<YYYY-MM-DD>.md`, and reply with the
 counts by severity and the critical and high rows. The report fills
-`references/security-audit.template.md`. Its Findings row is a worked example, replaced by the
+`assets/security-audit.template.md`. Its Findings row is a worked example, replaced by the
 audit's own.

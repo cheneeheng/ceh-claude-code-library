@@ -179,7 +179,7 @@ Mark an unmeasurable criterion **N/A with a reason** and report the gate out of 
 
 Write `.agents_workspace/ux-audits/<target>/run-<NNN>/UX_AUDIT.md` (zero-padded sequential run
 index, so a re-run never overwrites prior evidence). Keep the walker transcripts and any screenshots
-in that folder. The report fills `references/interface-audit.template.md`.
+in that folder. The report fills `assets/interface-audit.template.md`.
 
 ## Stop conditions
 
