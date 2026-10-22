@@ -57,6 +57,7 @@ test('a reply with a summary list folds each topic behind its own button', async
     const ui = await $.ui.mount({ surface, ...message(REPLY) })
     const summary = await ui.find({ type: 'Markdown', text: /^1\. \*\*Alpha\*\*/ })
     expect(summary?.text).toMatch(/Did beta\.$/)
+    expect((await ui.find({ key: 'reply-1#s' }))?.text).toMatch(/^Summary\s*1\. \*\*Alpha\*\*[\s\S]*Did beta\.$/)
     expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
     expect((await ui.find({ key: 'reply-1#0' }))?.text).toMatch(/▸ 1 Alpha/)
 
@@ -179,12 +180,15 @@ test('a reply with no summary list is drawn whole by the engine', async ($, on) 
   await ui.unmount()
 })
 
-test('/details on shows every reply whole, /details off folds again', async ($, on) => {
-  engineDraws(on)
+test('/details on boxes the summary and opens every topic, /details off folds again', async $ => {
   await $.command.run(details('on'))
   const shown = await $.ui.mount({ surface: 'terminal', ...message(REPLY) })
-  expect(await shown.find({ type: 'Text', text: /beta detail/ })).toBeDefined()
-  expect(await shown.find({ type: 'Button' })).toBeUndefined()
+  expect(await shown.find({ key: 'reply-1#s' })).toBeDefined()
+  expect(await shown.find({ text: /beta detail/ })).toBeDefined()
+  expect((await shown.find({ key: 'reply-1#1' }))?.text).toMatch(/▾ 2 Beta/)
+
+  await shown.press({ key: 'reply-1#1' })
+  expect(await shown.find({ text: /beta detail/ })).toBeUndefined()
   await shown.unmount()
 
   await $.command.run(details('off'))
