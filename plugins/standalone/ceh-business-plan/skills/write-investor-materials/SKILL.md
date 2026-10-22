@@ -11,8 +11,8 @@ license: Apache-2.0
 # Write investor materials
 
 Turn the plan into what an investor reads: a slide-by-slide deck outline and the outreach notes
-that get it opened. Done is `product/INVESTOR_DECK.md` and `product/INVESTOR_OUTREACH.md` beside
-the plan, where every slide's claim cites the plan section it comes from with its confidence tag,
+that get it opened. Done is `.agents_workspace/investor/INVESTOR_DECK.md` and
+`.agents_workspace/investor/INVESTOR_OUTREACH.md`, where every slide's claim cites the plan section it comes from with its confidence tag,
 and the ask states the amount, the months of runway it buys, and the milestones it reaches.
 
 ## Procedure
@@ -66,11 +66,13 @@ and the ask states the amount, the months of runway it buys, and the milestones 
 
 ## Output
 
-`product/INVESTOR_DECK.md`, beside `product/BUSINESS_PLAN.md`, fills
-`assets/investor-deck.template.md`, per `references/investor-deck-schema.md`, one numbered `##`
-slide per headline claim.
+Both files stay local, not committed: no other stage reads them, and the outreach notes may name
+investors and contacts.
 
-`product/INVESTOR_OUTREACH.md`, beside it, fills `assets/investor-outreach.template.md`, per
+`.agents_workspace/investor/INVESTOR_DECK.md` fills `assets/investor-deck.template.md`, per
+`references/investor-deck-schema.md`, one numbered `##` slide per headline claim.
+
+`.agents_workspace/investor/INVESTOR_OUTREACH.md`, beside it, fills `assets/investor-outreach.template.md`, per
 `references/investor-outreach-schema.md`.
 
 ## Stop conditions

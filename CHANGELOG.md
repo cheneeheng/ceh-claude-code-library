@@ -44,6 +44,11 @@ which wraps on any width, and a `---` line separates the summary from the detail
 `fold-replies` mod reads the list in place of the table and drops that first `---`, so a later
 `---` still starts the closing notes.
 
+`ceh-business-plan:write-investor-materials` saves the deck outline and outreach notes to
+`.agents_workspace/investor/` instead of `product/`. No other stage reads them, so by the strategy's
+"commit what the next stage reads" test they stay local, and the outreach notes may name investors
+and contacts that do not belong in a committed repo.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -51,7 +56,7 @@ which wraps on any width, and a `---` line separates the summary from the detail
 | `ceh-blog`                     | 1.0.13  |
 | `ceh-build-from-plan`          | 1.0.8   |
 | `ceh-build-planning`           | 1.1.9   |
-| `ceh-business-plan`            | 1.1.9   |
+| `ceh-business-plan`            | 1.1.10  |
 | `ceh-check-build-against-plan` | 1.0.8   |
 | `ceh-codebase-explanation`     | 1.2.7   |
 | `ceh-coding-conduct`           | 2.2.15  |
@@ -78,6 +83,8 @@ which wraps on any width, and a `---` line separates the summary from the detail
   the validator README state the template and schema pair.
 - `ceh-every-session`: the output style's summary is a numbered list closed by `---`, not a table,
   and the `fold-replies` mod folds replies that open with that list.
+- `ceh-business-plan:write-investor-materials`: `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` save
+  to `.agents_workspace/investor/`, not `product/`.
 
 ### Fixed
 

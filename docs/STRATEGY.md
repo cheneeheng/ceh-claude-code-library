@@ -86,7 +86,8 @@ The test is who reads the file.
   This follows vision principle 2: a decision that shapes the repo for others belongs in a
   committed file.
 - **Local in `.agents_workspace/`:** what only one session or its author reads. The decision log,
-  session handoffs, research notes, questionnaires, competitor analyses, reviews and audits whose
+  session handoffs, research notes, questionnaires, competitor analyses, investor decks and
+  outreach notes, reviews and audits whose
   author acts on them (plan, code, and test-suite reviews, blog drafts outside a blog repo), and
   scratch work. A skill whose output would be lost with the chat saves it here.
 
