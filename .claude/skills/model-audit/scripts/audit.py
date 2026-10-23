@@ -266,7 +266,27 @@ def safe_audit(state: dict, run: dict) -> dict:
         return {"plugin": state["plugin"], "error": str(e)}
 
 
+def earlier_rows(lines: list[str], first_cell: str, skip: set[str]) -> list[list[str]]:
+    """Body rows of the table headed by `first_cell` in an earlier same-day SUMMARY.md, minus the
+    rows whose plugin (the first word of the first cell) is in `skip` and the total row."""
+    rows, inside = [], False
+    for line in lines:
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if not line.startswith("|"):
+            inside = False
+        elif cells[0] == first_cell:
+            inside = True
+        elif inside and not cells[0].startswith("-") and cells[0] != "**all**":
+            if cells[0].split()[0] not in skip:
+                rows.append(cells)
+    return rows
+
+
 def write_summary(results: list[dict], run: dict, repo_valid: bool) -> Path:
+    # A second run on the same day keeps the earlier run's rows for plugins it did not re-audit.
+    path = run["out_dir"] / "SUMMARY.md"
+    earlier = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
+    audited = {r["plugin"] for r in results}
     lines = [
         f"# Model audit {run['date']}",
         "",
@@ -275,14 +295,21 @@ def write_summary(results: list[dict], run: dict, repo_valid: bool) -> Path:
         "| Plugin | Report | Guides audited | Pinned files tuned | Strict validate |",
         "| --- | --- | --- | --- | --- |",
     ]
+    rows = earlier_rows(earlier, "Plugin", audited)
     for r in results:
         if "error" in r:
-            lines.append(f"| {r['plugin']} | - | - | - | ERROR: {r['error'][:200]} |")
+            rows.append([r["plugin"], "-", "-", "-", f"ERROR: {r['error'][:200]}"])
             continue
-        lines.append(
-            f"| {r['plugin']} | [{r['plugin']}.md]({r['plugin']}.md) | {', '.join(r['guides']) or '-'} "
-            f"| {', '.join(r['tuned']) or '-'} | {'pass' if r['valid'] else 'FAIL'} |"
+        rows.append(
+            [
+                r["plugin"],
+                f"[{r['plugin']}.md]({r['plugin']}.md)",
+                ", ".join(r["guides"]) or "-",
+                ", ".join(r["tuned"]) or "-",
+                "pass" if r["valid"] else "FAIL",
+            ]
         )
+    lines += [f"| {' | '.join(c)} |" for c in sorted(rows)]
     lines += [
         "",
         f"`validate.py`: {'pass' if repo_valid else 'FAIL'}.",
@@ -299,9 +326,17 @@ def write_summary(results: list[dict], run: dict, repo_valid: bool) -> Path:
         "cacheReadInputTokens",
         "cacheCreationInputTokens",
     ]
-    total = {"label": "**all**", "cost": sum(r["cost"] for r in RUNS)}
-    total |= {k: sum(r[k] for r in RUNS) for k in keys}
-    for r in sorted(RUNS, key=lambda r: r["label"]) + [total]:
+    runs = RUNS + [
+        {
+            "label": c[0],
+            "cost": float(c[-1]),
+            **{k: int(v.replace(",", "")) for k, v in zip(keys, c[1:-1])},
+        }
+        for c in earlier_rows(earlier, "Run", audited)
+    ]
+    total = {"label": "**all**", "cost": sum(r["cost"] for r in runs)}
+    total |= {k: sum(r[k] for r in runs) for k in keys}
+    for r in sorted(runs, key=lambda r: r["label"]) + [total]:
         cells = [r["label"], *(f"{r[k]:,}" for k in keys), f"{r['cost']:.2f}"]
         lines.append(f"| {' | '.join(cells)} |")
     lines += [
@@ -316,7 +351,6 @@ def write_summary(results: list[dict], run: dict, repo_valid: bool) -> Path:
         "`tuning.json`.",
         "- Optional: run `claude plugin eval` from a plugin root before merging.",
     ]
-    path = run["out_dir"] / "SUMMARY.md"
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return path
 

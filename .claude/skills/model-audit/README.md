@@ -135,4 +135,5 @@ Sonnet. Otherwise change `config.json`.
 versions and write the changelog for kept edits, set `tuned-for` for accepted tuning, and optionally
 run `claude plugin eval`. Its Run cost table lists every headless run (`/doctor`, filter, tune)
 with its turns, input, output, cache read and cache write tokens, and cost, plus a total, so you can
-see where the usage went.
+see where the usage went. A second run on the same day merges into that day's `SUMMARY.md`: rows
+for the plugins it re-audits are replaced, all other rows stay, and the total covers both.

@@ -2,9 +2,12 @@
 
 claude-code 2.1.309. Edits applied: no.
 
-| Plugin             | Report                                         | Guides audited                                                        | Pinned files tuned | Strict validate |
-| ------------------ | ---------------------------------------------- | --------------------------------------------------------------------- | ------------------ | --------------- |
-| ceh-build-planning | [ceh-build-planning.md](ceh-build-planning.md) | fable-5, fable-5-1, haiku-5-5, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
+| Plugin              | Report                                           | Guides audited                                                        | Pinned files tuned | Strict validate |
+| ------------------- | ------------------------------------------------ | --------------------------------------------------------------------- | ------------------ | --------------- |
+| ceh-ag-ui           | [ceh-ag-ui.md](ceh-ag-ui.md)                     | fable-5, fable-5-1, haiku-5-5, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
+| ceh-blog            | [ceh-blog.md](ceh-blog.md)                       | fable-5, fable-5-1, haiku-5-5, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
+| ceh-build-from-plan | [ceh-build-from-plan.md](ceh-build-from-plan.md) | fable-5, fable-5-1, haiku-5-5, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
+| ceh-build-planning  | [ceh-build-planning.md](ceh-build-planning.md)   | fable-5, fable-5-1, haiku-5-5, opus-5, opus-5-5, sonnet-5, sonnet-5-5 | -                  | pass            |
 
 `validate.py`: pass.
 

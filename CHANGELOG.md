@@ -43,6 +43,12 @@ That audit used about a third of a 5-hour usage window, and nothing recorded whe
 run, plus a total. A test run asked only to reply "OK" took 5 turns and about 80k tokens, so
 each headless run starts with a large fixed cost.
 
+A second audit the same day, of `ceh-build-planning`, overwrote the first run's `SUMMARY.md`, so
+`audit.py` now merges same-day runs into one summary. That audit also found two contradictions in
+`ceh-build-planning`. Its README said a review's reply opens with `Plan review:`, a heading that only
+appears in the saved file. `review-build-plan` said it "always" appends a Reviewed line, and the
+next sentence exempts specs.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -50,7 +56,7 @@ each headless run starts with a large fixed cost.
 | `ceh-ag-ui`                    | 1.1.4   |
 | `ceh-blog`                     | 1.0.15  |
 | `ceh-build-from-plan`          | 1.0.11  |
-| `ceh-build-planning`           | 1.1.11  |
+| `ceh-build-planning`           | 1.1.12  |
 | `ceh-check-build-against-plan` | 1.0.10  |
 | `ceh-codebase-explanation`     | 1.2.8   |
 
@@ -69,10 +75,13 @@ each headless run starts with a large fixed cost.
 - `ceh-blog:draft-post`: Working principles cut to "Pick the strongest thread", and interview
   rule 1 asks the question that unlocks the post first.
 - `model-audit` `audit.py`: `SUMMARY.md` gains a Run cost table with each run's turns, tokens,
-  and cost.
+  and cost. A second run on the same day merges into that day's summary instead of overwriting it.
 
 ### Fixed
 
+- `ceh-build-planning`: the README's check for `review-build-plan` names the saved review and the
+  reply's verdict, findings, and path. The skill no longer says it "always" appends a Reviewed
+  line, which contradicted its exemption for specs.
 - `plan-schema.md`, in `ceh-build-planning`, `ceh-build-from-plan`, and
   `ceh-check-build-against-plan`: Key Decisions are copied once every phase is done, after the
   build check when it is installed, matching `implement-from-plan`.

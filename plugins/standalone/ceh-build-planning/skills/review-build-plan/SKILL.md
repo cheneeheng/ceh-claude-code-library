@@ -48,7 +48,7 @@ quotes the plan, and the verdict is delivered.
 6. **Grade each finding.** **Blocking**: the build would stop, go wrong, or build the wrong thing.
    **Advisory**: the build succeeds, but worse than it could. Then give the verdict (see Output).
 7. **Fix only on request.** By default the review edits no plan content, because the plan belongs
-   to its author. It always appends one Reviewed line to the plan's `## Record` (format in the plan
+   to its author. It appends one Reviewed line to the plan's `## Record` (format in the plan
    format file), so the review stays part of the plan's trail. A spec that is not a plan gets no
    Record line. When asked to fix, edit the plan for each blocking finding whose fix the
    plan or the code already settles, put a finding that would change In or Out under Open as a
