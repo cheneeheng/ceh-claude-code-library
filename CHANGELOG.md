@@ -26,6 +26,11 @@ both: it did not scan `product/` and did not know the folder-name form. The retr
 `<home>` and `<project>` placeholders, the check covers `product/`, `audits/`, and `examples/` and
 the folder-name form, and `.claude/rules/decision-no-home-paths.md` records the rule.
 
+The repo-local `model-audit` skill's `config.json` keys now say what they are for: `default`
+becomes `audit` (the pair for unpinned audits), `override` becomes `tuning` (the pair for pinned
+tuning and new-generation audits), and `jobs` becomes `parallel-plugins`. Haiku joins
+`models-in-use.json`, so every plugin is stale against `haiku-5-5` until its next audit.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -41,6 +46,8 @@ the folder-name form, and `.claude/rules/decision-no-home-paths.md` records the 
   plugins.
 - `validate.py` `hygiene` check: scans `product/`, `audits/`, and `examples/`, and catches the
   `C--Users-<name>` folder-name form.
+- `model-audit` `config.json`: keys renamed to `audit`, `tuning`, and `parallel-plugins`, and
+  `haiku` added to `models-in-use.json`.
 
 ### Fixed
 
