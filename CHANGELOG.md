@@ -59,6 +59,13 @@ follows because it reads the same run directory. The session tools stay at the t
 decision log, handoffs, research notes, questionnaires, `CODEBASE_EXPLAINED.md`, competitor
 analyses, and orchestration-lab runs. Files already saved at the old paths are not moved.
 
+`ceh-every-session:find-available-guide` now points AWS work at AWS's own agent toolkit,
+[aws/agent-toolkit-for-aws](https://github.com/aws/agent-toolkit-for-aws). The repo ships five
+plugins with separate scopes, so the registry lists each one under its own name and aliases:
+`aws-core`, `aws-agents`, `aws-data-analytics`, `aws-agents-for-devsecops`, and
+`aws-startup-advisor`. A plain "AWS" mention matches all five, and a service name such as Athena or
+AgentCore matches only the plugin that covers it.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -71,7 +78,7 @@ analyses, and orchestration-lab runs. Files already saved at the old paths are n
 | `ceh-check-build-against-plan` | 1.0.11  |
 | `ceh-codebase-explanation`     | 1.2.9   |
 | `ceh-coding-conduct`           | 2.2.16  |
-| `ceh-every-session`            | 2.8.11  |
+| `ceh-every-session`            | 2.8.12  |
 | `ceh-git-workflow`             | 1.4.5   |
 | `ceh-security-audit`           | 1.0.6   |
 | `ceh-seo`                      | 1.1.7   |
@@ -105,6 +112,8 @@ analyses, and orchestration-lab runs. Files already saved at the old paths are n
 - `$CEH_WORKFLOW_BUILD_DIR` and `$CEH_WORKFLOW_RUN_DIR` default to `.agents_workspace/workflow/`.
 - `docs/STRATEGY.md` "Where files live" and `.claude/rules/decision-artifact-locations.md` describe
   the three `.agents_workspace/` locations.
+- `ceh-every-session:find-available-guide` registry: five entries for the AWS agent toolkit
+  plugins, one per plugin.
 
 ### Fixed
 
