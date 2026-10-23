@@ -31,12 +31,23 @@ becomes `audit` (the pair for unpinned audits), `override` becomes `tuning` (the
 tuning and new-generation audits), and `jobs` becomes `parallel-plugins`. Haiku joins
 `models-in-use.json`, so every plugin is stale against `haiku-5-5` until its next audit.
 
+A model audit of `ceh-ag-ui`, `ceh-blog`, and `ceh-build-from-plan` against every current model
+guide, reports in `audits/2026-10-23/`, landed all its kept edits. Two `ceh-ag-ui` prohibitions
+now say what to do instead. `ceh-blog:draft-post` drops five Working principles that restated its
+own steps, keeping the one clause nothing else said. `plan-schema.md` said Key Decisions are copied
+to `ARCHITECTURE.md` only after a build check had run, while `implement-from-plan` copies them
+whether or not the check is installed. The schema now agrees with the skill in all three copies.
+
 ### Plugin versions
 
-| Plugin                     | Version |
-| -------------------------- | ------- |
-| `ceh-build-from-plan`      | 1.0.10  |
-| `ceh-codebase-explanation` | 1.2.8   |
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-ag-ui`                    | 1.1.4   |
+| `ceh-blog`                     | 1.0.15  |
+| `ceh-build-from-plan`          | 1.0.11  |
+| `ceh-build-planning`           | 1.1.11  |
+| `ceh-check-build-against-plan` | 1.0.10  |
+| `ceh-codebase-explanation`     | 1.2.8   |
 
 ### Changed
 
@@ -48,8 +59,16 @@ tuning and new-generation audits), and `jobs` becomes `parallel-plugins`. Haiku 
   `C--Users-<name>` folder-name form.
 - `model-audit` `config.json`: keys renamed to `audit`, `tuning`, and `parallel-plugins`, and
   `haiku` added to `models-in-use.json`.
+- `ceh-ag-ui:build-ag-ui` and the `build-ag-ui-agent` server prompt: prohibitions rewritten as
+  what to do.
+- `ceh-blog:draft-post`: Working principles cut to "Pick the strongest thread", and interview
+  rule 1 asks the question that unlocks the post first.
 
 ### Fixed
+
+- `plan-schema.md`, in `ceh-build-planning`, `ceh-build-from-plan`, and
+  `ceh-check-build-against-plan`: Key Decisions are copied once every phase is done, after the
+  build check when it is installed, matching `implement-from-plan`.
 
 - Home paths removed from `product/retros/2026-10-18-session-6f65e2d1.md` and the 2026-10-18
   `replay.py`.

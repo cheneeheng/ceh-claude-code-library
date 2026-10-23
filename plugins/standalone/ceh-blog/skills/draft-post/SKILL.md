@@ -140,8 +140,8 @@ and ask for specifics in the second batch, once the author is in the story.
 
 **Interview rules:**
 
-1. **One batch, answered together.** Send all the questions at once and wait for the author's
-   answers to all of them. Never ask turn by turn.
+1. **One batch, answered together.** Send all the questions at once, the one that unlocks the post
+   first, and wait for the author's answers to all of them. Never ask turn by turn.
 2. Follow up on vague or abstract answers in a second batch, only for the answers that stay too
    vague to draft from: _"Can you give me a specific example?"_
 3. **Make every question's options plausible guesses.** Instead of _"How did you figure it out?"_: _"A. Claude critiqued it B. You read something C. It crystallized on its own D. Other: say what"_. Correcting a concrete guess is easier than composing from scratch and gets a sharper reply. Where you have no good guesses, the options are the broad kinds of answer, plus `Other: say what`.
@@ -294,12 +294,7 @@ they cost the author, not warnings issued to the reader.
 
 ### Working principles
 
-- **Infer first, ask second**: extract everything the user has already said, and only ask what you genuinely can't infer.
-- **All questions at once**: never ask turn by turn. Send every question in one numbered batch, each atomic and ending in options, and ask the author to answer all of them. Put the question that unlocks the post first. Notes with a workable angle get zero questions.
-- **Read everything before writing anything**: full material first, identify the angle, then one complete draft.
 - **Pick the strongest thread**: if the material sprawls, choose the sharpest angle rather than covering everything, and tell the user which thread you picked and why.
-- **Concrete over abstract**: push for specifics — real numbers, actual events, named people, exact moments.
-- **Use the user's words**: pull real phrases, specifics, and examples from the material and the interview. A usable line ("first impression is a lot cleaner and smooth") goes into the draft nearly word-for-word.
 
 ### Edge cases
 
