@@ -82,6 +82,7 @@ are appended in any status, including after `built`.
 - A builder that departs from Design edits the Design line, gives the reason in that phase's
   Status, and appends a Design changed line to Record quoting the old line, so the plan stays true
   to the code and the original decision survives in the file.
-- A `built` plan is kept. Once any check of the build against it has run, each Design decision a
-  later reader still needs is copied to the Key Decisions log in `product/ARCHITECTURE.md`, and the
-  change gets a changelog entry when the repo keeps one. New work gets a new plan file.
+- A `built` plan is kept. Once every phase is done, each Design decision a later reader still
+  needs is copied to the Key Decisions log in `product/ARCHITECTURE.md`, after the check of the
+  build against the plan when that check is installed, and the change gets a changelog entry when
+  the repo keeps one. New work gets a new plan file.

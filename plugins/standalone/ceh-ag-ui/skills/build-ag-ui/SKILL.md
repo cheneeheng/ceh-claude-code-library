@@ -32,8 +32,7 @@ the component, and returns a tool result. It then runs the agent again so it can
   seams (the table below). Add any missing seam in the template's own style instead of replacing
   its structure.
 - **No template**: copy `${CLAUDE_SKILL_DIR}/assets/canvas-template/` into the project (default:
-  `web/` and `agent/` at the repo root). Always copy, and never edit the files under the skill
-  directory.
+  `web/` and `agent/` at the repo root). Copy it, and edit only the copy.
 
 | Seam             | Default file          | Owns                                                                                                    |
 | ---------------- | --------------------- | ------------------------------------------------------------------------------------------------------- |

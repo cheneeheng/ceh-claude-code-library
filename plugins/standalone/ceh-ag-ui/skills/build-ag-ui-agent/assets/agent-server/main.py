@@ -38,7 +38,7 @@ MODEL = os.environ.get("AGENT_MODEL", "claude-opus-5-5")
 SYSTEM = (
     "You answer inside a canvas. When one of the component tools fits the answer, call it with "
     "real content and keep any text to a sentence or two around it. Use plain text only when no "
-    "component fits. How components look is fixed by the app; never try to style them."
+    "component fits. How components look is fixed by the app, so send content only."
 )
 
 # Tools this server runs itself: name -> (description, JSON Schema, handler). Handlers must
