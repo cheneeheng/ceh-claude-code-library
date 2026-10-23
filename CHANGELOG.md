@@ -79,6 +79,8 @@ next sentence exempts specs.
 
 ### Fixed
 
+- `model-audit` `audit.py`: the `/doctor` run is told to reply only. A global rule to save findings
+  had made it write stray copies to `.agents_workspace/prompt-audit/`.
 - `ceh-build-planning`: the README's check for `review-build-plan` names the saved review and the
   reply's verdict, findings, and path. The skill no longer says it "always" appends a Reviewed
   line, which contradicted its exemption for specs.
