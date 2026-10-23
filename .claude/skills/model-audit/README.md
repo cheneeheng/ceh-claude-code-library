@@ -133,4 +133,6 @@ Sonnet. Otherwise change `config.json`.
 
 `audits/<date>/SUMMARY.md` is the PR body and carries the checklist: keep or drop edits, bump
 versions and write the changelog for kept edits, set `tuned-for` for accepted tuning, and optionally
-run `claude plugin eval`.
+run `claude plugin eval`. Its Run cost table lists every headless run (`/doctor`, filter, tune)
+with its turns, input, output, cache read and cache write tokens, and cost, plus a total, so you can
+see where the usage went.

@@ -38,6 +38,11 @@ own steps, keeping the one clause nothing else said. `plan-schema.md` said Key D
 to `ARCHITECTURE.md` only after a build check had run, while `implement-from-plan` copies them
 whether or not the check is installed. The schema now agrees with the skill in all three copies.
 
+That audit used about a third of a 5-hour usage window, and nothing recorded where.
+`model-audit`'s `SUMMARY.md` now has a Run cost table: turns, tokens, and cost for every headless
+run, plus a total. A test run asked only to reply "OK" took 5 turns and about 80k tokens, so
+each headless run starts with a large fixed cost.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -63,13 +68,14 @@ whether or not the check is installed. The schema now agrees with the skill in a
   what to do.
 - `ceh-blog:draft-post`: Working principles cut to "Pick the strongest thread", and interview
   rule 1 asks the question that unlocks the post first.
+- `model-audit` `audit.py`: `SUMMARY.md` gains a Run cost table with each run's turns, tokens,
+  and cost.
 
 ### Fixed
 
 - `plan-schema.md`, in `ceh-build-planning`, `ceh-build-from-plan`, and
   `ceh-check-build-against-plan`: Key Decisions are copied once every phase is done, after the
   build check when it is installed, matching `implement-from-plan`.
-
 - Home paths removed from `product/retros/2026-10-18-session-6f65e2d1.md` and the 2026-10-18
   `replay.py`.
 
