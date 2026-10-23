@@ -53,7 +53,7 @@ nothing else. The scripts, their arguments, and their state files are in
 
 ## Output
 
-Reply with the PR URL, the summary table, any errors or validation failures, and these next steps,
+Reply with the PR URL, the summary table, the Run cost total, any errors or validation failures, and these next steps,
 trimmed to what the run needs: drop step 3 when nothing was tuned, steps 5 and 6 when no edit was
 kept.
 

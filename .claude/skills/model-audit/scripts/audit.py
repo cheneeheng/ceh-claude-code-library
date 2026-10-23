@@ -43,8 +43,11 @@ TUNING_KEYS = [
 ]
 
 
+RUNS: list[dict] = []  # one cost row per headless run, for SUMMARY.md
+
+
 def claude(
-    prompt: str, model: str, effort: str, tools: list[str] = ()
+    prompt: str, model: str, effort: str, label: str, tools: list[str] = ()
 ) -> tuple[str, str, int]:
     """One headless run: (final text, slug of the model that actually ran, denied tool calls)."""
     cmd = [
@@ -68,11 +71,28 @@ def claude(
         raise RuntimeError(
             f"claude exited {r.returncode}: {(r.stderr or r.stdout).strip()[:500]}"
         )
+    usage = out.get("modelUsage") or {}
+    RUNS.append(
+        {
+            "label": label,
+            "turns": out.get("num_turns", 0),
+            "cost": out.get("total_cost_usd", 0),
+            **{
+                k: sum(u.get(k, 0) for u in usage.values())
+                for k in (
+                    "inputTokens",
+                    "outputTokens",
+                    "cacheReadInputTokens",
+                    "cacheCreationInputTokens",
+                )
+            },
+        }
+    )
     if out.get("is_error"):
         raise RuntimeError(
             f"claude run failed: {out.get('result') or out.get('subtype')}"
         )
-    usage = out.get("modelUsage") or {model: {}}
+    usage = usage or {model: {}}
     main_model = max(usage, key=lambda m: usage[m].get("outputTokens", 0))
     used = usage[main_model].get("canonicalModel", main_model).removeprefix("claude-")
     return out.get("result", "").strip(), used, len(out.get("permission_denials", []))
@@ -113,7 +133,9 @@ def audit_plugin(state: dict, run: dict) -> dict:
         new_gen = any(len(detect.version(s)[1]) == 1 for s in state["missing"])
         model, effort = run["tuning"] if new_gen and not run["forced"] else run["audit"]
         print(f"[{name}] /doctor prompt-audit with {model}/{effort}", file=sys.stderr)
-        raw, _, _ = claude(f"/doctor prompt-audit {rel}", model, effort)
+        raw, _, _ = claude(
+            f"/doctor prompt-audit {rel}", model, effort, f"{name} /doctor"
+        )
         raw_path = run["out_dir"] / f"{name}.doctor.md"
         raw_path.write_text(raw + "\n", encoding="utf-8")
         pinned = ", ".join(f"`{p['file']}`" for p in state["pinned"]) or "none"
@@ -130,6 +152,7 @@ def audit_plugin(state: dict, run: dict) -> dict:
             ),
             model,
             effort,
+            f"{name} filter",
             tools,
         )
         denied += n
@@ -181,6 +204,7 @@ def audit_plugin(state: dict, run: dict) -> dict:
                 ),
                 model,
                 effort,
+                f"{name} tune {p['file']}",
                 tools,
             )
             denied += n
@@ -262,6 +286,25 @@ def write_summary(results: list[dict], run: dict, repo_valid: bool) -> Path:
     lines += [
         "",
         f"`validate.py`: {'pass' if repo_valid else 'FAIL'}.",
+        "",
+        "## Run cost",
+        "",
+        "| Run | Turns | Input | Output | Cache read | Cache write | Cost (USD) |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    keys = [
+        "turns",
+        "inputTokens",
+        "outputTokens",
+        "cacheReadInputTokens",
+        "cacheCreationInputTokens",
+    ]
+    total = {"label": "**all**", "cost": sum(r["cost"] for r in RUNS)}
+    total |= {k: sum(r[k] for r in RUNS) for k in keys}
+    for r in sorted(RUNS, key=lambda r: r["label"]) + [total]:
+        cells = [r["label"], *(f"{r[k]:,}" for k in keys), f"{r['cost']:.2f}"]
+        lines.append(f"| {' | '.join(cells)} |")
+    lines += [
         "",
         "## Reviewer checklist",
         "",
