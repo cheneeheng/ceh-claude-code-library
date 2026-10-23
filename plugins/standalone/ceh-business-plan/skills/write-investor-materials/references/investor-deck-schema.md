@@ -1,7 +1,7 @@
 # Investor deck schema
 
 The deck outline `write-investor-materials` saves to
-`.agents_workspace/business/INVESTOR_DECK.md`, local and not committed. A new deck is a copy of `../assets/investor-deck.template.md`, relative
+`.agents_workspace/product/business/INVESTOR_DECK.md`, local and not committed. A new deck is a copy of `../assets/investor-deck.template.md`, relative
 to this file. The `schema: investor-deck/v1` line stays as written.
 
 ## Frontmatter

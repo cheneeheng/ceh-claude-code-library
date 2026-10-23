@@ -50,7 +50,7 @@ Answer these five questions and state the answers (one line each) so the choices
 When the user asks for options ("show me a few directions", "I can't picture it"), or the design
 pass leaves question 2 or 4 with two answers that both fit, build a board before the real UI:
 
-1. Write two to four throwaway static HTML files to `.agents_workspace/design-variants/<surface>/`,
+1. Write two to four throwaway static HTML files to `.agents_workspace/product/design-variants/<surface>/`,
    one per variant, plus an `index.html` that shows them side by side in labelled `<iframe>`s at
    the same width. Use the bundled theme tokens and real-looking content, never lorem ipsum.
 2. Make each variant differ from the others on **one** design-pass answer (the archetype, the

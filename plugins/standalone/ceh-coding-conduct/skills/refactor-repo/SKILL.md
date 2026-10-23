@@ -127,7 +127,7 @@ A refactor changes shape, never behavior:
 
 Per cluster: candidates applied with before/after `git diff --stat` totals, candidates skipped
 with reasons (coverage, size, risk), and any bug found while refactoring — reported, not fixed.
-Save the report to `.agents_workspace/refactor/<YYYY-MM-DD>.md`, filling
+Save the report to `.agents_workspace/product/refactor/<YYYY-MM-DD>.md`, filling
 `assets/refactor-report.template.md` per `references/refactor-report-schema.md`, one section per
 cluster, and name the path in the reply,
 because the skipped candidates and the unfixed bugs have no other record.

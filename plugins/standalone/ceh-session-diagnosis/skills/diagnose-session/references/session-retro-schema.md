@@ -2,7 +2,7 @@
 
 The report `diagnose-session` saves: `product/retros/<YYYY-MM-DD>-session-<session-id-prefix>.md`
 for in-scope root causes, scrubbed and audited first, and
-`.agents_workspace/retros/<YYYY-MM-DD>-session-<session-id-prefix>.md` for out-of-scope root causes,
+`.agents_workspace/product/retros/<YYYY-MM-DD>-session-<session-id-prefix>.md` for out-of-scope root causes,
 other findings, and hypotheses. A new file is a copy of `../assets/session-retro.template.md`,
 relative to this file. The `schema: session-retro/v1` line stays as written. Secrets in every
 quote are masked as `<secret>`.

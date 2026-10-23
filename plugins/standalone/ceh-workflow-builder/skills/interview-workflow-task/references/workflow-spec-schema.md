@@ -1,7 +1,7 @@
 # Workflow spec schema
 
 The spec `interview-workflow-task` writes to `$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.md`,
-defaulting to `.agents_workspace/`, and `build-agentic-workflow` builds from. A new spec is a copy of
+defaulting to `.agents_workspace/workflow/`, and `build-agentic-workflow` builds from. A new spec is a copy of
 `../assets/workflow-spec.template.md`, relative to this file. The `schema: workflow-spec/v1` line
 stays as written.
 

@@ -22,7 +22,7 @@ waiting for the user's approval.
 ## Procedure
 
 1. **Pick up pending drafts.** Read `*-repeat-mistake.md` in `product/retros/` and
-   `.agents_workspace/retros/` and list every fix still `awaiting approval` before taking a new
+   `.agents_workspace/product/retros/` and list every fix still `awaiting approval` before taking a new
    mistake, so a draft from an earlier session is not lost.
 2. **Name the mistake from evidence.** Quote what went wrong: the tool call, the file and line,
    the wrong output, and the correction that preceded it. "Was sloppy" is not a mistake, "wrote
@@ -69,7 +69,7 @@ Fixes that land in the current repository go to `product/retros/<YYYY-MM-DD>-rep
 committed with the first fix applied, because a later session working in the repo reads it. Mask
 secrets in its quotes as `<secret>`: a committed file leaves the machine on the next push. Fixes
 outside it (user settings, the global `CLAUDE.md`, memory, an installed plugin) go to
-`.agents_workspace/retros/<YYYY-MM-DD>-repeat-mistake.md`, local, because only the user acts on
+`.agents_workspace/product/retros/<YYYY-MM-DD>-repeat-mistake.md`, local, because only the user acts on
 them. When both files exist, each links the other through `other_file`. Reply with the same table. Each fix `awaiting approval` carries its full draft below the table, so
 a later session can apply it from the file alone. When a draft is applied or rejected, update its
 Status in the file it was saved in.

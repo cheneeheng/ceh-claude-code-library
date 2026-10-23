@@ -1,7 +1,7 @@
 # Repeat mistake schema
 
 The file `prevent-repeat-mistake` saves: `product/retros/<YYYY-MM-DD>-repeat-mistake.md` for fixes
-that land in the current repository, `.agents_workspace/retros/<YYYY-MM-DD>-repeat-mistake.md` for
+that land in the current repository, `.agents_workspace/product/retros/<YYYY-MM-DD>-repeat-mistake.md` for
 fixes only the user acts on. A new file is a copy of `../assets/repeat-mistake.template.md`,
 relative to this file. The `schema: repeat-mistake/v1` line stays as written. Appending to an
 existing file adds rows and drafts, and leaves its frontmatter as it is.

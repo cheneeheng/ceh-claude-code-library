@@ -282,7 +282,7 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
 
 ### Learning workspace
 
-Opt-in only. Keep one file per subject at `.agents_workspace/learning/<subject>.md`, so a later
+Opt-in only. Keep one file per subject at `.agents_workspace/product/learning/<subject>.md`, so a later
 session starts from what the reader already knows instead of from zero. A new file is a copy of
 `assets/learning.template.md`, per `references/learning-schema.md`.
 

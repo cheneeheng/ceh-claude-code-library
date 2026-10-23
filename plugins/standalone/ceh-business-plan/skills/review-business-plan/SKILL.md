@@ -16,7 +16,7 @@ scored, each score backed by a quote or "nothing found", and the next skill name
 
 ## Procedure
 
-1. Read the whole plan. Default to `.agents_workspace/business/BUSINESS_PLAN.md` (schema in
+1. Read the whole plan. Default to `.agents_workspace/product/business/BUSINESS_PLAN.md` (schema in
    `${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`). Any other plan, deck, or memo the
    user supplies is reviewed the same way.
 2. Score each lens 0, 1, or 2 using the table below. Quote the sentence in the plan that earns the
@@ -66,7 +66,7 @@ test.
 ## Output
 
 The review fills `assets/business-plan-review.template.md`, per
-`references/business-plan-review-schema.md`. Save the review to `.agents_workspace/business-plan-reviews/<YYYY-MM-DD>.md`, never into the plan,
+`references/business-plan-review-schema.md`. Save the review to `.agents_workspace/product/business-plan-reviews/<YYYY-MM-DD>.md`, never into the plan,
 which this skill only reads, so the scores survive into the session that runs the next skill. Name
 the path in the reply.
 

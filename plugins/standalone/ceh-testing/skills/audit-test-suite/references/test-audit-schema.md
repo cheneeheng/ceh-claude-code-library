@@ -1,6 +1,6 @@
 # Test audit schema
 
-The report `audit-test-suite` saves to `.agents_workspace/test-audits/<YYYY-MM-DD>.md`. A subagent
+The report `audit-test-suite` saves to `.agents_workspace/product/test-audits/<YYYY-MM-DD>.md`. A subagent
 in report-only mode returns it instead, and its caller saves it. A new report is a copy of
 `../assets/test-audit.template.md`, relative to this file. The `schema: test-audit/v1` line stays
 as written.

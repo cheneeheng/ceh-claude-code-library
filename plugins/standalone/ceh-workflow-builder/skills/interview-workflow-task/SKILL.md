@@ -112,7 +112,7 @@ step that produces it.
 
 ### Where the spec goes
 
-`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.md`, defaulting to `.agents_workspace/`. Use a
+`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.md`, defaulting to `.agents_workspace/workflow/`. Use a
 provisional slug until the name is settled, then rename the file — otherwise a second interview
 overwrites the first one's spec.
 

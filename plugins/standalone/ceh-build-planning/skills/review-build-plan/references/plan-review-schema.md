@@ -1,6 +1,6 @@
 # Plan review schema
 
-The review `review-build-plan` saves to `.agents_workspace/plan-reviews/<slug>-<YYYY-MM-DD>.md`. A
+The review `review-build-plan` saves to `.agents_workspace/product/plan-reviews/<slug>-<YYYY-MM-DD>.md`. A
 new review is a copy of `../assets/plan-review.template.md`, relative to this file. The
 `schema: plan-review/v1` line stays as written.
 

@@ -76,7 +76,7 @@ The review fills `assets/plan-review.template.md`, per `references/plan-review-s
 | **Revise first**   | Blocking findings, each fixable by editing the plan.                               |
 | **Rethink**        | A Scope finding changes what to build, or shows the Goal is out of reach as drawn. |
 
-Save the whole review to `.agents_workspace/plan-reviews/<slug>-<YYYY-MM-DD>.md`, because the
+Save the whole review to `.agents_workspace/product/plan-reviews/<slug>-<YYYY-MM-DD>.md`, because the
 Record line keeps only the verdict and counts, and the author fixing the plan in a later session
 needs the findings. Reply with the verdict, the blocking findings, and the path.
 

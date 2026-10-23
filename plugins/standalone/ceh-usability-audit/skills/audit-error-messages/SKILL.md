@@ -162,7 +162,7 @@ The message being right is half of it; the other half is whether the reader sees
 
 ## Output
 
-`.agents_workspace/ux-audits/<target>/run-<NNN>/ERROR_MESSAGES.md` — the same run-folder convention
+`.agents_workspace/product/ux-audits/<target>/run-<NNN>/ERROR_MESSAGES.md` — the same run-folder convention
 the walkthrough skills use, zero-padded index so a re-run never overwrites the previous evidence.
 Create missing parents. It fills `assets/error-messages-audit.template.md`, per
 `references/error-messages-audit-schema.md`: the triage table

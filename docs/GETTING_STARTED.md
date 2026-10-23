@@ -136,7 +136,7 @@ Each moment names the plugin, the command that starts it, and the file it writes
 **Shape**
 
 - Test whether an idea is worth building: install `ceh-business-plan`, start with
-  `/ceh-business-plan:develop-business-plan`. Writes `.agents_workspace/business/BUSINESS_PLAN.md`.
+  `/ceh-business-plan:develop-business-plan`. Writes `.agents_workspace/product/business/BUSINESS_PLAN.md`.
 - Learn from a competitor's repo or product: install `ceh-competitor-analysis`, start with
   `/ceh-competitor-analysis:analyze-competitor`. Writes reports in `.agents_workspace/`.
 
@@ -158,7 +158,7 @@ Each moment names the plugin, the command that starts it, and the file it writes
   `/ceh-testing:explore-app-for-bugs`, then `/ceh-testing:write-evidence-report`. Writes
   `product/EVIDENCE.md`.
 - Check a stranger can use it: install `ceh-usability-audit`, start with
-  `/ceh-usability-audit:simulate-newcomer-first-run`. Writes a report in `.agents_workspace/`.
+  `/ceh-usability-audit:simulate-newcomer-first-run`. Writes a report in `.agents_workspace/product/`.
 - Audit the whole codebase for security: install `ceh-security-audit`, start with
   `/ceh-security-audit:audit-codebase-security`. Writes a report.
 
@@ -193,7 +193,7 @@ Then, when you build from the plan:
 
 Run `/reload-plugins` after each install, so the new skills load.
 
-The Tell stage reads `.agents_workspace/business/BUSINESS_PLAN.md` and `product/EVIDENCE.md` when they exist. Without them it
+The Tell stage reads `.agents_workspace/product/business/BUSINESS_PLAN.md` and `product/EVIDENCE.md` when they exist. Without them it
 still runs, and says which claims rest on nothing proven.
 
 ## 4. Add these only when the moment arrives

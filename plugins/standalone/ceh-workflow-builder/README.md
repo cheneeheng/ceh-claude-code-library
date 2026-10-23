@@ -83,10 +83,10 @@ dynamic-workflow setup are documented with the runner in
 
 ## Directories
 
-|            | Variable                  | Default              | Holds                                                                                                    |
-| ---------- | ------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------- |
-| Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/` | the interview spec while authoring                                                                       |
-| Run time   | `$CEH_WORKFLOW_RUN_DIR`   | `.agents_workspace/` | a generated workflow's step artifacts and run state (read by `ceh-workflow-runner:run-agentic-workflow`) |
+|            | Variable                  | Default                       | Holds                                                                                                    |
+| ---------- | ------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/workflow/` | the interview spec while authoring                                                                       |
+| Run time   | `$CEH_WORKFLOW_RUN_DIR`   | `.agents_workspace/workflow/` | a generated workflow's step artifacts and run state (read by `ceh-workflow-runner:run-agentic-workflow`) |
 
 Two variables on purpose. Building one workflow must not collide with running
 another. Each run gets its own `<run-dir>/<name>/<run-id>/`, so a second run

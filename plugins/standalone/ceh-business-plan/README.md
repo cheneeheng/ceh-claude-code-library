@@ -80,7 +80,7 @@ competition, market math, business model, go-to-market, traction, financials, ri
 revised in place across the loop, with a `pmf_gate: N/8` score in its frontmatter. The schema and
 the 8-point gate live in `references/business-plan-schema.md`, shared by all nine skills.
 `write-investor-materials` writes `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` to
-`.agents_workspace/business/`, local and not committed, and leaves the plan itself unchanged.
+`.agents_workspace/product/business/`, local and not committed, and leaves the plan itself unchanged.
 
 ## The PMF readiness gate
 

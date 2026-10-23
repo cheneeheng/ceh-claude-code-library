@@ -68,9 +68,9 @@ runner never imitates it by hand. Workflow `.js` files need LF line endings.
 
 ## Environment variables
 
-| Variable                | Required | Default              | Holds                                                                                                     |
-| ----------------------- | -------- | -------------------- | --------------------------------------------------------------------------------------------------------- |
-| `$CEH_WORKFLOW_RUN_DIR` | no       | `.agents_workspace/` | a run's step artifacts and `run-state.md`, under `<run-dir>/<name>/<run-id>/`, expected to be git-ignored |
+| Variable                | Required | Default                       | Holds                                                                                                     |
+| ----------------------- | -------- | ----------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `$CEH_WORKFLOW_RUN_DIR` | no       | `.agents_workspace/workflow/` | a run's step artifacts and `run-state.md`, under `<run-dir>/<name>/<run-id>/`, expected to be git-ignored |
 
 ## Not this plugin
 

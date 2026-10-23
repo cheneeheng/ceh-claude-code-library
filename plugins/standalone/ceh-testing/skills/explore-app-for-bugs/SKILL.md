@@ -67,7 +67,7 @@ each confirmed bug after the report is written. Fix mode runs only when the user
 
 ## Output
 
-Write `.agents_workspace/qa/<YYYYMMDD-HHMM>/QA_REPORT.md`, timestamp from one `date` call, with
+Write `.agents_workspace/product/qa/<YYYYMMDD-HHMM>/QA_REPORT.md`, timestamp from one `date` call, with
 screenshots and logs beside it, filling `assets/qa-report.template.md`, per
 `references/qa-report-schema.md`.
 

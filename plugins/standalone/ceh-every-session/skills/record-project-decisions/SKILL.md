@@ -54,7 +54,7 @@ installed.
      choices that no longer exist. Project skills live in `.claude/skills/`.
    - **Decisions already written down:** the README, `product/ARCHITECTURE.md` Key Decisions, plans
      under `product/plans/`, ADRs (`docs/adr/`, `docs/decisions/`), business plan files
-     (`.agents_workspace/business/BUSINESS_PLAN.md`), `GLOSSARY.md`, and
+     (`.agents_workspace/product/business/BUSINESS_PLAN.md`), `GLOSSARY.md`, and
      manifests (`package.json`, `pyproject.toml`) as evidence of the stack.
    - **Areas no skill asks about:** who the product is for, market, language and locale, what is
      out of scope, stack, hosting, data and authentication, product name and voice. Take only the

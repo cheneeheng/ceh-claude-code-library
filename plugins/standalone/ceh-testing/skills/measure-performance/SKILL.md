@@ -30,7 +30,7 @@ and either way the baseline and every attempt are recorded.
    - Explain the number. Check it moves the way it should: double the input and the time should
      change in the way the algorithm predicts. A number that does not move is measuring something
      else: a cache hit, lazy initialisation, work the compiler removed.
-3. **Record the baseline** in `.agents_workspace/perf/<metric>.md`, filling
+3. **Record the baseline** in `.agents_workspace/product/perf/<metric>.md`, filling
    `assets/perf-report.template.md`: commit, command, machine, input, and the numbers. Every later number is compared against this row and nothing else.
 4. **Profile before changing anything.** Find where the time or memory goes with the stack's
    profiler. Change only what the profile points at. Guessing at a hotspot is how a day goes into

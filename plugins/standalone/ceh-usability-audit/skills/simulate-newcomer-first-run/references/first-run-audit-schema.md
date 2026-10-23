@@ -1,7 +1,7 @@
 # First-run audit schema
 
 The report `simulate-newcomer-first-run` writes to
-`.agents_workspace/ux-audits/<target>/run-<NNN>/UX_AUDIT.md`, with a zero-padded run index so a
+`.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.md`, with a zero-padded run index so a
 re-run never overwrites a prior run's evidence, and the raw walker transcripts beside it. A new
 report is a copy of `../assets/first-run-audit.template.md`, relative to this file. The
 `schema: first-run-audit/v1` line stays as written.
