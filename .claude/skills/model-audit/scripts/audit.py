@@ -4,11 +4,11 @@
 Run from anywhere:
   python .claude/skills/model-audit/scripts/audit.py [--plugins plugins/standalone/ceh-a ...] [--model M --effort E] [--apply]
 
-Per plugin, at most `jobs` plugins at a time because every run shares one rate limit:
+Per plugin, at most `parallel-plugins` plugins at a time because every run shares one rate limit:
   1. `/doctor prompt-audit <plugin>`, saved raw to audits/<date>/<plugin>.doctor.md.
   2. A filter pass that keeps general-guide fixes, defects, and model-guide changes that help
      at least one in-use model without hurting the others.
-  3. A tuning pass for each stale pinned agent or skill, with the override model.
+  3. A tuning pass for each stale pinned agent or skill, with the tuning model.
 Then it writes audits/<date>/<plugin>.md, updates tuning.json (never `tuned-for`), runs
 `claude plugin validate <plugin> --strict`, and writes audits/<date>/SUMMARY.md.
 Plugin files are edited only with --apply.
@@ -111,9 +111,7 @@ def audit_plugin(state: dict, run: dict) -> dict:
         # A new model generation (a slug with no minor version, e.g. opus-6) gets the stronger
         # pair. Only the triggering slugs count, not the predecessors pulled in with them.
         new_gen = any(len(detect.version(s)[1]) == 1 for s in state["missing"])
-        model, effort = (
-            run["override"] if new_gen and not run["forced"] else run["default"]
-        )
+        model, effort = run["tuning"] if new_gen and not run["forced"] else run["audit"]
         print(f"[{name}] /doctor prompt-audit with {model}/{effort}", file=sys.stderr)
         raw, _, _ = claude(f"/doctor prompt-audit {rel}", model, effort)
         raw_path = run["out_dir"] / f"{name}.doctor.md"
@@ -169,7 +167,7 @@ def audit_plugin(state: dict, run: dict) -> dict:
             if k in prev
         }
         if p["stale"]:
-            model, effort = run["override"]
+            model, effort = run["tuning"]
             print(f"[{name}] tuning {p['file']} with {model}/{effort}", file=sys.stderr)
             text, used, n = claude(
                 render(
@@ -290,7 +288,7 @@ def main() -> int:
     ap.add_argument("--model", help="unpinned-audit model (default from config.json)")
     ap.add_argument("--effort", help="unpinned-audit effort")
     ap.add_argument(
-        "--tune-model", help="pinned-tuning model (override pair in config.json)"
+        "--tune-model", help="pinned-tuning model (tuning pair in config.json)"
     )
     ap.add_argument("--tune-effort", help="pinned-tuning effort")
     ap.add_argument("--jobs", type=int, help="plugins audited in parallel")
@@ -328,18 +326,18 @@ def main() -> int:
         "cc_version": f"claude-code {version[0] if version else 'unknown'}",
         "apply": args.apply,
         "forced": bool(args.model or args.effort),
-        "default": (
-            args.model or cfg["default"]["model"],
-            args.effort or cfg["default"]["effort"],
+        "audit": (
+            args.model or cfg["audit"]["model"],
+            args.effort or cfg["audit"]["effort"],
         ),
-        "override": (
-            args.tune_model or cfg["override"]["model"],
-            args.tune_effort or cfg["override"]["effort"],
+        "tuning": (
+            args.tune_model or cfg["tuning"]["model"],
+            args.tune_effort or cfg["tuning"]["effort"],
         ),
         "out_dir": REPO / "audits" / datetime.date.today().isoformat(),
     }
     run["out_dir"].mkdir(parents=True, exist_ok=True)
-    with ThreadPoolExecutor(args.jobs or cfg.get("jobs", 3)) as pool:
+    with ThreadPoolExecutor(args.jobs or cfg.get("parallel-plugins", 3)) as pool:
         results = list(pool.map(lambda s: safe_audit(s, run), states))
     repo_valid = (
         subprocess.run(

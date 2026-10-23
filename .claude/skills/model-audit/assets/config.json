@@ -1,5 +1,5 @@
 {
-  "default": { "model": "sonnet", "effort": "medium" },
-  "override": { "model": "opus", "effort": "high" },
-  "jobs": 3
+  "audit": { "model": "sonnet", "effort": "medium" },
+  "tuning": { "model": "opus", "effort": "high" },
+  "parallel-plugins": 3
 }

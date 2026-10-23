@@ -18,7 +18,7 @@ Paths are relative to `.claude/skills/model-audit/`.
 | `scripts/detect.py`              | Stdlib-only, no LLM. Fetches the guide slugs, diffs them against `known-model-guides.json`, lists stale plugins as JSON. |
 | `scripts/audit.py`               | Runs the headless audits in parallel, writes `audits/<date>/`, updates each `tuning.json`, validates.                    |
 | `scripts/context_budget.py`      | Stdlib-only, no LLM. Per plugin: description characters plus what its context-injecting hooks print, per event.          |
-| `assets/config.json`             | `default` model/effort for unpinned audits, `override` pair for pinned tuning and new generations, `jobs`.               |
+| `assets/config.json`             | `audit` model/effort for unpinned audits, `tuning` pair for pinned tuning and new generations, `parallel-plugins`.       |
 | `assets/known-model-guides.json` | Every guide slug seen so far. `detect.py --write` adds new ones.                                                         |
 | `assets/models-in-use.json`      | Optional. Slugs (`opus-5-5`) or family aliases (`opus` = newest opus guide). Other guides never trigger audits.          |
 | `references/filter.md`           | Filter-pass prompt for unpinned files: general-page fixes, defects, and changes that help one model and hurt none.       |
@@ -36,15 +36,15 @@ python .claude/skills/model-audit/scripts/audit.py [--plugins plugins/standalone
 `/model-audit` passes its arguments to `audit.py` unchanged. With none, it audits every stale
 plugin with the pairs in `assets/config.json` and edits no plugin file.
 
-| Argument               | What it does                                                                                                                                                                                                                                                  | Default                    |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `--plugins <path> ...` | Audits only these plugins, each given as its path from the repo root (`plugins/standalone/ceh-every-session`), stale or not. It ignores `checked-against`, so every in-use guide chain is re-audited, and re-tunes pinned files even with a proposal pending. | every stale plugin         |
-| `--model <m>`          | Model for the `/doctor` and filter runs on unpinned files. It also wins over the stronger pair a new generation (`opus-6`) would otherwise get.                                                                                                               | `default.model`, `sonnet`  |
-| `--effort <e>`         | Effort for the same runs: `low`, `medium`, `high`, `xhigh` or `max`. Like `--model`, it disables the new-generation upgrade.                                                                                                                                  | `default.effort`, `medium` |
-| `--tune-model <m>`     | Model for the tuning pass on pinned files, and for unpinned runs triggered by a new generation.                                                                                                                                                               | `override.model`, `opus`   |
-| `--tune-effort <e>`    | Effort for the same runs as `--tune-model`.                                                                                                                                                                                                                   | `override.effort`, `high`  |
-| `--jobs <n>`           | Plugins audited in parallel. It is capped because every run shares one account rate limit.                                                                                                                                                                    | `jobs`, `3`                |
-| `--apply`              | Lets each run edit files under its plugin's directory. Without it, proposed edits exist only in the reports. Either way, `tuning.json` is updated.                                                                                                            | off: reports only          |
+| Argument               | What it does                                                                                                                                                                                                                                                  | Default                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `--plugins <path> ...` | Audits only these plugins, each given as its path from the repo root (`plugins/standalone/ceh-every-session`), stale or not. It ignores `checked-against`, so every in-use guide chain is re-audited, and re-tunes pinned files even with a proposal pending. | every stale plugin       |
+| `--model <m>`          | Model for the `/doctor` and filter runs on unpinned files. It also wins over the stronger pair a new generation (`opus-6`) would otherwise get.                                                                                                               | `audit.model`, `sonnet`  |
+| `--effort <e>`         | Effort for the same runs: `low`, `medium`, `high`, `xhigh` or `max`. Like `--model`, it disables the new-generation upgrade.                                                                                                                                  | `audit.effort`, `medium` |
+| `--tune-model <m>`     | Model for the tuning pass on pinned files, and for unpinned runs triggered by a new generation.                                                                                                                                                               | `tuning.model`, `opus`   |
+| `--tune-effort <e>`    | Effort for the same runs as `--tune-model`.                                                                                                                                                                                                                   | `tuning.effort`, `high`  |
+| `--jobs <n>`           | Plugins audited in parallel. It is capped because every run shares one account rate limit.                                                                                                                                                                    | `parallel-plugins`, `3`  |
+| `--apply`              | Lets each run edit files under its plugin's directory. Without it, proposed edits exist only in the reports. Either way, `tuning.json` is updated.                                                                                                            | off: reports only        |
 
 `detect.py --write` adds newly published guide slugs to `known-model-guides.json`. Without it, the
 detector only reports.
@@ -88,7 +88,7 @@ detector only reports.
   this misses an in-use slug.
 - `pinned.<path>.model`: the frontmatter `model:` resolved to a guide slug. An alias such as
   `sonnet` resolves to the newest `sonnet-*` guide, so a new Sonnet guide makes the file stale.
-  A model with no guide (`haiku` today) keeps its alias and is never tuned.
+  A model with no guide keeps its alias and is never tuned.
 - `pinned.<path>.tuned-for`: the guide the file was last tuned for. Only the user sets it, after
   accepting a tuning edit. `audit.py` never changes it.
 - `pinned.<path>.proposed-for`: the target of the last tuning proposal. A file whose
@@ -114,11 +114,11 @@ are skipped.
    Changes written for one model only are left out. General-page techniques are added only
    where the file's task needs them, and where a page disagrees with the `/doctor` report on the
    same instruction, the report wins. The report lists kept changes only.
-3. A tuning pass for each stale pinned file, using the `override` pair. It adapts the file to the
+3. A tuning pass for each stale pinned file, using the `tuning` pair. It adapts the file to the
    general page and to its model's guides, and model-specific wording is allowed there.
 4. `claude plugin validate <plugin-dir> --strict`, then `validate.py` once for the repo.
 
-Model choice: `default` (Sonnet) for unpinned audits, `override` (Opus) for pinned tuning and for
+Model choice: `audit` (Sonnet) for unpinned audits, `tuning` (Opus) for pinned tuning and for
 any audit triggered by a new generation, meaning an in-use slug with no minor version such as
 `opus-6`. Predecessors pulled in alongside a point release, such as `opus-5`, do not count. To re-run a plugin whose Sonnet report looked weak, use
 `--plugins <plugin-path> --model opus`. Effort levels are those `claude --help` lists
