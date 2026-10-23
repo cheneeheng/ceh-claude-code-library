@@ -1,7 +1,7 @@
 # Security audit schema
 
 The report `audit-codebase-security` saves to
-`.agents_workspace/security-audit/SECURITY_AUDIT-<YYYY-MM-DD>.md`, never a committed path. A new
+`.agents_workspace/product/security-audit/SECURITY_AUDIT-<YYYY-MM-DD>.md`, never a committed path. A new
 report is a copy of `../assets/security-audit.template.md`, relative to this file. The
 `schema: security-audit/v1` line stays as written.
 

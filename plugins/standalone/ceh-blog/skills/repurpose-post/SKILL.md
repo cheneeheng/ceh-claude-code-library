@@ -129,7 +129,7 @@ overrides the format rules above.
 
 Single format: output directly with a format label. Multiple: `##` heading per format in the order above.
 
-Save each format to its own file, `<slug>-<format>.md` (`thread`, `linkedin`, `tldr`, `newsletter`): next to the post when it is on disk, otherwise in `.agents_workspace/blog/` with the slug from the post's title in kebab case. Each file fills
+Save each format to its own file, `<slug>-<format>.md` (`thread`, `linkedin`, `tldr`, `newsletter`): next to the post when it is on disk, otherwise in `.agents_workspace/product/blog/` with the slug from the post's title in kebab case. Each file fills
 `${CLAUDE_PLUGIN_ROOT}/assets/repurposed-post.template.md`, per
 `${CLAUDE_PLUGIN_ROOT}/references/repurposed-post-schema.md`. A re-run overwrites the format files, never the post. Say where they were saved.
 

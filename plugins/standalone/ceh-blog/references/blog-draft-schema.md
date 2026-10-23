@@ -1,6 +1,6 @@
 # Blog draft schema
 
-A post `draft-post` or `edit-post` saves outside a blog repo, under `.agents_workspace/blog/`. A
+A post `draft-post` or `edit-post` saves outside a blog repo, under `.agents_workspace/product/blog/`. A
 post written into a blog repo follows that repo's own front matter instead. A new draft is a copy
 of `../assets/blog-draft.template.md`, relative to this file. The `schema: blog-draft/v1` line
 stays as written.

@@ -1,6 +1,6 @@
 # QA report schema
 
-The report `explore-app-for-bugs` writes to `.agents_workspace/qa/<YYYYMMDD-HHMM>/QA_REPORT.md`,
+The report `explore-app-for-bugs` writes to `.agents_workspace/product/qa/<YYYYMMDD-HHMM>/QA_REPORT.md`,
 with screenshots and logs beside it. A new report is a copy of `../assets/qa-report.template.md`,
 relative to this file. The `schema: qa-report/v1` line stays as written.
 

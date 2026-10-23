@@ -1,7 +1,7 @@
 # Error messages audit schema
 
 The report `audit-error-messages` writes to
-`.agents_workspace/ux-audits/<target>/run-<NNN>/ERROR_MESSAGES.md`, with a zero-padded run index so a
+`.agents_workspace/product/ux-audits/<target>/run-<NNN>/ERROR_MESSAGES.md`, with a zero-padded run index so a
 re-run never overwrites the previous evidence. A new report is a copy of
 `../assets/error-messages-audit.template.md`, relative to this file. The
 `schema: error-messages-audit/v1` line stays as written.

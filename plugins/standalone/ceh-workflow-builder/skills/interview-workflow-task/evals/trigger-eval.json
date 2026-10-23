@@ -32,7 +32,7 @@
     "should_trigger": true
   },
   {
-    "query": "what do you still need to know about my deploy process? the spec's at .agents_workspace/deploy-workflow-spec.md",
+    "query": "what do you still need to know about my deploy process? the spec's at .agents_workspace/workflow/deploy-workflow-spec.md",
     "should_trigger": true
   },
   {

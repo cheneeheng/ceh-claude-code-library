@@ -279,10 +279,10 @@ the flow's `compatibility` names Claude Code v2.1.269+ and the setting.
 
 ### Directories
 
-|            | Variable                  | Default              | Holds                                                 |
-| ---------- | ------------------------- | -------------------- | ----------------------------------------------------- |
-| Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/` | the workflow spec, build notes and headless drafts    |
-| Run time   | `$CEH_WORKFLOW_RUN_DIR`   | `.agents_workspace/` | the generated workflow's step artifacts and run state |
+|            | Variable                  | Default                       | Holds                                                 |
+| ---------- | ------------------------- | ----------------------------- | ----------------------------------------------------- |
+| Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/workflow/` | the workflow spec, build notes and headless drafts    |
+| Run time   | `$CEH_WORKFLOW_RUN_DIR`   | `.agents_workspace/workflow/` | the generated workflow's step artifacts and run state |
 
 Both default to one place, so both namespace by name: `<build-dir>/<name>-workflow-spec.md` and
 `<run-dir>/<name>/`. Use a provisional slug until the name is settled, then rename the spec, or a

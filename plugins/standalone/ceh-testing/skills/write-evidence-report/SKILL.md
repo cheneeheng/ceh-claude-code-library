@@ -36,10 +36,10 @@ on a fresh clone and none answers for the product as a whole. This file is the o
 
    | Area        | Source                                                                                                                                                                                    |
    | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   | QA          | `.agents_workspace/qa/<timestamp>/QA_REPORT.md`                                                                                                                                           |
-   | Performance | `.agents_workspace/perf/<metric>.md`                                                                                                                                                      |
-   | Security    | `.agents_workspace/security-audit/SECURITY_AUDIT-<date>.md`                                                                                                                               |
-   | Usability   | `.agents_workspace/ux-audits/<target>/run-<NNN>/UX_AUDIT.md` and `ERROR_MESSAGES.md`                                                                                                      |
+   | QA          | `.agents_workspace/product/qa/<timestamp>/QA_REPORT.md`                                                                                                                                   |
+   | Performance | `.agents_workspace/product/perf/<metric>.md`                                                                                                                                              |
+   | Security    | `.agents_workspace/product/security-audit/SECURITY_AUDIT-<date>.md`                                                                                                                       |
+   | Usability   | `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.md` and `ERROR_MESSAGES.md`                                                                                              |
    | Plan        | each plan in `product/plans/` with status `building`, plus each `built` plan whose `## Record` has no Evidence line yet: phases `done` with evidence, and any check-against-plan findings |
 
    With no such plan, the Plan area reads `none in flight`, not `not run`: nothing was skipped.

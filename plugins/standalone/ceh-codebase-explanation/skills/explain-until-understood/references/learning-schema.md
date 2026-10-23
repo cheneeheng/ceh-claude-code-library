@@ -1,7 +1,7 @@
 # Learning schema
 
 The opt-in learning workspace of `explain-until-understood`, one file per subject at
-`.agents_workspace/learning/<subject>.md`. A new file is a copy of
+`.agents_workspace/product/learning/<subject>.md`. A new file is a copy of
 `../assets/learning.template.md`, relative to this file. The `schema: learning/v1` line stays as
 written.
 

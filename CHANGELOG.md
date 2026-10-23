@@ -49,16 +49,38 @@ A second audit the same day, of `ceh-build-planning`, overwrote the first run's 
 appears in the saved file. `review-build-plan` said it "always" appends a Reviewed line, and the
 next sentence exempts specs.
 
+Local skill output now sits in three places under `.agents_workspace/` instead of one flat folder.
+The lifecycle skills' reports, reviews, audits, retros, blog drafts, business material, and scratch
+work move to `.agents_workspace/product/`, for example
+`.agents_workspace/product/blog/<YYYY-MM-DD>-<slug>-edited.md`. `ceh-workflow-builder` specs and
+drafts and the run state of generated workflows move to `.agents_workspace/workflow/`, the new
+default of `$CEH_WORKFLOW_BUILD_DIR` and `$CEH_WORKFLOW_RUN_DIR`, which `ceh-workflow-runner`
+follows because it reads the same run directory. The session tools stay at the top level: the
+decision log, handoffs, research notes, questionnaires, `CODEBASE_EXPLAINED.md`, competitor
+analyses, and orchestration-lab runs. Files already saved at the old paths are not moved.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-ag-ui`                    | 1.1.4   |
-| `ceh-blog`                     | 1.0.15  |
-| `ceh-build-from-plan`          | 1.0.11  |
-| `ceh-build-planning`           | 1.1.12  |
-| `ceh-check-build-against-plan` | 1.0.10  |
-| `ceh-codebase-explanation`     | 1.2.8   |
+| `ceh-blog`                     | 1.0.16  |
+| `ceh-build-from-plan`          | 1.0.12  |
+| `ceh-build-planning`           | 1.1.13  |
+| `ceh-business-plan`            | 1.1.12  |
+| `ceh-check-build-against-plan` | 1.0.11  |
+| `ceh-codebase-explanation`     | 1.2.9   |
+| `ceh-coding-conduct`           | 2.2.16  |
+| `ceh-every-session`            | 2.8.11  |
+| `ceh-git-workflow`             | 1.4.5   |
+| `ceh-security-audit`           | 1.0.6   |
+| `ceh-seo`                      | 1.1.7   |
+| `ceh-session-diagnosis`        | 1.0.8   |
+| `ceh-testing`                  | 1.4.12  |
+| `ceh-ui-design`                | 1.0.7   |
+| `ceh-usability-audit`          | 1.1.10  |
+| `ceh-workflow-builder`         | 1.3.11  |
+| `ceh-workflow-runner`          | 1.0.9   |
 
 ### Changed
 
@@ -76,6 +98,13 @@ next sentence exempts specs.
   rule 1 asks the question that unlocks the post first.
 - `model-audit` `audit.py`: `SUMMARY.md` gains a Run cost table with each run's turns, tokens,
   and cost. A second run on the same day merges into that day's summary instead of overwriting it.
+- Local output paths: every skill, schema, and README that saved to `.agents_workspace/<dir>/` for
+  blog drafts and voice, business material and reviews, plan and code reviews, retros, QA,
+  performance, test-suite, security, and usability reports, refactor reports, stress tests,
+  learning notes, and design variants now saves to `.agents_workspace/product/<dir>/`.
+- `$CEH_WORKFLOW_BUILD_DIR` and `$CEH_WORKFLOW_RUN_DIR` default to `.agents_workspace/workflow/`.
+- `docs/STRATEGY.md` "Where files live" and `.claude/rules/decision-artifact-locations.md` describe
+  the three `.agents_workspace/` locations.
 
 ### Fixed
 

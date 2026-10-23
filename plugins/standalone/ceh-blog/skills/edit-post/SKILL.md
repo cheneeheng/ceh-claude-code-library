@@ -28,7 +28,7 @@ type (Lessons Learned, How-To, Opinion, Launch, Thought Leadership, Personal Sto
 audience and register; the author's voice markers (rhythm, vocabulary, formality); the thesis, and
 where it actually appears.
 
-If `.agents_workspace/blog-voice.md` exists (`ceh-blog:draft-post` writes it from published posts),
+If `.agents_workspace/product/blog-voice.md` exists (`ceh-blog:draft-post` writes it from published posts),
 read it and judge the draft's voice markers against it: a draft that drifts from the author's usual
 register is a finding, not a style to preserve.
 
@@ -199,7 +199,7 @@ Wait for their answers, then address what they raise specifically.
 > **Meta:** [~150-character description — the post's specific angle, not just the broad topic; readable without the title]
 ```
 
-**Where it goes:** if the draft came from a file, show the diagnosis in chat and write the revision back to that file, keeping its front matter and putting the meta description in the front matter's existing description field instead of the `> **Meta:**` line. A draft pasted into chat gets its revision in chat, also saved to `.agents_workspace/blog/<YYYY-MM-DD>-<slug>-edited.md`, the slug from the title in kebab case, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-draft.template.md`, per `${CLAUDE_PLUGIN_ROOT}/references/blog-draft-schema.md`, so the revision outlives the session.
+**Where it goes:** if the draft came from a file, show the diagnosis in chat and write the revision back to that file, keeping its front matter and putting the meta description in the front matter's existing description field instead of the `> **Meta:**` line. A draft pasted into chat gets its revision in chat, also saved to `.agents_workspace/product/blog/<YYYY-MM-DD>-<slug>-edited.md`, the slug from the title in kebab case, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-draft.template.md`, per `${CLAUDE_PLUGIN_ROOT}/references/blog-draft-schema.md`, so the revision outlives the session.
 
 ## Stop conditions
 

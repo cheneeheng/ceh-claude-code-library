@@ -43,22 +43,22 @@ of the vision's Every step row) sit outside the route. They apply at every stage
 A build plan decides how, and it recurs for every feature inside the build loop:
 `ceh-build-planning:write-build-plan` itself triggers on "how should we build this". Keeping it in
 Shape would send "add a feature to my app" through the business-plan stage, the wrong door for a
-new user. The two stay connected through the handoff: the build plan reads `.agents_workspace/business/BUSINESS_PLAN.md` when
+new user. The two stay connected through the handoff: the build plan reads `.agents_workspace/product/business/BUSINESS_PLAN.md` when
 one exists.
 
 ## The spine: handoff files
 
-| Stage | Reads                                                                | Writes                                                             |
-| ----- | -------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| Shape | an idea, a conversation                                              | `.agents_workspace/business/BUSINESS_PLAN.md`                      |
-| Build | `.agents_workspace/business/BUSINESS_PLAN.md` when present, the repo | `product/plans/<slug>.md`, the code, `product/ARCHITECTURE.md`     |
-| Prove | the plan, the code                                                   | `product/EVIDENCE.md`: tests, QA, security, usability, performance |
-| Tell  | `.agents_workspace/business/BUSINESS_PLAN.md`, `product/EVIDENCE.md` | posts, listings, SEO pages                                         |
+| Stage | Reads                                                                        | Writes                                                             |
+| ----- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Shape | an idea, a conversation                                                      | `.agents_workspace/product/business/BUSINESS_PLAN.md`              |
+| Build | `.agents_workspace/product/business/BUSINESS_PLAN.md` when present, the repo | `product/plans/<slug>.md`, the code, `product/ARCHITECTURE.md`     |
+| Prove | the plan, the code                                                           | `product/EVIDENCE.md`: tests, QA, security, usability, performance |
+| Tell  | `.agents_workspace/product/business/BUSINESS_PLAN.md`, `product/EVIDENCE.md` | posts, listings, SEO pages                                         |
 
-Shape to Build: `ceh-business-plan` writes `.agents_workspace/business/BUSINESS_PLAN.md`, and `ceh-build-planning` reads
+Shape to Build: `ceh-business-plan` writes `.agents_workspace/product/business/BUSINESS_PLAN.md`, and `ceh-build-planning` reads
 it and writes the plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read. Prove to
 Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.md`, and
-`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `.agents_workspace/business/BUSINESS_PLAN.md`.
+`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.md`.
 
 Three rules hold for every handoff file:
 
@@ -85,12 +85,18 @@ The test is who reads the file.
   reads it as input. It has to survive a fresh clone, and a person can review it in a pull request.
   This follows vision principle 2: a decision that shapes the repo for others belongs in a
   committed file.
-- **Local in `.agents_workspace/`:** what only one session or its author reads. The decision log,
-  session handoffs, research notes, questionnaires, competitor analyses, reviews and audits whose
-  author acts on them (plan, code, and test-suite reviews, blog drafts outside a blog repo), and
-  scratch work. A skill whose output would be lost with the chat saves it here.
+- **Local in `.agents_workspace/`:** what only one session or its author reads. A skill whose
+  output would be lost with the chat saves it here, in one of three places:
+  - `.agents_workspace/product/` for the lifecycle stages' local output: reviews and audits whose
+    author acts on them (plan, code, test-suite, security, and usability reviews, QA and
+    performance reports), blog drafts outside a blog repo, retros whose fix lands elsewhere, the
+    business material below, and scratch work such as design variants and learning notes.
+  - `.agents_workspace/workflow/` for `ceh-workflow-builder` specs and drafts and the run state of
+    the workflows it generates, the default of `$CEH_WORKFLOW_BUILD_DIR` and `$CEH_WORKFLOW_RUN_DIR`.
+  - `.agents_workspace/` itself for the session tools: the decision log, session handoffs, research
+    notes, questionnaires, the codebase explanation, competitor analyses, and orchestration-lab runs.
 - **Business material stays local, even as a handoff file.** The business plan, the investor deck,
-  and the outreach notes go in `.agents_workspace/business/`, because they hold pricing, unit
+  and the outreach notes go in `.agents_workspace/product/business/`, because they hold pricing, unit
   economics, kill criteria, and investor contacts that do not belong in a repo others can read.
   A stage that reads the business plan works without it (rule 1 above), so a fresh clone loses
   context, not function. Git-ignoring a `product/` file per repo was rejected: nothing makes anyone
@@ -120,7 +126,7 @@ lifecycle:
   `record-project-decisions`. The agent acts on every route in the repo in the same session, and
   commits those issues to `product/retros/<date>-<kind>.md`, scrubbed when they quote a transcript,
   because the routed work reads them. Issues whose fix lands outside the repo, in user settings,
-  an installed plugin, or Claude Code, stay local in `.agents_workspace/retros/` for the user.
+  an installed plugin, or Claude Code, stay local in `.agents_workspace/product/retros/` for the user.
   `prevent-repeat-mistake` saves its own report the same way, split by where each fix lands.
 - **The evidence report is append-only.** `product/EVIDENCE.md` is one file per product, and each run
   adds a dated section at the top, so the section a plan's Record cites never changes. The separate

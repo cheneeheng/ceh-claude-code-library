@@ -76,6 +76,6 @@ saved.
 
 ## Output
 
-Save to `.agents_workspace/security-audit/SECURITY_AUDIT-<YYYY-MM-DD>.md`, and reply with the
+Save to `.agents_workspace/product/security-audit/SECURITY_AUDIT-<YYYY-MM-DD>.md`, and reply with the
 counts by severity and the critical and high rows. The report fills
 `assets/security-audit.template.md`, per `references/security-audit-schema.md`.

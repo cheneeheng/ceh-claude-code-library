@@ -1,6 +1,6 @@
 # Interface audit schema
 
-The report `audit-interface` writes to `.agents_workspace/ux-audits/<target>/run-<NNN>/UX_AUDIT.md`,
+The report `audit-interface` writes to `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.md`,
 with a zero-padded run index so a re-run never overwrites prior evidence, and the walker transcripts
 and screenshots beside it. A new report is a copy of `../assets/interface-audit.template.md`,
 relative to this file. The `schema: interface-audit/v1` line stays as written.

@@ -20,7 +20,7 @@ states its scope facts explicitly. This skill governs findability, not accuracy.
 ## Procedure
 
 1. **Read the product handoff files.** When the repo has them, read them before writing, because
-   they hold what earlier stages settled. `.agents_workspace/business/BUSINESS_PLAN.md` gives who the product is for,
+   they hold what earlier stages settled. `.agents_workspace/product/business/BUSINESS_PLAN.md` gives who the product is for,
    the problem, and the differentiator: take them from it rather than asking. `product/EVIDENCE.md`
    bounds every claim about what the product does or how well it does it (tested, fast, secure,
    usable). Read only its newest section, the first one, because earlier sections describe older

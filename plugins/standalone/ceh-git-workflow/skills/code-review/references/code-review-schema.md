@@ -1,6 +1,6 @@
 # Code review schema
 
-The review `code-review` saves to `.agents_workspace/code-reviews/<branch>-<YYYY-MM-DD>.md` when
+The review `code-review` saves to `.agents_workspace/product/code-reviews/<branch>-<YYYY-MM-DD>.md` when
 its comments are not posted on a PR. A new review is a copy of
 `../assets/code-review.template.md`, relative to this file. The `schema: code-review/v1` line
 stays as written.

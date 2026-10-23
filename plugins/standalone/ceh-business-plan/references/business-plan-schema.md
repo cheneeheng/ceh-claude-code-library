@@ -1,6 +1,6 @@
 # Business Plan Document Schema
 
-The artifact every skill of this plugin reads and writes. One file, `.agents_workspace/business/BUSINESS_PLAN.md`,
+The artifact every skill of this plugin reads and writes. One file, `.agents_workspace/product/business/BUSINESS_PLAN.md`,
 local and not committed, because a business plan holds pricing, unit economics, and kill criteria
 that do not belong in a repo others can read. A plan at the old path, `product/BUSINESS_PLAN.md`,
 moves to the new one, and the user is told it left the committed repo. It

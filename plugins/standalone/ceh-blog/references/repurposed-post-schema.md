@@ -1,7 +1,7 @@
 # Repurposed post schema
 
 One file per format that `repurpose-post` saves, `<slug>-<format>.md`: next to the post when it is
-on disk, otherwise in `.agents_workspace/blog/`. A new file is a copy of
+on disk, otherwise in `.agents_workspace/product/blog/`. A new file is a copy of
 `../assets/repurposed-post.template.md`, relative to this file. The `schema: repurposed-post/v1`
 line stays as written.
 

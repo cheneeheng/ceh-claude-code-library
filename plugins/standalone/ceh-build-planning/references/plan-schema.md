@@ -27,7 +27,7 @@ version of the format a plan follows.
 - `status`: `draft` (an Open question blocks building), `ready` (buildable as written),
   `building` (at least one phase is done), or `built` (every phase is done, with evidence).
 - `created`: the date the plan was first saved.
-- `business_plan`: the path to `.agents_workspace/business/BUSINESS_PLAN.md`. Omit the key when there is none.
+- `business_plan`: the path to `.agents_workspace/product/business/BUSINESS_PLAN.md`. Omit the key when there is none.
 
 **Sections:**
 

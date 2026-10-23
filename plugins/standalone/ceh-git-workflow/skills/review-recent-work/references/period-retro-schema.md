@@ -1,7 +1,7 @@
 # Period retro schema
 
 The retro `review-recent-work` saves: `product/retros/<YYYY-MM-DD>-period.md` for the retro and its
-in-scope issues, `.agents_workspace/retros/<YYYY-MM-DD>-period.md` for out-of-scope issues. A new
+in-scope issues, `.agents_workspace/product/retros/<YYYY-MM-DD>-period.md` for out-of-scope issues. A new
 file is a copy of `../assets/period-retro.template.md`, relative to this file. The
 `schema: period-retro/v1` line stays as written.
 

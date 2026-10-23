@@ -1,6 +1,6 @@
 # Business plan review schema
 
-The report `review-business-plan` saves to `.agents_workspace/business-plan-reviews/<YYYY-MM-DD>.md`.
+The report `review-business-plan` saves to `.agents_workspace/product/business-plan-reviews/<YYYY-MM-DD>.md`.
 A new report is a copy of `../assets/business-plan-review.template.md`, relative to this file. The
 `schema: business-plan-review/v1` line stays as written.
 

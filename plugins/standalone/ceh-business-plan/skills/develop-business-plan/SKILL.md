@@ -19,7 +19,7 @@ this moment has run and the plan's frontmatter agrees with its content.
 
 ## Procedure
 
-1. Find the plan: `.agents_workspace/business/BUSINESS_PLAN.md`, else Glob `**/BUSINESS_PLAN.md`
+1. Find the plan: `.agents_workspace/product/business/BUSINESS_PLAN.md`, else Glob `**/BUSINESS_PLAN.md`
    (schema, and what to do with a plan at the old path, in
    `${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`). When several exist, ask which one.
 2. No plan exists → Invoke the Skill tool with skill="ceh-business-plan:find-product-market-fit",

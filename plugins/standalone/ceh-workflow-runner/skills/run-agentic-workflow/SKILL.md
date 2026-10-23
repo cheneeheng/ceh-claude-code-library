@@ -53,7 +53,7 @@ restate it.
    do not read a workflow's `.js` and do its work by hand to look successful. Files on disk do not
    prove a workflow ran.
 4. **Find or create the run.** The run directory is `<run-dir>/<name>/<run-id>/`, where `<run-dir>` is
-   `$CEH_WORKFLOW_RUN_DIR`, defaulting to `.agents_workspace/`, and `<run-id>` is the start time
+   `$CEH_WORKFLOW_RUN_DIR`, defaulting to `.agents_workspace/workflow/`, and `<run-id>` is the start time
    `YYYYMMDD-HHMM`. Create it unless the flow is not `resumable`, writes no artifact and has no
    `fan_out`, in which case it has no run directory at all.
    - A flow that is not `resumable` always starts a new run and ignores `resume`.

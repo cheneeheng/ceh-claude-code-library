@@ -32,7 +32,7 @@ summarized under Output.
 2. **Read what exists before asking.** Read the format file, the repo, every plan in the plans
    folder that is not `built`, and only the frontmatter of each `built` one (read its full text
    only when the new work touches what it built), the README, and any issue or spec the user
-   named. When `.agents_workspace/business/BUSINESS_PLAN.md` exists, set `business_plan` and take the goal and target
+   named. When `.agents_workspace/product/business/BUSINESS_PLAN.md` exists, set `business_plan` and take the goal and target
    user from it rather than restating them. Put whatever is still unclear into **one round** of
    questions, each with a recommended answer. With no human to answer, take each recommended
    answer and list it under Open.

@@ -42,7 +42,7 @@ Read the previous posts, especially the latest episode in the same series. Then:
 - **Leave a thread**: plan what this episode leaves open. Closure instead if the series is
   finished.
 - **Capture the voice once**: if the blog has three or more posts, the target repo's `CLAUDE.md`
-  defines no blog voice, and `.agents_workspace/blog-voice.md` does not exist yet, write that file
+  defines no blog voice, and `.agents_workspace/product/blog-voice.md` does not exist yet, write that file
   from the posts, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-voice.template.md`, per
   `${CLAUDE_PLUGIN_ROOT}/references/blog-voice-schema.md`, each point backed by a quoted line. On
   later
@@ -62,7 +62,7 @@ before asking anything.
 - **Pasted content**: read it directly.
 
 **Product handoff files.** When the repo has them, read them before inferring anything, because
-they hold what earlier stages settled. `.agents_workspace/business/BUSINESS_PLAN.md` gives who the product is for,
+they hold what earlier stages settled. `.agents_workspace/product/business/BUSINESS_PLAN.md` gives who the product is for,
 the problem, and the differentiator: take them from it rather than asking. `product/EVIDENCE.md`
 bounds every claim about what the product does or how well it does it (tested, fast, secure,
 usable). Read only its newest section, the first one, because earlier sections describe older
@@ -315,7 +315,7 @@ they cost the author, not warnings issued to the reader.
 
 **Final draft**: complete post, ready to copy-paste — title; body (subheadings only if length warrants); one-line meta description `> **Meta:** [description]` — ~150 chars, specific angle, readable without the title.
 
-**Where it goes:** inside a blog repo (a posts directory was found), write the post as a new file there, matching the existing posts' filename pattern and front matter; the title and meta description go into the front matter fields the other posts use (`title`, `description`, or equivalent) instead of the `> **Meta:**` line. Mark it as a draft if the front matter has a draft flag. Otherwise save the draft to `.agents_workspace/blog/<YYYY-MM-DD>-<slug>.md`, the slug from the title in kebab case, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-draft.template.md`, per `${CLAUDE_PLUGIN_ROOT}/references/blog-draft-schema.md` (its `title` and `description` replace the title line and the `> **Meta:**` line), and show it in chat too, so an interview's post outlives the session. A post written into a blog repo follows that blog's front matter, never the template, because the template's fields would publish with it.
+**Where it goes:** inside a blog repo (a posts directory was found), write the post as a new file there, matching the existing posts' filename pattern and front matter; the title and meta description go into the front matter fields the other posts use (`title`, `description`, or equivalent) instead of the `> **Meta:**` line. Mark it as a draft if the front matter has a draft flag. Otherwise save the draft to `.agents_workspace/product/blog/<YYYY-MM-DD>-<slug>.md`, the slug from the title in kebab case, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-draft.template.md`, per `${CLAUDE_PLUGIN_ROOT}/references/blog-draft-schema.md` (its `title` and `description` replace the title line and the `> **Meta:**` line), and show it in chat too, so an interview's post outlives the session. A post written into a blog repo follows that blog's front matter, never the template, because the template's fields would publish with it.
 
 ## Hands off to
 

@@ -1,6 +1,6 @@
 # Perf report schema
 
-The file `measure-performance` keeps at `.agents_workspace/perf/<metric>.md`, one per metric. A new
+The file `measure-performance` keeps at `.agents_workspace/product/perf/<metric>.md`, one per metric. A new
 file is a copy of `../assets/perf-report.template.md`, relative to this file. The
 `schema: perf-report/v1` line stays as written.
 

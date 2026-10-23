@@ -24,7 +24,7 @@
     "should_trigger": true
   },
   {
-    "query": "the spec's finished at .agents_workspace/prepublish-workflow-spec.md. design it and emit it into .claude/skills/",
+    "query": "the spec's finished at .agents_workspace/workflow/prepublish-workflow-spec.md. design it and emit it into .claude/skills/",
     "should_trigger": true
   },
   {

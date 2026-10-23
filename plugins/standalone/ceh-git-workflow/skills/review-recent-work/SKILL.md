@@ -82,6 +82,6 @@ repo's scope has been handed to its route, and the path, headline numbers, and r
 Save by where each fix lands, creating the directory if needed. The retro and its in-scope issues
 go to `product/retros/<YYYY-MM-DD>-period.md`, committed with the first fix it routes, because the
 next retro and the routed work read it. Out-of-scope issues go to
-`.agents_workspace/retros/<YYYY-MM-DD>-period.md`, local, because only the user acts on them. When
+`.agents_workspace/product/retros/<YYYY-MM-DD>-period.md`, local, because only the user acts on them. When
 both files exist, each links the other through `other_file`. Each file fills
 `assets/period-retro.template.md`, per `references/period-retro-schema.md`.

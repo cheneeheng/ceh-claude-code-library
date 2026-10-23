@@ -1,6 +1,6 @@
 # Stress test schema
 
-The file `stress-test-plan` saves to `.agents_workspace/stress-tests/<YYYY-MM-DD>-<topic>.md` when
+The file `stress-test-plan` saves to `.agents_workspace/product/stress-tests/<YYYY-MM-DD>-<topic>.md` when
 there is no plan file to write the outcome back to. A new file is a copy of
 `../assets/stress-test.template.md`, relative to this file. The `schema: stress-test/v1` line stays
 as written.

@@ -173,7 +173,7 @@ Thought Leadership, Personal Story), each ending on **The Open Thread**.
 current repo: `content/`, `posts/`, `_posts/`, `src/content/`, `blog/`), and the destination rule:
 inside a blog repo the post is a file matching the existing posts' filename pattern and front matter,
 with the title and meta description in the front matter, and otherwise a file in
-`.agents_workspace/blog/` named `<YYYY-MM-DD>-<slug>`, filling the plugin's
+`.agents_workspace/product/blog/` named `<YYYY-MM-DD>-<slug>`, filling the plugin's
 `assets/blog-draft.template.md`, shown in chat too.
 
 ## Blog repurpose handoff line
@@ -206,7 +206,7 @@ editing both.
 | ----------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------ |
 | `plugins/standalone/ceh-seo/skills/write-project-listing-text/SKILL.md` | § Procedure, 1. Read the product handoff files | a numbered step, not a paragraph; same sentences |
 
-**Shared:** what Tell takes from `.agents_workspace/business/BUSINESS_PLAN.md` (user, problem, differentiator), that
+**Shared:** what Tell takes from `.agents_workspace/product/business/BUSINESS_PLAN.md` (user, problem, differentiator), that
 `product/EVIDENCE.md` bounds every product claim to the Claims of its newest section with nothing said about a
 `stale`, `not run`, or `open issues` area, and the missing-file fallback. The file names and
 statuses must match `ceh-testing:write-evidence-report` and `docs/STRATEGY.md`.
@@ -472,7 +472,7 @@ in both files together:
   stops asking. The builder reads it as "take the conservative reading and stop delegating". The
   pair loops forever if only one of them knows the convention.
 - **The closed heading set and `$CEH_WORKFLOW_BUILD_DIR`.** Neither skill may add a heading to the
-  spec, and both name the variable and its `.agents_workspace/` default, because the interview has
+  spec, and both name the variable and its `.agents_workspace/workflow/` default, because the interview has
   to work without the builder loaded.
 - **The no-human path.** The interview leaves an unanswerable row recorded as unanswered with its
   question, and the builder's Headless build carries that row into the draft as `OPEN: spec row
@@ -546,7 +546,7 @@ delete".
 `record-project-decisions`, anything else in the repo fixed directly, outside the repo left for the
 user), acting on every in-scope route in the same session, an uninstalled route left open, and the
 split save: in-scope issues committed to `product/retros/<YYYY-MM-DD>-<kind>.md`, out-of-scope ones
-local in `.agents_workspace/retros/`, each file linking the other through its `other_file`
+local in `.agents_workspace/product/retros/`, each file linking the other through its `other_file`
 frontmatter field. Each skill keeps its own report template (`period-retro`, `session-retro`,
 `repeat-mistake`), because the three reports differ.
 

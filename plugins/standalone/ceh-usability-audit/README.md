@@ -186,7 +186,7 @@ care about.
 
 ## Output
 
-`.agents_workspace/ux-audits/<target>/run-<NNN>/` — `UX_AUDIT.md` from the two walkthrough skills,
+`.agents_workspace/product/ux-audits/<target>/run-<NNN>/` — `UX_AUDIT.md` from the two walkthrough skills,
 `ERROR_MESSAGES.md` from the error triage, with walker transcripts and any screenshots beside them.
 A zero-padded sequential run index means a re-run never overwrites prior evidence. A finding without
 its transcript is an opinion.

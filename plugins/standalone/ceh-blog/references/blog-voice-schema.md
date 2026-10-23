@@ -1,6 +1,6 @@
 # Blog voice schema
 
-The voice profile `draft-post` saves to `.agents_workspace/blog-voice.md`, taken from three or more
+The voice profile `draft-post` saves to `.agents_workspace/product/blog-voice.md`, taken from three or more
 of the blog's posts. A new profile is a copy of `../assets/blog-voice.template.md`, relative to
 this file. The `schema: blog-voice/v1` line stays as written.
 
