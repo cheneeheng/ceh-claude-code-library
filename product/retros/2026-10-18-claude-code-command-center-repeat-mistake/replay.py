@@ -7,12 +7,11 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 T = Path.home() / (
-    ".claude/projects/C--Users-Chen-WorkLocal-00-Project-claude-code-command-center/"
-    "a2035f28-1913-41f9-8f99-d59a0cc27bfe.jsonl"
+    ".claude/projects/<project>/a2035f28-1913-41f9-8f99-d59a0cc27bfe.jsonl"
 )
 BG = HERE / "draft/ceh-git-workflow/scripts/branch-skill-gate.py"
 FG = HERE / "draft/ceh-testing/scripts/bug-fix-skill-gate.py"
-REPO = r"C:\Users\Chen\WorkLocal\00_Project\claude-code-command-center"
+REPO = r"<path to claude-code-command-center>"
 lines = T.read_text(encoding="utf-8").splitlines(keepends=True)
 
 

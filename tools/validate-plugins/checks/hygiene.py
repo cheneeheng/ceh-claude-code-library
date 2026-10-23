@@ -9,8 +9,19 @@ import sys
 from common import REPO, fail, main, plugin_dirs, rel
 
 INVISIBLE_PAT = re.compile("[\\u200b-\\u200f\\u202a-\\u202e\\u2060-\\u2064\\ufeff]")
-USER_PATH_PAT = re.compile(r"[A-Za-z]:[\\/]Users[\\/]\w|/Users/\w|/home/\w")
-HYGIENE_ROOTS = ("plugins", "docs", "tools", ".claude", ".github")
+USER_PATH_PAT = re.compile(
+    r"[A-Za-z]:[\\/]Users[\\/]\w|/Users/\w|/home/\w|[A-Za-z]--Users-\w"
+)
+HYGIENE_ROOTS = (
+    "plugins",
+    "docs",
+    "tools",
+    ".claude",
+    ".github",
+    "product",
+    "audits",
+    "examples",
+)
 HYGIENE_SUFFIXES = {
     ".md",
     ".json",
