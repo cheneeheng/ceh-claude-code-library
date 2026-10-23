@@ -47,7 +47,12 @@ RUNS: list[dict] = []  # one cost row per headless run, for SUMMARY.md
 
 
 def claude(
-    prompt: str, model: str, effort: str, label: str, tools: list[str] = ()
+    prompt: str,
+    model: str,
+    effort: str,
+    label: str,
+    tools: list[str] = (),
+    system: str = "",
 ) -> tuple[str, str, int]:
     """One headless run: (final text, slug of the model that actually ran, denied tool calls)."""
     cmd = [
@@ -64,6 +69,8 @@ def claude(
     ]
     if tools:
         cmd += ["--allowedTools", *tools]
+    if system:
+        cmd += ["--append-system-prompt", system]
     r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", cwd=REPO)
     try:
         out = json.loads(r.stdout)
@@ -133,8 +140,14 @@ def audit_plugin(state: dict, run: dict) -> dict:
         new_gen = any(len(detect.version(s)[1]) == 1 for s in state["missing"])
         model, effort = run["tuning"] if new_gen and not run["forced"] else run["audit"]
         print(f"[{name}] /doctor prompt-audit with {model}/{effort}", file=sys.stderr)
+        # A global CLAUDE.md that asks for findings to be saved made /doctor write stray copies to
+        # .agents_workspace/prompt-audit/. audit.py saves the reply itself.
         raw, _, _ = claude(
-            f"/doctor prompt-audit {rel}", model, effort, f"{name} /doctor"
+            f"/doctor prompt-audit {rel}",
+            model,
+            effort,
+            f"{name} /doctor",
+            system="Do not save the audit to a file. Reply with it only: the caller saves it.",
         )
         raw_path = run["out_dir"] / f"{name}.doctor.md"
         raw_path.write_text(raw + "\n", encoding="utf-8")
