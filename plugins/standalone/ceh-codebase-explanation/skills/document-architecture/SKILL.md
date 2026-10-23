@@ -25,25 +25,39 @@ gets the reasoning without opening every plan in `product/plans/`.
 
 - **Mermaid, never ASCII art.** Diagrams must render and stay diffable.
 - **Show what exists, not what's aspirational.** If it isn't built, it isn't in the diagram.
-- **One line of prose per diagram** stating what it shows — never a wall of text.
-- **One screen per diagram is the ceiling.** When one stops fitting, split it by subsystem — never
-  shrink the labels to buy room.
+- **The minimum text a newcomer needs, never a wall of text.** Each diagram opens with a short
+  walkthrough: one or two sentences on how to read it, then up to three bullets on what to notice
+  (the surprising branch, the lock, the two-request round trip). It never restates the diagram,
+  its table, or Key Decisions.
+- **Split a diagram when it stops reading cleanly**, not only when it stops fitting one screen:
+  edges crossing or back-tracking, or more than about a dozen edges. Split by stage or subsystem,
+  one numbered subsection each, and never shrink the labels to buy room.
+- **Number every section and open with a Contents list.** `01.`, `02.` on each `##`, `03.01` on
+  each `###`, and a linked `## Contents` after the title, per `references/architecture-schema.md`.
+- **Render every Mermaid block and look at the images before finishing**, for example with
+  `npx -p @mermaid-js/mermaid-cli mmdc -i ARCHITECTURE.md -o out.md`. Crossing edges survive a
+  read of the source and show only in the picture. When no renderer can run, say so in the
+  report.
 - **Update on shape change, not on every commit.** A diagram is stale only when the system no
   longer matches it; then the diagram and any new decision land in that same change.
 
 ## The 3-second read
 
-`ARCHITECTURE.md` opens with an `## Overview` section a newcomer absorbs in under three seconds,
-before any diagram. It answers "what is this thing?" and nothing else. Exactly two parts:
+`ARCHITECTURE.md` opens, after its Contents list, with an `## 01. Overview` section a newcomer
+absorbs in seconds, before any diagram. It answers "what is this thing?" and nothing else. Two
+parts:
 
-1. **One sentence** — what the system does, and for whom: an end user, an operator, or the
-   developer importing it. Problem-domain words only.
+1. **A short bullet list**, one bullet per idea: what the system does and for whom (an end user,
+   an operator, or the developer importing it), then one bullet per stage of the system.
+   Problem-domain words only.
 2. **One line of shape** — the whole system as a single left-to-right flow, 3–6 nodes.
 
 ````markdown
-## Overview
+## 01. Overview
 
-Shoppers browse a catalogue and place orders; staff fulfil them from an admin console.
+- Shoppers browse a catalogue and place orders, and staff fulfil them from an admin console.
+- The storefront takes the order and the Orders API records it.
+- Fulfilment books a carrier and ships it.
 
 ```mermaid
 flowchart LR
@@ -51,8 +65,8 @@ flowchart LR
 ```
 ````
 
-- **Three seconds is the acceptance test.** One sentence, one flow line, no scrolling. If the reader
-  has to parse a branch or a legend, it failed — cut until it passes.
+- **A few seconds is the acceptance test.** A few bullets, one flow line, no scrolling. If the
+  reader has to parse a branch, a legend, or a dense paragraph, it failed — cut until it passes.
 - **Domain nouns, not codebase nouns.** `Orders`, `Fulfilment` — never `OrderAggregateService`,
   and never a framework or database name; those belong in the Components diagram.
 - **Linear, never branching.** The overview is the spine. Externals, alternate paths, and every
@@ -90,6 +104,11 @@ you want this one:
   system: you cannot change it, and it fails independently.
 - **Name the technology on the node** (`Orders API · FastAPI`). This is the diagram where stack
   names belong.
+- **Cut edges that only repeat.** Many calls into one node can name the endpoint inside each
+  calling node instead of drawing every arrow to it. Externals of one kind (inputs, services
+  fetched over the network) sit in one `subgraph` with one edge to the group.
+- **Split by stage when it stops reading cleanly**, per the Rules. A node two parts share (the
+  database, the server) is the join point: it appears in both, and the walkthrough says so.
 - **Skip it if it adds nothing.** If Components would be the Overview plus a node or two, the system
   is small enough that the Overview _is_ the whole picture — ship it alone and move on.
 
@@ -127,7 +146,7 @@ single home for decision rationale; record one whenever you choose a framework/r
 strategy, pick between fundamentally different patterns, plan a major dependency upgrade, or reverse
 a prior decision in a new version.
 
-Append entries to a `## Key Decisions` section at the bottom of `ARCHITECTURE.md`, newest last, in
+Append entries to the numbered Key Decisions section at the bottom of `ARCHITECTURE.md`, newest last, in
 the entry shape of `assets/architecture.template.md`, per `references/architecture-schema.md`.
 
 - **Never delete a decision.** To change one, append a new entry and mark the old one
@@ -139,10 +158,10 @@ the entry shape of `assets/architecture.template.md`, per `references/architectu
 
 `product/ARCHITECTURE.md` in the target repo, committed, unless the repo's `CLAUDE.md` names another
 path. A new file starts as a copy of `assets/architecture.template.md`, and an existing one
-without its `schema:` line gets the template's frontmatter on the next update. Later planning reads it and a fresh clone must keep the decision trail, so it never lives in
+without its `schema:` line, or on an older version, is brought up to the template on the next update. Later planning reads it and a fresh clone must keep the decision trail, so it never lives in
 a git-ignored folder. `product/` holds the files the people and agents building the product read,
 and `docs/` is left to users of the product. When a `.agents_workspace/ARCHITECTURE.md` from an
 earlier version exists and `product/ARCHITECTURE.md` does not, move it there first and say so. For
 a large system, the diagram set may move to `product/architecture/` with one file per view, but the
-`## Overview` and `## Key Decisions` sections stay in `ARCHITECTURE.md` itself — the spine and the
+Overview and Key Decisions sections stay in `ARCHITECTURE.md` itself — the spine and the
 decision trail must remain readable and greppable in one place.

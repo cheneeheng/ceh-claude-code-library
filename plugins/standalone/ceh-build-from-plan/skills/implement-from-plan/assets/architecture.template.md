@@ -1,27 +1,45 @@
 ---
-schema: architecture/v1
+schema: architecture/v2
 ---
 
 # Architecture
 
-## Overview
+## Contents
 
-<what the system does, for whom>
+- [01. Overview](#01-overview)
+- [02. <diagram name>](#02-<anchor>)
+  - [02.01 <subsection>](#0201-<anchor>)
+- [NN. Key Decisions](#nn-key-decisions)
+
+## 01. Overview
+
+- <what the system does, for whom>
+- <one stage of the system>
 
 ```mermaid
 flowchart LR
     <nodes>
 ```
 
-## <diagram name>
+## 02. <diagram name>
 
-<what the diagram shows>
+<how to read the diagram>
+
+- <what to notice>
 
 ```mermaid
 <diagram>
 ```
 
-## Key Decisions
+### 02.01 <subsection>
+
+<how to read the diagram>
+
+```mermaid
+<diagram>
+```
+
+## NN. Key Decisions
 
 ### YYYY-MM-DD — <title>
 

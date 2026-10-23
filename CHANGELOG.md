@@ -9,6 +9,44 @@ before this repo live in
 
 ---
 
+## 2026-10-23
+
+`ceh-codebase-explanation:document-architecture` now writes an `ARCHITECTURE.md` a new developer
+can read. A retro from `claude-code-command-center`, moved into `product/retros/`, found its output
+unreadable: one Components diagram with 20+ edges that still fitted one screen, bare diagrams with
+no explanation, a dense one-paragraph Overview, and no section numbers in 270 lines. The skill and
+its template now ask for the minimum text a newcomer needs instead of one sentence or one line,
+split diagrams when edges stop reading cleanly, number every section with a Contents list, and
+render every Mermaid block before finishing. The template moves to `architecture/v2`, and the copy
+in `ceh-build-from-plan` follows.
+
+Committed files no longer carry the user's home path. Two retros held it, inside the
+`C--Users-<name>` project folder name and an absolute repo path, and the `hygiene` check missed
+both: it did not scan `product/` and did not know the folder-name form. The retros now use
+`<home>` and `<project>` placeholders, the check covers `product/`, `audits/`, and `examples/` and
+the folder-name form, and `.claude/rules/decision-no-home-paths.md` records the rule.
+
+### Plugin versions
+
+| Plugin                     | Version |
+| -------------------------- | ------- |
+| `ceh-build-from-plan`      | 1.0.10  |
+| `ceh-codebase-explanation` | 1.2.8   |
+
+### Changed
+
+- `ceh-codebase-explanation:document-architecture`: walkthrough per diagram, bullet-list
+  Overview, split diagrams by readability, numbered sections and Contents, a render check.
+- `architecture.template.md` and `architecture-schema.md` move to `architecture/v2` in both
+  plugins.
+- `validate.py` `hygiene` check: scans `product/`, `audits/`, and `examples/`, and catches the
+  `C--Users-<name>` folder-name form.
+
+### Fixed
+
+- Home paths removed from `product/retros/2026-10-18-session-6f65e2d1.md` and the 2026-10-18
+  `replay.py`.
+
 ## 2026-10-22
 
 Output templates moved from `references/` to `assets/`. A template is a file the skill copies and
