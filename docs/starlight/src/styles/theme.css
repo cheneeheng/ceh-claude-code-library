@@ -14,9 +14,11 @@
   --sl-text-h3: var(--fs-300);
   --sl-text-h4: var(--fs-200);
   --sl-text-h5: var(--fs-100);
+  --sl-line-height: 1.7;
 
   /* Wide enough for the catalog tables; prose is capped back to a readable line below. */
   --sl-content-width: 54rem;
+  --sl-sidebar-width: 17rem;
 
   /* Starlight's grays run white (strongest ink) to black (page): map them onto ink, line, surface. */
   --sl-color-white: var(--fg);
@@ -29,16 +31,16 @@
   --sl-color-gray-7: var(--surface-2);
   --sl-color-black: var(--surface);
 
-  /* Depth ladder: chrome recedes on --bg, the reading pane sits on --surface. */
+  /* One surface for chrome and page, split by hairlines: the docs-site convention. */
   --sl-color-bg: var(--surface);
-  --sl-color-bg-nav: var(--bg);
-  --sl-color-bg-sidebar: var(--bg);
+  --sl-color-bg-nav: var(--surface);
+  --sl-color-bg-sidebar: var(--surface);
   --sl-color-bg-inline-code: var(--surface-2);
   --sl-color-hairline-light: var(--border);
   --sl-color-hairline: var(--border);
   --sl-color-hairline-shade: var(--border);
 
-  /* Blue is the one brand color: links, the primary button, focus. */
+  /* Blue is the one brand color: links, the primary button, the current page, focus. */
   --sl-color-text: var(--fg);
   --sl-color-text-accent: var(--secondary);
   --sl-color-text-invert: var(--on-text);
@@ -48,31 +50,181 @@
   --sl-color-accent-high: var(--secondary-hi);
 }
 
+/* — Header ------------------------------------------------------------------------------------ */
+.site-title {
+  font-size: var(--fs-200);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+}
+
+.site-title img {
+  height: var(--space-6);
+}
+
+/* — Sidebar: section labels are eyebrows, pages are quiet rows, the current page is lit blue -- */
+.sidebar-content .top-level > li + li {
+  margin-top: var(--space-6);
+}
+
+.sidebar-content .top-level > li > details > summary .large {
+  font-size: var(--fs-50);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.sidebar-content .top-level > li > details > summary .caret {
+  display: none;
+}
+
+.sidebar-content details details > summary .large {
+  font-size: var(--fs-100);
+  font-weight: var(--weight-medium);
+  color: var(--fg-muted);
+}
+
+.sidebar-content .caret {
+  color: var(--fg-subtle);
+}
+
+.sidebar-content a {
+  font-size: var(--fs-100);
+  color: var(--fg-muted);
+  border-radius: var(--radius-sm);
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+
+.sidebar-content :is(a[aria-current="page"], a[aria-current="page"]:hover, a[aria-current="page"]:focus) {
+  font-weight: var(--weight-semibold);
+  color: var(--secondary);
+  background: var(--secondary-wash);
+}
+
+/* — Page ------------------------------------------------------------------------------------- */
 :is(h1, h2, h3, h4) {
   font-weight: var(--weight-bold);
   letter-spacing: var(--tracking-tight);
 }
 
 h1 {
-  font-weight: var(--weight-heavy);
   line-height: var(--lh-tight);
 }
 
-.sl-link-button {
-  border-radius: var(--radius-md);
-}
-
-/* Meridian's signature: the current page carries the amber active-edge, which marks state. */
-.sidebar-content a {
-  border-radius: var(--radius-sm);
-}
-
-.sidebar-content :is(a[aria-current="page"], a[aria-current="page"]:hover, a[aria-current="page"]:focus) {
-  color: var(--fg);
-  background: var(--accent-wash);
-  box-shadow: inset var(--edge) 0 0 var(--accent);
+.sl-markdown-content h2:not(:where(.not-content *)) {
+  margin-top: var(--space-12);
 }
 
 .sl-markdown-content :is(p, ul, ol, blockquote) {
   max-width: 75ch;
+}
+
+.sl-markdown-content a:not(:where(.not-content *)) {
+  font-weight: var(--weight-medium);
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--dur-fast) var(--ease-standard);
+}
+
+.sl-markdown-content a:not(:where(.not-content *)):hover {
+  text-decoration-color: currentColor;
+}
+
+/* Inline code scales with its text, so a code link in a heading or list stays readable. */
+.sl-markdown-content :not(pre) > code:not(:where(.not-content *)) {
+  font-size: 0.875em;
+  padding: 0.1em 0.35em;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+/* Tables sit in one framed panel: a tinted header row, hairline rows, no closing rule. */
+.sl-markdown-content table:not(:where(.not-content *)) {
+  font-size: var(--fs-100);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  border-spacing: 0;
+  border-collapse: separate;
+}
+
+.sl-markdown-content th:not(:where(.not-content *)) {
+  background: var(--surface-2);
+  font-weight: var(--weight-semibold);
+  text-align: start;
+}
+
+.sl-markdown-content :is(th, td):not(:where(.not-content *)) {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.sl-markdown-content tr:last-child > td:not(:where(.not-content *)) {
+  border-bottom: 0;
+}
+
+/* — Right rail: "On this page" is an eyebrow like the sidebar's section labels --------------- */
+starlight-toc h2 {
+  font-size: var(--fs-50);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* — Components ------------------------------------------------------------------------------- */
+.sl-link-button {
+  border-radius: var(--radius-md);
+}
+
+.sl-link-card {
+  border-color: var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+  transition:
+    border-color var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard);
+}
+
+.sl-link-card:hover {
+  border-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.sl-link-card .title {
+  font-size: var(--fs-200);
+}
+
+.sl-link-card .description {
+  font-size: var(--fs-100);
+}
+
+/* No hero image, so the copy takes the full column and the title fits one line. */
+@media (min-width: 50rem) {
+  .hero {
+    grid-template-columns: 100%;
+    padding-block: var(--space-16) var(--space-8);
+  }
+}
+
+.hero h1 {
+  font-size: clamp(var(--fs-600), 5vw, var(--fs-700));
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-tight);
+}
+
+.hero .copy > h1 {
+  max-width: none;
+}
+
+.hero .tagline {
+  max-width: 60ch;
+  font-size: var(--fs-300);
+  color: var(--fg-muted);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
 }

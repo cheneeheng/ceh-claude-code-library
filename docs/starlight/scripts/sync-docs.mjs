@@ -63,8 +63,8 @@ function rewriteLinks(md, src) {
     .join("\n");
 }
 
-function write(slug, frontmatter, body) {
-  const file = path.join(OUT, `${slug}.md`);
+function write(slug, frontmatter, body, ext = "md") {
+  const file = path.join(OUT, `${slug}.${ext}`);
   mkdirSync(path.dirname(file), { recursive: true });
   const head = Object.entries(frontmatter).map(([k, v]) => `${k}: ${JSON.stringify(v)}`);
   writeFileSync(file, `---\n${head.join("\n")}\n---\n\n${body}`);
@@ -89,14 +89,19 @@ const staged = new Set(stages.flatMap((s) => s.names));
 const unstaged = plugins.filter((n) => !staged.has(n));
 if (unstaged.length) stages.push({ stage: "Other", question: "Not yet placed in a stage.", names: unstaged });
 
+// JSON.stringify inside {} passes each value as a JS string, so quotes and braces need no escaping.
 const hub = stages.map(({ stage, question, names }) => {
-  const items = names.map((n) => `- [\`${n}\`](${BASE}/plugins/${n}/): ${summary[n]}.`);
-  return `## ${stage}\n\n${question}\n\n${items.join("\n")}`;
+  const cards = names.map(
+    (n) =>
+      `  <LinkCard title={${JSON.stringify(n)}} description={${JSON.stringify(summary[n] + ".")}} href="${BASE}/plugins/${n}/" />`,
+  );
+  return `## ${stage}\n\n${question}\n\n<CardGrid>\n${cards.join("\n")}\n</CardGrid>`;
 });
 write(
   "plugins/index",
   { title: "Plugins", description: "Every plugin, grouped by the lifecycle stage it serves." },
-  `${plugins.length} plugins, each installable alone. Find the stage you are in, then open the plugin for what it does, how it is invoked, and what it needs. Which to install first is in [Get started](${BASE}/get-started/).\n\n${hub.join("\n\n")}\n`,
+  `import { CardGrid, LinkCard } from "@astrojs/starlight/components";\n\n${plugins.length} plugins, each installable alone. Find the stage you are in, then open the plugin for what it does, how it is invoked, and what it needs. Which to install first is in [Get started](${BASE}/get-started/).\n\n${hub.join("\n\n")}\n`,
+  "mdx",
 );
 writeFileSync(
   path.join(SITE, "src/sidebar.json"),

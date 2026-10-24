@@ -1,0 +1,46 @@
+---
+title: Home
+description: Claude Code plugins that guide autonomous agents through a product's life, one plugin per use case.
+template: splash
+hero:
+  title: CEH Claude Code Library
+  tagline: Plugins that guide a Claude Code agent through a product's life, from shaping the idea to building, proving, and telling people about it. Written for developers who use Claude Code, and each one works installed alone.
+  actions:
+    - text: Get started
+      link: /ceh-claude-code-library/get-started/
+      icon: right-arrow
+    - text: Browse plugins
+      link: /ceh-claude-code-library/plugins/
+      variant: minimal
+---
+
+import { CardGrid, LinkCard } from "@astrojs/starlight/components";
+
+## Install
+
+Add the marketplace, then install `ceh-every-session`, the one plugin every session should have.
+[Get started](/ceh-claude-code-library/get-started/) lists the rest of the core for people who write code in git repos.
+
+```text
+/plugin marketplace add cheneeheng/ceh-claude-code-library
+/plugin install ceh-every-session@ceh-claude-code-library --scope user
+```
+
+## Learn
+
+<CardGrid>
+  <LinkCard title="Plugins" description="Know what you are about to do? Every plugin, grouped by lifecycle stage." href="/ceh-claude-code-library/plugins/" />
+  <LinkCard title="Why this library" description="Choosing between tools? What it is for, and what it is not." href="/ceh-claude-code-library/why/" />
+  <LinkCard title="How the plugins fit together" description="How it works and why: stages, handoff files, how work is chosen." href="/ceh-claude-code-library/concepts/" />
+  <LinkCard title="Testing workflow" description="Writing or running tests? How the testing skills and agents route." href="/ceh-claude-code-library/guides/testing-workflow/" />
+  <LinkCard title="Retro workflow" description="Running a retro? Which of the three retro skills to start, and where its report goes." href="/ceh-claude-code-library/guides/retro-workflow/" />
+</CardGrid>
+
+## Reference
+
+<CardGrid>
+  <LinkCard title="Catalog" description="Looking for one skill or agent? Every one, grouped by plugin." href="/ceh-claude-code-library/reference/catalog/" />
+  <LinkCard title="Environment variables" description="Configuring a plugin? Every variable a plugin reads." href="/ceh-claude-code-library/reference/environment-variables/" />
+  <LinkCard title="Plugin dependencies" description="Wondering what installs with what? The dependency graph." href="/ceh-claude-code-library/reference/plugin-dependencies/" />
+  <LinkCard title="Plugin versions" description="Checking what changed? Every plugin's current version." href="/ceh-claude-code-library/reference/plugin-versions/" />
+</CardGrid>
