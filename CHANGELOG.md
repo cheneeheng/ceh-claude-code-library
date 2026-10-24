@@ -31,6 +31,17 @@ framed panel, and inline code scales with its text. The home page and the plugin
 their links as cards, and the Guides group gains the retro workflow, which the sidebar left out.
 No plugin changes.
 
+A new repo-local skill, `.claude/skills/evaluate-plugin/`, is the procedure for evaluating a plugin.
+It replaces the archived `ceh-evaluation` without rebuilding a test runner: `claude plugin eval` runs
+every case, for skills, hooks, agents, and MCP servers alike. The skill adds what the runner leaves
+out: prompts sourced from real transcripts first, graders shaped per component type, a paid run only
+after one yes on the cases and a spending ceiling, a one-case probe before the suite, a noise floor,
+and one fix per round, sorted by cause. Description fixes go to skill-creator's description loop.
+Long tuning runs go to `/claude-api hillclimb`, fed by `scripts/plugin_eval_round.py`. That script
+runs `claude plugin eval --keep-temp`, the only way a run's transcript survives, and writes each
+round in the layout the hill-climb guide and its report builder read. It was checked on a real
+one-case run, and the guide's lite report builder read its output. No plugin changes.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -43,6 +54,9 @@ No plugin changes.
   microsoft/azure-skills plugins.
 - `docs/RETRO_WORKFLOW.md`: a routing guide for the retro skills, linked from `README.md`, listed in
   `CLAUDE.md`, and published on the docs site under Guides.
+- `.claude/skills/evaluate-plugin/`: `SKILL.md` and `scripts/plugin_eval_round.py`, pointed to from
+  the `CLAUDE.md` Evaluation section and `add-plugin-component` step 6, with its strictness-level
+  copy registered in `docs/CROSS_REFERENCES.md`.
 
 ### Changed
 

@@ -550,6 +550,19 @@ local in `.agents_workspace/product/retros/`, each file linking the other throug
 frontmatter field. Each skill keeps its own report template (`period-retro`, `session-retro`,
 `repeat-mistake`), because the three reports differ.
 
+## Eval case strictness levels
+
+**Canonical:** `.claude/skills/add-plugin-component/SKILL.md` — § 6. Validate, the eval-cases paragraph and its three levels
+
+| Copy                                      | Section                   | Diverges                                                                                                            |
+| ----------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `.claude/skills/evaluate-plugin/SKILL.md` | § Procedure steps 4 and 9 | condensed to one sentence per level; the failure reading sits in step 9's table, which adds grader and setup causes |
+
+**Shared:** each positive case written at three strictness levels over the same task (supportive
+names the moment, neutral gives the task only, competing adds a pull that tempts and never orders),
+and the reading: failing at neutral points at the description, failing even at supportive points at
+the body, failing at all three in a visible tool call is a hook candidate.
+
 ---
 
 ## Update protocol

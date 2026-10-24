@@ -59,7 +59,7 @@ Categorization rules of thumb:
 
 ```
 .agents_workspace/            # Session artifacts, git-ignored in full: DECISION_LOG.md, skill-evals/
-.claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/), model-audit (scripts/, references/, assets/)
+.claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/), model-audit (scripts/, references/, assets/), evaluate-plugin (scripts/)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
 audits/<date>/                # Model-audit reports, one <plugin>.md each plus SUMMARY.md — written by the model-audit skill
@@ -169,6 +169,9 @@ Evals use Anthropic's own tools, nothing bespoke. Two options, by scope:
   `--threshold`, `--json` and `--trust-plugin`.
 
 The two tools do not read each other's case files. Eval only when asked, because the cost is real.
+The repo-local skill `.claude/skills/evaluate-plugin/` is the procedure: it writes plugin-eval cases
+for skills, hooks, agents, and MCP servers, fixes one gap per round, and hands description fixes to
+skill-creator and long tuning runs to `/claude-api hillclimb` through its converter script.
 Do not run the archived `ceh-evaluation` plugin (`archive/ceh-evaluation/`): these two replace it.
 
 ## Versioning
