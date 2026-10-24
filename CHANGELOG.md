@@ -18,6 +18,13 @@ with separate scopes, so the registry lists each one under its own name and alia
 `foundry-iq-skills`. Only `azure` is in `claude-plugins-official`, so it has a second line for the
 `azure-skills` marketplace, and the other six install from that marketplace only.
 
+A new guide, `docs/RETRO_WORKFLOW.md`, explains how the three retro skills fit together:
+`review-recent-work` for a period, `diagnose-session` for one session, and `prevent-repeat-mistake`
+for one mistake. It covers which one to start, the route table the first two share, and the split
+between reports committed to `product/retros/` and those kept in
+`.agents_workspace/product/retros/`, which until now only `docs/STRATEGY.md` and each `SKILL.md`
+described in part. No plugin changes.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -28,6 +35,8 @@ with separate scopes, so the registry lists each one under its own name and alia
 
 - `ceh-every-session:find-available-guide` registry: eight lines for the seven
   microsoft/azure-skills plugins.
+- `docs/RETRO_WORKFLOW.md`: a routing guide for the retro skills, linked from `README.md`, listed in
+  `CLAUDE.md`, and published on the docs site under Guides.
 
 ## 2026-10-23
 

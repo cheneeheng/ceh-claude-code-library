@@ -16,6 +16,7 @@ const PAGES = [
   ["docs/VISION.md", "why", "Why this library"],
   ["docs/STRATEGY.md", "concepts", "How the plugins fit together"],
   ["docs/TESTING_WORKFLOW.md", "guides/testing-workflow", "Testing workflow"],
+  ["docs/RETRO_WORKFLOW.md", "guides/retro-workflow", "Retro workflow"],
   ["docs/CATALOG.md", "reference/catalog", "Catalog"],
   ["docs/ENVIRONMENT_VARIABLES.md", "reference/environment-variables", "Environment variables"],
   ["docs/PLUGIN_DEPENDENCIES.md", "reference/plugin-dependencies", "Plugin dependencies"],
