@@ -30,6 +30,8 @@ decisions about this repo.
 
 **Guides:** [`docs/TESTING_WORKFLOW.md`](docs/TESTING_WORKFLOW.md) — how [`ceh-testing`](plugins/standalone/ceh-testing/) and the three
 stack testing skills route between each other, with the trigger phrases and sequence for each moment.
+[`docs/RETRO_WORKFLOW.md`](docs/RETRO_WORKFLOW.md) — which retro skill to start, where each issue
+it finds is routed, and where its report is saved.
 
 **Versions:** each plugin keeps its own semantic version, and the repo has no releases.
 [`CHANGELOG.md`](CHANGELOG.md) groups changes by the date each PR was opened, and
