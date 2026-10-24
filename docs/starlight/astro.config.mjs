@@ -11,6 +11,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "CEH Claude Code Library",
+      logo: { src: "./public/favicon.svg" },
       social: [{ icon: "github", label: "GitHub", href: REPO }],
       customCss: ["./src/styles/meridian-tokens.css", "./src/styles/theme.css"],
       expressiveCode: {
@@ -28,11 +29,9 @@ export default defineConfig({
         },
       ],
       sidebar: [
-        { label: "Home", link: "/" },
-        { slug: "get-started" },
-        { label: "Understand", items: [{ slug: "why" }, { slug: "concepts" }] },
-        { label: "Plugins", items: [{ slug: "plugins" }, ...stages] },
-        { label: "Guides", items: [{ slug: "guides/testing-workflow" }] },
+        { label: "Start here", items: [{ slug: "get-started" }, { slug: "why" }, { slug: "concepts" }] },
+        { label: "Plugins", items: [{ label: "Overview", slug: "plugins" }, ...stages] },
+        { label: "Guides", items: [{ slug: "guides/testing-workflow" }, { slug: "guides/retro-workflow" }] },
         {
           label: "Reference",
           items: [

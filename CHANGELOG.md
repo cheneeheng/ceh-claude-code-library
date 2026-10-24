@@ -25,6 +25,12 @@ between reports committed to `product/retros/` and those kept in
 `.agents_workspace/product/retros/`, which until now only `docs/STRATEGY.md` and each `SKILL.md`
 described in part. No plugin changes.
 
+The docs site now looks like a standard documentation site. The header carries the logo, the sidebar
+groups pages under small uppercase section labels with the current page in blue, tables sit in a
+framed panel, and inline code scales with its text. The home page and the plugin overview show
+their links as cards, and the Guides group gains the retro workflow, which the sidebar left out.
+No plugin changes.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -37,6 +43,12 @@ described in part. No plugin changes.
   microsoft/azure-skills plugins.
 - `docs/RETRO_WORKFLOW.md`: a routing guide for the retro skills, linked from `README.md`, listed in
   `CLAUDE.md`, and published on the docs site under Guides.
+
+### Changed
+
+- Docs site (`docs/starlight/`): a documentation-style theme over the Meridian tokens, card grids
+  on the home page and the plugin overview, and a "Start here" sidebar group in place of the
+  "Home" link and the "Understand" group.
 
 ## 2026-10-23
 
