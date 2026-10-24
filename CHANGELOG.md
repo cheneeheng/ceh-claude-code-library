@@ -9,6 +9,26 @@ before this repo live in
 
 ---
 
+## 2026-10-24
+
+`ceh-every-session:find-available-guide` now points Azure work at Microsoft's own plugins,
+[microsoft/azure-skills](https://github.com/microsoft/azure-skills). The repo ships seven plugins
+with separate scopes, so the registry lists each one under its own name and aliases: `azure`,
+`aks-skills`, `azure-cost`, `azure-advisor`, `azure-kusto-graph-skills`, `azure-local-skills`, and
+`foundry-iq-skills`. Only `azure` is in `claude-plugins-official`, so it has a second line for the
+`azure-skills` marketplace, and the other six install from that marketplace only.
+
+### Plugin versions
+
+| Plugin              | Version |
+| ------------------- | ------- |
+| `ceh-every-session` | 2.8.13  |
+
+### Added
+
+- `ceh-every-session:find-available-guide` registry: eight lines for the seven
+  microsoft/azure-skills plugins.
+
 ## 2026-10-23
 
 `ceh-codebase-explanation:document-architecture` now writes an `ARCHITECTURE.md` a new developer

@@ -1,6 +1,6 @@
 {
   "name": "ceh-every-session",
-  "version": "2.8.12",
+  "version": "2.8.13",
   "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, context economy via delegated bulk reads, and replies folded to their summary.",
   "types": "./types/index.d.ts",
   "author": {
