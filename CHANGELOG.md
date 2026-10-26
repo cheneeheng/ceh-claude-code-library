@@ -60,11 +60,20 @@ rewrites came out of it. `write-build-plan` missed a feature added to an existin
 prompt sounded quick (5 of 9 runs fired), and `review-build-plan` missed "just glance at the phases"
 before building (0 of 3). After the rewrites every trigger case fired or stayed quiet 3 of 3.
 
+An eighth PR adds the same kind of suite for `ceh-build-from-plan`: 17 cases on whether
+`implement-from-plan` fires, what it records, and whether `build-record-guard.py` denies a
+hand-written Built Phase line. The skill fired in all 27 positive runs and stayed quiet in all 15
+near-miss runs, and the hook denied in 3 of 3. One fix came out of it: told "all checks passed" in a
+session that could not run the check, the skill recorded Built Phase 2 on the user's word in 3 of 3
+runs. Its rule now says the user's report is not a run, and the phase stayed `todo` in 3 of 3. The
+outcome cases need Bash, which `claude plugin eval` cannot sandbox on Windows, so they are unproven
+until the suite runs on Linux or macOS.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
-| `ceh-build-from-plan`      | 1.1.0   |
+| `ceh-build-from-plan`      | 1.1.1   |
 | `ceh-build-planning`       | 1.1.15  |
 | `ceh-business-plan`        | 1.1.13  |
 | `ceh-codebase-explanation` | 1.2.10  |
@@ -88,6 +97,8 @@ before building (0 of 3). After the rewrites every trigger case fired or stayed 
   `implement-from-plan` to detect it and must accept its slash command. Noted in `plugins/CLAUDE.md`.
 - `ceh-build-planning`: `evals/`, 19 `claude plugin eval` cases with their graders and fixture
   scripts.
+- `ceh-build-from-plan`: `evals/`, 17 `claude plugin eval` cases with their graders and fixture
+  scripts.
 
 ### Changed
 
@@ -97,6 +108,8 @@ before building (0 of 3). After the rewrites every trigger case fired or stayed 
   wider moment.
 - `ceh-build-planning`: `write-build-plan`'s description names a feature added to existing code even
   when it sounds quick, and `review-build-plan`'s names a quick look before building.
+- `ceh-build-from-plan:implement-from-plan`: a check the session could not run leaves the phase
+  `todo` even when the user says it passed.
 - `ceh-business-plan`: schema and template `business-plan/v2` with Numbering and contents,
   Diagrams, and HTML version sections; `find-product-market-fit` draws the default diagrams and
   numbers its draft; the five specialists find their subsection by title; `develop-business-plan`

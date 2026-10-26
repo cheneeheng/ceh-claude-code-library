@@ -60,7 +60,8 @@ reason recorded.
   Status, and append a Design changed line to the plan's `## Record` quoting the old line, so the
   plan stays true to the code and the original decision survives.
 - A phase is `done` only on a passing Check run after its last edit. A check you could not run
-  leaves the phase `todo`, with the reason in its Status.
+  leaves the phase `todo`, with the reason in its Status, even when the user says it passed: their
+  report is not a run.
 
 ## Output
 
