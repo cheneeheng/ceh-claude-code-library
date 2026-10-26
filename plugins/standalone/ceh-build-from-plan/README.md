@@ -18,6 +18,33 @@ append-only `## Record`, so the build keeps its history.
 **Manual trigger:** `/ceh-build-from-plan:implement-from-plan [plan-file] [phase]`, or say
 `"build from the plan"` / `"build phase 2"`.
 
+## Hooks
+
+The plugin ships a hook (`hooks/hooks.json`) that activates automatically when the plugin is
+enabled.
+
+| Guard                                     | Event                                       | Script                  | Default |
+| ----------------------------------------- | ------------------------------------------- | ----------------------- | ------- |
+| [Build record guard](#build-record-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`) | `build-record-guard.py` | on      |
+
+### Build record guard
+
+Denies an edit that adds a `- YYYY-MM-DD Built Phase` line to a plan in `product/plans/`, unless
+`implement-from-plan` was started in the session, by the Skill tool or its slash command. A Built
+Phase line is the plan's evidence that a phase was built test first and proven by its own check,
+so a line written by hand records a build that procedure never ran. It happened once: a session
+hand-wrote three Built lines, recorded in `product/retros/2026-10-26-repeat-mistake.md` in this
+library's repo. Built lines already in the file do not count, so rewriting a plan that has them
+passes. The guard fails open: unparseable input or a missing transcript allows the edit.
+
+Set a variable under `env` in a Claude Code settings file. The
+[environment variables page](../../../docs/ENVIRONMENT_VARIABLES.md) shows which file and how to undo it.
+
+| Variable                 | Default              | Effect                                                                          |
+| ------------------------ | -------------------- | ------------------------------------------------------------------------------- |
+| `CEH_BUILD_RECORD_GUARD` | unset (guard on)     | `off` allows Built Phase lines without `implement-from-plan`                    |
+| `CEH_DISABLED_HOOKS`     | unset (all hooks on) | Comma-separated hook script names to skip; `build-record-guard` switches it off |
+
 ## Not this plugin
 
 - Writing the plan: `ceh-build-planning`.

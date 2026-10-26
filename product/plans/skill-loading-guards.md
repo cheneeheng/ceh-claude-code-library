@@ -84,13 +84,25 @@ and told to build the phase through it.
   after it, with `validate.py` showing no failure outside `docs/starlight/node_modules/`; and the
   real mistake replayed against session 09b1a5aa's transcript,
   `<home>/.claude/projects/<project>/09b1a5aa-4d55-4c15-9f41-356f815dfdca.jsonl`, is denied.
-- **Status:** todo
+- **Status:** todo. Stopped on 2026-10-26 with everything built, on the
+  branch `feat/build-record-guard`. All 9 `hooks` fixtures pass (they failed first with "no
+  hooks.json runs this script"). The replay against the transcript cut at the first
+  `implement-from-plan` start, line 1864, denies the edit, and the full transcript, which now
+  holds that start, allows it. `validate.py` fails one `repo-rules` check:
+  `implement-from-plan/SKILL.md: named by hook script build-record-guard.py, so set
+'user-invocable: false'`. That needs a decision, under Open.
 
 ## Open
 
 Whether `transcript_path` inside a subagent names the subagent's own transcript: assumed it does,
 so a subagent that builds through the skill is allowed and one that does not is denied, which is
 the rule either way.
+
+How to satisfy the rule "a skill a hook script names is `user-invocable: false`"
+(`tools/validate-plugins/checks/repo_rules.py:110`), which exists for skills a hook loads into
+context, when this hook names `implement-from-plan` only to detect it: blocks Phase 2. Assumed
+nothing. Spelling the name in parts would get past the check by hiding from it, and setting
+`user-invocable: false` removes the slash command the hook itself accepts.
 
 ## Record
 
