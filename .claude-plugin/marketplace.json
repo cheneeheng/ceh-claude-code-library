@@ -23,7 +23,7 @@
     {
       "name": "ceh-codebase-explanation",
       "source": "./plugins/standalone/ceh-codebase-explanation",
-      "version": "1.2.9",
+      "version": "1.2.10",
       "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, the living architecture document, and why code is the way it is, traced through git history."
     },
     {
@@ -95,7 +95,7 @@
     {
       "name": "ceh-documentation",
       "source": "./plugins/standalone/ceh-documentation",
-      "version": "1.0.5",
+      "version": "1.0.6",
       "description": "CEH documentation: write user-facing documentation for a project — a full docs set, user guides and operator runbooks, an exhaustive API reference, concept pages with sourced design rationale, and runnable examples."
     },
     {
