@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Make write-build-plan trigger on retro fixes, and guard Built Phase lines with a hook
-status: building
+status: built
 created: 2026-10-26
 ---
 
@@ -53,6 +53,12 @@ and told to build the phase through it.
 - It follows `branch-guard.py`'s shape: the `CEH_DISABLED_HOOKS` kill switch first, then its own
   `off` switch, a `main()` under `if __name__ == "__main__"`, and fail open on any error, because a
   guard that blocks work on its own bugs costs more than it saves.
+- The rule "a skill a hook script names is `user-invocable: false`" gets a named exemption,
+  `NAMES_TO_DETECT` in `tools/validate-plugins/checks/repo_rules.py`, holding only
+  `build-record-guard.py` with its reason, and the matching sentence in `plugins/CLAUDE.md`. The
+  hook names `implement-from-plan` only to detect it, and that skill must keep the slash command
+  the hook accepts. A narrower rule by hook type was rejected because it would also release three
+  scripts the rule protects today. (Decided by the user, 2026-10-26.)
 - Two PRs, one per fix, in phase order: `ceh-build-planning` PATCH, then `ceh-build-from-plan`
   MINOR for the new hook.
 
@@ -84,7 +90,12 @@ and told to build the phase through it.
   after it, with `validate.py` showing no failure outside `docs/starlight/node_modules/`; and the
   real mistake replayed against session 09b1a5aa's transcript,
   `<home>/.claude/projects/<project>/09b1a5aa-4d55-4c15-9f41-356f815dfdca.jsonl`, is denied.
-- **Status:** todo
+- **Status:** done. The 9 `hooks` fixtures failed first ("no hooks.json runs this script") and
+  pass now. The replay, against the transcript cut before the first `implement-from-plan` start
+  (line 1864, because the full transcript now holds a real start), denies the edit. `validate.py`'s
+  only failures are the 20 hygiene hits in `docs/starlight/node_modules/`, after the
+  `NAMES_TO_DETECT` exemption in Design. The `repo-rules` check still flags a non-exempt
+  hook-named skill: `usage-limit-handoff` set user-invocable for one run was flagged, then restored.
 
 ## Open
 
@@ -98,3 +109,10 @@ the rule either way.
 - 2026-10-26 Reviewed: Revise first, 2 blocking (slash-command invocation not matched; Write/MultiEdit old-line count wrong)
 - 2026-10-26 Built Phase 1: `grep -c "the fixes a retro or issue" .../write-build-plan/SKILL.md`, 1
 - 2026-10-26 PR: #162 https://github.com/cheneeheng/ceh-claude-code-library/pull/162
+- 2026-10-26 Design changed: was no change to `validate.py`'s rules, now a `NAMES_TO_DETECT`
+  exemption in `repo_rules.py` for `build-record-guard.py`, because the rule demanded
+  `user-invocable: false` on `implement-from-plan`, which would remove its slash command
+- 2026-10-26 Built Phase 2: `python tools/validate-plugins/validate.py`, only the 20
+  `docs/starlight/node_modules/` hygiene hits; `checks/hooks.py`: OK, hooks check passed
+- 2026-10-26 Checked: 16 Built, 0 Gap, 0 Deviation, 0 Extra, 0 Failing
+- 2026-10-26 PR: #163 https://github.com/cheneeheng/ceh-claude-code-library/pull/163

@@ -67,6 +67,37 @@ def hook_fixtures(tmp: Path) -> list[dict]:
 
     bulk = {"BULK_READER_MIN_LINES": "350"}
     any_tool = {"tool_name": "Read", "tool_input": {}, "transcript_path": "t.jsonl"}
+
+    # build-record-guard: a plan file, and transcripts with and without implement-from-plan started.
+    built = "- 2026-10-26 Built Phase 1: check, 1 passed\n"
+    plans = tmp / "product" / "plans"
+    plans.mkdir(parents=True)
+    plan = plans / "p.md"
+    plan.write_text("## Record\n\n" + built, encoding="utf-8")
+    plan_p = plan.as_posix()
+    tx = {}
+    for name, line in (
+        ("none", '{"type":"user","message":{"content":"implement-from-plan, later"}}'),
+        (
+            "skill",
+            '{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Skill","input":{"skill":"ceh-build-from-plan:implement-from-plan"}}]}}',
+        ),
+        (
+            "slash",
+            '{"type":"user","message":{"content":"<command-name>/ceh-build-from-plan:implement-from-plan</command-name>"}}',
+        ),
+    ):
+        (tmp / f"tx-{name}.jsonl").write_text(line + "\n", encoding="utf-8")
+        tx[name] = (tmp / f"tx-{name}.jsonl").as_posix()
+
+    def record(tool: str, ti: dict, t: str = "none") -> dict:
+        return {
+            "tool_name": tool,
+            "tool_input": {"file_path": plan_p, **ti},
+            "transcript_path": tx[t],
+        }
+
+    add_built = {"old_string": "## Record\n", "new_string": "## Record\n" + built}
     return [
         # branch-guard: deny on the session repo's default branch, allow elsewhere, in another
         # repo, or when switched off.
@@ -98,6 +129,16 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         # ask-user-question-guard: deny the dialog, pass other tools and when switched off.
         {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "out": "decision block"},
         {"script": "ask-user-question-guard.py", "stdin": read(small_p), "out": ""},
+        # build-record-guard: a new Built Phase line needs implement-from-plan started this session.
+        {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "out": "implement-from-plan"},
+        {"script": "build-record-guard.py", "stdin": record("Edit", add_built, "skill"), "out": ""},
+        {"script": "build-record-guard.py", "stdin": record("Edit", add_built, "slash"), "out": ""},
+        {"script": "build-record-guard.py", "stdin": record("Edit", {"old_string": "a", "new_string": "- 2026-10-26 PR: #1 x"}), "out": ""},
+        {"script": "build-record-guard.py", "stdin": {**record("Edit", add_built), "tool_input": {"file_path": small_p, **add_built}}, "out": ""},
+        {"script": "build-record-guard.py", "stdin": record("Write", {"content": "## Record\n\n" + built + "- x\n"}), "out": ""},
+        {"script": "build-record-guard.py", "stdin": record("MultiEdit", {"edits": [{"old_string": built, "new_string": built + "- x\n"}]}), "out": ""},
+        {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "env": {"CEH_BUILD_RECORD_GUARD": "off"}, "out": ""},
+        {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "env": {"CEH_DISABLED_HOOKS": "build-record-guard"}, "out": ""},
         {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "env": {"CEH_DISABLED_HOOKS": "ask-user-question-guard"}, "out": ""},
         # Context injectors: valid JSON naming their skill, silent when switched off.
         {"script": "load-contract.sh", "stdin": {}, "out": "ceh-coding-conduct:agent-coding-contract"},

@@ -25,6 +25,12 @@ from common import (
 )
 
 COMPONENT_PAT = re.compile(r"\b(ceh-[a-z0-9-]+):([a-z0-9-]+)\b")
+# Hook scripts that name a skill only to detect that it ran, so the skill may stay user-invocable.
+NAMES_TO_DETECT = {
+    # Allows a plan's Built Phase line once implement-from-plan started, by Skill call or slash
+    # command; making it model-only would remove the slash command this guard accepts.
+    "build-record-guard.py",
+}
 
 
 def check() -> None:
@@ -117,6 +123,8 @@ def check() -> None:
             path = d / "scripts" / script
             if not path.exists():
                 fail(rel(hooks), f"wires scripts/{script}, which does not exist")
+                continue
+            if script in NAMES_TO_DETECT:
                 continue
             text = path.read_text(encoding="utf-8")
             for plugin, skill in dict.fromkeys(COMPONENT_PAT.findall(text)):

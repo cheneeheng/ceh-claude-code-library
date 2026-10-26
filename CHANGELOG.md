@@ -46,10 +46,19 @@ including a multi-file change to existing code or skills such as a retro's fixes
 description named only a new app, tool, component, or feature, and a retro's fixes to existing
 skills did not read as one.
 
+A sixth PR applies the second fix. `ceh-build-from-plan` gains its first hook,
+`build-record-guard.py`. It denies a new `Built Phase` line in a `product/plans/` file unless
+`implement-from-plan` was started in the session, by the Skill tool or its slash command. A
+rewrite of that skill's description would not have helped, because the description already matched
+the moment it was skipped. Replayed against the session transcript as it stood when the mistake
+happened, the hook denies the edit. `CEH_BUILD_RECORD_GUARD=off` and `CEH_DISABLED_HOOKS` turn it
+off.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
+| `ceh-build-from-plan`      | 1.1.0   |
 | `ceh-build-planning`       | 1.1.14  |
 | `ceh-business-plan`        | 1.1.13  |
 | `ceh-codebase-explanation` | 1.2.10  |
@@ -65,6 +74,12 @@ skills did not read as one.
   of Meridian's `brand.css`, registered in `docs/CROSS_REFERENCES.md`.
 - `product/retros/2026-10-26-repeat-mistake.md`, and a Checked line in
   `product/plans/visual-business-plan.md`.
+- `ceh-build-from-plan`: `hooks/hooks.json` and `scripts/build-record-guard.py`, with nine fixtures
+  in `tools/validate-plugins/checks/hooks.py`, the `CEH_BUILD_RECORD_GUARD` variable, and the
+  plan `product/plans/skill-loading-guards.md`.
+- `tools/validate-plugins/checks/repo_rules.py`: a `NAMES_TO_DETECT` exemption from "a skill a
+  hook script names is `user-invocable: false`", holding only `build-record-guard.py`, which names
+  `implement-from-plan` to detect it and must accept its slash command. Noted in `plugins/CLAUDE.md`.
 
 ### Changed
 
