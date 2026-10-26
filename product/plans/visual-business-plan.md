@@ -139,3 +139,4 @@ skill reports its path.
 - 2026-10-26 Design changed: was "`develop-business-plan` rebuilds `BUSINESS_PLAN.html` next to the
   plan after every specialist", now also renumbers and rewrites the contents list as steps 5 and
   6, because the review's B1 needed one owner for both
+- 2026-10-26 PR: #159 https://github.com/cheneeheng/ceh-claude-code-library/pull/159
