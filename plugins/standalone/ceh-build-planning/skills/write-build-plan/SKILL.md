@@ -1,9 +1,10 @@
 ---
 name: write-build-plan
 description: >-
-  Load this skill before the first code of a new app, tool, component, or feature that has no plan
-  yet, even when the user only says build or create it: one committed plan file with scope, design
-  decisions, and checked phases. Trigger on "create a new tool", "build me X", "plan this app".
+  Load this skill before the first edit of a change that has no plan yet: a new app, tool, or
+  feature, or a multi-file change to existing code or skills, such as the fixes a retro or issue
+  lists. Writes one plan file. Trigger on "build me X", "plan this", "implement the changes in this
+  retro".
 argument-hint: "[what to build]"
 disable-model-invocation: false
 user-invocable: true
