@@ -81,7 +81,8 @@ before applying one.
 
 ## Output
 
-`### Unit model` goes into §08 and `### Cash and sensitivity` into §11. A re-run replaces both:
+`### Unit model` goes into §08 and `### Cash and sensitivity` into §11. On disk their headings carry
+nested numbers (see Numbering in the schema), so a re-run finds both by title and replaces them:
 
 ```markdown
 ### Unit model

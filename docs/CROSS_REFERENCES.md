@@ -565,13 +565,24 @@ the body, failing at all three in a visible tool call is a hook candidate.
 
 ---
 
+## Meridian theme (`brand.css`)
+
+**Canonical:** `plugins/standalone/ceh-ui-design/skills/design-ui/references/meridian/brand.css` — the whole file
+
+| Copy                                                    | Section    | Diverges |
+| ------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-business-plan/assets/brand.css` | whole file | none     |
+
+**Shared:** the file byte for byte. `ceh-business-plan`'s HTML generator inlines its copy, because
+a user may install the business plan without `ceh-ui-design`. Check with `cmp` after a theme change.
+
 ## Mermaid source rules
 
 **Canonical:** `plugins/standalone/ceh-ui-design/skills/design-ui/SKILL.md` — § Finishing recipes, Diagrams (the four bullets from "Chain subgraphs" to "pass the CLI")
 
-| Copy                         | Section | Diverges |
-| ---------------------------- | ------- | -------- |
-| none yet, added by later PRs |         |          |
+| Copy                                                                      | Section    | Diverges                                          |
+| ------------------------------------------------------------------------- | ---------- | ------------------------------------------------- |
+| `plugins/standalone/ceh-business-plan/references/business-plan-schema.md` | § Diagrams | the page-only rules live in the page shell's code |
 
 **Shared:** the four rules that hold wherever a Mermaid diagram renders: chain subgraphs with `~~~`
 and `direction LR`, gantt `tickInterval`, `xychart-beta` height in front matter, and validate with

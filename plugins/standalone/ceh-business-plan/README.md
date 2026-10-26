@@ -77,7 +77,13 @@ never as authority that settles a question.
 
 A single living `BUSINESS_PLAN.md` (13 sections: problem, target customer, value prop, solution,
 competition, market math, business model, go-to-market, traction, financials, risks, milestones),
-revised in place across the loop, with a `pmf_gate: N/8` score in its frontmatter. The schema and
+revised in place across the loop, with a `pmf_gate: N/8` score in its frontmatter. The plan is
+drawn as well as written: Mermaid diagrams sit beside the text they show, every heading carries a
+nested number (`§12.01.02`), and a linked contents list opens it. After every specialist,
+`develop-business-plan` rebuilds `BUSINESS_PLAN.html` next to it: one self-contained page in the
+Meridian theme with a contents rail and the diagrams rendered. The HTML needs Node.js 18+ and
+network access (npx fetches `marked`, the page loads Mermaid from a CDN); without them the
+markdown is still written and the HTML is skipped. The schema and
 the 8-point gate live in `references/business-plan-schema.md`, shared by all nine skills.
 `write-investor-materials` writes `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` to
 `.agents_workspace/product/business/`, local and not committed, and leaves the plan itself unchanged.

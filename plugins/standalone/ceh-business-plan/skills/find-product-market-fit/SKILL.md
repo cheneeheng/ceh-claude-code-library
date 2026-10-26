@@ -78,6 +78,11 @@ what the source material supports; for everything else, **write your best-guess 
 it `[assumption]`**, not "TBD". A wrong, specific assumption is useful — it gives the interview a
 target. A blank is not.
 
+Draw it as well as write it: add the schema's default diagrams wherever the draft's text supports
+one, number every heading below h2, and fill the contents list (both under "Diagrams" and
+"Numbering and contents" in the schema). A plan of text alone reads as a wall to a reader who
+scans first.
+
 Tag every load-bearing claim: `[evidence]`, `[assumption]`, or `[hypothesis-to-test]`. Then score
 the PMF gate (N/8) in frontmatter and identify the **lowest-scoring, highest-leverage** criterion
 — that is where the interview starts.
@@ -138,6 +143,8 @@ the one question that would most move it.
 After each answer (or a small batch), fold it into `BUSINESS_PLAN.md`:
 
 - Update the affected sections; **re-tag** the confidence on every claim the answer touched.
+  Redraw any diagram beside text the answer changed, in the same edit, so the picture never
+  disagrees with the words.
 - Regenerate §01 Executive Summary and §12 Risks ranking — they shift as the plan firms up.
   Leave every specialist subsection and tagged line as it is (see "Specialist subsections" in the
   schema): the premortem's kill criteria in §12 are fixed in advance on purpose.

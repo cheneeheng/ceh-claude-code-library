@@ -84,7 +84,8 @@ pond, plus a statement of which source it intends to build first and what would 
 
 ## Output
 
-Written into §04 of `BUSINESS_PLAN.md`:
+Written into §04 of `BUSINESS_PLAN.md`. On disk its headings carry nested numbers (see Numbering
+in the schema), so a re-run finds the subsection by its title:
 
 ```markdown
 ### Strategy

@@ -108,7 +108,7 @@ and the Mermaid lessons that cost several render rounds land wherever a skill dr
   `grep`, with the number of `<h2>` to `<h6>` and contents links in the HTML, and grep that the
   HTML holds no `**Contents**` list and every `href="#…"` in the body has a matching `id`. Look at
   the page in a browser. `validate.py` green.
-- **Status:** todo
+- **Status:** done
 
 ### Phase 3: Mermaid copies (PR 3)
 
@@ -132,3 +132,11 @@ skill reports its path.
 - 2026-10-26 Built Phase 1: greps found 1 Document row, 1 "h2 to h6", 0 old lines; validate.py
   failed only on 20 hygiene hits in the git-ignored local `docs/starlight/node_modules/`
 - 2026-10-26 PR: #158 https://github.com/cheneeheng/ceh-claude-code-library/pull/158
+- 2026-10-26 Built Phase 2: generator on a v2 scratch copy of the mcp-cassette plan, 19 h2-h6 in
+  the markdown, 19 headings and 19 rail links in the HTML, no Contents list, 0 unmatched anchors
+  of 19 markdown links; in Chrome 11 of 11 diagrams rendered, 0 errors, 0 tables scrolling at
+  2000px
+- 2026-10-26 Design changed: was "`develop-business-plan` rebuilds `BUSINESS_PLAN.html` next to the
+  plan after every specialist", now also renumbers and rewrites the contents list as steps 5 and
+  6, because the review's B1 needed one owner for both
+- 2026-10-26 PR: #159 https://github.com/cheneeheng/ceh-claude-code-library/pull/159

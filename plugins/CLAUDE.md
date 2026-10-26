@@ -36,7 +36,9 @@ references/x-schema.md`), so the format lives in one pair of files and the saved
 version. A reference file cites a sibling folder's file relative to itself (`../assets/<file>`),
 never as "next to this file". Bump `v<N>` when a required field or heading is renamed or removed.
 Out of scope: what the user ships (code, tests, docs pages, blog posts in a blog repo, `SKILL.md`
-files a skill generates) and `flow.yaml`, which carries its own `version: 1`. `validate.py` (the
+files a skill generates), `flow.yaml`, which carries its own `version: 1`, and a file a script
+generates from a templated one, such as `BUSINESS_PLAN.html` built from `BUSINESS_PLAN.md`, which
+carries the version for both. `validate.py` (the
 `templates` check) rejects a template without its schema line or its schema file, a template that
 carries explanation, a template or schema no file in its plugin cites, a copy that differs from
 its twin in another plugin, and a skill whose `## Output` names a saved `.agents_workspace/` or
@@ -54,8 +56,10 @@ touches. A rule that applies on every run stays inline, because a model can skip
 see it. A new catalog skill argues its own exception in its PR.
 
 Scaffold or script bundles a skill executes or copies are not reference material and are allowed:
-`ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent` `assets/`) and `ceh-git-datastore`
-(`build-git-datastore`, `migrate-git-datastore` `references/` + `scripts/`).
+`ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent` `assets/`), `ceh-git-datastore`
+(`build-git-datastore`, `migrate-git-datastore` `references/` + `scripts/`), and
+`ceh-business-plan` (the HTML generator in `scripts/`, with its page shell and `brand.css` in
+`assets/`).
 
 **Name skills with a verb phrase and agents with a noun, and put the framework or library in the
 name when a skill is specific to one** (`write-fastapi-endpoints`, `write-postgresql-code`,

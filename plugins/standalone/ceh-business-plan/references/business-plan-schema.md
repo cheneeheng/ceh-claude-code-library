@@ -13,9 +13,13 @@ deepen named sections with one subsection, listed under [Specialist subsections]
 ## Template
 
 A new plan is a copy of `../assets/business-plan.template.md`, relative to this file: its
-frontmatter and the 13 section headings. The `schema: business-plan/v1` line stays as written. A
-plan from before the template carries `artifact: BUSINESS_PLAN` instead: replace that line with the
-schema line on the next revision.
+frontmatter, the contents list, and the 13 section headings. The `schema: business-plan/v2` line
+stays as written. Two older forms move up on the next revision:
+
+- A plan carrying `artifact: BUSINESS_PLAN` predates the template: replace that line with the
+  schema line, then apply the v1 step below.
+- A `business-plan/v1` plan has no contents list and no numbers below h2: add both, per
+  [Numbering and contents](#numbering-and-contents), and set the schema line to `v2`.
 
 **Frontmatter:**
 
@@ -41,6 +45,71 @@ Each section is a level-2 heading in the literal form `## §NN Title`, for examp
 `## §09 Go-to-Market`, so a skill can check a section exists by searching for `^## §09`. See the
 [Worked example](#worked-example).
 
+## Numbering and contents
+
+- **Every heading below h2 carries a nested two-digit number** after its parent's:
+  `### §04.01 Strategy`, `#### §12.01.01 Commitments`, down to h6. Numbers follow position in the
+  section, so a subsection added above another shifts its number. A skill finds a subsection by
+  its title, the text after the number, never by the number.
+- **A linked contents list sits just before `## §01`**, under a line that reads `**Contents**`,
+  one bullet per heading from h2 to h6, each level indented two more spaces, linked by GitHub's
+  anchor for the heading (`[§04.01 Strategy](#0401-strategy)`). The HTML build drops it from that
+  line to the first `## ` heading, because the page draws its own contents rail.
+- **`develop-business-plan` owns both.** After every specialist returns, it renumbers the headings
+  below h2 and rewrites the contents list from the headings. That pass is the one edit the router
+  makes, so no specialist renumbers another's subsection. A skill that writes the plan with no
+  router around it, such as `find-product-market-fit` drafting v0, numbers its own headings and
+  writes the list itself.
+
+## Diagrams
+
+The plan is drawn as well as written, for a reader who scans before reading. Where the text
+describes a flow, a funnel, a split, a position, or a timeline, a Mermaid diagram sits beside the
+paragraph it shows.
+
+- **A diagram is a reading aid, never a replacement.** Every sentence stays, and a diagram makes
+  no claim the text does not. A diagram or table that summarises the plan uses only facts in it,
+  and says "not stated" where the plan is silent.
+- **A diagram belongs to the skill that owns the text beside it**, and that skill updates it in the
+  same edit that changes the text. The milestone timeline sits in §13 under
+  `find-product-market-fit`, and draws the kill dates `run-premortem` tagged there as they stand.
+- **The default set**, drawn when the text supports it, never invented to fill a slot:
+
+| Where           | Diagram                                                 | Mermaid type     |
+| --------------- | ------------------------------------------------------- | ---------------- |
+| §01 or preamble | The payoff chain: what the product leads to, in order   | `flowchart LR`   |
+| §05             | Scope (what it does and does not do), and the core loop | `flowchart`      |
+| §06             | Positioning against the named alternatives              | `quadrantChart`  |
+| §06             | Capabilities side by side, "not stated" where silent    | a Markdown table |
+| §05 or §13      | Build stages                                            | `flowchart LR`   |
+| §07             | The market funnel, TAM to SOM                           | `flowchart TB`   |
+| §09             | The channel funnel to the first ten customers           | `flowchart LR`   |
+| §11             | Where the hours or the money go                         | `xychart-beta`   |
+| §13             | Milestones on a timeline, kill criteria marked `crit`   | `gantt`          |
+
+A diagram can render without an error and still be unreadable:
+
+- Chain subgraphs with invisible links (`A ~~~ B`) and give each `direction LR`, or Mermaid lays
+  them out in an arbitrary order.
+- In a `gantt` chart with `axisFormat %b %Y`, set `tickInterval 2month` or wider, or the axis
+  labels overlap.
+- Set a horizontal `xychart-beta`'s height under `config.xyChart.height` in the diagram's front
+  matter, or a chart with few bars renders far too tall.
+- Validate every diagram with the Mermaid CLI,
+  `npx -p @mermaid-js/mermaid-cli mmdc -i <file>.md -o <out>.md`, then look at the rendered
+  result, because overflowing labels and a diagram scaled down to unreadable text both pass the
+  CLI.
+
+## HTML version
+
+`BUSINESS_PLAN.html` sits next to the plan: one self-contained page in the Meridian theme, a
+reading column with a contents rail from h2 to h6, evidence tags as coloured labels, and every
+diagram rendered. It is generated, never edited: the markdown stays the source, and both are
+kept. `develop-business-plan` rebuilds it after every specialist with
+`node ${CLAUDE_PLUGIN_ROOT}/scripts/build-plan-html.cjs <plan.md>`, which reads its page shell and
+`brand.css` from the plugin's `assets/`. The page loads Mermaid from a CDN, so offline each diagram
+shows its source text instead.
+
 | ID  | Title                      | Content                                                                                                                                                                                        |
 | --- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | §01 | Executive Summary          | Three sentences: what it is, who it's for, why now. Written **last**, regenerated each loop.                                                                                                   |
@@ -63,8 +132,8 @@ models, or API surface here.
 
 ## Specialist subsections
 
-Each specialist skill owns one `###` subsection per section, under the literal heading below, and
-replaces it in place on a re-run. Its parts are `####` headings inside it. The section's original
+Each specialist skill owns one `###` subsection per section, under the literal title below with
+its number in front (`### §12.01 Premortem`), and replaces it in place on a re-run. Its parts are `####` headings inside it. The section's original
 content stays above it. Every claim keeps a confidence tag.
 
 | Skill                        | Owns                                                 | Also writes                                                                                                                                |
@@ -118,12 +187,12 @@ attack the lowest-scoring, highest-leverage one first.
 
 ## Worked example
 
-An idea-stage plan after one loop and a premortem, cut to one line per section. The heading lines
-and frontmatter keys are literal.
+An idea-stage plan after one loop and a premortem, cut to one line per section and one diagram.
+The heading lines and frontmatter keys are literal.
 
-```markdown
+````markdown
 ---
-schema: business-plan/v1
+schema: business-plan/v2
 status: draft
 created: 2026-03-02
 updated: 2026-03-09
@@ -132,6 +201,23 @@ stage: idea
 derived_from: [product/plans/mvp.md]
 pmf_gate: 5/8
 ---
+
+**Contents**
+
+- [§01 Executive Summary](#01-executive-summary)
+- [§02 Problem](#02-problem)
+- [§03 Target Customer](#03-target-customer)
+- [§04 Value Proposition](#04-value-proposition)
+- [§05 Solution / Product](#05-solution--product)
+- [§06 Alternatives & Competition](#06-alternatives--competition)
+- [§07 Market](#07-market)
+- [§08 Business Model & Pricing](#08-business-model--pricing)
+- [§09 Go-to-Market](#09-go-to-market)
+- [§10 Traction & Validation](#10-traction--validation)
+- [§11 Financials](#11-financials)
+- [§12 Risks & Unknowns](#12-risks--unknowns)
+  - [§12.01 Premortem](#1201-premortem)
+- [§13 Milestones](#13-milestones)
 
 ## §01 Executive Summary
 
@@ -163,6 +249,11 @@ A spreadsheet and a highlighter. No named competitor serves practices this small
 
 400 practices x $79 x 12 = $379,200 a year in the metro area [assumption]
 
+```mermaid
+flowchart TB
+  A["Independent practices in the metro<br/>400"] --> B["At $79 a month<br/>$379,200 a year"]
+```
+
 ## §08 Business Model & Pricing
 
 $79 a month per practice, anchored to one day of a manager's pay [assumption]
@@ -183,7 +274,7 @@ Break-even at 60 practices, with 9 months of runway [assumption]
 
 1. Managers will not pay from their own budget [hypothesis-to-test]
 
-### Premortem
+### §12.01 Premortem
 
 Run on 2026-03-09.
 
@@ -194,4 +285,4 @@ Run on 2026-03-09.
 
 - 2026-03-23: ten calls made, three say they would pay $79
 - 2026-04-30: under 5 paid practices, stop (run-premortem)
-```
+````
