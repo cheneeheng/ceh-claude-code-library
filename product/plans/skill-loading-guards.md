@@ -97,3 +97,4 @@ the rule either way.
 - 2026-10-26 Planned: status ready
 - 2026-10-26 Reviewed: Revise first, 2 blocking (slash-command invocation not matched; Write/MultiEdit old-line count wrong)
 - 2026-10-26 Built Phase 1: `grep -c "the fixes a retro or issue" .../write-build-plan/SKILL.md`, 1
+- 2026-10-26 PR: #162 https://github.com/cheneeheng/ceh-claude-code-library/pull/162
