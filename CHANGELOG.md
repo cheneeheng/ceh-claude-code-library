@@ -54,12 +54,18 @@ the moment it was skipped. Replayed against the session transcript as it stood w
 happened, the hook denies the edit. `CEH_BUILD_RECORD_GUARD=off` and `CEH_DISABLED_HOOKS` turn it
 off.
 
+A seventh PR adds the first `claude plugin eval` suite for `ceh-build-planning`: 19 cases under
+`evals/`, 17 on whether each skill fires or stays quiet and 2 on what it produces. Two description
+rewrites came out of it. `write-build-plan` missed a feature added to an existing app when the
+prompt sounded quick (5 of 9 runs fired), and `review-build-plan` missed "just glance at the phases"
+before building (0 of 3). After the rewrites every trigger case fired or stayed quiet 3 of 3.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
 | `ceh-build-from-plan`      | 1.1.0   |
-| `ceh-build-planning`       | 1.1.14  |
+| `ceh-build-planning`       | 1.1.15  |
 | `ceh-business-plan`        | 1.1.13  |
 | `ceh-codebase-explanation` | 1.2.10  |
 | `ceh-documentation`        | 1.0.6   |
@@ -80,6 +86,8 @@ off.
 - `tools/validate-plugins/checks/repo_rules.py`: a `NAMES_TO_DETECT` exemption from "a skill a
   hook script names is `user-invocable: false`", holding only `build-record-guard.py`, which names
   `implement-from-plan` to detect it and must accept its slash command. Noted in `plugins/CLAUDE.md`.
+- `ceh-build-planning`: `evals/`, 19 `claude plugin eval` cases with their graders and fixture
+  scripts.
 
 ### Changed
 
@@ -87,6 +95,8 @@ off.
   rail, tables wrap before they scroll, and the theme install covers single-file output.
 - `ceh-build-planning:write-build-plan`: its description, catalog row, and README row name the
   wider moment.
+- `ceh-build-planning`: `write-build-plan`'s description names a feature added to existing code even
+  when it sounds quick, and `review-build-plan`'s names a quick look before building.
 - `ceh-business-plan`: schema and template `business-plan/v2` with Numbering and contents,
   Diagrams, and HTML version sections; `find-product-market-fit` draws the default diagrams and
   numbers its draft; the five specialists find their subsection by title; `develop-business-plan`
