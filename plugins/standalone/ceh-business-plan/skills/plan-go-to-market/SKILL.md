@@ -80,7 +80,8 @@ Pick the one that passes both, and write down why the others were declined.
 
 ## Output
 
-Written into §09 of `BUSINESS_PLAN.md` as one subsection, replaced whole on a re-run:
+Written into §09 of `BUSINESS_PLAN.md` as one subsection, replaced whole on a re-run. On disk its
+headings carry nested numbers (see Numbering in the schema), so a re-run finds it by its title:
 
 ```markdown
 ### Go-to-market plan

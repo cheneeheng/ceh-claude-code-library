@@ -81,7 +81,8 @@ honoured.
 ## Output
 
 Written into §12 of `BUSINESS_PLAN.md` as one subsection. A re-run replaces it, except that a kill
-criterion whose date has passed is kept as written (see Stop conditions):
+criterion whose date has passed is kept as written (see Stop conditions). On disk its headings
+carry nested numbers (see Numbering in the schema), so a re-run finds it by its title:
 
 ```markdown
 ### Premortem

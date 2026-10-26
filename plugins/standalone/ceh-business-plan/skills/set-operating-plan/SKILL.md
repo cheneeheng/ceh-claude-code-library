@@ -81,7 +81,8 @@ that touches their money, safety, or data.
 ## Output
 
 Written into §13 of `BUSINESS_PLAN.md` as one subsection, replaced whole on a re-run. The
-milestone lines above it, including those other skills tagged, stay:
+milestone lines above it, including those other skills tagged, stay. On disk its headings carry
+nested numbers (see Numbering in the schema), so a re-run finds it by its title:
 
 ```markdown
 ### Operating plan

@@ -21,22 +21,40 @@ level, tables that wrap their cells before they scroll, and a single-file theme 
 the Mermaid lessons that cost several render rounds, registered in `docs/CROSS_REFERENCES.md` for
 the copies the next PRs add.
 
+The second PR draws the business plan and renders it. `ceh-business-plan` moves the plan to
+`business-plan/v2`: a linked contents list before §01, a nested two-digit number on every heading
+below h2, and a default set of Mermaid diagrams beside the text they show, which never replace a
+sentence or add a claim. `develop-business-plan` keeps the numbers and the contents list in step
+after every specialist, the one edit the router makes, then rebuilds `BUSINESS_PLAN.html` next to
+the plan with a generator moved in from `mcp-cassette`: one self-contained page in the Meridian
+theme, its heading ids matching GitHub's anchors so the markdown's own links work in it. A v1 plan
+moves to v2 on its next revision.
+
 ### Plugin versions
 
-| Plugin          | Version |
-| --------------- | ------- |
-| `ceh-ui-design` | 1.0.8   |
+| Plugin              | Version |
+| ------------------- | ------- |
+| `ceh-business-plan` | 1.1.13  |
+| `ceh-ui-design`     | 1.0.8   |
 
 ### Added
 
 - `product/retros/2026-10-25-90a119d8-business-plan-visuals.md` and
   `product/plans/visual-business-plan.md`.
 - `ceh-ui-design:design-ui`: the Document archetype and the Diagrams finishing recipe.
+- `ceh-business-plan`: `scripts/build-plan-html.cjs`, `assets/business-plan-page.html`, and a copy
+  of Meridian's `brand.css`, registered in `docs/CROSS_REFERENCES.md`.
 
 ### Changed
 
 - `ceh-ui-design:design-ui`: in-page contents link h2 to h6, a Document always gets a contents
   rail, tables wrap before they scroll, and the theme install covers single-file output.
+- `ceh-business-plan`: schema and template `business-plan/v2` with Numbering and contents,
+  Diagrams, and HTML version sections; `find-product-market-fit` draws the default diagrams and
+  numbers its draft; the five specialists find their subsection by title; `develop-business-plan`
+  renumbers, rewrites the contents list, and rebuilds the HTML.
+- `plugins/CLAUDE.md`: the generator joins the allowed script bundles, and a generated HTML sits
+  outside the template rule.
 
 ## 2026-10-24
 

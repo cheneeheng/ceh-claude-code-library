@@ -5,6 +5,10 @@ description: >-
   to the specialist skill for the moment. Trigger on "write a business plan", "validate my product
   idea", "do the numbers work", "run a premortem", "write a pitch deck".
 argument-hint: "[plan-or-idea]"
+compatibility: >-
+  The HTML rebuild needs Node.js 18+ and network access: npx fetches the marked CLI on first run,
+  and the page loads Mermaid from a CDN. Without Node or the network, the markdown plan is still
+  written and the HTML is skipped.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -32,8 +36,13 @@ this moment has run and the plan's frontmatter agrees with its content.
    frontmatter: `status: draft` routes to the first row, `status: validated` to the review row.
 4. When the specialist returns, re-read the plan's frontmatter. If `pmf_gate` is below `8/8`, set
    `status: draft`. Set `updated` to today.
-5. Report in one or two lines what changed and which specialist the result points to next. Invoke
-   it only when the user agrees.
+5. Renumber every heading below h2 and rewrite the `**Contents**` list from the headings, per
+   "Numbering and contents" in the schema. A v1 plan gets both now and moves to v2.
+6. Rebuild the HTML: `node ${CLAUDE_PLUGIN_ROOT}/scripts/build-plan-html.cjs <plan path>`, which
+   writes `BUSINESS_PLAN.html` next to the plan. When Node is missing or the run fails, say so in
+   one line and go on: the markdown is the source.
+7. Report in one or two lines what changed, the HTML's path, and which specialist the result
+   points to next. Invoke it only when the user agrees.
 
 ## Routing
 
@@ -52,7 +61,8 @@ this moment has run and the plan's frontmatter agrees with its content.
 
 - One specialist per request. Chaining them unasked runs interviews the user did not ask for.
 - Do not do a specialist's work here. If this skill starts scoring, interviewing, or editing a
-  section, the request was routed wrong.
+  section, the request was routed wrong. The one edit it makes is step 5's numbers and contents
+  list, which span every specialist's subsections, so only the router can keep them in step.
 - When a specialist stops on a missing input (no price, no ranked risks, no named customer), it
   names the skill that supplies it. Offer that skill as the next step.
 - The status rule in step 4 runs after every specialist, because several of them re-score

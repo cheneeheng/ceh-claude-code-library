@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{product}}: Business Plan</title>
+<style>
+/*BRAND_CSS*/
+
+/* ---- Document layout on top of Meridian ---------------------------------- */
+html { scroll-behavior: smooth; scroll-padding-top: var(--space-8); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: var(--space-12);
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-8) var(--space-16);
+}
+
+/* Contents rail */
+.toc { position: sticky; top: var(--space-8); align-self: start; max-height: calc(100vh - 2 * var(--space-8)); overflow-y: auto; }
+.toc .eyebrow { margin-bottom: var(--space-3); }
+.toc ul { list-style: none; }
+.toc a {
+  display: block;
+  font-size: var(--fs-100);
+  line-height: var(--lh-snug);
+  color: var(--fg-muted);
+  padding: var(--space-1) var(--space-3);
+  border-left: var(--edge) solid var(--border);
+  transition: color var(--dur-fast) var(--ease-standard), background var(--dur-fast) var(--ease-standard);
+}
+.toc a:hover { color: var(--fg); text-decoration: none; }
+/* Each heading level below h2 indents one step further. */
+.toc li a { padding-left: calc(var(--space-3) * (var(--lvl) - 1)); }
+.toc li:not(.toc-2) a { font-size: var(--fs-75); }
+.toc a.is-active { color: var(--fg); font-weight: var(--weight-medium); }
+
+/* Header */
+.doc-header { max-width: 72ch; margin-bottom: var(--space-12); }
+.doc-header h1 { margin: var(--space-2) 0 var(--space-3); }
+.meta { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
+.legend { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); margin-top: var(--space-4); font-size: var(--fs-75); color: var(--fg-muted); }
+
+/* Prose */
+article > :is(p, ul, ol, h2, h3, h4) { max-width: 72ch; }
+article p, article li { color: var(--fg); }
+article p + p, article p + ul, article p + ol, article ul + p, article ol + p { margin-top: var(--space-4); }
+article ul, article ol { padding-left: var(--space-6); margin-top: var(--space-3); }
+article li + li { margin-top: var(--space-2); }
+article li > p { margin-top: var(--space-2); }
+article strong { font-weight: var(--weight-semibold); }
+article h2 { margin: var(--space-16) 0 var(--space-5); padding-top: var(--space-8); border-top: 1px solid var(--border); }
+article > h2:first-of-type { margin-top: var(--space-12); }
+article h3 { margin: var(--space-10) 0 var(--space-4); }
+article h4 { margin: var(--space-8) 0 var(--space-3); font-size: var(--fs-200); font-weight: var(--weight-semibold); }
+.sec { color: var(--fg-subtle); font-weight: var(--weight-semibold); margin-right: var(--space-1); }
+code { font-family: var(--font-mono); font-size: 0.9em; background: var(--surface-2); border-radius: var(--radius-sm); padding: 0.05em 0.3em; }
+
+/* Panels: diagrams and tables */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin: var(--space-6) 0;
+  overflow-x: auto;
+}
+.diagram { padding: var(--space-6); max-width: 960px; }
+.diagram pre.mermaid { font-family: var(--font-ui); text-align: center; }
+.diagram svg { max-width: 100%; height: auto; }
+.table-wrap { padding: var(--space-4) var(--space-5); }
+.table td, .table th { vertical-align: top; }
+.table td { line-height: var(--lh-base); }
+.table td { overflow-wrap: anywhere; hyphens: auto; } /* wrap cells so wide tables fit without scrolling */
+.table tbody tr { transition: background var(--dur-fast) var(--ease-standard); }
+.table tbody tr:hover { background: var(--surface-2); }
+li .table-wrap { margin: var(--space-4) 0; }
+
+/* Evidence tags: what backs each claim */
+.badge.tag { white-space: normal; font-size: var(--fs-75); line-height: var(--lh-snug); vertical-align: baseline; }
+.tag-evidence   { color: var(--success); background: var(--success-wash); border-color: color-mix(in srgb, var(--success) 30%, transparent); }
+.tag-assumption { color: var(--accent-hi); background: var(--accent-wash); border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+.tag-hypothesis { color: var(--secondary); background: var(--secondary-wash); border-color: color-mix(in srgb, var(--secondary) 30%, transparent); }
+.tag-fail       { color: var(--danger); background: var(--danger-wash); border-color: color-mix(in srgb, var(--danger) 30%, transparent); }
+
+@media (max-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: var(--space-8); padding: var(--space-8) var(--space-4); }
+  .toc { position: static; max-height: none; }
+}
+@media print {
+  .toc { display: none; }
+  .layout { display: block; padding: 0; }
+  .panel { box-shadow: none; break-inside: avoid; }
+  article h2 { break-after: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Contents">
+    <span class="eyebrow">Contents</span>
+    <ul>
+{{TOC}}
+    </ul>
+  </nav>
+  <main>
+    <header class="doc-header">
+      <span class="eyebrow">Business plan</span>
+      <h1>{{product}}</h1>
+      <div class="meta">
+        <span class="badge">status: {{status}}</span>
+        <span class="badge">stage: {{stage}}</span>
+        <span class="badge badge-mono">PMF gate {{pmf_gate}}</span>
+        <span class="badge badge-mono">created {{created}}</span>
+        <span class="badge badge-mono">updated {{updated}}</span>
+      </div>
+      <div class="legend">
+        <span><span class="badge tag tag-evidence">evidence</span> backed by a source</span>
+        <span><span class="badge tag tag-assumption">assumption</span> taken as true, not yet tested</span>
+        <span><span class="badge tag tag-hypothesis">hypothesis-to-test</span> has a pass or fail test</span>
+      </div>
+    </header>
+    <article>
+{{BODY}}
+    </article>
+  </main>
+</div>
+<script type="module">
+// less-code: Mermaid loads from a CDN; offline, each diagram shows its source text instead.
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.esm.min.mjs";
+const v = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+mermaid.initialize({
+  startOnLoad: false,
+  theme: "base",
+  fontFamily: v("--font-ui"),
+  themeVariables: {
+    fontFamily: v("--font-ui"), fontSize: "14px",
+    background: v("--surface"),
+    primaryColor: v("--secondary-wash"), primaryBorderColor: v("--secondary"), primaryTextColor: v("--fg"),
+    secondaryColor: v("--surface-2"), tertiaryColor: v("--bg"),
+    lineColor: v("--fg-muted"), textColor: v("--fg"),
+    clusterBkg: v("--bg"), clusterBorder: v("--border-strong"),
+    edgeLabelBackground: v("--surface"),
+    taskBkgColor: v("--secondary-wash"), taskBorderColor: v("--secondary"), taskTextColor: v("--fg"),
+    taskTextDarkColor: v("--fg"), taskTextOutsideColor: v("--fg"),
+    critBkgColor: v("--danger"), critBorderColor: v("--danger"),
+    sectionBkgColor: v("--bg"), altSectionBkgColor: v("--surface"), sectionBkgColor2: v("--bg"),
+    gridColor: v("--border"), todayLineColor: v("--accent"),
+    quadrant1Fill: v("--secondary-wash"), quadrant2Fill: v("--surface-2"),
+    quadrant3Fill: v("--surface-2"), quadrant4Fill: v("--surface-2"),
+    quadrantPointFill: v("--secondary"), quadrantTitleFill: v("--fg"),
+    quadrant1TextFill: v("--fg"), quadrant2TextFill: v("--fg-muted"),
+    quadrant3TextFill: v("--fg-muted"), quadrant4TextFill: v("--fg-muted"),
+    xyChart: { plotColorPalette: v("--data-1"), backgroundColor: v("--surface") },
+  },
+  flowchart: { wrappingWidth: 200 },
+  gantt: { barHeight: 18, barGap: 6, fontSize: 12, sectionFontSize: 12, leftPadding: 240, useWidth: 900 },
+});
+await document.fonts.ready; // measure labels in Inter, not the fallback font
+await mermaid.run({ querySelector: "pre.mermaid" });
+</script>
+<script>
+// Mark the section in view in the contents rail.
+// The current section is the last heading above the top third of the viewport.
+const links = [...document.querySelectorAll(".toc a")];
+const heads = links.map((a) => document.getElementById(a.hash.slice(1)));
+const mark = () => {
+  let current = 0;
+  heads.forEach((h, i) => { if (h.getBoundingClientRect().top < innerHeight / 3) current = i; });
+  links.forEach((a, i) => {
+    const on = i === current;
+    a.classList.toggle("has-edge", on);
+    a.classList.toggle("is-active", on);
+    on ? a.setAttribute("aria-current", "location") : a.removeAttribute("aria-current");
+  });
+};
+addEventListener("scroll", mark, { passive: true });
+mark();
+</script>
+</body>
+</html>
