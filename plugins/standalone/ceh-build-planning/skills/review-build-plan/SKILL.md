@@ -1,9 +1,10 @@
 ---
 name: review-build-plan
 description: >-
-  Load this skill when a build plan or spec exists and nobody has built from it yet: review it on
-  scope, engineering, design, and developer experience, and end with a verdict. Trigger on "review
-  this plan", "is this plan ready to build", "review the spec".
+  Load this skill when a build plan or spec exists and nobody has built from it yet, even for a
+  quick look before building: review it on scope, engineering, design, and developer experience,
+  and end with a verdict. Trigger on "review this plan", "just check the phases", "review the
+  spec".
 argument-hint: "[plan-file]"
 disable-model-invocation: false
 user-invocable: true
