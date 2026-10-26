@@ -118,8 +118,11 @@ what fails without it. A skill that only reads files and emits Markdown gets no 
 
 Every skill states `disable-model-invocation`, `user-invocable`, and `license` explicitly, even at
 their defaults, so the frontmatter says who invokes it. The validator checks that all three are
-present, and that a skill a hook script names sets `user-invocable: false`. The other values are a
-review rule, and every skill falls into one of three cases:
+present, and that a skill a hook script names sets `user-invocable: false`. The one exception is a
+script that names a skill only to detect that it ran, listed by name in `NAMES_TO_DETECT` in
+`tools/validate-plugins/checks/repo_rules.py` with its reason: today `build-record-guard.py`, which
+must accept `implement-from-plan`'s slash command. The other values are a review rule, and every
+skill falls into one of three cases:
 
 | Who starts it  | `disable-model-invocation` | `user-invocable` | Use it for                                                                                          |
 | -------------- | -------------------------- | ---------------- | --------------------------------------------------------------------------------------------------- |

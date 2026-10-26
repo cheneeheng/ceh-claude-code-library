@@ -77,6 +77,9 @@ off.
 - `ceh-build-from-plan`: `hooks/hooks.json` and `scripts/build-record-guard.py`, with nine fixtures
   in `tools/validate-plugins/checks/hooks.py`, the `CEH_BUILD_RECORD_GUARD` variable, and the
   plan `product/plans/skill-loading-guards.md`.
+- `tools/validate-plugins/checks/repo_rules.py`: a `NAMES_TO_DETECT` exemption from "a skill a
+  hook script names is `user-invocable: false`", holding only `build-record-guard.py`, which names
+  `implement-from-plan` to detect it and must accept its slash command. Noted in `plugins/CLAUDE.md`.
 
 ### Changed
 
