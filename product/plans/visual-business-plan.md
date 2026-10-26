@@ -131,3 +131,4 @@ skill reports its path.
   fixed in this plan with the 10 advisory findings
 - 2026-10-26 Built Phase 1: greps found 1 Document row, 1 "h2 to h6", 0 old lines; validate.py
   failed only on 20 hygiene hits in the git-ignored local `docs/starlight/node_modules/`
+- 2026-10-26 PR: #158 https://github.com/cheneeheng/ceh-claude-code-library/pull/158
