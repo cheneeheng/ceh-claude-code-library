@@ -170,6 +170,19 @@ hubs and site-level pages; it does not list every page.
   pipe inside a cell is `\|`.
 - Bold UI labels exactly as shown: **Save**. Code names, paths, flags, and env vars in backticks.
 
+A diagram can render without an error and still be unreadable:
+
+- Chain subgraphs with invisible links (`A ~~~ B`) and give each `direction LR`, or Mermaid lays
+  them out in an arbitrary order.
+- In a `gantt` chart with `axisFormat %b %Y`, set `tickInterval 2month` or wider, or the axis
+  labels overlap.
+- Set a horizontal `xychart-beta`'s height under `config.xyChart.height` in the diagram's front
+  matter, or a chart with few bars renders far too tall.
+- Validate every diagram with the Mermaid CLI,
+  `npx -p @mermaid-js/mermaid-cli mmdc -i <file>.md -o <out>.md`, then look at the rendered
+  result, because overflowing labels and a diagram scaled down to unreadable text both pass the
+  CLI.
+
 ## 6. Links
 
 - Relative paths with the `.md` extension: `../reference/client.md#clientstream`.

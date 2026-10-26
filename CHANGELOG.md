@@ -30,12 +30,18 @@ the plan with a generator moved in from `mcp-cassette`: one self-contained page 
 theme, its heading ids matching GitHub's anchors so the markdown's own links work in it. A v1 plan
 moves to v2 on its next revision.
 
+The third PR copies the four Mermaid source rules into the other skills that draw diagrams:
+`ceh-documentation`'s docs standard and `ceh-codebase-explanation:document-architecture`, whose
+render rule now points to the shared one.
+
 ### Plugin versions
 
-| Plugin              | Version |
-| ------------------- | ------- |
-| `ceh-business-plan` | 1.1.13  |
-| `ceh-ui-design`     | 1.0.8   |
+| Plugin                     | Version |
+| -------------------------- | ------- |
+| `ceh-business-plan`        | 1.1.13  |
+| `ceh-codebase-explanation` | 1.2.10  |
+| `ceh-documentation`        | 1.0.6   |
+| `ceh-ui-design`            | 1.0.8   |
 
 ### Added
 
@@ -55,6 +61,8 @@ moves to v2 on its next revision.
   renumbers, rewrites the contents list, and rebuilds the HTML.
 - `plugins/CLAUDE.md`: the generator joins the allowed script bundles, and a generated HTML sits
   outside the template rule.
+- `ceh-documentation` (`references/docs-standard.md`) and
+  `ceh-codebase-explanation:document-architecture`: the Mermaid source rules, registered as copies.
 
 ## 2026-10-24
 

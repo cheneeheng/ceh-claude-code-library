@@ -34,12 +34,24 @@ gets the reasoning without opening every plan in `product/plans/`.
   one numbered subsection each, and never shrink the labels to buy room.
 - **Number every section and open with a Contents list.** `01.`, `02.` on each `##`, `03.01` on
   each `###`, and a linked `## Contents` after the title, per `references/architecture-schema.md`.
-- **Render every Mermaid block and look at the images before finishing**, for example with
-  `npx -p @mermaid-js/mermaid-cli mmdc -i ARCHITECTURE.md -o out.md`. Crossing edges survive a
-  read of the source and show only in the picture. When no renderer can run, say so in the
-  report.
+- **Render every Mermaid block and look at the images before finishing**, per the last rule
+  below. Crossing edges survive a read of the source and show only in the picture. When no
+  renderer can run, say so in the report.
 - **Update on shape change, not on every commit.** A diagram is stale only when the system no
   longer matches it; then the diagram and any new decision land in that same change.
+
+A diagram can render without an error and still be unreadable:
+
+- Chain subgraphs with invisible links (`A ~~~ B`) and give each `direction LR`, or Mermaid lays
+  them out in an arbitrary order.
+- In a `gantt` chart with `axisFormat %b %Y`, set `tickInterval 2month` or wider, or the axis
+  labels overlap.
+- Set a horizontal `xychart-beta`'s height under `config.xyChart.height` in the diagram's front
+  matter, or a chart with few bars renders far too tall.
+- Validate every diagram with the Mermaid CLI,
+  `npx -p @mermaid-js/mermaid-cli mmdc -i <file>.md -o <out>.md`, then look at the rendered
+  result, because overflowing labels and a diagram scaled down to unreadable text both pass the
+  CLI.
 
 ## The 3-second read
 

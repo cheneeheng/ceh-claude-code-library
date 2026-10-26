@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Draw the business plan, render it as HTML, and teach design-ui the document archetype
-status: ready
+status: built
 created: 2026-10-26
 business_plan: none
 ---
@@ -116,7 +116,7 @@ and the Mermaid lessons that cost several render rounds land wherever a skill dr
   the cross-reference entry, version and changelog rows.
 - **Check:** `validate.py` green, and the block text is identical in all four files by a diff of
   the extracted lines.
-- **Status:** todo
+- **Status:** done
 
 ## Open
 
@@ -140,3 +140,5 @@ skill reports its path.
   plan after every specialist", now also renumbers and rewrites the contents list as steps 5 and
   6, because the review's B1 needed one owner for both
 - 2026-10-26 PR: #159 https://github.com/cheneeheng/ceh-claude-code-library/pull/159
+- 2026-10-26 Built Phase 3: the 10-line block hashes to 10e7cbd5 in all four files
+- 2026-10-26 PR: #160 https://github.com/cheneeheng/ceh-claude-code-library/pull/160
