@@ -9,6 +9,35 @@ before this repo live in
 
 ---
 
+## 2026-10-26
+
+A retro from `mcp-cassette`, moved into `product/retros/`, recorded what a visual reader asked of a
+business plan and its HTML version. The build plan `product/plans/visual-business-plan.md` carries
+it into the skills in three PRs. This first one teaches `ceh-ui-design:design-ui` that a plan or
+report is a document, not a site: a new Document archetype (one reading column, a contents rail, no
+hero and no primary action), a contents list that links every heading from h2 to h6 one indent per
+level, tables that wrap their cells before they scroll, and a single-file theme install that inlines
+`brand.css` at build time instead of pasting it into the page template. A new Diagrams recipe holds
+the Mermaid lessons that cost several render rounds, registered in `docs/CROSS_REFERENCES.md` for
+the copies the next PRs add.
+
+### Plugin versions
+
+| Plugin          | Version |
+| --------------- | ------- |
+| `ceh-ui-design` | 1.0.8   |
+
+### Added
+
+- `product/retros/2026-10-25-90a119d8-business-plan-visuals.md` and
+  `product/plans/visual-business-plan.md`.
+- `ceh-ui-design:design-ui`: the Document archetype and the Diagrams finishing recipe.
+
+### Changed
+
+- `ceh-ui-design:design-ui`: in-page contents link h2 to h6, a Document always gets a contents
+  rail, tables wrap before they scroll, and the theme install covers single-file output.
+
 ## 2026-10-24
 
 `ceh-every-session:find-available-guide` now points Azure work at Microsoft's own plugins,

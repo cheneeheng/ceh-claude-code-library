@@ -59,7 +59,7 @@
     {
       "name": "ceh-ui-design",
       "source": "./plugins/standalone/ceh-ui-design",
-      "version": "1.0.7",
+      "version": "1.0.8",
       "description": "CEH UI design: framework-agnostic visual design for any UI or HTML page — layout archetypes, hierarchy, navigation placement (including in-page contents), empty/loading/error states, density, a variants board, finishing recipes, and two bundled token-driven themes (Meridian, Tidewater)."
     },
     {
