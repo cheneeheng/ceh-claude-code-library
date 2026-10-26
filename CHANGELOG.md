@@ -40,10 +40,17 @@ plan's own stale "step 4" wording. It also records two misses from this work in
 `write-build-plan`, and the phases were built without `implement-from-plan`. Each has a drafted
 fix awaiting approval, and none is applied. No plugin changes.
 
+A fifth PR applies the first fix, planned in `product/plans/skill-loading-guards.md`.
+`ceh-build-planning:write-build-plan` now loads before the first edit of any unplanned change,
+including a multi-file change to existing code or skills such as a retro's fixes. Its old
+description named only a new app, tool, component, or feature, and a retro's fixes to existing
+skills did not read as one.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
+| `ceh-build-planning`       | 1.1.14  |
 | `ceh-business-plan`        | 1.1.13  |
 | `ceh-codebase-explanation` | 1.2.10  |
 | `ceh-documentation`        | 1.0.6   |
@@ -63,6 +70,8 @@ fix awaiting approval, and none is applied. No plugin changes.
 
 - `ceh-ui-design:design-ui`: in-page contents link h2 to h6, a Document always gets a contents
   rail, tables wrap before they scroll, and the theme install covers single-file output.
+- `ceh-build-planning:write-build-plan`: its description, catalog row, and README row name the
+  wider moment.
 - `ceh-business-plan`: schema and template `business-plan/v2` with Numbering and contents,
   Diagrams, and HTML version sections; `find-product-market-fit` draws the default diagrams and
   numbers its draft; the five specialists find their subsection by title; `develop-business-plan`
