@@ -39,9 +39,11 @@ Two failure modes produce almost all bad UI, and this file targets both:
 Answer these five questions and state the answers (one line each) so the choices are reviewable:
 
 1. **What kind of surface is this?** Data-dense tool, content/marketing page, focused single-task
-   flow, or metric overview. This classification drives every later choice.
+   flow, metric overview, or a document read top to bottom (a plan, report, or spec). This
+   classification drives every later choice.
 2. **Which layout archetype fits?** (table below)
-3. **What is the one primary action per view?** Everything else is visually subordinate.
+3. **What is the one primary action per view?** Everything else is visually subordinate. A
+   document has none: the reader reads.
 4. **Which theme template?** (Theme layer below)
 5. **What do empty, loading, and error look like?** Designed now, not retrofitted.
 
@@ -78,12 +80,15 @@ and write the reason beside the chosen answer.
 | **Top-nav**        | Content and marketing sites, ≤5 destinations          | Horizontal nav bar + full-width sections below                                       |
 | **Focused flow**   | Auth, checkout, onboarding, wizards, single forms     | Single centered column, minimal or no nav, one action per step                       |
 | **Dashboard grid** | Metric overviews, monitoring                          | App shell + card grid; cards sized by importance, not uniformly                      |
+| **Document**       | Business plans, reports, specs read top to bottom     | One reading column + contents rail; no hero, no primary action, no calls to action   |
 
 The surface kind (design-pass question 1) picks the archetype; the destination count only breaks a
-tie between two that both fit.
+tie between two that both fit. A plan or report is a Document even when it ships as a web page:
+it is read, not sold or operated, so site furniture only gets between the reader and the text.
 
 Do not mix archetypes on one surface. An app does not get a marketing hero; a login page does not
-get a sidebar. An in-page contents rail (_Navigation_) is not an archetype and does not count.
+get a sidebar. An in-page contents rail (_Navigation_) is the Document's own navigation, and a long
+page in another archetype may add one without becoming a second archetype.
 
 #### Content width
 
@@ -107,8 +112,9 @@ get a sidebar. An in-page contents rail (_Navigation_) is not an archetype and d
 
 Decide the mobile form of the archetype up front: sidebar collapses to a drawer or bottom tab bar
 (pick one, not both); top-nav collapses to a menu button; dashboard grids stack to one column in
-card-importance order; tables either scroll horizontally in their own container or reflow to
-key-value cards — never squash columns.
+card-importance order; tables wrap their cells first, and only a table whose wrapped cells still
+cannot fit reflows to key-value cards or, last, scrolls inside its own container — never squash
+columns (see _Humanized tables_).
 
 ### Hierarchy
 
@@ -159,16 +165,18 @@ A long single document (report, spec, docs page) lists its own sections. Those l
 do not navigate, so the frequency-order and max-7 rules above do not apply.
 
 - **Show it** when the page has ≥4 `h2` sections or runs past ~3 screens.
-- **On a content page, the top bar comes first.** A standalone document with ≤5 sections puts its
-  section links in the top bar, and that is its whole navigation.
-- **Add a contents rail only when the top bar cannot carry the sections:** ≥6 `h2` sections,
-  sections that need `h3` links, or a top bar already full of site destinations. In an app shell
-  the rail is the only option.
+- **A Document gets a contents rail.** Its headings go below `h2`, and a top bar cannot carry
+  nested levels.
+- **On a Top-nav content page, the top bar comes first.** A page with ≤5 sections and no
+  subheadings puts its section links in the top bar, and that is its whole navigation. More than
+  that, or a top bar already full of site destinations, gets a rail. In an app shell the rail is
+  the only option.
 - **Rail placement:** sticky beside the content on wide screens, on the right when a sidebar
   already holds the left. On narrow screens it becomes a static list above the first section,
   never a horizontal scroller.
-- **Document order.** Link every `h2` with its heading text; add `h3` one indent down only for
-  long sections.
+- **Document order, h2 to h6.** Link every heading from `h2` to `h6` with its heading text, each
+  level indented one step further than its parent. Markdown renders all five levels, and a reader
+  jumps to a subsection as often as to a chapter.
 - **Mark the section in view** with `.has-edge.is-active` plus `aria-current="location"`, driven by
   an `IntersectionObserver` on the sections. The URL cannot say where the reader is.
 - **Offset jumps:** with any sticky header, set `scroll-padding-top` to its height so a jumped-to
@@ -215,7 +223,7 @@ mixed density inside one view reads as broken.
 
 The core rules make a UI _correct_; these recipes make it _finished_. Apply them on the first
 build. In page order: the command dock (global state), section headers, then how data is displayed
-(tables, lifecycle colors, monograms, stat blocks), then controls and motion. Worked markup for
+(tables, lifecycle colors, monograms, stat blocks, diagrams), then controls and motion. Worked markup for
 the dock, tables, stepper, monogram, and inputs lives in `references/examples.md`.
 
 #### Command dock — global state and its action
@@ -266,6 +274,11 @@ Default table styling is the strongest primitive tell. Every data table gets thi
   side plus a faint brand wash, drawn with an inset shadow so column alignment does not shift.
 - Any table containing form fields uses `table-layout: fixed` so content cannot renegotiate
   column widths.
+- **Wrap before scrolling:** cells wrap (`overflow-wrap: anywhere`), so a wide table fits its
+  column. Never set `white-space: nowrap` on a column that holds sentences, and set a `.badge` with
+  long text inside a cell to `white-space: normal`, because the theme's badge does not wrap and one
+  long label forces the whole table to scroll. Scroll the table's own container only when wrapped
+  cells still cannot fit, as with a wide table on a phone.
 
 #### Lifecycle colors and flow
 
@@ -292,6 +305,30 @@ For any domain state machine (draft → running → review → done):
   over a tiny muted label, an eyebrow above the group.
 - Semantic color on the value only when it carries state, and only when nonzero.
 - A stat block that navigates is one quiet link — no underline; tint the eyebrow on hover.
+
+#### Diagrams
+
+Diagrams are Mermaid, each in a plain panel beside the text it illustrates. A diagram can render
+without an error and still be unreadable:
+
+- Chain subgraphs with invisible links (`A ~~~ B`) and give each `direction LR`, or Mermaid lays
+  them out in an arbitrary order.
+- In a `gantt` chart with `axisFormat %b %Y`, set `tickInterval 2month` or wider, or the axis
+  labels overlap.
+- Set a horizontal `xychart-beta`'s height under `config.xyChart.height` in the diagram's front
+  matter, or a chart with few bars renders far too tall.
+- Validate every diagram with the Mermaid CLI,
+  `npx -p @mermaid-js/mermaid-cli mmdc -i <file>.md -o <out>.md`, then look at the rendered
+  result, because overflowing labels and a diagram scaled down to unreadable text both pass the
+  CLI.
+
+On a page that renders Mermaid itself:
+
+- Pass `flowchart: { wrappingWidth: 200 }` to `mermaid.initialize`. Mermaid 12 wraps node labels at
+  120px, so flowcharts render as tall, narrow boxes; a larger value scales wide diagrams down until
+  the text is too small to read.
+- `await document.fonts.ready` before `mermaid.run()`, so labels are measured in the web font, not
+  the fallback.
 
 #### Inputs on dense surfaces
 
@@ -346,6 +383,7 @@ Structure tells (a design pass never happened):
 - Every section boxed: border + shadow + background tint on the same element, cards inside cards.
 - Uniform spacing everywhere — no proximity grouping, section gaps equal to element gaps.
 - Gradient hero / glassmorphism on an app surface, or on every page of a content site.
+- A hero, call to action, or primary button on a document.
 - Emoji as icons or bullet decoration in product UI.
 - Two or more filled primary buttons in one view.
 - A lone `h1` that repeats the active nav label verbatim.
@@ -403,6 +441,11 @@ bundled style over a generic component library (shadcn/ui, MUI, Mantine) for one
   `@import "./brand.css";` at the top of the entry CSS, or
   `<link rel="stylesheet" href="/brand.css">` for plain HTML. The file brings its own web fonts,
   reset, and bare-element styles, so unclassed markup already looks right.
+- **Single-file output** (a generated report or plan that must stay one HTML file): still copy
+  `brand.css` unchanged as its own file next to the generator, and have the build inline it into a
+  `<style>` element. Never paste the theme into the page template by hand: a pasted copy drifts
+  from the theme, and a later swap or update means editing the template instead of replacing one
+  file.
 - **Light/dark:** `data-theme="light"` or `"dark"` on `<html>` forces a theme; omit it to follow
   `prefers-color-scheme`.
 

@@ -565,6 +565,19 @@ the body, failing at all three in a visible tool call is a hook candidate.
 
 ---
 
+## Mermaid source rules
+
+**Canonical:** `plugins/standalone/ceh-ui-design/skills/design-ui/SKILL.md` — § Finishing recipes, Diagrams (the four bullets from "Chain subgraphs" to "pass the CLI")
+
+| Copy                         | Section | Diverges |
+| ---------------------------- | ------- | -------- |
+| none yet, added by later PRs |         |          |
+
+**Shared:** the four rules that hold wherever a Mermaid diagram renders: chain subgraphs with `~~~`
+and `direction LR`, gantt `tickInterval`, `xychart-beta` height in front matter, and validate with
+the Mermaid CLI then look at the result. The page-only rules below them (`wrappingWidth: 200`,
+`document.fonts.ready`) stay in `design-ui` alone, because a Markdown file has no page to configure.
+
 ## Update protocol
 
 When changing a shared block:
