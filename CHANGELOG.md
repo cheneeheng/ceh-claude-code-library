@@ -34,6 +34,12 @@ The third PR copies the four Mermaid source rules into the other skills that dra
 `ceh-documentation`'s docs standard and `ceh-codebase-explanation:document-architecture`, whose
 render rule now points to the shared one.
 
+A fourth PR checks the finished build against its plan: 22 items Built and 2 Deviations, both the
+plan's own stale "step 4" wording. It also records two misses from this work in
+`product/retros/2026-10-26-repeat-mistake.md`. The plan was written by hand instead of through
+`write-build-plan`, and the phases were built without `implement-from-plan`. Each has a drafted
+fix awaiting approval, and none is applied. No plugin changes.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -50,6 +56,8 @@ render rule now points to the shared one.
 - `ceh-ui-design:design-ui`: the Document archetype and the Diagrams finishing recipe.
 - `ceh-business-plan`: `scripts/build-plan-html.cjs`, `assets/business-plan-page.html`, and a copy
   of Meridian's `brand.css`, registered in `docs/CROSS_REFERENCES.md`.
+- `product/retros/2026-10-26-repeat-mistake.md`, and a Checked line in
+  `product/plans/visual-business-plan.md`.
 
 ### Changed
 

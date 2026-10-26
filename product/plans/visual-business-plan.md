@@ -142,3 +142,5 @@ skill reports its path.
 - 2026-10-26 PR: #159 https://github.com/cheneeheng/ceh-claude-code-library/pull/159
 - 2026-10-26 Built Phase 3: the 10-line block hashes to 10e7cbd5 in all four files
 - 2026-10-26 PR: #160 https://github.com/cheneeheng/ceh-claude-code-library/pull/160
+- 2026-10-26 Checked: 22 Built, 2 Deviation (In and Design both say `develop-business-plan` "step
+  4", the skill has steps 5 and 6; the plan is stale, the Design changed line above records it)
