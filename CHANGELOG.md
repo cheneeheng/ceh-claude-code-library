@@ -26,6 +26,13 @@ names at least four of them in 3 of 3 runs. Without it, 0 of 2 graded runs pass,
 we start building", the session starts building Phase 1 instead of reviewing the plan. Run it with
 `--scaffold --allow-tools Write Edit`.
 
+A third PR adds two setup needs to the repo-local `evaluate-plugin` skill's probe and suite
+steps, found running the `ceh-build-from-plan` suite on Linux. A case with
+`context.scaffold_script` runs its fixture only under `--scaffold`, and without it every
+`source: file` grader fails on a missing path. `--allow-tools Bash` on Linux needs both
+`bubblewrap` and `socat`, and the CLI refuses the run without `socat`. No plugin version changes,
+because the skill is repo-local.
+
 ### Added
 
 - `ceh-build-planning`: eval case `rbp-outcome-lens-plan`.
@@ -33,6 +40,8 @@ we start building", the session starts building Phase 1 instead of reviewing the
 ### Changed
 
 - `ceh-build-planning`: `rbp-outcome-flawed-plan` grades the Record line and the saved review.
+- `evaluate-plugin` (repo-local): steps 6 and 7 name `--scaffold` and the Linux Bash sandbox
+  packages.
 
 ---
 
