@@ -9,6 +9,22 @@ before this repo live in
 
 ---
 
+## 2026-10-27
+
+The `ceh-build-planning` outcome case for `review-build-plan` gains two free graders, because the
+llm grader showed no difference with and without the plugin: a run without it finds the planted
+defects too. The new graders check what only the skill does, the Reviewed line it appends to the
+plan's Record and the review it saves under `plan-reviews/`. With the plugin both pass 3 of 3
+runs, without it 0 of 3, and the case score moves from 0.33 to 1.00. Run the case with
+`--scaffold --allow-tools Write Edit`. No plugin version changes, because eval cases do not load
+in a user's session.
+
+### Changed
+
+- `ceh-build-planning`: `rbp-outcome-flawed-plan` grades the Record line and the saved review.
+
+---
+
 ## 2026-10-26
 
 A retro from `mcp-cassette`, moved into `product/retros/`, recorded what a visual reader asked of a
