@@ -64,14 +64,18 @@ paid run, and a new yes before spending past that ceiling.
    ceiling. No paid run starts before it.
 6. **Probe first.** Run one case once with
    `claude plugin eval <plugin> --case <one> --runs 1 --ablation none --max-cost-usd 1 --no-publish`
-   and recompute the total from its real cost. Past the ceiling → stop and ask. For each `llm`
-   grader, add three throwaway cases with the same grader whose prompts make Claude reply with
-   nothing, with "I don't know", and with a confident answer to the wrong question: all three must
-   fail. Fix a grader that passes any of them, then delete the throwaway cases.
-7. **Run the suite** in the background with `--max-cost-usd` set to the approved ceiling and
-   `--no-publish`. Run `trigger` cases with `--ablation none`: under the default two-arm mode a
-   `tool_used: Skill` grader only marks whether the plugin fired and does not count toward the
-   score. Run `outcome` cases with the default two-arm mode, so `Δ` shows what the plugin adds.
+   and recompute the total from its real cost. Past the ceiling → stop and ask. Add `--scaffold`
+   when a case sets `context.scaffold_script`: without it the fixture never runs and every
+   `source: file` grader fails on a missing path. Before `--allow-tools Bash` on Linux, install
+   `bubblewrap` and `socat` (`apt install bubblewrap socat`), or the CLI refuses the run. For each
+   `llm` grader, add three throwaway cases with the same grader whose prompts make Claude reply
+   with nothing, with "I don't know", and with a confident answer to the wrong question: all three
+   must fail. Fix a grader that passes any of them, then delete the throwaway cases.
+7. **Run the suite** in the background with `--max-cost-usd` set to the approved ceiling,
+   `--no-publish`, and the probe's `--scaffold` and Bash setup. Run `trigger` cases with
+   `--ablation none`: under the default two-arm mode a `tool_used: Skill` grader only marks
+   whether the plugin fired and does not count toward the score. Run `outcome` cases with the
+   default two-arm mode, so `Δ` shows what the plugin adds.
 8. **Read the result.** Open `<plugin>/evals/results/<timestamp>/aggregate-result.json`. Leave out
    runs with a non-null `error` that scored without graders: those are API failures, not plugin
    failures. The noise floor on a pass rate is about `1/sqrt(cases × runs)`: a difference smaller
