@@ -19,6 +19,17 @@ runs, without it 0 of 3, and the case score moves from 0.33 to 1.00. Run the cas
 `--scaffold --allow-tools Write Edit`. No plugin version changes, because eval cases do not load
 in a user's session.
 
+A second PR adds `rbp-outcome-lens-plan`, a plan with no surface gap but five defects only the
+review's lenses catch: no ownership rule, duplicate check-ins, a cron retry that re-sends emails,
+missing empty and error states, and a dark mode the Goal does not need. With the plugin the reply
+names at least four of them in 3 of 3 runs. Without it, 0 of 2 graded runs pass, because asked "can
+we start building", the session starts building Phase 1 instead of reviewing the plan. Run it with
+`--scaffold --allow-tools Write Edit`.
+
+### Added
+
+- `ceh-build-planning`: eval case `rbp-outcome-lens-plan`.
+
 ### Changed
 
 - `ceh-build-planning`: `rbp-outcome-flawed-plan` grades the Record line and the saved review.
