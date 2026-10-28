@@ -133,6 +133,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "new_string": "b",
     }
     readme = {"file_path": f"{guarded}/docs/README.md", "content": "x"}
+    tst = "ceh-testing"
+    test_file = {"file_path": f"{guarded}/tests/test_check.py", "content": "x"}
 
     # sync-agents-workspace: a project whose workspace repo is on branch ws, and a linked worktree.
     proj, wt = tmp / "proj", tmp / "wt"
@@ -304,6 +306,17 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**guard(gw, "Write", {**readme, "file_path": (tmp / "elsewhere" / "README.md").as_posix()}), "out": ""},
         {**guard(gw, "Bash", commit), "env": {"CEH_SKILL_STARTED_GUARD": "off"}, "out": ""},
         {**guard(gw, "Bash", commit), "env": {"CEH_DISABLED_HOOKS": "skill-started-guard"}, "out": ""},
+        # skill-started-guard (ceh-testing): a test file needs a testing skill started.
+        {**guard(tst, "Write", test_file), "out": "ceh-testing:write-test-first"},
+        {**guard(tst, "Edit", {**test_file, "file_path": f"{guarded}/web/a.spec.ts"}), "out": "ceh-testing:write-test-first"},
+        *[{**guard(tst, "Write", test_file, started(s)), "out": ""} for s in (
+            "ceh-testing:write-test-first", "ceh-testing:test-a-bug-fix", "ceh-testing:verify-behavior-preserved",
+            "ceh-python-library:write-pytest-library-tests", "ceh-python-service:write-pytest-service-tests",
+            "ceh-web-frontend:write-vitest-playwright-tests")],
+        {**guard(tst, "Write", {**test_file, "file_path": f"{guarded}/src/check.py"}), "out": ""},
+        {**guard(tst, "Write", {**test_file, "file_path": (tmp / "elsewhere" / "test_x.py").as_posix()}), "out": ""},
+        {**guard(tst, "Write", test_file), "env": {"CEH_SKILL_STARTED_GUARD": "off"}, "out": ""},
+        {**guard(tst, "Write", test_file), "env": {"CEH_DISABLED_HOOKS": "skill-started-guard"}, "out": ""},
         # sync-agents-workspace: one sequence on the tmp project above, in this order.
         {**sync("start", wt), "env": {**who, "CEH_DISABLED_HOOKS": "sync-agents-workspace"}, "out": "",
          "after": lambda: "created despite the kill switch" if os.path.lexists(wt_ws) else None},

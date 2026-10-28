@@ -109,7 +109,9 @@ another skill's steps only name ("following X") no longer gets followed from mem
   plugin README row and `python3` note, the MINOR bump, changelog and versions rows.
 - **Check:** the fixtures fail first and pass after, `validate.py` as in Phase 1, and the cut
   transcript gets a deny for `Write tests/integration/test_check.py`.
-- **Status:** todo
+- **Status:** done. The 12 fixtures failed first ("no hooks.json runs this script") and pass now
+  ("OK: hooks check passed"); the cut transcript gets a deny for the `test_check.py` write; the body
+  outside `RULES` matches `ceh-git-workflow`'s copy; `validate.py` fails only on git-ignored files.
 
 ### Phase 3: ceh-coding-conduct guard
 
@@ -136,3 +138,4 @@ another skill's steps only name ("following X") no longer gets followed from mem
 - 2026-10-28 Reviewed: Ready to build, 0 blocking
 - 2026-10-28 Built Phase 1: `python tools/validate-plugins/checks/hooks.py`, OK: hooks check passed
 - 2026-10-28 PR: #173 https://github.com/cheneeheng/ceh-claude-code-library/pull/173
+- 2026-10-28 Built Phase 2: `python tools/validate-plugins/checks/hooks.py`, OK: hooks check passed

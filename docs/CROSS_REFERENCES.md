@@ -106,6 +106,7 @@ the other. Each hook is a standalone script with no shared module, so the list i
 | `plugins/standalone/ceh-every-session/scripts/ask-user-question-guard.py`    | top of `main()`        | `sys.exit(0)` instead of `return`      |
 | `plugins/standalone/ceh-build-from-plan/scripts/build-record-guard.py`       | top of `main()`        | none                                   |
 | `plugins/standalone/ceh-git-workflow/scripts/sync-agents-workspace.py`       | top of `main()`        | none                                   |
+| `plugins/standalone/ceh-testing/scripts/skill-started-guard.py`              | top of `main()`        | none                                   |
 | `plugins/standalone/ceh-git-workflow/scripts/skill-started-guard.py`         | top of `main()`        | none                                   |
 | `plugins/standalone/ceh-coding-conduct/scripts/load-contract.sh`             | the `case` line on top | bash: `case` on `$(basename "$0" .sh)` |
 | `plugins/standalone/ceh-coding-conduct/scripts/inject-less-code-reminder.sh` | the `case` line on top | bash: `case` on `$(basename "$0" .sh)` |
@@ -593,6 +594,19 @@ a user may install the business plan without `ceh-ui-design`. Check with `cmp` a
 and `direction LR`, gantt `tickInterval`, `xychart-beta` height in front matter, and validate with
 the Mermaid CLI then look at the result. The page-only rules below them (`wrappingWidth: 200`,
 `document.fonts.ready`) stay in `design-ui` alone, because a Markdown file has no page to configure.
+
+## Skill-started guard (`skill-started-guard.py`)
+
+**Canonical:** `plugins/standalone/ceh-git-workflow/scripts/skill-started-guard.py` — the whole script
+
+| Copy                                                            | Section          | Diverges                             |
+| --------------------------------------------------------------- | ---------------- | ------------------------------------ |
+| `plugins/standalone/ceh-testing/scripts/skill-started-guard.py` | the whole script | `RULES` holds only the test-file row |
+
+**Shared:** everything outside `RULES`: `started()`, `subject()` with its `new_source` branch, the
+kill switches, the deny message, and the fail-open exit. Each copy keeps only its own plugin's rows
+in `RULES`, so each plugin works installed alone. Check with
+`diff <(sed '/^RULES = \[/,/^\]/d' <a>) <(sed '/^RULES = \[/,/^\]/d' <b>)`.
 
 ## Update protocol
 
