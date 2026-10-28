@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Settle where a decision lives, then move this repo's CLAUDE.md decisions into rule files
-status: building
+status: built
 created: 2026-10-28
 ---
 
@@ -176,9 +176,10 @@ describes the repo and its procedures and points to the decisions instead of res
   prints nothing. Manual, because only a live session shows what loaded: in a fresh session,
   `/context` lists none of the six files under Memory files, and after reading
   `plugins/CLAUDE.md` it lists all six.
-- **Status:** todo. Built and landed: `validate.py` in a clean worktree passes, each file has one
-  `paths:`, and the citation grep prints nothing. The manual `/context` check needs a fresh
-  session, which the building session could not start, so it waits for the user.
+- **Status:** done, PR #181. `validate.py` in a clean worktree passes, each file has one `paths:`,
+  and the citation grep prints nothing. In place of `/context`, a fresh headless session with an
+  `InstructionsLoaded` log loaded none of the six at `session_start`, and all six with
+  `path_glob_match` after reading `plugins/standalone/ceh-seo/.claude-plugin/plugin.json`.
 
 ## Open
 
@@ -194,3 +195,6 @@ None
 - 2026-10-28 Built Phase 2: python tools/validate-plugins/validate.py, OK: all plugin checks passed
 - 2026-10-28 PR: #180 https://github.com/cheneeheng/ceh-claude-code-library/pull/180
 - 2026-10-28 PR: #181 https://github.com/cheneeheng/ceh-claude-code-library/pull/181
+- 2026-10-28 Built Phase 3: InstructionsLoaded log in a fresh session, six files loaded by path_glob_match after a plugins/ read, none at session_start
+- 2026-10-28 Checked: 7 In, 9 Design, 9 Out, 3 phase Checks Built; none not Built
+- 2026-10-28 PR: #182 https://github.com/cheneeheng/ceh-claude-code-library/pull/182
