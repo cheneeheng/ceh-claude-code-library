@@ -200,3 +200,4 @@ and union merge for `DECISION_LOG.md` only.
 - 2026-10-28 Built Phase 2: python tools/validate-plugins/checks/hooks.py, OK: hooks check passed
 - 2026-10-28 Design changed: was "A commit and a merge are about six git spawns, roughly 0.3 s on Windows", now "`end` took 0.98 s on Windows", because the scratchpad run measured it
 - 2026-10-28 PR: #169 https://github.com/cheneeheng/ceh-claude-code-library/pull/169
+- 2026-10-28 PR: #171 https://github.com/cheneeheng/ceh-claude-code-library/pull/171
