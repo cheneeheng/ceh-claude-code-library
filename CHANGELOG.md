@@ -95,6 +95,10 @@ templates, component names, frontmatter scalars, and invocation flags. They load
 session reads a matching file, so they add nothing to the per-session total. `plugins/CLAUDE.md`
 keeps how each rule is checked, the `>-` folding mechanics, and the list of exceptions.
 
+A fourteenth PR closes `product/plans/decisions-out-of-claude-md.md` as built. A fresh session with
+an `InstructionsLoaded` log confirmed the six scoped files load only after a file under `plugins/`
+is read.
+
 ### Plugin versions
 
 | Plugin                    | Version |
@@ -143,6 +147,7 @@ keeps how each rule is checked, the `>-` folding mechanics, and the list of exce
   `add-plugin-component` skills cite the rule files.
 - `plugins/CLAUDE.md`: authoring decisions replaced by pointers; `CLAUDE.md`,
   `add-plugin-component`, and the `scalars.py` error message cite the rule files.
+- `product/plans/decisions-out-of-claude-md.md`: status built, with the Phase 3 load check.
 
 ### Fixed
 
