@@ -193,3 +193,4 @@ None
 - 2026-10-28 Design changed: was "Phase 2 adds roughly 70 ... Context per session does not grow", now "Phase 2 adds 130, ending at 169 ... grows by 66 lines", because each moved file carries frontmatter, title and Why line
 - 2026-10-28 Built Phase 2: python tools/validate-plugins/validate.py, OK: all plugin checks passed
 - 2026-10-28 PR: #180 https://github.com/cheneeheng/ceh-claude-code-library/pull/180
+- 2026-10-28 PR: #181 https://github.com/cheneeheng/ceh-claude-code-library/pull/181
