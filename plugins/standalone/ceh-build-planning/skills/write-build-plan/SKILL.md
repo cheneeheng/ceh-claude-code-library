@@ -61,6 +61,13 @@ summarized under Output.
    - Loading, error, and empty states for every screen that fetches.
    - For an LLM feature: model and provider, how the message list is built from stored messages,
      and what happens when a conversation outgrows the context window.
+   - For each new type, function, or module other code calls: its signature with the errors it
+     returns, and the file it lives in, named for its concern and never a catch-all (`utils`).
+     Then check the shape. Illegal states: name a value each type can hold that the domain
+     forbids, and tighten the type or say where it is validated, once. Runs twice: say what each
+     write (a row, a file, a message) does on a retry, and make it idempotent or say why it runs
+     once. Shared state: name who writes each value two requests or processes touch. Smallest
+     interface: a module that exposes most of what it holds hides nothing, so merge or cut it.
 
 6. **Sequence the phases.** Foundations first (data model, auth) before the features that use
    them. No phase relies on anything a later phase introduces. Prefer thin vertical slices that

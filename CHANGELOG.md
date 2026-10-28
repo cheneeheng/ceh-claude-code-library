@@ -53,6 +53,12 @@ new source file outside a tests or `scripts/` folder waits until `sketch-design`
 because the same session wrote a new module without its four checks. The retro's fix is now
 `applied`.
 
+An eighth PR moves `sketch-design`'s four checks (illegal states, runs twice, shared state,
+smallest interface) and its one-concern-per-file rule into `write-build-plan`'s Design step, and
+adds them to `review-build-plan`'s Engineering lens. The retro recommended it: every build starts
+from a reviewed plan, whose Design already holds the types and signatures, so the checks belong
+where the shape is decided. A follow-up PR retires `sketch-design` itself.
+
 ### Plugin versions
 
 | Plugin               | Version |
@@ -60,6 +66,7 @@ because the same session wrote a new module without its four checks. The retro's
 | `ceh-git-workflow`   | 1.5.0   |
 | `ceh-testing`        | 1.5.0   |
 | `ceh-coding-conduct` | 2.3.0   |
+| `ceh-build-planning` | 1.1.16  |
 
 ### Added
 
@@ -78,6 +85,8 @@ because the same session wrote a new module without its four checks. The retro's
 - `tools/validate-plugins`: `checks/hooks.py` keys hook scripts by `<plugin>/<script>`, and a bare
   name two plugins ship fails as ambiguous.
 - `CLAUDE.md`: the Landing section's changelog step starts `update-changelog`.
+- `ceh-build-planning`: `write-build-plan` step 5 settles each called type's shape and runs the
+  four shape checks; `review-build-plan`'s Engineering lens asks for them.
 
 ### Fixed
 
