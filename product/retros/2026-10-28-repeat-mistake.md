@@ -37,6 +37,13 @@ All five are inferred judgments from reading each `SKILL.md` and from this sessi
 | `ceh-coding-conduct:sketch-design`  | **Merge into planning.** Move its four checks into `write-build-plan`'s Design step, and into `review-build-plan`'s Engineering lens so they are reviewed. Then retire it.                                                                                 | SOUL requires a reviewed plan before any build, and the plan's Design already holds the types and signatures. So the "before its first test" moment is always covered by a plan. What the plan lacked was the four checks, which belong where the shape is decided. For a change too small for a plan, `write-less-code` already covers the shape.                             |
 | `ceh-testing:write-test-first`      | **Keep standalone,** and have `implement-from-plan` step 3.2 invoke it explicitly, or let the guard enforce it.                                                                                                                                            | It is the TDD contract for every change that adds behavior, with or without a plan: one red test at a time, never weaken a test, an integration test per feature, and skip only when there is nothing to assert. `implement-from-plan` restates one line of it. Merging would make two copies to keep in step.                                                                 |
 
+**Outcome, 2026-10-28.** The user kept `commit`, because commits come before a PR exists, so
+`pull-request` is the wrong home, and the guard enforces loading it. The user kept
+`update-changelog`, because it also creates a missing changelog and sets the entry format.
+`update-readme` and `write-test-first` stay, as recommended. `sketch-design` merged into planning
+and retired, with the `ceh-coding-conduct` copy of the guard, per
+`product/plans/retire-sketch-design.md`.
+
 If you take all five: three skills retire into their natural parents (`commit` and `update-changelog` into `pull-request` and `release`, `sketch-design` into planning), two stay, and the guard's `RULES` shrink to `git commit` (pointing at `pull-request` or `release`), `README.md` and test files.
 
 ## Pending drafts

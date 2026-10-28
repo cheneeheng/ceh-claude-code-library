@@ -30,7 +30,6 @@ its prerequisites, hooks, and environment variables.
 | [Shrink Diff](../plugins/standalone/ceh-coding-conduct/skills/shrink-diff/SKILL.md)                     | `/ceh-coding-conduct:shrink-diff`     | Branch functionally done, before the PR — retroactively apply write-less-code to the accumulated diff vs `main`                                                                               |
 | [Refactor Repo](../plugins/standalone/ceh-coding-conduct/skills/refactor-repo/SKILL.md)                 | `/ceh-coding-conduct:refactor-repo`   | Manual only — propose-then-apply refactor campaign over the whole repo or a named module                                                                                                      |
 | [Find Root Cause](../plugins/standalone/ceh-coding-conduct/skills/find-root-cause/SKILL.md)             | `/ceh-coding-conduct:find-root-cause` | Something is broken and no command has yet shown why, before any fix: reproduce, falsifiable hypotheses, evidence, a cause confirmed by prediction, saved as a fix record in `product/fixes/` |
-| [Sketch Design](../plugins/standalone/ceh-coding-conduct/skills/sketch-design/SKILL.md)                 | `/ceh-coding-conduct:sketch-design`   | Before the code for a feature that adds a type, module, or called function: types, signatures, boundaries, then four checks on the sketch                                                     |
 
 ### [Codebase Explanation (`ceh-codebase-explanation`)](../plugins/standalone/ceh-codebase-explanation/)
 
