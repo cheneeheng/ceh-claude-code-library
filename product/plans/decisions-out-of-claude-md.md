@@ -197,3 +197,4 @@ None
 - 2026-10-28 PR: #181 https://github.com/cheneeheng/ceh-claude-code-library/pull/181
 - 2026-10-28 Built Phase 3: InstructionsLoaded log in a fresh session, six files loaded by path_glob_match after a plugins/ read, none at session_start
 - 2026-10-28 Checked: 7 In, 9 Design, 9 Out, 3 phase Checks Built; none not Built
+- 2026-10-28 PR: #182 https://github.com/cheneeheng/ceh-claude-code-library/pull/182
