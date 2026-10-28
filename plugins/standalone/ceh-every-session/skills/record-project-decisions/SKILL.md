@@ -2,7 +2,7 @@
 name: record-project-decisions
 description: >-
   Load this skill when a decision binds a whole project: write it as a rule file,
-  .claude/rules/decision-<topic>.md, that every session loads. Trigger on "we decided", "from now on
+  .claude/rules/decision-<topic>.md, that Claude Code loads. Trigger on "we decided", "from now on
   we use", "record this decision", "starting a new project".
 argument-hint: "[record <decision> | seed]"
 disable-model-invocation: false
@@ -17,9 +17,10 @@ and every kind of task follows it without being told again. Done when each decis
 own `.claude/rules/decision-<topic>.md` file, no two files contradict each other, and whatever
 could not be settled is reported as open.
 
-Claude Code loads every `.md` file in `.claude/rules/` at launch with the same priority as
-`.claude/CLAUDE.md`. A decision written there outranks plugin standards in every session, with no
-skill needing to know about it. The files sit directly in `.claude/rules/`, never in a subfolder,
+Claude Code loads each `.md` file in `.claude/rules/` with the same priority as
+`.claude/CLAUDE.md`: at launch when it has no `paths` frontmatter, and once a matching file is read
+when it has. A decision written there outranks plugin standards, with no skill needing to know
+about it. The files sit directly in `.claude/rules/`, never in a subfolder,
 and the `decision-` prefix marks the ones this skill owns.
 
 Two modes. **Record** (the default) writes one decision from the conversation, or promotes an
@@ -35,9 +36,11 @@ installed.
    SvelteKit, never React", not "prefer modern frameworks". A statement that changes nothing an
    agent would do is not a decision: leave it in the conversation or its source document.
 2. **Read what exists:** every file in `.claude/rules/` and the project's `CLAUDE.md`. Already
-   stated there in the same terms: stop and say so. Same topic in a `decision-` file: that file is
-   the one to update. Contradicts a decision: see Stop conditions. Edit only `decision-` files:
-   the project's other rule files are not this skill's to change.
+   stated in a rule file in the same terms: stop and say so. Already stated in `CLAUDE.md`: stop
+   and report it as a candidate to move into its own `decision-` file. Same topic in a `decision-`
+   file: that file is the one to update. Contradicts a decision: see Stop conditions. Edit only
+   `decision-` files: `CLAUDE.md` and the project's other rule files are not this skill's to
+   change.
 3. **Write the file** in the shape under Output, and report its path.
 
 ### Seed
@@ -63,8 +66,9 @@ installed.
 3. **Merge** into one candidate per fact. "Svelte, not React" settles open choices in several
    skills at once and is still one decision. Drop choices this project will never face: a CLI
    tool has no UI framework question.
-4. **Resolve each candidate.** Inferred, when a file answers it, citing that file. Otherwise it is a
-   question.
+4. **Resolve each candidate.** Already stated in `CLAUDE.md`: write no file, and report it as a
+   candidate to move. Inferred, when another file answers it, citing that file.
+   Otherwise it is a question.
 5. **Settle the questions.** Interactive: ask them up front with `AskUserQuestion`, at most four per
    call, calls back to back, each with a recommended answer listed first. Show the inferred
    decisions in the same pass so the user can correct one. No human (a subagent, a headless run):
@@ -75,6 +79,11 @@ installed.
 
 - **One decision per file, a few lines each.** Adding, changing, or retiring a decision then
   touches one file, and `git log` on that file is the decision's history.
+- **A choice goes in a `decision-` file, a description in `CLAUDE.md`.** A statement someone could
+  reasonably have chosen differently, and that should hold in later sessions, is a decision, even
+  when `CLAUDE.md` covers its area. `CLAUDE.md` keeps what the project is, its layout, its
+  commands, and its procedures, and a procedure step that depends on a decision names its file
+  rather than restating it, so each decision lives in one place with one history.
 - **Committed with the project.** The `decision-` files are the record people read and review,
   not agent scratch, so they are never added to `.gitignore`. The agent's decision log stays
   separate.
@@ -89,9 +98,9 @@ installed.
   instead of writing it: an override that keeps recurring is a defect in the skill.
 - **No `paths` frontmatter by default.** Decisions bind non-code tasks too. Scope one with
   `paths` only when it concerns one part of the tree and nothing else.
-- **Keep the set small.** Once the `decision-` files pass 150 lines in total, say so in the
-  report and name the decisions that bind least, because every line costs context in every
-  session.
+- **Keep the set small.** Once the `decision-` files without `paths` pass 150 lines in total, say
+  so in the report and name the decisions that bind least, because every line of them costs
+  context in every session. A file with `paths` loads only when its paths are read.
 
 ## Output
 
