@@ -36,10 +36,12 @@ Pick the path, then run it top to bottom. Each step gates the next.
 3. **Bump** the version in every manifest the project ships. All must read the same vX.Y.Z.
 4. **Changelog:** invoke the Skill tool with skill="ceh-git-workflow:update-changelog" to write
    the vX.Y.Z section. Gate: section written and semver-validated.
-5. **Docs:** refresh the README per `ceh-git-workflow:update-readme` if the release is
-   user-facing, and CLAUDE.md if project facts changed. Otherwise record "no update needed".
+5. **Docs:** if the release is user-facing, invoke the Skill tool with
+   skill="ceh-git-workflow:update-readme" to refresh the README. Refresh CLAUDE.md if project
+   facts changed. Otherwise record "no update needed".
 6. **Commit** with the [release commit message](#release-commit-message). Tree clean.
-7. **Land** the branch: open the PR and merge it per `ceh-git-workflow:pull-request`. Gate: CI
+7. **Land** the branch: invoke the Skill tool with skill="ceh-git-workflow:pull-request" and run
+   its Open and Merge sections. Gate: CI
    green, approvals met, merged to `main`.
 8. **Tag and publish** per [Tag and publish](#tag-and-publish).
 

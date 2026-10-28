@@ -21,7 +21,7 @@ the Markdown.
 
 1. **Gather the inputs.** Read every per-competitor report in
    `.agents_workspace/competitor-analysis/`. When a competitor the user named has no report yet,
-   run ceh-competitor-analysis:analyze-competitor for it first. Do not compare from memory.
+   invoke the Skill tool with skill="ceh-competitor-analysis:analyze-competitor" for it first. Do not compare from memory.
 2. **Measure our side fresh.** Count our components with commands (`ls`, `find`, `wc -l`) rather
    than copying numbers from our own README, which drifts. Note the date.
 3. **Pick the dimensions.** Start from the fixed rows under Output. Add rows for any axis on which

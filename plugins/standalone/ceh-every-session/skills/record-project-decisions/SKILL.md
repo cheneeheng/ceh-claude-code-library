@@ -46,7 +46,8 @@ installed.
 2. **Collect candidates from three sources:**
    - **Choices the installed skills leave open.** From the skill listing, pick the plugins this
      project would use. For each, dispatch one `ceh-every-session:bulk-reader` subagent on its
-     `SKILL.md` files, following `ceh-every-session:delegate-bulk-reads`. Ask it for every choice
+     `SKILL.md` files. First invoke the Skill tool with
+     skill="ceh-every-session:delegate-bulk-reads" for how to brief it. Ask it for every choice
      a skill leaves to the project: alternatives it offers, "if X use A, otherwise B" branches,
      values it asks for. One line each, with `path:line`. Send the subagents in parallel. Take each
      plugin's directory from its `installPath` in `~/.claude/plugins/installed_plugins.json`, not
