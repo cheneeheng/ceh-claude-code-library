@@ -12,7 +12,7 @@ Tier: **cross-cutting**. No plugin dependencies.
 Each skill declares what it needs in its `compatibility` frontmatter. In short: the `git` CLI for
 every skill, the GitHub CLI (`gh`, authenticated via `gh auth login`) for `pull-request` and
 `release`, and `python3` on PATH (stdlib only) for the `update-changelog` validator and the
-branch guard and workspace sync hooks. The workspace sync hook also needs git 2.27 or later.
+branch guard, skill-started guard and workspace sync hooks. The workspace sync hook also needs git 2.27 or later.
 
 ## Skills
 
@@ -42,10 +42,11 @@ out into one per step.
 
 The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled.
 
-| Hook                              | Event                                                                 | Script                     | Default |
-| --------------------------------- | --------------------------------------------------------------------- | -------------------------- | ------- |
-| [Branch guard](#branch-guard)     | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`)           | `branch-guard.py`          | on      |
-| [Workspace sync](#workspace-sync) | `SessionStart`, `PostToolUse` (`EnterWorktree`), `Stop`, `SessionEnd` | `sync-agents-workspace.py` | on      |
+| Hook                                        | Event                                                                 | Script                     | Default |
+| ------------------------------------------- | --------------------------------------------------------------------- | -------------------------- | ------- |
+| [Branch guard](#branch-guard)               | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`)           | `branch-guard.py`          | on      |
+| [Workspace sync](#workspace-sync)           | `SessionStart`, `PostToolUse` (`EnterWorktree`), `Stop`, `SessionEnd` | `sync-agents-workspace.py` | on      |
+| [Skill-started guard](#skill-started-guard) | `PreToolUse` (`Bash`, `Edit`, `Write`, `MultiEdit`)                   | `skill-started-guard.py`   | on      |
 
 ### Branch guard
 
@@ -99,12 +100,30 @@ worktrees (`isolation: "worktree"`), which fire none of its events. On Windows, 
 kills its children and forbids breakaway would kill the background merge; the next session start
 then merges. `CEH_DISABLED_HOOKS` with `sync-agents-workspace` switches it off.
 
+### Skill-started guard
+
+Denies a call until a skill that owns its moment has been started in the session, by a `Skill`
+tool call or a slash command, and names the skill to invoke:
+
+| Call                                 | Owning skills                   |
+| ------------------------------------ | ------------------------------- |
+| `git commit` in a `Bash` command     | `commit`                        |
+| An edit or write of a `CHANGELOG.md` | `update-changelog` or `release` |
+| An edit or write of a `README.md`    | `update-readme`                 |
+
+A skill another skill's steps only name ("following `commit`") still has to be started: that
+wording is how all three were skipped in one session. Files outside the session's project pass,
+and so does `git commit` quoted inside another command, such as a `grep`. A subagent reads its own
+transcript, so it starts the skill itself. It fails open. `CEH_SKILL_STARTED_GUARD=off`, or
+`CEH_DISABLED_HOOKS` with `skill-started-guard`, switches it off.
+
 ## Scripts
 
 | Script                             | Purpose                                                                                                                                                                                    |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `scripts/branch-guard.py`          | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                                                               |
 | `scripts/sync-agents-workspace.py` | `SessionStart`, `PostToolUse` (`EnterWorktree`), `Stop` and `SessionEnd` hook: a git worktree of `.agents_workspace` in each worktree, merged back (see [Workspace sync](#workspace-sync)) |
+| `scripts/skill-started-guard.py`   | `PreToolUse` hook: deny a commit, changelog or README edit until its skill was started (see [Skill-started guard](#skill-started-guard))                                                   |
 | `scripts/check-semver.py`          | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                                                        |
 
 ```bash
