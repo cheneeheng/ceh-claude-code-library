@@ -12,7 +12,7 @@ Tier: **cross-cutting**. No plugin dependencies.
 Each skill declares what it needs in its `compatibility` frontmatter. In short: the `git` CLI for
 every skill, the GitHub CLI (`gh`, authenticated via `gh auth login`) for `pull-request` and
 `release`, and `python3` on PATH (stdlib only) for the `update-changelog` validator and the
-branch guard hook.
+branch guard and workspace sync hooks. The workspace sync hook also needs git 2.27 or later.
 
 ## Skills
 
@@ -42,9 +42,10 @@ out into one per step.
 
 The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled.
 
-| Guard                         | Event                                                       | Script            | Default |
-| ----------------------------- | ----------------------------------------------------------- | ----------------- | ------- |
-| [Branch guard](#branch-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`) | `branch-guard.py` | on      |
+| Hook                              | Event                                                       | Script                     | Default |
+| --------------------------------- | ----------------------------------------------------------- | -------------------------- | ------- |
+| [Branch guard](#branch-guard)     | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`) | `branch-guard.py`          | on      |
+| [Workspace sync](#workspace-sync) | `SessionStart`, `Stop`, `SessionEnd`                        | `sync-agents-workspace.py` | on      |
 
 ### Branch guard
 
@@ -69,12 +70,40 @@ Set a variable under `env` in a Claude Code settings file. The
 | `CEH_BRANCH_GUARD`   | unset (guard on)     | `off` allows edits on the default branch, for when the user asked to edit it in place |
 | `CEH_DISABLED_HOOKS` | unset (all hooks on) | Comma-separated hook script names to skip; `branch-guard` switches this guard off     |
 
+### Workspace sync
+
+Brings a project's nested `.agents_workspace` git repo (decision log, handoffs, notes) into a git
+worktree. A worktree is a fresh checkout of tracked files, so without it a worktree session sees no
+workspace. A link would not do: Claude Code's worktree isolation refuses Edit and Write through a
+link to a folder outside the worktree.
+
+- **Session start in a worktree:** adds `<worktree>/.agents_workspace` as a git worktree of the main
+  checkout's workspace repo, on the branch `ceh-ws/<X>/<worktree folder>`, where `<X>` is the branch
+  the main workspace has checked out. A branch left by an earlier worktree of the same name is
+  reused.
+- **After every turn:** commits the worktree's workspace changes to that branch, so removing the
+  worktree loses only what changed since the last turn.
+- **Session end:** commits once more and merges the branch into `<X>`, autostashing uncommitted
+  changes in the main workspace. `DECISION_LOG.md` merges with git's `union` driver, so two sessions
+  appending both keep their lines. Other files merge normally.
+- **Session start in a main checkout:** merges every `ceh-ws/<X>/` branch left over, for example
+  when a session crashed or ran out of its 1.5 s exit budget, deletes merged branches no worktree
+  holds, and tells the agent which branch failed to merge and how to merge it by hand.
+
+It never pushes, never aborts a merge it did not start, and fails silently, because a sync hook
+must never stop a session. It does nothing without a `.agents_workspace` git repo in the main
+checkout, when that repo is on a detached `HEAD`, or in a bare repo. It does not cover subagent
+worktrees (`isolation: "worktree"`), which fire none of its events, or a worktree entered
+mid-session with `EnterWorktree` unless the session later restarts there. `CEH_DISABLED_HOOKS`
+with `sync-agents-workspace` switches it off.
+
 ## Scripts
 
-| Script                    | Purpose                                                                                                                             |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `scripts/branch-guard.py` | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                        |
-| `scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`) |
+| Script                             | Purpose                                                                                                                                                   |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/branch-guard.py`          | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                              |
+| `scripts/sync-agents-workspace.py` | `SessionStart`, `Stop` and `SessionEnd` hook: a git worktree of `.agents_workspace` in each worktree, merged back (see [Workspace sync](#workspace-sync)) |
+| `scripts/check-semver.py`          | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                       |
 
 ```bash
 python3 scripts/check-semver.py CHANGELOG.md
