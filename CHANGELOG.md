@@ -74,6 +74,14 @@ bare name now call it: `pull-request` steps 3 and 4, `release` steps 5 and 7, `w
 step 1, `explore-app-for-bugs` step 6, `record-project-decisions` Seed step 2, and
 `compare-competitors` step 1.
 
+An eleventh PR settles where a decision lives when `CLAUDE.md` already covers its area.
+`record-project-decisions` now says a choice someone could have made differently goes in its own
+`decision-` file, and `CLAUDE.md` keeps the description and procedures. Record and Seed report a
+decision `CLAUDE.md` already states as a candidate to move, and write no copy. The 150-line warning
+counts only files without `paths`, the ones every session loads. The PR also carries
+`product/plans/decisions-out-of-claude-md.md`, whose later phases move this repo's `CLAUDE.md`
+decisions into rule files.
+
 ### Plugin versions
 
 | Plugin                    | Version |
@@ -83,7 +91,7 @@ step 1, `explore-app-for-bugs` step 6, `record-project-decisions` Seed step 2, a
 | `ceh-coding-conduct`      | 2.4.0   |
 | `ceh-build-planning`      | 1.1.16  |
 | `ceh-build-from-plan`     | 1.1.2   |
-| `ceh-every-session`       | 2.8.14  |
+| `ceh-every-session`       | 2.8.15  |
 | `ceh-competitor-analysis` | 1.1.12  |
 
 ### Added
@@ -96,6 +104,7 @@ step 1, `explore-app-for-bugs` step 6, `record-project-decisions` Seed step 2, a
 - `ceh-testing`: `skill-started-guard.py` `PreToolUse` hook for test files.
 - `ceh-coding-conduct`: `skill-started-guard.py` `PreToolUse` hook for new source files.
 - `.claude/rules/decision-skill-references.md`: when a skill body calls a skill, when it names one.
+- `product/plans/decisions-out-of-claude-md.md`.
 
 ### Changed
 
@@ -112,6 +121,8 @@ step 1, `explore-app-for-bugs` step 6, `record-project-decisions` Seed step 2, a
   a skill call it with the Skill tool instead of naming it.
 - `ceh-build-from-plan`: `implement-from-plan` step 3.1 takes the shape from the plan's Design.
 - `ceh-git-workflow`, `ceh-testing`: `skill-started-guard.py` drops the unused `new_source` branch.
+- `ceh-every-session`: `record-project-decisions` states the boundary between a `decision-` file
+  and `CLAUDE.md`, and its schema documents `paths`.
 
 ### Fixed
 
