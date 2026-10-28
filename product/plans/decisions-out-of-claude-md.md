@@ -176,7 +176,9 @@ describes the repo and its procedures and points to the decisions instead of res
   prints nothing. Manual, because only a live session shows what loaded: in a fresh session,
   `/context` lists none of the six files under Memory files, and after reading
   `plugins/CLAUDE.md` it lists all six.
-- **Status:** todo
+- **Status:** todo. Built and landed: `validate.py` in a clean worktree passes, each file has one
+  `paths:`, and the citation grep prints nothing. The manual `/context` check needs a fresh
+  session, which the building session could not start, so it waits for the user.
 
 ## Open
 

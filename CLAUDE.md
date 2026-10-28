@@ -71,7 +71,8 @@ Each plugin's domain is in the root `README.md` Plugins table and its own `plugi
 ## Skills and Frontmatter
 
 Skill and agent authoring rules (templates, `references/` policy, naming, frontmatter conventions)
-live in `plugins/CLAUDE.md`, which loads when working under `plugins/`.
+live in `.claude/rules/` files scoped to `plugins/**` and `.claude/skills/**`, listed in
+`plugins/CLAUDE.md`, which explains how they are checked and loads when working under `plugins/`.
 
 ## Plugin Dependencies
 
