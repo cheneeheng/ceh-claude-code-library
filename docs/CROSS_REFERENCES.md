@@ -107,6 +107,7 @@ the other. Each hook is a standalone script with no shared module, so the list i
 | `plugins/standalone/ceh-build-from-plan/scripts/build-record-guard.py`       | top of `main()`        | none                                   |
 | `plugins/standalone/ceh-git-workflow/scripts/sync-agents-workspace.py`       | top of `main()`        | none                                   |
 | `plugins/standalone/ceh-testing/scripts/skill-started-guard.py`              | top of `main()`        | none                                   |
+| `plugins/standalone/ceh-coding-conduct/scripts/skill-started-guard.py`       | top of `main()`        | none                                   |
 | `plugins/standalone/ceh-git-workflow/scripts/skill-started-guard.py`         | top of `main()`        | none                                   |
 | `plugins/standalone/ceh-coding-conduct/scripts/load-contract.sh`             | the `case` line on top | bash: `case` on `$(basename "$0" .sh)` |
 | `plugins/standalone/ceh-coding-conduct/scripts/inject-less-code-reminder.sh` | the `case` line on top | bash: `case` on `$(basename "$0" .sh)` |
@@ -599,9 +600,10 @@ the Mermaid CLI then look at the result. The page-only rules below them (`wrappi
 
 **Canonical:** `plugins/standalone/ceh-git-workflow/scripts/skill-started-guard.py` — the whole script
 
-| Copy                                                            | Section          | Diverges                             |
-| --------------------------------------------------------------- | ---------------- | ------------------------------------ |
-| `plugins/standalone/ceh-testing/scripts/skill-started-guard.py` | the whole script | `RULES` holds only the test-file row |
+| Copy                                                                   | Section          | Diverges                              |
+| ---------------------------------------------------------------------- | ---------------- | ------------------------------------- |
+| `plugins/standalone/ceh-testing/scripts/skill-started-guard.py`        | the whole script | `RULES` holds only the test-file row  |
+| `plugins/standalone/ceh-coding-conduct/scripts/skill-started-guard.py` | the whole script | `RULES` holds only the new-source row |
 
 **Shared:** everything outside `RULES`: `started()`, `subject()` with its `new_source` branch, the
 kill switches, the deny message, and the fail-open exit. Each copy keeps only its own plugin's rows
