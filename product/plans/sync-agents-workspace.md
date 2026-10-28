@@ -178,7 +178,9 @@ Edit, and after the session ends the entry is in the main checkout's log.
 - **Status:** todo. The user's run on 2026-10-28 on 1.4.6: the line reached the main log only when
   the next session's catch-up merged it (`Stop` commit 11:43:11, merge 11:45:32), not at exit, and
   `EnterWorktree` created no workspace. Both are fixed by
-  `product/plans/sync-agents-workspace-exit.md`, whose Phase 2 repeats this check
+  `product/plans/sync-agents-workspace-exit.md`, whose Phase 2 repeats this check. The user's
+  re-run on 2026-10-28 on 1.4.7 reported both working, see that plan's Phase 2. Left `todo`
+  because a user's report is not a check run
 
 ## Open
 

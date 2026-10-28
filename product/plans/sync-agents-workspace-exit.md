@@ -94,7 +94,12 @@ creates the workspace the way a session start does.
   `claude --worktree ws-test3`, append a line to `.agents_workspace/DECISION_LOG.md`, exit and keep;
   within a few seconds the line is in the main checkout's log with no new session started. (b) In a
   session in the main checkout, ask it to enter a worktree; `.agents_workspace` appears in it.
-- **Status:** todo
+- **Status:** todo. The user ran it on Windows on 2026-10-28 on 1.4.7 and reported (a) and (b)
+  working. Exiting with "remove" instead of "keep" also merged the workspace changes. The
+  workspace history shows the merged branches (`ceh-ws/ceh-claude-code-library/ws-test3` at
+  `c946200`, `testing-1215` at `87f7007`) were in the main workspace's branch before their
+  branches were deleted. Left `todo` because a user's report is not a check run. POSIX is still
+  unverified
 
 ## Open
 
