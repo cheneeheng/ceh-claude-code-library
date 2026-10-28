@@ -82,6 +82,13 @@ counts only files without `paths`, the ones every session loads. The PR also car
 `product/plans/decisions-out-of-claude-md.md`, whose later phases move this repo's `CLAUDE.md`
 decisions into rule files.
 
+A twelfth PR moves the root `CLAUDE.md` decisions into ten `.claude/rules/decision-` files: vision
+governs, plugin boundaries, no bundles, every-session admission, shared-standards duplication,
+plugin dependencies, evaluation, version levels, no releases, and changelog sections. Each keeps
+its rule's meaning and cites the commit that first added it. `CLAUDE.md` keeps the description and
+procedures and points to the files. The rule files that load in every session now total 169
+lines, over the skill's 150-line warning: per-file frontmatter adds 66 lines per session.
+
 ### Plugin versions
 
 | Plugin                    | Version |
@@ -105,6 +112,7 @@ decisions into rule files.
 - `ceh-coding-conduct`: `skill-started-guard.py` `PreToolUse` hook for new source files.
 - `.claude/rules/decision-skill-references.md`: when a skill body calls a skill, when it names one.
 - `product/plans/decisions-out-of-claude-md.md`.
+- `.claude/rules/`: ten `decision-` files moved out of the root `CLAUDE.md`.
 
 ### Changed
 
@@ -123,6 +131,9 @@ decisions into rule files.
 - `ceh-git-workflow`, `ceh-testing`: `skill-started-guard.py` drops the unused `new_source` branch.
 - `ceh-every-session`: `record-project-decisions` states the boundary between a `decision-` file
   and `CLAUDE.md`, and its schema documents `paths`.
+- `CLAUDE.md`: decisions replaced by pointers to their rule files; `docs/PLUGIN_DEPENDENCIES.md`,
+  `docs/STRATEGY.md`, `CONTRIBUTING.md`, `plugins/CLAUDE.md`, and the `model-audit` and
+  `add-plugin-component` skills cite the rule files.
 
 ### Fixed
 

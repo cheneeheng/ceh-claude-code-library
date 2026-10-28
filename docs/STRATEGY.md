@@ -188,7 +188,7 @@ it installed be disabled. A document carries the route at no install cost. The b
   not topics" and "load only what the moment needs." The handoff files give the shape without that
   cost.
 - **No shared base plugin for handoff formats.** It would force an extra install on every run.
-  Formats are duplicated, per the Shared-Standards Duplication Policy in `CLAUDE.md`.
+  Formats are duplicated, per `.claude/rules/decision-shared-standards-duplication.md`.
 
 ## Where the repo does not match yet
 

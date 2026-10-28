@@ -193,7 +193,8 @@ Same commit, both files, or CI fails:
 **PATCH** for content/description updates, **MINOR** for a new skill or agent or for adding or
 removing a `dependencies` entry, **MAJOR** for renaming or removing the plugin. Bump at commit
 time, not during iterative edits. The PR also adds its `CHANGELOG.md` entry under the date it is
-opened and updates `docs/PLUGIN_VERSIONS.md` — see Versioning in `CLAUDE.md`.
+opened and updates `docs/PLUGIN_VERSIONS.md` — see `.claude/rules/decision-version-levels.md` and
+`decision-changelog-sections.md`.
 
 ## 6. Validate
 

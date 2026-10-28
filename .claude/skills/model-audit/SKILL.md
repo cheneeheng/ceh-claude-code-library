@@ -71,8 +71,8 @@ kept.
 5. **Bump versions.** Each plugin with a kept edit gets a PATCH bump in both its `plugin.json` and
    `.claude-plugin/marketplace.json`, and its `docs/PLUGIN_VERSIONS.md` row. A plugin whose only
    change is `tuning.json` gets none.
-6. **Changelog.** Add the PR's entry under the date it was opened, per the root `CLAUDE.md`
-   Versioning section, with a `### Plugin versions` table if anything was bumped.
+6. **Changelog.** Add the PR's entry under the date it was opened, per
+   `.claude/rules/decision-changelog-sections.md`, with a `### Plugin versions` table if anything was bumped.
 7. **Handle failures.** For an errored plugin or a failed validation, fix the cause, then re-run
    `/model-audit --plugins <plugin-path>`. A report that looks weak can be re-run with
    `--model opus`.
