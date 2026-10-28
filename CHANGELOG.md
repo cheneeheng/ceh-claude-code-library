@@ -48,12 +48,18 @@ file waits until `write-test-first`, `test-a-bug-fix`, `verify-behavior-preserve
 testing skill has been started. In the same session, tests were written right after
 `implement-from-plan` named `write-test-first`, which was never loaded.
 
+A seventh PR, the last of the three, gives `ceh-coding-conduct` its copy: a `Write` that creates a
+new source file outside a tests or `scripts/` folder waits until `sketch-design` has been started,
+because the same session wrote a new module without its four checks. The retro's fix is now
+`applied`.
+
 ### Plugin versions
 
-| Plugin             | Version |
-| ------------------ | ------- |
-| `ceh-git-workflow` | 1.5.0   |
-| `ceh-testing`      | 1.5.0   |
+| Plugin               | Version |
+| -------------------- | ------- |
+| `ceh-git-workflow`   | 1.5.0   |
+| `ceh-testing`        | 1.5.0   |
+| `ceh-coding-conduct` | 2.3.0   |
 
 ### Added
 
@@ -63,6 +69,7 @@ testing skill has been started. In the same session, tests were written right af
 - `ceh-git-workflow`: `skill-started-guard.py` `PreToolUse` hook, with `CEH_SKILL_STARTED_GUARD`.
 - `product/plans/skill-started-guard.md` and `product/retros/2026-10-28-repeat-mistake.md`.
 - `ceh-testing`: `skill-started-guard.py` `PreToolUse` hook for test files.
+- `ceh-coding-conduct`: `skill-started-guard.py` `PreToolUse` hook for new source files.
 
 ### Changed
 

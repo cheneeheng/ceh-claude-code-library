@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Deny a write whose owning skill was never started, in ceh-git-workflow, ceh-testing and ceh-coding-conduct
-status: building
+status: built
 created: 2026-10-28
 ---
 
@@ -122,7 +122,10 @@ another skill's steps only name ("following X") no longer gets followed from mem
   changelog and versions rows, and the retro row set to `applied`.
 - **Check:** the fixtures fail first and pass after, `validate.py` as in Phase 1, and the cut
   transcript gets a deny for a Write of a new `src/mcp_cassette/check_new.py`.
-- **Status:** todo
+- **Status:** done. The 8 fixtures failed first ("no hooks.json runs this script") and pass now
+  ("OK: hooks check passed"); the cut transcript gets a deny for the new `check_new.py` and none
+  for the existing `check.py`; the body outside `RULES` matches; `validate.py` fails only on
+  git-ignored files.
 
 ## Open
 
@@ -140,3 +143,6 @@ another skill's steps only name ("following X") no longer gets followed from mem
 - 2026-10-28 PR: #173 https://github.com/cheneeheng/ceh-claude-code-library/pull/173
 - 2026-10-28 Built Phase 2: `python tools/validate-plugins/checks/hooks.py`, OK: hooks check passed
 - 2026-10-28 PR: #174 https://github.com/cheneeheng/ceh-claude-code-library/pull/174
+- 2026-10-28 Built Phase 3: `python tools/validate-plugins/checks/hooks.py`, OK: hooks check passed
+- 2026-10-28 Checked: 24 Built, 0 Gap, 0 Deviation, 0 Extra, 0 Failing
+- 2026-10-28 PR: #175 https://github.com/cheneeheng/ceh-claude-code-library/pull/175

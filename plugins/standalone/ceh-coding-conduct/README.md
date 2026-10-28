@@ -60,6 +60,13 @@ contract load, so the full skill now loads at session start instead.
 has no Skill tool, so the directive points it at both skills' `SKILL.md` files to read instead. The
 read-only agents `Explore`, `Plan`, and `bulk-reader` are skipped.
 
+**Before a new source file** — a `PreToolUse` hook on `Write` (`scripts/skill-started-guard.py`)
+denies creating a `.py`, `.ts`, `.tsx` or `.js` file in the session's project, outside a tests or
+`scripts/` folder, until `sketch-design` has been started by a `Skill` tool call or a slash command.
+Edits to existing files, and files outside the project, pass. It needs `python3` on PATH (stdlib
+only), and fails open without it. `CEH_SKILL_STARTED_GUARD=off` switches it off, in every plugin
+that ships it.
+
 ### Why each hook exists
 
 Hooks are enforcement, so each one is kept on a failure that guidance alone did not prevent:
@@ -73,11 +80,15 @@ Hooks are enforcement, so each one is kept on a failure that guidance alone did 
   whole session, not a moment, so no description fires it: an agent starting to write code does not
   stop to look for it. Loaded once, the ladder also drifted out of effect in long sessions and the
   agent over-built.
+- **A new source file waits for `sketch-design`.** In one session, `implement-from-plan` named
+  `sketch-design` at the right step and the agent wrote the new module without starting it, so its
+  four checks never ran. Rewording the naming skill is the guidance that already failed.
 
 To switch one off without uninstalling the plugin, list its script name in `CEH_DISABLED_HOOKS`
-(comma-separated, no extension): `load-contract`, `inject-less-code-reminder`.
+(comma-separated, no extension): `load-contract`, `inject-less-code-reminder`,
+`skill-started-guard`.
 
-Both hooks fire in every session where the plugin is enabled, including ones that write no code.
+The first two hooks fire in every session where the plugin is enabled, including ones that write no code.
 So install it only where you write code: `docs/GETTING_STARTED.md` tells writers and planners to
 skip it.
 

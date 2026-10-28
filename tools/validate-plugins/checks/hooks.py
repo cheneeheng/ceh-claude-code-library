@@ -135,6 +135,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     readme = {"file_path": f"{guarded}/docs/README.md", "content": "x"}
     tst = "ceh-testing"
     test_file = {"file_path": f"{guarded}/tests/test_check.py", "content": "x"}
+    cc = "ceh-coding-conduct"
+    new_src = {"file_path": f"{guarded}/src/check_new.py", "content": "x"}
+    (tmp / "guarded" / "src").mkdir(parents=True)
+    (tmp / "guarded" / "src" / "existing.py").write_text("x\n", encoding="utf-8")
 
     # sync-agents-workspace: a project whose workspace repo is on branch ws, and a linked worktree.
     proj, wt = tmp / "proj", tmp / "wt"
@@ -317,6 +321,15 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**guard(tst, "Write", {**test_file, "file_path": (tmp / "elsewhere" / "test_x.py").as_posix()}), "out": ""},
         {**guard(tst, "Write", test_file), "env": {"CEH_SKILL_STARTED_GUARD": "off"}, "out": ""},
         {**guard(tst, "Write", test_file), "env": {"CEH_DISABLED_HOOKS": "skill-started-guard"}, "out": ""},
+        # skill-started-guard (ceh-coding-conduct): a new source file needs sketch-design started.
+        {**guard(cc, "Write", new_src), "out": "ceh-coding-conduct:sketch-design"},
+        {**guard(cc, "Write", new_src, started("ceh-coding-conduct:sketch-design")), "out": ""},
+        {**guard(cc, "Write", {**new_src, "file_path": f"{guarded}/src/existing.py"}), "out": ""},
+        {**guard(cc, "Write", {**new_src, "file_path": f"{guarded}/tests/helpers.py"}), "out": ""},
+        {**guard(cc, "Write", {**new_src, "file_path": f"{guarded}/scripts/tool.py"}), "out": ""},
+        {**guard(cc, "Write", {**new_src, "file_path": (tmp / "elsewhere" / "x.py").as_posix()}), "out": ""},
+        {**guard(cc, "Write", new_src), "env": {"CEH_SKILL_STARTED_GUARD": "off"}, "out": ""},
+        {**guard(cc, "Write", new_src), "env": {"CEH_DISABLED_HOOKS": "skill-started-guard"}, "out": ""},
         # sync-agents-workspace: one sequence on the tmp project above, in this order.
         {**sync("start", wt), "env": {**who, "CEH_DISABLED_HOOKS": "sync-agents-workspace"}, "out": "",
          "after": lambda: "created despite the kill switch" if os.path.lexists(wt_ws) else None},
