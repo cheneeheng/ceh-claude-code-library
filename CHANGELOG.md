@@ -30,7 +30,8 @@ workspace; a `PostToolUse` hook on that tool now creates it.
 
 A third PR records the user's live re-check on 1.4.7 in both plans: the exit merge and
 `EnterWorktree` both worked on Windows, also when the worktree was removed at exit. No plugin
-version changes, because only plans change.
+version changes, because only plans change. A fourth PR marks both plans `built`, with a check of
+the build against each plan in its Record.
 
 ### Plugin versions
 

@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Make the workspace sync merge at session exit, and cover EnterWorktree
-status: building
+status: built
 created: 2026-10-28
 ---
 
@@ -94,12 +94,11 @@ creates the workspace the way a session start does.
   `claude --worktree ws-test3`, append a line to `.agents_workspace/DECISION_LOG.md`, exit and keep;
   within a few seconds the line is in the main checkout's log with no new session started. (b) In a
   session in the main checkout, ask it to enter a worktree; `.agents_workspace` appears in it.
-- **Status:** todo. The user ran it on Windows on 2026-10-28 on 1.4.7 and reported (a) and (b)
-  working. Exiting with "remove" instead of "keep" also merged the workspace changes. The
+- **Status:** done, by the user's manual run on Windows on 2026-10-28 on 1.4.7: (a) and (b)
+  work. Exiting with "remove" instead of "keep" also merged the workspace changes. The
   workspace history shows the merged branches (`ceh-ws/ceh-claude-code-library/ws-test3` at
   `c946200`, `testing-1215` at `87f7007`) were in the main workspace's branch before their
-  branches were deleted. Left `todo` because a user's report is not a check run. POSIX is still
-  unverified
+  branches were deleted. The POSIX launch path is verified only by CI's Linux fixtures, not live
 
 ## Open
 
@@ -112,3 +111,5 @@ None.
 - 2026-10-28 Built Phase 1: python tools/validate-plugins/checks/hooks.py, OK: hooks check passed
 - 2026-10-28 PR: #170 https://github.com/cheneeheng/ceh-claude-code-library/pull/170
 - 2026-10-28 PR: #171 https://github.com/cheneeheng/ceh-claude-code-library/pull/171
+- 2026-10-28 Built Phase 2: the user's manual run in Claude Code on Windows on 1.4.7, (a) and (b) work
+- 2026-10-28 Checked: 15 Built; POSIX launch path verified by CI fixtures only, not live
