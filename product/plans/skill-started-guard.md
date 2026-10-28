@@ -145,3 +145,4 @@ another skill's steps only name ("following X") no longer gets followed from mem
 - 2026-10-28 PR: #174 https://github.com/cheneeheng/ceh-claude-code-library/pull/174
 - 2026-10-28 Built Phase 3: `python tools/validate-plugins/checks/hooks.py`, OK: hooks check passed
 - 2026-10-28 Checked: 24 Built, 0 Gap, 0 Deviation, 0 Extra, 0 Failing
+- 2026-10-28 PR: #175 https://github.com/cheneeheng/ceh-claude-code-library/pull/175
