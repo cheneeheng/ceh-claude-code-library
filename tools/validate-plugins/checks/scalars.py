@@ -35,7 +35,7 @@ def check() -> None:
                     fail(
                         rel(path),
                         "'description' must use the folded block scalar '>-' "
-                        f"(found {value[:12]!r}...) - see CLAUDE.md",
+                        f"(found {value[:12]!r}...) - see .claude/rules/decision-frontmatter-scalars.md",
                     )
             elif value and not value.startswith(("'", '"', ">", "|")) and ": " in value:
                 fail(

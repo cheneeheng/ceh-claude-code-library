@@ -89,6 +89,12 @@ its rule's meaning and cites the commit that first added it. `CLAUDE.md` keeps t
 procedures and points to the files. The rule files that load in every session now total 169
 lines, over the skill's 150-line warning: per-file frontmatter adds 66 lines per session.
 
+A thirteenth PR moves the `plugins/CLAUDE.md` authoring decisions into six `decision-` files
+scoped to `plugins/**` and `.claude/skills/**`: component templates, skill bundled files, output
+templates, component names, frontmatter scalars, and invocation flags. They load only when a
+session reads a matching file, so they add nothing to the per-session total. `plugins/CLAUDE.md`
+keeps how each rule is checked, the `>-` folding mechanics, and the list of exceptions.
+
 ### Plugin versions
 
 | Plugin                    | Version |
@@ -113,6 +119,7 @@ lines, over the skill's 150-line warning: per-file frontmatter adds 66 lines per
 - `.claude/rules/decision-skill-references.md`: when a skill body calls a skill, when it names one.
 - `product/plans/decisions-out-of-claude-md.md`.
 - `.claude/rules/`: ten `decision-` files moved out of the root `CLAUDE.md`.
+- `.claude/rules/`: six path-scoped `decision-` files moved out of `plugins/CLAUDE.md`.
 
 ### Changed
 
@@ -134,6 +141,8 @@ lines, over the skill's 150-line warning: per-file frontmatter adds 66 lines per
 - `CLAUDE.md`: decisions replaced by pointers to their rule files; `docs/PLUGIN_DEPENDENCIES.md`,
   `docs/STRATEGY.md`, `CONTRIBUTING.md`, `plugins/CLAUDE.md`, and the `model-audit` and
   `add-plugin-component` skills cite the rule files.
+- `plugins/CLAUDE.md`: authoring decisions replaced by pointers; `CLAUDE.md`,
+  `add-plugin-component`, and the `scalars.py` error message cite the rule files.
 
 ### Fixed
 
