@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Give every git worktree its own worktree of the .agents_workspace repo, and merge it back
-status: building
+status: built
 created: 2026-10-28
 ---
 
@@ -175,12 +175,12 @@ Edit, and after the session ends the entry is in the main checkout's log.
   Edit, exit and keep the worktree. Passing: the line is in the main checkout's
   `.agents_workspace/DECISION_LOG.md`. Then repeat with `EnterWorktree`, and record the result in
   the README's limits line.
-- **Status:** todo. The user's run on 2026-10-28 on 1.4.6: the line reached the main log only when
+- **Status:** done, by the user's manual run on Windows on 2026-10-28 on 1.4.7, which this check
+  needs because it takes an interactive session. Before that, the user's run on 1.4.6: the line reached the main log only when
   the next session's catch-up merged it (`Stop` commit 11:43:11, merge 11:45:32), not at exit, and
   `EnterWorktree` created no workspace. Both are fixed by
-  `product/plans/sync-agents-workspace-exit.md`, whose Phase 2 repeats this check. The user's
-  re-run on 2026-10-28 on 1.4.7 reported both working, see that plan's Phase 2. Left `todo`
-  because a user's report is not a check run
+  `product/plans/sync-agents-workspace-exit.md`, whose Phase 2 repeats this check. On 1.4.7 both
+  work, see that plan's Phase 2
 
 ## Open
 
@@ -201,3 +201,6 @@ and union merge for `DECISION_LOG.md` only.
 - 2026-10-28 Design changed: was "A commit and a merge are about six git spawns, roughly 0.3 s on Windows", now "`end` took 0.98 s on Windows", because the scratchpad run measured it
 - 2026-10-28 PR: #169 https://github.com/cheneeheng/ceh-claude-code-library/pull/169
 - 2026-10-28 PR: #171 https://github.com/cheneeheng/ceh-claude-code-library/pull/171
+- 2026-10-28 Built Phase 3: the user's manual run in Claude Code on Windows on 1.4.7, exit merge and EnterWorktree both work
+- 2026-10-28 Checked: 29 Built, 2 Deviation, 1 Extra; Deviation: Design "`SessionEnd` ... `end`: commit, then merge" is now a detached end-worker (sync-agents-workspace.py:14, superseded by product/plans/sync-agents-workspace-exit.md); Deviation: Design "When the branch starts with `ceh-ws/`" is an exact match on the computed branch (sync-agents-workspace.py commit()); Extra: Out "Mid-session `EnterWorktree`" is now covered (hooks.json:17 `"matcher": "EnterWorktree"`, planned by the exit plan)
+- 2026-10-28 PR: #172 https://github.com/cheneeheng/ceh-claude-code-library/pull/172
