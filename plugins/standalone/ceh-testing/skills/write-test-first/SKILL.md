@@ -27,7 +27,8 @@ state what stays unverified.
 
 1. **Cut the task into slices.** One slice is one behavior a caller can observe, stated in one
    sentence: "`parse_duration('1h30m')` returns 90 minutes". Order them so each builds on the
-   last. Choose the inputs for each with `ceh-testing:design-test-cases`, whose "Before the first
+   last. Choose the inputs for each: invoke the Skill tool with
+   skill="ceh-testing:design-test-cases", whose "Before the first
    test" rules (name the seam, call it the way users do, no tautological tests) apply to every
    test here.
 2. **Red.** Write the test for the next slice only. If the function does not exist yet, add its

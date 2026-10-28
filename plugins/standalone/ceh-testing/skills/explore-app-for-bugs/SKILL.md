@@ -47,9 +47,9 @@ each confirmed bug after the report is written. Fix mode runs only when the user
    still trigger it. Capture the evidence: a screenshot, the console line, the response body, or
    the command output. A bug that would not happen twice is listed as unconfirmed, never dropped.
 5. **Write the report** in the Output shape.
-6. **Fix mode only:** take confirmed bugs in severity order. Find the cause first, then fix it with
-   a failing test first (`ceh-coding-conduct:find-root-cause` and `ceh-testing:test-a-bug-fix`, when
-   installed). Re-run the bug's reproduction steps after the fix and record the result in the
+6. **Fix mode only:** take confirmed bugs in severity order. Find the cause first
+   (`ceh-coding-conduct:find-root-cause`, when installed), then invoke the Skill tool with
+   skill="ceh-testing:test-a-bug-fix" to fix it with a failing test first. Re-run the bug's reproduction steps after the fix and record the result in the
    report.
 
 ## Rules

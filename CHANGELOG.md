@@ -66,15 +66,25 @@ does not. The two remaining guard copies lose the `new_source` branch no rule us
 retro records the outcome of all five keep-or-merge rows: `commit` and `update-changelog` stay, by
 the user's call.
 
+A tenth PR records when a skill body calls another skill explicitly and when it only names it, in
+`.claude/rules/decision-skill-references.md`. A step the procedure runs gets
+`Invoke the Skill tool with skill="..."`, which the model acts on and `validate.py` checks. A
+redirect, suggestion, citation or user command keeps the bare name. Six steps that ran a skill by
+bare name now call it: `pull-request` steps 3 and 4, `release` steps 5 and 7, `write-test-first`
+step 1, `explore-app-for-bugs` step 6, `record-project-decisions` Seed step 2, and
+`compare-competitors` step 1.
+
 ### Plugin versions
 
-| Plugin                | Version |
-| --------------------- | ------- |
-| `ceh-git-workflow`    | 1.5.1   |
-| `ceh-testing`         | 1.5.1   |
-| `ceh-coding-conduct`  | 2.4.0   |
-| `ceh-build-planning`  | 1.1.16  |
-| `ceh-build-from-plan` | 1.1.2   |
+| Plugin                    | Version |
+| ------------------------- | ------- |
+| `ceh-git-workflow`        | 1.5.2   |
+| `ceh-testing`             | 1.5.2   |
+| `ceh-coding-conduct`      | 2.4.0   |
+| `ceh-build-planning`      | 1.1.16  |
+| `ceh-build-from-plan`     | 1.1.2   |
+| `ceh-every-session`       | 2.8.14  |
+| `ceh-competitor-analysis` | 1.1.12  |
 
 ### Added
 
@@ -85,6 +95,7 @@ the user's call.
 - `product/plans/skill-started-guard.md` and `product/retros/2026-10-28-repeat-mistake.md`.
 - `ceh-testing`: `skill-started-guard.py` `PreToolUse` hook for test files.
 - `ceh-coding-conduct`: `skill-started-guard.py` `PreToolUse` hook for new source files.
+- `.claude/rules/decision-skill-references.md`: when a skill body calls a skill, when it names one.
 
 ### Changed
 
@@ -97,6 +108,8 @@ the user's call.
   four shape checks; `review-build-plan`'s Engineering lens asks for them.
 - `ceh-coding-conduct`: `sketch-design` and the `skill-started-guard.py` hook removed, merged into
   `ceh-build-planning`.
+- `ceh-git-workflow`, `ceh-testing`, `ceh-every-session`, `ceh-competitor-analysis`: steps that run
+  a skill call it with the Skill tool instead of naming it.
 - `ceh-build-from-plan`: `implement-from-plan` step 3.1 takes the shape from the plan's Design.
 - `ceh-git-workflow`, `ceh-testing`: `skill-started-guard.py` drops the unused `new_source` branch.
 

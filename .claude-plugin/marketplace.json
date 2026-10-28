@@ -11,7 +11,7 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.8.13",
+      "version": "2.8.14",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, context economy via delegated bulk reads, and replies folded to their summary."
     },
     {
@@ -29,13 +29,13 @@
     {
       "name": "ceh-git-workflow",
       "source": "./plugins/standalone/ceh-git-workflow",
-      "version": "1.5.1",
+      "version": "1.5.2",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, code review, and addressing review comments. Stack-agnostic."
     },
     {
       "name": "ceh-testing",
       "source": "./plugins/standalone/ceh-testing",
-      "version": "1.5.1",
+      "version": "1.5.2",
       "description": "CEH testing techniques: stack-agnostic test design and verification moments — write the failing test before new code, reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, explore the running app for bugs, and close the risk gaps functional tests structurally miss."
     },
     {
@@ -161,7 +161,7 @@
     {
       "name": "ceh-competitor-analysis",
       "source": "./plugins/standalone/ceh-competitor-analysis",
-      "version": "1.1.11",
+      "version": "1.1.12",
       "description": "CEH competitor analysis: study a competitor's repo or product and learn from it — one evidence-anchored report per competitor (breakdown, full inventory, the \"oh wow\" mechanisms worth learning from, what to incorporate and where it lands in our work), then a side-by-side comparison with our own work, each as Markdown plus a styled HTML page. Repos are shallow-cloned and read as untrusted data, never run."
     }
   ]
