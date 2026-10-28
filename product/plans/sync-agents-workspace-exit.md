@@ -113,3 +113,4 @@ None.
 - 2026-10-28 PR: #171 https://github.com/cheneeheng/ceh-claude-code-library/pull/171
 - 2026-10-28 Built Phase 2: the user's manual run in Claude Code on Windows on 1.4.7, (a) and (b) work
 - 2026-10-28 Checked: 15 Built; POSIX launch path verified by CI fixtures only, not live
+- 2026-10-28 PR: #172 https://github.com/cheneeheng/ceh-claude-code-library/pull/172

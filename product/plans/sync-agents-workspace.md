@@ -203,3 +203,4 @@ and union merge for `DECISION_LOG.md` only.
 - 2026-10-28 PR: #171 https://github.com/cheneeheng/ceh-claude-code-library/pull/171
 - 2026-10-28 Built Phase 3: the user's manual run in Claude Code on Windows on 1.4.7, exit merge and EnterWorktree both work
 - 2026-10-28 Checked: 29 Built, 2 Deviation, 1 Extra; Deviation: Design "`SessionEnd` ... `end`: commit, then merge" is now a detached end-worker (sync-agents-workspace.py:14, superseded by product/plans/sync-agents-workspace-exit.md); Deviation: Design "When the branch starts with `ceh-ws/`" is an exact match on the computed branch (sync-agents-workspace.py commit()); Extra: Out "Mid-session `EnterWorktree`" is now covered (hooks.json:17 `"matcher": "EnterWorktree"`, planned by the exit plan)
+- 2026-10-28 PR: #172 https://github.com/cheneeheng/ceh-claude-code-library/pull/172
