@@ -27,6 +27,22 @@ The plugin ships no agents. `audit-test-suite` has a report-only mode for a larg
 the audit to a background subagent with the skill loaded and it returns a ranked report without
 editing anything. Writing the missing tests belongs to the stack's own tester agents.
 
+## Hooks
+
+| Hook                                        | Event                                       | Script                   | Default |
+| ------------------------------------------- | ------------------------------------------- | ------------------------ | ------- |
+| [Skill-started guard](#skill-started-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`) | `skill-started-guard.py` | on      |
+
+### Skill-started guard
+
+Denies an edit or write of a test file (`test_*.py`, `*_test.py`, `*.test.*` or `*.spec.*` in JS or
+TS) until a skill that owns writing tests has been started in the session, by a `Skill` tool call or
+a slash command: `write-test-first`, `test-a-bug-fix`, `verify-behavior-preserved`, or a stack
+testing skill named above. A skill that another skill's steps only name ("`write-test-first` sets
+out how") still has to be started. Files outside the session's project pass. It needs `python3` on
+PATH (stdlib only) and fails open without it. `CEH_SKILL_STARTED_GUARD=off`, or
+`CEH_DISABLED_HOOKS` with `skill-started-guard`, switches it off, in every plugin that ships it.
+
 ## Relation to the stack testing skills
 
 | Question                                 | Owner                                                                 |
