@@ -30,8 +30,11 @@ reason recorded.
    `todo` phase. Skip `done` phases. At an `unplanned` phase, stop: it needs planning first.
    For each phase:
    1. Say which phase you are starting and what it builds, in one line. When the phase adds a
-      type, module, or function other code calls, sketch its shape before the test. When
-      `ceh-coding-conduct` is installed, `ceh-coding-conduct:sketch-design` sets out how.
+      type, module, or function other code calls, take its shape from the plan's Design. When the
+      Design does not settle it (an older plan, or the minimal plan step 1 writes), settle it there
+      first: the signature, the file it lives in, a forbidden value each type can hold, what each
+      write does when it runs twice, who writes each shared value, and the smallest interface each
+      module needs. Append a Design changed line to the Record.
    2. Write the failing test for the behavior the phase adds, and run it to see it fail. When
       `ceh-testing` is installed, `ceh-testing:write-test-first` sets out how.
    3. Implement what **Builds** names, and nothing else.

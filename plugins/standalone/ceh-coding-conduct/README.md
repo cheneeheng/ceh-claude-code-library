@@ -26,7 +26,6 @@ for a whole codebase.
 | `write-less-code`       | Every coding session (auto, via hook)                                                                   | The minimalism reflex — the ladder (YAGNI → stdlib → native → installed dep → one line), native-platform-first, the `// less-code:` shortcut convention. The positive half of the contract's minimal-change rules.                                                                                                                                                                                 |
 | `shrink-diff`           | On demand — when a feature branch is functionally done and its diff should get smaller before review    | Retroactive minimalism — applies the write-less-code standard to the accumulated diff vs `main`, across all the commits and sessions that produced it: dedupe against existing code, delete dead weight, collapse over-built structure. Diff-scoped, with three narrow causes for touching unchanged code.                                                                                         |
 | `refactor-repo`         | Manual only (`/refactor-repo`) — never auto-fires                                                       | Whole-codebase (or per-module) refactor campaign: read-only inventory, ranked proposal with payoff/risk/diff-size estimates, then apply only user-approved clusters on `refactor/` branches under a behavior-preservation gate. Shallow modules worth deepening are proposed with their before and after interface, and settled one question round at a time before any code.                      |
-| `sketch-design`         | Before the code for a feature that adds a type, a module, or a function other code calls                | Design before code: types that make illegal states unrepresentable, signatures with no bodies, the decision each module owns, then four checks (illegal states, runs twice, shared state, smallest interface). It's working if the reply shows a Types / Signatures / Boundaries / Checks block before the first file edit.                                                                        |
 | `find-root-cause`       | Something is broken and no command has yet shown why, before any fix — or after a fix that did not hold | Debugging before fixing: one command red on the exact symptom, 3 to 5 falsifiable hypotheses, evidence that kills them one variable at a time, then a cause confirmed by a prediction. After two failed fixes it attacks the shared premise. It's working if the hand-over has a hypotheses table and a Prediction line, is saved to `product/fixes/<slug>.md`, and no fix lands before the cause. |
 
 **Manual triggers**
@@ -36,7 +35,6 @@ for a whole codebase.
 - `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
 - `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
 - `find-root-cause` — `/find-root-cause`, or say `"debug this"` / `"find and fix these bugs"` / `"why is this failing"`.
-- `sketch-design` — `/sketch-design`, or say `"design this first"` / `"sketch the types"`.
 
 ## How the skills auto-load
 
@@ -60,13 +58,6 @@ contract load, so the full skill now loads at session start instead.
 has no Skill tool, so the directive points it at both skills' `SKILL.md` files to read instead. The
 read-only agents `Explore`, `Plan`, and `bulk-reader` are skipped.
 
-**Before a new source file** — a `PreToolUse` hook on `Write` (`scripts/skill-started-guard.py`)
-denies creating a `.py`, `.ts`, `.tsx` or `.js` file in the session's project, outside a tests or
-`scripts/` folder, until `sketch-design` has been started by a `Skill` tool call or a slash command.
-Edits to existing files, and files outside the project, pass. It needs `python3` on PATH (stdlib
-only), and fails open without it. `CEH_SKILL_STARTED_GUARD=off` switches it off, in every plugin
-that ships it.
-
 ### Why each hook exists
 
 Hooks are enforcement, so each one is kept on a failure that guidance alone did not prevent:
@@ -80,15 +71,11 @@ Hooks are enforcement, so each one is kept on a failure that guidance alone did 
   whole session, not a moment, so no description fires it: an agent starting to write code does not
   stop to look for it. Loaded once, the ladder also drifted out of effect in long sessions and the
   agent over-built.
-- **A new source file waits for `sketch-design`.** In one session, `implement-from-plan` named
-  `sketch-design` at the right step and the agent wrote the new module without starting it, so its
-  four checks never ran. Rewording the naming skill is the guidance that already failed.
 
 To switch one off without uninstalling the plugin, list its script name in `CEH_DISABLED_HOOKS`
-(comma-separated, no extension): `load-contract`, `inject-less-code-reminder`,
-`skill-started-guard`.
+(comma-separated, no extension): `load-contract`, `inject-less-code-reminder`.
 
-The first two hooks fire in every session where the plugin is enabled, including ones that write no code.
+Both hooks fire in every session where the plugin is enabled, including ones that write no code.
 So install it only where you write code: `docs/GETTING_STARTED.md` tells writers and planners to
 skip it.
 

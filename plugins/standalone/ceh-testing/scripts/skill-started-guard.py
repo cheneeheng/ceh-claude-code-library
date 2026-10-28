@@ -56,13 +56,7 @@ def subject(kind: str, ti: dict, cwd: str) -> str:
     root = cwd.replace("\\", "/").rstrip("/")
     if root and os.path.isabs(path) and not path.lower().startswith(root.lower() + "/"):
         return ""  # scratch files outside the project are nobody's deliverable
-    if kind == "path":
-        return path
-    # new_source: a new code file outside tests and scripts, the moment sketch-design owns
-    skip = re.search(
-        r"(^|/)(tests?|__tests__|scripts)/|(^|/)test_|_test\.|\.(test|spec)\.", path
-    )
-    return "" if skip or Path(path).exists() else path
+    return path
 
 
 def main() -> None:

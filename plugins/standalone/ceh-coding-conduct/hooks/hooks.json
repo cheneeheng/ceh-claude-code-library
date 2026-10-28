@@ -35,18 +35,6 @@
           }
         ]
       }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/skill-started-guard.py\"",
-            "timeout": 10
-          }
-        ]
-      }
     ]
   }
 }

@@ -59,14 +59,22 @@ adds them to `review-build-plan`'s Engineering lens. The retro recommended it: e
 from a reviewed plan, whose Design already holds the types and signatures, so the checks belong
 where the shape is decided. A follow-up PR retires `sketch-design` itself.
 
+A ninth PR retires `ceh-coding-conduct:sketch-design` and the `ceh-coding-conduct` copy of
+`skill-started-guard.py`, which only enforced starting it. `implement-from-plan` now takes a
+type's shape from the plan's Design, and settles it there with the same checks when the Design
+does not. The two remaining guard copies lose the `new_source` branch no rule uses any more. The
+retro records the outcome of all five keep-or-merge rows: `commit` and `update-changelog` stay, by
+the user's call.
+
 ### Plugin versions
 
-| Plugin               | Version |
-| -------------------- | ------- |
-| `ceh-git-workflow`   | 1.5.0   |
-| `ceh-testing`        | 1.5.0   |
-| `ceh-coding-conduct` | 2.3.0   |
-| `ceh-build-planning` | 1.1.16  |
+| Plugin                | Version |
+| --------------------- | ------- |
+| `ceh-git-workflow`    | 1.5.1   |
+| `ceh-testing`         | 1.5.1   |
+| `ceh-coding-conduct`  | 2.4.0   |
+| `ceh-build-planning`  | 1.1.16  |
+| `ceh-build-from-plan` | 1.1.2   |
 
 ### Added
 
@@ -87,6 +95,10 @@ where the shape is decided. A follow-up PR retires `sketch-design` itself.
 - `CLAUDE.md`: the Landing section's changelog step starts `update-changelog`.
 - `ceh-build-planning`: `write-build-plan` step 5 settles each called type's shape and runs the
   four shape checks; `review-build-plan`'s Engineering lens asks for them.
+- `ceh-coding-conduct`: `sketch-design` and the `skill-started-guard.py` hook removed, merged into
+  `ceh-build-planning`.
+- `ceh-build-from-plan`: `implement-from-plan` step 3.1 takes the shape from the plan's Design.
+- `ceh-git-workflow`, `ceh-testing`: `skill-started-guard.py` drops the unused `new_source` branch.
 
 ### Fixed
 

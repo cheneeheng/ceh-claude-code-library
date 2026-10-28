@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Move sketch-design's checks into planning, then retire it and its guard
-status: building
+status: built
 created: 2026-10-28
 ---
 
@@ -91,7 +91,12 @@ decided, in a plan's Design, and are reviewed there. `ceh-coding-conduct:sketch-
   `RULES`, and
   `git grep -n -i -E "sketch|design before code|new_source|new source" -- plugins tools docs README.md .claude-plugin ':!docs/IDEAS.md' ':!docs/starlight'`
   finds nothing outside `ceh-git-datastore`'s unrelated "TypeScript sketch".
-- **Status:** todo
+- **Status:** done. `validate.py` has 0 problems outside git-ignored files, `checks/hooks.py` prints
+  "OK: hooks check passed", the two guard copies match outside `RULES`, and the grep finds only the
+  two `ceh-git-datastore` "TypeScript sketch" lines. `implement-from-plan` names the checks inline
+  rather than pointing at `write-build-plan`, because `ceh-build-from-plan` must work without
+  `ceh-build-planning` installed. The plugin's `hooks.py` fixture setup for `guarded/src/` went with
+  the `cc` fixtures it served.
 
 ## Open
 
@@ -105,3 +110,4 @@ decided, in a plan's Design, and are reviewed there. `ceh-coding-conduct:sketch-
 - 2026-10-28 Revised: all 5 findings fixed in the plan
 - 2026-10-28 Built Phase 1: `python tools/validate-plugins/validate.py`, 0 problems outside git-ignored files
 - 2026-10-28 PR: #176 https://github.com/cheneeheng/ceh-claude-code-library/pull/176
+- 2026-10-28 Built Phase 2: `python tools/validate-plugins/checks/hooks.py`, OK: hooks check passed

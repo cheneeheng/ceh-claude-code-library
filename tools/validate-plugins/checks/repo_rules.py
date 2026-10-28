@@ -30,7 +30,7 @@ NAMES_TO_DETECT = {
     # Allows a plan's Built Phase line once implement-from-plan started, by Skill call or slash
     # command; making it model-only would remove the slash command this guard accepts.
     "build-record-guard.py",
-    # Allows a commit, changelog, README, test or new source write once a skill that owns it
+    # Allows a commit, changelog, README or test write once a skill that owns it
     # started; the owning skills keep the slash commands this guard accepts.
     "skill-started-guard.py",
 }
