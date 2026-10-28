@@ -121,7 +121,8 @@ their defaults, so the frontmatter says who invokes it. The validator checks tha
 present, and that a skill a hook script names sets `user-invocable: false`. The one exception is a
 script that names a skill only to detect that it ran, listed by name in `NAMES_TO_DETECT` in
 `tools/validate-plugins/checks/repo_rules.py` with its reason: today `build-record-guard.py`, which
-must accept `implement-from-plan`'s slash command. The other values are a review rule, and every
+must accept `implement-from-plan`'s slash command, and `skill-started-guard.py`, which must accept
+the slash command of every skill it names. The other values are a review rule, and every
 skill falls into one of three cases:
 
 | Who starts it  | `disable-model-invocation` | `user-invocable` | Use it for                                                                                          |

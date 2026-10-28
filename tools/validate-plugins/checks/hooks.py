@@ -100,6 +100,40 @@ def hook_fixtures(tmp: Path) -> list[dict]:
 
     add_built = {"old_string": "## Record\n", "new_string": "## Record\n" + built}
 
+    # skill-started-guard: a session in tmp/guarded, and transcripts that started one skill.
+    guarded = (tmp / "guarded").as_posix()
+
+    def started(skill: str, how: str = "skill") -> str:
+        if how == "skill":
+            use = {"type": "tool_use", "name": "Skill", "input": {"skill": skill}}
+            line = {"type": "assistant", "message": {"content": [use]}}
+        else:
+            line = {
+                "type": "user",
+                "message": {"content": f"<command-name>/{skill}</command-name>"},
+            }
+        p = tmp / f"tx-{how}-{skill.replace(':', '-')}.jsonl"
+        p.write_text(json.dumps(line) + "\n", encoding="utf-8")
+        return p.as_posix()
+
+    def guard(plugin: str, tool: str, ti: dict, t: str = tx["none"]) -> dict:
+        stdin = {
+            "tool_name": tool,
+            "tool_input": ti,
+            "cwd": guarded,
+            "transcript_path": t,
+        }
+        return {"script": f"{plugin}/skill-started-guard.py", "stdin": stdin}
+
+    gw = "ceh-git-workflow"
+    commit = {"command": "git commit -m x"}
+    changelog = {
+        "file_path": f"{guarded}/CHANGELOG.md",
+        "old_string": "a",
+        "new_string": "b",
+    }
+    readme = {"file_path": f"{guarded}/docs/README.md", "content": "x"}
+
     # sync-agents-workspace: a project whose workspace repo is on branch ws, and a linked worktree.
     proj, wt = tmp / "proj", tmp / "wt"
     ws, wt_ws = proj / ".agents_workspace", wt / ".agents_workspace"
@@ -255,6 +289,21 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "env": {"CEH_BUILD_RECORD_GUARD": "off"}, "out": ""},
         {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "env": {"CEH_DISABLED_HOOKS": "build-record-guard"}, "out": ""},
         {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "env": {"CEH_DISABLED_HOOKS": "ask-user-question-guard"}, "out": ""},
+        # skill-started-guard (ceh-git-workflow): commit, CHANGELOG.md and README.md need their skill started.
+        {**guard(gw, "Bash", commit), "out": "ceh-git-workflow:commit"},
+        {**guard(gw, "Bash", commit, started("ceh-git-workflow:commit")), "out": ""},
+        {**guard(gw, "Bash", commit, started("ceh-git-workflow:commit", "slash")), "out": ""},
+        {**guard(gw, "Bash", {"command": "cd x && git -C y commit -m z"}), "out": "ceh-git-workflow:commit"},
+        {**guard(gw, "Bash", {"command": "git status"}), "out": ""},
+        {**guard(gw, "Bash", {"command": 'grep "git commit" f'}), "out": ""},
+        {**guard(gw, "Edit", changelog), "out": "ceh-git-workflow:update-changelog"},
+        {**guard(gw, "Edit", changelog, started("ceh-git-workflow:update-changelog")), "out": ""},
+        {**guard(gw, "Edit", changelog, started("ceh-git-workflow:release")), "out": ""},
+        {**guard(gw, "Write", readme), "out": "ceh-git-workflow:update-readme"},
+        {**guard(gw, "Write", readme, started("ceh-git-workflow:update-readme")), "out": ""},
+        {**guard(gw, "Write", {**readme, "file_path": (tmp / "elsewhere" / "README.md").as_posix()}), "out": ""},
+        {**guard(gw, "Bash", commit), "env": {"CEH_SKILL_STARTED_GUARD": "off"}, "out": ""},
+        {**guard(gw, "Bash", commit), "env": {"CEH_DISABLED_HOOKS": "skill-started-guard"}, "out": ""},
         # sync-agents-workspace: one sequence on the tmp project above, in this order.
         {**sync("start", wt), "env": {**who, "CEH_DISABLED_HOOKS": "sync-agents-workspace"}, "out": "",
          "after": lambda: "created despite the kill switch" if os.path.lexists(wt_ws) else None},
@@ -281,12 +330,15 @@ def hook_fixtures(tmp: Path) -> list[dict]:
 
 
 def check() -> None:
-    scripts: dict[str, Path] = {}
+    # Keyed by <plugin>/<script>, and by the bare name while only one plugin ships it (else None).
+    scripts: dict[str, Path | None] = {}
     for d in plugin_dirs():
         hooks = d / "hooks" / "hooks.json"
         if hooks.is_file():
             for name in HOOK_SCRIPT_PAT.findall(hooks.read_text(encoding="utf-8")):
-                scripts[name] = d / "scripts" / name
+                path = d / "scripts" / name
+                scripts[f"{d.name}/{name}"] = path
+                scripts[name] = path if scripts.get(name, path) == path else None
 
     # The full path, not "bash": Windows CreateProcess searches System32 first and finds WSL's
     # bash.exe, which does not pass the fixture's environment variables through.
@@ -306,9 +358,10 @@ def check() -> None:
         base_env.update({"TMP": str(state), "TEMP": str(state), "TMPDIR": str(state)})
         fixtures = hook_fixtures(tmp)
 
-        for name in sorted(set(scripts) - {f["script"] for f in fixtures}):
+        covered = {scripts.get(f["script"]) for f in fixtures}
+        for path in sorted({p for p in scripts.values() if p} - covered):
             fail(
-                rel(scripts[name]),
+                rel(path),
                 "hook script has no fixture in checks/hooks.py hook_fixtures()",
             )
 
@@ -316,7 +369,12 @@ def check() -> None:
             script = scripts.get(f["script"])
             where = f"hook fixture {i} ({f['script']})"
             if script is None:
-                fail(where, "no hooks.json runs this script")
+                fail(
+                    where,
+                    "several plugins ship this script, name it <plugin>/<script>"
+                    if f["script"] in scripts
+                    else "no hooks.json runs this script",
+                )
                 continue
             if script.suffix == ".sh" and not bash:
                 continue

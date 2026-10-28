@@ -106,6 +106,7 @@ the other. Each hook is a standalone script with no shared module, so the list i
 | `plugins/standalone/ceh-every-session/scripts/ask-user-question-guard.py`    | top of `main()`        | `sys.exit(0)` instead of `return`      |
 | `plugins/standalone/ceh-build-from-plan/scripts/build-record-guard.py`       | top of `main()`        | none                                   |
 | `plugins/standalone/ceh-git-workflow/scripts/sync-agents-workspace.py`       | top of `main()`        | none                                   |
+| `plugins/standalone/ceh-git-workflow/scripts/skill-started-guard.py`         | top of `main()`        | none                                   |
 | `plugins/standalone/ceh-coding-conduct/scripts/load-contract.sh`             | the `case` line on top | bash: `case` on `$(basename "$0" .sh)` |
 | `plugins/standalone/ceh-coding-conduct/scripts/inject-less-code-reminder.sh` | the `case` line on top | bash: `case` on `$(basename "$0" .sh)` |
 

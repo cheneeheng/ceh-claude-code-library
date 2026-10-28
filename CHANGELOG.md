@@ -33,22 +33,37 @@ A third PR records the user's live re-check on 1.4.7 in both plans: the exit mer
 version changes, because only plans change. A fourth PR marks both plans `built`, with a check of
 the build against each plan in its Record.
 
+A fifth PR adds `skill-started-guard.py` to `ceh-git-workflow`, the first of three PRs applying the
+fix in `product/retros/2026-10-28-repeat-mistake.md`. In one mcp-cassette session, the `commit`,
+`update-changelog` and `update-readme` skills were never started although a loaded skill named each
+at the right moment, and rewording that prose is the rung that already failed. The hook denies
+`git commit`, a `CHANGELOG.md` edit or a `README.md` edit until a skill that owns the moment has
+been started, by its `Skill` call or slash command. The hook fixtures in `checks/hooks.py` now
+address a script as `<plugin>/<script>`, so the copies `ceh-testing` and `ceh-coding-conduct` get
+next each have their own fixtures. The root `CLAUDE.md` Landing section now starts
+`update-changelog` instead of forbidding it.
+
 ### Plugin versions
 
 | Plugin             | Version |
 | ------------------ | ------- |
-| `ceh-git-workflow` | 1.4.7   |
+| `ceh-git-workflow` | 1.5.0   |
 
 ### Added
 
 - `ceh-git-workflow`: `sync-agents-workspace.py` hook on `SessionStart`, `Stop` and `SessionEnd`.
 - `ceh-git-workflow`: `sync-agents-workspace.py` also runs on `PostToolUse` for `EnterWorktree`.
 - `tools/validate-plugins`: `before` and `after` fixture keys in `checks/hooks.py`.
+- `ceh-git-workflow`: `skill-started-guard.py` `PreToolUse` hook, with `CEH_SKILL_STARTED_GUARD`.
+- `product/plans/skill-started-guard.md` and `product/retros/2026-10-28-repeat-mistake.md`.
 
 ### Changed
 
 - `product/plans/sync-agents-workspace.md` and `sync-agents-workspace-exit.md`: the live re-check
   results.
+- `tools/validate-plugins`: `checks/hooks.py` keys hook scripts by `<plugin>/<script>`, and a bare
+  name two plugins ship fails as ambiguous.
+- `CLAUDE.md`: the Landing section's changelog step starts `update-changelog`.
 
 ### Fixed
 

@@ -203,8 +203,8 @@ new version and the section date on every bumped plugin's row.
 Follow `ceh-git-workflow:pull-request` (open, merge, land), with these differences for this repo.
 Where they conflict, this section wins:
 
-- **Changelog step:** do not log under `## [Unreleased]` or run `ceh-git-workflow:update-changelog`
-  in Unreleased mode. Write the entry under today's `## YYYY-MM-DD` section, per the rule above.
+- **Changelog step:** start `ceh-git-workflow:update-changelog` as the step says, but write the
+  entry under today's `## YYYY-MM-DD` section, per the rule above, never under `## [Unreleased]`.
 - **Version bumps ride in the PR.** The skill's "needs a version bump or tag → switch to
   `ceh-git-workflow:release`" does not apply: bump `plugin.json`, `marketplace.json`, and
   `docs/PLUGIN_VERSIONS.md` in the PR's commit, and never tag or release.
