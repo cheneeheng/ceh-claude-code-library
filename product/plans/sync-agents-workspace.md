@@ -175,7 +175,10 @@ Edit, and after the session ends the entry is in the main checkout's log.
   Edit, exit and keep the worktree. Passing: the line is in the main checkout's
   `.agents_workspace/DECISION_LOG.md`. Then repeat with `EnterWorktree`, and record the result in
   the README's limits line.
-- **Status:** todo
+- **Status:** todo. The user's run on 2026-10-28 on 1.4.6: the line reached the main log only when
+  the next session's catch-up merged it (`Stop` commit 11:43:11, merge 11:45:32), not at exit, and
+  `EnterWorktree` created no workspace. Both are fixed by
+  `product/plans/sync-agents-workspace-exit.md`, whose Phase 2 repeats this check
 
 ## Open
 

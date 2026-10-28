@@ -157,13 +157,44 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         return subprocess.run(["git", "-C", str(repo), "rev-parse", "-q", "--verify", "MERGE_HEAD"],
                               capture_output=True).returncode == 0  # fmt: skip
 
+    def settled(*lines: str) -> str | None:
+        """Wait up to 20 s for the detached end worker: every line in the main log, and the
+        main workspace idle (no merge, no autostash held, no index lock)."""
+        deadline = time.time() + 20
+        while True:
+            log = set((ws / "DECISION_LOG.md").read_text(encoding="utf-8").split())
+            busy = [
+                f
+                for f in ("MERGE_HEAD", "MERGE_AUTOSTASH", "index.lock")
+                if (ws / ".git" / f).exists()
+            ]
+            if set(lines) <= log and not busy:
+                return None
+            if time.time() > deadline:
+                return f"after 20 s, main log {sorted(log)}, still present: {busy}"
+            time.sleep(0.2)
+
     def merged_with_dirty_log() -> str | None:
-        log = (ws / "DECISION_LOG.md").read_text(encoding="utf-8").split()
-        if not {"w1", "m1", "m2"} <= set(log):
-            return f"main log after merge: {log}"
-        if "DECISION_LOG.md" not in g(ws, "status", "--porcelain") or merging(ws):
-            return "m2 should stay uncommitted and no merge should be in progress"
+        if problem := settled("w1", "m1", "m2"):
+            return problem
+        if "DECISION_LOG.md" not in g(ws, "status", "--porcelain"):
+            return "m2 should stay uncommitted"
         return None
+
+    wt2 = tmp / "wt2"
+
+    def commit_v1() -> None:
+        append(wt2 / ".agents_workspace", "v1")
+        g(wt2 / ".agents_workspace", "commit", "-q", "-am", "v1")
+
+    def caught_up_at_end() -> str | None:
+        if problem := settled("v1", "m2"):
+            return problem
+        return (
+            None
+            if (ws / "notes.txt").read_text(encoding="utf-8") == "m"
+            else "notes.txt changed"
+        )
 
     def both_edit_notes() -> None:
         for repo, text in ((wt_ws, "w"), (ws, "m")):
@@ -233,6 +264,12 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**sync("end", wt), "out": "", "before": main_appends, "after": merged_with_dirty_log},
         {**sync("start", proj), "out": "ceh-ws/ws/wt", "before": both_edit_notes, "after": conflict_aborted},
         {**sync("start", wt), "out": "", "before": lambda: shutil.rmtree(wt_ws), "after": on_ws_branch},
+        # EnterWorktree mid-session: PostToolUse runs start with the worktree as cwd.
+        {**sync("start", wt2), "stdin": {"tool_name": "EnterWorktree", "tool_input": {}, "cwd": str(wt2)}, "out": "",
+         "before": lambda: g(proj, "worktree", "add", "-q", "-b", "feat2", str(wt2)),
+         "after": lambda: None if g(wt2 / ".agents_workspace", "branch", "--show-current") == "ceh-ws/ws/wt2" else "no wt2 workspace"},
+        # A session that ends in the main checkout catches up: wt2 merges, wt's conflict aborts.
+        {**sync("end", proj), "out": "", "before": commit_v1, "after": caught_up_at_end},
         {**sync("start", None), "out": ""},
         # Context injectors: valid JSON naming their skill, silent when switched off.
         {"script": "load-contract.sh", "stdin": {}, "out": "ceh-coding-conduct:agent-coding-contract"},
@@ -260,7 +297,9 @@ def check() -> None:
         for k, v in os.environ.items()
         if not k.startswith(("CEH_", "BULK_READER_"))
     }
-    with tempfile.TemporaryDirectory() as tmp_dir:
+    # A detached hook worker may still hold a file when the fixtures end, and Windows refuses to
+    # delete it: report the fixture, not a cleanup traceback.
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp_dir:
         tmp = Path(tmp_dir)
         state = tmp / "state"  # denial counters and warn-once markers land here
         state.mkdir()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""SessionStart, Stop and SessionEnd hook: give a linked git worktree its own worktree of the
-main checkout's .agents_workspace repo, and merge it back.
+"""SessionStart, PostToolUse (EnterWorktree), Stop and SessionEnd hook: give a linked git
+worktree its own worktree of the main checkout's .agents_workspace repo, and merge it back.
 
 Claude Code's worktree isolation refuses Edit and Write through a link to the main checkout, so
 the worktree gets a real git worktree of the workspace repo instead, at
@@ -11,9 +11,14 @@ Arguments, one per event:
   start   in a linked worktree, create its workspace; in a main checkout, catch up: merge every
           ceh-ws/<X>/ branch not yet merged, and report each merge that failed.
   commit  commit the worktree's workspace changes, so a removed worktree loses nothing committed.
-  end     commit, then merge the worktree's branch into <X>.
+  end     start end-worker detached and return, because the SessionEnd budget (1.5 s, which a
+          plugin cannot raise) can kill a merge in progress.
+  end-worker <cwd>
+          in a linked worktree, commit, then merge its branch into <X>; in a main checkout,
+          catch up, since Claude Code may report the main checkout as cwd when a session ends.
 
-Reads cwd from the hook payload, never os.getcwd(), and does nothing without it. Fails open:
+Reads cwd from the hook payload (end-worker: from argv), never os.getcwd(), and does nothing
+without it. Fails open:
 anything unexpected exits 0 silently, because a convenience hook must never stop a session.
 """
 
@@ -137,12 +142,41 @@ def catch_up(main_ws, x):
     fmt = "--format=%(refname:short)"
     _, pending = git(main_ws, "for-each-ref", fmt, "--no-merged=HEAD", ref)
     failed = [b for b in pending.splitlines() if not merge(main_ws, b)]
+    # A concurrent end-worker may have merged a branch whose merge lost the index lock here.
+    _, still = git(main_ws, "for-each-ref", fmt, "--no-merged=HEAD", ref)
+    failed = [b for b in failed if b in still.splitlines()]
     _, merged = git(main_ws, "for-each-ref", fmt, "--merged=HEAD", ref)
     for b in merged.splitlines():
         git(
             main_ws, "branch", "-q", "-d", b
         )  # git refuses while a worktree has it checked out
     return failed
+
+
+def detach(cwd, run_in):
+    """Start `end-worker <cwd>` in its own process group, so it outlives the hook."""
+    args = [sys.executable, "-I", "-S", os.path.abspath(__file__), "end-worker", cwd]
+    # The worker runs in the main checkout, so it never holds the worktree folder open.
+    io = dict(
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        cwd=str(run_in),
+    )
+    if os.name != "nt":
+        subprocess.Popen(args, start_new_session=True, **io)
+        return
+    # CREATE_NO_WINDOW, not DETACHED_PROCESS: its git.exe children share one hidden console
+    # instead of flashing a window each.
+    flags = subprocess.CREATE_NO_WINDOW | subprocess.CREATE_NEW_PROCESS_GROUP
+    try:
+        subprocess.Popen(
+            args, creationflags=flags | subprocess.CREATE_BREAKAWAY_FROM_JOB, **io
+        )
+    except (
+        OSError
+    ):  # the job forbids breakaway; the next session start's catch-up still merges
+        subprocess.Popen(args, creationflags=flags, **io)
 
 
 def main():
@@ -152,15 +186,21 @@ def main():
         return
 
     event = sys.argv[1] if len(sys.argv) > 1 else ""
-    cwd = (json.load(sys.stdin) or {}).get("cwd")
+    if event == "end-worker":
+        cwd = sys.argv[2] if len(sys.argv) > 2 else ""
+    else:
+        cwd = (json.load(sys.stdin) or {}).get("cwd")
     if not cwd or not os.path.isdir(cwd):
         return
     found = checkouts(cwd)
     if not found:
         return
     top, main_checkout = found
+    if event == "end":
+        detach(cwd, main_checkout or top)
+        return
     if (
-        not main_checkout and event != "start"
+        not main_checkout and event == "commit"
     ):  # Stop fires every turn: one git spawn here
         return
     main_ws = workspace_repo(main_checkout or top)
@@ -169,7 +209,11 @@ def main():
         return
 
     if not main_checkout:
-        if event == "start" and (failed := catch_up(main_ws, x)):
+        if event == "end-worker":
+            catch_up(
+                main_ws, x
+            )  # SessionEnd output is discarded: the next start reports failures
+        elif event == "start" and (failed := catch_up(main_ws, x)):
             names = ", ".join(failed)
             note = (
                 f"The {WORKSPACE} branches {names} did not merge into {x} on their own "
@@ -191,9 +235,9 @@ def main():
     branch = f"{PREFIX}{x}/{top.name}"
     if event == "start":
         create(top, main_ws, branch)
-    elif event in ("commit", "end"):
+    elif event in ("commit", "end-worker"):
         commit(top, branch)
-        if event == "end":
+        if event == "end-worker":
             merge(main_ws, branch)
 
 
