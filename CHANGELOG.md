@@ -28,6 +28,10 @@ covers both: `end` now starts a detached background process that merges, and whe
 main checkout it catches up instead. A session that enters a worktree with `EnterWorktree` got no
 workspace; a `PostToolUse` hook on that tool now creates it.
 
+A third PR records the user's live re-check on 1.4.7 in both plans: the exit merge and
+`EnterWorktree` both worked on Windows, also when the worktree was removed at exit. No plugin
+version changes, because only plans change.
+
 ### Plugin versions
 
 | Plugin             | Version |
@@ -39,6 +43,11 @@ workspace; a `PostToolUse` hook on that tool now creates it.
 - `ceh-git-workflow`: `sync-agents-workspace.py` hook on `SessionStart`, `Stop` and `SessionEnd`.
 - `ceh-git-workflow`: `sync-agents-workspace.py` also runs on `PostToolUse` for `EnterWorktree`.
 - `tools/validate-plugins`: `before` and `after` fixture keys in `checks/hooks.py`.
+
+### Changed
+
+- `product/plans/sync-agents-workspace.md` and `sync-agents-workspace-exit.md`: the live re-check
+  results.
 
 ### Fixed
 
