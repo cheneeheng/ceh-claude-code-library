@@ -21,16 +21,29 @@ the session ends. A session that starts in the main checkout merges whatever is 
 reports any merge that failed. The fixture runner in `checks/hooks.py` gains `before` and `after`
 steps, so a fixture can check files and branches, not only output.
 
+A second PR fixes two gaps the live check found. A session that exited a worktree with "keep" did
+not merge: the merge came only from the next session's catch-up. The cause was not pinned down
+(the 1.5 s `SessionEnd` budget, or Claude Code reporting the main checkout at exit), so the fix
+covers both: `end` now starts a detached background process that merges, and when the hook sees the
+main checkout it catches up instead. A session that enters a worktree with `EnterWorktree` got no
+workspace; a `PostToolUse` hook on that tool now creates it.
+
 ### Plugin versions
 
 | Plugin             | Version |
 | ------------------ | ------- |
-| `ceh-git-workflow` | 1.4.6   |
+| `ceh-git-workflow` | 1.4.7   |
 
 ### Added
 
 - `ceh-git-workflow`: `sync-agents-workspace.py` hook on `SessionStart`, `Stop` and `SessionEnd`.
+- `ceh-git-workflow`: `sync-agents-workspace.py` also runs on `PostToolUse` for `EnterWorktree`.
 - `tools/validate-plugins`: `before` and `after` fixture keys in `checks/hooks.py`.
+
+### Fixed
+
+- `ceh-git-workflow`: the workspace merge at session end runs in a detached process, and catches
+  up when the session ends in the main checkout.
 
 ---
 

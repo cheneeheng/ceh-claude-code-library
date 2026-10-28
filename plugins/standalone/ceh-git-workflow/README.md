@@ -42,10 +42,10 @@ out into one per step.
 
 The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled.
 
-| Hook                              | Event                                                       | Script                     | Default |
-| --------------------------------- | ----------------------------------------------------------- | -------------------------- | ------- |
-| [Branch guard](#branch-guard)     | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`) | `branch-guard.py`          | on      |
-| [Workspace sync](#workspace-sync) | `SessionStart`, `Stop`, `SessionEnd`                        | `sync-agents-workspace.py` | on      |
+| Hook                              | Event                                                                 | Script                     | Default |
+| --------------------------------- | --------------------------------------------------------------------- | -------------------------- | ------- |
+| [Branch guard](#branch-guard)     | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`)           | `branch-guard.py`          | on      |
+| [Workspace sync](#workspace-sync) | `SessionStart`, `PostToolUse` (`EnterWorktree`), `Stop`, `SessionEnd` | `sync-agents-workspace.py` | on      |
 
 ### Branch guard
 
@@ -77,33 +77,35 @@ worktree. A worktree is a fresh checkout of tracked files, so without it a workt
 workspace. A link would not do: Claude Code's worktree isolation refuses Edit and Write through a
 link to a folder outside the worktree.
 
-- **Session start in a worktree:** adds `<worktree>/.agents_workspace` as a git worktree of the main
+- **Session start in a worktree, or `EnterWorktree`:** adds `<worktree>/.agents_workspace` as a git worktree of the main
   checkout's workspace repo, on the branch `ceh-ws/<X>/<worktree folder>`, where `<X>` is the branch
   the main workspace has checked out. A branch left by an earlier worktree of the same name is
   reused.
 - **After every turn:** commits the worktree's workspace changes to that branch, so removing the
   worktree loses only what changed since the last turn.
-- **Session end:** commits once more and merges the branch into `<X>`, autostashing uncommitted
-  changes in the main workspace. `DECISION_LOG.md` merges with git's `union` driver, so two sessions
-  appending both keep their lines. Other files merge normally.
+- **Session end:** starts a background process and returns at once, because `SessionEnd` hooks get
+  1.5 s that a plugin cannot raise. In a worktree, the process commits once more and merges the
+  branch into `<X>`, autostashing uncommitted changes in the main workspace. When Claude Code
+  reports the main checkout at exit, it catches up as below. `DECISION_LOG.md` merges with git's
+  `union` driver, so two sessions appending both keep their lines. Other files merge normally.
 - **Session start in a main checkout:** merges every `ceh-ws/<X>/` branch left over, for example
-  when a session crashed or ran out of its 1.5 s exit budget, deletes merged branches no worktree
+  when a session crashed or its background merge was killed, deletes merged branches no worktree
   holds, and tells the agent which branch failed to merge and how to merge it by hand.
 
 It never pushes, never aborts a merge it did not start, and fails silently, because a sync hook
 must never stop a session. It does nothing without a `.agents_workspace` git repo in the main
 checkout, when that repo is on a detached `HEAD`, or in a bare repo. It does not cover subagent
-worktrees (`isolation: "worktree"`), which fire none of its events, or a worktree entered
-mid-session with `EnterWorktree` unless the session later restarts there. `CEH_DISABLED_HOOKS`
-with `sync-agents-workspace` switches it off.
+worktrees (`isolation: "worktree"`), which fire none of its events. On Windows, a job object that
+kills its children and forbids breakaway would kill the background merge; the next session start
+then merges. `CEH_DISABLED_HOOKS` with `sync-agents-workspace` switches it off.
 
 ## Scripts
 
-| Script                             | Purpose                                                                                                                                                   |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `scripts/branch-guard.py`          | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                              |
-| `scripts/sync-agents-workspace.py` | `SessionStart`, `Stop` and `SessionEnd` hook: a git worktree of `.agents_workspace` in each worktree, merged back (see [Workspace sync](#workspace-sync)) |
-| `scripts/check-semver.py`          | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                       |
+| Script                             | Purpose                                                                                                                                                                                    |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `scripts/branch-guard.py`          | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                                                               |
+| `scripts/sync-agents-workspace.py` | `SessionStart`, `PostToolUse` (`EnterWorktree`), `Stop` and `SessionEnd` hook: a git worktree of `.agents_workspace` in each worktree, merged back (see [Workspace sync](#workspace-sync)) |
+| `scripts/check-semver.py`          | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                                                        |
 
 ```bash
 python3 scripts/check-semver.py CHANGELOG.md
