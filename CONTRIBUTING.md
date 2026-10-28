@@ -1,8 +1,8 @@
 # Contributing
 
 How to work on this repo. What the plugins are and how to install them is in the
-[`README.md`](README.md). The rules every change follows are in [`CLAUDE.md`](CLAUDE.md) and
-[`docs/VISION.md`](docs/VISION.md). Add a skill, agent, hook, or plugin with the repo-local
+[`README.md`](README.md). The rules every change follows are in [`CLAUDE.md`](CLAUDE.md), the
+decision files in [`.claude/rules/`](.claude/rules/), and [`docs/VISION.md`](docs/VISION.md). Add a skill, agent, hook, or plugin with the repo-local
 `add-plugin-component` skill in `.claude/skills/`.
 
 ## Tools

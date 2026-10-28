@@ -1,4 +1,4 @@
-"""repo-rules: rules CLAUDE.md states that a machine can check (docs/VISION.md, goal 5).
+"""repo-rules: rules CLAUDE.md and .claude/rules/ state that a machine can check (docs/VISION.md, goal 5).
 
 docs/PLUGIN_VERSIONS.md matches every plugin.json version; each plugin's newest CHANGELOG.md Plugin
 versions row matches it too, under the section PLUGIN_VERSIONS.md dates it to; no marketplace entry

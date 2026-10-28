@@ -135,10 +135,10 @@ describes the repo and its procedures and points to the decisions instead of res
   `.claude/rules/`. Each phase updates the citations of the file it moves from.
   `docs/VISION.md:8` ("`CLAUDE.md` says how the repo works") stays true and is not edited.
 - **Line budget.** The unscoped `decision-` files total 39 lines today
-  (`decision-skill-references.md` is already scoped). Phase 2 adds about 100, ending near 140,
-  under the 150-line warning. If it passes 150, the Phase 2 report names the decisions that bind
-  least, as the skill says. The scoped files of Phase 3 do not count. Context per session does not
-  grow: every moved line leaves `CLAUDE.md`.
+  (`decision-skill-references.md` is already scoped). Phase 2 adds 130, ending at 169, over the
+  150-line warning, so the Phase 2 report names the decisions that bind least, as the skill says.
+  The scoped files of Phase 3 do not count. Context per session grows by 66 lines (285 to 351),
+  because each file carries its own frontmatter, title, and Why line.
 
 ## Phases
 
@@ -159,8 +159,12 @@ describes the repo and its procedures and points to the decisions instead of res
   `ls .claude/rules/decision-{vision-governs,plugin-boundaries,no-bundles,every-session-admission,shared-standards-duplication,plugin-dependencies,evaluation,version-levels,no-releases,changelog-sections}.md`
   lists all ten; `grep -n "no version ranges\|no version tags\|PATCH\*\* —" CLAUDE.md` prints
   nothing; `grep -rn "CLAUDE.md. (Plugin Dependencies\|Duplication Policy in .CLAUDE\|Versioning in .CLAUDE\|CLAUDE.md. Versioning" --include=*.md docs .claude/skills CONTRIBUTING.md tools`
-  prints nothing; `cat $(grep -L "^paths:" .claude/rules/decision-*.md) | wc -l` prints under 150.
-- **Status:** todo
+  prints nothing; `cat $(grep -L "^paths:" .claude/rules/decision-*.md) | wc -l` prints the
+  unscoped total, reported against the 150-line warning.
+- **Status:** done, `python tools/validate-plugins/validate.py` in a clean worktree: "OK: all
+  plugin checks passed"; `ls` lists 10, both greps print nothing; unscoped total 169, over the
+  warning. The least-binding decisions are `decision-no-bundles.md` and `decision-evaluation.md`.
+  Design changed: the budget check said "under 150", which the move cannot meet without rewording.
 
 ### Phase 3: Move the plugins/CLAUDE.md decisions
 
@@ -184,3 +188,5 @@ None
 - 2026-10-28 Reviewed: Revise first, 2 blocking (live-citation list misses six citations; VISION.md edit violates its own-PR rule)
 - 2026-10-28 Built Phase 1: python tools/validate-plugins/validate.py, OK: all plugin checks passed
 - 2026-10-28 PR: #179 https://github.com/cheneeheng/ceh-claude-code-library/pull/179
+- 2026-10-28 Design changed: was "Phase 2 adds roughly 70 ... Context per session does not grow", now "Phase 2 adds 130, ending at 169 ... grows by 66 lines", because each moved file carries frontmatter, title and Why line
+- 2026-10-28 Built Phase 2: python tools/validate-plugins/validate.py, OK: all plugin checks passed

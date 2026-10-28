@@ -1,8 +1,8 @@
 # Plugin Dependencies
 
 The current dependency graph between `ceh-*` plugins: every declared edge, the reference that
-forces it. The rules for an edge are in `CLAUDE.md`
-(Plugin Dependencies); this page holds the graph as it stands and the evidence behind each edge.
+forces it. The rules for an edge are in
+`.claude/rules/decision-plugin-dependencies.md`; this page holds the graph as it stands and the evidence behind each edge.
 
 ## How dependencies behave
 
@@ -51,7 +51,7 @@ conditional hand-offs or negative routing, which stay prose.
 
 ## Rules for an edge
 
-`CLAUDE.md` (Plugin Dependencies) holds the first three. The validator enforces the last one.
+`.claude/rules/decision-plugin-dependencies.md` holds the first three. The validator enforces the last one.
 
 1. **The reference fires on every run of the skill or agent.** A conditional handoff stays prose.
 2. **Negative routing never counts.** It names an alternative, and an edge would install what the

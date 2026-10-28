@@ -18,8 +18,8 @@ templates (below) live in `assets/` instead:
   plugin's own `references/`, cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`, so it needs no
   `docs/CROSS_REFERENCES.md` entry. A file used by one skill lives in that skill's `references/`.
   Only a file needed by skills of different plugins is copied word-for-word into each and
-  registered in `docs/CROSS_REFERENCES.md` (see the Shared-Standards Duplication Policy in the
-  root `CLAUDE.md`).
+  registered in `docs/CROSS_REFERENCES.md` (see
+  `.claude/rules/decision-shared-standards-duplication.md`).
 - **A standards set too large to inline.**
 
 Never for general reference material a model already knows.
