@@ -9,6 +9,31 @@ before this repo live in
 
 ---
 
+## 2026-10-28
+
+`ceh-git-workflow` gains a hook that brings the nested `.agents_workspace` repo into git worktrees.
+A worktree is a fresh checkout of tracked files, so a session in one saw no decision log, handoffs
+or notes. Linking the folder was tried first and dropped: Claude Code's worktree isolation refuses
+Edit and Write through a link to any folder outside the worktree. Instead, a session that starts in
+a worktree gets a git worktree of the workspace repo on a `ceh-ws/<branch>/<name>` branch. Changes
+are committed after every turn and merged back into the main workspace's checked-out branch when
+the session ends. A session that starts in the main checkout merges whatever is left over and
+reports any merge that failed. The fixture runner in `checks/hooks.py` gains `before` and `after`
+steps, so a fixture can check files and branches, not only output.
+
+### Plugin versions
+
+| Plugin             | Version |
+| ------------------ | ------- |
+| `ceh-git-workflow` | 1.4.6   |
+
+### Added
+
+- `ceh-git-workflow`: `sync-agents-workspace.py` hook on `SessionStart`, `Stop` and `SessionEnd`.
+- `tools/validate-plugins`: `before` and `after` fixture keys in `checks/hooks.py`.
+
+---
+
 ## 2026-10-27
 
 The `ceh-build-planning` outcome case for `review-build-plan` gains two free graders, because the

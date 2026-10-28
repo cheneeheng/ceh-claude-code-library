@@ -23,7 +23,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
 
     Keys: script, stdin (dict), env, args, repeat (runs on one session; the last is checked),
     code (exit code), out (substring of stdout; "" means stdout must be empty), err (substring
-    of stderr).
+    of stderr), before (called just before the script), after (called just after it; returns an
+    error message or None). Fixtures run in list order, so a sequence can share one tmp repo.
     """
     big, small = tmp / "big.txt", tmp / "small.txt"
     big.write_text("x\n" * 400, encoding="utf-8")
@@ -98,6 +99,89 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         }
 
     add_built = {"old_string": "## Record\n", "new_string": "## Record\n" + built}
+
+    # sync-agents-workspace: a project whose workspace repo is on branch ws, and a linked worktree.
+    proj, wt = tmp / "proj", tmp / "wt"
+    ws, wt_ws = proj / ".agents_workspace", wt / ".agents_workspace"
+    who = {
+        f"GIT_{r}_{k}": v
+        for r in ("AUTHOR", "COMMITTER")
+        for k, v in (("NAME", "t"), ("EMAIL", "t@t"))
+    }
+
+    def g(cwd: Path, *args: str) -> str:
+        r = subprocess.run(["git", "-C", str(cwd), "-c", "user.name=t", "-c", "user.email=t@t", *args],
+                           capture_output=True, text=True)  # fmt: skip
+        return r.stdout.strip()
+
+    proj.mkdir()
+    (proj / ".gitignore").write_text(".agents_workspace\n", encoding="utf-8")
+    for d, branch in ((proj, "main"), (ws, "ws")):
+        d.mkdir(exist_ok=True)
+        if d == ws:
+            (ws / "DECISION_LOG.md").write_text("# Log\n", encoding="utf-8")
+        g(d, "init", "-q", "-b", branch)
+        g(d, "add", ".")
+        g(d, "commit", "-q", "-m", "x")
+    g(proj, "worktree", "add", "-q", "-b", "feat", str(wt))
+
+    def sync(event: str, cwd: Path | None, **extra) -> dict:
+        stdin = {"cwd": str(cwd)} if cwd else {}
+        return {
+            "script": "sync-agents-workspace.py",
+            "args": [event],
+            "stdin": stdin,
+            "env": who,
+            **extra,
+        }
+
+    def on_ws_branch() -> str | None:
+        got = g(wt_ws, "branch", "--show-current") if wt_ws.is_dir() else "no folder"
+        return (
+            None
+            if got == "ceh-ws/ws/wt"
+            else f"wt/.agents_workspace: expected ceh-ws/ws/wt, got {got!r}"
+        )
+
+    def append(repo: Path, line: str) -> None:
+        with open(repo / "DECISION_LOG.md", "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+
+    def main_appends() -> None:
+        # The main checkout commits m1 and leaves m2 uncommitted, as a live session would.
+        append(ws, "m1")
+        g(ws, "commit", "-q", "-am", "m1")
+        append(ws, "m2")
+
+    def merging(repo: Path) -> bool:
+        return subprocess.run(["git", "-C", str(repo), "rev-parse", "-q", "--verify", "MERGE_HEAD"],
+                              capture_output=True).returncode == 0  # fmt: skip
+
+    def merged_with_dirty_log() -> str | None:
+        log = (ws / "DECISION_LOG.md").read_text(encoding="utf-8").split()
+        if not {"w1", "m1", "m2"} <= set(log):
+            return f"main log after merge: {log}"
+        if "DECISION_LOG.md" not in g(ws, "status", "--porcelain") or merging(ws):
+            return "m2 should stay uncommitted and no merge should be in progress"
+        return None
+
+    def both_edit_notes() -> None:
+        for repo, text in ((wt_ws, "w"), (ws, "m")):
+            (repo / "notes.txt").write_text(text, encoding="utf-8")
+            g(repo, "add", "notes.txt")
+            g(repo, "commit", "-q", "-m", "notes")
+
+    def conflict_aborted() -> str | None:
+        if merging(ws) or (ws / "notes.txt").read_text(encoding="utf-8") != "m":
+            return (
+                "a failed merge should be aborted, leaving the main notes.txt as it was"
+            )
+        return (
+            None
+            if "m2" in (ws / "DECISION_LOG.md").read_text(encoding="utf-8")
+            else "m2 lost"
+        )
+
     return [
         # branch-guard: deny on the session repo's default branch, allow elsewhere, in another
         # repo, or when switched off.
@@ -140,6 +224,16 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "env": {"CEH_BUILD_RECORD_GUARD": "off"}, "out": ""},
         {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "env": {"CEH_DISABLED_HOOKS": "build-record-guard"}, "out": ""},
         {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "env": {"CEH_DISABLED_HOOKS": "ask-user-question-guard"}, "out": ""},
+        # sync-agents-workspace: one sequence on the tmp project above, in this order.
+        {**sync("start", wt), "env": {**who, "CEH_DISABLED_HOOKS": "sync-agents-workspace"}, "out": "",
+         "after": lambda: "created despite the kill switch" if os.path.lexists(wt_ws) else None},
+        {**sync("start", wt), "out": "", "after": on_ws_branch},
+        {**sync("commit", wt), "out": "", "before": lambda: append(wt_ws, "w1"),
+         "after": lambda: None if g(wt_ws, "log", "-1", "--format=%s") == "ceh-ws: wt" else "no ceh-ws commit"},
+        {**sync("end", wt), "out": "", "before": main_appends, "after": merged_with_dirty_log},
+        {**sync("start", proj), "out": "ceh-ws/ws/wt", "before": both_edit_notes, "after": conflict_aborted},
+        {**sync("start", wt), "out": "", "before": lambda: shutil.rmtree(wt_ws), "after": on_ws_branch},
+        {**sync("start", None), "out": ""},
         # Context injectors: valid JSON naming their skill, silent when switched off.
         {"script": "load-contract.sh", "stdin": {}, "out": "ceh-coding-conduct:agent-coding-contract"},
         {"script": "load-contract.sh", "stdin": {}, "args": ["SubagentStart"], "out": '"hookEventName": "SubagentStart"'},
@@ -191,6 +285,8 @@ def check() -> None:
             cmd = [sys.executable, "-I", "-S"] if script.suffix == ".py" else [bash]
             stdin = json.dumps({"session_id": f"fixture-{i}", **f["stdin"]})
             env = {**base_env, **f.get("env", {})}
+            if "before" in f:
+                f["before"]()
             for _ in range(f.get("repeat", 1)):
                 r = subprocess.run(
                     # cwd=REPO + POSIX-relative path so Git Bash on Windows resolves it.
@@ -213,6 +309,8 @@ def check() -> None:
                 fail(where, f"stdout lacks {f['out']!r}: {r.stdout.strip()[:200]}")
             if f.get("err") and f["err"] not in r.stderr:
                 fail(where, f"stderr lacks {f['err']!r}: {r.stderr.strip()[:200]}")
+            if "after" in f and (problem := f["after"]()):
+                fail(where, problem)
             if r.stdout.strip():
                 try:
                     json.loads(r.stdout)
