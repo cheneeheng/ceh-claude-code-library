@@ -1,9 +1,11 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: YYYY-MM-DD
+source: "<source>"
 ---
 
 # <Topic>
 
 <rule>
 
-Why: <reason>. Decided YYYY-MM-DD. Source: <path, or "conversation">.
+Why: <reason>.

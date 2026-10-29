@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-09-30
+source: "CLAUDE.md (6df04b8)"
 ---
 
 # Plugin boundaries
@@ -17,4 +19,4 @@ Plugins split on one axis: use case.
 - The cross-cutting tier is orthogonal: it loads alongside a use-case plugin, never instead of one.
 - Technique splits from tooling only when the content would be byte-identical across stacks.
 
-Why: topic-named skills never auto-trigger or restate what the model knows, and splitting variants duplicates standards and reintroduces drift. Decided 2026-09-30. Source: CLAUDE.md (6df04b8).
+Why: topic-named skills never auto-trigger or restate what the model knows, and splitting variants duplicates standards and reintroduces drift.

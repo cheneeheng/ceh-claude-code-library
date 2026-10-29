@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-10-21
+source: "plugins/CLAUDE.md (f366fe9)"
 paths:
   - "plugins/**"
   - ".claude/skills/**"
@@ -17,4 +19,4 @@ spelling the format inline. A reference file cites a sibling folder's file relat
 (`../assets/<file>`). Bump `v<N>` when a required field or heading is renamed or removed. Out of
 scope: what the user ships, `flow.yaml`, and a file a script generates from a templated one.
 
-Why: the format lives in one pair of files, and each saved file names its version. Decided 2026-10-21. Source: plugins/CLAUDE.md (f366fe9).
+Why: the format lives in one pair of files, and each saved file names its version.

@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-10-06
+source: "plugins/CLAUDE.md (1778e9c)"
 paths:
   - "plugins/**"
   - ".claude/skills/**"
@@ -22,4 +24,4 @@ keep their catalog files, a new catalog skill argues its own exception in its PR
 script bundles a skill executes or copies are allowed (`ceh-ag-ui`, `ceh-git-datastore`,
 `ceh-business-plan`).
 
-Why: a model can skip a link and never see it, so only what a run reads in part leaves the body. Decided 2026-10-06. Source: plugins/CLAUDE.md (1778e9c).
+Why: a model can skip a link and never see it, so only what a run reads in part leaves the body.

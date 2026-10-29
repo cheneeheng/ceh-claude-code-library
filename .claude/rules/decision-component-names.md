@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-10-06
+source: "plugins/CLAUDE.md (1778e9c)"
 paths:
   - "plugins/**"
   - ".claude/skills/**"
@@ -15,4 +17,4 @@ Exempt: model-only standards named for what they carry (`agent-coding-contract`,
 `usage-limit-handoff`), and terms of art (`pull-request`, `release`). A plugin is named for its
 use case, a script for what it does, and the `ceh-` prefix is exempt.
 
-Why: vision principle 10, "Names say what they do": anyone who has seen only the name can say what the component does and when. Decided 2026-10-06. Source: plugins/CLAUDE.md (1778e9c).
+Why: vision principle 10, "Names say what they do": anyone who has seen only the name can say what the component does and when.

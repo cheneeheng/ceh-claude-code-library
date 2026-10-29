@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-10-28
+source: "conversation"
 paths:
   - "plugins/**"
   - ".claude/skills/**"
@@ -14,4 +16,4 @@ the skill's content, a command the user runs, or a skill in another plugin that 
 dependency.
 
 Why: an explicit call makes the model load the skill and lets `validate.py` check it, while a bare
-name is only a pointer the model may skip. Decided 2026-10-28. Source: conversation.
+name is only a pointer the model may skip.

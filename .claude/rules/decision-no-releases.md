@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-10-05
+source: "CLAUDE.md (0ee2394)"
 ---
 
 # No releases
@@ -9,4 +11,4 @@ asks for a release in any form ("cut a release", "ship it", "tag a release", the
 sequence, or `ceh-git-workflow:release`), do not start it. Reply with a warning that releases are
 not intended or used in this repository, and stop.
 
-Why: changes reach users through per-plugin version bumps and the dated `CHANGELOG.md` sections each PR adds. Decided 2026-10-05. Source: CLAUDE.md (0ee2394).
+Why: changes reach users through per-plugin version bumps and the dated `CHANGELOG.md` sections each PR adds.

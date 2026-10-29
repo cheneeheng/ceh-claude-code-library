@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-09-30
+source: "CLAUDE.md (6df04b8)"
 ---
 
 # Shared-standards duplication
@@ -10,4 +12,4 @@ each rather than extracting a shared base plugin. Register every duplicated bloc
 changing appears there, edit the canonical file first, then mirror the change to every listed copy
 in the same session. New duplication gets a new entry.
 
-Why: each use-case plugin stays self-contained so a user loads exactly one per use case, and the registry contains the drift that costs. Decided 2026-09-30. Source: CLAUDE.md (6df04b8).
+Why: each use-case plugin stays self-contained so a user loads exactly one per use case, and the registry contains the drift that costs.
