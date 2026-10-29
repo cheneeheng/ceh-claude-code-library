@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-10-06
+source: "plugins/CLAUDE.md (1778e9c)"
 paths:
   - "plugins/**"
   - ".claude/skills/**"
@@ -20,4 +22,4 @@ of three cases:
 When a hook names the skill on every firing, its description is one line: what the skill is, with
 no trigger phrases and no mention of the hook.
 
-Why: the frontmatter says who invokes the skill, and a hook-delivered skill has no moment for trigger phrases to fire on. Decided 2026-10-06. Source: plugins/CLAUDE.md (1778e9c).
+Why: the frontmatter says who invokes the skill, and a hook-delivered skill has no moment for trigger phrases to fire on.

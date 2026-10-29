@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-10-09
+source: "CLAUDE.md (f0fbf0a)"
 ---
 
 # Vision governs
@@ -9,4 +11,4 @@ adding or changing a plugin, skill, agent, hook, script, or rule, and before acc
 `docs/IDEAS.md`. A change the vision does not allow either changes or does not land. If a file and
 the vision disagree, fix one of them in the same PR.
 
-Why: the vision holds the agents-first stance, the lifecycle scope, and the principles that settle a decision. Decided 2026-10-09. Source: CLAUDE.md (f0fbf0a).
+Why: the vision holds the agents-first stance, the lifecycle scope, and the principles that settle a decision.

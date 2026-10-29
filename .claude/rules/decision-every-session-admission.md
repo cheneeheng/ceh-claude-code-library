@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-10-01
+source: "CLAUDE.md (1142f63)"
 ---
 
 # Every-session admission
@@ -8,4 +10,4 @@ schema: decision-rule/v1
 or ops. If a component assumes a repository, code, or a specific activity, it belongs elsewhere.
 "Useful almost everywhere" is not the test.
 
-Why: that test is how an every-session plugin becomes a dumping ground. Decided 2026-10-01. Source: CLAUDE.md (1142f63).
+Why: that test is how an every-session plugin becomes a dumping ground.

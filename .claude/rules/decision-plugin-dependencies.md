@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-09-30
+source: "CLAUDE.md (6df04b8)"
 ---
 
 # Plugin dependencies
@@ -11,4 +13,4 @@ negative routing (`Not for tagging, use ceh-git-workflow:release`) never counts.
 plugin may depend only on other cross-cutting plugins. Where a dependency exists, the skill body
 calls the target with `Invoke the Skill tool with skill="ceh-<plugin>:<skill>"`.
 
-Why: dependencies install and enable automatically and transitively, so a needless one installs what the user steered away from. Decided 2026-09-30. Source: CLAUDE.md (6df04b8).
+Why: dependencies install and enable automatically and transitively, so a needless one installs what the user steered away from.

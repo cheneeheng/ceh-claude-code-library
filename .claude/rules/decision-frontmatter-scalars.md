@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-10-06
+source: "plugins/CLAUDE.md (1778e9c)"
 paths:
   - "plugins/**"
   - ".claude/skills/**"
@@ -15,4 +17,4 @@ read-only. Every other frontmatter key containing `: ` is quoted, single quotes 
 software the machine may not have, naming the runtime, its minimum version, and what fails
 without it.
 
-Why: `>-` has no escaping burden, and once the skill listing overflows its budget Claude Code drops whole descriptions. Decided 2026-10-06. Source: plugins/CLAUDE.md (1778e9c).
+Why: `>-` has no escaping burden, and once the skill listing overflows its budget Claude Code drops whole descriptions.

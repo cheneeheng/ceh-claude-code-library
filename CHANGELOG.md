@@ -9,6 +9,38 @@ before this repo live in
 
 ---
 
+## 2026-10-29
+
+`ceh-every-session:record-project-decisions` now decides each decision's scope before writing it.
+A rule that holds in any project and names nothing of this one goes to `~/.claude/rules/`, which
+Claude Code loads in every project on the machine and which is never committed. A rule that names
+the project stays in `.claude/rules/`. Before this, a preference for all of a user's work was
+committed into whichever repo the session ran in, and no other project saw it. The decision-rule
+format moves to `decision-rule/v2`: the date and source leave the body's Why line for `decided`
+and `source` frontmatter, which Claude Code strips before loading a rule, so they no longer cost
+context in every session. This repo's 20 rule files are migrated to v2. All three rules that looked
+user-wide (`decision-artifact-locations.md`, `decision-pr-review.md`, `decision-no-home-paths.md`)
+stay in the repo, because each names this repo's folders or `validate.py`. The plan is
+`product/plans/decision-scope.md`.
+
+### Plugin versions
+
+| Plugin              | Version |
+| ------------------- | ------- |
+| `ceh-every-session` | 2.8.16  |
+
+### Added
+
+- `record-project-decisions`: a scope step (project, user, or one task) in Record and Seed mode,
+  and user-scope rule files in `~/.claude/rules/`, checked against `~/.claude/CLAUDE.md` too.
+
+### Changed
+
+- `decision-rule/v2`: `decided` and `source` move into frontmatter, and the Why line keeps only the
+  reason. The 20 files in `.claude/rules/` are migrated.
+
+---
+
 ## 2026-10-28
 
 `ceh-git-workflow` gains a hook that brings the nested `.agents_workspace` repo into git worktrees.

@@ -1,5 +1,7 @@
 ---
-schema: decision-rule/v1
+schema: decision-rule/v2
+decided: 2026-10-05
+source: "CLAUDE.md (0ee2394)"
 ---
 
 # Changelog sections
@@ -11,4 +13,4 @@ new one goes at the top, below the intro. A section holds prose on what changed 
 `### Added` / `### Changed` / `### Fixed`. In the same commit, `docs/PLUGIN_VERSIONS.md` gets the
 new version and the section date on every bumped plugin's row.
 
-Why: with no releases, the dated sections are how a change is announced and traced. Decided 2026-10-05. Source: CLAUDE.md (0ee2394).
+Why: with no releases, the dated sections are how a change is announced and traced.
