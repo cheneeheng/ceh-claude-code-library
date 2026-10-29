@@ -168,3 +168,4 @@ Code strips before loading, and this repo's rule set holds only what binds this 
 - 2026-10-29 Built Phase 3: `ls .claude/rules/`, all three candidates still listed, no split per the user
 - 2026-10-29 Checked: 18 Built, 1 Deviation (the starlight mirror was not edited: it is generated from the README and git-ignored)
 - 2026-10-29 Design changed: was "`source` is always single-quoted, per `decision-frontmatter-scalars.md`", now "`source` is always quoted, ... single-quoted when the value holds a double quote", because the pre-commit prettier hook rewrites single quotes to double unless the value holds one
+- 2026-10-29 PR: #183 https://github.com/cheneeheng/ceh-claude-code-library/pull/183
