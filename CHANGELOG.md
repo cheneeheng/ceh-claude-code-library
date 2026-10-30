@@ -18,7 +18,7 @@ separately. Nothing here is committed work and no plugin changes.
 
 ### Changed
 
-- `docs/IDEAS.md`: add 37 open ideas, and credit Hermes `setup-wizard-generator` on the rejected
+- `docs/IDEAS.md`: add 36 open ideas, and credit Hermes `setup-wizard-generator` on the rejected
   "Human-steps wizard" entry instead of proposing it again.
 
 ## 2026-10-29
