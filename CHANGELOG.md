@@ -9,6 +9,18 @@ before this repo live in
 
 ---
 
+## 2026-10-30
+
+`docs/IDEAS.md` gains the ideas from the OpenClaw and Hermes Agent competitor analyses, merged where
+both ship the same thing and ranked by value, so they are not lost in reports that only one session
+reads. Ideas for the planned memory plugin are left out, because that plugin is being built
+separately. Nothing here is committed work and no plugin changes.
+
+### Changed
+
+- `docs/IDEAS.md`: add 37 open ideas, and credit Hermes `setup-wizard-generator` on the rejected
+  "Human-steps wizard" entry instead of proposing it again.
+
 ## 2026-10-29
 
 `ceh-every-session:record-project-decisions` now decides each decision's scope before writing it.
