@@ -9,6 +9,17 @@ before this repo live in
 
 ---
 
+## 2026-10-31
+
+`docs/IDEAS.md` gains the ideas from the diagram-design competitor analysis, refreshed against its
+2.6.136, which the comparison session left out of the backlog. Nothing here is committed work and no
+plugin changes.
+
+### Changed
+
+- `docs/IDEAS.md`: add 13 open ideas, and credit diagram-design's PR visual proof on the open
+  "Visual-change gate" entry instead of proposing it again.
+
 ## 2026-10-30
 
 `docs/IDEAS.md` gains the ideas from the OpenClaw and Hermes Agent competitor analyses, merged where
