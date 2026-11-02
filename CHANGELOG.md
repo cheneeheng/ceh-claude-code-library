@@ -19,9 +19,10 @@ diagrams splitting across pages, so the recipe also keeps each one on a single p
 
 ### Plugin versions
 
-| Plugin          | Version |
-| --------------- | ------- |
-| `ceh-ui-design` | 1.0.9   |
+| Plugin              | Version |
+| ------------------- | ------- |
+| `ceh-business-plan` | 1.1.14  |
+| `ceh-ui-design`     | 1.0.9   |
 
 ### Added
 
@@ -36,6 +37,8 @@ diagrams splitting across pages, so the recipe also keeps each one on a single p
 
 - `docs/CROSS_REFERENCES.md`: the new bullets join the page-only Mermaid rules.
 - `product/retros/2026-10-30-repeat-mistake.md`: record what the prose cap investigation found.
+- `ceh-business-plan` page shell: text and panels share one right edge in a column capped at 1100px,
+  replacing a `72ch` text column above 960px diagrams, which read as sloppy.
 
 ### Fixed
 
