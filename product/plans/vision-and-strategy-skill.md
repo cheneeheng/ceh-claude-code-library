@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: A skill that writes a repo's vision and strategy docs
-status: ready
+status: built
 created: 2026-11-02
 ---
 
@@ -220,7 +220,7 @@ one PR, because that file wants its own.
   file's Changing this file section wants its own PR.
 - **Check:** `python tools/validate-plugins/validate.py` passes, and
   `grep ceh-vision-and-strategy docs/VISION.md` finds the row.
-- **Status:** todo
+- **Status:** done. `validate.py`: "OK: all plugin checks passed", and the grep finds the Shape row.
 
 ## Open
 
@@ -233,3 +233,4 @@ one PR, because that file wants its own.
 - 2026-11-02 Planned: status ready
 - 2026-11-02 Reviewed: Revise first, 4 blocking (step 3 overwrites an adopted doc; no path for a file without a schema line; step 4 forbids the step 7 confirmation; tests assume a repo with history)
 - 2026-11-02 PR: #193 https://github.com/cheneeheng/ceh-claude-code-library/pull/193
+- 2026-11-02 Built Phase 3: python tools/validate-plugins/validate.py, OK: all plugin checks passed
