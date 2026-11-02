@@ -3,7 +3,9 @@ agent is named in backticks in its plugin README."""
 
 from __future__ import annotations
 
+from pathlib import Path
 import re
+import subprocess
 import sys
 
 from common import REPO, fail, main, plugin_dirs, rel
@@ -35,10 +37,31 @@ HYGIENE_SUFFIXES = {
 }
 
 
+def committable_files() -> list[Path]:
+    """Tracked files plus new ones git would accept, so git-ignored output never fails the gate."""
+    listed = subprocess.run(
+        ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        cwd=REPO,
+        check=True,
+    ).stdout
+    return [REPO / name for name in listed.split("\0") if name]
+
+
 def check() -> None:
-    files = list(REPO.glob("*.md"))
-    for root in HYGIENE_ROOTS:
-        files += [p for p in (REPO / root).rglob("*") if p.suffix in HYGIENE_SUFFIXES]
+    files = [
+        p
+        for p in committable_files()
+        if p.is_file()
+        and p.suffix in HYGIENE_SUFFIXES
+        and (
+            p.parent == REPO
+            and p.suffix == ".md"
+            or p.relative_to(REPO).parts[0] in HYGIENE_ROOTS
+        )
+    ]
     for path in files:
         text = path.read_text(encoding="utf-8")
         for n, line in enumerate(text.splitlines(), 1):
