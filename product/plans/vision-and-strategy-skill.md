@@ -232,3 +232,4 @@ one PR, because that file wants its own.
 
 - 2026-11-02 Planned: status ready
 - 2026-11-02 Reviewed: Revise first, 4 blocking (step 3 overwrites an adopted doc; no path for a file without a schema line; step 4 forbids the step 7 confirmation; tests assume a repo with history)
+- 2026-11-02 PR: #193 https://github.com/cheneeheng/ceh-claude-code-library/pull/193
