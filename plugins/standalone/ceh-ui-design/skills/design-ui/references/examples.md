@@ -181,6 +181,100 @@ matching hairline border; the initial in the ramp color.
 >
 ```
 
+## Mermaid diagrams in a column
+
+Each diagram fits its panel, stops at natural size, and keeps 16px labels at 11px or larger. Past
+that the panel scrolls, and in print the diagram scales to one page. `.diagram` and `.doc-column`
+are the page's own classes, not the theme's.
+
+```html
+<div class="diagram card">
+  <pre class="mermaid">
+flowchart LR
+  a["Written"]:::ok --> b["Reviewed"]
+</pre>
+</div>
+```
+
+Colour nodes from page CSS, not `classDef`. Mermaid's parser rejects `var()` there, and a dark-theme
+`rgba()` wash breaks on its commas. `:::ok` still adds the class, and the tokens follow the theme:
+
+```css
+.doc-column {
+  min-width: 0; /* the grid or flex column beside the contents rail */
+}
+.diagram {
+  padding: var(--space-4);
+  overflow-x: auto;
+}
+html:not(.no-diagrams) pre.mermaid:not([data-processed]) {
+  visibility: hidden;
+}
+pre.mermaid svg {
+  display: block;
+  margin-inline: auto;
+  height: auto;
+  max-width: var(--natural);
+  min-width: calc(var(--natural) * 11 / 16);
+}
+.node.ok :is(rect, path, polygon) {
+  fill: var(--success-wash) !important;
+  stroke: var(--success) !important;
+}
+@media print {
+  .diagram {
+    overflow-x: visible;
+    break-inside: avoid;
+  }
+  pre.mermaid svg {
+    min-width: 0;
+    max-height: 90vh;
+  }
+}
+```
+
+`themeVariables` also needs real colours, so read each from `getComputedStyle` before
+`mermaid.initialize`. If the CDN fails, each panel shows its source text.
+
+```html
+<script type="module">
+  const mermaid = (
+    await import("https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.esm.min.mjs").catch(
+      () => null,
+    )
+  )?.default;
+  if (!mermaid) {
+    document.documentElement.classList.add("no-diagrams");
+  } else {
+    const token = (name) =>
+      getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    mermaid.initialize({
+      startOnLoad: false,
+      deterministicIds: true,
+      theme: "base",
+      flowchart: { useMaxWidth: false, wrappingWidth: 200 },
+      themeVariables: {
+        background: token("--surface"),
+        primaryTextColor: token("--fg"),
+        lineColor: token("--fg-muted"),
+        clusterBkg: token("--surface-2"),
+        clusterBorder: token("--border-strong"),
+        titleColor: token("--fg"),
+        edgeLabelBackground: token("--surface"),
+        fontFamily: token("--font-ui"),
+      },
+    });
+    await document.fonts.ready;
+    await mermaid.run();
+    document.querySelectorAll("pre.mermaid svg").forEach((s) => {
+      s.style.setProperty("--natural", s.viewBox.baseVal.width + "px");
+      s.setAttribute("width", "100%");
+      s.removeAttribute("height");
+    });
+  }
+</script>
+```
+
 ## Input as recessed well, auto-growing
 
 Inside a `--surface` card, the field steps _down_ to `--bg`; short placeholder, explanation in the

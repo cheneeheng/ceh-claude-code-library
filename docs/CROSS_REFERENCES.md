@@ -593,7 +593,8 @@ a user may install the business plan without `ceh-ui-design`. Check with `cmp` a
 **Shared:** the four rules that hold wherever a Mermaid diagram renders: chain subgraphs with `~~~`
 and `direction LR`, gantt `tickInterval`, `xychart-beta` height in front matter, and validate with
 the Mermaid CLI then look at the result. The page-only rules below them (`wrappingWidth: 200`,
-`document.fonts.ready`) stay in `design-ui` alone, because a Markdown file has no page to configure.
+`document.fonts.ready`, the fit rule, the size budget, the too-wide order, and the scroller rule)
+stay in `design-ui` alone, because a Markdown file has no page to configure.
 
 ## Skill-started guard (`skill-started-guard.py`)
 

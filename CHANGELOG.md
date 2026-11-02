@@ -9,6 +9,32 @@ before this repo live in
 
 ---
 
+## 2026-11-02
+
+`ceh-ui-design:design-ui` now tells an agent how wide a Document with diagrams is and how every
+Mermaid diagram fits it, with markup to copy, because a page built without those rules improvised a
+cutoff that scrolled some diagrams and shrank others. The markup was run in headless Chrome on the
+page that showed the mistake, at 1760px, 1280px, and 400px and in print. The print run found tall
+diagrams splitting across pages, so the recipe also keeps each one on a single page.
+
+### Plugin versions
+
+| Plugin          | Version |
+| --------------- | ------- |
+| `ceh-ui-design` | 1.0.9   |
+
+### Added
+
+- `design-ui`: a Content width bullet for a Document with diagrams, Mermaid bullets for the fit rule,
+  size budget, too-wide order, and scroller, and a Document audit item in the Review pass.
+- `design-ui` `references/examples.md`: a "Mermaid diagrams in a column" section with the panel
+  markup, CSS, script, and node colours from page CSS.
+- `product/retros/2026-10-30-repeat-mistake.md` and `product/plans/design-ui-diagram-width.md`.
+
+### Changed
+
+- `docs/CROSS_REFERENCES.md`: the new bullets join the page-only Mermaid rules.
+
 ## 2026-10-31
 
 `docs/IDEAS.md` gains the ideas from the diagram-design competitor analysis, refreshed against its
