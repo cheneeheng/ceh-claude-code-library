@@ -127,3 +127,4 @@ None
 - 2026-11-02 Planned: status ready
 - 2026-11-02 Reviewed: Revise first, 4 blocking (Procedure step 3 still opens examples.md on every build; triggers name the component, not its condition; Variants trigger drops the logic prototype; Motion cut has an undecidable test)
 - 2026-11-02 Design changed: was "`SKILL.md` ends at least 5,000 bytes smaller", now the cut rule wins and the build reports the figure, because a number could force a good rule out; was three Motion bullets conditional on what the model does untold, now only "Move and resize" goes, because no eval can apply that test
+- 2026-11-02 PR: #188 https://github.com/cheneeheng/ceh-claude-code-library/pull/188
