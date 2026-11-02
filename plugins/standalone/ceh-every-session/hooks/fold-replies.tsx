@@ -1,8 +1,7 @@
 import { atom, read, update } from 'claude-code'
-import type { EngineInterface, Register } from 'claude-code'
+import type { Register } from 'claude-code'
 
 import type { SectionId } from '../types'
-import { inline } from './fold-title'
 import { split } from './split-summary'
 import { takeDecisions } from './take-decisions'
 
@@ -12,9 +11,6 @@ const showAll = atom({ plugin: 'ceh-every-session', key: 'showAll' } as const, f
 
 // A footer mode label, not $.ui.status: the engine draws a status with a warning mark.
 const FOLDED = 'folded replies (mod)'
-
-const toggle = ($: EngineInterface, id: SectionId) =>
-  update($, open, list => (list.includes(id) ? list.filter(one => one !== id) : [...list, id]))
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
@@ -34,12 +30,6 @@ export const register: Register = on => {
     return { text: isAll ? 'Details shown under summaries.' : 'Details folded under summaries.' }
   })
 
-  on('ui.message', async ($, e, next) => {
-    await toggle($, e.element)
-
-    return next(e)
-  })
-
   on('ui.render', { component: 'SessionMode' }, async ($, e, next) =>
     (await read($, showAll)) ? next(e) : next({ ...e, props: { modes: [...e.props.modes, FOLDED] } }),
   )
@@ -52,10 +42,17 @@ export const register: Register = on => {
 
     const opened = await read($, open)
     const picks = await read($, picked)
-    const elements = $.ui.resolve(e)
-    const { Box, Button, Markdown, Text } = elements
-    const Client = 'Client' in elements ? elements.Client : undefined
+    const { Box, Button, Markdown, Text } = $.ui.resolve(e)
     const decisionId = (index: number) => `${e.requestId}#d${index}`
+    // A one-line title drawn as `Text` spans, since a Button takes no Markdown:
+    // each `code` span in the color a reply draws inline code in. An unpaired
+    // backtick leaves the line as written.
+    const inline = (line: string) => {
+      const parts = line.split('`')
+      return parts.length % 2 === 0
+        ? line
+        : parts.map((part, at) => (at % 2 ? <Text color="permission">{part}</Text> : part))
+    }
 
     // A pick fills the prompt box with every pick of this reply, unsent, so the
     // person can add to it or pick again before pressing Enter.
@@ -86,19 +83,18 @@ export const register: Register = on => {
           // A listed topic is the exception to the mode: open when folding, folded under /details on.
           const isListed = opened.includes(id)
           const isOpen = isAll !== isListed
-          const head = section.number ? `${section.number} ` : ''
+          const toggle = () =>
+            update($, open, list => (isListed ? list.filter(one => one !== id) : [...list, id]))
 
           return (
             <>
               <Box flexDirection="column" borderStyle="round" borderDimColor paddingX={1}>
-                {Client && e.surface === 'terminal' ? (
-                  <Client key={id} module="./fold-title.tsx" props={{ head, topic: section.topic, isOpen }} />
-                ) : (
-                  <Button key={id} plain onPress={() => toggle($, id)}>
-                    <Text dimColor>{isOpen ? '▾' : '▸'}</Text> {head}
-                    <Text bold={isOpen}>{inline(Text, section.topic)}</Text>
-                  </Button>
-                )}
+                {/* Never a Client with a pointer listener: one turns on pixel mouse reports for the
+                    whole terminal, and VS Code's rounded cell height then shifts every click. */}
+                <Button key={id} plain onPress={toggle}>
+                  <Text dimColor>{isOpen ? '▾' : '▸'}</Text> {section.number && `${section.number} `}
+                  <Text bold={isOpen}>{inline(section.topic)}</Text>
+                </Button>
                 {isOpen && (
                   <Box paddingLeft={2}>
                     <Markdown text={section.body.trim()} />
@@ -121,11 +117,11 @@ export const register: Register = on => {
 
           return (
             <Box flexDirection="column" borderStyle="round" borderDimColor paddingX={1}>
-              <Text bold>{inline(Text, decision.question)}</Text>
+              <Text bold>{inline(decision.question)}</Text>
               {decision.options.map((option, at) => (
                 <Button key={`${decisionId(index)}o${at}`} plain onPress={() => pick(index, at)}>
                   <Text dimColor={chosen !== at}>{chosen === at ? '●' : '○'}</Text> {at + 1}.{' '}
-                  {inline(Text, option)}
+                  {inline(option)}
                 </Button>
               ))}
             </Box>
