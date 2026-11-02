@@ -29,7 +29,9 @@ summarized under Output.
    The label may move up mid-session, never down: a spike that turns into a keeper gets a plan, and
    architectural work keeps its plan when it shrinks.
 
-2. **Read what exists before asking.** Read the format file, the repo, every plan in the plans
+2. **Read what exists before asking.** When a `VISION.md` and `STRATEGY.md` exist (in `product/`,
+   `docs/`, the root, or where the repo's `CLAUDE.md` says), read them, and put anything the plan
+   would contradict under Open. Read the format file, the repo, every plan in the plans
    folder that is not `built`, and only the frontmatter of each `built` one (read its full text
    only when the new work touches what it built), the README, and any issue or spec the user
    named. When `.agents_workspace/product/business/BUSINESS_PLAN.md` exists, set `business_plan` and take the goal and target

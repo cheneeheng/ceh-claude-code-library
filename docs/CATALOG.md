@@ -219,6 +219,12 @@ its prerequisites, hooks, and environment variables.
 | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | [Audit Codebase Security](../plugins/standalone/ceh-security-audit/skills/audit-codebase-security/SKILL.md) | `/ceh-security-audit:audit-codebase-security` | The whole codebase needs a security audit: attack surface first, each entry point traced to its sinks, report-only by default |
 
+### [Vision and Strategy (`ceh-vision-and-strategy`)](../plugins/standalone/ceh-vision-and-strategy/)
+
+| Skill                                                                                                                | Invoke                                               | When                                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Write Vision and Strategy](../plugins/standalone/ceh-vision-and-strategy/skills/write-vision-and-strategy/SKILL.md) | `/ceh-vision-and-strategy:write-vision-and-strategy` | A repo's direction must be written down so later decisions can be settled: drafts `VISION.md` and `STRATEGY.md` from the repo, confirms them with its owner, tests them on real decisions |
+
 ### [Competitor Analysis (`ceh-competitor-analysis`)](../plugins/standalone/ceh-competitor-analysis/)
 
 | Skill                                                                                                    | Invoke                                         | When                                                                                                                                         |

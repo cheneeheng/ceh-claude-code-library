@@ -139,6 +139,9 @@ Each moment names the plugin, the command that starts it, and the file it writes
   `/ceh-business-plan:develop-business-plan`. Writes `.agents_workspace/product/business/BUSINESS_PLAN.md`.
 - Learn from a competitor's repo or product: install `ceh-competitor-analysis`, start with
   `/ceh-competitor-analysis:analyze-competitor`. Writes reports in `.agents_workspace/`.
+- Write down the repo's direction: install `ceh-vision-and-strategy`, start with
+  `/ceh-vision-and-strategy:write-vision-and-strategy`. Writes `product/VISION.md` and
+  `product/STRATEGY.md`.
 
 **Build**
 
