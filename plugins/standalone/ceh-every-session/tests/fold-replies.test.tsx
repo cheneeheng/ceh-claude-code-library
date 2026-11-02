@@ -1,5 +1,6 @@
 import type { On } from 'claude-code'
 import { expect, test } from 'claude-code/testing'
+import type { Mounted } from 'claude-code/testing'
 
 const REPLY = [
   '1. **Alpha** · _done_',
@@ -52,23 +53,72 @@ const engineDraws = (on: On) =>
     return <Text>{e.props.text}</Text>
   })
 
-test('a reply with a summary list folds each topic behind its own button', async $ => {
-  for (const surface of ['terminal', 'desktop'] as const) {
-    const ui = await $.ui.mount({ surface, ...message(REPLY) })
-    const summary = await ui.find({ type: 'Markdown', text: /^1\. \*\*Alpha\*\*/ })
-    expect(summary?.text).toMatch(/Did beta\.$/)
-    expect((await ui.find({ key: 'reply-1#s' }))?.text).toMatch(/^Summary\s*1\. \*\*Alpha\*\*[\s\S]*Did beta\.$/)
-    expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
-    expect((await ui.find({ key: 'reply-1#0' }))?.text).toMatch(/▸ 1 Alpha/)
+// A left click as the terminal reports it to a topic title: a press, then a release.
+const click = async (ui: Pick<Mounted<'terminal'>, 'pointer' | 'resize'>, key: string, upAt = 1) => {
+  await ui.resize({ columns: 20, rows: 1, in: key })
+  await ui.pointer({ type: 'down', x: 1, y: 0, button: 'left', in: key })
+  await ui.pointer({ type: 'up', x: upAt, y: 0, button: 'left', in: key })
+}
 
-    await ui.press({ key: 'reply-1#0' })
-    expect(await ui.find({ text: /alpha detail/ })).toBeDefined()
-    expect(await ui.find({ text: /beta detail/ })).toBeUndefined()
+// The title times clicks by the real clock, so the wait is real too.
+declare const setTimeout: (done: () => void, ms: number) => void
+const pastRepressWindow = () => new Promise<void>(done => setTimeout(done, 250))
 
-    await ui.press({ key: 'reply-1#0' })
-    expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
-    await ui.unmount()
-  }
+test('a reply with a summary list folds each topic, a desktop behind its own button', async $ => {
+  const ui = await $.ui.mount({ surface: 'desktop', ...message(REPLY) })
+  const summary = await ui.find({ type: 'Markdown', text: /^1\. \*\*Alpha\*\*/ })
+  expect(summary?.text).toMatch(/Did beta\.$/)
+  expect((await ui.find({ key: 'reply-1#s' }))?.text).toMatch(/^Summary\s*1\. \*\*Alpha\*\*[\s\S]*Did beta\.$/)
+  expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
+  expect((await ui.find({ key: 'reply-1#0' }))?.text).toMatch(/▸ 1 Alpha/)
+
+  await ui.press({ key: 'reply-1#0' })
+  expect(await ui.find({ text: /alpha detail/ })).toBeDefined()
+  expect(await ui.find({ text: /beta detail/ })).toBeUndefined()
+
+  await ui.press({ key: 'reply-1#0' })
+  expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
+  await ui.unmount()
+})
+
+test('in a terminal a topic title takes its clicks itself, so the transcript cannot select it', async $ => {
+  const ui = await $.ui.mount({ surface: 'terminal', ...message(REPLY) })
+  expect(await ui.find({ type: 'Button' })).toBeUndefined()
+  expect((await ui.find({ key: 'reply-1#s' }))?.text).toMatch(/^Summary\s*1\. \*\*Alpha\*\*[\s\S]*Did beta\.$/)
+  expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
+  expect(await ui.find({ in: 'reply-1#0', text: /▸ 1 Alpha/ })).toBeDefined()
+
+  await click(ui, 'reply-1#0')
+  expect(await ui.find({ text: /alpha detail/ })).toBeDefined()
+  expect(await ui.find({ text: /beta detail/ })).toBeUndefined()
+  expect(await ui.find({ in: 'reply-1#0', text: /▾ 1 Alpha/ })).toBeDefined()
+
+  await pastRepressWindow()
+  await click(ui, 'reply-1#0')
+  expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
+  await ui.unmount()
+})
+
+test('an accidental double click on a topic counts once, a later click counts again', async $ => {
+  const ui = await $.ui.mount({ surface: 'terminal', ...message(REPLY) })
+  await click(ui, 'reply-1#0')
+  await click(ui, 'reply-1#0')
+  expect(await ui.find({ text: /alpha detail/ })).toBeDefined()
+
+  await pastRepressWindow()
+  await click(ui, 'reply-1#0')
+  expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
+  await ui.unmount()
+})
+
+test('a click whose hand slips along the title still counts, one dragged off it does not', async $ => {
+  const ui = await $.ui.mount({ surface: 'terminal', ...message(REPLY) })
+  await click(ui, 'reply-1#0', 25)
+  expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
+
+  await click(ui, 'reply-1#0', 3)
+  expect(await ui.find({ text: /alpha detail/ })).toBeDefined()
+  await ui.unmount()
 })
 
 test('a lead-in line before the summary list shows as is, and the topics still fold', async $ => {
@@ -76,7 +126,7 @@ test('a lead-in line before the summary list shows as is, and the topics still f
   expect(await ui.find({ type: 'Markdown', text: /^I agree, with one caveat\.$/ })).toBeDefined()
   expect(await ui.find({ type: 'Markdown', text: /^1\. \*\*Alpha\*\*/ })).toBeDefined()
   expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
-  expect((await ui.find({ key: 'reply-1#0' }))?.text).toMatch(/▸ 1 Alpha/)
+  expect(await ui.find({ in: 'reply-1#0', text: /▸ 1 Alpha/ })).toBeDefined()
   await ui.unmount()
 })
 
@@ -93,7 +143,7 @@ test('closing text below a --- line shows open in its own Notes box, outside its
   expect((await ui.find({ key: 'reply-1#1a' }))?.text).toMatch(/^Notes\s*Do you want me to go on\?\s+Tests: 3 of 3 pass\./)
   expect(await ui.find({ text: /continued beta line/ })).toBeUndefined()
 
-  await ui.press({ key: 'reply-1#1' })
+  await click(ui, 'reply-1#1')
   const beta = await ui.find({ type: 'Markdown', text: /beta detail/ })
   expect(beta?.text).toMatch(/continued beta line/)
   expect(beta?.text).not.toMatch(/Do you want/)
@@ -106,7 +156,7 @@ test('a code block and the bullets after it stay inside their fold', async $ => 
   expect(await ui.find({ text: /alpha detail/ })).toBeUndefined()
   expect(await ui.find({ text: /tree\// })).toBeUndefined()
 
-  await ui.press({ key: 'reply-1#0' })
+  await click(ui, 'reply-1#0')
   const alpha = await ui.find({ type: 'Markdown', text: /tree\// })
   expect(alpha?.text).toMatch(/\*\*leaf\*\*[\s\S]*alpha detail/)
   expect(await ui.find({ key: 'reply-1#1' })).toBeDefined()
@@ -119,7 +169,7 @@ test('paragraphs, tables, and bullets after them all stay inside their fold', as
   const ui = await $.ui.mount({ surface: 'terminal', ...message(reply) })
   expect(await ui.find({ text: /Where they differ|after the table|A last note/ })).toBeUndefined()
 
-  await ui.press({ key: 'reply-1#0' })
+  await click(ui, 'reply-1#0')
   const alpha = await ui.find({ type: 'Markdown', text: /alpha detail/ })
   expect(alpha?.text).toMatch(/Where they differ[\s\S]*\| a +\| 6\/6[\s\S]*after the table[\s\S]*A last note/)
   await ui.unmount()
@@ -147,14 +197,15 @@ test('decision blocks become options, and a pick fills the prompt box with every
 test('backticks in a topic, a question, or an option draw as code, with no backticks shown', async $ => {
   const reply = `${REPLY.replaceAll('Alpha', '`alpha.sh` hook')}\n\n**Decision: Keep \`alpha.sh\`?**\n\n1. Yes, keep \`alpha.sh\` (recommended)\n2. No`
   const ui = await $.ui.mount({ surface: 'terminal', ...message(reply) })
-  for (const key of ['reply-1#0', 'reply-1#d0o0']) {
-    const found = await ui.find({ key })
-    expect(found?.text).toMatch(/alpha\.sh/)
-    expect(found?.text).not.toMatch(/`/)
-  }
+  const option = await ui.find({ key: 'reply-1#d0o0' })
+  expect(option?.text).toMatch(/alpha\.sh/)
+  expect(option?.text).not.toMatch(/`/)
+  const isCode = (one: { props: { color?: unknown } }) => one.props.color === 'permission'
+  const title = await ui.findAll({ in: 'reply-1#0', type: 'Text', text: 'alpha.sh' })
+  expect(title.filter(isCode)).toHaveLength(1)
+  expect(await ui.find({ in: 'reply-1#0', text: /`/ })).toBeUndefined()
   const spans = await ui.findAll({ type: 'Text', text: 'alpha.sh' })
-  const code = spans.filter(one => one.props.color === 'permission')
-  expect(code.map(one => one.text)).toEqual(['alpha.sh', 'alpha.sh', 'alpha.sh'])
+  expect(spans.filter(isCode).map(one => one.text)).toEqual(['alpha.sh', 'alpha.sh'])
   await ui.unmount()
 })
 
@@ -185,9 +236,9 @@ test('/details on boxes the summary and opens every topic, /details off folds ag
   const shown = await $.ui.mount({ surface: 'terminal', ...message(REPLY) })
   expect(await shown.find({ key: 'reply-1#s' })).toBeDefined()
   expect(await shown.find({ text: /beta detail/ })).toBeDefined()
-  expect((await shown.find({ key: 'reply-1#1' }))?.text).toMatch(/▾ 2 Beta/)
+  expect(await shown.find({ in: 'reply-1#1', text: /▾ 2 Beta/ })).toBeDefined()
 
-  await shown.press({ key: 'reply-1#1' })
+  await click(shown, 'reply-1#1')
   expect(await shown.find({ text: /beta detail/ })).toBeUndefined()
   await shown.unmount()
 

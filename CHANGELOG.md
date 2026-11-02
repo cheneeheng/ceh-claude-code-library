@@ -17,11 +17,17 @@ cutoff that scrolled some diagrams and shrank others. The markup was run in head
 page that showed the mistake, at 1760px, 1280px, and 400px and in print. The print run found tall
 diagrams splitting across pages, so the recipe also keeps each one on a single page.
 
+A folded Topic in the `fold-replies` mod no longer turns a click into a text highlight. Claude Code
+reads a second click within 500 ms and one cell as a word select and never presses the Button under
+it, and a Button cannot opt out, so a terminal now draws the title as a `Client` that holds the
+pointer itself.
+
 ### Plugin versions
 
 | Plugin              | Version |
 | ------------------- | ------- |
 | `ceh-business-plan` | 1.1.14  |
+| `ceh-every-session` | 2.8.17  |
 | `ceh-ui-design`     | 1.0.10  |
 
 ### Added
@@ -51,6 +57,9 @@ diagrams splitting across pages, so the recipe also keeps each one on a single p
 
 - `validate.py` `hygiene`: scan tracked and new files only, because git-ignored `node_modules` and
   eval reports turned a clean branch red in a working checkout, so the local gate never passed.
+- `ceh-every-session` `fold-replies` mod: a quick second click or a one-cell slip on a Topic title
+  toggles or does nothing instead of selecting its text, and a double click counts once. New
+  `hooks/fold-title.tsx`, record in `product/fixes/fold-title-click-selects-text.md`.
 
 ## 2026-10-31
 
