@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: design-ui gets a width rule, a fit rule, and worked markup for Mermaid pages
-status: building
+status: built
 created: 2026-11-02
 ---
 
@@ -116,7 +116,8 @@ rules, `classDef`, and fit-gap rows of `product/retros/2026-10-30-repeat-mistake
 - **Check:** `python tools/validate-plugins/validate.py` passes on a clean export of the index and in
   CI, `grep -c "awaiting approval" product/retros/2026-10-30-repeat-mistake.md` prints `2`, and a
   `git grep -i` for the private repo and page names finds nothing.
-- **Status:** todo
+- **Status:** done. `validate.py` printed "OK: all plugin checks passed" on a clean export, and CI run
+  41462173569 `validate` succeeded. The retro count is `2`, and the private-name grep finds nothing.
 
 ## Open
 
@@ -130,3 +131,6 @@ None
 - 2026-11-02 Built Phase 1: headless Chrome measurements, 23 of 23 rendered, smallest label 11px, no page scroll at 1760px, 1280px, or 400px
 - 2026-11-02 Design changed: was "the replacement CSS and JS in the retro, unchanged unless Phase 1 fails it", now print adds `break-inside: avoid` and `max-height: 90vh`, because Phase 1 printed the tall diagrams split and overlapping the next section
 - 2026-11-02 Built Phase 2: page built from `references/examples.md` passes the Phase 1 measures, and the recipe also sets `deterministicIds` and the cluster and edge-label theme variables, as the tested page did
+- 2026-11-02 PR: #187 https://github.com/cheneeheng/ceh-claude-code-library/pull/187
+- 2026-11-02 Built Phase 3: CI run 41462173569 validate success, "OK: all plugin checks passed" on a clean export
+- 2026-11-02 Checked: 28 Built, 0 Gap, 0 Deviation, 0 Extra, 0 Failing, 0 Cannot verify
