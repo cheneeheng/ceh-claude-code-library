@@ -22,6 +22,12 @@ reads a second click within 500 ms and one cell as a word select and never press
 it, and a Button cannot opt out, so a terminal now draws the title as a `Client` that holds the
 pointer itself.
 
+That `Client` moved the clickable row of a Topic title one line below the title in VS Code, so the
+title is a Button again. A `Client` with a pointer listener turns on pixel mouse reports for the whole
+terminal, VS Code answers with a rounded cell height, and Claude Code's pixel-to-cell conversion then
+drifts down the screen. A quick second click or a slip on a title selects its text again, which is the
+smaller fault.
+
 A new plugin, `ceh-vision-and-strategy`, writes a repo's `VISION.md` and `STRATEGY.md`, because agents
 need written intent to act as intended and no skill covered that moment. Build planning now reads the
 two docs when they exist, so they are a handoff and not an island.
@@ -32,7 +38,7 @@ two docs when they exist, so they are a handoff and not an island.
 | ------------------------- | ------- |
 | `ceh-build-planning`      | 1.1.17  |
 | `ceh-business-plan`       | 1.1.14  |
-| `ceh-every-session`       | 2.8.17  |
+| `ceh-every-session`       | 2.8.18  |
 | `ceh-ui-design`           | 1.0.10  |
 | `ceh-vision-and-strategy` | 1.0.0   |
 
@@ -73,6 +79,9 @@ two docs when they exist, so they are a handoff and not an island.
 - `ceh-every-session` `fold-replies` mod: a quick second click or a one-cell slip on a Topic title
   toggles or does nothing instead of selecting its text, and a double click counts once. New
   `hooks/fold-title.tsx`, record in `product/fixes/fold-title-click-selects-text.md`.
+- `ceh-every-session` `fold-replies` mod: a click on a Topic title toggles it at the title's own row in
+  VS Code, and no longer one row below. Draw the title as a Button and remove `hooks/fold-title.tsx`,
+  record in `product/fixes/fold-title-click-row-offset.md`.
 
 ## 2026-10-31
 
