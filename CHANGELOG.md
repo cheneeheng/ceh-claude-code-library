@@ -40,7 +40,6 @@ two docs when they exist, so they are a handoff and not an island.
 
 - `ceh-vision-and-strategy` at 1.0.0, with the skill `write-vision-and-strategy`, its `vision` and
   `strategy` templates and schemas, and the plan `product/plans/vision-and-strategy-skill.md`.
-
 - `design-ui`: a Content width bullet for a Document with diagrams, Mermaid bullets for the fit rule,
   size budget, too-wide order, and scroller, and a Document audit item in the Review pass.
 - `design-ui` `references/examples.md`: a "Mermaid diagrams in a column" section with the panel
@@ -50,6 +49,8 @@ two docs when they exist, so they are a handoff and not an island.
 
 ### Changed
 
+- `docs/VISION.md`: list `ceh-vision-and-strategy` in the Shape row, closing the gap
+  `docs/STRATEGY.md` recorded until this PR.
 - `write-build-plan` and `review-build-plan`: read a repo's `VISION.md` and `STRATEGY.md` when they
   exist, and treat a contradiction as an Open item or a finding.
 - `docs/STRATEGY.md`: the new plugin in the Shape row and the spine, and the two docs in the kept files.

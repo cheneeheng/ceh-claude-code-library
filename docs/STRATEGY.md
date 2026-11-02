@@ -198,8 +198,7 @@ it installed be disabled. A document carries the route at no install cost. The b
 
 This list shrinks as the gaps close. Remove a line in the PR that closes it.
 
-- `docs/VISION.md` does not list `ceh-vision-and-strategy` in its Shape row yet, because a change to
-  that file lands in its own PR. The next PR closes this.
+No known gaps as of 2026-11-02.
 
 ## Open questions
 
