@@ -1,15 +1,54 @@
 # UI Design Examples
 
-Worked markup for the `design-ui` finishing recipes, in the skill's order. The core rules
-(Layout → Density) are fully stated in `SKILL.md` and need no markup here. All snippets use the
-bundled theme contract (tokens + component classes) and plain HTML — they translate 1:1 to Svelte
-or JSX.
+Worked markup for the `design-ui` finishing recipes, in the skill's order, plus the full rules of
+each recipe that applies only when its component is present. `SKILL.md` names the section to read
+and when, so read only that section. The core rules (Layout → Density) are fully stated in
+`SKILL.md` and need no markup here. All snippets use the bundled theme contract (tokens + component
+classes) and plain HTML — they translate 1:1 to Svelte or JSX.
+
+## Variants board
+
+When the user asks for options ("show me a few directions", "I can't picture it"), or the design
+pass leaves question 2 or 4 with two answers that both fit, build a board before the real UI:
+
+1. Write two to four throwaway static HTML files to `.agents_workspace/product/design-variants/<surface>/`,
+   one per variant, plus an `index.html` that shows them side by side in labelled `<iframe>`s at
+   the same width. Use the bundled theme tokens and real-looking content, never lorem ipsum.
+2. Make each variant differ from the others on **one** design-pass answer (the archetype, the
+   theme, or the density) and label it with that answer. Variants that differ on everything at once
+   get feedback like "the second one", which maps to no decision.
+3. Show the board's path and ask which to keep. On feedback, keep the chosen answer fixed and vary
+   the next open one. Two or three rounds is the usual end.
+4. Record the chosen answers in the design-pass list, then build the real UI from them. The board
+   stays in `.agents_workspace/` and is never imported by the app.
+
+The same board serves a logic prototype: when a flow's behavior is the open question (a multi-step
+form, a drag interaction), make each variant a small self-contained HTML page with inline script
+that behaves the way that option would. With no user to choose, pick by the Review pass checklist
+and write the reason beside the chosen answer.
 
 ## Command dock
 
-Global state + its one action in a dock below the topbar: three centered panels split by hairline
-rules, width-aligned with the content column, accent rule crowning the top. The topbar above it
-stays brand + nav on `--bg` so the chrome recedes.
+When app-wide state exists (a current run, round, or selection) with one primary action on it, do
+not cram it into the topbar and do not repeat it per page. The topbar stays brand + nav on `--bg`
+so the chrome recedes; the state gets a **dock**: a bordered, rounded card floating below the
+chrome, width-aligned with the content column so its edges share the cards' gutter.
+
+- **Three panels split by hairline vertical rules, each panel's content centered.** Centered
+  blocks floating in open space read as accidental; centered inside delineated panels read as
+  deliberate — the rules are what license the centering.
+- **Left — identity:** eyebrow (`CURRENT ROUND`) → the state's name at display size (the dock's
+  focal point), with metadata as quiet mono chips on the title line, not raw hyperlinks.
+- **Center — the action:** the one primary action as an accent-filled pill with a one-line muted
+  micro-caption beneath saying what it does ("runs the 2 queued orders"). The center always
+  carries the state's _current_ call-to-action — a live progress line while running, the review
+  action when finished — and collapses (rules included) when there is no action.
+- **Right — outcome:** mirror the left's anatomy with an eyebrow + stat block for the last result;
+  the whole panel is a quiet link to the detail/history view.
+- Optionally crown the dock with a 2–3px accent rule across its top, echoing the primary button.
+- Hide the dock entirely when there is no state and no history — a fresh install gets no empty band.
+- **State lives once:** anything the dock shows disappears from individual views — no second
+  primary button, no repeated status heading, no duplicate cost readout anywhere in the app.
 
 ```html
 <section
@@ -135,8 +174,15 @@ current-row highlight:
 
 ## Lifecycle stepper
 
-One color per stage, used everywhere that stage appears. Past muted, current lit with a halo,
-future ghosted, rail filled through the current node.
+For any domain state machine (draft → running → review → done):
+
+- Assign each stage one color **once** and use it in every representation — status badge, stepper
+  node, history pill — so color alone identifies the stage anywhere in the app.
+- Show progression as a **node-and-rail stepper**, not text: small nodes joined by a continuous
+  rail, stage labels beneath.
+- Past stages muted; the current node lit in its stage color with a soft halo, pulsing only while
+  actively running; future stages ghosted. The rail fills through the current node so a transition
+  visibly flows forward.
 
 ```html
 <div
@@ -167,8 +213,10 @@ future ghosted, rail filled through the current node.
 
 ## Identity monogram
 
-Stable per-entity color from the data ramp (hash the name to pick `--data-1…6`); wash fill with a
-matching hairline border; the initial in the ramp color.
+- Entity cards and rows lead with a small rounded monogram tile: the entity's initial on a wash
+  tint picked from the `--data-*` ramp by a stable name hash, with a matching hairline border —
+  every entity keeps its color everywhere it appears.
+- On hover or keyboard focus, slide in a `→` at the card's corner so "this opens" is unmistakable.
 
 ```html
 <span
@@ -277,8 +325,14 @@ pre.mermaid svg {
 
 ## Input as recessed well, auto-growing
 
-Inside a `--surface` card, the field steps _down_ to `--bg`; short placeholder, explanation in the
-tooltip; grows with content but never sideways.
+- A field inside a card is a **recessed well**: `--bg` fill one rung below its card, hairline
+  border, brightening on hover, brand border on focus — visible at rest, never a ghost that only
+  appears on hover.
+- Free text of unpredictable length is an auto-growing textarea: `field-sizing: content` with a
+  one-line min-height and a viewport-relative max, plus `overflow-wrap: anywhere` so an unbroken
+  string wraps instead of widening the layout.
+- Placeholders are ≤3 words ("add instruction…"); the full explanation goes in the tooltip. A long
+  placeholder wraps and forces scrollbars in an empty field.
 
 ```html
 <td>
