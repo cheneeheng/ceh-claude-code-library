@@ -31,7 +31,8 @@ quotes the plan, and the verdict is delivered.
    reads what is written, and only the second is what the builder gets.
 3. **Read what the plan rests on**: every file, route, model, and dependency it names in the
    repo, and the business plan when `business_plan` is set. A plan claim the code contradicts is a
-   finding.
+   finding. A plan claim that contradicts the repo's `VISION.md` or `STRATEGY.md`, in `product/`,
+   `docs/`, the root, or where the repo's `CLAUDE.md` says, is a finding too.
 4. **Run each lens that applies**, and name the ones you skip with the reason.
 
    | Lens                     | Applies                                   | Asks                                                                                                                                                                                                                                                                                                                                                     |

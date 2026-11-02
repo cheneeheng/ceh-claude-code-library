@@ -22,15 +22,24 @@ reads a second click within 500 ms and one cell as a word select and never press
 it, and a Button cannot opt out, so a terminal now draws the title as a `Client` that holds the
 pointer itself.
 
+A new plugin, `ceh-vision-and-strategy`, writes a repo's `VISION.md` and `STRATEGY.md`, because agents
+need written intent to act as intended and no skill covered that moment. Build planning now reads the
+two docs when they exist, so they are a handoff and not an island.
+
 ### Plugin versions
 
-| Plugin              | Version |
-| ------------------- | ------- |
-| `ceh-business-plan` | 1.1.14  |
-| `ceh-every-session` | 2.8.17  |
-| `ceh-ui-design`     | 1.0.10  |
+| Plugin                    | Version |
+| ------------------------- | ------- |
+| `ceh-build-planning`      | 1.1.17  |
+| `ceh-business-plan`       | 1.1.14  |
+| `ceh-every-session`       | 2.8.17  |
+| `ceh-ui-design`           | 1.0.10  |
+| `ceh-vision-and-strategy` | 1.0.0   |
 
 ### Added
+
+- `ceh-vision-and-strategy` at 1.0.0, with the skill `write-vision-and-strategy`, its `vision` and
+  `strategy` templates and schemas, and the plan `product/plans/vision-and-strategy-skill.md`.
 
 - `design-ui`: a Content width bullet for a Document with diagrams, Mermaid bullets for the fit rule,
   size budget, too-wide order, and scroller, and a Document audit item in the Review pass.
@@ -41,6 +50,9 @@ pointer itself.
 
 ### Changed
 
+- `write-build-plan` and `review-build-plan`: read a repo's `VISION.md` and `STRATEGY.md` when they
+  exist, and treat a contradiction as an Open item or a finding.
+- `docs/STRATEGY.md`: the new plugin in the Shape row and the spine, and the two docs in the kept files.
 - `docs/CROSS_REFERENCES.md`: the new bullets join the page-only Mermaid rules.
 - `product/retros/2026-10-30-repeat-mistake.md`: record what the prose cap investigation found.
 - `ceh-business-plan` page shell: text and panels share one right edge in a column capped at 1100px,

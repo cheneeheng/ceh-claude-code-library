@@ -31,7 +31,7 @@ at once. This repo keeps its granularity and adds the second kind of idea withou
 
 | Stage | The question it answers                                | Plugins                                                                                                                                                                                                         |
 | ----- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Shape | What should exist, for whom, and is it worth building? | `ceh-business-plan`, `ceh-competitor-analysis`                                                                                                                                                                  |
+| Shape | What should exist, for whom, and is it worth building? | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-vision-and-strategy`                                                                                                                                       |
 | Build | How is it built? Then build it: code, UI, docs         | `ceh-build-planning`, `ceh-build-from-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-git-datastore`, `ceh-documentation`, `ceh-codebase-explanation` |
 | Prove | Does it work, is it safe, and can a person use it?     | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                                                                      |
 | Tell  | Who should find it, and what do they read?             | `ceh-blog`, `ceh-seo`                                                                                                                                                                                           |
@@ -48,15 +48,17 @@ one exists.
 
 ## The spine: handoff files
 
-| Stage | Reads                                                                        | Writes                                                             |
-| ----- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| Shape | an idea, a conversation                                                      | `.agents_workspace/product/business/BUSINESS_PLAN.md`              |
-| Build | `.agents_workspace/product/business/BUSINESS_PLAN.md` when present, the repo | `product/plans/<slug>.md`, the code, `product/ARCHITECTURE.md`     |
-| Prove | the plan, the code                                                           | `product/EVIDENCE.md`: tests, QA, security, usability, performance |
-| Tell  | `.agents_workspace/product/business/BUSINESS_PLAN.md`, `product/EVIDENCE.md` | posts, listings, SEO pages                                         |
+| Stage | Reads                                                                                                                          | Writes                                                                                            |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| Shape | an idea, a conversation, the repo                                                                                              | `.agents_workspace/product/business/BUSINESS_PLAN.md`, `product/VISION.md`, `product/STRATEGY.md` |
+| Build | `.agents_workspace/product/business/BUSINESS_PLAN.md` and `product/VISION.md` and `product/STRATEGY.md` when present, the repo | `product/plans/<slug>.md`, the code, `product/ARCHITECTURE.md`                                    |
+| Prove | the plan, the code                                                                                                             | `product/EVIDENCE.md`: tests, QA, security, usability, performance                                |
+| Tell  | `.agents_workspace/product/business/BUSINESS_PLAN.md`, `product/EVIDENCE.md`                                                   | posts, listings, SEO pages                                                                        |
 
 Shape to Build: `ceh-business-plan` writes `.agents_workspace/product/business/BUSINESS_PLAN.md`, and `ceh-build-planning` reads
-it and writes the plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read. Prove to
+it and writes the plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read.
+`ceh-vision-and-strategy` writes `product/VISION.md` and `product/STRATEGY.md`, and `ceh-build-planning`
+reads them too, putting what a plan would contradict under Open. Prove to
 Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.md`, and
 `ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.md`.
 
@@ -109,6 +111,8 @@ publishes a plan.
 Committing every file a stage writes would bloat the repo, so committed handoff files have a
 lifecycle:
 
+- **Vision and strategy are revised in place.** One of each per repo, committed and kept, because
+  every later stage reads them.
 - **Plans are kept.** A built plan stays in `product/plans/` with `status: built` and an append-only
   Record of how it was planned, reviewed, built, checked, proven, and merged, so the plan is the
   audit trail of its change. Its lasting decisions are also copied to the Key Decisions log in
@@ -194,7 +198,8 @@ it installed be disabled. A document carries the route at no install cost. The b
 
 This list shrinks as the gaps close. Remove a line in the PR that closes it.
 
-No known gaps as of 2026-10-10.
+- `docs/VISION.md` does not list `ceh-vision-and-strategy` in its Shape row yet, because a change to
+  that file lands in its own PR. The next PR closes this.
 
 ## Open questions
 
