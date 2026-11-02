@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Slim design-ui by moving conditional recipes beside their markup
-status: ready
+status: built
 created: 2026-11-02
 ---
 
@@ -118,7 +118,8 @@ app-wide state is told in one line where they are. The source is the slimming ro
 - **Check:** `python tools/validate-plugins/validate.py` passes on a clean export of the index and in
   CI, `grep -c "awaiting approval" product/retros/2026-10-30-repeat-mistake.md` prints `0`, and the
   draft's heading no longer appears under Pending drafts.
-- **Status:** todo
+- **Status:** done. `validate.py` printed "OK: all plugin checks passed", CI run 41469938859 succeeded,
+  the retro count is `0`, and Pending drafts reads "None".
 
 ## Open
 
@@ -133,3 +134,6 @@ None
 - 2026-11-02 Built Phase 1: heading grep printed 0, each section name printed 1
 - 2026-11-02 Built Phase 2: every kept item found, SKILL.md 27,186 bytes
 - 2026-11-02 Design changed: was Phase 3 `grep -c "awaiting approval"` prints `1`, now `0`, because the user closed the prose cap row before this build landed
+- 2026-11-02 PR: #191 https://github.com/cheneeheng/ceh-claude-code-library/pull/191
+- 2026-11-02 Built Phase 3: CI run 41469938859 success, "OK: all plugin checks passed" locally
+- 2026-11-02 Checked: 25 Built, 0 Gap, 0 Deviation, 0 Extra, 0 Failing, 0 Cannot verify
