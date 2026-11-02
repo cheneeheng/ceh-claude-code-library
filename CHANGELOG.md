@@ -37,6 +37,11 @@ diagrams splitting across pages, so the recipe also keeps each one on a single p
 - `docs/CROSS_REFERENCES.md`: the new bullets join the page-only Mermaid rules.
 - `product/retros/2026-10-30-repeat-mistake.md`: record what the prose cap investigation found.
 
+### Fixed
+
+- `validate.py` `hygiene`: scan tracked and new files only, because git-ignored `node_modules` and
+  eval reports turned a clean branch red in a working checkout, so the local gate never passed.
+
 ## 2026-10-31
 
 `docs/IDEAS.md` gains the ideas from the diagram-design competitor analysis, refreshed against its
