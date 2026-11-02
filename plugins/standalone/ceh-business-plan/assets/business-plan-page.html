@@ -14,10 +14,9 @@ html { scroll-behavior: smooth; scroll-padding-top: var(--space-8); }
 
 .layout {
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: 240px minmax(0, 1100px);
+  justify-content: center;
   gap: var(--space-12);
-  max-width: 1280px;
-  margin: 0 auto;
   padding: var(--space-12) var(--space-8) var(--space-16);
 }
 
@@ -41,13 +40,12 @@ html { scroll-behavior: smooth; scroll-padding-top: var(--space-8); }
 .toc a.is-active { color: var(--fg); font-weight: var(--weight-medium); }
 
 /* Header */
-.doc-header { max-width: 72ch; margin-bottom: var(--space-12); }
+.doc-header { margin-bottom: var(--space-12); }
 .doc-header h1 { margin: var(--space-2) 0 var(--space-3); }
 .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
 .legend { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); margin-top: var(--space-4); font-size: var(--fs-75); color: var(--fg-muted); }
 
-/* Prose */
-article > :is(p, ul, ol, h2, h3, h4) { max-width: 72ch; }
+/* Prose: text and panels share one right edge, set by the .layout column. */
 article p, article li { color: var(--fg); }
 article p + p, article p + ul, article p + ol, article ul + p, article ol + p { margin-top: var(--space-4); }
 article ul, article ol { padding-left: var(--space-6); margin-top: var(--space-3); }
@@ -70,7 +68,7 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--surfac
   margin: var(--space-6) 0;
   overflow-x: auto;
 }
-.diagram { padding: var(--space-6); max-width: 960px; }
+.diagram { padding: var(--space-6); }
 .diagram pre.mermaid { font-family: var(--font-ui); text-align: center; }
 .diagram svg { max-width: 100%; height: auto; }
 .table-wrap { padding: var(--space-4) var(--space-5); }
