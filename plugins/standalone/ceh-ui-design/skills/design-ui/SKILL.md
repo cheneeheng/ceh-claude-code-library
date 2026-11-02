@@ -97,6 +97,10 @@ page in another archetype may add one without becoming a second archetype.
 - Data tables: may use the full content pane — density is the point.
 - Page content in an app shell: cap around 1200–1400px and left-align within the pane; do not
   stretch to fill a 4K monitor.
+- A Document with diagrams: one column, capped around 1100px, holds the title, headings, prose, and
+  diagram panels, all ending on the same right edge. This overrides the prose cap above. A narrower
+  text column above 1100px panels was rejected on sight as sloppy, so keep the paragraphs short
+  instead.
 
 #### Alignment and spacing rhythm
 
@@ -224,7 +228,7 @@ mixed density inside one view reads as broken.
 The core rules make a UI _correct_; these recipes make it _finished_. Apply them on the first
 build. In page order: the command dock (global state), section headers, then how data is displayed
 (tables, lifecycle colors, monograms, stat blocks, diagrams), then controls and motion. Worked markup for
-the dock, tables, stepper, monogram, and inputs lives in `references/examples.md`.
+the dock, tables, stepper, monogram, diagrams, and inputs lives in `references/examples.md`.
 
 #### Command dock — global state and its action
 
@@ -329,6 +333,17 @@ On a page that renders Mermaid itself:
   the text is too small to read.
 - `await document.fonts.ready` before `mermaid.run()`, so labels are measured in the web font, not
   the fallback.
+- Give every diagram the same fit rule, never a cutoff that treats some differently: fit its panel,
+  do not grow past natural size, and do not draw labels below `--fs-50`. Past that, the panel scrolls
+  on screen and the diagram scales to one page in print (worked markup in `references/examples.md`).
+- Past about 9 nodes or 12 edges, split the diagram into an overview and a detail before fitting it,
+  or use a table if the relationships are only pairs. A bigger diagram shrinks until it is unreadable.
+- Measure each diagram's natural width against the column. Flowchart, sequence, and state labels are
+  16px, so a diagram past the panel width divided by 11/16, about 1550px in a 1100px column, cannot
+  fit readably. Break long labels with `<br/>`, then turn the flow top to bottom, then split it at a
+  natural pause. Check after a split that no node or edge was lost. `xychart-beta` labels start at
+  14px and `gantt` labels at 10px, so check those two by eye.
+- Put the panel's scroller inside any `overflow: hidden` card, or the diagram clips with no scrollbar.
 
 #### Inputs on dense surfaces
 
@@ -416,6 +431,10 @@ Before calling the UI done, verify:
 7. **Finish audit:** depth ladder distinct (chrome vs command surfaces vs clickable cards); table
    cells read as words with lifecycle colors consistent across every representation; section
    eyebrows share one vocabulary; global state and its action appear exactly once.
+8. **Document audit:** the theme installed whole, per Install, with its fonts; a contents list where
+   In-page contents calls for one; for a Mermaid page, `document.fonts.ready` awaited and every
+   diagram measured. A `less-code` comment is no exemption: the theme is the shortcut, and a partial
+   copy of it is the drift Install warns about.
 
 ### Theme layer
 
