@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Slim design-ui by moving conditional recipes beside their markup
-status: ready
+status: built
 created: 2026-11-02
 ---
 
@@ -97,7 +97,8 @@ app-wide state is told in one line where they are. The source is the slimming ro
 "^#### Command dock\|^### Variants board\|^#### Lifecycle colors\|^#### Identity monograms\|^#### Inputs on dense"`
   on `SKILL.md` prints `0`. Each of the five section names appears once in a `SKILL.md` trigger,
   by `grep -c` per name.
-- **Status:** todo
+- **Status:** done. The heading grep printed `0`, each section name printed `1`, and the 33 removed
+  lines not found in `examples.md` are the headings, reworded sentences, and cuts Design names.
 
 ### Phase 2: Cut what restates another section
 
@@ -106,7 +107,8 @@ app-wide state is told in one line where they are. The source is the slimming ro
   item: `--dur-fast`, `--ease-out`, `prefers-reduced-motion`, "Keep the layout still", "Show
   progress", `.spinner`, and the five kept Anti-patterns bullets. "Move and resize" is gone. `wc -c`
   gives the figure the build reports.
-- **Status:** todo
+- **Status:** done. Every kept item is found, "Move and resize" prints `0`, and `SKILL.md` is 27,186
+  bytes, 5,381 smaller.
 
 ### Phase 3: Land
 
@@ -114,9 +116,10 @@ app-wide state is told in one line where they are. The source is the slimming ro
   the row's "see the draft" replaced and `## Applied` naming this plan, then the PR through
   `ceh-git-workflow:pull-request`.
 - **Check:** `python tools/validate-plugins/validate.py` passes on a clean export of the index and in
-  CI, `grep -c "awaiting approval" product/retros/2026-10-30-repeat-mistake.md` prints `1`, and the
+  CI, `grep -c "awaiting approval" product/retros/2026-10-30-repeat-mistake.md` prints `0`, and the
   draft's heading no longer appears under Pending drafts.
-- **Status:** todo
+- **Status:** done. `validate.py` printed "OK: all plugin checks passed", CI run 41469938859 succeeded,
+  the retro count is `0`, and Pending drafts reads "None".
 
 ## Open
 
@@ -128,3 +131,9 @@ None
 - 2026-11-02 Reviewed: Revise first, 4 blocking (Procedure step 3 still opens examples.md on every build; triggers name the component, not its condition; Variants trigger drops the logic prototype; Motion cut has an undecidable test)
 - 2026-11-02 Design changed: was "`SKILL.md` ends at least 5,000 bytes smaller", now the cut rule wins and the build reports the figure, because a number could force a good rule out; was three Motion bullets conditional on what the model does untold, now only "Move and resize" goes, because no eval can apply that test
 - 2026-11-02 PR: #188 https://github.com/cheneeheng/ceh-claude-code-library/pull/188
+- 2026-11-02 Built Phase 1: heading grep printed 0, each section name printed 1
+- 2026-11-02 Built Phase 2: every kept item found, SKILL.md 27,186 bytes
+- 2026-11-02 Design changed: was Phase 3 `grep -c "awaiting approval"` prints `1`, now `0`, because the user closed the prose cap row before this build landed
+- 2026-11-02 PR: #191 https://github.com/cheneeheng/ceh-claude-code-library/pull/191
+- 2026-11-02 Built Phase 3: CI run 41469938859 success, "OK: all plugin checks passed" locally
+- 2026-11-02 Checked: 25 Built, 0 Gap, 0 Deviation, 0 Extra, 0 Failing, 0 Cannot verify

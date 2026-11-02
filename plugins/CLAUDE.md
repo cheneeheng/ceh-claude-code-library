@@ -20,7 +20,8 @@ The two migrated catalog skills keep their bundled files for this reason.
 `assets/template.html`, and a `scripts/to-elements.js` converter. The Cytoscape API and stylesheet
 references were cut on 2026-10-08 as material the model already knows. On the same day
 `design-ui`'s `examples.md` was cut to the finishing recipes, the markup the core rules' prose does
-not already carry. Both stay because each is a catalog a run reads only part of: `design-ui`
+not already carry, and on 2026-11-02 it took the rules of the recipes that apply only when their
+component is present. Both stay because each is a catalog a run reads only part of: `design-ui`
 installs one of its two themes, and `visualize-graph-cytoscape` opens the topic file its task
 touches.
 

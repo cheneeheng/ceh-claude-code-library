@@ -21,9 +21,8 @@ Work in this order:
 1. **Design pass** — answer the five questions below _before_ writing any markup.
 2. **Theme** — install one of the bundled token-driven templates (_Theme layer_, end of this file).
    Never hand-roll colors, type, or spacing.
-3. **Build** — apply the _Rules_ below, core rules then _Finishing recipes_, consulting
-   `references/examples.md` (worked markup for the finishing recipes) and the chosen theme's
-   `brand-guide.html`.
+3. **Build** — apply the _Rules_ below, core rules then _Finishing recipes_, consulting the chosen
+   theme's `brand-guide.html` and only the sections of `references/examples.md` that a rule names.
 4. **Review pass** — run the checklist before calling the UI done.
 
 Two failure modes produce almost all bad UI, and this file targets both:
@@ -47,26 +46,9 @@ Answer these five questions and state the answers (one line each) so the choices
 4. **Which theme template?** (Theme layer below)
 5. **What do empty, loading, and error look like?** Designed now, not retrofitted.
 
-### Variants board
-
-When the user asks for options ("show me a few directions", "I can't picture it"), or the design
-pass leaves question 2 or 4 with two answers that both fit, build a board before the real UI:
-
-1. Write two to four throwaway static HTML files to `.agents_workspace/product/design-variants/<surface>/`,
-   one per variant, plus an `index.html` that shows them side by side in labelled `<iframe>`s at
-   the same width. Use the bundled theme tokens and real-looking content, never lorem ipsum.
-2. Make each variant differ from the others on **one** design-pass answer (the archetype, the
-   theme, or the density) and label it with that answer. Variants that differ on everything at once
-   get feedback like "the second one", which maps to no decision.
-3. Show the board's path and ask which to keep. On feedback, keep the chosen answer fixed and vary
-   the next open one. Two or three rounds is the usual end.
-4. Record the chosen answers in the design-pass list, then build the real UI from them. The board
-   stays in `.agents_workspace/` and is never imported by the app.
-
-The same board serves a logic prototype: when a flow's behavior is the open question (a multi-step
-form, a drag interaction), make each variant a small self-contained HTML page with inline script
-that behaves the way that option would. With no user to choose, pick by the Review pass checklist
-and write the reason beside the chosen answer.
+The user asks for options ("show me a few directions", "I can't picture it"), the design pass leaves
+question 2 or 4 with two answers that both fit, or a flow's behavior is the open question: read
+`references/examples.md` § Variants board and build the board before the real UI.
 
 ## Rules
 
@@ -227,31 +209,19 @@ mixed density inside one view reads as broken.
 
 The core rules make a UI _correct_; these recipes make it _finished_. Apply them on the first
 build. In page order: the command dock (global state), section headers, then how data is displayed
-(tables, lifecycle colors, monograms, stat blocks, diagrams), then controls and motion. Worked markup for
-the dock, tables, stepper, monogram, diagrams, and inputs lives in `references/examples.md`.
+(tables, lifecycle colors, monograms, stat blocks, diagrams), then controls and motion. Worked markup
+for tables and diagrams lives in `references/examples.md`.
 
-#### Command dock — global state and its action
+A recipe that applies only when its component is present lives there too. Read only the section
+named, when its condition holds:
 
-When app-wide state exists (a current run, round, or selection) with one primary action on it, do
-not cram it into the topbar and do not repeat it per page. The topbar stays brand + nav; the state
-gets a **dock**: a bordered, rounded card floating below the chrome, width-aligned with the
-content column so its edges share the cards' gutter.
-
-- **Three panels split by hairline vertical rules, each panel's content centered.** Centered
-  blocks floating in open space read as accidental; centered inside delineated panels read as
-  deliberate — the rules are what license the centering.
-- **Left — identity:** eyebrow (`CURRENT ROUND`) → the state's name at display size (the dock's
-  focal point), with metadata as quiet mono chips on the title line, not raw hyperlinks.
-- **Center — the action:** the one primary action as an accent-filled pill with a one-line muted
-  micro-caption beneath saying what it does ("runs the 2 queued orders"). The center always
-  carries the state's _current_ call-to-action — a live progress line while running, the review
-  action when finished — and collapses (rules included) when there is no action.
-- **Right — outcome:** mirror the left's anatomy with an eyebrow + stat block for the last result;
-  the whole panel is a quiet link to the detail/history view.
-- Optionally crown the dock with a 2–3px accent rule across its top, echoing the primary button.
-- Hide the dock entirely when there is no state and no history — a fresh install gets no empty band.
-- **State lives once:** anything the dock shows disappears from individual views — no second
-  primary button, no repeated status heading, no duplicate cost readout anywhere in the app.
+- App-wide state exists (a current run, round, or selection) with one primary action on it:
+  `references/examples.md` § Command dock.
+- A domain state machine exists (draft → running → review → done): `references/examples.md` §
+  Lifecycle stepper.
+- Entity cards or rows need a visual identity: `references/examples.md` § Identity monogram.
+- A field sits inside a card, or takes free text of unpredictable length: `references/examples.md` §
+  Input as recessed well.
 
 #### Section headers — eyebrow above the panel
 
@@ -270,7 +240,7 @@ Default table styling is the strongest primitive tell. Every data table gets thi
   as color-coded words ("1 succeeded" in success, "2 failed" in danger).
 - **Show only what happened:** a red zero is noise — omit zero counts, use an em dash when
   nothing ran.
-- **Status is a colored pill** from the lifecycle palette (next recipe), never plain text.
+- **Status is a colored pill** from the lifecycle palette, never plain text.
 - Numbers use tabular figures; rows get a hover wash and pointer; rows that navigate are keyboard
   operable (`tabindex="0"` + Enter); the last row drops its separator.
 - **Highlight the semantically current row, not the first row:** key the highlight to state
@@ -283,25 +253,6 @@ Default table styling is the strongest primitive tell. Every data table gets thi
   long text inside a cell to `white-space: normal`, because the theme's badge does not wrap and one
   long label forces the whole table to scroll. Scroll the table's own container only when wrapped
   cells still cannot fit, as with a wide table on a phone.
-
-#### Lifecycle colors and flow
-
-For any domain state machine (draft → running → review → done):
-
-- Assign each stage one color **once** and use it in every representation — status badge, stepper
-  node, history pill — so color alone identifies the stage anywhere in the app.
-- Show progression as a **node-and-rail stepper**, not text: small nodes joined by a continuous
-  rail, stage labels beneath.
-- Past stages muted; the current node lit in its stage color with a soft halo, pulsing only while
-  actively running; future stages ghosted. The rail fills through the current node so a transition
-  visibly flows forward.
-
-#### Identity monograms
-
-- Entity cards and rows lead with a small rounded monogram tile: the entity's initial on a wash
-  tint picked from the `--data-*` ramp by a stable name hash, with a matching hairline border —
-  every entity keeps its color everywhere it appears.
-- On hover or keyboard focus, slide in a `→` at the card's corner so "this opens" is unmistakable.
 
 #### Stat blocks
 
@@ -345,19 +296,6 @@ On a page that renders Mermaid itself:
   14px and `gantt` labels at 10px, so check those two by eye.
 - Put the panel's scroller inside any `overflow: hidden` card, or the diagram clips with no scrollbar.
 
-#### Inputs on dense surfaces
-
-- A field inside a card is a **recessed well**: `--bg` fill one rung below its card, hairline
-  border, brightening on hover, brand border on focus — visible at rest, never a ghost that only
-  appears on hover.
-- Free text of unpredictable length is an auto-growing textarea: `field-sizing: content` with a
-  one-line min-height and a viewport-relative max, plus `overflow-wrap: anywhere` so an unbroken
-  string wraps instead of widening the layout.
-- Placeholders are ≤3 words ("add instruction…"); the full explanation goes in the tooltip. A long
-  placeholder wraps and forces scrollbars in an empty field.
-- Theme scrollbars app-wide: `scrollbar-width: thin` with a `--border-strong` thumb on
-  transparent — the OS-default chunky scrollbar breaks any polished surface it appears on.
-
 #### Micro-interactions
 
 Exactly one small motion per interactive element, using the theme's motion tokens: the primary
@@ -376,10 +314,6 @@ input. Motion that explains nothing is decoration, and it gets cut.
 - **Pick the easing by direction.** Entering or settling uses `--ease-out`, so it starts fast and
   lands soft. Moving between two on-screen positions uses `--ease-standard`. An exit runs at the
   next shorter duration than its enter, because the user has already moved on.
-- **Move and resize with `transform` and `opacity`.** Animating `width`, `height`, `top`, or
-  `margin` reflows the page on every frame and jank shows first on slow hardware. Expand a panel
-  with a `transform` or a `grid-template-rows` transition, not `height: auto` hacks. Color,
-  background, and shadow transitions at `--dur-fast` do not reflow and are fine.
 - **Keep the layout still.** Content that appears pushes nothing that the user is reading or about
   to click: reserve its space or overlay it.
 - **Show progress, not suspense.** A skeleton or `.spinner` after about 300 ms of waiting; no
@@ -392,28 +326,13 @@ input. Motion that explains nothing is decoration, and it gets cut.
 
 ### Anti-patterns — reject on sight
 
-Structure tells (a design pass never happened):
-
-- Everything centered — body text, forms, and headers all on the center axis.
-- Every section boxed: border + shadow + background tint on the same element, cards inside cards.
-- Uniform spacing everywhere — no proximity grouping, section gaps equal to element gaps.
 - Gradient hero / glassmorphism on an app surface, or on every page of a content site.
-- A hero, call to action, or primary button on a document.
 - Emoji as icons or bullet decoration in product UI.
-- Two or more filled primary buttons in one view.
-- A lone `h1` that repeats the active nav label verbatim.
 - Brand color as background wash for entire sections "to add visual interest".
-- Five type sizes or three font families in one view.
-- Happy path only — empty/loading/error left as afterthoughts.
-
-Finish tells (the primitive draft shipped):
-
-- Topbar, toolbars, and content cards all on the same background — no depth ladder, one slab.
-- A `#` column header, bare integers, or raw symbols where a word fits ("Round 2", "3 failed").
-- A zero rendered in the danger color — show only what happened.
 - A state machine rendered as plain text when its stages are known.
-- Global state or its primary action repeated on individual views (two "End turn" buttons).
-- OS-default scrollbars inside a themed surface.
+- OS-default scrollbars inside a themed surface. Theme scrollbars app-wide: `scrollbar-width: thin`
+  with a `--border-strong` thumb on transparent — the OS-default chunky scrollbar breaks any polished
+  surface it appears on.
 
 ### Review pass
 

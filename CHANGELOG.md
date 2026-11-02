@@ -22,7 +22,7 @@ diagrams splitting across pages, so the recipe also keeps each one on a single p
 | Plugin              | Version |
 | ------------------- | ------- |
 | `ceh-business-plan` | 1.1.14  |
-| `ceh-ui-design`     | 1.0.9   |
+| `ceh-ui-design`     | 1.0.10  |
 
 ### Added
 
@@ -31,7 +31,7 @@ diagrams splitting across pages, so the recipe also keeps each one on a single p
 - `design-ui` `references/examples.md`: a "Mermaid diagrams in a column" section with the panel
   markup, CSS, script, and node colours from page CSS.
 - `product/retros/2026-10-30-repeat-mistake.md` and `product/plans/design-ui-diagram-width.md`.
-- `product/plans/design-ui-slimming.md`: the reviewed plan for slimming `design-ui`, not yet built.
+- `product/plans/design-ui-slimming.md`: the reviewed plan for slimming `design-ui`.
 
 ### Changed
 
@@ -39,6 +39,13 @@ diagrams splitting across pages, so the recipe also keeps each one on a single p
 - `product/retros/2026-10-30-repeat-mistake.md`: record what the prose cap investigation found.
 - `ceh-business-plan` page shell: text and panels share one right edge in a column capped at 1100px,
   replacing a `72ch` text column above 960px diagrams, which read as sloppy.
+- `design-ui`: slim `SKILL.md` from 32,567 to 27,186 bytes. Command dock, Variants board, Lifecycle
+  colors, Identity monograms, and Inputs move to `references/examples.md`, each with a one-line
+  trigger stating its condition, and a build reads only the section a rule names. Anti-patterns keeps
+  only what no other rule states, and Motion drops its general performance advice. No eval tested
+  this, by the user's choice.
+- `product/retros/2026-10-30-repeat-mistake.md`: close the prose cap row, because the user kept `65ch`
+  for pages of long text alone and 1100px for a page with diagrams.
 
 ### Fixed
 
