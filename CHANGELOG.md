@@ -30,10 +30,12 @@ diagrams splitting across pages, so the recipe also keeps each one on a single p
 - `design-ui` `references/examples.md`: a "Mermaid diagrams in a column" section with the panel
   markup, CSS, script, and node colours from page CSS.
 - `product/retros/2026-10-30-repeat-mistake.md` and `product/plans/design-ui-diagram-width.md`.
+- `product/plans/design-ui-slimming.md`: the reviewed plan for slimming `design-ui`, not yet built.
 
 ### Changed
 
 - `docs/CROSS_REFERENCES.md`: the new bullets join the page-only Mermaid rules.
+- `product/retros/2026-10-30-repeat-mistake.md`: record what the prose cap investigation found.
 
 ## 2026-10-31
 
