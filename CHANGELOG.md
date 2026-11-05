@@ -33,6 +33,8 @@ even on merged PRs, which can only merge on green CI.
   for the attribution rule and its placeholder, "attribution line" throughout.
 - `ceh-git-workflow:pull-request`: the Merge path ticks the `All CI checks pass` box with
   `gh pr edit` once CI is green, also after auto-merge has landed the PR.
+- `model-audit.yml`: the weekly audit's commit and draft PR end with the plain attribution line
+  `Generated with Claude Code by CEH`, matching the line sessions use, in place of the linked one.
 
 ## 2026-11-02
 

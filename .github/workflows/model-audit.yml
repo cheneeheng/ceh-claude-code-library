@@ -72,10 +72,10 @@ jobs:
           git checkout -b "$branch"
           git add .claude/skills/model-audit/assets/known-model-guides.json audits plugins
           git commit -m "chore(model-audit): audit reports for $date" \
-            -m "Generated with [Claude Code](https://claude.com/claude-code) by CEH"
+            -m "Generated with Claude Code by CEH"
           git push -u origin "$branch"
           body="$RUNNER_TEMP/body.md"
           cp "audits/$date/SUMMARY.md" "$body"
-          printf '\nGenerated with [Claude Code](https://claude.com/claude-code) by CEH\n' >> "$body"
+          printf '\nGenerated with Claude Code by CEH\n' >> "$body"
           gh pr create --draft --base main --head "$branch" \
             --title "chore(model-audit): audit $date" --body-file "$body"
