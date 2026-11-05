@@ -56,7 +56,7 @@ git push origin vX.Y.Z
 gh release create vX.Y.Z --title "vX.Y.Z" --notes-file notes.md && rm notes.md
 ```
 
-`notes.md` is the vX.Y.Z changelog section plus the attribution footer (see
+`notes.md` is the vX.Y.Z changelog section plus the attribution line (see
 [Attribution](#attribution)).
 
 ### Hotfix
@@ -98,13 +98,14 @@ When in doubt, PATCH. Versions only increase. Pre-releases take a suffix (`v1.4.
 
 ### Attribution
 
-| Artifact             | Setting              | Where the footer goes           |
+| Artifact             | Setting              | Where the line goes             |
 | -------------------- | -------------------- | ------------------------------- |
 | Release commit       | `attribution.commit` | Last line of the commit message |
 | GitHub release notes | `attribution.pr`     | Last line of the notes file     |
 
-Reproduce the line the session's Git instructions supply, verbatim. Never substitute a literal
-from this skill or from memory. If the setting is empty, omit it. The tag message takes none.
+Attribution: end each artifact with its setting's line the session's Git instructions supply,
+verbatim. Never substitute a literal from this skill or from memory. If no line is supplied, or the
+setting is `false` or empty, omit it. The tag message takes none.
 
 ## Output
 
@@ -123,7 +124,7 @@ chore: release vX.Y.Z
 - Manifests: <which moved, old -> new>
 - Docs: <changelog / README / CLAUDE.md updated, or "no update needed" and why>
 
-<attribution footer>
+<attribution line, see Attribution>
 ```
 
 ## Stop conditions

@@ -57,13 +57,13 @@ Pick the path from the request, then run only that path:
 
 1. Check the [pre-merge gate](#pre-merge-gate). If the branch won't merge cleanly,
    [resolve conflicts](#resolving-conflicts) first.
-2. Merge with the [merge commit message](#merge-commit-message):
+2. Merge, leaving the [merge commit message](#merge-commit-message) to the repo's setting:
 
    ```bash
    if [ "$(gh api repos/{owner}/{repo} --jq .allow_auto_merge)" = "true" ]; then
-     gh pr merge <N> --merge --auto --subject "..." --body-file merge-body.txt
+     gh pr merge <N> --merge --auto
    else
-     gh pr merge <N> --merge --subject "..." --body-file merge-body.txt   # gate must be green
+     gh pr merge <N> --merge   # gate must be green
    fi
    ```
 
@@ -129,7 +129,7 @@ the next.
 ### PR title and description
 
 The title is a Conventional Commits subject (imperative, lowercase, no trailing period, ≤ 72
-chars). It seeds the merge commit subject.
+chars). The repo's merge commit setting may use it as the merge commit subject.
 
 ```markdown
 ## What
@@ -165,12 +165,12 @@ didn't add.>
 - [ ] No secrets or credentials in code
 - [ ] Migrations (if any) are backward-compatible
 - [ ] Decision record updated (if a durable decision was made)
-- [ ] Attribution included if AI tooling assisted
+- [ ] Attribution line included if AI tooling assisted
 ```
 
-Attribution: append the `attribution.pr` line the session's Git instructions supply, verbatim, as
-the last line of the body. Never substitute a literal from this skill or from memory. If settings
-supply none, omit it and check the box.
+Attribution: end the PR body with the `attribution.pr` line the session's Git instructions supply,
+verbatim. Never substitute a literal from this skill or from memory. If no line is supplied, or the
+setting is `false` or empty, omit it and check the box.
 
 Write the body to a temp file and pass `--body-file`, for `gh pr create` and `gh pr edit` alike.
 Never inline it with a shell heredoc or a PowerShell here-string: the temp file avoids all quoting
@@ -276,15 +276,17 @@ The gate applies to the rebased state: let CI re-run before merging.
 
 ### Merge commit message
 
-The merge commit reads on its own in `git log main`, never GitHub's default:
+A PR merge takes its message from the repo's GitHub setting for merge commits (Settings →
+General → Pull Requests → Default commit message). Never pass `--subject`, `--body`, or
+`--body-file` to `gh pr merge`, because they override that setting.
+
+A local merge, with no PR and no setting, reads on its own in `git log main`:
 
 ```
-Merge pull request #<N>: <PR title>
+Merge branch '<branch-name>': <the branch's Conventional Commits subject>
 
 <one or two lines: what it delivers and why it is landing, plus anything a bisect would want>
 ```
-
-A local merge uses the same shape with the branch's Conventional Commits subject.
 
 ### Reporting the remote branch
 
