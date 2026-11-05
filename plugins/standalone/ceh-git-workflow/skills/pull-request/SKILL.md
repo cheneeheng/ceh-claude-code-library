@@ -56,7 +56,14 @@ Pick the path from the request, then run only that path:
 ### Merge
 
 1. Check the [pre-merge gate](#pre-merge-gate). If the branch won't merge cleanly,
-   [resolve conflicts](#resolving-conflicts) first.
+   [resolve conflicts](#resolving-conflicts) first. Once CI is green, tick the body's
+   `All CI checks pass` box, also when auto-merge already landed the PR:
+
+   ```bash
+   gh pr view <N> --json body -q '.body | split("- [ ] All CI") | join("- [x] All CI")' > body.md
+   gh pr edit <N> --body-file body.md && rm body.md
+   ```
+
 2. Merge, leaving the [merge commit message](#merge-commit-message) to the repo's setting:
 
    ```bash
@@ -122,7 +129,7 @@ the next.
 4. Commit the work and docs: invoke the Skill tool with skill="ceh-git-workflow:commit". Tree clean
    before the next step.
 5. Run [Open](#open), then [Merge](#merge). If Open queued auto-merge, Merge only waits for it to
-   land and cleans up. Wait on CI with `gh run watch`, never by polling by hand.
+   land, ticks the CI box, and cleans up. Wait on CI with `gh run watch`, never by polling by hand.
 
 ## Rules
 

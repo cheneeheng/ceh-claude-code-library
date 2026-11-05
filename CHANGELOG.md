@@ -16,11 +16,14 @@ setting gives, and no longer passes its own subject and body, so the owner's cho
 A local merge with no PR keeps a written message. The commit, pull-request, and release skills now
 word their attribution rule the same way, so it reads as one rule.
 
+The PR body's `All CI checks pass` box is now ticked once CI is green, because it stayed unticked
+even on merged PRs, which can only merge on green CI.
+
 ### Plugin versions
 
 | Plugin             | Version |
 | ------------------ | ------- |
-| `ceh-git-workflow` | 1.5.3   |
+| `ceh-git-workflow` | 1.5.4   |
 
 ### Changed
 
@@ -28,6 +31,8 @@ word their attribution rule the same way, so it reads as one rule.
   merge commit message section points to the repo's GitHub setting.
 - `ceh-git-workflow:commit`, `ceh-git-workflow:pull-request`, `ceh-git-workflow:release`: one wording
   for the attribution rule and its placeholder, "attribution line" throughout.
+- `ceh-git-workflow:pull-request`: the Merge path ticks the `All CI checks pass` box with
+  `gh pr edit` once CI is green, also after auto-merge has landed the PR.
 
 ## 2026-11-02
 
