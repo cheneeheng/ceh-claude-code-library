@@ -86,10 +86,9 @@ lowercase and consistent with scopes already used in the log (`git log --oneline
 - Breaking changes: `BREAKING CHANGE:` footer with migration notes (or a `!` after the
   type/scope: `feat(api)!: ...`).
 - Reference issues: `Closes #123` (auto-closes on merge) or `Refs #456` (links only) in footer.
-- Attribution: use the footer the environment already supplies — the `attribution.commit` value
-  from Claude Code settings, surfaced verbatim in the session's Git instructions. Reproduce that
-  line exactly; never substitute a literal from this skill or from memory. If settings set
-  `attribution.commit` to `false`/empty, or no attribution line is supplied, omit the footer.
+- Attribution: end the commit message with the `attribution.commit` line the session's Git
+  instructions supply, verbatim. Never substitute a literal from this skill or from memory. If no
+  line is supplied, or the setting is `false` or empty, omit it.
 
 ## Output
 
@@ -111,5 +110,5 @@ endpoint remains unchanged; no migration needed.
 
 Closes #342
 Co-authored-by: Jane Doe <jane@example.com>
-<attribution footer exactly as configured in settings — see Attribution above>
+<attribution line, see Attribution>
 ```

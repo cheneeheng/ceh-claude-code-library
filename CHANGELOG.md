@@ -9,6 +9,26 @@ before this repo live in
 
 ---
 
+## 2026-11-05
+
+`ceh-git-workflow:pull-request` now merges a PR with the message the repo's GitHub merge commit
+setting gives, and no longer passes its own subject and body, so the owner's choice in GitHub holds.
+A local merge with no PR keeps a written message. The commit, pull-request, and release skills now
+word their attribution rule the same way, so it reads as one rule.
+
+### Plugin versions
+
+| Plugin             | Version |
+| ------------------ | ------- |
+| `ceh-git-workflow` | 1.5.3   |
+
+### Changed
+
+- `ceh-git-workflow:pull-request`: `gh pr merge` runs without `--subject` or `--body-file`, and the
+  merge commit message section points to the repo's GitHub setting.
+- `ceh-git-workflow:commit`, `ceh-git-workflow:pull-request`, `ceh-git-workflow:release`: one wording
+  for the attribution rule and its placeholder, "attribution line" throughout.
+
 ## 2026-11-02
 
 `ceh-ui-design:design-ui` now tells an agent how wide a Document with diagrams is and how every
