@@ -302,3 +302,4 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
 - 2026-11-06 Design changed: was "defining `NAME = "plan"`, `VERSION = 2`, the `Plan` model and `render`", now adds "`MODEL = Plan`", because `artifact.py` needs one name to validate with in every format's model
 - 2026-11-06 Design changed: was "`def render(plan: Plan) -> str`", now "`def render(plan: Plan, source: str) -> str`", because the rendered frontmatter's `generated_from` names the source YAML
 - 2026-11-06 Built Phase 1: scratchpad selfcheck.py through artifact.py, "ALL PASSED"
+- 2026-11-06 PR: #199 https://github.com/cheneeheng/ceh-claude-code-library/pull/199
