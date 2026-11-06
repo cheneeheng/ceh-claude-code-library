@@ -11,6 +11,14 @@ before this repo live in
 
 ## 2026-11-06
 
+`write-questionnaire` gains an issue form for sessions nobody watches. `write --issue <owner/repo>
+--labels <list>` posts the questionnaire as a GitHub issue body and reports its number, and
+`read --issue <owner/repo>#<n>` reads the answers from the body and from `Answer <n>:` comments,
+the newest per question winning. `--issue` only selects the form: the skill posts only when a human
+authorized opening issues in that repo ahead of time, and never retries a failed post. A session
+that passes neither argument is unchanged. The first caller is Nightshift's intake, planned in
+`product/plans/caller-set-forms.md`.
+
 The build plan gets a second format, `plan/v2`: the plan is YAML, a pydantic model checks every
 field of it, body included, and the Markdown a person reads is generated from the YAML and
 committed beside it. This is the first phase of the trial planned in
@@ -43,7 +51,7 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
 | `ceh-build-planning`           | 1.2.2   |
 | `ceh-build-from-plan`          | 1.2.1   |
 | `ceh-check-build-against-plan` | 1.1.1   |
-| `ceh-every-session`            | 2.8.19  |
+| `ceh-every-session`            | 2.8.20  |
 | `ceh-git-workflow`             | 1.5.5   |
 | `ceh-testing`                  | 1.5.3   |
 
@@ -91,6 +99,10 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
 - `ceh-git-workflow:pull-request` and `ceh-testing:write-evidence-report`: append their Record
   entries to a `plan/v2` plan's YAML, quoted, read its state from the YAML, and say when its
   Markdown was not re-rendered.
+- `ceh-every-session:write-questionnaire`: `write --issue <owner/repo> --labels <list>` posts the
+  questionnaire as an issue, under a human's advance authorization only, and
+  `read --issue <owner/repo>#<n>` reads the body's and the comments' answers. The schema gains an
+  Issue form paragraph and stays `questionnaire/v1`.
 
 ### Fixed
 
