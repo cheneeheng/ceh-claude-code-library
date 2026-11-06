@@ -19,6 +19,11 @@ authorized opening issues in that repo ahead of time, and never retries a failed
 that passes neither argument is unchanged. The first caller is Nightshift's intake, planned in
 `product/plans/caller-set-forms.md`.
 
+`write-build-plan` completes a draft another step wrote. Given the path of a `status: draft`
+`plan/v2` plan, it fills in the plan around the goal and Scope In items the drafter wrote, keeping
+them word for word, and saves to the same file, so a scheduler's intake can write the task's goal
+and done criteria and leave the planning to the skill. A request with no path is unchanged.
+
 The build plan gets a second format, `plan/v2`: the plan is YAML, a pydantic model checks every
 field of it, body included, and the Markdown a person reads is generated from the YAML and
 committed beside it. This is the first phase of the trial planned in
@@ -48,7 +53,7 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-build-planning`           | 1.2.2   |
+| `ceh-build-planning`           | 1.2.3   |
 | `ceh-build-from-plan`          | 1.2.1   |
 | `ceh-check-build-against-plan` | 1.1.1   |
 | `ceh-every-session`            | 2.8.20  |
@@ -103,6 +108,9 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
   questionnaire as an issue, under a human's advance authorization only, and
   `read --issue <owner/repo>#<n>` reads the body's and the comments' answers. The schema gains an
   Issue form paragraph and stays `questionnaire/v1`.
+- `ceh-build-planning:write-build-plan`: given a `status: draft` plan's path, it completes that
+  plan in place and keeps its goal and Scope In items word for word. The plugin README row now
+  names the `.yaml` it saves.
 
 ### Fixed
 
