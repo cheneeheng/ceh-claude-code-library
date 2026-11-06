@@ -279,6 +279,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": {**home("home-empty"), "CEH_DISABLED_HOOKS": "usage-limit-watch"}, "out": ""},
         # ask-user-question-guard: deny the dialog, pass other tools and when switched off.
         {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "out": "decision block"},
+        {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "out": "no user is present"},
         {"script": "ask-user-question-guard.py", "stdin": read(small_p), "out": ""},
         # build-record-guard: a new Built Phase line needs implement-from-plan started this session.
         {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "out": "implement-from-plan"},
