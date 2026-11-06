@@ -42,6 +42,8 @@ every skill keeps writing `plan/v1` Markdown until the hooks and skill changes l
 - `decision-output-templates.md`, `decision-skill-bundled-files.md`, `plugins/CLAUDE.md`, and
   STRATEGY handoff rule 3: allow a YAML format with its model beside the schema, its generated
   Markdown, and `scripts/artifact.py`.
+- `product/plans/artifact-validation.md`: the check that copies of the model, `artifact.py`, and
+  the hooks stay byte-identical moves from Phase 4 to Phase 3, which creates those copies.
 
 ## 2026-11-05
 
