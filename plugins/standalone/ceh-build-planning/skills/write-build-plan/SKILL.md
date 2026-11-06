@@ -4,7 +4,7 @@ description: >-
   Load this skill before the first edit of a change that has no plan yet: a new app or tool, a
   feature added to existing code even when it sounds quick, or a multi-file change such as a
   retro's fixes. Writes one plan file. Trigger on "build me X", "add X to the app", "plan this".
-argument-hint: "[what to build]"
+argument-hint: "[what to build | <draft plan path>]"
 compatibility: >-
   Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
   plan/v2 plan and render its Markdown. Without uv the plan is saved unchecked and unrendered.
@@ -18,6 +18,16 @@ license: Apache-2.0
 Turn a request into one plan file that an agent can build from without asking again, in the format
 in `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md`. Done means the plan is saved, audited, and
 summarized under Output.
+
+Given the path of a `plan/v2` YAML plan with `status: draft`, or of a `.md` whose frontmatter has
+`generated_from: <slug>.yaml`, which resolves to that YAML, complete that plan in place. Another
+step, such as a scheduler's intake, may have drafted it with only the goal and the done criteria.
+Its goal and every Scope In item stay word for word, and more In items may follow them. Its Design
+entries, Open items and record are kept, and step 5 adds entries after them. Its `unplanned`
+phases are replaced by the phases step 6 writes. Every step still runs, and step 7 saves to the
+same YAML and appends a second Planned entry after the drafter's `Planned: status draft`. A
+`plan/v1` Markdown plan with no YAML beside it, or a plan that is not `draft`, is not a completable
+draft: say so and write a new plan as usual.
 
 ## Procedure
 
@@ -96,7 +106,8 @@ summarized under Output.
 
 ## Rules
 
-- One plan per request. Leave a `built` plan as written: new work gets a new plan file.
+- One plan per request. Leave a `built` plan as written: new work gets a new plan file. A draft
+  passed by path is completed, not written again.
 - Write only the plan's YAML. Its Markdown is rendered from it.
 - Leave every decision that is not needed now under Out or Open, not in Design.
 

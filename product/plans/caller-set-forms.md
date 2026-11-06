@@ -173,7 +173,10 @@ No change to `docs/VISION.md` is needed.
   A draft written as Nightshift writes it (goal, two In items, one Design entry, one `unplanned`
   phase, one Planned entry) passes
   `uv run --script plugins/standalone/ceh-build-planning/scripts/artifact.py check <draft>.yaml`.
-- **Status:** todo
+- **Status:** done. `validate.py` printed `OK: all plugin checks passed`, `generated_from` is in the
+  SKILL.md once, `1.2.3` is on the `ceh-build-planning` line in all four files, and a draft of
+  "Add a usage section" in that shape exited 0 from `artifact.py check` and `render`. The plugin
+  README row also changed `<slug>.md` to `<slug>.yaml`, because it was stale since `plan/v2`
 
 ### Phase 3: The fixed file of `hand-off-session`
 
@@ -202,3 +205,4 @@ No change to `docs/VISION.md` is needed.
 - 2026-11-06 Reviewed: Revise first, 4 blocking (draft format .md vs plan/v2 .yaml unsettled; Decisions pending "none" drops the forks load must route; --issue as caller authorization contradicts VISION Who overrides; comment answer format not told to the answerer), all fixed in the plan
 - 2026-11-06 Built Phase 1: `python tools/validate-plugins/validate.py`, OK: all plugin checks passed
 - 2026-11-06 PR: #207 https://github.com/cheneeheng/ceh-claude-code-library/pull/207
+- 2026-11-06 Built Phase 2: `python tools/validate-plugins/validate.py`, OK: all plugin checks passed
