@@ -5,6 +5,9 @@ description: >-
   feature added to existing code even when it sounds quick, or a multi-file change such as a
   retro's fixes. Writes one plan file. Trigger on "build me X", "add X to the app", "plan this".
 argument-hint: "[what to build]"
+compatibility: >-
+  Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
+  plan/v2 plan and render its Markdown. Without uv the plan is saved unchecked and unrendered.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

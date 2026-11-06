@@ -5,6 +5,9 @@ description: >-
   built, nothing unplanned added, each phase's check still passing. Report-only unless asked to fix.
   Trigger on "check the build against the plan", "did we build what we planned".
 argument-hint: "[plan-file]"
+compatibility: >-
+  Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
+  plan/v2 plan and render its Markdown. Without uv the plan is saved unchecked and unrendered.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

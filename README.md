@@ -99,10 +99,10 @@ nothing instead of blocking you. Install with `winget install Python.Python.3.12
 
 Individual **skills** have their own prerequisites, stated in each `SKILL.md`'s `compatibility`
 frontmatter and surfaced when the skill loads: the git and GitHub CLIs for [`ceh-git-workflow`](plugins/standalone/ceh-git-workflow/),
-Python 3.12 with `uv` for the two Python plugins, Bun or Node for [`ceh-web-frontend`](plugins/standalone/ceh-web-frontend/). Installing a
+Python 3.12 with `uv` for the two Python plugins, Bun or Node for [`ceh-web-frontend`](plugins/standalone/ceh-web-frontend/), and `uv` for
+the three build-plan plugins, which check and render a plan's YAML through it. Installing a
 plugin never installs these. A skill whose prerequisite is missing says so instead of guessing.
-Skills that only read files and write Markdown (planning, blog, review) declare nothing and need
-nothing.
+Skills that only read files and write Markdown (blog, review) declare nothing and need nothing.
 
 Environment variables the plugins read are indexed in
 [`docs/ENVIRONMENT_VARIABLES.md`](docs/ENVIRONMENT_VARIABLES.md).

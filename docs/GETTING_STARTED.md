@@ -146,8 +146,9 @@ Each moment names the plugin, the command that starts it, and the file it writes
 **Build**
 
 - Plan a new app or one feature: install `ceh-build-planning`, start with
-  `/ceh-build-planning:write-build-plan`. Writes `product/plans/<slug>.md`, and deleting that file
-  discards the plan.
+  `/ceh-build-planning:write-build-plan`. Writes `product/plans/<slug>.yaml` and the
+  `<slug>.md` generated from it, and deleting both discards the plan. It needs `uv` to check and
+  render the plan, and saves it unchecked without.
 - Build from that plan: install `ceh-build-from-plan` and your stack plugin (below), start with
   `/ceh-build-from-plan:implement-from-plan`. Writes the code and the plan's evidence.
 - Write the user and operator docs: install `ceh-documentation`, start with
