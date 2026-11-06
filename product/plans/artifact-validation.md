@@ -330,3 +330,4 @@ None
 - 2026-11-06 PR: #203 https://github.com/cheneeheng/ceh-claude-code-library/pull/203
 - 2026-11-06 Design changed: was "`render <yaml>` checks the YAML, then writes the rendered `.md` to a temp file in the same folder and moves it into place with `os.replace`", now it also skips an unchanged `.md`, retries the rename and always removes the temp file, because the live session's first render collided on Windows and left a stray `.tmp`
 - 2026-11-06 Built Phase 3: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and the live session in a scratch repo
+- 2026-11-06 PR: #204 https://github.com/cheneeheng/ceh-claude-code-library/pull/204
