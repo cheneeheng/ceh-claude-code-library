@@ -18,6 +18,12 @@ committed beside it. This is the first phase of the trial planned in
 rather than only described. It ships the format and its checker. Nothing writes `plan/v2` yet, so
 every skill keeps writing `plan/v1` Markdown until the hooks and skill changes land.
 
+The `CEH Every Session` output style no longer ends a session nobody watches on a decision block.
+When the prompt or the caller says no user is present, as in a scheduled `claude -p` run, a
+question goes where the caller says, or the agent takes the conservative option, records it and
+continues, because a block nobody reads ends the run with the work undone. The question guard's
+deny reason says the same. A session nothing marks as unwatched is unchanged.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -25,6 +31,7 @@ every skill keeps writing `plan/v1` Markdown until the hooks and skill changes l
 | `ceh-build-planning`           | 1.1.18  |
 | `ceh-build-from-plan`          | 1.1.3   |
 | `ceh-check-build-against-plan` | 1.0.12  |
+| `ceh-every-session`            | 2.8.19  |
 
 ### Added
 
@@ -39,6 +46,9 @@ every skill keeps writing `plan/v1` Markdown until the hooks and skill changes l
   free text goes in `|` blocks. The `plan/v1` format is unchanged.
 - `validate.py` `templates` check: accepts `.template.yaml` templates, whose schema line is the
   first line, and a skill that cites either template suffix.
+- `ceh-every-session`: the output style gains a rule for sessions with no user present, and
+  `decided` joins its Status words. `ask-user-question-guard.py`'s deny reason gains the same
+  instruction, checked by a new `validate.py` hook fixture.
 - `decision-output-templates.md`, `decision-skill-bundled-files.md`, `plugins/CLAUDE.md`, and
   STRATEGY handoff rule 3: allow a YAML format with its model beside the schema, its generated
   Markdown, and `scripts/artifact.py`.

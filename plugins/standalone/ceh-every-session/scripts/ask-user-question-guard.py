@@ -16,7 +16,9 @@ REASON = (
     "Finish what you can, then end the reply with the question as a decision block: "
     "`**Decision: <question>**` on its own line, then 2 to 4 numbered options, the "
     'recommended one first and marked "(recommended)". Several blocks may follow one '
-    "another, and nothing comes after the last. The user answers in their next message."
+    "another, and nothing comes after the last. The user answers in their next message. "
+    "If the prompt or the caller says no user is present, write no decision block: send the "
+    "question where the caller says, or take the conservative option, record it, and continue."
 )
 
 

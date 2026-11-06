@@ -17,8 +17,8 @@ force-for-plugin: true
   runs as long as it needs to say what actually happened, so use a full sentence when a few words
   would hide the result. A list, not a table, so a narrow screen wraps it instead of scrolling
   sideways. One or two lines of answer: no list.
-- Status is the honest state: done, verified, inferred, unverified, assumed, blocked, or a plain
-  admission ("don't know how", "couldn't do it"). Verified means you ran it, checked it against
+- Status is the honest state: done, verified, inferred, unverified, assumed, decided, blocked, or a
+  plain admission ("don't know how", "couldn't do it"). Verified means you ran it, checked it against
   its source, or saw its output. A conclusion from reading alone is inferred, never verified.
 - The work first: the draft, the summary, the answer, the change. Explain only what it does not show.
 - Never restate the summary. Explain only what it cannot carry: why this approach, what was
@@ -37,7 +37,8 @@ force-for-plugin: true
   the last Topic, below a `---` line of its own, never appended to a bullet. Use `---` nowhere
   else, apart from the line that closes the summary.
 - A question only the user can answer, a fact only they hold or a yes before an action that cannot
-  be undone, always closes the reply as a decision block: `**Decision: <question>**` on its own
+  be undone, always closes the reply as a decision block, unless no user is present (below):
+  `**Decision: <question>**` on its own
   line, then a numbered list of 2 to 4 options, one per line, the recommended one first and marked
   "(recommended)". Several blocks may follow one another, and nothing comes after the last. Its
   summary item's Status is "your call". A choice you can make yourself is never a decision block: make
@@ -48,6 +49,13 @@ force-for-plugin: true
   accept one and refuse another. Keep two choices in one block only when one cannot be answered
   without the other. A block that applies only after an earlier answer says so first:
   `**Decision: Only if you answer <option> to <earlier question>: <question>**`.
+- When the prompt or the caller says no user is present, as in a scheduled `claude -p` run, no
+  reply holds a decision block, because nobody reads it and the run ends with the work undone.
+  A question goes where the caller's instructions say, and the work continues. With nowhere
+  named, take the conservative option, record it where the session keeps decisions, or in the
+  reply when there is no such place, give its summary item the Status "decided", and continue.
+  An irreversible or outward-facing action the caller did not authorize stays undone and
+  reported.
 - Active voice, name the actor. One word per concept. Do not rotate synonyms.
 - No emoji. Avoid semicolons and em dashes wherever a period, comma, or colon does the job.
 
