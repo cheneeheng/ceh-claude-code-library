@@ -24,6 +24,11 @@ that passes neither argument is unchanged. The first caller is Nightshift's inta
 them word for word, and saves to the same file, so a scheduler's intake can write the task's goal
 and done criteria and leave the planning to the skill. A request with no path is unchanged.
 
+`hand-off-session` can keep a calling program's state in one fixed file. `save --file <path>`
+overwrites that file and writes no index line, the caller's named fields go right after
+`**Session:**` and load reports them, and when the caller names a place for decisions, a pending
+fork goes there instead of to the user. A save with no `--file` is unchanged.
+
 The build plan gets a second format, `plan/v2`: the plan is YAML, a pydantic model checks every
 field of it, body included, and the Markdown a person reads is generated from the YAML and
 committed beside it. This is the first phase of the trial planned in
@@ -56,7 +61,7 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
 | `ceh-build-planning`           | 1.2.3   |
 | `ceh-build-from-plan`          | 1.2.1   |
 | `ceh-check-build-against-plan` | 1.1.1   |
-| `ceh-every-session`            | 2.8.20  |
+| `ceh-every-session`            | 2.8.21  |
 | `ceh-git-workflow`             | 1.5.5   |
 | `ceh-testing`                  | 1.5.3   |
 
@@ -111,6 +116,9 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
 - `ceh-build-planning:write-build-plan`: given a `status: draft` plan's path, it completes that
   plan in place and keeps its goal and Scope In items word for word. The plugin README row now
   names the `.yaml` it saves.
+- `ceh-every-session:hand-off-session`: `save --file <path>` overwrites one file with no index
+  line, caller fields follow `**Session:**`, and a caller-named place receives pending decisions.
+  The schema gains both and stays `handoff/v1`.
 
 ### Fixed
 

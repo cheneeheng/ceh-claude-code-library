@@ -4,7 +4,7 @@ description: >-
   Load this skill when a session's working state must survive into a later one: save writes a
   handoff file, load reads one back and resumes. Trigger on "save where we are", "write a handoff",
   "I'll continue this tomorrow", "load the handoff", "pick this up".
-argument-hint: "[save | load [path]]"
+argument-hint: "[save [--file <path>] | load [path]]"
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -31,15 +31,25 @@ spare handoff file costs nothing and a missing one loses the state.
    directory, filling `assets/handoff.template.md`. Create the directory if needed. Take the timestamp from
    a single `date` call and the session id prefix from the first 8 characters of
    `${CLAUDE_SESSION_ID}`. A caller that passes its own header lines (a usage window, a reason)
-   gets them added under the title.
+   gets them added under the title. With `--file <path>`, write to that path instead, overwriting
+   it, so a calling program keeps its state in one file under a fixed name.
+   - **Caller fields:** a caller may name extra fields and their values in its request, for example
+     "save --file jobs/J/state.md with fields Plan: product/plans/x.yaml, PR: none yet". Write each
+     as a `**<Field>:** <value>` line directly after `**Session:**`, in the order named.
+   - **A place for decisions:** when the caller names one (a file or a skill), Decisions pending
+     lists each pending fork as usual and ends with `, forks go to <place>`, and reads
+     `none, forks go to <place>` only when nothing is pending.
 4. **Append one line to the global index** at `~/.claude/handoff/index.md`, creating it if absent:
    `- <YYYY-MM-DD HH:MM> — <cwd> — <branch or "no git"> — <one-line state> — <file path>`.
    The index is what finds the file days later without remembering which directory it was in.
+   With `--file`, skip this step: the caller knows where its file is, and a line per save would
+   grow without bound.
 5. **Report the file path and its content** as your message, so the handoff is readable without
    opening the file.
 
 Saving does not end the session. Keep working afterwards if the user asks, and save again later:
-each save is a new file, never an edit of an old one.
+each save is a new file, never an edit of an old one, except with `--file`, which overwrites its
+one file.
 
 ## Load
 
@@ -50,9 +60,11 @@ each save is a new file, never an edit of an old one.
 2. **Read it in full**, then check it against the world before trusting it: the branch exists and
    is checked out, files named under Done exist, `git log` and `git status` match the described
    state. Report every mismatch. The file is a snapshot and the repo may have moved on.
-3. **State what you are resuming:** the goal, and the first Open item as the next step.
+3. **State what you are resuming:** the goal, each caller field after `**Session:**`, and the
+   first Open item as the next step.
 4. **Continue from the first Open item.** A Decisions pending entry that blocks that step goes to
-   the user before any work on it.
+   the user before any work on it. When the line ends `, forks go to <place>`, send each such fork
+   there instead: write it to the file named, or invoke the skill named with it.
 
 ## Rules
 

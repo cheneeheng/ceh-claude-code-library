@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Three skills gain a form a calling program sets, for Nightshift's intake
-status: building
+status: built
 created: 2026-11-06
 ---
 
@@ -188,7 +188,8 @@ No change to `docs/VISION.md` is needed.
   plugin README and `docs/CATALOG.md`. `grep -c "forks go to"` prints at least 2 for the SKILL.md.
   `grep -n "2.8.21" plugins/standalone/ceh-every-session/.claude-plugin/plugin.json .claude-plugin/marketplace.json docs/PLUGIN_VERSIONS.md CHANGELOG.md`
   prints at least one line per file.
-- **Status:** todo
+- **Status:** done. `validate.py` printed `OK: all plugin checks passed`. `--file` counts are 5, 1,
+  2 and 1, `forks go to` is in the SKILL.md 3 times, and `2.8.21` is in all four files
 
 ## Open
 
@@ -207,3 +208,4 @@ No change to `docs/VISION.md` is needed.
 - 2026-11-06 PR: #207 https://github.com/cheneeheng/ceh-claude-code-library/pull/207
 - 2026-11-06 Built Phase 2: `python tools/validate-plugins/validate.py`, OK: all plugin checks passed
 - 2026-11-06 PR: #208 https://github.com/cheneeheng/ceh-claude-code-library/pull/208
+- 2026-11-06 Built Phase 3: `python tools/validate-plugins/validate.py`, OK: all plugin checks passed
