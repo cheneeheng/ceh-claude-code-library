@@ -231,7 +231,13 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
   shows. With `UV_CACHE_DIR` pointing at an empty scratchpad folder, the first `artifact.py check`
   is timed and the time is written in this phase's Status, which settles the timeout question
   under Open.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py` printed "OK: all plugin checks
+  passed" locally with uv, and CI went green on the PR, where `checks/hooks.py` now fails when
+  `CI` is set and uv is missing, so green means the uv fixtures ran. Breaking each hook on purpose
+  turned three fixtures red. The first `artifact.py check` with an empty `UV_CACHE_DIR` took
+  1.9 s, and a warm one 0.7 s, so the 120-second timeout stands. The plugin README's Hooks section
+  and the `CEH_ARTIFACT_CHECK` row in `docs/ENVIRONMENT_VARIABLES.md` landed here, not in Phase 5,
+  because a shipped hook documents its switch.
 
 ### Phase 3: Skills write and re-check the YAML, and the copies
 
@@ -293,8 +299,6 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
 
 ## Open
 
-- How long uv's first install of pydantic and PyYAML takes on a cold machine: assumed under the
-  120-second hook timeout. Phase 2 times it, and a slower result raises the timeout.
 - Whether agents write long Design entries well inside YAML block scalars: assumed yes. Phase 3's
   real session shows it, and a poor result is reported before Phase 6 is planned.
 
@@ -308,3 +312,5 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
 - 2026-11-06 PR: #199 https://github.com/cheneeheng/ceh-claude-code-library/pull/199
 - 2026-11-06 Design changed: was "`checks/artifact_models.py` ... checks ... that every copy of the model, `artifact.py` and both hooks is byte-identical" in Phase 4, now its stdlib part lands in Phase 3, because Phase 3 creates the copies and nothing else catches their drift until Phase 4
 - 2026-11-06 PR: #201 https://github.com/cheneeheng/ceh-claude-code-library/pull/201
+- 2026-11-06 Built Phase 2: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-06 PR: #203 https://github.com/cheneeheng/ceh-claude-code-library/pull/203

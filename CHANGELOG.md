@@ -18,6 +18,11 @@ committed beside it. This is the first phase of the trial planned in
 rather than only described. It ships the format and its checker. Nothing writes `plan/v2` yet, so
 every skill keeps writing `plan/v1` Markdown until the hooks and skill changes land.
 
+The second phase adds the hooks to `ceh-build-planning`. Each write to a plan YAML is checked and
+its errors handed back to the agent, and its Markdown is rendered once it is valid. A hand edit to
+generated Markdown is denied. With no uv on the machine, the agent is told once per session that
+the file went unchecked, rather than the check passing silently.
+
 The `CEH Every Session` output style no longer ends a session nobody watches on a decision block.
 When the prompt or the caller says no user is present, as in a scheduled `claude -p` run, a
 question goes where the caller says, or the agent takes the conservative option, records it and
@@ -28,7 +33,7 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-build-planning`           | 1.1.18  |
+| `ceh-build-planning`           | 1.2.0   |
 | `ceh-build-from-plan`          | 1.1.3   |
 | `ceh-check-build-against-plan` | 1.0.12  |
 | `ceh-every-session`            | 2.8.19  |
@@ -38,6 +43,10 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
 - `ceh-build-planning`: `references/plan-model.py`, the `plan/v2` model and its renderer, and
   `scripts/artifact.py`, which checks a plan YAML (errors, or a stale Markdown beside it) and
   renders its Markdown, run with `uv run --script`.
+- `ceh-build-planning` hooks: `artifact-render-hook.py` (PostToolUse) checks and renders a plan
+  YAML on every write and warns once when uv is missing, and `generated-md-guard.py` (PreToolUse)
+  denies a hand edit to Markdown with `generated_from:` in its frontmatter. `CEH_ARTIFACT_CHECK=off`
+  turns both off. `validate.py` has fixtures for both, and CI installs uv.
 - `plan.template.yaml` in all three plan plugins, the `plan/v2` skeleton.
 
 ### Changed

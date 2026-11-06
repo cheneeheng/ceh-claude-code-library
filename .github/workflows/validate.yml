@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+      # uv runs scripts/artifact.py, the plan/v2 check the artifact hook fixtures exercise.
+      - uses: astral-sh/setup-uv@v6
       # shellcheck is preinstalled on GitHub-hosted ubuntu runners.
       - name: Validate plugins, skills, references, and scripts
         run: python tools/validate-plugins/validate.py

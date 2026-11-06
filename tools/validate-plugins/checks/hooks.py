@@ -249,7 +249,77 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             else "m2 lost"
         )
 
+    # artifact-render-hook and generated-md-guard: plan/v2 YAML in tmp/product/plans.
+    good_plan = (
+        "schema: plan/v2\ntitle: Count words\nstatus: ready\ncreated: 2026-11-06\n"
+        "goal: |\n  A CLI that counts words.\nscope:\n  in:\n    - Count the words in a file\n"
+        "  out: []\ndesign:\n  - topic: Stack.\n    decision: |\n      Python stdlib.\n"
+        "phases:\n  - name: CLI\n    builds: |\n      The counter.\n    check: |\n"
+        "      `python wc.py README.md` prints a number.\n    status: todo\nopen: []\n"
+        "record:\n  - date: 2026-11-06\n    event: Planned\n    details: status ready\n"
+    )
+    no_check = good_plan.replace(
+        "    check: |\n      `python wc.py README.md` prints a number.\n", ""
+    )
+    yamls = {
+        "ok": good_plan,
+        "broken": no_check,
+        "dashed": "---\n# a comment first\n" + no_check,
+        "no-schema": good_plan.replace("schema: plan/v2\n", ""),
+    }
+    for name, text in yamls.items():
+        (plans / f"{name}.yaml").write_text(text, encoding="utf-8")
+    other_yaml = tmp / "config.yaml"
+    other_yaml.write_text("key: value\n", encoding="utf-8")
+    generated = plans / "gen.md"
+    generated.write_text(
+        "---\nschema: plan/v2\ngenerated_from: gen.yaml\n---\n", encoding="utf-8"
+    )
+
+    def write(name: str) -> dict:
+        return {
+            "tool_name": "Write",
+            "tool_input": {"file_path": (plans / name).as_posix()},
+        }
+
+    def rendered(name: str) -> str | None:
+        md = plans / f"{name}.md"
+        ok = md.is_file() and "generated_from: ok.yaml" in md.read_text(
+            encoding="utf-8"
+        )
+        return None if ok else f"{md.name} was not rendered"
+
+    def not_rendered(name: str):
+        return lambda: (
+            f"{name}.md was rendered" if (plans / f"{name}.md").exists() else None
+        )
+
+    no_uv = {"PATH": str(tmp / "no-uv")}
+    render_hook = "artifact-render-hook.py"
+    # Running artifact.py needs uv: skipped without it, as shellcheck is in checks/scripts.py.
+    uv_fixtures = [
+        {"script": render_hook, "stdin": write("ok.yaml"), "out": "", "after": lambda: rendered("ok")},
+        {"script": render_hook, "stdin": write("broken.yaml"), "out": '"decision": "block"', "after": not_rendered("broken")},
+        {"script": render_hook, "stdin": write("dashed.yaml"), "out": "phases.0.check"},
+        {"script": render_hook, "stdin": write("no-schema.yaml"), "out": "no 'schema:"},
+    ] if shutil.which("uv") else []  # fmt: skip
+
     return [
+        # artifact-render-hook: block an invalid plan YAML, render a valid one, skip other files,
+        # and warn once when uv is missing.
+        *uv_fixtures,
+        {"script": render_hook, "stdin": {"tool_name": "Write", "tool_input": {"file_path": other_yaml.as_posix()}}, "env": no_uv, "out": ""},
+        {"script": render_hook, "stdin": write("p.md"), "env": no_uv, "out": ""},
+        {"script": render_hook, "stdin": write("broken.yaml"), "env": no_uv, "out": "uv is not installed"},
+        {"script": render_hook, "stdin": write("broken.yaml"), "env": no_uv, "repeat": 2, "out": ""},
+        {"script": render_hook, "stdin": write("broken.yaml"), "env": {**no_uv, "CEH_ARTIFACT_CHECK": "off"}, "out": ""},
+        {"script": render_hook, "stdin": write("broken.yaml"), "env": {**no_uv, "CEH_DISABLED_HOOKS": "artifact-render-hook"}, "out": ""},
+        # generated-md-guard: deny an edit to a generated .md, naming its YAML.
+        {"script": "generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "Edit "},
+        {"script": "generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+        {"script": "generated-md-guard.py", "stdin": edit(plan_p), "out": ""},
+        {"script": "generated-md-guard.py", "stdin": edit(generated.as_posix()), "env": {"CEH_ARTIFACT_CHECK": "off"}, "out": ""},
+        {"script": "generated-md-guard.py", "stdin": edit(generated.as_posix()), "env": {"CEH_DISABLED_HOOKS": "generated-md-guard"}, "out": ""},
         # branch-guard: deny on the session repo's default branch, allow elsewhere, in another
         # repo, or when switched off.
         {"script": "branch-guard.py", "stdin": edit(repos["main"]), "out": "On the default branch"},
@@ -372,6 +442,12 @@ def check() -> None:
         base_env.update({"TMP": str(state), "TEMP": str(state), "TMPDIR": str(state)})
         fixtures = hook_fixtures(tmp)
 
+        # CI installs uv, so a skip there would hide the artifact fixtures: fail instead.
+        if os.environ.get("CI") and not shutil.which("uv"):
+            fail(
+                ".github/workflows/validate.yml",
+                "uv is not installed, the artifact fixtures did not run",
+            )
         covered = {scripts.get(f["script"]) for f in fixtures}
         for path in sorted({p for p in scripts.values() if p} - covered):
             fail(
