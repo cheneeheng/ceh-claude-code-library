@@ -20,12 +20,14 @@ append-only `## Record`, so the build keeps its history.
 
 ## Hooks
 
-The plugin ships a hook (`hooks/hooks.json`) that activates automatically when the plugin is
+The plugin ships three hooks (`hooks/hooks.json`) that activate automatically when the plugin is
 enabled.
 
-| Guard                                     | Event                                       | Script                  | Default |
-| ----------------------------------------- | ------------------------------------------- | ----------------------- | ------- |
-| [Build record guard](#build-record-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`) | `build-record-guard.py` | on      |
+| Guard                                     | Event                                        | Script                    | Default |
+| ----------------------------------------- | -------------------------------------------- | ------------------------- | ------- |
+| [Build record guard](#build-record-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`)  | `build-record-guard.py`   | on      |
+| [Artifact check](#artifact-check)         | `PostToolUse` (`Edit`, `Write`, `MultiEdit`) | `artifact-render-hook.py` | on      |
+| [Artifact check](#artifact-check)         | `PreToolUse` (`Edit`, `Write`, `MultiEdit`)  | `generated-md-guard.py`   | on      |
 
 ### Build record guard
 
@@ -35,7 +37,18 @@ Phase line is the plan's evidence that a phase was built test first and proven b
 so a line written by hand records a build that procedure never ran. It happened once: a session
 hand-wrote three Built lines, recorded in `product/retros/2026-10-26-repeat-mistake.md` in this
 library's repo. Built lines already in the file do not count, so rewriting a plan that has them
-passes. The guard fails open: unparseable input or a missing transcript allows the edit.
+passes. The guard fails open: unparseable input or a missing transcript allows the edit. In a
+`plan/v2` YAML plan, it guards a new `event: Built Phase` record entry the same way.
+
+### Artifact check
+
+The same two hooks `ceh-build-planning` ships, so the check works with this plugin installed
+alone. On each write to a `product/plans/*.yaml`, `artifact-render-hook.py` runs
+`scripts/artifact.py render`: errors go back to the agent to fix, and the Markdown beside the YAML
+is rendered only once the YAML is valid. It needs [uv](https://docs.astral.sh/uv/), which installs
+pydantic and PyYAML on first use, and without uv it says once per session that the file was not
+checked. `generated-md-guard.py` denies a hand edit to a Markdown file whose frontmatter says
+`generated_from:`. The skill also runs `artifact.py check` before it acts on a `plan/v2` plan.
 
 Set a variable under `env` in a Claude Code settings file. The
 [environment variables page](../../../docs/ENVIRONMENT_VARIABLES.md) shows which file and how to undo it.
@@ -43,6 +56,7 @@ Set a variable under `env` in a Claude Code settings file. The
 | Variable                 | Default              | Effect                                                                          |
 | ------------------------ | -------------------- | ------------------------------------------------------------------------------- |
 | `CEH_BUILD_RECORD_GUARD` | unset (guard on)     | `off` allows Built Phase lines without `implement-from-plan`                    |
+| `CEH_ARTIFACT_CHECK`     | unset (check on)     | `off` turns both artifact check hooks off                                       |
 | `CEH_DISABLED_HOOKS`     | unset (all hooks on) | Comma-separated hook script names to skip; `build-record-guard` switches it off |
 
 ## Not this plugin

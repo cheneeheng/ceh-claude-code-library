@@ -21,9 +21,21 @@ reason recorded.
 
 1. **Find the plan.** Take the path from the arguments. Otherwise look in the plans folder for a
    plan with `status: ready` or `building`, and when there are several, take the most recently
-   created and say which. With no plan at all, write a minimal one from the request in the plan
-   format: Goal, Scope, and phases with checks, every assumption under Open. Say that you did,
-   because the user may have expected a plan to exist.
+   created and say which. With no plan at all, write a minimal one from the request as `plan/v2`,
+   a filled copy of `${CLAUDE_SKILL_DIR}/assets/plan.template.yaml`: Goal, Scope, and phases with
+   checks, every assumption under Open. Say that you did, because the user may have expected a
+   plan to exist.
+
+   **A `plan/v2` plan is checked first.** When `<slug>.yaml` sits beside the plan's `.md`, the
+   YAML is the plan: read and edit it, never the `.md`. Before acting on it, run
+   `uv run --script ${CLAUDE_PLUGIN_ROOT}/scripts/artifact.py check <slug>.yaml`. When it exits 1
+   with errors, stop and report them, because a stage that acts on a broken plan builds the wrong
+   thing. When its only error is a stale `.md`, run the same command with `render` and go on.
+   When it exits 3 or uv is missing, say in the reply that the plan went unchecked, and go on.
+   After the last write to the YAML, run `render`. In the YAML, a phase's Status is its `status`
+   and `evidence`, the reason or failure the steps below put in a Status goes in its `note`, and a
+   Record line is a `record` entry, with `phase` set on a Built Phase entry.
+
 2. **Read the whole plan before any code.** Design is binding. An Open item marked as blocking
    stops the run before it starts.
 3. **Build each targeted phase in order.** The target is the named phase, or by default every

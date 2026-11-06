@@ -48,7 +48,11 @@ Pick the path from the request, then run only that path:
    (`git diff --name-only origin/main...HEAD -- product/plans/`), append
    `- YYYY-MM-DD PR: #<n> <url>` to the `## Record` section at the end of that plan, then commit and
    push it to the same branch. The plan then traces its change to the review that landed it. With
-   no plan in the diff, skip this step.
+   no plan in the diff, skip this step. A plan with a `<slug>.yaml` beside its `.md` is a
+   `plan/v2` plan: append to the YAML's `record` list instead, as `date: YYYY-MM-DD`,
+   `event: PR`, and `details: "#<n> <url>"`, quoted because a bare `#` starts a YAML comment, and
+   never edit its generated `.md`. Commit both files. When the `.md` did not change, because the
+   hook that renders it (`ceh-build-planning`) is not installed, say so in the reply.
 4. Open as a **draft** while CI runs or the work is still settling, and mark it ready only once the
    self-review passes. A draft is safe to queue: auto-merge waits until the PR is marked ready.
    Request the reviewers the [approval rules](#approvals-and-merge-strategy) require.

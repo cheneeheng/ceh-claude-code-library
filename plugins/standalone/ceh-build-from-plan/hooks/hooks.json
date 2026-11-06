@@ -8,6 +8,23 @@
             "type": "command",
             "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/build-record-guard.py\"",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/generated-md-guard.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/artifact-render-hook.py\"",
+            "timeout": 120
           }
         ]
       }

@@ -23,6 +23,13 @@ its errors handed back to the agent, and its Markdown is rendered once it is val
 generated Markdown is denied. With no uv on the machine, the agent is told once per session that
 the file went unchecked, rather than the check passing silently.
 
+The third phase switches the plan skills to `plan/v2`. `write-build-plan` writes the YAML and
+renders its Markdown, and the skills that read a plan run `artifact.py check` on it first, so a
+plan edited by Bash, a merge, or a session without the hooks is still caught before a stage acts on
+it. `ceh-build-from-plan` and `ceh-check-build-against-plan` carry their own copies of the model,
+the CLI, and the hooks, so each still works installed alone, and `validate.py` fails when the
+copies drift. Plans already written as `plan/v1` Markdown are still edited in place.
+
 The `CEH Every Session` output style no longer ends a session nobody watches on a decision block.
 When the prompt or the caller says no user is present, as in a scheduled `claude -p` run, a
 question goes where the caller says, or the agent takes the conservative option, records it and
@@ -33,10 +40,12 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-build-planning`           | 1.2.0   |
-| `ceh-build-from-plan`          | 1.1.3   |
-| `ceh-check-build-against-plan` | 1.0.12  |
+| `ceh-build-planning`           | 1.2.1   |
+| `ceh-build-from-plan`          | 1.2.0   |
+| `ceh-check-build-against-plan` | 1.1.0   |
 | `ceh-every-session`            | 2.8.19  |
+| `ceh-git-workflow`             | 1.5.5   |
+| `ceh-testing`                  | 1.5.3   |
 
 ### Added
 
@@ -48,6 +57,10 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
   denies a hand edit to Markdown with `generated_from:` in its frontmatter. `CEH_ARTIFACT_CHECK=off`
   turns both off. `validate.py` has fixtures for both, and CI installs uv.
 - `plan.template.yaml` in all three plan plugins, the `plan/v2` skeleton.
+- `ceh-build-from-plan` and `ceh-check-build-against-plan`: copies of `plan-model.py`,
+  `artifact.py`, and both artifact hooks, wired in their `hooks.json`.
+- `validate.py` `artifact-models` check: a model has its schema and YAML template, and every copy
+  of a model, `artifact.py`, and the artifact hooks is byte-identical.
 
 ### Changed
 
@@ -63,6 +76,22 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
   Markdown, and `scripts/artifact.py`.
 - `product/plans/artifact-validation.md`: the check that copies of the model, `artifact.py`, and
   the hooks stay byte-identical moves from Phase 4 to Phase 3, which creates those copies.
+- `ceh-build-planning:write-build-plan` saves a new plan as `plan/v2` YAML and renders its
+  Markdown. `review-build-plan`, `ceh-build-from-plan:implement-from-plan`, and
+  `ceh-check-build-against-plan:check-build-against-plan` run `artifact.py check` on a `plan/v2`
+  plan before acting on it, and write their Record entries to the YAML.
+  `implement-from-plan`'s minimal plan is `plan/v2` too.
+- `build-record-guard.py`: also guards a new `event: Built Phase` entry in a plan YAML.
+- `ceh-git-workflow:pull-request` and `ceh-testing:write-evidence-report`: append their Record
+  entries to a `plan/v2` plan's YAML, quoted, read its state from the YAML, and say when its
+  Markdown was not re-rendered.
+
+### Fixed
+
+- `artifact.py render`, in all three plan plugins: the hook and the skill render at once after a
+  write, and on Windows one rename failed with access denied and left a `.tmp` beside the plan. A
+  render now leaves an unchanged `.md` alone, retries the rename briefly, and always removes its
+  temp file.
 
 ## 2026-11-05
 

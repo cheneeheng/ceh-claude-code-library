@@ -83,21 +83,25 @@ summarized under Output.
    - No placeholder (`TODO`, `...`, "adjust as needed"), no reference to a file, route, type, or
      field the plan does not define, and no field named differently in two places.
 
-   Save to the plans folder with `status: ready`, or `status: draft` when an Open question blocks
-   building. Add the Planned line to the plan's `## Record`, in the format the plan format file
-   gives.
+   Save the plan as `plan/v2`: `<slug>.yaml` in the plans folder, a filled copy of
+   `${CLAUDE_PLUGIN_ROOT}/assets/plan.template.yaml`, with `status: ready`, or `status: draft` when
+   an Open question blocks building, and a Planned entry in its `record`. Then run
+   `uv run --script ${CLAUDE_PLUGIN_ROOT}/scripts/artifact.py render <slug>.yaml` and fix the YAML
+   for each error it lists until it exits 0, which writes `<slug>.md` beside it. Never write the
+   `.md` by hand: it is generated. When the command exits 3 or uv is missing, say in the reply
+   that the plan was saved unchecked and unrendered.
 
 ## Rules
 
 - One plan per request. Leave a `built` plan as written: new work gets a new plan file.
-- Write only the plan file.
+- Write only the plan's YAML. Its Markdown is rendered from it.
 - Leave every decision that is not needed now under Out or Open, not in Design.
 
 ## Output
 
 Close the reply with:
 
-- The label from step 1 and the plan's path.
+- The label from step 1 and the plan's YAML path.
 - The In list, and the phases one line each with their Check.
 - Open: every assumption taken without an answer.
 

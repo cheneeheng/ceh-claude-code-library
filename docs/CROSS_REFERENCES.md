@@ -320,23 +320,31 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 **Canonical:** `plugins/standalone/ceh-build-planning/references/plan-schema.md` — whole file,
 shared there by `write-build-plan` and `review-build-plan`
 
-| Copy                                                                                                        | Section    | Diverges |
-| ----------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-schema.md`               | whole file | none     |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-schema.md` | whole file | none     |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/plan.template.md`                 | whole file | none     |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/assets/plan.template.md`   | whole file | none     |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/plan.template.yaml`               | whole file | none     |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/assets/plan.template.yaml` | whole file | none     |
+| Copy                                                                                                                                       | Section                                                     | Diverges                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-schema.md`                                              | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-schema.md`                                | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/plan.template.md`                                                | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/assets/plan.template.md`                                  | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/plan.template.yaml`                                              | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/assets/plan.template.yaml`                                | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/plan-model.py`                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/references/plan-model.py`                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-build-from-plan/scripts/artifact.py`, `artifact-render-hook.py`, `generated-md-guard.py`                           | whole files                                                 | none                                                                             |
+| `plugins/standalone/ceh-check-build-against-plan/scripts/artifact.py`, `artifact-render-hook.py`, `generated-md-guard.py`                  | whole files                                                 | none                                                                             |
+| `ceh-build-planning:review-build-plan`, `ceh-build-from-plan:implement-from-plan`, `ceh-check-build-against-plan:check-build-against-plan` | the "A `plan/v2` plan is checked first" paragraph in step 1 | `implement-from-plan` adds where a Status note and a Record entry go in the YAML |
 
 **Shared:** the whole plan format and its template `plan.template.md` (canonical in
 `ceh-build-planning/assets/`, beside the `references/` holding `plan-schema.md`), byte for byte: the `product/plans/<slug>.md` location, the
 frontmatter and its four statuses, the Goal, Scope, Design, Phases, and Open sections, the phase
 rules (a runnable Check, `todo` / `unplanned` / `done` with evidence), and the rules for changing
 a plan, and the `plan/v2` YAML template `plan.template.yaml` with its keys and rules. The `plan/v2`
-model `plan-model.py` and `scripts/artifact.py` are only in `ceh-build-planning` until the copies
-land with the hooks. Each of the three plugins carries a copy so it works installed alone. `validate.py` fails
-when a copy differs from the canonical file. `ceh-business-plan:find-product-market-fit` reads
+model `plan-model.py`, `scripts/artifact.py`, and the two artifact hooks are canonical in
+`ceh-build-planning` and copied whole into the other two plugins, as is the read-time check
+paragraph of each plugin's skill that reads a plan. Each of the three plugins carries a copy so it
+works installed alone. `validate.py` fails when a copy differs from the canonical file (the
+`templates` check for templates and schemas, `artifact-models` for the model and scripts). The read-time
+check paragraph is kept in step by hand. `ceh-business-plan:find-product-market-fit` reads
 plans too, but carries no copy: it reads only the plans folder and the Goal, Scope, and Design
 sections.
 

@@ -25,6 +25,15 @@ quotes the plan, and the verdict is delivered.
    `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md`. With no plan but a spec (an issue, a PRD, a
    spec file), review the spec with the Scope lens and the gap checks of step 5, and skip what
    concerns phases. With neither, stop: there is nothing to review.
+
+   **A `plan/v2` plan is checked first.** When `<slug>.yaml` sits beside the plan's `.md`, the
+   YAML is the plan: read and edit it, never the `.md`. Before acting on it, run
+   `uv run --script ${CLAUDE_PLUGIN_ROOT}/scripts/artifact.py check <slug>.yaml`. When it exits 1
+   with errors, stop and report them, because a stage that acts on a broken plan builds the wrong
+   thing. When its only error is a stale `.md`, run the same command with `render` and go on.
+   When it exits 3 or uv is missing, say in the reply that the plan went unchecked, and go on.
+   After the last write to the YAML, run `render`.
+
 2. **Review from a fresh context when this session wrote the plan.** Dispatch one background
    subagent on the most capable model with the plan path and `${CLAUDE_SKILL_DIR}/SKILL.md`, told
    to run steps 3 to 6 and return the Output. The author reads what they meant, a fresh reader
@@ -50,8 +59,9 @@ quotes the plan, and the verdict is delivered.
 6. **Grade each finding.** **Blocking**: the build would stop, go wrong, or build the wrong thing.
    **Advisory**: the build succeeds, but worse than it could. Then give the verdict (see Output).
 7. **Fix only on request.** By default the review edits no plan content, because the plan belongs
-   to its author. It appends one Reviewed line to the plan's `## Record` (format in the plan
-   format file), so the review stays part of the plan's trail. A spec that is not a plan gets no
+   to its author. It appends one Reviewed entry to the plan's Record (format in the plan format
+   file), as a `record` entry in a `plan/v2` YAML or a line under `## Record` in a `plan/v1`
+   Markdown plan, so the review stays part of the plan's trail. A spec that is not a plan gets no
    Record line. When asked to fix, edit the plan for each blocking finding whose fix the
    plan or the code already settles, put a finding that would change In or Out under Open as a
    question with a recommended answer, and set `status: draft` while any blocking finding is open.

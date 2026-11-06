@@ -22,6 +22,7 @@ import os
 import re
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 PLUGIN_ROOT = Path(__file__).resolve().parent.parent
@@ -101,11 +102,27 @@ def validate(path: Path):
 
 
 def write_atomic(path: Path, text: str) -> None:
+    # The hook and the skill both render after a write, often at once. An unchanged file is left
+    # alone, so the second render touches nothing.
+    if path.is_file() and path.read_text(encoding="utf-8") == text:
+        return
     # A temp file in the same folder, then a rename: a parallel render never leaves half a file.
     fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
-    with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
-        f.write(text)
-    os.replace(tmp, path)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
+            f.write(text)
+        # Windows refuses the rename while another process has the target open: retry briefly.
+        for attempt in range(10):
+            try:
+                os.replace(tmp, path)
+                return
+            except PermissionError:
+                if attempt == 9:
+                    raise
+                time.sleep(0.1)
+    finally:
+        if os.path.exists(tmp):
+            os.remove(tmp)
 
 
 def main(argv: list[str]) -> int:
