@@ -37,6 +37,7 @@ CHECKS = [
     "scripts",
     "hooks",
     "templates",
+    "artifact_models",
 ]
 
 

@@ -133,9 +133,10 @@ leaves the Markdown unrendered. The agent fixes the YAML in the same turn, and t
   whose `NAME` and `VERSION` match with `importlib.util.spec_from_file_location`.
   - `check <yaml>` parses with `yaml.safe_load`, validates, and, when `<slug>.md` exists beside
     it, reports it as stale if its bytes differ from `render(plan)`.
-  - `render <yaml>` checks the YAML, then writes the rendered `.md` to a temp file in the same
-    folder and moves it into place with `os.replace`, so two hook copies rendering at once never
-    leave a half-written file.
+  - `render <yaml>` checks the YAML, then leaves an `.md` that already matches untouched, and
+    otherwise writes it to a temp file in the same folder and moves it into place with
+    `os.replace`, retried briefly while Windows holds the target open, the temp file removed
+    either way, so two renders at once never leave a half-written file or a stray `.tmp`.
   - Exit codes: `0` valid (and rendered), `1` errors as `<path>: <field path>: <error>` lines on
     stdout (a YAML syntax error as `<path>:<line>:<col>: <problem>`, a stale `.md` as `<path>:
 stale, run render`), `2` any other failure with the exception on stdout, `3` no model for that
@@ -263,7 +264,21 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
   manual because only a live session shows the skills, hooks and guard working together, and it
   spends model calls, so the builder asks the user whether to run it in the session or hand over
   the steps.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py` printed "OK: all plugin checks
+  passed", the guard fixture denies a hand-written `event: Built Phase` entry, and a planted line
+  in one copy of `plan-model.py` and of `artifact.py` turned `artifact-models` red. The user chose
+  to run the live session here: four `claude -p` prompts on Sonnet in a scratch repo, about $1.10.
+  "Plan a small CLI that counts the words in a text file" wrote a valid YAML and its rendered
+  Markdown. "Build phase 1" re-checked the plan, built test first, moved phase 1 to `done`, added a
+  Built Phase entry with `phase: 1`, set `building` and re-rendered, and `artifact.py check` exits
+  0 on the result. Two seeded broken writes never reached the hook: asked for a phase "with no
+  check", the agent filled `check` with a note because the schema requires it, and asked for the
+  name "Lines flag #2", it quoted the value because `plan-schema.md` explains ` #`. So the
+  same-turn fix after a block is proven only by the piped fixtures, not live. The first render in
+  the session collided on Windows (access denied on the rename, a stray `.tmp` left), so
+  `artifact.py` now skips an unchanged `.md`, retries the rename, and always removes the temp
+  file. Forty parallel renders in a scratch race test all passed after the fix, but the old code
+  passed too, so the collision was not reproduced outside the session.
 
 ### Phase 4: Model-to-template repo check
 
@@ -299,8 +314,7 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
 
 ## Open
 
-- Whether agents write long Design entries well inside YAML block scalars: assumed yes. Phase 3's
-  real session shows it, and a poor result is reported before Phase 6 is planned.
+None
 
 ## Record
 
@@ -314,3 +328,6 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
 - 2026-11-06 PR: #201 https://github.com/cheneeheng/ceh-claude-code-library/pull/201
 - 2026-11-06 Built Phase 2: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-06 PR: #203 https://github.com/cheneeheng/ceh-claude-code-library/pull/203
+- 2026-11-06 Design changed: was "`render <yaml>` checks the YAML, then writes the rendered `.md` to a temp file in the same folder and moves it into place with `os.replace`", now it also skips an unchanged `.md`, retries the rename and always removes the temp file, because the live session's first render collided on Windows and left a stray `.tmp`
+- 2026-11-06 Built Phase 3: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and the live session in a scratch repo
+- 2026-11-06 PR: #204 https://github.com/cheneeheng/ceh-claude-code-library/pull/204

@@ -23,6 +23,15 @@ feature that was never built. Done means every plan item has a status and the re
    folder whose status is `building` or `built`, and say which. The format is in
    `${CLAUDE_SKILL_DIR}/references/plan-schema.md`. With no plan, use the spec the user names: an
    issue, a PRD, or a README section. With neither, stop: there is nothing to check against.
+
+   **A `plan/v2` plan is checked first.** When `<slug>.yaml` sits beside the plan's `.md`, the
+   YAML is the plan: read and edit it, never the `.md`. Before acting on it, run
+   `uv run --script ${CLAUDE_PLUGIN_ROOT}/scripts/artifact.py check <slug>.yaml`. When it exits 1
+   with errors, stop and report them, because a stage that acts on a broken plan builds the wrong
+   thing. When its only error is a stale `.md`, run the same command with `render` and go on.
+   When it exits 3 or uv is missing, say in the reply that the plan went unchecked, and go on.
+   After the last write to the YAML, run `render`.
+
 2. **List the plan items.** One row per Scope In item, per Design decision, per Scope Out item
    (which must be absent), and per phase Check.
 3. **Check each item against the code**, and give it one status:
@@ -53,8 +62,9 @@ feature that was never built. Done means every plan item has a status and the re
    the fix touched. Otherwise fix exactly the items either one flagged, quoting its finding, and
    nothing else, then gate again with two fresh reviewers. Stop after three rounds and report what
    is still flagged, by which reviewer, and the fixes each round tried.
-6. **Record the check in the plan.** Append one Checked line to the plan's `## Record`: the count
-   per status and each item that is not Built. It is the one write a report-only check makes, so
+6. **Record the check in the plan.** Append one Checked entry to the plan's Record, as a `record`
+   entry in a `plan/v2` YAML or a line under `## Record` in a `plan/v1` plan: the count per status
+   and each item that is not Built. It is the one write a report-only check makes, so
    the plan keeps how its build was checked. After a gated fix, record the final round. Checking
    against a spec that is not a plan writes nothing.
 

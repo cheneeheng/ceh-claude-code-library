@@ -62,7 +62,12 @@ on a fresh clone and none answers for the product as a whole. This file is the o
    the older single-run layout keeps its content, under a section heading dated from its **Written**
    line. Commit it with the change it describes or on its own.
 7. **Record the evidence in each plan.** Append an Evidence line to the `## Record` of each plan in
-   the Plan area: the section date, the short SHA, and every area that is not `passed`.
+   the Plan area: the section date, the short SHA, and every area that is not `passed`. A plan
+   with a `<slug>.yaml` beside its `.md` is a `plan/v2` plan: read its status and Record from the
+   YAML, not the `.md`, which can lag behind it, and append to the YAML's `record` list instead,
+   as `date`, `event: Evidence`, and a quoted `details`, never editing the generated `.md`. Commit
+   both files. When the `.md` did not change, because the hook that renders it
+   (`ceh-build-planning`) is not installed, say so in the reply.
 
 ## Rules
 

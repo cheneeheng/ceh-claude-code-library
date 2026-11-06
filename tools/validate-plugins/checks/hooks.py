@@ -295,31 +295,65 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         )
 
     no_uv = {"PATH": str(tmp / "no-uv")}
-    render_hook = "artifact-render-hook.py"
-    # Running artifact.py needs uv: skipped without it, as shellcheck is in checks/scripts.py.
-    uv_fixtures = [
-        {"script": render_hook, "stdin": write("ok.yaml"), "out": "", "after": lambda: rendered("ok")},
-        {"script": render_hook, "stdin": write("broken.yaml"), "out": '"decision": "block"', "after": not_rendered("broken")},
-        {"script": render_hook, "stdin": write("dashed.yaml"), "out": "phases.0.check"},
-        {"script": render_hook, "stdin": write("no-schema.yaml"), "out": "no 'schema:"},
-    ] if shutil.which("uv") else []  # fmt: skip
+    have_uv = shutil.which("uv") is not None
+
+    def artifact_fixtures(plugin: str, full: bool) -> list[dict]:
+        """The artifact hooks of one plugin. The copies are byte-identical (checks/artifact_models.py),
+        so the full set runs once and each other copy runs a smoke test of each path."""
+        rh, mg = f"{plugin}/artifact-render-hook.py", f"{plugin}/generated-md-guard.py"
+        # Running artifact.py needs uv: skipped without it, as shellcheck is in checks/scripts.py.
+        uv = [
+            {"script": rh, "stdin": write("ok.yaml"), "out": "", "after": lambda: rendered("ok")},
+            {"script": rh, "stdin": write("broken.yaml"), "out": '"decision": "block"', "after": not_rendered("broken")},
+        ] + ([
+            {"script": rh, "stdin": write("dashed.yaml"), "out": "phases.0.check"},
+            {"script": rh, "stdin": write("no-schema.yaml"), "out": "no 'schema:"},
+        ] if full else [])  # fmt: skip
+        smoke = [
+            {
+                "script": rh,
+                "stdin": write("broken.yaml"),
+                "env": no_uv,
+                "out": "uv is not installed",
+            },
+            {"script": mg, "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+            {"script": mg, "stdin": edit(plan_p), "out": ""},
+        ]
+        rest = [
+            {"script": rh, "stdin": {"tool_name": "Write", "tool_input": {"file_path": other_yaml.as_posix()}}, "env": no_uv, "out": ""},
+            {"script": rh, "stdin": write("p.md"), "env": no_uv, "out": ""},
+            {"script": rh, "stdin": write("broken.yaml"), "env": no_uv, "repeat": 2, "out": ""},
+            {"script": rh, "stdin": write("broken.yaml"), "env": {**no_uv, "CEH_ARTIFACT_CHECK": "off"}, "out": ""},
+            {"script": rh, "stdin": write("broken.yaml"), "env": {**no_uv, "CEH_DISABLED_HOOKS": "artifact-render-hook"}, "out": ""},
+            {"script": mg, "stdin": edit(generated.as_posix()), "out": "Edit "},
+            {"script": mg, "stdin": edit(generated.as_posix()), "env": {"CEH_ARTIFACT_CHECK": "off"}, "out": ""},
+            {"script": mg, "stdin": edit(generated.as_posix()), "env": {"CEH_DISABLED_HOOKS": "generated-md-guard"}, "out": ""},
+        ] if full else []  # fmt: skip
+        return (uv if have_uv else []) + smoke + rest
+
+    # build-record-guard on a plan/v2 YAML: a new `event: Built Phase` entry needs the skill.
+    built_entry = (
+        "  - date: 2026-10-26\n    event: Built Phase\n    phase: 1\n    details: x\n"
+    )
+    yaml_plan = (plans / "ok.yaml").as_posix()
+
+    def record_yaml(t: str = "none") -> dict:
+        ti = {
+            "file_path": yaml_plan,
+            "old_string": "record:\n",
+            "new_string": "record:\n" + built_entry,
+        }
+        return {"tool_name": "Edit", "tool_input": ti, "transcript_path": tx[t]}
 
     return [
         # artifact-render-hook: block an invalid plan YAML, render a valid one, skip other files,
-        # and warn once when uv is missing.
-        *uv_fixtures,
-        {"script": render_hook, "stdin": {"tool_name": "Write", "tool_input": {"file_path": other_yaml.as_posix()}}, "env": no_uv, "out": ""},
-        {"script": render_hook, "stdin": write("p.md"), "env": no_uv, "out": ""},
-        {"script": render_hook, "stdin": write("broken.yaml"), "env": no_uv, "out": "uv is not installed"},
-        {"script": render_hook, "stdin": write("broken.yaml"), "env": no_uv, "repeat": 2, "out": ""},
-        {"script": render_hook, "stdin": write("broken.yaml"), "env": {**no_uv, "CEH_ARTIFACT_CHECK": "off"}, "out": ""},
-        {"script": render_hook, "stdin": write("broken.yaml"), "env": {**no_uv, "CEH_DISABLED_HOOKS": "artifact-render-hook"}, "out": ""},
-        # generated-md-guard: deny an edit to a generated .md, naming its YAML.
-        {"script": "generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "Edit "},
-        {"script": "generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
-        {"script": "generated-md-guard.py", "stdin": edit(plan_p), "out": ""},
-        {"script": "generated-md-guard.py", "stdin": edit(generated.as_posix()), "env": {"CEH_ARTIFACT_CHECK": "off"}, "out": ""},
-        {"script": "generated-md-guard.py", "stdin": edit(generated.as_posix()), "env": {"CEH_DISABLED_HOOKS": "generated-md-guard"}, "out": ""},
+        # and warn once when uv is missing. generated-md-guard: deny an edit to a generated .md,
+        # naming its YAML.
+        *artifact_fixtures("ceh-build-planning", True),
+        *artifact_fixtures("ceh-build-from-plan", False),
+        *artifact_fixtures("ceh-check-build-against-plan", False),
+        {"script": "build-record-guard.py", "stdin": record_yaml(), "out": "implement-from-plan"},
+        {"script": "build-record-guard.py", "stdin": record_yaml("skill"), "out": ""},
         # branch-guard: deny on the session repo's default branch, allow elsewhere, in another
         # repo, or when switched off.
         {"script": "branch-guard.py", "stdin": edit(repos["main"]), "out": "On the default branch"},
