@@ -1,13 +1,17 @@
 """artifact-models: each YAML format's `<name>-model.py` sits beside its `<name>-schema.md`, with
 `../assets/<name>.template.yaml`, and every copy of a model, of `artifact.py`, and of the two
-artifact hooks is byte-identical across plugins."""
+artifact hooks is byte-identical across plugins. With uv, each template's keys must also be
+exactly its model's, through `model_vs_template.py`."""
 
 from __future__ import annotations
 
+import os
+import shutil
+import subprocess
 import sys
 from collections import defaultdict
 
-from common import fail, main, plugin_dirs, rel
+from common import REPO, fail, main, plugin_dirs, rel
 
 MODEL_SUFFIX = "-model.py"
 # The scripts every plugin carrying a model ships, which must not drift between plugins.
@@ -37,6 +41,32 @@ def check() -> None:
         for other in paths[1:]:
             if other.read_bytes() != first:
                 fail(rel(other), f"differs from its copy {rel(paths[0])}")
+
+    # Comparing a template with its model needs pydantic, so it runs through uv: skipped without
+    # uv, as shellcheck is in checks/scripts.py, but required in CI, which installs it.
+    uv = shutil.which("uv")
+    if not uv:
+        if os.environ.get("CI"):
+            fail(
+                ".github/workflows/validate.yml",
+                "uv is not installed, templates were not compared with their models",
+            )
+        else:
+            print(
+                "artifact-models: uv not installed, templates not compared with their models",
+                file=sys.stderr,
+            )
+        return
+    script = REPO / "tools" / "validate-plugins" / "model_vs_template.py"
+    r = subprocess.run(
+        [uv, "run", "--quiet", "--script", str(script), str(REPO)],
+        capture_output=True, text=True, encoding="utf-8", timeout=120,
+    )  # fmt: skip
+    for line in r.stdout.splitlines():
+        where, _, problem = line.partition(": ")
+        fail(where, f"does not match its model: {problem}")
+    if r.returncode not in (0, 1) or (r.returncode == 1 and not r.stdout.strip()):
+        fail(rel(script), f"exited {r.returncode}: {r.stderr.strip()[-300:]}")
 
 
 if __name__ == "__main__":

@@ -287,7 +287,11 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
 - **Check:** `python tools/validate-plugins/validate.py` is green. Removing `open` from every
   `plan.template.yaml` copy turns it red, naming the template and the model (then revert). CI on
   the PR is green, with the uv part run and not skipped, as its log shows.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py` printed "OK: all plugin checks
+  passed". With `open` removed from all three `plan.template.yaml` copies, `artifact-models`
+  reported each one: "does not match its model: (top level): missing ['open']", then the copies
+  were restored. In CI, `artifact-models` fails when uv is missing, so a green run means the
+  comparison ran.
 
 ### Phase 5: Docs and decision rule
 
@@ -331,3 +335,4 @@ None
 - 2026-11-06 Design changed: was "`render <yaml>` checks the YAML, then writes the rendered `.md` to a temp file in the same folder and moves it into place with `os.replace`", now it also skips an unchanged `.md`, retries the rename and always removes the temp file, because the live session's first render collided on Windows and left a stray `.tmp`
 - 2026-11-06 Built Phase 3: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and the live session in a scratch repo
 - 2026-11-06 PR: #204 https://github.com/cheneeheng/ceh-claude-code-library/pull/204
+- 2026-11-06 Built Phase 4: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"

@@ -60,7 +60,9 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
 - `ceh-build-from-plan` and `ceh-check-build-against-plan`: copies of `plan-model.py`,
   `artifact.py`, and both artifact hooks, wired in their `hooks.json`.
 - `validate.py` `artifact-models` check: a model has its schema and YAML template, and every copy
-  of a model, `artifact.py`, and the artifact hooks is byte-identical.
+  of a model, `artifact.py`, and the artifact hooks is byte-identical. With uv, it also runs
+  `tools/validate-plugins/model_vs_template.py`, which fails when a template's keys, nested lists
+  included, differ from its model's. CI requires uv for it.
 
 ### Changed
 
