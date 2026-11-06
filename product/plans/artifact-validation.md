@@ -180,10 +180,11 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
     block, render, non-plan file, a plan YAML opening with `---`, no-uv warning, generated `.md`
     denied, `CEH_ARTIFACT_CHECK=off`, and `CEH_DISABLED_HOOKS`. The render and block fixtures are
     skipped when `shutil.which("uv")` is None, the shellcheck precedent in `checks/scripts.py`.
-  - `checks/artifact_models.py`, added to `CHECKS` in `validate.py` and to the tool's README,
-    checks that each `*-model.py` has its `<name>-schema.md` and `../assets/<name>.template.yaml`,
-    and that every copy of the model, `artifact.py` and both hooks is byte-identical. It then runs
-    `uv run --script tools/validate-plugins/model_vs_template.py`, which checks that each
+  - `checks/artifact_models.py`, added to `CHECKS` in `validate.py` and to the tool's README, in
+    two parts. The stdlib part, in Phase 3 with the copies it guards, checks that each
+    `*-model.py` has its `<name>-schema.md` and `../assets/<name>.template.yaml`, and that every
+    copy of the model, `artifact.py` and both hooks is byte-identical. The uv part, in Phase 4,
+    runs `uv run --script tools/validate-plugins/model_vs_template.py`, which checks that each
     template's keys, nested lists included, are exactly the model's aliases as
     `model_json_schema()` reports them. With no uv it prints a skip note and passes.
   - CI adds `astral-sh/setup-uv` to `validate.yml` in Phase 2, so the uv fixtures and checks
@@ -236,15 +237,18 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
 
 - **Builds:** `write-build-plan` writes the YAML from the template, and `review-build-plan`
   re-checks it and appends its Reviewed entry. The model, template, CLI and hooks are copied into
-  `ceh-build-from-plan` and `ceh-check-build-against-plan`, with fixtures for each copy and every
-  copy registered in `docs/CROSS_REFERENCES.md`. `implement-from-plan` re-checks the YAML, writes
+  `ceh-build-from-plan` and `ceh-check-build-against-plan`, with fixtures for each copy, every
+  copy registered in `docs/CROSS_REFERENCES.md`, and the stdlib part of `checks/artifact_models.py`
+  in `CHECKS` and the tool's README, so the copies cannot drift from the PR that creates them. `implement-from-plan` re-checks the YAML, writes
   its minimal plan in step 1 as `plan/v2` YAML from the template, and edits phase status, `note`,
   Design and Record in the YAML. `build-record-guard.py` detects a new `event: Built Phase` entry
   in a plan YAML as it detects the Markdown line today. `check-build-against-plan` re-checks and
   reads the YAML and appends its Checked entry to it. `pull-request` and `write-evidence-report`
   read and append Record state in the YAML when one exists, stage both files, and note an
   unrendered `.md`. Every skill still edits a `plan/v1` Markdown plan in place when no YAML exists.
-- **Check:** `python tools/validate-plugins/validate.py` is green. The guard, piped a Write that
+- **Check:** `python tools/validate-plugins/validate.py` is green, and adding a line to one
+  `plan-model.py` copy, then to one `artifact.py` copy, turns it red for copy drift (revert
+  both). The guard, piped a Write that
   adds an `event: Built Phase` entry with no skill started, denies it. Then one real session in a
   scratch repo with the three plugins installed locally: "plan a CLI that counts words" writes a
   valid YAML and its rendered Markdown. "Add a phase 2 with no check" is blocked, and the session
@@ -257,12 +261,11 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
 
 ### Phase 4: Model-to-template repo check
 
-- **Builds:** `checks/artifact_models.py` and `model_vs_template.py`, in `CHECKS` and the tool's
-  README.
-- **Check:** `python tools/validate-plugins/validate.py` is green. Removing `open` from one
-  `plan.template.yaml` copy turns it red, naming the template and the model, and adding a field to
-  one `plan-model.py` copy turns it red for copy drift (revert both). CI on the PR is green, with
-  the uv part run and not skipped, as its log shows.
+- **Builds:** the uv part of `checks/artifact_models.py`, and `model_vs_template.py`, in the
+  tool's README.
+- **Check:** `python tools/validate-plugins/validate.py` is green. Removing `open` from every
+  `plan.template.yaml` copy turns it red, naming the template and the model (then revert). CI on
+  the PR is green, with the uv part run and not skipped, as its log shows.
 - **Status:** todo
 
 ### Phase 5: Docs and decision rule
@@ -303,3 +306,4 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
 - 2026-11-06 Design changed: was "`def render(plan: Plan) -> str`", now "`def render(plan: Plan, source: str) -> str`", because the rendered frontmatter's `generated_from` names the source YAML
 - 2026-11-06 Built Phase 1: scratchpad selfcheck.py through artifact.py, "ALL PASSED"
 - 2026-11-06 PR: #199 https://github.com/cheneeheng/ceh-claude-code-library/pull/199
+- 2026-11-06 Design changed: was "`checks/artifact_models.py` ... checks ... that every copy of the model, `artifact.py` and both hooks is byte-identical" in Phase 4, now its stdlib part lands in Phase 3, because Phase 3 creates the copies and nothing else catches their drift until Phase 4
