@@ -132,6 +132,8 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
+    # A Windows console or pipe defaults to cp1252, which cannot print every character a plan holds.
+    sys.stdout.reconfigure(encoding="utf-8")
     try:
         sys.exit(main(sys.argv[1:]))
     except Exception as e:  # anything unexpected is exit 2, never an empty exit 1
