@@ -77,7 +77,10 @@ Three rules hold for every handoff file:
    heading is renamed or removed, because that is the change that breaks a reader. `validate.py`
    checks that each template opens with its schema line, holds no explanation, has its schema, is
    cited by its plugin, and matches its copies in other plugins. The reference run may still revise
-   a format, through a version bump.
+   a format, through a version bump. A format can instead be YAML checked by a model: a
+   `<schema>.template.yaml`, a `<schema>-model.py` beside the schema whose pydantic model checks
+   every field and whose renderer writes the Markdown, and that Markdown committed beside the YAML
+   with `generated_from:` in its frontmatter. The build plan, `plan/v2`, is the trial.
 
 ## Where files live: commit what the next stage reads
 

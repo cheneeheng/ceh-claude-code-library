@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Handoff files as YAML validated by pydantic, with Markdown generated from it
-status: ready
+status: building
 created: 2026-11-06
 ---
 
@@ -79,7 +79,8 @@ leaves the Markdown unrendered. The agent fixes the YAML in the same turn, and t
   `generated_from: <slug>.yaml`, `title`, `status`, `created`, and `business_plan` when set, so
   readers that grep `status: built` keep working. The body keeps the `plan/v1` layout exactly.
 - **The `plan/v2` model**, `references/plan-model.py` beside `plan-schema.md`, defining
-  `NAME = "plan"`, `VERSION = 2`, the `Plan` model and `render`. Every model sets
+  `NAME = "plan"`, `VERSION = 2`, the `Plan` model, `MODEL = Plan` (the name `artifact.py`
+  validates with, the same in every format's model) and `render`. Every model sets
   `extra="forbid"` and `strict=True`, so a mistyped key, or a value YAML retyped (`yes` read as a
   bool), is an error. YAML keys are model aliases: `schema` is `Field(alias="schema")` on a field
   named `schema_`, and `in` is `Field(alias="in")` on `in_`, because `in` is a Python keyword and
@@ -117,7 +118,7 @@ leaves the Markdown unrendered. The agent fixes the YAML in the same turn, and t
   as a `|` block scalar, and `plan-schema.md` says why. The CLI also rejects a plain-scalar
   free-text value whose source line holds ` #` after the value it loaded, so a cut value is an
   error, not a silent loss.
-- **Renderer**, `def render(plan: Plan) -> str` in the same model module, built from f-strings,
+- **Renderer**, `def render(plan: Plan, source: str) -> str` in the same model module, built from f-strings,
   stdlib only. The same YAML always renders to byte-identical Markdown. The model module is the
   whole format in code: model, validators and renderer.
 - **Template**, `assets/plan.template.yaml`: the YAML skeleton the writer copies, placeholders as
@@ -212,7 +213,13 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
   `Built Phase` entry without `phase`, an unknown key, an unquoted `details: PR #12`, and a YAML
   syntax error (with line and column). A copy with `schema: plan/v3` exits 3, and an edited `.md`
   beside a valid YAML is reported stale. `python tools/validate-plugins/validate.py` is green.
-- **Status:** todo
+- **Status:** done, a scratchpad `selfcheck.py` ran every case above through `artifact.py` and
+  printed "ALL PASSED", and `validate.py` printed "OK: all plugin checks passed". The conversion
+  to YAML was made by a scratch converter, not by hand, and the round-trip `diff -w` showed one
+  blank line. `plan.template.yaml` landed in all three plan plugins in this phase, not in Phase 3,
+  because the shared `plan-schema.md` cites `../assets/plan.template.yaml` and a reference must
+  resolve in every copy. `decision-skill-bundled-files.md` and `plugins/CLAUDE.md` also changed, to
+  admit `<schema>-model.py` in `references/` and `scripts/artifact.py` as a script bundle.
 
 ### Phase 2: Hooks in `ceh-build-planning`, with fixtures and uv in CI
 
@@ -292,3 +299,6 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
 
 - 2026-11-06 Planned: status ready
 - 2026-11-06 Reviewed: Revise first, 5 blocking (schema copies drift in Phase 1, hooks lack fixtures, Phases paragraph cannot round-trip, no note field for a todo phase, write-time hook does not cover every write)
+- 2026-11-06 Design changed: was "defining `NAME = "plan"`, `VERSION = 2`, the `Plan` model and `render`", now adds "`MODEL = Plan`", because `artifact.py` needs one name to validate with in every format's model
+- 2026-11-06 Design changed: was "`def render(plan: Plan) -> str`", now "`def render(plan: Plan, source: str) -> str`", because the rendered frontmatter's `generated_from` names the source YAML
+- 2026-11-06 Built Phase 1: scratchpad selfcheck.py through artifact.py, "ALL PASSED"
