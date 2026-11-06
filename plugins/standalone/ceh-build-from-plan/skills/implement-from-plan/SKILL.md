@@ -5,6 +5,9 @@ description: >-
   the phase names, with each phase's check run and its evidence recorded. Trigger on "implement the
   plan", "build phase 2", "start building product/plans/mvp.md".
 argument-hint: "[plan-file] [phase]"
+compatibility: >-
+  Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
+  plan/v2 plan and render its Markdown. Without uv the plan is saved unchecked and unrendered.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0

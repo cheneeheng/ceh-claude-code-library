@@ -306,7 +306,12 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
   `grep -l CEH_ARTIFACT_CHECK docs/ENVIRONMENT_VARIABLES.md`,
   `grep -l "plans/<slug>.yaml" docs/STRATEGY.md` and
   `grep -l "Who overrides" .claude/rules/decision-artifact-validation.md` each find their file.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py` printed "OK: all plugin checks
+  passed" and the three greps each printed their file. The README and `CEH_DISABLED_HOOKS` parts
+  had landed in Phases 2 and 3. The rule sets `paths` to `plugins/**` and
+  `tools/validate-plugins/**`, because the always-loaded decision files already passed 150 lines
+  (221) before it. The four plan skills also gained `compatibility` on uv, and the root README's
+  prerequisites stopped saying planning skills need nothing.
 
 ### Phase 6: Remaining formats
 
@@ -337,3 +342,4 @@ None
 - 2026-11-06 PR: #204 https://github.com/cheneeheng/ceh-claude-code-library/pull/204
 - 2026-11-06 Built Phase 4: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-06 PR: #205 https://github.com/cheneeheng/ceh-claude-code-library/pull/205
+- 2026-11-06 Built Phase 5: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and the three greps

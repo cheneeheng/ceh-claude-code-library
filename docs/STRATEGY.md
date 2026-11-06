@@ -51,7 +51,7 @@ one exists.
 | Stage | Reads                                                                                                                          | Writes                                                                                            |
 | ----- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | Shape | an idea, a conversation, the repo                                                                                              | `.agents_workspace/product/business/BUSINESS_PLAN.md`, `product/VISION.md`, `product/STRATEGY.md` |
-| Build | `.agents_workspace/product/business/BUSINESS_PLAN.md` and `product/VISION.md` and `product/STRATEGY.md` when present, the repo | `product/plans/<slug>.md`, the code, `product/ARCHITECTURE.md`                                    |
+| Build | `.agents_workspace/product/business/BUSINESS_PLAN.md` and `product/VISION.md` and `product/STRATEGY.md` when present, the repo | `product/plans/<slug>.yaml` and its generated `<slug>.md`, the code, `product/ARCHITECTURE.md`    |
 | Prove | the plan, the code                                                                                                             | `product/EVIDENCE.md`: tests, QA, security, usability, performance                                |
 | Tell  | `.agents_workspace/product/business/BUSINESS_PLAN.md`, `product/EVIDENCE.md`                                                   | posts, listings, SEO pages                                                                        |
 

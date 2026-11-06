@@ -16,10 +16,10 @@ a removed plugin loses its row.
 | ------------------------------ | ------- | ------------ |
 | `ceh-ag-ui`                    | 1.1.4   | `2026-10-23` |
 | `ceh-blog`                     | 1.0.16  | `2026-10-23` |
-| `ceh-build-from-plan`          | 1.2.0   | `2026-11-06` |
-| `ceh-build-planning`           | 1.2.1   | `2026-11-06` |
+| `ceh-build-from-plan`          | 1.2.1   | `2026-11-06` |
+| `ceh-build-planning`           | 1.2.2   | `2026-11-06` |
 | `ceh-business-plan`            | 1.1.14  | `2026-11-02` |
-| `ceh-check-build-against-plan` | 1.1.0   | `2026-11-06` |
+| `ceh-check-build-against-plan` | 1.1.1   | `2026-11-06` |
 | `ceh-codebase-explanation`     | 1.2.10  | `2026-10-26` |
 | `ceh-coding-conduct`           | 2.4.0   | `2026-10-28` |
 | `ceh-competitor-analysis`      | 1.1.12  | `2026-10-28` |

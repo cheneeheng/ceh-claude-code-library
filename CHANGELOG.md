@@ -40,9 +40,9 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-build-planning`           | 1.2.1   |
-| `ceh-build-from-plan`          | 1.2.0   |
-| `ceh-check-build-against-plan` | 1.1.0   |
+| `ceh-build-planning`           | 1.2.2   |
+| `ceh-build-from-plan`          | 1.2.1   |
+| `ceh-check-build-against-plan` | 1.1.1   |
 | `ceh-every-session`            | 2.8.19  |
 | `ceh-git-workflow`             | 1.5.5   |
 | `ceh-testing`                  | 1.5.3   |
@@ -84,6 +84,10 @@ deny reason says the same. A session nothing marks as unwatched is unchanged.
   plan before acting on it, and write their Record entries to the YAML.
   `implement-from-plan`'s minimal plan is `plan/v2` too.
 - `build-record-guard.py`: also guards a new `event: Built Phase` entry in a plan YAML.
+- The four plan skills declare `compatibility` on uv. The root README's prerequisites,
+  `docs/GETTING_STARTED.md`, and STRATEGY's spine table name the plan YAML. A new rule,
+  `decision-artifact-validation.md`, records why handoff files are checked by code, scoped to
+  `plugins/**` and `tools/validate-plugins/**` so it costs no context elsewhere.
 - `ceh-git-workflow:pull-request` and `ceh-testing:write-evidence-report`: append their Record
   entries to a `plan/v2` plan's YAML, quoted, read its state from the YAML, and say when its
   Markdown was not re-rendered.

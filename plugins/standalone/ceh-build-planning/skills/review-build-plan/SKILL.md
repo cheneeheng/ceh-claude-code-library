@@ -6,6 +6,9 @@ description: >-
   and end with a verdict. Trigger on "review this plan", "just check the phases", "review the
   spec".
 argument-hint: "[plan-file]"
+compatibility: >-
+  Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
+  plan/v2 plan and render its Markdown. Without uv the plan is saved unchecked and unrendered.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
