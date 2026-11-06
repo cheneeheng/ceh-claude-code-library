@@ -9,6 +9,40 @@ before this repo live in
 
 ---
 
+## 2026-11-06
+
+The build plan gets a second format, `plan/v2`: the plan is YAML, a pydantic model checks every
+field of it, body included, and the Markdown a person reads is generated from the YAML and
+committed beside it. This is the first phase of the trial planned in
+`product/plans/artifact-validation.md`, which makes handoff files deterministic and checkable
+rather than only described. It ships the format and its checker. Nothing writes `plan/v2` yet, so
+every skill keeps writing `plan/v1` Markdown until the hooks and skill changes land.
+
+### Plugin versions
+
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-build-planning`           | 1.1.18  |
+| `ceh-build-from-plan`          | 1.1.3   |
+| `ceh-check-build-against-plan` | 1.0.12  |
+
+### Added
+
+- `ceh-build-planning`: `references/plan-model.py`, the `plan/v2` model and its renderer, and
+  `scripts/artifact.py`, which checks a plan YAML (errors, or a stale Markdown beside it) and
+  renders its Markdown, run with `uv run --script`.
+- `plan.template.yaml` in all three plan plugins, the `plan/v2` skeleton.
+
+### Changed
+
+- `plan-schema.md`, in all three plan plugins: a `plan/v2` section with its keys, rules, and why
+  free text goes in `|` blocks. The `plan/v1` format is unchanged.
+- `validate.py` `templates` check: accepts `.template.yaml` templates, whose schema line is the
+  first line, and a skill that cites either template suffix.
+- `decision-output-templates.md`, `decision-skill-bundled-files.md`, `plugins/CLAUDE.md`, and
+  STRATEGY handoff rule 3: allow a YAML format with its model beside the schema, its generated
+  Markdown, and `scripts/artifact.py`.
+
 ## 2026-11-05
 
 `ceh-git-workflow:pull-request` now merges a PR with the message the repo's GitHub merge commit

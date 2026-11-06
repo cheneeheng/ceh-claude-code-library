@@ -10,9 +10,9 @@ from collections import defaultdict
 
 from common import fail, main, plugin_dirs, rel, skill_files
 
-# `schema: <name>/v<N>` is the template's first frontmatter key.
+# `schema: <name>/v<N>` is the template's first frontmatter key, or a YAML template's first key.
 SCHEMA_PAT = re.compile(r"^schema: ([a-z0-9]+(?:-[a-z0-9]+)*)/v([1-9]\d*)$")
-SUFFIX = ".template.md"
+SUFFIXES = (".template.md", ".template.yaml")
 # The schema explaining a template: references/<name>-schema.md, a sibling of its assets/ folder.
 SCHEMA_SUFFIX = "-schema.md"
 # A template holds placeholders, not explanation: a placeholder that is not a `a | b` choice stays
@@ -25,8 +25,10 @@ SAVED_FILE_PAT = re.compile(
 )
 
 
-def schema_line(text: str) -> str:
+def schema_line(text: str, yaml: bool) -> str:
     lines = text.splitlines()
+    if yaml:
+        return lines[0] if lines else ""
     return lines[1] if len(lines) > 1 and lines[0] == "---" else ""
 
 
@@ -38,15 +40,16 @@ def output_section(text: str) -> str:
 def check() -> None:
     by_name = defaultdict(list)
     for d in plugin_dirs():
-        templates = sorted(d.rglob("*" + SUFFIX))
+        templates = sorted(t for s in SUFFIXES for t in d.rglob("*" + s))
         cited = "\n".join(
             p.read_text(encoding="utf-8")
             for p in d.rglob("*.md")
-            if not p.name.endswith(SUFFIX)
+            if not p.name.endswith(SUFFIXES)
         )
         for t in templates:
             where = rel(t)
-            stem = t.name[: -len(SUFFIX)]
+            suffix = next(s for s in SUFFIXES if t.name.endswith(s))
+            stem = t.name[: -len(suffix)]
             body = t.read_text(encoding="utf-8")
             for bad in LONG_PLACEHOLDER_PAT.findall(body) + YAML_COMMENT_PAT.findall(
                 body
@@ -54,7 +57,7 @@ def check() -> None:
                 fail(where, f"explanation '{bad}' belongs in its schema file")
             if "<!--" in body:
                 fail(where, "comments belong in its schema file")
-            m = SCHEMA_PAT.match(schema_line(body))
+            m = SCHEMA_PAT.match(schema_line(body, suffix == ".template.yaml"))
             if not m:
                 fail(where, f"must open with 'schema: {stem}/v<N>'")
             elif m.group(1) != stem:
@@ -86,7 +89,7 @@ def check() -> None:
     for skill in skill_files():
         text = skill.read_text(encoding="utf-8")
         saved = SAVED_FILE_PAT.search(output_section(text))
-        if saved and SUFFIX not in text:
+        if saved and not any(s in text for s in SUFFIXES):
             fail(rel(skill), f"Output names '{saved.group()}' but cites no template")
 
 

@@ -27,8 +27,9 @@ touches.
 
 The allowed scaffold and script bundles are `ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent`
 `assets/`), `ceh-git-datastore` (`build-git-datastore`, `migrate-git-datastore` `references/` +
-`scripts/`), and `ceh-business-plan` (the HTML generator in `scripts/`, with its page shell and
-`brand.css` in `assets/`).
+`scripts/`), `ceh-business-plan` (the HTML generator in `scripts/`, with its page shell and
+`brand.css` in `assets/`), and each plugin carrying a YAML format's `<schema>-model.py` (its
+`scripts/artifact.py`, which checks and renders that format).
 
 `validate.py` cannot check part of speech, so the naming rule is a review rule.
 

@@ -19,4 +19,11 @@ spelling the format inline. A reference file cites a sibling folder's file relat
 (`../assets/<file>`). Bump `v<N>` when a required field or heading is renamed or removed. Out of
 scope: what the user ships, `flow.yaml`, and a file a script generates from a templated one.
 
-Why: the format lives in one pair of files, and each saved file names its version.
+A format may instead be YAML validated end to end: `<schema>.template.yaml`, whose first key is
+`schema: <schema>/v<N>`, with `<schema>-model.py` beside the schema file holding its pydantic model
+and Markdown renderer. The skill saves the YAML, and the Markdown generated from it is committed
+beside it with `generated_from: <file>.yaml` in its frontmatter and never edited by hand. The
+build plan is the trial format (`plan/v2`).
+
+Why: the format lives in one pair of files, and each saved file names its version. A YAML format
+adds the model, so every field of the file, body included, is checked rather than described.

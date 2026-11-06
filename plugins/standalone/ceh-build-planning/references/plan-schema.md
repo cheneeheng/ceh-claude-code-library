@@ -1,6 +1,7 @@
 # Plan schema
 
-A build plan is one Markdown file. `ceh-build-planning` writes it, `ceh-build-from-plan` builds
+A build plan is one Markdown file (`plan/v1`), or a YAML file with its Markdown generated beside
+it (`plan/v2`, below). `ceh-build-planning` writes it, `ceh-build-from-plan` builds
 from it and records evidence in it, and `ceh-check-build-against-plan` checks the code against it.
 This file is copied word for word into all three plugins, so each works installed alone.
 
@@ -46,6 +47,53 @@ version of the format a plan follows.
   empty.
 - **Record:** append-only, oldest first, one dated line per lifecycle event, per Record rules
   below.
+
+## plan/v2: YAML with generated Markdown
+
+A `plan/v2` plan is `product/plans/<slug>.yaml`, a copy of `../assets/plan.template.yaml`, and its
+Markdown, `product/plans/<slug>.md`, is generated from it and committed beside it. The YAML is the
+source: agents read and edit it, and nobody edits the Markdown, which opens with
+`generated_from: <slug>.yaml`. The Markdown keeps the `plan/v1` layout above, so a reader of it sees
+no change. A `plan/v1` plan with no YAML beside it is still edited in place.
+
+The format in code is `plan-model.py` beside this file: its pydantic model checks every key, type
+and rule below, and its renderer writes the Markdown. `scripts/artifact.py` in the plugin runs both,
+through uv:
+
+```bash
+uv run --script scripts/artifact.py check product/plans/<slug>.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render product/plans/<slug>.yaml  # check, then write the .md
+```
+
+Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other
+failure, and `3` means this plugin has no model for that version. Field paths count from 0, so
+`phases.0` is Phase 1.
+
+**Keys**, each one required unless marked optional, and no other key allowed:
+
+- `schema`: `plan/v2`. `title`, `status`, `created`, `business_plan` (optional): as the `plan/v1`
+  frontmatter above. `created` is an unquoted date, `2026-11-06`.
+- `goal`: the Goal paragraph.
+- `scope.in`: one item per capability, at least one. `scope.out`: `item` and `reason` per
+  exclusion, `[]` when none.
+- `design`: `topic` and `decision` per decision, at least one. The topic renders in bold and keeps
+  its own punctuation. A decision that opens with a list, table or code block starts on the line
+  below its topic.
+- `phases`: `name`, `builds`, `check` and `status` (`todo`, `unplanned` or `done`) per phase, at
+  least one, numbered by position. `evidence` is required exactly when `status` is `done`. `note`
+  (optional, any status) holds what the Phase rules put in a Status beyond its value: a failed
+  attempt, a check that could not run, a departure from Design.
+- `open`: `question` and `assumption` per item, `[]` when none, which renders as `None`.
+- `record`: `date`, `event` and `details` per entry, at least one. `event` is one of the Record
+  rules' events below. `phase` is required exactly when `event` is `Built Phase`.
+
+**Rules across keys:** `built` needs every phase `done`, `building` at least one, and `draft` or
+`ready` none.
+
+**Free text goes in `|` blocks**, as the template writes it, or in quotes. In a plain YAML value,
+` #` starts a comment, so `details: PR #12` would keep only `PR`. `artifact.py` reports a plain
+value followed by a comment as an error, never a silent loss. Every value is strict: `yes` is a
+bool and `1.10` a number, so quote a value that must stay text.
 
 ## Phase rules
 

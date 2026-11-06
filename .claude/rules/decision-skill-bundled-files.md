@@ -12,7 +12,8 @@ paths:
 Each skill is self-contained with inline content. `references/` holds only two kinds of file, and
 output templates live in `assets/` instead:
 
-- A schema: the schema of an output template, or one used by several skills. Skills of one plugin
+- A schema: the schema of an output template, or one used by several skills, and for a YAML
+  format its `<schema>-model.py` beside it (`decision-output-templates.md`). Skills of one plugin
   share one copy in the plugin's own `references/`, cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`.
   A file used by one skill lives in that skill's `references/`. Only a file needed by skills of
   different plugins is copied word for word into each and registered in `docs/CROSS_REFERENCES.md`.
@@ -22,6 +23,6 @@ Never general reference material a model already knows. A rule that applies on e
 inline. Exceptions: `ceh-ui-design:design-ui` and `ceh-web-frontend:visualize-graph-cytoscape`
 keep their catalog files, a new catalog skill argues its own exception in its PR, and scaffold or
 script bundles a skill executes or copies are allowed (`ceh-ag-ui`, `ceh-git-datastore`,
-`ceh-business-plan`).
+`ceh-business-plan`, and `scripts/artifact.py` in each plugin that carries a YAML format's model).
 
 Why: a model can skip a link and never see it, so only what a run reads in part leaves the body.
