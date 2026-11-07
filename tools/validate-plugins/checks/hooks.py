@@ -331,6 +331,59 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ] if full else []  # fmt: skip
         return (uv if have_uv else []) + smoke + rest
 
+    # evidence/v2 in ceh-testing: each EVIDENCE.yaml in its own product/ folder, since the hook
+    # finds a spine file by its stem.
+    na = "{status: not run}"
+    good_ev = (
+        "schema: evidence/v2\nproduct: Demo\nruns:\n  - date: 2026-11-07\n    sha: abc1234\n"
+        "    tree: clean\n    areas:\n"
+        "      tests: {status: passed, result: 3 passed, checked_at: abc1234}\n"
+        f"      qa: {na}\n      performance: {na}\n      security: {na}\n"
+        f"      usability: {na}\n      plan: {na}\n"
+        "    open_issues: []\n    claims: []\n    not_run:\n"
+        + "".join(
+            f"      - {{area: {a}, reason: none, skill: x}}\n"
+            for a in ("qa", "performance", "security", "usability", "plan")
+        )
+    )
+    evs = {
+        "ok": good_ev,
+        "passing": good_ev.replace("status: passed", "status: passing"),
+        "no-schema": good_ev.replace("schema: evidence/v2\n", ""),
+    }
+    ev = {}
+    for name, text in evs.items():
+        folder = tmp / f"ev-{name}" / "product"
+        folder.mkdir(parents=True, exist_ok=True)
+        ev[name] = folder / "EVIDENCE.yaml"
+        ev[name].write_text(text, encoding="utf-8")
+    stray = tmp / "notes" / "STRATEGY.yaml"
+    stray.parent.mkdir(exist_ok=True)
+    stray.write_text("key: value\n", encoding="utf-8")
+
+    def write_at(p) -> dict:
+        return {"tool_name": "Write", "tool_input": {"file_path": p.as_posix()}}
+
+    def ev_rendered() -> str | None:
+        md = ev["ok"].with_suffix(".md")
+        ok = md.is_file() and "| Tests | passed |" in md.read_text(encoding="utf-8")
+        return None if ok else "EVIDENCE.md was not rendered"
+
+    trh = "ceh-testing/artifact-render-hook.py"
+    evidence_fixtures = ([
+        {"script": trh, "stdin": write_at(ev["ok"]), "out": "", "after": ev_rendered},
+        {"script": trh, "stdin": write_at(ev["passing"]), "out": "runs.0.areas.tests.status"},
+        {"script": trh, "stdin": write_at(ev["no-schema"]), "out": "no 'schema:"},
+        # ceh-testing holds no plan model, so a plan YAML is not its to check.
+        {"script": trh, "stdin": write("broken.yaml"), "out": ""},
+        # A plan plugin holds no evidence model, so an evidence YAML is not its to check.
+        {"script": "ceh-build-planning/artifact-render-hook.py", "stdin": write_at(ev["no-schema"]), "out": ""},
+    ] if have_uv else []) + [
+        {"script": trh, "stdin": write_at(stray), "env": no_uv, "out": ""},
+        {"script": trh, "stdin": write_at(ev["passing"]), "env": no_uv, "out": "uv is not installed"},
+        {"script": "ceh-testing/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+    ]  # fmt: skip
+
     # build-record-guard on a plan/v2 YAML: a new `event: Built Phase` entry needs the skill.
     built_entry = (
         "  - date: 2026-10-26\n    event: Built Phase\n    phase: 1\n    details: x\n"
@@ -352,6 +405,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *artifact_fixtures("ceh-build-planning", True),
         *artifact_fixtures("ceh-build-from-plan", False),
         *artifact_fixtures("ceh-check-build-against-plan", False),
+        *evidence_fixtures,
         {"script": "build-record-guard.py", "stdin": record_yaml(), "out": "implement-from-plan"},
         {"script": "build-record-guard.py", "stdin": record_yaml("skill"), "out": ""},
         # branch-guard: deny on the session repo's default branch, allow elsewhere, in another

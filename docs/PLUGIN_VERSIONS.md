@@ -16,10 +16,10 @@ a removed plugin loses its row.
 | ------------------------------ | ------- | ------------ |
 | `ceh-ag-ui`                    | 1.1.4   | `2026-10-23` |
 | `ceh-blog`                     | 1.0.17  | `2026-11-07` |
-| `ceh-build-from-plan`          | 1.2.4   | `2026-11-07` |
-| `ceh-build-planning`           | 1.2.7   | `2026-11-07` |
+| `ceh-build-from-plan`          | 1.2.5   | `2026-11-07` |
+| `ceh-build-planning`           | 1.2.8   | `2026-11-07` |
 | `ceh-business-plan`            | 1.1.15  | `2026-11-07` |
-| `ceh-check-build-against-plan` | 1.1.4   | `2026-11-07` |
+| `ceh-check-build-against-plan` | 1.1.5   | `2026-11-07` |
 | `ceh-codebase-explanation`     | 1.2.10  | `2026-10-26` |
 | `ceh-coding-conduct`           | 2.4.0   | `2026-10-28` |
 | `ceh-competitor-analysis`      | 1.1.13  | `2026-11-07` |
@@ -34,7 +34,7 @@ a removed plugin loses its row.
 | `ceh-seo`                      | 1.1.7   | `2026-10-23` |
 | `ceh-session-diagnosis`        | 1.0.8   | `2026-10-23` |
 | `ceh-session-to-skill`         | 1.0.2   | `2026-10-16` |
-| `ceh-testing`                  | 1.5.3   | `2026-11-06` |
+| `ceh-testing`                  | 1.6.0   | `2026-11-07` |
 | `ceh-ui-design`                | 1.0.10  | `2026-11-02` |
 | `ceh-usability-audit`          | 1.1.11  | `2026-11-07` |
 | `ceh-vision-and-strategy`      | 1.0.0   | `2026-11-02` |

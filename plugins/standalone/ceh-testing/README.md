@@ -29,9 +29,11 @@ editing anything. Writing the missing tests belongs to the stack's own tester ag
 
 ## Hooks
 
-| Hook                                        | Event                                       | Script                   | Default |
-| ------------------------------------------- | ------------------------------------------- | ------------------------ | ------- |
-| [Skill-started guard](#skill-started-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`) | `skill-started-guard.py` | on      |
+| Hook                                                                      | Event                                        | Script                    | Default |
+| ------------------------------------------------------------------------- | -------------------------------------------- | ------------------------- | ------- |
+| [Skill-started guard](#skill-started-guard)                               | `PreToolUse` (`Edit`, `Write`, `MultiEdit`)  | `skill-started-guard.py`  | on      |
+| [Evidence render](#evidence-render-and-generated-markdown-guard)          | `PostToolUse` (`Edit`, `Write`, `MultiEdit`) | `artifact-render-hook.py` | on      |
+| [Generated Markdown guard](#evidence-render-and-generated-markdown-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`)  | `generated-md-guard.py`   | on      |
 
 ### Skill-started guard
 
@@ -42,6 +44,15 @@ testing skill named above. A skill that another skill's steps only name ("`write
 out how") still has to be started. Files outside the session's project pass. It needs `python3` on
 PATH (stdlib only) and fails open without it. `CEH_SKILL_STARTED_GUARD=off`, or
 `CEH_DISABLED_HOOKS` with `skill-started-guard`, switches it off, in every plugin that ships it.
+
+### Evidence render and generated Markdown guard
+
+`write-evidence-report` saves `product/EVIDENCE.yaml` (`evidence/v2`). After every write to it, the
+render hook checks the YAML against its model through `uv` and renders `product/EVIDENCE.md`, or
+reports each error back to the agent and leaves the Markdown as it was. The guard denies a direct
+edit to a generated Markdown file and names its YAML. Both need `uv`: without it the agent is told
+once per session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS`
+with `artifact-render-hook` or `generated-md-guard`, switches them off.
 
 ## Relation to the stack testing skills
 

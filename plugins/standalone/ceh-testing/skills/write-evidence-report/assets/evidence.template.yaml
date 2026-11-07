@@ -1,0 +1,46 @@
+schema: evidence/v2
+product: <product>
+runs:
+  - date: YYYY-MM-DD
+    sha: <short-sha>
+    tree: <clean | dirty (<n> files)>
+    areas:
+      tests:
+        status: <passed | failed | not run>
+        result: <command and summary line>
+        checked_at: <sha>
+      qa:
+        status: <status>
+        result: <bugs found / fixed>
+        checked_at: <sha or date>
+      performance:
+        status: <status>
+        result: <metric and value on machine>
+        checked_at: <sha or date>
+      security:
+        status: <status>
+        result: <counts by severity>
+        checked_at: <sha or date>
+      usability:
+        status: <status>
+        result: <blockers / friction counts>
+        checked_at: <sha or date>
+      plan:
+        status: <status>
+        result: <items built / missing>
+        checked_at: <sha or date>
+    open_issues:
+      - area: <area>
+        issue: |
+          <issue>
+        severity: <severity>
+    claims:
+      - claim: |
+          <claim>
+        area: <area>
+        figure: <figure>
+    not_run:
+      - area: <area>
+        reason: |
+          <reason>
+        skill: <skill>

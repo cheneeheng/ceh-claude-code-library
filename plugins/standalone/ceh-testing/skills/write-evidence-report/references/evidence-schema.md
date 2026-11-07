@@ -29,3 +29,43 @@ by date.
   and plan items missing or failing their check. `None` when empty.
 - **Claims:** one sentence each that a launch post may state, with its area and figure.
 - **Not run:** each area not run, with the reason and the skill that produces it.
+
+## evidence/v2: YAML with generated Markdown
+
+An `evidence/v2` report is `product/EVIDENCE.yaml`, a copy of `../assets/evidence.template.yaml`,
+and `product/EVIDENCE.md` is generated from it in the `v1` layout above and committed beside it.
+The YAML is the source: agents read and edit it, and nobody edits the Markdown, which opens with
+`generated_from: EVIDENCE.yaml` and a do-not-edit `generated_note`. The format in code is
+`evidence-model.py` beside this file, and `scripts/artifact.py` in the skill checks and renders it
+through uv:
+
+```bash
+uv run --script scripts/artifact.py check product/EVIDENCE.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render product/EVIDENCE.yaml  # check, then write the .md
+```
+
+Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other
+failure, and `3` means no model for that version. Field paths count from 0, so `runs.0` is the
+newest run.
+
+**Keys**, each required unless marked optional, and no other key allowed:
+
+- `schema`: `evidence/v2`. `product`: as in `v1`.
+- `runs`: at least one, newest first, each with `date` (an unquoted date), `sha` (7 to 40 lowercase
+  hex characters), `tree` (`clean` or `dirty (<n> files)`), `areas`, `open_issues`, `claims` and
+  `not_run`. A run is appended at the top, and an earlier run is never edited.
+- `areas`: the six keys `tests`, `qa`, `performance`, `security`, `usability`, `plan`, each with
+  `status`, `result` and `checked_at`. Tests `status` is `passed`, `failed` or `not run`, the others
+  `passed`, `open issues`, `stale (<n>)` or `not run`. `result` and `checked_at` may be left out
+  only when the status is `not run`, and every `not run` area has a `not_run` entry.
+- `open_issues`: `area`, `issue` and `severity` (optional). `claims`: `claim`, `area`, `figure`.
+  `not_run`: `area`, `reason`, `skill`. Each `area` is one of the six keys, and the Markdown shows
+  its display name. An empty list is `[]` and renders as `None`.
+
+**Free text goes in `|` blocks or quotes**, because ` #` starts a YAML comment, and every value is
+strict, so quote a value such as `1.10` that must stay text.
+
+A `v1` `EVIDENCE.md` with no YAML beside it is moved on the next run: write `EVIDENCE.yaml` from
+it, every earlier section as a run, render, and check `git diff --word-diff product/EVIDENCE.md`
+before adding the new run. Text the YAML cannot hold goes in the nearest free-text field, and the
+reply names the move and any line the diff shows changed.

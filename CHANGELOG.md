@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-11-07
 
+The user approved the artifact-validation trial, and the evidence report is the first format to
+follow the build plan. `write-evidence-report` now saves `product/EVIDENCE.yaml` (`evidence/v2`),
+checked end to end by a pydantic model, and `product/EVIDENCE.md` is rendered from it in the layout
+readers already know. `ceh-testing` gains the render hook and the generated-Markdown guard. The
+render hook now finds a spine file by where it lives, and acts only on formats whose model its own
+plugin holds. Before, a copy in a plugin with no plan model would have warned on every plan write.
+The plan for the remaining formats (architecture, vision, strategy, the business plan, and their
+readers) is `product/plans/artifact-validation-formats.yaml`.
+
 A generated `plan/v2` Markdown now says it is generated, and formatters leave it alone. Its
 frontmatter gains `generated_note`, telling a reader not to edit the file but to edit the YAML and
 re-render, and its body sits inside a `prettier-ignore` range, because the repo's pre-commit
@@ -35,9 +44,10 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-build-planning`           | 1.2.7   |
-| `ceh-build-from-plan`          | 1.2.4   |
-| `ceh-check-build-against-plan` | 1.1.4   |
+| `ceh-build-planning`           | 1.2.8   |
+| `ceh-build-from-plan`          | 1.2.5   |
+| `ceh-check-build-against-plan` | 1.1.5   |
+| `ceh-testing`                  | 1.6.0   |
 | `ceh-blog`                     | 1.0.17  |
 | `ceh-business-plan`            | 1.1.15  |
 | `ceh-competitor-analysis`      | 1.1.13  |
@@ -50,6 +60,12 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 
 ### Added
 
+- `product/plans/artifact-validation-formats.yaml`, with its generated `.md`: seven phases carrying
+  the YAML formats to evidence, architecture, vision, strategy, the business plan and their
+  readers. Reviewed from a fresh context, and all 13 findings fixed.
+- `evidence/v2` in `ceh-testing:write-evidence-report`: `evidence-model.py`,
+  `evidence.template.yaml`, `scripts/artifact.py`, and the schema's YAML section. `ceh-testing`
+  gains `artifact-render-hook.py` and `generated-md-guard.py`, with fixtures in `checks/hooks.py`.
 - `product/plans/skill-local-files.yaml`, with its generated `.md`: three phases (the `copies`
   check, the plan plugins in the new layout, then every other plugin with a layout check and the
   rules), reviewed from a fresh context and revised for all 12 findings.

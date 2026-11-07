@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: artifact-validation-formats.yaml
 generated_note: "Do not edit. artifact.py renders this file from artifact-validation-formats.yaml: edit the YAML, then run artifact.py render."
 title: YAML formats with generated Markdown for evidence, architecture, vision, strategy and the business plan
-status: ready
+status: building
 created: 2026-11-07
 ---
 
@@ -251,7 +251,12 @@ reports `runs.0.areas.tests.status` to the agent right after the write and leave
   `runs.0.areas.tests.status`, one with no `schema:` key is blocked, a `product/plans/x.yaml`
   gets no output, and a `notes/STRATEGY.yaml` gets no output. `python
   tools/validate-plugins/validate.py` is green.
-- **Status:** todo
+- **Status:** done, a two-run scratchpad `EVIDENCE.yaml` rendered (exit 0) with its headings, Tree lines, table
+  header and area order equal to the template's run block written twice; the five broken copies
+  each exited 1 naming `runs.0.areas.tests.status`, `runs.0`, `(top level)`, `runs.0.sha` and
+  `extra`; the hook cases run as fixtures in `checks/hooks.py`; `python
+  tools/validate-plugins/validate.py` printed "OK: all plugin checks passed". The `notes/STRATEGY.yaml` fixture runs without uv, so it proves the hook is silent there, not
+  that the place test refused it. `ceh-testing` holds no strategy model either way.
 
 ### Phase 2: Architecture
 
@@ -343,5 +348,6 @@ None
 - 2026-11-07 Reviewed: Revise first, 3 blocking (hook acts on plan YAML in plugins with no plan model, review-build-plan
   gets no business-plan model, no move step for a specialist meeting an old business plan), all
   fixed with the 10 advisory findings
+- 2026-11-07 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 
 <!-- prettier-ignore-end -->
