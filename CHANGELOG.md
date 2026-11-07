@@ -78,6 +78,11 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
   The bundled-file, output-template and artifact-validation rules, `plugins/CLAUDE.md`,
   `add-plugin-component`, the READMEs and `docs/CROSS_REFERENCES.md` describe the new layout, and
   every copy stays registered. Phase 3, which completes the plan.
+- `copies` now reads its pairs from `docs/CROSS_REFERENCES.md` instead of matching paths: a
+  registered whole-file copy that differs from its canonical file, a registered path that does
+  not exist, a row it cannot pair, or an identical copy left unregistered fails, and files that
+  only share a name pass. The registry's whole-file entries list one full path per row, and the
+  Entry shape shows the form. `product/plans/registry-driven-copies.yaml`.
 
 ### Fixed
 

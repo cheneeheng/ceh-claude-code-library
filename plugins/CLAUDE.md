@@ -12,9 +12,9 @@ and `decision-invocation-flags.md`. This file explains how they are checked and 
 `validate.py` (the `templates` check) rejects a template without its schema line or its schema
 file, a template that carries explanation, a template or schema no file in its plugin cites, and a
 skill whose `## Output` names a saved `.agents_workspace/` or `product/` file but cites no
-template. The `copies` check rejects a bundled file that differs from a file at the same path in
-another skill folder, a plugin root holding `assets/` or `references/`, and a citation of either
-through `${CLAUDE_PLUGIN_ROOT}`.
+template. The `copies` check rejects a whole-file copy registered in `docs/CROSS_REFERENCES.md` that
+differs from its canonical file, an identical copy left unregistered, a plugin root holding
+`assets/` or `references/`, and a citation of either through `${CLAUDE_PLUGIN_ROOT}`.
 
 The two migrated catalog skills keep their bundled files for this reason.
 `ceh-ui-design:design-ui` carries two themes and `examples.md` under `references/`, and

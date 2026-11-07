@@ -1,6 +1,6 @@
 schema: plan/v2
 title: The copies check compares the whole-file copies the registry declares
-status: ready
+status: built
 created: 2026-11-07
 goal: |
   The `copies` check in `validate.py` stops guessing which files are copies from their path, and
@@ -109,7 +109,14 @@ phases:
       exit 1 with an unregistered error; (d) write different bytes to those two files: exit 0;
       (e) add a second backticked path to the write-concept-docs row: exit 1 with a malformed
       error.
-    status: todo
+    status: done
+    evidence: |
+      `copies` OK on the tree (64 registered pairs); (a) drift, (b) stale, (c) unregistered and
+      (e) malformed each failed naming the expected paths, (d) passed, and the restored tree is OK.
+    note: |
+      The first run of (b) and (e) changed nothing, because the `sed` pattern missed the
+      column-padded rows; rerun with a pattern that allows the padding. (b) and (e) also report the
+      real file as an unregistered identical copy, as the review predicted.
 open: []
 record:
   - date: 2026-11-07
@@ -124,3 +131,10 @@ record:
   - date: 2026-11-07
     event: PR
     details: "#216 https://github.com/cheneeheng/ceh-claude-code-library/pull/216"
+  - date: 2026-11-07
+    event: Built Phase
+    phase: 1
+    details: copies OK with 64 pairs; drift, stale, unregistered, malformed fail; different passes
+  - date: 2026-11-07
+    event: PR
+    details: "#217 https://github.com/cheneeheng/ceh-claude-code-library/pull/217"
