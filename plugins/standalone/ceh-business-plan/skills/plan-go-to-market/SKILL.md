@@ -5,6 +5,9 @@ description: >-
   arithmetic, and a pass-or-fail channel test, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
+compatibility: >-
+  Checking and rendering BUSINESS_PLAN.yaml needs uv; without it the YAML is saved unchecked
+  and its Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -16,7 +19,8 @@ the Output block filled, and the channel test scheduled in §13 with its dates a
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. Take the
+1. Check and read the plan's `BUSINESS_PLAN.yaml`, as the `business-plan/v3` section of
+   `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md` says, and render it after your edit. Take the
    segment from §03 and the price and acquisition ceiling from §08.
 2. Name the first ten customers. Real names or accounts where the user has them. Otherwise the
    exact list they come from: a directory, a community, a conference attendee list, a street. A
@@ -80,8 +84,9 @@ Pick the one that passes both, and write down why the others were declined.
 
 ## Output
 
-Written into §09 of `BUSINESS_PLAN.md` as one subsection, replaced whole on a re-run. On disk its
-headings carry nested numbers (see Numbering in the schema), so a re-run finds it by its title:
+Written into §09 of `BUSINESS_PLAN.yaml` as one entry of `go_to_market.subsections`, with
+`owner: plan-go-to-market`, replaced whole on a re-run, which finds it by its title. Its parts
+are that entry's own `subsections`. Rendered, without the numbers the renderer adds:
 
 ```markdown
 ### Go-to-market plan

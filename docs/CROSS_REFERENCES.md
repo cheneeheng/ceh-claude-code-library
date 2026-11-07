@@ -356,6 +356,18 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-vision-and-strategy/scripts/artifact.py`                                                                           | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-vision-and-strategy/scripts/artifact-render-hook.py`                                                               | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-vision-and-strategy/scripts/generated-md-guard.py`                                                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/scripts/artifact.py`                                                    | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/scripts/artifact.py`                                                  | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/scripts/artifact.py`                                                        | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/skills/review-business-plan/scripts/artifact.py`                                                     | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/skills/run-premortem/scripts/artifact.py`                                                            | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/scripts/artifact.py`                                                       | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/scripts/artifact.py`                                                         | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/scripts/artifact.py`                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/scripts/artifact.py`                                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/scripts/artifact.py`                                                                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/scripts/artifact-render-hook.py`                                                                     | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-business-plan/scripts/generated-md-guard.py`                                                                       | whole file                                                  | none                                                                             |
 | `ceh-build-planning:review-build-plan`, `ceh-build-from-plan:implement-from-plan`, `ceh-check-build-against-plan:check-build-against-plan` | the "A `plan/v2` plan is checked first" paragraph in step 1 | `implement-from-plan` adds where a Status note and a Record entry go in the YAML |
 
 **Shared:** the whole plan format, byte for byte: the `product/plans/<slug>.md` location, the
@@ -659,7 +671,7 @@ skill that asks the author or writes a draft carries its own copy.
 
 ## Business plan format
 
-**Canonical:** whole files, `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/references/business-plan-schema.md`, `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/assets/business-plan.template.md`
+**Canonical:** whole files, `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/references/business-plan-schema.md`, `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/assets/business-plan.template.md`, `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/references/business-plan-model.py`, `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/assets/business-plan.template.yaml`
 
 | Copy                                                                                                        | Section    | Diverges |
 | ----------------------------------------------------------------------------------------------------------- | ---------- | -------- |
@@ -679,6 +691,22 @@ skill that asks the author or writes a draft carries its own copy.
 | `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/assets/business-plan.template.md`   | whole file | none     |
 | `plugins/standalone/ceh-business-plan/skills/write-investor-materials/references/business-plan-schema.md`   | whole file | none     |
 | `plugins/standalone/ceh-business-plan/skills/write-investor-materials/assets/business-plan.template.md`     | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/references/business-plan-model.py`       | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/assets/business-plan.template.yaml`      | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/references/business-plan-model.py`           | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/assets/business-plan.template.yaml`          | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/review-business-plan/references/business-plan-model.py`        | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/review-business-plan/assets/business-plan.template.yaml`       | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/run-premortem/references/business-plan-model.py`               | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/run-premortem/assets/business-plan.template.yaml`              | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/references/business-plan-model.py`          | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/assets/business-plan.template.yaml`         | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/references/business-plan-model.py`            | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/assets/business-plan.template.yaml`           | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/references/business-plan-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/assets/business-plan.template.yaml` | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/references/business-plan-model.py`    | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/assets/business-plan.template.yaml`   | whole file | none     |
 
 **Shared:** the business plan format and its template. `find-product-market-fit` drafts the plan,
 and every specialist reads it, so each of the nine skills carries a copy.

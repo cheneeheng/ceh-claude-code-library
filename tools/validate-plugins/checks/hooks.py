@@ -396,6 +396,18 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "conflicts:\n  order:\n    - {principle: Simple, protects: ease}\n  example: For example, none.\n"
         "gaps: []\nextra_sections: []\nchanging: A PR.\n"
     )
+    good_bp = (
+        "schema: business-plan/v3\nstatus: draft\ncreated: 2026-11-07\nupdated: 2026-11-07\n"
+        "product: Wordy\nstage: idea\nderived_from: []\npmf_gate: 2\nsections:\n"
+        + "".join(
+            f"  {k}: {{body: '', subsections: []}}\n"
+            for k in (
+                "executive_summary", "problem", "target_customer", "value_proposition",
+                "solution", "alternatives", "market", "business_model", "go_to_market",
+                "traction", "financials", "risks", "milestones",
+            )
+        )
+    )  # fmt: skip
     evidence_fixtures = [
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
@@ -411,6 +423,11 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             "ceh-vision-and-strategy", "VISION", good_vision,
             good_vision.replace("status: draft", "status: adopted"),
             "status adopted allows no [assumed]", "## Identity",
+        ),
+        *spine_fixtures(
+            "ceh-business-plan", "BUSINESS_PLAN", good_bp,
+            good_bp.replace("pmf_gate: 2", "pmf_gate: 9"),
+            "pmf_gate", "## §01 Executive Summary",
         ),
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),

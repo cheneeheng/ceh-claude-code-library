@@ -5,6 +5,9 @@ description: >-
   that most changes it, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
+compatibility: >-
+  Checking and rendering BUSINESS_PLAN.yaml needs uv; without it the YAML is saved unchecked
+  and its Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -16,9 +19,11 @@ scored, each score backed by a quote or "nothing found", and the next skill name
 
 ## Procedure
 
-1. Read the whole plan. Default to `.agents_workspace/product/business/BUSINESS_PLAN.md` (schema in
-   `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`). Any other plan, deck, or memo the
-   user supplies is reviewed the same way.
+1. Read the whole plan. Default to `.agents_workspace/product/business/BUSINESS_PLAN.yaml`,
+   checked first as the `business-plan/v3` section of
+   `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md` says, or its `BUSINESS_PLAN.md` when
+   no YAML exists, since a review only reads. Any other plan, deck, or memo the user supplies is
+   reviewed the same way.
 2. Score each lens 0, 1, or 2 using the table below. Quote the sentence in the plan that earns the
    score. A lens with nothing to quote scores 0.
 3. Answer the fresh-owner question: if new owners took this plan over tomorrow with no attachment

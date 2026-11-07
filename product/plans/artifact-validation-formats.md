@@ -312,7 +312,14 @@ reports `runs.0.areas.tests.status` to the agent right after the write and leave
   says that step was not run. Each exits 1: a missing section, an extra
   section, `validated` with `pmf_gate: 7`, an unknown `owner`, a seventh heading level.
   `python tools/validate-plugins/validate.py` is green.
-- **Status:** todo
+- **Status:** done, a scratchpad `BUSINESS_PLAN.yaml` with nested subsections under §04 and §12 rendered (exit 0),
+  all 17 Contents links resolved to rendered headings, and `node
+  plugins/standalone/ceh-business-plan/skills/develop-business-plan/scripts/build-plan-html.cjs`
+  wrote `BUSINESS_PLAN.html` with 17 headings and the gate as `5/8`; the five broken copies
+  exited 1 naming `sections.milestones`, `sections.roadmap`, `(top level)` for the gate,
+  `sections.risks.subsections.0.owner` and `(top level)` for the depth; `python
+  tools/validate-plugins/validate.py` printed "OK: all plugin checks passed". A section `body` may be empty, a departure from Design with a Design changed entry, because a
+  v0 plan opens with the 13 headings and nothing under them.
 
 ### Phase 5: Read-time checks in the plan skills
 
@@ -369,5 +376,8 @@ None
 - 2026-11-07 Design changed: was "`gaps: list of str` ... `changing`" in both models, now `extra_sections: list of {title, body}` before `changing` too, because `write-vision-and-strategy` keeps an existing doc's sections outside the template, which `extra="forbid"` would otherwise reject
 - 2026-11-07 Built Phase 3: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-07 PR: #222 https://github.com/cheneeheng/ceh-claude-code-library/pull/222
+- 2026-11-07 Design changed: was "each `{body: str, subsections: list}`", checked as non-empty, now `body` may be empty, because a v0 plan opens with the 13 headings and nothing under them
+- 2026-11-07 Built Phase 4: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-07 PR: #223 https://github.com/cheneeheng/ceh-claude-code-library/pull/223
 
 <!-- prettier-ignore-end -->

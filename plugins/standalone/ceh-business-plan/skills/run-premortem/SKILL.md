@@ -5,6 +5,9 @@ description: >-
   kill criterion set in advance, and a loss cap, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
+compatibility: >-
+  Checking and rendering BUSINESS_PLAN.yaml needs uv; without it the YAML is saved unchecked
+  and its Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -17,7 +20,8 @@ written as a number.
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. List
+1. Check and read the plan's `BUSINESS_PLAN.yaml`, as the `business-plan/v3` section of
+   `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md` says, and render it after your edit. List
    every `[assumption]` tag. Those are the candidate causes of death.
 2. Set the scene and write it down: it is 18 months from today and the business has failed. Write
    five to seven failure stories, each a specific sequence of events with a cause and a month.
@@ -80,9 +84,10 @@ honoured.
 
 ## Output
 
-Written into §12 of `BUSINESS_PLAN.md` as one subsection. A re-run replaces it, except that a kill
-criterion whose date has passed is kept as written (see Stop conditions). On disk its headings
-carry nested numbers (see Numbering in the schema), so a re-run finds it by its title:
+Written into §12 of `BUSINESS_PLAN.yaml` as one entry of `risks.subsections`, with
+`owner: run-premortem`. A re-run finds it by its title and replaces it, except that a kill
+criterion whose date has passed is kept as written (see Stop conditions). Its parts are that
+entry's own `subsections`. Rendered, without the numbers the renderer adds:
 
 ```markdown
 ### Premortem

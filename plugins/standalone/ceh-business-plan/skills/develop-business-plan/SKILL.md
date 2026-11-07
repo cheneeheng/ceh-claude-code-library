@@ -7,8 +7,9 @@ description: >-
 argument-hint: "[plan-or-idea]"
 compatibility: >-
   The HTML rebuild needs Node.js 18+ and network access: npx fetches the marked CLI on first run,
-  and the page loads Mermaid from a CDN. Without Node or the network, the markdown plan is still
-  written and the HTML is skipped.
+  and the page loads Mermaid from a CDN. Without Node or the network, the plan is still written
+  and the HTML is skipped. Checking and rendering BUSINESS_PLAN.yaml needs uv; without it the YAML
+  is saved unchecked and its Markdown is not rendered.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -17,15 +18,19 @@ license: Apache-2.0
 # Develop business plan
 
 Route a business-plan request to the one specialist skill that owns its moment, and keep
-`BUSINESS_PLAN.md` consistent between specialists. This skill owns only the routing and the rules
+`BUSINESS_PLAN.yaml` consistent between specialists. This skill owns only the routing and the rules
 below. Every interview, test, and section edit belongs to a specialist. Done is the specialist for
 this moment has run and the plan's frontmatter agrees with its content.
 
 ## Procedure
 
-1. Find the plan: `.agents_workspace/product/business/BUSINESS_PLAN.md`, else Glob `**/BUSINESS_PLAN.md`
-   (schema, and what to do with a plan at the old path, in
+1. Find the plan: `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, else
+   `BUSINESS_PLAN.md` there, else Glob `**/BUSINESS_PLAN.yaml` and `**/BUSINESS_PLAN.md` (schema,
+   and what to do with a plan at the old path, in
    `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`). When several exist, ask which one.
+   Check the YAML as the schema's `business-plan/v3` section says, and stop on its errors. A
+   Markdown plan with no YAML beside it is moved to the YAML now, as that section says, before
+   any specialist runs.
 2. No plan exists → Invoke the Skill tool with skill="ceh-business-plan:find-product-market-fit",
    whatever was asked. It drafts from app plans or supplied material before asking anything. When
    the user asked for a different specialist, say in one line that it needs a plan first. The one
@@ -34,13 +39,14 @@ this moment has run and the plan's frontmatter agrees with its content.
 3. A plan exists → match the request to a row of the routing table and invoke that skill, passing
    the plan's path. When the request names no moment ("continue", "work on my plan"), read the
    frontmatter: `status: draft` routes to the first row, `status: validated` to the review row.
-4. When the specialist returns, re-read the plan's frontmatter. If `pmf_gate` is below `8/8`, set
+4. When the specialist returns, re-read the YAML. If `pmf_gate` is below `8`, set
    `status: draft`. Set `updated` to today.
-5. Renumber every heading below h2 and rewrite the `**Contents**` list from the headings, per
-   "Numbering and contents" in the schema. A v1 plan gets both now and moves to v2.
-6. Rebuild the HTML: `node ${CLAUDE_SKILL_DIR}/scripts/build-plan-html.cjs <plan path>`, which
+5. Render: `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <plan>.yaml`, which
+   writes every heading number and the `**Contents**` list, and fix the YAML for each error it
+   lists. Without uv, say the Markdown was not rendered.
+6. Rebuild the HTML: `node ${CLAUDE_SKILL_DIR}/scripts/build-plan-html.cjs <plan>.md`, which
    writes `BUSINESS_PLAN.html` next to the plan. When Node is missing or the run fails, say so in
-   one line and go on: the markdown is the source.
+   one line and go on: the YAML is the source.
 7. Report in one or two lines what changed, the HTML's path, and which specialist the result
    points to next. Invoke it only when the user agrees.
 
