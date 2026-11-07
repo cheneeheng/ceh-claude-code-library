@@ -361,5 +361,6 @@ None
 - 2026-11-07 Design changed: was "a `Superseded by` status names an earlier entry", now "names another entry", because entries are newest last, so the entry that replaces one always comes after it
 - 2026-11-07 Design changed: was "(none)", now "the `product/architecture/` split is dropped", because one YAML renders one Markdown, and the split had no reader that needed it
 - 2026-11-07 Built Phase 2: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-07 PR: #221 https://github.com/cheneeheng/ceh-claude-code-library/pull/221
 
 <!-- prettier-ignore-end -->
