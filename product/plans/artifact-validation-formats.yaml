@@ -1,0 +1,370 @@
+schema: plan/v2
+title: YAML formats with generated Markdown for evidence, architecture, vision, strategy and the business plan
+status: ready
+created: 2026-11-07
+goal: |
+  The trial in `product/plans/artifact-validation.md` proved the mechanism on the build plan, and
+  the user approved it on 2026-11-07. This plan carries it to the other handoff files on the spine
+  (STRATEGY, "The spine: handoff files"): `product/EVIDENCE.md`, `product/ARCHITECTURE.md`,
+  `product/VISION.md`, `product/STRATEGY.md` and `.agents_workspace/product/business/BUSINESS_PLAN.md`.
+  Each becomes a YAML source checked end to end by a pydantic model, with its Markdown rendered
+  beside it in the layout readers see today, so a stage that reads one gets a file whose every
+  field was checked when it was written. The flow that matters most: `write-evidence-report`
+  appends a run to `product/EVIDENCE.yaml` with a Tests status of `passing`, the plugin's hook
+  reports `runs.0.areas.tests.status` to the agent right after the write and leaves
+  `EVIDENCE.md` unrendered, and the agent fixes the value in the same turn so the hook renders it.
+scope:
+  in:
+    - |
+      `evidence/v2`: `product/EVIDENCE.yaml` validated by `evidence-model.py`, with
+      `product/EVIDENCE.md` rendered from it in the `evidence/v1` layout, written and re-checked by
+      `ceh-testing:write-evidence-report`, with the render hook and generated-Markdown guard in
+      `ceh-testing`.
+    - |
+      `architecture/v3`: `product/ARCHITECTURE.yaml` validated by `architecture-model.py`, with
+      `product/ARCHITECTURE.md` rendered in the `architecture/v2` layout, its section numbers,
+      Contents list and anchors generated, written by `ceh-codebase-explanation:document-architecture`
+      and appended to by `ceh-build-from-plan:implement-from-plan`, with the hooks in
+      `ceh-codebase-explanation` and the model in `ceh-build-from-plan`.
+    - |
+      `vision/v2` and `strategy/v2`: `product/VISION.yaml` and `product/STRATEGY.yaml` validated by
+      their models, with the Markdown rendered in the `v1` layouts, written by
+      `ceh-vision-and-strategy:write-vision-and-strategy`, with the hooks in `ceh-vision-and-strategy`.
+      An `adopted` file holding `[assumed]` is an error.
+    - |
+      `business-plan/v3`: `.agents_workspace/product/business/BUSINESS_PLAN.yaml` validated by
+      `business-plan-model.py`, with `BUSINESS_PLAN.md` rendered in the `business-plan/v2` layout,
+      its heading numbers and Contents list generated, written by the seven skills of
+      `ceh-business-plan` that write the plan and checked by all nine, with the hooks in
+      `ceh-business-plan`. The HTML build keeps reading the rendered Markdown.
+    - |
+      A read-time check: each skill that writes, edits or reads one of these formats and carries
+      `artifact.py` runs `artifact.py check` on the YAML before acting on it and stops on an error,
+      as the plan skills do. That covers the writers, `write-build-plan` and `review-build-plan`
+      reading a vision, strategy or business plan, `find-product-market-fit` reading an
+      architecture, and `write-vision-and-strategy` reading a business plan.
+    - |
+      Every other skill that reads one of these files, or a `plan/v2` plan, reads the checked YAML
+      by its keys instead of the Markdown, carrying `artifact.py` and the models it reads:
+      `whats-next`, `record-project-decisions`, `draft-post`, `write-project-listing-text`,
+      `write-concept-docs`, `write-project-docs` and `write-fastapi-endpoints`.
+    - |
+      A Markdown file in an older version is moved to the YAML by the skill that next updates it,
+      with the old file's text kept, as Design says.
+    - |
+      Repo upkeep in the phase that creates each copy: hook fixtures for every new copy in
+      `checks/hooks.py`, every copy registered in `docs/CROSS_REFERENCES.md`, the plugin READMEs and
+      `docs/GETTING_STARTED.md` naming uv, `docs/ENVIRONMENT_VARIABLES.md` rows, STRATEGY's spine
+      table naming each YAML, and `decision-artifact-validation.md` and
+      `decision-output-templates.md` no longer calling the plan the only YAML format.
+  out:
+    - item: The report-only formats (plan reviews, audits, retros, QA and performance reports, and the rest)
+      reason: |
+        no other stage reads them, so the user's instruction about handoff files does not cover them
+        by itself. Phase 7 stays `unplanned` and gets its own plan once Phase 6 lands, format by
+        format, each argued under VISION principle 7.
+    - item: Converting this repo's own `docs/VISION.md` and `docs/STRATEGY.md`
+      reason: |
+        they are the library's maintainer documents, not files `write-vision-and-strategy` wrote, and
+        do not follow `vision/v1` or `strategy/v1`.
+    - item: Settling copies of one model at different installed versions
+      reason: |
+        unchanged from the trial: accepted, see Design. Revisited when a session shows one copy
+        blocking what another accepts.
+    - item: Updating eval cases under `evals/`
+      reason: |
+        they pass against the rendered Markdown, and running them costs model calls, so only on
+        request per `decision-evaluation.md`.
+design:
+  - topic: Why the vision allows it
+    decision: |
+      The argument in `decision-artifact-validation.md` holds unchanged: the user asked for handoff
+      files that are deterministic and checkable (VISION, Who overrides) and approved the trial on
+      2026-11-07. Phase 1 changes the rule's last two sentences from "the build plan is the trial,
+      other formats follow once the user approves it" to the list of formats this plan adds, and
+      `decision-output-templates.md`'s "The build plan is the trial format" the same way.
+  - topic: One mechanism, unchanged
+    decision: |
+      Each format copies the trial's pieces as they are: `<name>-model.py` beside `<name>-schema.md`
+      in `references/`, `<name>.template.yaml` in `assets/`, `scripts/artifact.py` in each skill that
+      carries the model, and `artifact.py`, `artifact-render-hook.py` and `generated-md-guard.py` at
+      the plugin root wired in `hooks/hooks.json` exactly as in `ceh-build-planning`. Each model
+      defines `NAME`, `VERSION`, `MODEL` and `render(doc, source) -> str`, sets `extra="forbid"`
+      and `strict=True`, and renders frontmatter with `schema`, `generated_from` and
+      `generated_note` first, then the format's own keys, and its body inside a prettier-ignore
+      range. `artifact.py` and the two hooks stay byte-identical across every plugin, so a change
+      to one is a change to all.
+  - topic: The hook finds spine files by place, only for its own models
+    decision: |
+      `artifact-render-hook.py` acts today on a `.yaml` whose `schema:` names a model in its plugin,
+      and on any `product/plans/*.yaml` whatever plugin it is in. Copied unchanged into a plugin with
+      no plan model, that second test would run `artifact.py` on every plan write and warn "not
+      checked" (exit 3), though `ceh-build-planning` checked it. Phase 1 changes the second test in
+      every copy at once to a table of places, each acting only when the plugin holds that format's
+      model: `product/plans/*.yaml` to `plan`, and the stems `EVIDENCE` to `evidence`,
+      `ARCHITECTURE` to `architecture`, `VISION` to `vision`, `STRATEGY` to `strategy` and
+      `BUSINESS_PLAN` to `business-plan`, each matched only in a folder named `product` or
+      `business`, or beside a `.md` of the same stem. So a spine YAML that lost its `schema:` key is
+      an error, not a skip, and an unrelated `STRATEGY.yaml` elsewhere in a repo is left alone.
+      Each new plugin's fixtures cover its own format, and the plan fixtures stay in the three plan
+      plugins.
+  - topic: Rendered layout and versions
+    decision: |
+      Each rendered Markdown keeps the current Markdown version's layout, so a reader that greps it
+      (`^## §09`, `status: adopted`, a run heading) sees no change. The YAML takes the next version
+      number: `evidence/v2`, `architecture/v3`, `vision/v2`, `strategy/v2`, `business-plan/v3`.
+      Each schema file gains a section for the YAML version, as `plan-schema.md` did, and keeps its
+      Markdown section for files not yet moved. The YAML always sits beside the Markdown it renders,
+      with the same stem: a vision kept at `docs/VISION.md` or a path the repo's `CLAUDE.md` names
+      gets its `VISION.yaml` there, not in `product/`.
+  - topic: Moving an existing Markdown file
+    decision: |
+      A living file (all five are) has one copy per repo for good, so leaving old files as written,
+      as the trial did for plans, would mean the YAML never reaches existing users. The skill that
+      next updates an older-version Markdown file writes its YAML from it first, renders, and runs
+      `git diff --word-diff` on the Markdown before making its own change. Any text the YAML could
+      not hold is kept in the nearest free-text field, and the reply names the move and any line the
+      diff shows changed. `.agents_workspace/` is not in git, so for the business plan the skill
+      copies the old file to `BUSINESS_PLAN.v2.md` beside it before the move and says so. The user
+      chose this on 2026-11-07. For the business plan, `develop-business-plan` moves the file before
+      it dispatches a specialist, and `find-product-market-fit` does the same when it runs without
+      the router. Either one first brings an `artifact: BUSINESS_PLAN` or `business-plan/v1` file to
+      `v2` as the schema already says, then moves it. Any other specialist that finds a Markdown
+      plan with no YAML stops and names `develop-business-plan`.
+  - topic: The evidence/v2 model
+    decision: |
+      | Key | Type |
+      | --- | --- |
+      | `schema` | `Literal["evidence/v2"]` |
+      | `product` | non-empty one-line `str` |
+      | `runs` | list of runs, at least one, newest first |
+
+      A run is `{date: date, sha: str, tree: str, areas: {tests, qa, performance, security,
+      usability, plan}, open_issues: list of {area, issue, severity optional}, claims: list of
+      {claim, area, figure}, not_run: list of {area, reason, skill}}`. `sha` matches
+      `^[0-9a-f]{7,40}$`, `tree` matches `^(clean|dirty \(\d+ files\))$`, and each area is
+      `{status, result: str optional, checked_at: str optional}`. Tests `status` is
+      `passed | failed | not run`, every other area's is `passed | open issues | stale (<n>) |
+      not run`, and `result` and `checked_at` are required unless the status is `not run`. An area
+      `not run` must have a `not_run` entry, and an `area` field anywhere is one of the six
+      lowercase keys above. The renderer writes the display names in the template's order: Tests,
+      QA, Performance, Security, Usability, Plan.
+      Runs must be in non-increasing date order. The model cannot tell that an earlier run was
+      edited, so `write-evidence-report` keeps the "never edit an earlier run" rule in prose.
+  - topic: The architecture/v3 model
+    decision: |
+      `{schema, title: str default "Architecture", overview: {bullets: list of str, at least one,
+      flow: str}, diagrams: list, key_decisions: list}`. A diagram is
+      `{name: Literal["System context", "Components", "Key flows", "Data model", "State machines"],
+      walkthrough: str, notice: list of str, at most 3, mermaid: str optional, parts: list optional}`,
+      with exactly one of `mermaid` and `parts`. A part is `{title, walkthrough, notice, mermaid}`.
+      A key decision is `{date, title, status: Literal["Accepted"] or "Superseded by <date> <title>",
+      context, decision, consequences}`. Validators: a `Superseded by` status names an earlier entry
+      by its date and title. A title or name holding an em dash is an error, because the anchor
+      would gain a double hyphen. A `mermaid` value holds the diagram only, and the renderer wraps it
+      in the fence. The renderer numbers sections `01.` onward and parts `03.01`, writes the
+      Contents list, and builds each anchor with GitHub's rule: lowercase, drop every character but
+      letters, digits, spaces and hyphens, spaces to hyphens. `implement-from-plan` appends a
+      key decision to the YAML and no longer numbers anything.
+  - topic: The vision/v2 and strategy/v2 models
+    decision: |
+      Both carry `{schema, status: Literal["draft", "adopted"], updated: date}`, and a validator
+      rejects `adopted` when any string in the file holds `[assumed]`. Vision:
+      `identity: {name, sentence, is: list of {trait, meaning}, is_not: list of str}`, `vision`,
+      `scope: {text, test, refuses}`, `goals: list of {goal, measure}`, `non_goals: list of
+      {thing, reason}`, `principles: list of {name, rule, ask}`, `conflicts: {order: list of
+      {principle, protects}, example}`, `gaps: list of str` (empty renders "No known gaps as of
+      <updated>."), `changing`. Each `conflicts.order` principle names a principle in the list.
+      Strategy: `concept`, `parts: {columns: list of str, at least 2, rows: list of list of str}`
+      (each row as long as `columns`, since the schema lets a repo change the columns),
+      `work: {rule, reason, next: list of {work, why}}`, `measuring`, `not_to_do: list of {approach,
+      reason}`, `gaps`, `open: list of {question, assumption}`, `changing`. Both files are read by
+      `write-build-plan`, and a strategy that disagrees with the vision is a review matter the model
+      cannot check.
+  - topic: The business-plan/v3 model
+    decision: |
+      Frontmatter keys as in `business-plan/v2`: `status: draft | validated`, `created`, `updated`
+      (not before `created`), `product`, `stage: idea | prototype | launched | revenue`,
+      `derived_from: list of str`, `pmf_gate: int 0 to 8`, rendered as `<n>/8` as `v2` writes it
+      and the HTML build shows it. `sections` is a mapping with exactly
+      the 13 keys `executive_summary` through `milestones` in order, so a missing or extra section
+      is an error, each `{body: str, subsections: list}`. A subsection is `{title, owner, body,
+      subsections}`, nested to h6 at most, where `owner` is the skill that wrote it, one of the seven
+      writer skill names. The model checks only that the name is known. It cannot tell who made an
+      edit, so "a specialist edits only subsections it owns" stays a rule in each skill's prose.
+      The seven writers are `develop-business-plan`, `find-product-market-fit`, `plan-go-to-market`,
+      `run-premortem`, `set-operating-plan`, `sharpen-strategy` and `stress-test-unit-economics`.
+      `review-business-plan` and `write-investor-materials` only read the plan, and check it first.
+      `status: validated` needs `pmf_gate: 8`.
+      The renderer writes `## §NN Title` headings, numbers every lower heading by position
+      (`### §04.01 Strategy`), and writes the Contents list, so `develop-business-plan` drops its
+      renumbering pass. Confidence tags, diagrams and tables stay inside `body` text, which the model
+      checks only as non-empty.
+  - topic: Who carries what
+    decision: |
+      | Format | Model in | Hooks in |
+      | --- | --- | --- |
+      | evidence | `ceh-testing:write-evidence-report` | `ceh-testing` |
+      | architecture | `ceh-codebase-explanation:document-architecture`, `ceh-build-from-plan:implement-from-plan`, and in Phase 5 `ceh-business-plan:find-product-market-fit` | `ceh-codebase-explanation`, `ceh-build-from-plan` (already) |
+      | vision, strategy | `ceh-vision-and-strategy:write-vision-and-strategy`, and in Phase 5 `write-build-plan` and `review-build-plan` | `ceh-vision-and-strategy` |
+      | business-plan | all nine skills of `ceh-business-plan`, and in Phase 5 `write-build-plan`, `review-build-plan` and `ceh-vision-and-strategy:write-vision-and-strategy` | `ceh-business-plan` |
+
+      `ceh-testing` gains `artifact.py` and the hooks next to `skill-started-guard.py`, wired in its
+      existing `hooks.json`. No `dependencies` entry is added, per STRATEGY rule 2.
+
+      Phase 6 adds the readers in other plugins, each skill carrying `scripts/artifact.py` and the
+      models of what it reads, with their schema files and templates, and no hooks, since they write
+      none of these files:
+
+      | Skill | Models |
+      | --- | --- |
+      | `ceh-every-session:whats-next` | plan, architecture, evidence, business-plan |
+      | `ceh-every-session:record-project-decisions` | plan, architecture, business-plan |
+      | `ceh-blog:draft-post` | evidence, business-plan |
+      | `ceh-seo:write-project-listing-text` | evidence, business-plan |
+      | `ceh-documentation:write-concept-docs`, `write-project-docs` | architecture |
+      | `ceh-python-service:write-fastapi-endpoints` | architecture |
+
+      The builder confirms each row against what the skill reads before copying, and drops a model
+      the skill only names in passing.
+  - topic: Readers read the YAML by its keys
+    decision: |
+      The user chose on 2026-11-07 that every reader checks the YAML and reads it directly, so each
+      reader can follow the format's fields instead of parsing Markdown, and accepted uv as a
+      requirement of these skills, since most installs already need it for the writers. A reader
+      runs `artifact.py check` first, then reads the fields its step needs by key path, named in
+      its prose (`draft-post` takes its claims from `runs.0.claims` of `EVIDENCE.yaml`, for
+      example). Exit 1 stops the reader with the errors. Exit 2 or 3, or no uv, is said in the
+      reply as "not checked", and the reader goes on with the YAML. With no YAML beside the `.md`,
+      it reads the Markdown as today. Each reader skill gains `compatibility` on uv, per
+      `decision-frontmatter-scalars.md`. `ceh-every-session` still admits `whats-next` and
+      `record-project-decisions` under `decision-every-session-admission.md`, because uv is needed
+      only when a repo holds one of these files, and without uv both skills still work.
+  - topic: Copies at different versions
+    decision: |
+      Unchanged from the trial: copies of the same version give the same verdict, and copies at
+      different installed versions can disagree, which is accepted. A model change lands in every
+      copy in one PR, which the `copies` check enforces. A disagreement shows as a block naming the
+      file and the error, never a silent pass, so it is seen when it happens.
+  - topic: Landing
+    decision: |
+      Each phase lands as its own PR, with its `CHANGELOG.md` entry and `docs/PLUGIN_VERSIONS.md`
+      rows. A plugin that gains hooks bumps MINOR in that phase, as the trial did, and every other
+      plugin a phase touches bumps PATCH. Phase 1 also points Phase 6 of
+      `product/plans/artifact-validation.md` at this plan in its note. This plan's Phase 7 is done
+      when its own plan for the report-only formats is saved and reviewed, with that plan's path as
+      evidence, so this plan becomes `built` then, and the trial plan's Phase 6 is marked done with
+      this plan's path as its evidence, which makes it `built` too.
+phases:
+  - name: Evidence, and the hook's spine names
+    builds: |
+      `evidence-model.py`, `evidence.template.yaml` and the `evidence/v2` section of
+      `evidence-schema.md` in `write-evidence-report`, with its `scripts/artifact.py`; the plugin-root
+      `artifact.py` and both hooks in `ceh-testing`, wired in its `hooks.json`; the spine-name change
+      to `artifact-render-hook.py` in every copy; `write-evidence-report` writing, re-checking and
+      moving the file per Design; fixtures for the new copies; the two rule updates; the docs rows
+      for `ceh-testing`; the note on Phase 6 of `artifact-validation.md`.
+    check: |
+      In the scratchpad, a filled `EVIDENCE.yaml` with two runs passes `uv run --script
+      plugins/standalone/ceh-testing/scripts/artifact.py render`. In the rendered Markdown, the lines
+      starting `#`, `**Tree:**` and `|`, with dates, SHAs and cell values ignored, equal
+      `evidence.template.md`'s with its run block written twice. Each of these exits 1 naming its
+      field path: Tests status `open issues`, an area `not run` with no `not_run` entry, runs out of
+      date order, a bad `sha`, an unknown key. Piped to the `ceh-testing` hook, a Write of a
+      `product/EVIDENCE.yaml` whose Tests status is `passing` is blocked naming
+      `runs.0.areas.tests.status`, one with no `schema:` key is blocked, a `product/plans/x.yaml`
+      gets no output, and a `notes/STRATEGY.yaml` gets no output. `python
+      tools/validate-plugins/validate.py` is green.
+    status: todo
+  - name: Architecture
+    builds: |
+      `architecture-model.py`, `architecture.template.yaml` and the `architecture/v3` section of
+      `architecture-schema.md` in `document-architecture` and `implement-from-plan`, with their
+      `scripts/artifact.py`; the plugin-root scripts and `hooks.json` in `ceh-codebase-explanation`;
+      both skills writing and re-checking the YAML, `implement-from-plan` appending key decisions to
+      it; the move of an `architecture/v1` or `v2` file; fixtures and docs rows.
+    check: |
+      A filled `ARCHITECTURE.yaml` with one diagram split into two parts and two key decisions, one
+      superseding the other, renders, and a scratchpad script confirms every Contents link matches
+      the anchor of a rendered heading. Each exits 1: a diagram with both `mermaid` and `parts`,
+      four `notice` bullets, a `Superseded by` naming no entry, an em dash in a title.
+      `python tools/validate-plugins/validate.py` is green.
+    status: todo
+  - name: Vision and strategy
+    builds: |
+      Both models, templates and schema sections in `write-vision-and-strategy`, with its
+      `scripts/artifact.py`; the plugin-root scripts and `hooks.json` in `ceh-vision-and-strategy`;
+      the skill writing, re-checking and moving both files; fixtures and docs rows.
+    check: |
+      A filled `VISION.yaml` and `STRATEGY.yaml` render, and their heading lines match the `v1`
+      templates' in order. Each exits 1: `adopted` with `[assumed]` in a goal, a conflict order
+      naming no principle, a strategy row shorter than its columns. `python
+      tools/validate-plugins/validate.py` is green.
+    status: todo
+  - name: Business plan
+    builds: |
+      The model, template and `business-plan/v3` section in all nine copies of
+      `business-plan-schema.md`, with `scripts/artifact.py` in each skill; the plugin-root scripts and
+      `hooks.json` in `ceh-business-plan`; the seven writers writing and re-checking the YAML, each
+      specialist editing only subsections it owns, the two readers checking it before reading,
+      `develop-business-plan` dropping its renumbering pass and moving an older Markdown plan
+      before it dispatches, `find-product-market-fit` doing the same without the router, and
+      the other specialists stopping on a Markdown plan with no YAML, all per Design; fixtures and
+      docs rows.
+    check: |
+      A filled `BUSINESS_PLAN.yaml` with nested subsections under §04 and §12 renders, its Contents
+      links all resolve to rendered headings, and `node
+      plugins/standalone/ceh-business-plan/skills/develop-business-plan/scripts/build-plan-html.cjs`
+      builds HTML from the rendered Markdown with no error and shows the gate as `<n>/8`. That
+      script runs `npx marked@4`, so it needs Node and network, and without them the phase's Status
+      says that step was not run. Each exits 1: a missing section, an extra
+      section, `validated` with `pmf_gate: 7`, an unknown `owner`, a seventh heading level.
+      `python tools/validate-plugins/validate.py` is green.
+    status: todo
+  - name: Read-time checks in the plan skills
+    builds: |
+      `vision-model.py`, `strategy-model.py` and `business-plan-model.py` copied into
+      `write-build-plan` and `review-build-plan`, `architecture-model.py` into
+      `find-product-market-fit`, and `business-plan-model.py` into `write-vision-and-strategy`, with
+      their schema files and templates as the `artifact-models` check requires; each of these skills
+      running `artifact.py check` on that YAML before reading it, stopping on exit 1, and saying
+      "not checked" on exit 2 or 3 or without uv; copies registered.
+    check: |
+      `python tools/validate-plugins/validate.py` is green, and a planted line in one new copy of
+      `vision-model.py` turns `copies` red (then revert). One `claude -p` session in a scratch repo
+      holding an invalid `product/VISION.yaml` asks to plan a small change, and the skill stops
+      naming the field. This last check spends model calls, so the builder asks the user whether to
+      run it or hand over the steps.
+    status: todo
+  - name: Readers in other plugins
+    builds: |
+      The copies in the Phase 6 table under "Who carries what", each reader checking and reading the
+      YAML by key path per "Readers read the YAML by its keys", `compatibility` on uv in each
+      reader, copies registered, and the READMEs of `ceh-every-session`, `ceh-blog`, `ceh-seo`,
+      `ceh-documentation` and `ceh-python-service` naming uv. Each plugin bumps PATCH.
+    check: |
+      `python tools/validate-plugins/validate.py` is green, and a planted line in the
+      `ceh-every-session` copy of `plan-model.py` turns `copies` red (then revert). For each reader,
+      `grep -n "artifact.py check"` finds the step in its `SKILL.md`, and each key path it names
+      exists in the model it reads, which a scratchpad script confirms by loading the model's
+      `model_json_schema()`.
+    status: todo
+  - name: Report-only formats
+    builds: |
+      A plan of its own for the report-only formats, written once Phase 6 lands, format by format,
+      each with its case under VISION principle 7.
+    check: |
+      That plan is saved and reviewed. Its path is this phase's evidence.
+    status: unplanned
+open: []
+record:
+  - date: 2026-11-07
+    event: Planned
+    details: |
+      status ready
+  - date: 2026-11-07
+    event: Reviewed
+    details: |
+      Revise first, 3 blocking (hook acts on plan YAML in plugins with no plan model, review-build-plan
+      gets no business-plan model, no move step for a specialist meeting an old business plan), all
+      fixed with the 10 advisory findings
