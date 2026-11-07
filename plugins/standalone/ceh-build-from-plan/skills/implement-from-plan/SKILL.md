@@ -64,11 +64,14 @@ reason recorded.
 5. **Copy the lasting decisions.** The built plan stays in the plans folder as the record of this
    change: later planning runs read only its frontmatter. When `ceh-check-build-against-plan` is
    installed, run `ceh-check-build-against-plan:check-build-against-plan` first, because it adds
-   its Checked line to the plan. Then, in one commit: copy each Design decision a later reader
-   still needs to the Key Decisions log in `product/ARCHITECTURE.md`, in the entry shape of
-   `assets/architecture.template.md`, per `references/architecture-schema.md` (a missing file
-   starts as a copy of the template), and add a changelog entry when the repo keeps a
-   changelog. Say which decisions were copied.
+   its Checked line to the plan. Then, in one commit: append each Design decision a later reader
+   still needs to `key_decisions` in `product/ARCHITECTURE.yaml`, in the shape of
+   `assets/architecture.template.yaml`, per the `architecture/v3` section of
+   `references/architecture-schema.md` (a missing file starts as a copy of the template, and an
+   `ARCHITECTURE.md` with no YAML is moved first, as that section says). Check the YAML with
+   `artifact.py check` before the edit and `render` it after, as for the plan, and never edit the
+   generated `ARCHITECTURE.md`. Add a changelog entry when the repo keeps a changelog. Say which
+   decisions were copied.
 
 ## Rules
 
@@ -85,7 +88,7 @@ reason recorded.
 
 After the run, report per phase: done or stopped, the Check command and its result, assumptions
 taken, and anything not verified with the command the user should run. List the decisions copied
-to `product/ARCHITECTURE.md`.
+to `product/ARCHITECTURE.yaml`.
 
 ## Stop conditions
 

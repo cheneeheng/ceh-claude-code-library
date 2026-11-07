@@ -21,3 +21,20 @@ rules for how an agent behaves while it codes.
 - `document-architecture` — `/document-architecture`, or say `"write the architecture doc"` / `"diagram the system"` / `"record this decision"`.
 - `trace-code-rationale` — `/trace-code-rationale <file>[:<lines>]`, or ask `"why is it like this"` / `"why was this added"` / `"is this safe to remove"`.
 - `maintain-glossary` — `/maintain-glossary [term ...]`, or ask `"what do we call X"` / `"define our terms"`.
+
+## Hooks
+
+| Hook                                                                          | Event                                        | Script                    | Default |
+| ----------------------------------------------------------------------------- | -------------------------------------------- | ------------------------- | ------- |
+| [Architecture render](#architecture-render-and-generated-markdown-guard)      | `PostToolUse` (`Edit`, `Write`, `MultiEdit`) | `artifact-render-hook.py` | on      |
+| [Generated Markdown guard](#architecture-render-and-generated-markdown-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`)  | `generated-md-guard.py`   | on      |
+
+### Architecture render and generated Markdown guard
+
+`document-architecture` saves `product/ARCHITECTURE.yaml` (`architecture/v3`). After every write to
+it, the render hook checks the YAML against its model through `uv` and renders
+`product/ARCHITECTURE.md` with its section numbers and Contents list, or reports each error back
+to the agent and leaves the Markdown as it was. The guard denies a direct edit to a generated
+Markdown file and names its YAML. Both need `uv`: without it the agent is told once per session
+that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS` with
+`artifact-render-hook` or `generated-md-guard`, switches them off.

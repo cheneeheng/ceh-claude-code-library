@@ -348,6 +348,10 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-testing/scripts/artifact.py`                                                                                       | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/artifact-render-hook.py`                                                                           | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/generated-md-guard.py`                                                                             | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/scripts/artifact.py`                                             | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-codebase-explanation/scripts/artifact.py`                                                                          | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-codebase-explanation/scripts/artifact-render-hook.py`                                                              | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-codebase-explanation/scripts/generated-md-guard.py`                                                                | whole file                                                  | none                                                                             |
 | `ceh-build-planning:review-build-plan`, `ceh-build-from-plan:implement-from-plan`, `ceh-check-build-against-plan:check-build-against-plan` | the "A `plan/v2` plan is checked first" paragraph in step 1 | `implement-from-plan` adds where a Status note and a Record entry go in the YAML |
 
 **Shared:** the whole plan format, byte for byte: the `product/plans/<slug>.md` location, the
@@ -363,12 +367,14 @@ Design sections.
 
 ## Architecture template and schema
 
-**Canonical:** whole files, `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/references/architecture-schema.md`, `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/assets/architecture.template.md`
+**Canonical:** whole files, `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/references/architecture-schema.md`, `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/assets/architecture.template.md`, `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/references/architecture-model.py`, `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/assets/architecture.template.yaml`
 
 | Copy                                                                                                  | Section    | Diverges |
 | ----------------------------------------------------------------------------------------------------- | ---------- | -------- |
 | `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/architecture-schema.md` | whole file | none     |
 | `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/architecture.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/architecture-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/architecture.template.yaml` | whole file | none     |
 
 **Shared:** the `product/ARCHITECTURE.md` layout: its `schema:` line, the Overview, the diagram
 sections, and the Key Decisions entry shape. `document-architecture` owns the file and

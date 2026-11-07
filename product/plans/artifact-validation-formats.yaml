@@ -153,14 +153,15 @@ design:
       edited, so `write-evidence-report` keeps the "never edit an earlier run" rule in prose.
   - topic: The architecture/v3 model
     decision: |
-      `{schema, title: str default "Architecture", overview: {bullets: list of str, at least one,
-      flow: str}, diagrams: list, key_decisions: list}`. A diagram is
+      `{schema, overview: {bullets: list of str, at least one, flow: str}, diagrams: list,
+      key_decisions: list}`, the title fixed as `# Architecture` as the template has it. A diagram is
       `{name: Literal["System context", "Components", "Key flows", "Data model", "State machines"],
       walkthrough: str, notice: list of str, at most 3, mermaid: str optional, parts: list optional}`,
       with exactly one of `mermaid` and `parts`. A part is `{title, walkthrough, notice, mermaid}`.
       A key decision is `{date, title, status: Literal["Accepted"] or "Superseded by <date> <title>",
-      context, decision, consequences}`. Validators: a `Superseded by` status names an earlier entry
-      by its date and title. A title or name holding an em dash is an error, because the anchor
+      context, decision, consequences}`. Validators: a `Superseded by` status names another entry
+      by its date and title. The whole document stays in the one YAML, so the
+      `product/architecture/` split `document-architecture` allowed is dropped. A title or name holding an em dash is an error, because the anchor
       would gain a double hyphen. A `mermaid` value holds the diagram only, and the renderer wraps it
       in the fence. The renderer numbers sections `01.` onward and parts `03.01`, writes the
       Contents list, and builds each anchor with GitHub's rule: lowercase, drop every character but
@@ -298,7 +299,17 @@ phases:
       the anchor of a rendered heading. Each exits 1: a diagram with both `mermaid` and `parts`,
       four `notice` bullets, a `Superseded by` naming no entry, an em dash in a title.
       `python tools/validate-plugins/validate.py` is green.
-    status: todo
+    status: done
+    evidence: |
+      a scratchpad `ARCHITECTURE.yaml` with a two-part diagram and a superseded decision rendered
+      (exit 0) and all 6 Contents links resolved to rendered headings; the four broken copies
+      exited 1 naming `diagrams.0`, `diagrams.0.notice`, `(top level)` and
+      `key_decisions.0.title`; `python tools/validate-plugins/validate.py` printed "OK: all plugin
+      checks passed".
+    note: |
+      Departures from Design, each with a Design changed entry: no `title` key, a `Superseded by`
+      names another entry rather than an earlier one, and the `product/architecture/` split is
+      dropped.
   - name: Vision and strategy
     builds: |
       Both models, templates and schema sections in `write-vision-and-strategy`, with its
@@ -385,3 +396,20 @@ record:
   - date: 2026-11-07
     event: PR
     details: "#220 https://github.com/cheneeheng/ceh-claude-code-library/pull/220"
+  - date: 2026-11-07
+    event: Design changed
+    details: |
+      was "title: str default "Architecture", ...", now "no title key, the heading fixed as `# Architecture`", because the template fixes the title, so a key would hold a value that never changes
+  - date: 2026-11-07
+    event: Design changed
+    details: |
+      was "a `Superseded by` status names an earlier entry", now "names another entry", because entries are newest last, so the entry that replaces one always comes after it
+  - date: 2026-11-07
+    event: Design changed
+    details: |
+      was "(none)", now "the `product/architecture/` split is dropped", because one YAML renders one Markdown, and the split had no reader that needed it
+  - date: 2026-11-07
+    event: Built Phase
+    phase: 2
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
