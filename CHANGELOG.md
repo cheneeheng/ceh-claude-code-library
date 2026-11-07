@@ -26,11 +26,16 @@ path inside their skill folders byte-identical. A plugin's root keeps only the s
 agents run. It is the repo's first `plan/v2` plan and lands before Phase 6 of the artifact
 validation plan.
 
+`write-build-plan` now hands every plan it saves to `review-build-plan`, whatever its triage
+label, as an explicit last step. Before, only an architectural plan was pointed at a review, and
+only by name, so a session that labelled its plan bounded either skipped the review or dispatched
+its own reviewer instead of the skill, which reviews from a fresh context itself.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-build-planning`           | 1.2.4   |
+| `ceh-build-planning`           | 1.2.5   |
 | `ceh-build-from-plan`          | 1.2.2   |
 | `ceh-check-build-against-plan` | 1.1.2   |
 
@@ -39,6 +44,11 @@ validation plan.
 - `product/plans/skill-local-files.yaml`, with its generated `.md`: three phases (the `copies`
   check, the plan plugins in the new layout, then every other plugin with a layout check and the
   rules), reviewed from a fresh context and revised for all 12 findings.
+
+### Changed
+
+- `write-build-plan`: step 8 invokes `ceh-build-planning:review-build-plan` on every saved plan,
+  and its Output reports the review's verdict. The "for an architectural plan" handoff is gone.
 
 ### Fixed
 
