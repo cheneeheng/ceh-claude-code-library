@@ -239,5 +239,6 @@ None
   ceh-build-planning/references/ copy, which Phase 2 removed (the check now lists the four
   skill copies). Extra: root CLAUDE.md Structure block, and the ceh-build-planning README
   sentence that said the skills still write plan/v1.
+- 2026-11-07 PR: #215 https://github.com/cheneeheng/ceh-claude-code-library/pull/215
 
 <!-- prettier-ignore-end -->
