@@ -87,5 +87,6 @@ None
 - 2026-11-07 Reviewed: Revise first, 1 blocking (the fixture lets the refused read's PermissionError escape
   write_atomic and crash validate.py, so the red run is a traceback, not a fail naming the
   fixture, and the patch restore is skipped)
+- 2026-11-07 PR: #218 https://github.com/cheneeheng/ceh-claude-code-library/pull/218
 
 <!-- prettier-ignore-end -->
