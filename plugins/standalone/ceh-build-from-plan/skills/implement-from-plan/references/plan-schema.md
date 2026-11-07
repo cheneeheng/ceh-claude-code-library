@@ -53,8 +53,11 @@ version of the format a plan follows.
 A `plan/v2` plan is `product/plans/<slug>.yaml`, a copy of `../assets/plan.template.yaml`, and its
 Markdown, `product/plans/<slug>.md`, is generated from it and committed beside it. The YAML is the
 source: agents read and edit it, and nobody edits the Markdown, which opens with
-`generated_from: <slug>.yaml`. The Markdown keeps the `plan/v1` layout above, so a reader of it sees
-no change. A `plan/v1` plan with no YAML beside it is still edited in place.
+`generated_from: <slug>.yaml` and a `generated_note` saying not to edit it. The skill that edits the
+YAML re-renders the Markdown. The body sits between `prettier-ignore-start` and
+`prettier-ignore-end` comments, so a formatter leaves it as rendered. The Markdown keeps the
+`plan/v1` layout above, so a reader of it sees no change. A `plan/v1` plan with no YAML beside it
+is still edited in place.
 
 The format in code is `plan-model.py` beside this file: its pydantic model checks every key, type
 and rule below, and its renderer writes the Markdown. `scripts/artifact.py` in the plugin runs both,

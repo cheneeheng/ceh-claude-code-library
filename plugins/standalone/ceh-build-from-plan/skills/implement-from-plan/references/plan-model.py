@@ -8,6 +8,7 @@ holds plan-schema.md.
 from __future__ import annotations
 
 import datetime as dt
+import json
 from typing import Annotated, Literal, Optional
 
 import yaml
@@ -121,9 +122,14 @@ def _bullet(text: str) -> str:
 
 def _key(key: str, value: object) -> str:
     # safe_dump quotes a value only when YAML needs it, such as a title holding ": ".
-    return yaml.safe_dump(
+    line = yaml.safe_dump(
         {key: value}, sort_keys=False, allow_unicode=True, width=10**6
     ).strip()
+    # It quotes with ' and prettier rewrites that to ", so quote as a JSON string, valid YAML.
+    # less-code: a value holding a " may still be requoted by prettier; escape it if one ever does.
+    if line.startswith(f"{key}: '"):
+        line = f"{key}: {json.dumps(value, ensure_ascii=False)}"
+    return line
 
 
 def _status(p: Phase) -> str:
@@ -135,18 +141,23 @@ def _status(p: Phase) -> str:
 
 def render(plan: Plan, source: str) -> str:
     """The plan as plan/v1-layout Markdown. The same plan always renders to the same text."""
+    note = f"Do not edit. artifact.py renders this file from {source}: edit the YAML, then run artifact.py render."
     front = [
         _key("schema", plan.schema_),
         _key("generated_from", source),
+        _key("generated_note", note),
         _key("title", plan.title),
     ]
     front += [_key("status", plan.status), _key("created", plan.created)]
     if plan.business_plan:
         front.append(_key("business_plan", plan.business_plan))
+    # The ignore range keeps a formatter from rewriting the body, which would leave it stale.
     out = [
         "---",
         *front,
         "---",
+        "",
+        "<!-- prettier-ignore-start -->",
         "",
         "## Goal",
         "",
@@ -177,4 +188,5 @@ def render(plan: Plan, source: str) -> str:
     for e in plan.record:
         event = f"{e.event} {e.phase}" if e.phase else e.event
         out.append(_bullet(f"{e.date.isoformat()} {event}: {e.details}"))
+    out += ["", "<!-- prettier-ignore-end -->"]
     return "\n".join(out) + "\n"

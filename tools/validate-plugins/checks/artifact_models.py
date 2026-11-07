@@ -1,7 +1,8 @@
 """artifact-models: each YAML format's `<name>-model.py` sits beside its `<name>-schema.md`, with
 `../assets/<name>.template.yaml`, and every copy of a model, of `artifact.py`, and of the two
 artifact hooks is byte-identical across plugins. With uv, each template's keys must also be
-exactly its model's, through `model_vs_template.py`."""
+exactly its model's, through `model_vs_template.py`, and each `product/plans/*.yaml` must pass
+`artifact.py check`, so its generated Markdown is not stale."""
 
 from __future__ import annotations
 
@@ -67,6 +68,24 @@ def check() -> None:
         fail(where, f"does not match its model: {problem}")
     if r.returncode not in (0, 1) or (r.returncode == 1 and not r.stdout.strip()):
         fail(rel(script), f"exited {r.returncode}: {r.stderr.strip()[-300:]}")
+
+    # This repo's own plan/v2 plans: a hand edit to the YAML outside Claude Code leaves its
+    # generated Markdown stale, which no hook sees.
+    cli = (
+        REPO
+        / "plugins"
+        / "standalone"
+        / "ceh-build-planning"
+        / "scripts"
+        / "artifact.py"
+    )
+    for plan in sorted((REPO / "product" / "plans").glob("*.yaml")):
+        r = subprocess.run(
+            [uv, "run", "--quiet", "--script", str(cli), "check", str(plan)],
+            capture_output=True, text=True, encoding="utf-8", timeout=120,
+        )  # fmt: skip
+        if r.returncode:
+            fail(rel(plan), (r.stdout or r.stderr).strip()[-300:])
 
 
 if __name__ == "__main__":
