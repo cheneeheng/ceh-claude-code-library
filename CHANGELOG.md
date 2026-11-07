@@ -19,6 +19,13 @@ need quotes now use double quotes, as prettier writes them. In this repo, `valid
 `artifact.py check` on every `product/plans/*.yaml`, so a YAML edited outside Claude Code without a
 re-render fails CI.
 
+A plan to move every file a skill needs into that skill's own folder, so a skill folder works
+wherever it is copied. A file several skills need is copied into each, every copy stays registered
+in `docs/CROSS_REFERENCES.md`, and a new `copies` check in `validate.py` keeps copies at the same
+path inside their skill folders byte-identical. A plugin's root keeps only the scripts hooks and
+agents run. It is the repo's first `plan/v2` plan and lands before Phase 6 of the artifact
+validation plan.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -26,6 +33,12 @@ re-render fails CI.
 | `ceh-build-planning`           | 1.2.4   |
 | `ceh-build-from-plan`          | 1.2.2   |
 | `ceh-check-build-against-plan` | 1.1.2   |
+
+### Added
+
+- `product/plans/skill-local-files.yaml`, with its generated `.md`: three phases (the `copies`
+  check, the plan plugins in the new layout, then every other plugin with a layout check and the
+  rules), reviewed from a fresh context and revised for all 12 findings.
 
 ### Fixed
 
