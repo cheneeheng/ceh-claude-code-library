@@ -104,6 +104,10 @@ draft: say so and write a new plan as usual.
    `.md` by hand: it is generated. When the command exits 3 or uv is missing, say in the reply
    that the plan was saved unchecked and unrendered.
 
+8. **Have it reviewed.** Invoke the Skill tool with skill="ceh-build-planning:review-build-plan"
+   with the plan's YAML path, for every plan saved, whatever its label. That skill reviews from a
+   fresh context on its own, so do not dispatch a reviewer yourself.
+
 ## Rules
 
 - One plan per request. Leave a `built` plan as written: new work gets a new plan file. A draft
@@ -118,10 +122,9 @@ Close the reply with:
 - The label from step 1 and the plan's YAML path.
 - The In list, and the phases one line each with their Check.
 - Open: every assumption taken without an answer.
+- The review's verdict from step 8.
 
 ## Hands off to
 
-- For an architectural plan, `ceh-build-planning:review-build-plan` reviews it from a fresh context
-  before anyone builds.
 - When `ceh-build-from-plan` is installed, `ceh-build-from-plan:implement-from-plan` builds the
   plan phase by phase.
