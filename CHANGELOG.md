@@ -9,6 +9,32 @@ before this repo live in
 
 ---
 
+## 2026-11-07
+
+A generated `plan/v2` Markdown now says it is generated, and formatters leave it alone. Its
+frontmatter gains `generated_note`, telling a reader not to edit the file but to edit the YAML and
+re-render, and its body sits inside a `prettier-ignore` range, because the repo's pre-commit
+prettier had rewritten the body and every commit left the Markdown stale. Frontmatter values that
+need quotes now use double quotes, as prettier writes them. In this repo, `validate.py` also runs
+`artifact.py check` on every `product/plans/*.yaml`, so a YAML edited outside Claude Code without a
+re-render fails CI.
+
+### Plugin versions
+
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-build-planning`           | 1.2.4   |
+| `ceh-build-from-plan`          | 1.2.2   |
+| `ceh-check-build-against-plan` | 1.1.2   |
+
+### Fixed
+
+- `plan-model.py` in all three plan plugins: add `generated_note`, wrap the body in a
+  `prettier-ignore` range, and double-quote frontmatter values, so a prettier run no longer
+  makes the Markdown stale. `plan-schema.md` and `decision-output-templates.md` describe both.
+- `tools/validate-plugins/checks/artifact_models.py`: fail a `product/plans/*.yaml` whose
+  generated Markdown is stale.
+
 ## 2026-11-06
 
 `write-questionnaire` gains an issue form for sessions nobody watches. `write --issue <owner/repo>
