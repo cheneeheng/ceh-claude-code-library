@@ -115,5 +115,6 @@ None
 - 2026-11-07 Reviewed: Revise first, 3 blocking (Fix record format missing from the registry rewrite, so its
   template row is malformed on day one; fenced Entry shape example row would be parsed;
   Check (b) renames the file, giving malformed and unregistered, not stale)
+- 2026-11-07 PR: #216 https://github.com/cheneeheng/ceh-claude-code-library/pull/216
 
 <!-- prettier-ignore-end -->
