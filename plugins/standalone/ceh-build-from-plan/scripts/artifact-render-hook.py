@@ -2,8 +2,8 @@
 """PostToolUse hook: check a YAML artifact the agent just wrote, and render its Markdown.
 
 Matches Edit|Write|MultiEdit. It acts on a `.yaml` whose `schema: <name>/v<N>` names a model in
-this plugin, and on any `product/plans/*.yaml`, so a plan missing its schema key is reported, not
-skipped. It runs `scripts/artifact.py render` through uv. Errors go back to the agent as a block
+this plugin, and on a `.yaml` in the place a format lives (`place_format`) when this plugin holds
+that format's model, so a spine file missing its schema key is reported, not skipped. It runs `scripts/artifact.py render` through uv. Errors go back to the agent as a block
 reason. The tool has already run, so the file stays on disk until the agent fixes it, and the
 Markdown is not regenerated. When the check cannot run (no uv, a failed install, an unknown
 version), the agent is told once per session and reason, never left with a silent pass.
@@ -24,10 +24,30 @@ ROOT = Path(__file__).resolve().parent.parent
 CLI = ROOT / "scripts" / "artifact.py"
 SCHEMA = re.compile(r"""^schema:\s*["']?([a-z0-9]+(?:-[a-z0-9]+)*)/v\d+""", re.M)
 UV_HELP = "Install uv (https://docs.astral.sh/uv/) so the check can run."
+# Spine file stems and their formats, matched in a `product` or `business` folder or beside a
+# `.md` of the same stem, so an unrelated STRATEGY.yaml elsewhere is left alone.
+SPINE = {
+    "EVIDENCE": "evidence",
+    "ARCHITECTURE": "architecture",
+    "VISION": "vision",
+    "STRATEGY": "strategy",
+    "BUSINESS_PLAN": "business-plan",
+}
 
 
 def model_names() -> set[str]:
     return {p.name[: -len("-model.py")] for p in ROOT.glob("**/references/*-model.py")}
+
+
+def place_format(file: Path) -> str | None:
+    """The format a file's place says it holds, or None."""
+    if file.parent.name == "plans" and file.parent.parent.name == "product":
+        return "plan"
+    name = SPINE.get(file.stem)
+    near = (
+        file.parent.name in ("product", "business") or file.with_suffix(".md").exists()
+    )
+    return name if name and near else None
 
 
 def warn_once(session: str, path: str, why: str) -> None:
@@ -60,8 +80,8 @@ def main() -> None:
     if file.suffix != ".yaml" or not file.is_file():
         return
     m = SCHEMA.search(file.read_text(encoding="utf-8"))
-    in_plans = "/product/plans/" in path.replace("\\", "/")
-    if not in_plans and not (m and m.group(1) in model_names()):
+    names = model_names()
+    if not (m and m.group(1) in names) and place_format(file) not in names:
         return
 
     session = str(payload.get("session_id", ""))

@@ -160,7 +160,8 @@ Each moment names the plugin, the command that starts it, and the file it writes
   `/ceh-check-build-against-plan:check-build-against-plan`. Reports in the session.
 - Test it and roll up the evidence: `ceh-testing` (a stack plugin already brings it), start with
   `/ceh-testing:explore-app-for-bugs`, then `/ceh-testing:write-evidence-report`. Writes
-  `product/EVIDENCE.md`.
+  `product/EVIDENCE.yaml` and the `EVIDENCE.md` generated from it. It needs `uv` to check and
+  render the report, and saves it unchecked without.
 - Check a stranger can use it: install `ceh-usability-audit`, start with
   `/ceh-usability-audit:simulate-newcomer-first-run`. Writes a report in `.agents_workspace/product/`.
 - Audit the whole codebase for security: install `ceh-security-audit`, start with

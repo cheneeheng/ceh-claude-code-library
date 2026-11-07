@@ -319,7 +319,8 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
   and `strategy`, then the report-only formats, and the read-time check in readers outside the
   trial, planned in full once the user approves the trial.
 - **Check:** planned with the phase.
-- **Status:** unplanned
+- **Status:** unplanned. Planned in full in `product/plans/artifact-validation-formats.yaml`, and
+  done when that plan is built.
 
 ## Open
 

@@ -9,7 +9,8 @@ disable-model-invocation: false
 user-invocable: true
 compatibility: >-
   Needs git to pin the report to a commit. Running the test suite needs the project's own test
-  runner; without it the Tests area is written as not run.
+  runner; without it the Tests area is written as not run. Checking and rendering EVIDENCE.yaml
+  needs uv; without it the file is saved unchecked and its Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -56,11 +57,16 @@ on a fresh clone and none answers for the product as a whole. This file is the o
    with the area and figure behind it: "All 212 tests pass at a1b2c3d", "p95 search latency 38 ms
    on <machine>". A `stale`, `not run`, or `open issues` area yields no positive claim about the
    thing it checks.
-6. **Add a dated section at the top of `product/EVIDENCE.md`**, below its `# Evidence: <product>`
-   title, in the Output format. Never edit an earlier section: each one is what was proven at its
-   commit, and a plan's Record cites it by date. With no file, create it with the title. A file in
-   the older single-run layout keeps its content, under a section heading dated from its **Written**
-   line. Commit it with the change it describes or on its own.
+6. **Add the run at the top of `product/EVIDENCE.yaml`**, as the first item of `runs`, in the
+   Output format. Never edit an earlier run: each one is what was proven at its commit, and a
+   plan's Record cites it by date. With no file, copy the template. With only an `EVIDENCE.md`,
+   move it first, as the schema's `evidence/v2` section says (a file in the older single-run
+   layout becomes one run dated from its **Written** line). Before the edit, run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check product/EVIDENCE.yaml` and stop on
+   exit 1 with its errors. After the last edit, run it with `render`, which writes
+   `product/EVIDENCE.md`, and fix the YAML for each error it lists. Never edit the generated `.md`.
+   On exit 2 or 3, or without uv, say in the reply that the file went unchecked and unrendered.
+   Commit both files with the change they describe or on their own.
 7. **Record the evidence in each plan.** Append an Evidence line to the `## Record` of each plan in
    the Plan area: the section date, the short SHA, and every area that is not `passed`. A plan
    with a `<slug>.yaml` beside its `.md` is a `plan/v2` plan: read its status and Record from the
@@ -82,10 +88,9 @@ on a fresh clone and none answers for the product as a whole. This file is the o
 
 ## Output
 
-`product/EVIDENCE.md` follows `assets/evidence.template.md`, per
-`references/evidence-schema.md`: a new file is a copy of it, and
-each run adds one dated `##` section in its shape. A file without the `schema:` line gets the
-template's frontmatter on the next run, and its sections stay as they are.
+`product/EVIDENCE.yaml` follows `assets/evidence.template.yaml`, per the `evidence/v2` section of
+`references/evidence-schema.md`: a new file is a copy of it, and each run adds one item at the top
+of `runs`. `product/EVIDENCE.md` is rendered from it in the layout of `assets/evidence.template.md`.
 
 ## Stop conditions
 
