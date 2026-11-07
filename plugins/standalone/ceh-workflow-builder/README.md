@@ -75,7 +75,7 @@ Covers the assumed-capability contract, the six-condition workflow gate, the
 step-earns-a-skill test, saved dynamic workflows as an optional stage backend,
 data-contract schemas for non-adjacent handoffs (step N to step N+m), the
 falsifiable-gate rule, and the two run directories. A workflow comes out as
-`flow.yaml` (format: `references/flow-config-schema.md`), a thin
+`flow.yaml` (format: `skills/build-agentic-workflow/references/flow-config-schema.md`), a thin
 `<name>-flow` trigger skill and an invocation guide with the interactive and
 headless commands. Launch arguments, approvals, headless permissions and the
 dynamic-workflow setup are documented with the runner in

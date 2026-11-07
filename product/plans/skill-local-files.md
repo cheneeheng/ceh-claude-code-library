@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: skill-local-files.yaml
 generated_note: "Do not edit. artifact.py renders this file from skill-local-files.yaml: edit the YAML, then run artifact.py render."
 title: Every file a skill needs lives in the skill's own folder, and copies are checked byte for byte
-status: building
+status: built
 created: 2026-11-07
 ---
 
@@ -208,7 +208,11 @@ it adds start in the new layout.
   and `grep -rn 'CLAUDE_PLUGIN_ROOT}/scripts' plugins --include=SKILL.md` lists only hook or
   agent scripts. Then create `plugins/standalone/ceh-blog/references/x.md` and rerun
   `validate.py`: it exits 1 with a layout error naming that folder. Delete it.
-- **Status:** todo
+- **Status:** done, `validate.py`: "OK: all plugin checks passed"; both greps print nothing; with
+  `ceh-blog/references/x.md` planted, exit 1 with "[copies] plugins/standalone/ceh-blog/references:
+  bundled files live in the skill that uses them"; deleted, exit 0. The first planted-folder run printed no error and the cause was not found; two re-runs failed
+  as expected. Root `CLAUDE.md`'s Structure block also changed, because it described the
+  plugin-level `references/` the layout check now fails.
 
 ## Open
 
@@ -230,5 +234,10 @@ None
   entry.", because `artifact.py` is part of that format and its copies sit beside the others
 - 2026-11-07 Built Phase 2: validate.py OK, artifact.py check exit 0 from all four skill copies
 - 2026-11-07 PR: #214 https://github.com/cheneeheng/ceh-claude-code-library/pull/214
+- 2026-11-07 Built Phase 3: validate.py OK, both greps empty, planted ceh-blog/references fails the layout check
+- 2026-11-07 Checked: 25 Built, 1 Deviation, 2 Extra. Deviation: the Phase 1 Check names a
+  ceh-build-planning/references/ copy, which Phase 2 removed (the check now lists the four
+  skill copies). Extra: root CLAUDE.md Structure block, and the ceh-build-planning README
+  sentence that said the skills still write plan/v1.
 
 <!-- prettier-ignore-end -->

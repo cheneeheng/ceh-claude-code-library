@@ -105,9 +105,8 @@ A diagram can render without an error and still be unreadable:
 `BUSINESS_PLAN.html` sits next to the plan: one self-contained page in the Meridian theme, one
 column capped at 1100px where text and panels share a right edge, a contents rail from h2 to h6,
 evidence tags as coloured labels, and every diagram rendered. It is generated, never edited: the markdown stays the source, and both are
-kept. `develop-business-plan` rebuilds it after every specialist with
-`node ${CLAUDE_PLUGIN_ROOT}/scripts/build-plan-html.cjs <plan.md>`, which reads its page shell and
-`brand.css` from the plugin's `assets/`. The page loads Mermaid from a CDN, so offline each diagram
+kept. `develop-business-plan` rebuilds it after every specialist with the HTML script in its own
+`scripts/`, which reads the page shell and `brand.css` from that skill's `assets/`. The page loads Mermaid from a CDN, so offline each diagram
 shows its source text instead.
 
 | ID  | Title                      | Content                                                                                                                                                                                        |

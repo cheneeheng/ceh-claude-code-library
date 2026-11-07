@@ -38,6 +38,15 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 | `ceh-build-planning`           | 1.2.6   |
 | `ceh-build-from-plan`          | 1.2.3   |
 | `ceh-check-build-against-plan` | 1.1.3   |
+| `ceh-blog`                     | 1.0.17  |
+| `ceh-business-plan`            | 1.1.15  |
+| `ceh-competitor-analysis`      | 1.1.13  |
+| `ceh-documentation`            | 1.0.7   |
+| `ceh-git-workflow`             | 1.5.6   |
+| `ceh-orchestration-lab`        | 1.0.7   |
+| `ceh-usability-audit`          | 1.1.11  |
+| `ceh-workflow-builder`         | 1.3.12  |
+| `ceh-workflow-runner`          | 1.0.10  |
 
 ### Added
 
@@ -57,6 +66,15 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
   `review-build-plan` now carry `plan-schema.md`, `plan-model.py` and both templates, and all four
   plan skills carry `scripts/artifact.py` and run it as `${CLAUDE_SKILL_DIR}/scripts/artifact.py`.
   `ceh-build-planning` has no plugin-level `assets/` or `references/` any more. Phase 2.
+- Every other plugin keeps its bundled files in the skills that use them: the blog, business-plan,
+  competitor, docs, usability, orchestration-lab and workflow files move from the plugin root into
+  each citing skill, `check-semver.py` into `update-changelog/scripts/`, and `union.attributes`
+  beside the hook script that reads it. Skills cite them through `${CLAUDE_SKILL_DIR}`. The
+  `copies` check now also fails a plugin-level `assets/` or `references/` folder, a
+  `${CLAUDE_PLUGIN_ROOT}/assets|references` citation, and a reference file naming the plugin root.
+  The bundled-file, output-template and artifact-validation rules, `plugins/CLAUDE.md`,
+  `add-plugin-component`, the READMEs and `docs/CROSS_REFERENCES.md` describe the new layout, and
+  every copy stays registered. Phase 3, which completes the plan.
 
 ### Fixed
 

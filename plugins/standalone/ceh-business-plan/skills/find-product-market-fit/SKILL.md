@@ -13,7 +13,7 @@ license: Apache-2.0
 
 Produce a **validated business plan** — one whose product-market fit has been pressure-tested,
 not asserted. The deliverable is a single living `BUSINESS_PLAN.md` (schema and PMF gate in
-`${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`), revised in place across an interview loop until it passes
+`${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`), revised in place across an interview loop until it passes
 the 8-point PMF readiness gate and the user confirms.
 
 The reason this skill exists: a business plan written in one pass is a wish list. Real
@@ -72,7 +72,7 @@ a single grounding question — _"In one or two sentences: what's the product, a
 ## Phase 1 — Draft v0 proactively
 
 Write a complete `.agents_workspace/product/business/BUSINESS_PLAN.md` from
-`${CLAUDE_PLUGIN_ROOT}/assets/business-plan.template.md`
+`${CLAUDE_SKILL_DIR}/assets/business-plan.template.md`
 per the schema — all 13 sections, even the thin ones. Fill
 what the source material supports; for everything else, **write your best-guess hypothesis and tag
 it `[assumption]`**, not "TBD". A wrong, specific assumption is useful — it gives the interview a

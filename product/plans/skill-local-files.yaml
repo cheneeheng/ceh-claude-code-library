@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Every file a skill needs lives in the skill's own folder, and copies are checked byte for byte
-status: building
+status: built
 created: 2026-11-07
 goal: |
   Every file a skill reads, copies or runs (its templates, schemas, models, reference files and
@@ -230,7 +230,15 @@ phases:
       and `grep -rn 'CLAUDE_PLUGIN_ROOT}/scripts' plugins --include=SKILL.md` lists only hook or
       agent scripts. Then create `plugins/standalone/ceh-blog/references/x.md` and rerun
       `validate.py`: it exits 1 with a layout error naming that folder. Delete it.
-    status: todo
+    status: done
+    evidence: |
+      `validate.py`: "OK: all plugin checks passed"; both greps print nothing; with
+      `ceh-blog/references/x.md` planted, exit 1 with "[copies] plugins/standalone/ceh-blog/references:
+      bundled files live in the skill that uses them"; deleted, exit 0.
+    note: |
+      The first planted-folder run printed no error and the cause was not found; two re-runs failed
+      as expected. Root `CLAUDE.md`'s Structure block also changed, because it described the
+      plugin-level `references/` the layout check now fails.
 open: []
 record:
   - date: 2026-11-07
@@ -268,3 +276,15 @@ record:
   - date: 2026-11-07
     event: PR
     details: "#214 https://github.com/cheneeheng/ceh-claude-code-library/pull/214"
+  - date: 2026-11-07
+    event: Built Phase
+    phase: 3
+    details: |
+      validate.py OK, both greps empty, planted ceh-blog/references fails the layout check
+  - date: 2026-11-07
+    event: Checked
+    details: |
+      25 Built, 1 Deviation, 2 Extra. Deviation: the Phase 1 Check names a
+      ceh-build-planning/references/ copy, which Phase 2 removed (the check now lists the four
+      skill copies). Extra: root CLAUDE.md Structure block, and the ceh-build-planning README
+      sentence that said the skills still write plan/v1.

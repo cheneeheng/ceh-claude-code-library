@@ -30,7 +30,7 @@ those four. The reason is that native capabilities keep growing: when Claude Cod
 four, that part of the runner goes, so the runner shrinks rather than competes with it.
 
 The config format, the validation rules, the `run-state.md` layout and the status line are in
-`${CLAUDE_PLUGIN_ROOT}/references/flow-config-schema.md`. Read it before step 1; this skill does not
+`${CLAUDE_SKILL_DIR}/references/flow-config-schema.md`. Read it before step 1; this skill does not
 restate it.
 
 ## Procedure

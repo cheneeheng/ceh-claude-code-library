@@ -27,7 +27,7 @@ Identify: **the thesis** (the single central claim); **the key takeaway**; **the
 ### 2. Ask what is open
 
 Collect every open question, then send them as one batch in the format of
-`${CLAUDE_PLUGIN_ROOT}/references/ask-the-author.md` (read that file first) and wait for all the
+`${CLAUDE_SKILL_DIR}/references/ask-the-author.md` (read that file first) and wait for all the
 answers. If nothing is open, skip this step.
 
 **Format(s)**: if the user specified them, proceed with those. Otherwise add this question:
@@ -130,8 +130,8 @@ overrides the format rules above.
 Single format: output directly with a format label. Multiple: `##` heading per format in the order above.
 
 Save each format to its own file, `<slug>-<format>.md` (`thread`, `linkedin`, `tldr`, `newsletter`): next to the post when it is on disk, otherwise in `.agents_workspace/product/blog/` with the slug from the post's title in kebab case. Each file fills
-`${CLAUDE_PLUGIN_ROOT}/assets/repurposed-post.template.md`, per
-`${CLAUDE_PLUGIN_ROOT}/references/repurposed-post-schema.md`. A re-run overwrites the format files, never the post. Say where they were saved.
+`${CLAUDE_SKILL_DIR}/assets/repurposed-post.template.md`, per
+`${CLAUDE_SKILL_DIR}/references/repurposed-post-schema.md`. A re-run overwrites the format files, never the post. Say where they were saved.
 
 After delivering, ask for feedback as one batch in the same format, one atomic question per
 adjustment: tone, length, a specific tweet, the LinkedIn opener, each with options (keep, a concrete

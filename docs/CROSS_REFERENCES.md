@@ -2,7 +2,8 @@
 
 Tracks content duplicated word-for-word across multiple skills. When editing any entry,
 update **all listed files**. Each block is intentionally inlined (zero file reads at runtime);
-this map exists so edits don't get lost.
+this map exists so edits don't get lost. A whole bundled-file copy is also checked byte for byte
+by the `copies` check in `validate.py`.
 
 Add an entry when a migrated or new skill duplicates content from another, using the shape at the
 bottom of this file.
@@ -394,18 +395,19 @@ ends with the questions it would have asked, in order, each with the assumption 
 
 ## Usability persona set and severity scale
 
-**Canonical:** `plugins/standalone/ceh-usability-audit/references/personas-and-severity.md` — § The personas, § Severity
+**Canonical:** `plugins/standalone/ceh-usability-audit/skills/audit-interface/references/personas-and-severity.md` — § The personas, § Severity
 
-| Copy                                                                  | Section                                                             | Diverges                                                                                       |
-| --------------------------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-usability-audit/README.md`                    | § The personas, § Severity — assigned by outcome, not by appearance | condensed for the reader: column wording differs, the five personas and four severities do not |
-| `plugins/standalone/ceh-usability-audit/agents/newcomer-simulator.md` | § Holding the persona                                               | the same five personas as second-person instructions to the walker, not a table                |
+| Copy                                                                                                            | Section                                                             | Diverges                                                                                       |
+| --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/references/personas-and-severity.md` | whole file                                                          | none                                                                                           |
+| `plugins/standalone/ceh-usability-audit/README.md`                                                              | § The personas, § Severity — assigned by outcome, not by appearance | condensed for the reader: column wording differs, the five personas and four severities do not |
+| `plugins/standalone/ceh-usability-audit/agents/newcomer-simulator.md`                                           | § Holding the persona                                               | the same five personas as second-person instructions to the walker, not a table                |
 
 **Shared:** the five personas (Blank Slate, Cautious Returner, Interrupted, Wrong Turn, Small
 Screen) with their constraints and the failure class each catches, the four severities (Blocker,
 Detour, Friction, Polish) with their assignment conditions, and the rule that severity comes from
-an observed walker outcome, with anything unobserved demoted to an unranked `Hypotheses` list. The
-two audit skills read the canonical file, so they are not copies. The README and the agent keep
+an observed walker outcome, with anything unobserved demoted to an unranked `Hypotheses` list. Each
+audit skill carries its own copy of the file. The README and the agent keep
 their own form because a reader and a walker each need a different one.
 
 ## AG-UI styling lock and canvas extensions
@@ -441,21 +443,21 @@ fails. The doc carries the two stops as reading material.
 
 ## flow.yaml schema
 
-**Canonical:** `plugins/standalone/ceh-workflow-builder/references/flow-config-schema.md` — whole file
+**Canonical:** `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/flow-config-schema.md` — whole file
 
-| Copy                                                                      | Section    | Diverges |
-| ------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-workflow-runner/references/flow-config-schema.md` | whole file | none     |
-| `plugins/standalone/ceh-workflow-runner/references/run-state-schema.md`   | whole file | none     |
-| `plugins/standalone/ceh-workflow-runner/references/approval-schema.md`    | whole file | none     |
-| `plugins/standalone/ceh-workflow-runner/assets/run-state.template.md`     | whole file | none     |
-| `plugins/standalone/ceh-workflow-runner/assets/approval.template.md`      | whole file | none     |
+| Copy                                                                                                  | Section    | Diverges |
+| ----------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/references/flow-config-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/references/run-state-schema.md`   | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/references/approval-schema.md`    | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/assets/run-state.template.md`     | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/assets/approval.template.md`      | whole file | none     |
 
 **Shared:** the entire `flow.yaml` contract: keys, stage kinds, validation rules, the `run-state.md`
 layout (`run-state-schema.md`) and its template, the approval file (`approval-schema.md`) and its
 template, and the `FLOW STATUS:` line. The canonical schemas sit beside `flow-config-schema.md` in
-`ceh-workflow-builder/references/`, and the canonical templates in `ceh-workflow-builder/assets/`.
-`validate.py` fails when a template or schema differs from its copy. The builder writes and checks a config against it, the runner
+`build-agentic-workflow/references/`, and the canonical templates in its `assets/`.
+The `copies` check fails when a template or schema differs from its copy. The builder writes and checks a config against it, the runner
 checks it again before running, so a rule present in only one copy lets the builder emit a config
 the runner rejects, or the reverse. Keep the two files byte-identical.
 
@@ -535,9 +537,9 @@ names what would settle it.
 
 **Canonical:** `plugins/standalone/ceh-blog/skills/edit-post/SKILL.md` — § 3. Edit, AI-writing tells
 
-| Copy                                                               | Section    | Diverges                                |
-| ------------------------------------------------------------------ | ---------- | --------------------------------------- |
-| `plugins/standalone/ceh-documentation/references/docs-standard.md` | § 8. Voice | drops "even when the author wrote them" |
+| Copy                                                                                                                 | Section    | Diverges                                |
+| -------------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------------------- |
+| `plugins/standalone/ceh-documentation/skills/write-api-reference/references/docs-standard.md` (and its three copies) | § 8. Voice | drops "even when the author wrote them" |
 
 **Shared:** the tells list word for word (stock words, stock frames, reflexive triplets,
 signposting, the default em dash, the restating closer) and "replace with the specific thing, or
@@ -580,9 +582,9 @@ the body, failing at all three in a visible tool call is a hook candidate.
 
 **Canonical:** `plugins/standalone/ceh-ui-design/skills/design-ui/references/meridian/brand.css` — the whole file
 
-| Copy                                                    | Section    | Diverges |
-| ------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-business-plan/assets/brand.css` | whole file | none     |
+| Copy                                                                                 | Section    | Diverges |
+| ------------------------------------------------------------------------------------ | ---------- | -------- |
+| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/assets/brand.css` | whole file | none     |
 
 **Shared:** the file byte for byte. `ceh-business-plan`'s HTML generator inlines its copy, because
 a user may install the business plan without `ceh-ui-design`. Check with `cmp` after a theme change.
@@ -591,11 +593,11 @@ a user may install the business plan without `ceh-ui-design`. Check with `cmp` a
 
 **Canonical:** `plugins/standalone/ceh-ui-design/skills/design-ui/SKILL.md` — § Finishing recipes, Diagrams (the four bullets from "Chain subgraphs" to "pass the CLI")
 
-| Copy                                                                                | Section                 | Diverges                                                                             |
-| ----------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------ |
-| `plugins/standalone/ceh-business-plan/references/business-plan-schema.md`           | § Diagrams              | the page-only rules live in the page shell's code                                    |
-| `plugins/standalone/ceh-documentation/references/docs-standard.md`                  | § 5, after the list     | none                                                                                 |
-| `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/SKILL.md` | § Rules, after the list | its render rule points to the last bullet and adds "say so when no renderer can run" |
+| Copy                                                                                                                            | Section                 | Diverges                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/references/business-plan-schema.md` (and its eight copies) | § Diagrams              | the page-only rules live in the page shell's code                                    |
+| `plugins/standalone/ceh-documentation/skills/write-api-reference/references/docs-standard.md` (and its three copies)            | § 5, after the list     | none                                                                                 |
+| `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/SKILL.md`                                             | § Rules, after the list | its render rule points to the last bullet and adds "say so when no renderer can run" |
 
 **Shared:** the four rules that hold wherever a Mermaid diagram renders: chain subgraphs with `~~~`
 and `direction LR`, gantt `tickInterval`, `xychart-beta` height in front matter, and validate with
@@ -615,6 +617,67 @@ stay in `design-ui` alone, because a Markdown file has no page to configure.
 kill switches, the deny message, and the fail-open exit. Each copy keeps only its own plugin's rows
 in `RULES`, so each plugin works installed alone. Check with
 `diff <(sed '/^RULES = \[/,/^\]/d' <a>) <(sed '/^RULES = \[/,/^\]/d' <b>)`.
+
+## Blog bundled files
+
+**Canonical:** `plugins/standalone/ceh-blog/skills/draft-post/` — whole files:
+`references/ask-the-author.md`, `references/blog-draft-schema.md`, `assets/blog-draft.template.md`
+
+| Copy                                                                             | Section     | Diverges |
+| -------------------------------------------------------------------------------- | ----------- | -------- |
+| `plugins/standalone/ceh-blog/skills/edit-post/`, same three paths                | whole files | none     |
+| `plugins/standalone/ceh-blog/skills/repurpose-post/references/ask-the-author.md` | whole file  | none     |
+
+**Shared:** the ask-the-author question format and the blog draft format with its template. Each
+skill that asks the author or writes a draft carries its own copy.
+
+## Business plan format
+
+**Canonical:** `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/` — whole
+files: `references/business-plan-schema.md`, `assets/business-plan.template.md`
+
+| Copy                                                                                                                                                                                                                                                     | Section     | Diverges |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | -------- |
+| `plugins/standalone/ceh-business-plan/skills/` `develop-business-plan`, `plan-go-to-market`, `review-business-plan`, `run-premortem`, `set-operating-plan`, `sharpen-strategy`, `stress-test-unit-economics`, `write-investor-materials`, same two paths | whole files | none     |
+
+**Shared:** the business plan format and its template. `find-product-market-fit` drafts the plan,
+and every specialist reads it, so each of the nine skills carries a copy.
+
+## Competitor report page
+
+**Canonical:** `plugins/standalone/ceh-competitor-analysis/skills/analyze-competitor/references/report-page.html` — whole file
+
+| Copy                                                                                                | Section    | Diverges |
+| --------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-competitor-analysis/skills/compare-competitors/references/report-page.html` | whole file | none     |
+
+**Shared:** the HTML page shell both reports fill, including its COMPARISON-ONLY blocks.
+
+## Docs standard
+
+**Canonical:** `plugins/standalone/ceh-documentation/skills/write-api-reference/references/docs-standard.md` — whole file
+
+| Copy                                                                                                | Section    | Diverges |
+| --------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-documentation/skills/write-concept-docs/references/docs-standard.md`        | whole file | none     |
+| `plugins/standalone/ceh-documentation/skills/write-guides-and-runbooks/references/docs-standard.md` | whole file | none     |
+| `plugins/standalone/ceh-documentation/skills/write-project-docs/references/docs-standard.md`        | whole file | none     |
+
+**Shared:** the one docs format every writing skill follows.
+
+## Orchestration run log
+
+**Canonical:** `plugins/standalone/ceh-orchestration-lab/skills/orchestrate/` — whole files:
+`references/run-log.md`, `references/run-schema.md`, `references/runs-index-schema.md`,
+`assets/run.template.md`, `assets/runs-index.template.md`, `scripts/token_usage.py`,
+`scripts/dispatch_ledger.py`
+
+| Copy                                                                                     | Section     | Diverges |
+| ---------------------------------------------------------------------------------------- | ----------- | -------- |
+| `plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/`, same seven paths | whole files | none     |
+
+**Shared:** how a run folder is opened, kept and closed, its two formats, and the two scripts that
+fill Token usage and Ledger.
 
 ## Update protocol
 

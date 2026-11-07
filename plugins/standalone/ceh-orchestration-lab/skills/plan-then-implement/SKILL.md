@@ -15,8 +15,8 @@ This session plans, one implementer carries out the plan, and the run is logged.
 when the run folder is closed with an outcome and the user's verdict, whether the task succeeded
 or not.
 
-This session's ID is `${CLAUDE_SESSION_ID}` and the plugin root is `${CLAUDE_PLUGIN_ROOT}`. Read
-`${CLAUDE_PLUGIN_ROOT}/references/run-log.md` now: it says how to open, keep, and close the run
+This session's ID is `${CLAUDE_SESSION_ID}` and the skill folder is `${CLAUDE_SKILL_DIR}`. Read
+`${CLAUDE_SKILL_DIR}/references/run-log.md` now: it says how to open, keep, and close the run
 folder, and where these two values go.
 
 ## Arguments

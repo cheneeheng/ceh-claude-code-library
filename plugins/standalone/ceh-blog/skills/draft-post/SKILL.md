@@ -23,7 +23,7 @@ thread, saved or shown where the Output section says.
 
 Read the blog, not just the repo, before the first question or the first word of the draft. Every
 question this skill has goes into the one batch of step 3, per
-`${CLAUDE_PLUGIN_ROOT}/references/ask-the-author.md`. Read that file now.
+`${CLAUDE_SKILL_DIR}/references/ask-the-author.md`. Read that file now.
 **Finding the blog:** use a path or URL the user gave; otherwise look in the current repo for a
 posts directory (`content/`, `posts/`, `_posts/`, `src/content/`, `blog/`); if neither turns one
 up, add a question to the batch on where the blog lives. "No existing blog" is a valid answer and
@@ -43,8 +43,8 @@ Read the previous posts, especially the latest episode in the same series. Then:
   finished.
 - **Capture the voice once**: if the blog has three or more posts, the target repo's `CLAUDE.md`
   defines no blog voice, and `.agents_workspace/product/blog-voice.md` does not exist yet, write that file
-  from the posts, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-voice.template.md`, per
-  `${CLAUDE_PLUGIN_ROOT}/references/blog-voice-schema.md`, each point backed by a quoted line. On
+  from the posts, filling `${CLAUDE_SKILL_DIR}/assets/blog-voice.template.md`, per
+  `${CLAUDE_SKILL_DIR}/references/blog-voice-schema.md`, each point backed by a quoted line. On
   later
   runs read the file instead of re-deriving it, and offer once to move it into `CLAUDE.md` so it
   outlives the workspace. The profile governs vocabulary, register, and rhythm. The banned tells
@@ -103,7 +103,7 @@ audience and takeaway ones first. Then interview (step 3).
 Skip this step when the material is rich or the route was notes. Otherwise extract the **specific
 raw material** that makes the post real: stories, data points, moments, opinions, decisions. Only
 ask what you haven't inferred, and adapt to the post type. Send every question from steps 1 to 3
-as one batch, in the format of `${CLAUDE_PLUGIN_ROOT}/references/ask-the-author.md`. From a repo,
+as one batch, in the format of `${CLAUDE_SKILL_DIR}/references/ask-the-author.md`. From a repo,
 the repo gives the _what_, so interview for the **human story**, 2–3 of these, only what the repo
 hasn't answered:
 
@@ -241,7 +241,7 @@ The Open Thread: What's unresolved, what you'll watch for, what comes next
 ### 5. Refine
 
 After sharing the draft, ask for feedback as one batch in the format of
-`${CLAUDE_PLUGIN_ROOT}/references/ask-the-author.md`. Turn every item below that applies into its
+`${CLAUDE_SKILL_DIR}/references/ask-the-author.md`. Turn every item below that applies into its
 own question, with the fix as an option. Always close with one general question, _"How does the
 draft read overall? A. Ready to use B. Needs the changes answered above C. Other: say what"_. These
 are things you'd fix even if they're happy. Watch for and raise:
@@ -315,7 +315,7 @@ they cost the author, not warnings issued to the reader.
 
 **Final draft**: complete post, ready to copy-paste — title; body (subheadings only if length warrants); one-line meta description `> **Meta:** [description]` — ~150 chars, specific angle, readable without the title.
 
-**Where it goes:** inside a blog repo (a posts directory was found), write the post as a new file there, matching the existing posts' filename pattern and front matter; the title and meta description go into the front matter fields the other posts use (`title`, `description`, or equivalent) instead of the `> **Meta:**` line. Mark it as a draft if the front matter has a draft flag. Otherwise save the draft to `.agents_workspace/product/blog/<YYYY-MM-DD>-<slug>.md`, the slug from the title in kebab case, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-draft.template.md`, per `${CLAUDE_PLUGIN_ROOT}/references/blog-draft-schema.md` (its `title` and `description` replace the title line and the `> **Meta:**` line), and show it in chat too, so an interview's post outlives the session. A post written into a blog repo follows that blog's front matter, never the template, because the template's fields would publish with it.
+**Where it goes:** inside a blog repo (a posts directory was found), write the post as a new file there, matching the existing posts' filename pattern and front matter; the title and meta description go into the front matter fields the other posts use (`title`, `description`, or equivalent) instead of the `> **Meta:**` line. Mark it as a draft if the front matter has a draft flag. Otherwise save the draft to `.agents_workspace/product/blog/<YYYY-MM-DD>-<slug>.md`, the slug from the title in kebab case, filling `${CLAUDE_SKILL_DIR}/assets/blog-draft.template.md`, per `${CLAUDE_SKILL_DIR}/references/blog-draft-schema.md` (its `title` and `description` replace the title line and the `> **Meta:**` line), and show it in chat too, so an interview's post outlives the session. A post written into a blog repo follows that blog's front matter, never the template, because the template's fields would publish with it.
 
 ## Hands off to
 

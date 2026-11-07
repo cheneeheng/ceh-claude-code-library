@@ -128,7 +128,7 @@ live web UI, either hold each persona yourself in the main session (accepting th
 too much) or hand the walker screenshots and page text instead of a URL. Say in the report which you
 did.
 
-Read `${CLAUDE_PLUGIN_ROOT}/references/personas-and-severity.md` before dispatching. It holds the
+Read `${CLAUDE_SKILL_DIR}/references/personas-and-severity.md` before dispatching. It holds the
 five personas, each a constraint catching a distinct failure class, and the severity scale step 6
 ranks with. Run all five unless a surface makes one meaningless (`Small Screen` on a library API),
 and record a skipped persona as a skip.
@@ -138,7 +138,7 @@ and record a skipped persona as a skip.
 **Severity comes from what happened to a walker, never from how bad something looks to you.** This
 is what keeps the report from becoming a list of preferences. Assign each stall one of the four
 severities (Blocker, Detour, Friction, Polish) by the conditions in
-`${CLAUDE_PLUGIN_ROOT}/references/personas-and-severity.md`.
+`${CLAUDE_SKILL_DIR}/references/personas-and-severity.md`.
 
 A walker that ran out of turns produced no result at all — re-dispatch it over a narrower goal, and
 never read turn exhaustion as a failure to complete. Overrunning the action budget is a **Detour**

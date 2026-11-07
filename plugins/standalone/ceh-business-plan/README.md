@@ -84,7 +84,7 @@ nested number (`§12.01.02`), and a linked contents list opens it. After every s
 Meridian theme with a contents rail and the diagrams rendered. The HTML needs Node.js 18+ and
 network access (npx fetches `marked`, the page loads Mermaid from a CDN); without them the
 markdown is still written and the HTML is skipped. The schema and
-the 8-point gate live in `references/business-plan-schema.md`, shared by all nine skills.
+the 8-point gate live in `references/business-plan-schema.md`, copied into each of the nine skills.
 `write-investor-materials` writes `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` to
 `.agents_workspace/product/business/`, local and not committed, and leaves the plan itself unchanged.
 

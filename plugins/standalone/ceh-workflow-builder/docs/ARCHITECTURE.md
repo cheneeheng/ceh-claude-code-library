@@ -4,7 +4,7 @@ How the plugin turns a repetitive task into a workflow that runs through Claude 
 or headless (`claude -p`), and where Claude Code's dynamic workflows fit in.
 
 The `flow.yaml` format is specified in
-[`references/flow-config-schema.md`](../references/flow-config-schema.md) and the runner, which
+[`skills/build-agentic-workflow/references/flow-config-schema.md`](../skills/build-agentic-workflow/references/flow-config-schema.md) and the runner, which
 ships in the separate `ceh-workflow-runner` plugin, in
 [`skills/run-agentic-workflow/SKILL.md`](../../ceh-workflow-runner/skills/run-agentic-workflow/SKILL.md). This page shows how
 they fit together; those two files are the authority on keys and statuses.

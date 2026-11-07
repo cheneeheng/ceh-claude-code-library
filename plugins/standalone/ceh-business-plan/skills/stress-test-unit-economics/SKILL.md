@@ -16,7 +16,7 @@ are sold. Done is a unit model, a cash timeline, and a sensitivity table in §08
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`. Collect
+1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. Collect
    every number already stated and where it came from.
 2. Define the unit: one customer, one order, one seat, one job. Pick the thing the customer pays
    for. A wrong unit hides the loss, so state it before any arithmetic.

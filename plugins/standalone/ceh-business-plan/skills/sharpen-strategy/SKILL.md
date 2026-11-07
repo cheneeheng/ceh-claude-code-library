@@ -16,7 +16,7 @@ a rival cannot copy cheaply, and that visibly give something up. Done is a §04 
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`. Read §02
+1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. Read §02
    to §09 in full: strategy is a claim about how those sections fit.
 2. Answer three questions from the plan alone, one sentence each: what business is this, who is the
    customer, what does the customer value? (Peter Drucker's questions.) A question the plan cannot

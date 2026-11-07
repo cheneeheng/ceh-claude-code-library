@@ -16,7 +16,7 @@ the Output block filled, and the channel test scheduled in §13 with its dates a
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`. Take the
+1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. Take the
    segment from §03 and the price and acquisition ceiling from §08.
 2. Name the first ten customers. Real names or accounts where the user has them. Otherwise the
    exact list they come from: a directory, a community, a conference attendee list, a street. A

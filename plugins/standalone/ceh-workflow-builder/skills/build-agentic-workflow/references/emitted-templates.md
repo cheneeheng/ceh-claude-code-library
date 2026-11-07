@@ -66,7 +66,7 @@ yourself.
 ```
 
 Beside it sit `flow.yaml` and the invocation guide `README.md`. `flow.yaml` follows
-`${CLAUDE_PLUGIN_ROOT}/references/flow-config-schema.md`, whose Complete example section is the
+`../references/flow-config-schema.md`, whose Complete example section is the
 model for it: copy its shape, not its stages.
 
 In the emitted files, spell the delegation out as a literal instruction to invoke the Skill tool

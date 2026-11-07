@@ -20,7 +20,7 @@ decision this skill makes:
 - **A workflow**: a `flow.yaml` that owns ordering and gates only, a thin trigger skill that hands
   it to `ceh-workflow-runner:run-agentic-workflow`, and the step skills, scripts, saved workflows
   and handoff schemas the stages delegate to. The format and its validation rules are in
-  `${CLAUDE_PLUGIN_ROOT}/references/flow-config-schema.md`. Read it before Phase 3. This skill does
+  `${CLAUDE_SKILL_DIR}/references/flow-config-schema.md`. Read it before Phase 3. This skill does
   not restate it.
 
 Target runtime is Claude Code only. Use its capabilities directly.
