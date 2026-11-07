@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: registry-driven-copies.yaml
 generated_note: "Do not edit. artifact.py renders this file from registry-driven-copies.yaml: edit the YAML, then run artifact.py render."
 title: The copies check compares the whole-file copies the registry declares
-status: ready
+status: built
 created: 2026-11-07
 ---
 
@@ -103,7 +103,10 @@ only share a name are left alone. The layout part of the check stays as it is.
   exit 1 with an unregistered error; (d) write different bytes to those two files: exit 0;
   (e) add a second backticked path to the write-concept-docs row: exit 1 with a malformed
   error.
-- **Status:** todo
+- **Status:** done, `copies` OK on the tree (64 registered pairs); (a) drift, (b) stale, (c) unregistered and
+  (e) malformed each failed naming the expected paths, (d) passed, and the restored tree is OK. The first run of (b) and (e) changed nothing, because the `sed` pattern missed the
+  column-padded rows; rerun with a pattern that allows the padding. (b) and (e) also report the
+  real file as an unregistered identical copy, as the review predicted.
 
 ## Open
 
@@ -116,5 +119,6 @@ None
   template row is malformed on day one; fenced Entry shape example row would be parsed;
   Check (b) renames the file, giving malformed and unregistered, not stale)
 - 2026-11-07 PR: #216 https://github.com/cheneeheng/ceh-claude-code-library/pull/216
+- 2026-11-07 Built Phase 1: copies OK with 64 pairs; drift, stale, unregistered, malformed fail; different passes
 
 <!-- prettier-ignore-end -->
