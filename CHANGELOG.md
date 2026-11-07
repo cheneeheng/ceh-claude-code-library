@@ -35,9 +35,9 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-build-planning`           | 1.2.6   |
-| `ceh-build-from-plan`          | 1.2.3   |
-| `ceh-check-build-against-plan` | 1.1.3   |
+| `ceh-build-planning`           | 1.2.7   |
+| `ceh-build-from-plan`          | 1.2.4   |
+| `ceh-check-build-against-plan` | 1.1.4   |
 | `ceh-blog`                     | 1.0.17  |
 | `ceh-business-plan`            | 1.1.15  |
 | `ceh-competitor-analysis`      | 1.1.13  |
@@ -89,6 +89,11 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 
 ### Fixed
 
+- `artifact.py` in every plan skill and plan plugin: a render no longer exits 2 with
+  `PermissionError` when it reads the generated Markdown while another render renames over it on
+  Windows, which happened when the three plan plugins' render hooks ran at once. A refused read
+  now counts as a changed file, and `validate.py` pins it with a fixture.
+  `product/fixes/render-reads-markdown-while-another-render-replaces-it.md`.
 - `plan-model.py` in all three plan plugins: add `generated_note`, wrap the body in a
   `prettier-ignore` range, and double-quote frontmatter values, so a prettier run no longer
   makes the Markdown stale. `plan-schema.md` and `decision-output-templates.md` describe both.

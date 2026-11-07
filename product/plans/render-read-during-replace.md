@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: render-read-during-replace.yaml
 generated_note: "Do not edit. artifact.py renders this file from render-read-during-replace.yaml: edit the YAML, then run artifact.py render."
 title: A plan render survives reading the Markdown while another render replaces it
-status: ready
+status: built
 created: 2026-11-07
 ---
 
@@ -75,7 +75,8 @@ retries, so every concurrent render ends with the same `.md` and exits 0. A regr
   `uv run --script plugins/standalone/<plan plugin>/scripts/artifact.py render <copy>.yaml` at
   once, one per plan plugin, then `artifact.py check <copy>.yaml`; every render and every
   check exits 0.
-- **Status:** todo
+- **Status:** done, Fixture red on the old code ("write_atomic does not survive a refused read"), green after;
+  `validate.py` OK; manual race, 60 rounds of three renders and a check: 0 failures.
 
 ## Open
 
@@ -88,5 +89,6 @@ None
   write_atomic and crash validate.py, so the red run is a traceback, not a fail naming the
   fixture, and the patch restore is skipped)
 - 2026-11-07 PR: #218 https://github.com/cheneeheng/ceh-claude-code-library/pull/218
+- 2026-11-07 Built Phase 1: fixture red then green, validate.py OK, race 0 failures in 60 rounds
 
 <!-- prettier-ignore-end -->

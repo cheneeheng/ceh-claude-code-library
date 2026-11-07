@@ -6,19 +6,53 @@ must pass `artifact.py check`, so its generated Markdown is not stale."""
 
 from __future__ import annotations
 
+import importlib.util
 import os
+import pathlib
 import shutil
 import subprocess
 import sys
+import tempfile
 
 from common import REPO, fail, main, plugin_dirs, rel
 
 MODEL_SUFFIX = "-model.py"
 # The scripts every plugin carrying a model ships, which must not drift between plugins.
 SHARED_SCRIPTS = ("artifact.py", "artifact-render-hook.py", "generated-md-guard.py")
+CLI = REPO / "plugins" / "standalone" / "ceh-build-planning" / "scripts" / "artifact.py"
+
+
+def _survives_refused_read() -> None:
+    """On Windows, reading the Markdown while another render renames over it is refused
+    (product/fixes/render-reads-markdown-while-another-render-replaces-it.md): write_atomic
+    must still write. artifact.py imports only the stdlib at the top, so this needs no uv."""
+    spec = importlib.util.spec_from_file_location("artifact_cli", CLI)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    with tempfile.TemporaryDirectory() as tmp:
+        target = pathlib.Path(tmp) / "plan.md"
+        target.write_text("old\n", encoding="utf-8")
+        real = pathlib.Path.read_text
+
+        def refused(self, *args, **kwargs):
+            if self == target:
+                raise PermissionError(13, "Permission denied", str(self))
+            return real(self, *args, **kwargs)
+
+        pathlib.Path.read_text = refused
+        try:
+            mod.write_atomic(target, "new\n")
+            ok = real(target, encoding="utf-8") == "new\n"
+        except Exception:
+            ok = False
+        finally:
+            pathlib.Path.read_text = real
+    if not ok:
+        fail(rel(CLI), "write_atomic does not survive a refused read")
 
 
 def check() -> None:
+    _survives_refused_read()
     for d in plugin_dirs():
         models = sorted(d.glob("**/references/*" + MODEL_SUFFIX))
         for model in models:
@@ -60,17 +94,9 @@ def check() -> None:
 
     # This repo's own plan/v2 plans: a hand edit to the YAML outside Claude Code leaves its
     # generated Markdown stale, which no hook sees.
-    cli = (
-        REPO
-        / "plugins"
-        / "standalone"
-        / "ceh-build-planning"
-        / "scripts"
-        / "artifact.py"
-    )
     for plan in sorted((REPO / "product" / "plans").glob("*.yaml")):
         r = subprocess.run(
-            [uv, "run", "--quiet", "--script", str(cli), "check", str(plan)],
+            [uv, "run", "--quiet", "--script", str(CLI), "check", str(plan)],
             capture_output=True, text=True, encoding="utf-8", timeout=120,
         )  # fmt: skip
         if r.returncode:

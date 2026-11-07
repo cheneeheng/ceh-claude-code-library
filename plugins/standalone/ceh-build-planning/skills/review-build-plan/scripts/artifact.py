@@ -103,9 +103,13 @@ def validate(path: Path):
 
 def write_atomic(path: Path, text: str) -> None:
     # The hook and the skill both render after a write, often at once. An unchanged file is left
-    # alone, so the second render touches nothing.
-    if path.is_file() and path.read_text(encoding="utf-8") == text:
-        return
+    # alone, so the second render touches nothing. On Windows the read is refused while another
+    # render renames over the file, and a missing file cannot be read: both go on to the write.
+    try:
+        if path.read_text(encoding="utf-8") == text:
+            return
+    except OSError:
+        pass
     # A temp file in the same folder, then a rename: a parallel render never leaves half a file.
     fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
     try:

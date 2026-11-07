@@ -1,6 +1,6 @@
 schema: plan/v2
 title: A plan render survives reading the Markdown while another render replaces it
-status: ready
+status: built
 created: 2026-11-07
 goal: |
   On Windows, the three plan plugins' render hooks run at once after every plan edit, and the one
@@ -76,7 +76,10 @@ phases:
       `uv run --script plugins/standalone/<plan plugin>/scripts/artifact.py render <copy>.yaml` at
       once, one per plan plugin, then `artifact.py check <copy>.yaml`; every render and every
       check exits 0.
-    status: todo
+    status: done
+    evidence: |
+      Fixture red on the old code ("write_atomic does not survive a refused read"), green after;
+      `validate.py` OK; manual race, 60 rounds of three renders and a check: 0 failures.
 open: []
 record:
   - date: 2026-11-07
@@ -91,3 +94,7 @@ record:
   - date: 2026-11-07
     event: PR
     details: "#218 https://github.com/cheneeheng/ceh-claude-code-library/pull/218"
+  - date: 2026-11-07
+    event: Built Phase
+    phase: 1
+    details: fixture red then green, validate.py OK, race 0 failures in 60 rounds
