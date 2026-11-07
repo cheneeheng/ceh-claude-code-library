@@ -29,7 +29,7 @@ feature that was never built. Done means every plan item has a status and the re
 
    **A `plan/v2` plan is checked first.** When `<slug>.yaml` sits beside the plan's `.md`, the
    YAML is the plan: read and edit it, never the `.md`. Before acting on it, run
-   `uv run --script ${CLAUDE_PLUGIN_ROOT}/scripts/artifact.py check <slug>.yaml`. When it exits 1
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <slug>.yaml`. When it exits 1
    with errors, stop and report them, because a stage that acts on a broken plan builds the wrong
    thing. When its only error is a stale `.md`, run the same command with `render` and go on.
    When it exits 3 or uv is missing, say in the reply that the plan went unchecked, and go on.

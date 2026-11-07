@@ -156,7 +156,7 @@ it adds start in the new layout.
   are its rows. A new entry is added for each moved file that had no entry: `ask-the-author.md`
   and the three blog format pairs, the business-plan format pair, `report-page.html`,
   `docs-standard.md`, `run-log.md` with the two run format pairs and the two orchestration-lab
-  scripts, and `artifact.py`. The intro gains one line: a whole bundled-file copy is also
+  scripts. The `artifact.py` copies are rows of the Build plan format entry. The intro gains one line: a whole bundled-file copy is also
   checked byte for byte by `copies`.
 - **Versions and changelog:** PATCH for every plugin a phase touches, in that phase's PR, per
   `decision-version-levels.md`. Every phase's PR, Phase 1 included, adds its `CHANGELOG.md`
@@ -193,7 +193,9 @@ it adds start in the new layout.
   `ceh-build-planning/skills/write-build-plan`, `ceh-build-planning/skills/review-build-plan`,
   `ceh-build-from-plan/skills/implement-from-plan`, and
   `ceh-check-build-against-plan/skills/check-build-against-plan`.
-- **Status:** todo
+- **Status:** done, `validate.py`: "OK: all plugin checks passed"; `artifact.py check` exit 0 from all four
+  skill copies. The `artifact.py` copies are rows of the Build plan format entry instead of a separate entry,
+  because they belong to that format; see the Design changed record.
 
 ### Phase 3: Every other plugin, the layout check, and the rules
 
@@ -223,5 +225,10 @@ None
 - 2026-11-07 PR: #211 https://github.com/cheneeheng/ceh-claude-code-library/pull/211
 - 2026-11-07 Built Phase 1: validate.py OK, and red on a one-byte change naming all three plan-schema.md copies
 - 2026-11-07 PR: #213 https://github.com/cheneeheng/ceh-claude-code-library/pull/213
+- 2026-11-07 Design changed: was "... `run-log.md` with the two run format pairs and the two orchestration-lab scripts, and
+  `artifact.py`.", now "... scripts. The `artifact.py` copies are rows of the Build plan format
+  entry.", because `artifact.py` is part of that format and its copies sit beside the others
+- 2026-11-07 Built Phase 2: validate.py OK, artifact.py check exit 0 from all four skill copies
+- 2026-11-07 PR: #214 https://github.com/cheneeheng/ceh-claude-code-library/pull/214
 
 <!-- prettier-ignore-end -->

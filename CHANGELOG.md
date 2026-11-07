@@ -35,9 +35,9 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-build-planning`           | 1.2.5   |
-| `ceh-build-from-plan`          | 1.2.2   |
-| `ceh-check-build-against-plan` | 1.1.2   |
+| `ceh-build-planning`           | 1.2.6   |
+| `ceh-build-from-plan`          | 1.2.3   |
+| `ceh-check-build-against-plan` | 1.1.3   |
 
 ### Added
 
@@ -53,6 +53,10 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
   (`assets/`, `references/`, `scripts/`) byte-identical across skills and plugins, replacing the
   same-name loops in `templates` and `artifact-models`. `scripts` now also compiles a skill's own
   `scripts/`. Phase 1 of `product/plans/skill-local-files.yaml`.
+- The plan plugins keep the plan format in each skill that reads a plan: `write-build-plan` and
+  `review-build-plan` now carry `plan-schema.md`, `plan-model.py` and both templates, and all four
+  plan skills carry `scripts/artifact.py` and run it as `${CLAUDE_SKILL_DIR}/scripts/artifact.py`.
+  `ceh-build-planning` has no plugin-level `assets/` or `references/` any more. Phase 2.
 
 ### Fixed
 

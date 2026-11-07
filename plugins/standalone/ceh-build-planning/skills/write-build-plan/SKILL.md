@@ -16,7 +16,7 @@ license: Apache-2.0
 # Write a Build Plan
 
 Turn a request into one plan file that an agent can build from without asking again, in the format
-in `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md`. Done means the plan is saved, audited, and
+in `${CLAUDE_SKILL_DIR}/references/plan-schema.md`. Done means the plan is saved, audited, and
 summarized under Output.
 
 Given the path of a `plan/v2` YAML plan with `status: draft`, or of a `.md` whose frontmatter has
@@ -97,9 +97,9 @@ draft: say so and write a new plan as usual.
      field the plan does not define, and no field named differently in two places.
 
    Save the plan as `plan/v2`: `<slug>.yaml` in the plans folder, a filled copy of
-   `${CLAUDE_PLUGIN_ROOT}/assets/plan.template.yaml`, with `status: ready`, or `status: draft` when
+   `${CLAUDE_SKILL_DIR}/assets/plan.template.yaml`, with `status: ready`, or `status: draft` when
    an Open question blocks building, and a Planned entry in its `record`. Then run
-   `uv run --script ${CLAUDE_PLUGIN_ROOT}/scripts/artifact.py render <slug>.yaml` and fix the YAML
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <slug>.yaml` and fix the YAML
    for each error it lists until it exits 0, which writes `<slug>.md` beside it. Never write the
    `.md` by hand: it is generated. When the command exits 3 or uv is missing, say in the reply
    that the plan was saved unchecked and unrendered.
