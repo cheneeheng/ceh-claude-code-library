@@ -378,5 +378,6 @@ None
 - 2026-11-07 PR: #222 https://github.com/cheneeheng/ceh-claude-code-library/pull/222
 - 2026-11-07 Design changed: was "each `{body: str, subsections: list}`", checked as non-empty, now `body` may be empty, because a v0 plan opens with the 13 headings and nothing under them
 - 2026-11-07 Built Phase 4: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-07 PR: #223 https://github.com/cheneeheng/ceh-claude-code-library/pull/223
 
 <!-- prettier-ignore-end -->
