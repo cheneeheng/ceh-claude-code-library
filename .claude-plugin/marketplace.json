@@ -167,7 +167,7 @@
     {
       "name": "ceh-vision-and-strategy",
       "source": "./plugins/standalone/ceh-vision-and-strategy",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "CEH vision and strategy: write a repo's VISION.md and STRATEGY.md, so agents and people can settle later decisions from them, drafted from what the repo shows and confirmed with its owner."
     }
   ]

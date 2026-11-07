@@ -7,6 +7,9 @@ description: >-
   ceh-business-plan:develop-business-plan).
 disable-model-invocation: false
 user-invocable: true
+compatibility: >-
+  Checking and rendering VISION.yaml and STRATEGY.yaml needs uv; without it the files are saved
+  unchecked and their Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -23,10 +26,11 @@ way.
 1. **Find what exists.** Look for each doc in `product/`, `docs/`, the root, and any path the repo's
    `CLAUDE.md` names. An existing doc stays where it is and is revised: change only what the request
    or a finding needs, and keep the owner's wording. A request for one doc when the other is missing
-   drafts both, because the two hold up against each other. An existing doc with no `schema:` line
-   gets the template's frontmatter, `adopted` when the repo's `CLAUDE.md` or the owner already treats
-   it as binding, otherwise `draft`. Keep its extra sections and its order, and add a missing section
-   only when a later step writes to it.
+   drafts both, because the two hold up against each other. An existing Markdown doc is moved to
+   its YAML first, per Output: one with no `schema:` line gets `status: adopted` when the repo's
+   `CLAUDE.md` or the owner already treats it as binding, otherwise `draft`. Its sections outside
+   the template go in `extra_sections`, and a required field it lacks reads "Not stated yet." until
+   a later step writes to it, so an adopted doc stays adopted through the move.
 2. **Read what the repo shows:** the README, `CLAUDE.md`, `.claude/rules/`, plans, any architecture,
    ideas, or roadmap file, the changelog, recent `git log`, and
    `.agents_workspace/product/business/BUSINESS_PLAN.md` when present. When what the repo does and
@@ -75,10 +79,19 @@ way.
 
 ## Output
 
-`VISION.md` follows `assets/vision.template.md`, per `references/vision-schema.md`. `STRATEGY.md`
-follows `assets/strategy.template.md`, per `references/strategy-schema.md`. Both go in `product/`
-unless step 1 found them elsewhere. Close the reply with each file's path and status, the result of
-each test, and the open questions.
+`VISION.yaml` follows `assets/vision.template.yaml`, per the `vision/v2` section of
+`references/vision-schema.md`, and `STRATEGY.yaml` follows `assets/strategy.template.yaml`, per the
+`strategy/v2` section of `references/strategy-schema.md`. `VISION.md` and `STRATEGY.md` are
+rendered from them in the layouts of `assets/vision.template.md` and `assets/strategy.template.md`,
+and never edited by hand. Both go in `product/` unless step 1 found them elsewhere, and each YAML
+sits beside its Markdown. An existing Markdown file with no YAML beside it is moved first, as the
+schema says.
+
+Before editing a YAML, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>`
+and stop on exit 1 with its errors. After the last edit, run it with `render` and fix the YAML for
+each error it lists. On exit 2 or 3, or without uv, say in the reply that the file went unchecked
+and unrendered. Close the reply with each file's path and status, the result of each test, and the
+open questions.
 
 ## Stop conditions
 

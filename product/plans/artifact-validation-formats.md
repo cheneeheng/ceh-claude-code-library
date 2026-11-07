@@ -288,7 +288,11 @@ reports `runs.0.areas.tests.status` to the agent right after the write and leave
   templates' in order. Each exits 1: `adopted` with `[assumed]` in a goal, a conflict order
   naming no principle, a strategy row shorter than its columns. `python
   tools/validate-plugins/validate.py` is green.
-- **Status:** todo
+- **Status:** done, scratchpad `VISION.yaml` and `STRATEGY.yaml` rendered (exit 0) with heading lines equal to the
+  `v1` templates' (the vision sample adds one principle heading); the three broken copies exited
+  1 with "status adopted allows no [assumed]", "conflicts.order names 'Speed'" and "row 1 has 1
+  cells"; `python tools/validate-plugins/validate.py` printed "OK: all plugin checks passed". Both models gained `extra_sections`, a departure from Design with a Design changed entry,
+  because the skill keeps an existing doc's sections outside the template.
 
 ### Phase 4: Business plan
 
@@ -362,5 +366,7 @@ None
 - 2026-11-07 Design changed: was "(none)", now "the `product/architecture/` split is dropped", because one YAML renders one Markdown, and the split had no reader that needed it
 - 2026-11-07 Built Phase 2: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-07 PR: #221 https://github.com/cheneeheng/ceh-claude-code-library/pull/221
+- 2026-11-07 Design changed: was "`gaps: list of str` ... `changing`" in both models, now `extra_sections: list of {title, body}` before `changing` too, because `write-vision-and-strategy` keeps an existing doc's sections outside the template, which `extra="forbid"` would otherwise reject
+- 2026-11-07 Built Phase 3: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 
 <!-- prettier-ignore-end -->

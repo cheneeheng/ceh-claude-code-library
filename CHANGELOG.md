@@ -11,6 +11,11 @@ before this repo live in
 
 ## 2026-11-07
 
+The vision and strategy follow as YAML formats. `write-vision-and-strategy` saves `VISION.yaml`
+(`vision/v2`) and `STRATEGY.yaml` (`strategy/v2`) beside the Markdown each renders, and an adopted
+doc that still holds `[assumed]` is now an error, not a review finding. `ceh-vision-and-strategy`
+gains the render hook and the generated-Markdown guard.
+
 The architecture document follows as the third YAML format. `document-architecture` saves
 `product/ARCHITECTURE.yaml` (`architecture/v3`), and `ARCHITECTURE.md` is rendered from it with
 its section numbers, Contents list and anchors generated, so no skill numbers headings by hand.
@@ -55,6 +60,7 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 | `ceh-check-build-against-plan` | 1.1.5   |
 | `ceh-testing`                  | 1.6.0   |
 | `ceh-codebase-explanation`     | 1.3.0   |
+| `ceh-vision-and-strategy`      | 1.1.0   |
 | `ceh-blog`                     | 1.0.17  |
 | `ceh-business-plan`            | 1.1.15  |
 | `ceh-competitor-analysis`      | 1.1.13  |

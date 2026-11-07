@@ -320,7 +320,15 @@ phases:
       templates' in order. Each exits 1: `adopted` with `[assumed]` in a goal, a conflict order
       naming no principle, a strategy row shorter than its columns. `python
       tools/validate-plugins/validate.py` is green.
-    status: todo
+    status: done
+    evidence: |
+      scratchpad `VISION.yaml` and `STRATEGY.yaml` rendered (exit 0) with heading lines equal to the
+      `v1` templates' (the vision sample adds one principle heading); the three broken copies exited
+      1 with "status adopted allows no [assumed]", "conflicts.order names 'Speed'" and "row 1 has 1
+      cells"; `python tools/validate-plugins/validate.py` printed "OK: all plugin checks passed".
+    note: |
+      Both models gained `extra_sections`, a departure from Design with a Design changed entry,
+      because the skill keeps an existing doc's sections outside the template.
   - name: Business plan
     builds: |
       The model, template and `business-plan/v3` section in all nine copies of
@@ -416,3 +424,12 @@ record:
   - date: 2026-11-07
     event: PR
     details: "#221 https://github.com/cheneeheng/ceh-claude-code-library/pull/221"
+  - date: 2026-11-07
+    event: Design changed
+    details: |
+      was "`gaps: list of str` ... `changing`" in both models, now `extra_sections: list of {title, body}` before `changing` too, because `write-vision-and-strategy` keeps an existing doc's sections outside the template, which `extra="forbid"` would otherwise reject
+  - date: 2026-11-07
+    event: Built Phase
+    phase: 3
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"

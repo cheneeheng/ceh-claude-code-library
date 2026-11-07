@@ -387,6 +387,15 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "schema: architecture/v3\noverview:\n  bullets:\n    - It counts words.\n"
         "  flow: |\n    flowchart LR\n        a --> b\ndiagrams: []\nkey_decisions: []\n"
     )
+    good_vision = (
+        "schema: vision/v2\nstatus: draft\nupdated: 2026-11-07\nidentity:\n  name: Wordy\n"
+        "  sentence: a CLI.\n  is:\n    - {trait: Small, meaning: One file.}\n  is_not: [An editor.]\n"
+        "vision: Counted. [assumed]\nscope: {text: Text., test: Does it count, refuses: Spelling.}\n"
+        "goals:\n  - {goal: Fast, measure: Under a second.}\nnon_goals: []\n"
+        "principles:\n  - {name: Simple, rule: Few flags., ask: Can it go}\n"
+        "conflicts:\n  order:\n    - {principle: Simple, protects: ease}\n  example: For example, none.\n"
+        "gaps: []\nextra_sections: []\nchanging: A PR.\n"
+    )
     evidence_fixtures = [
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
@@ -397,6 +406,11 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             "ceh-codebase-explanation", "ARCHITECTURE", good_arch,
             good_arch.replace("  bullets:\n    - It counts words.\n", "  bullets: []\n"),
             "overview.bullets", "## 01. Overview",
+        ),
+        *spine_fixtures(
+            "ceh-vision-and-strategy", "VISION", good_vision,
+            good_vision.replace("status: draft", "status: adopted"),
+            "status adopted allows no [assumed]", "## Identity",
         ),
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),

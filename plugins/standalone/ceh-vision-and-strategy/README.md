@@ -15,9 +15,20 @@ repo can hold code or only documents.
 
 ## What it writes
 
-`product/VISION.md` and `product/STRATEGY.md`, or wherever the repo already keeps them. The skill
-writes the files, and you commit them. Only an `adopted` doc gets a pointer from `CLAUDE.md`, so an
-assumption never binds a later session.
+`product/VISION.yaml` and `product/STRATEGY.yaml`, or wherever the repo already keeps the docs, with
+`VISION.md` and `STRATEGY.md` rendered beside them. The skill writes the files, and you commit them.
+Only an `adopted` doc gets a pointer from `CLAUDE.md`, so an assumption never binds a later
+session.
+
+## Hooks
+
+After every write to either YAML, `artifact-render-hook.py` (`PostToolUse`) checks it against its
+model through `uv` and renders the Markdown, or reports each error back to the agent and leaves the
+Markdown as it was. An adopted doc that still holds `[assumed]` is one such error.
+`generated-md-guard.py` (`PreToolUse`) denies a direct edit to a generated Markdown file and names
+its YAML. Both need `uv`: without it the agent is told once per session that the file went
+unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS` with `artifact-render-hook` or
+`generated-md-guard`, switches them off.
 
 ## Not this plugin
 
