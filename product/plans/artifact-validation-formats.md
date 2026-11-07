@@ -368,5 +368,6 @@ None
 - 2026-11-07 PR: #221 https://github.com/cheneeheng/ceh-claude-code-library/pull/221
 - 2026-11-07 Design changed: was "`gaps: list of str` ... `changing`" in both models, now `extra_sections: list of {title, body}` before `changing` too, because `write-vision-and-strategy` keeps an existing doc's sections outside the template, which `extra="forbid"` would otherwise reject
 - 2026-11-07 Built Phase 3: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-07 PR: #222 https://github.com/cheneeheng/ceh-claude-code-library/pull/222
 
 <!-- prettier-ignore-end -->
