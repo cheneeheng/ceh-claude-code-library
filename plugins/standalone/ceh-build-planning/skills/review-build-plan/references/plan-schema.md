@@ -3,7 +3,8 @@
 A build plan is one Markdown file (`plan/v1`), or a YAML file with its Markdown generated beside
 it (`plan/v2`, below). `ceh-build-planning` writes it, `ceh-build-from-plan` builds
 from it and records evidence in it, and `ceh-check-build-against-plan` checks the code against it.
-This file is copied word for word into all three plugins, so each works installed alone.
+This file is copied word for word into every skill that reads a plan, so each skill folder works on
+its own.
 
 ## Location
 
@@ -60,8 +61,8 @@ YAML re-renders the Markdown. The body sits between `prettier-ignore-start` and
 is still edited in place.
 
 The format in code is `plan-model.py` beside this file: its pydantic model checks every key, type
-and rule below, and its renderer writes the Markdown. `scripts/artifact.py` in the plugin runs both,
-through uv:
+and rule below, and its renderer writes the Markdown. `scripts/artifact.py` in the skill, beside this
+file's `references/`, runs both through uv, and the plugin's render hook runs its own copy:
 
 ```bash
 uv run --script scripts/artifact.py check product/plans/<slug>.yaml   # errors, or a stale .md
@@ -69,7 +70,7 @@ uv run --script scripts/artifact.py render product/plans/<slug>.yaml  # check, t
 ```
 
 Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other
-failure, and `3` means this plugin has no model for that version. Field paths count from 0, so
+failure, and `3` means no model for that version sits beside the script. Field paths count from 0, so
 `phases.0` is Phase 1.
 
 **Keys**, each one required unless marked optional, and no other key allowed:

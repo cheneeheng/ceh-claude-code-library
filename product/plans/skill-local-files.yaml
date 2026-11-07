@@ -171,7 +171,7 @@ design:
       are its rows. A new entry is added for each moved file that had no entry: `ask-the-author.md`
       and the three blog format pairs, the business-plan format pair, `report-page.html`,
       `docs-standard.md`, `run-log.md` with the two run format pairs and the two orchestration-lab
-      scripts, and `artifact.py`. The intro gains one line: a whole bundled-file copy is also
+      scripts. The `artifact.py` copies are rows of the Build plan format entry. The intro gains one line: a whole bundled-file copy is also
       checked byte for byte by `copies`.
   - topic: "Versions and changelog:"
     decision: |
@@ -211,7 +211,13 @@ phases:
       `ceh-build-planning/skills/write-build-plan`, `ceh-build-planning/skills/review-build-plan`,
       `ceh-build-from-plan/skills/implement-from-plan`, and
       `ceh-check-build-against-plan/skills/check-build-against-plan`.
-    status: todo
+    status: done
+    evidence: |
+      `validate.py`: "OK: all plugin checks passed"; `artifact.py check` exit 0 from all four
+      skill copies.
+    note: |
+      The `artifact.py` copies are rows of the Build plan format entry instead of a separate entry,
+      because they belong to that format; see the Design changed record.
   - name: Every other plugin, the layout check, and the rules
     builds: |
       The remaining moves from Design, What moves where, with their citations per Design, How
@@ -249,3 +255,13 @@ record:
   - date: 2026-11-07
     event: PR
     details: "#213 https://github.com/cheneeheng/ceh-claude-code-library/pull/213"
+  - date: 2026-11-07
+    event: Design changed
+    details: |
+      was "... `run-log.md` with the two run format pairs and the two orchestration-lab scripts, and
+      `artifact.py`.", now "... scripts. The `artifact.py` copies are rows of the Build plan format
+      entry.", because `artifact.py` is part of that format and its copies sit beside the others
+  - date: 2026-11-07
+    event: Built Phase
+    phase: 2
+    details: validate.py OK, artifact.py check exit 0 from all four skill copies

@@ -25,13 +25,13 @@ quotes the plan, and the verdict is delivered.
 
 1. **Find the plan.** Take the path from the arguments, or the newest plan in the plans folder
    whose status is `draft` or `ready`, and say which. The format is in
-   `${CLAUDE_PLUGIN_ROOT}/references/plan-schema.md`. With no plan but a spec (an issue, a PRD, a
+   `${CLAUDE_SKILL_DIR}/references/plan-schema.md`. With no plan but a spec (an issue, a PRD, a
    spec file), review the spec with the Scope lens and the gap checks of step 5, and skip what
    concerns phases. With neither, stop: there is nothing to review.
 
    **A `plan/v2` plan is checked first.** When `<slug>.yaml` sits beside the plan's `.md`, the
    YAML is the plan: read and edit it, never the `.md`. Before acting on it, run
-   `uv run --script ${CLAUDE_PLUGIN_ROOT}/scripts/artifact.py check <slug>.yaml`. When it exits 1
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <slug>.yaml`. When it exits 1
    with errors, stop and report them, because a stage that acts on a broken plan builds the wrong
    thing. When its only error is a stale `.md`, run the same command with `render` and go on.
    When it exits 3 or uv is missing, say in the reply that the plan went unchecked, and go on.

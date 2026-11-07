@@ -1,0 +1,36 @@
+schema: plan/v2
+title: <title>
+status: <draft | ready | building | built>
+created: YYYY-MM-DD
+business_plan: <path>
+goal: |
+  <goal>
+scope:
+  in:
+    - <capability>
+  out:
+    - item: <excluded>
+      reason: <reason>
+design:
+  - topic: <topic>
+    decision: |
+      <decision>
+phases:
+  - name: <name>
+    builds: |
+      <items>
+    check: |
+      <command> <passing result>
+    status: <todo | unplanned | done>
+    evidence: |
+      <evidence>
+    note: |
+      <note>
+open:
+  - question: <question>
+    assumption: <assumption>
+record:
+  - date: YYYY-MM-DD
+    event: <event>
+    phase: <n>
+    details: <details>

@@ -6,7 +6,8 @@ again.
 
 The plan is the handoff between the lifecycle stages. `ceh-build-from-plan` builds it phase by
 phase, and `ceh-check-build-against-plan` checks the finished code against it. Each of the three
-plugins works installed alone, and they share the plan format in `references/plan-schema.md`.
+plugins works installed alone, and each of their skills carries the plan format in its own
+`references/plan-schema.md`.
 
 ## Skills
 
@@ -22,8 +23,8 @@ or `"review this plan"`.
 ## Hooks
 
 The plugin ships two hooks (`hooks/hooks.json`) that activate automatically when the plugin is
-enabled. They act only on `plan/v2` plans, the YAML format in `references/plan-schema.md`. The
-skills still write `plan/v1` Markdown, so today they act only on a plan YAML written by hand.
+enabled. They act only on `plan/v2` plans, the YAML format in each skill's
+`references/plan-schema.md`, which the skills write.
 
 | Hook                 | Event                                        | Script                    | Default |
 | -------------------- | -------------------------------------------- | ------------------------- | ------- |
