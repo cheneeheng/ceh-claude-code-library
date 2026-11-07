@@ -229,5 +229,6 @@ None
   `artifact.py`.", now "... scripts. The `artifact.py` copies are rows of the Build plan format
   entry.", because `artifact.py` is part of that format and its copies sit beside the others
 - 2026-11-07 Built Phase 2: validate.py OK, artifact.py check exit 0 from all four skill copies
+- 2026-11-07 PR: #214 https://github.com/cheneeheng/ceh-claude-code-library/pull/214
 
 <!-- prettier-ignore-end -->
