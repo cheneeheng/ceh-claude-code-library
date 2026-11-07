@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: skill-local-files.yaml
 generated_note: "Do not edit. artifact.py renders this file from skill-local-files.yaml: edit the YAML, then run artifact.py render."
 title: Every file a skill needs lives in the skill's own folder, and copies are checked byte for byte
-status: ready
+status: building
 created: 2026-11-07
 ---
 
@@ -175,7 +175,9 @@ it adds start in the new layout.
   rerun: it exits 1 with a `copies` error naming that file and its two other copies, in
   `ceh-build-planning/references/` and `ceh-build-from-plan/skills/implement-from-plan/references/`.
   Revert.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py`: "OK: all plugin checks passed"; with one byte
+  appended to the check-build-against-plan copy, `[copies]` failed naming it and the other two
+  copies; reverted, OK again.
 
 ### Phase 2: The plan plugins in the new layout
 
@@ -219,5 +221,7 @@ None
   and add-plugin-component SKILL.md missing from In; VISION and STRATEGY still require
   registration)
 - 2026-11-07 PR: #211 https://github.com/cheneeheng/ceh-claude-code-library/pull/211
+- 2026-11-07 Built Phase 1: validate.py OK, and red on a one-byte change naming all three plan-schema.md copies
+- 2026-11-07 PR: #213 https://github.com/cheneeheng/ceh-claude-code-library/pull/213
 
 <!-- prettier-ignore-end -->

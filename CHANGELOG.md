@@ -49,6 +49,10 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 
 - `write-build-plan`: step 8 invokes `ceh-build-planning:review-build-plan` on every saved plan,
   and its Output reports the review's verdict. The "for an architectural plan" handoff is gone.
+- `validate.py`: one `copies` check keeps every file at the same path inside its skill folder
+  (`assets/`, `references/`, `scripts/`) byte-identical across skills and plugins, replacing the
+  same-name loops in `templates` and `artifact-models`. `scripts` now also compiles a skill's own
+  `scripts/`. Phase 1 of `product/plans/skill-local-files.yaml`.
 
 ### Fixed
 
