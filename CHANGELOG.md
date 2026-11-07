@@ -53,6 +53,9 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 - `product/plans/skill-local-files.yaml`, with its generated `.md`: three phases (the `copies`
   check, the plan plugins in the new layout, then every other plugin with a layout check and the
   rules), reviewed from a fresh context and revised for all 12 findings.
+- `product/plans/registry-driven-copies.yaml`: the `copies` check compares only the whole-file
+  copies `docs/CROSS_REFERENCES.md` registers, and fails drift, stale paths, malformed rows and
+  unregistered identical copies. Reviewed from a fresh context, all 9 findings fixed.
 
 ### Changed
 
