@@ -5,6 +5,9 @@ description: >-
   key results and weekly inputs, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
+compatibility: >-
+  Checking and rendering BUSINESS_PLAN.yaml needs uv; without it the YAML is saved unchecked
+  and its Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -16,7 +19,8 @@ which number to look at each week.
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. Take the
+1. Check and read the plan's `BUSINESS_PLAN.yaml`, as the `business-plan/v3` section of
+   `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md` says, and render it after your edit. Take the
    ranked risks from §12, the channel test from §09, and the cash-out month from §11.
 2. Choose the objectives, three at most. The first is whatever retires the top risk in §12. An
    objective that touches no risk and no revenue is cut. Andy Grove's rule for objectives was few
@@ -80,9 +84,10 @@ that touches their money, safety, or data.
 
 ## Output
 
-Written into §13 of `BUSINESS_PLAN.md` as one subsection, replaced whole on a re-run. The
-milestone lines above it, including those other skills tagged, stay. On disk its headings carry
-nested numbers (see Numbering in the schema), so a re-run finds it by its title:
+Written into §13 of `BUSINESS_PLAN.yaml` as one entry of `milestones.subsections`, with
+`owner: set-operating-plan`, replaced whole on a re-run, which finds it by its title. The
+milestone lines in `milestones.body`, including those other skills tagged, stay. Its parts are
+that entry's own `subsections`. Rendered, without the numbers the renderer adds:
 
 ```markdown
 ### Operating plan

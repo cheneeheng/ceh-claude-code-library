@@ -7,13 +7,13 @@ exists, then runs a disciplined interview loop that attacks the plan's weakest a
 
 ## How it works
 
-`develop-business-plan` is a thin entry point: it finds `BUSINESS_PLAN.md`, works out which moment
+`develop-business-plan` is a thin entry point: it finds `BUSINESS_PLAN.yaml`, works out which moment
 this is, and calls the specialist skill that owns it. With no plan on disk it always calls
 `find-product-market-fit`, which is a loop, not a one-shot generator:
 
 ```
 Intake   → read build plans (product/plans/*.md) or any PRD/spec/pitch you provide
-Draft v0 → write BUSINESS_PLAN.md from what's known; score the PMF gate
+Draft v0 → write BUSINESS_PLAN.yaml from what's known; score the PMF gate
 Interview→ attack the lowest-scoring gate criterion — one sharp question at a time
 Revise   → fold the answer in, re-tag confidence, re-score the gate
          ↺ repeat interview/revise until gate = 8/8 AND you confirm
@@ -75,11 +75,13 @@ never as authority that settles a question.
 
 ## What it produces
 
-A single living `BUSINESS_PLAN.md` (13 sections: problem, target customer, value prop, solution,
-competition, market math, business model, go-to-market, traction, financials, risks, milestones),
-revised in place across the loop, with a `pmf_gate: N/8` score in its frontmatter. The plan is
-drawn as well as written: Mermaid diagrams sit beside the text they show, every heading carries a
-nested number (`§12.01.02`), and a linked contents list opens it. After every specialist,
+A single living `BUSINESS_PLAN.yaml` (`business-plan/v3`, 13 sections: problem, target customer,
+value prop, solution, competition, market math, business model, go-to-market, traction,
+financials, risks, milestones), revised in place across the loop, with a `pmf_gate` score out of 8. Every skill checks it against its model through `uv` before reading it, and `BUSINESS_PLAN.md`
+is rendered from it: Mermaid diagrams sit beside the text they show, every heading carries a
+nested number (`§12.01.02`), and a linked contents list opens it, all written by the renderer. An
+older `BUSINESS_PLAN.md` moves to the YAML on the next run, with a `BUSINESS_PLAN.v2.md` backup.
+After every specialist,
 `develop-business-plan` rebuilds `BUSINESS_PLAN.html` next to it: one self-contained page in the
 Meridian theme with a contents rail and the diagrams rendered. The HTML needs Node.js 18+ and
 network access (npx fetches `marked`, the page loads Mermaid from a CDN); without them the
@@ -87,6 +89,15 @@ markdown is still written and the HTML is skipped. The schema and
 the 8-point gate live in `references/business-plan-schema.md`, copied into each of the nine skills.
 `write-investor-materials` writes `INVESTOR_DECK.md` and `INVESTOR_OUTREACH.md` to
 `.agents_workspace/product/business/`, local and not committed, and leaves the plan itself unchanged.
+
+## Hooks
+
+After every write to `BUSINESS_PLAN.yaml`, `artifact-render-hook.py` (`PostToolUse`) checks it
+against its model through `uv` and renders `BUSINESS_PLAN.md`, or reports each error back to the
+agent and leaves the Markdown as it was. `generated-md-guard.py` (`PreToolUse`) denies a direct
+edit to a generated Markdown file and names its YAML. Both need `uv`: without it the agent is told
+once per session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS`
+with `artifact-render-hook` or `generated-md-guard`, switches them off.
 
 ## The PMF readiness gate
 

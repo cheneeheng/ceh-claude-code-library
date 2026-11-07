@@ -55,11 +55,10 @@ Each section is a level-2 heading in the literal form `## §NN Title`, for examp
   one bullet per heading from h2 to h6, each level indented two more spaces, linked by GitHub's
   anchor for the heading (`[§04.01 Strategy](#0401-strategy)`). The HTML build drops it from that
   line to the first `## ` heading, because the page draws its own contents rail.
-- **`develop-business-plan` owns both.** After every specialist returns, it renumbers the headings
-  below h2 and rewrites the contents list from the headings. That pass is the one edit the router
-  makes, so no specialist renumbers another's subsection. A skill that writes the plan with no
-  router around it, such as `find-product-market-fit` drafting v0, numbers its own headings and
-  writes the list itself.
+- **In a `v3` plan the renderer writes both**, from the YAML's order, so no skill renumbers or
+  rewrites the list. In a `v2` Markdown plan not yet moved, `develop-business-plan` renumbers
+  after every specialist and rewrites the list, and a skill with no router around it numbers its
+  own headings.
 
 ## Diagrams
 
@@ -153,6 +152,52 @@ Three rules keep the writers apart:
   the section content above the subsections and leaves them as they are.
 - A skill that re-scores a gate criterion updates `pmf_gate`. Whenever `pmf_gate` is below `8/8`,
   `status` is `draft`.
+
+## business-plan/v3: YAML with generated Markdown
+
+A `business-plan/v3` plan is `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, a copy of
+`../assets/business-plan.template.yaml`, with `BUSINESS_PLAN.md` generated beside it in the `v2`
+layout above. Every skill reads and edits the YAML, never the Markdown, which opens with
+`generated_from: BUSINESS_PLAN.yaml` and a do-not-edit `generated_note`. The renderer writes every
+`§` number and the `**Contents**` list, so nobody numbers a heading by hand, and the HTML build
+keeps reading the Markdown. The format in code is `business-plan-model.py` beside this file, and
+`scripts/artifact.py` in each skill checks and renders it through uv.
+
+**Every skill, every run:**
+
+1. Before reading the plan, run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <dir>/BUSINESS_PLAN.yaml`. Exit
+   `1` lists each error with its field path: stop and report them. When the only error is a stale
+   `.md`, run `render` and go on. Exit `2` or `3`, or no uv, is said in the reply as "not checked",
+   and the skill goes on with the YAML.
+2. A skill that writes runs `render` after its last edit, and fixes the YAML for each error it
+   lists.
+3. With only a Markdown plan and no YAML, `develop-business-plan` moves it before it dispatches a
+   specialist, and `find-product-market-fit` moves it when it runs without the router. Any other
+   skill stops and names `develop-business-plan`. The move first brings an
+   `artifact: BUSINESS_PLAN` or `v1` plan to `v2`, as Template says, copies the file to
+   `BUSINESS_PLAN.v2.md` beside it, because `.agents_workspace/` is not in git, then writes the
+   YAML from it and renders. The reply names the move, the backup, and any text the YAML could not
+   hold, which goes in the nearest section `body`.
+
+**Keys**, each required, and no other key allowed:
+
+- `schema` (`business-plan/v3`), `status`, `created`, `updated` (unquoted dates, `updated` not
+  before `created`), `product`, `stage`, `derived_from` (`[]` when none), and `pmf_gate`, the
+  number of criteria met, `0` to `8`, rendered as `<n>/8`. `status: validated` needs `pmf_gate: 8`.
+- `sections`: exactly the 13 keys `executive_summary`, `problem`, `target_customer`,
+  `value_proposition`, `solution`, `alternatives`, `market`, `business_model`, `go_to_market`,
+  `traction`, `financials`, `risks`, `milestones`, in that order, for §01 to §13. Each has `body`
+  (the section's own content, `""` when empty) and `subsections`.
+- A subsection has `title` (the text after its number, so a skill finds it by title), `owner`,
+  `body` and `subsections`, nested four deep at most, down to h6. `owner` is the skill that wrote
+  it, one of `develop-business-plan`, `find-product-market-fit`, `plan-go-to-market`,
+  `run-premortem`, `set-operating-plan`, `sharpen-strategy` and `stress-test-unit-economics`. The
+  model checks only that the name is known. The rules in Specialist subsections still say who may
+  edit what.
+
+Confidence tags, diagrams and tables stay inside `body` text, written as `|` blocks, because ` #`
+starts a YAML comment.
 
 ## PMF Readiness Gate
 

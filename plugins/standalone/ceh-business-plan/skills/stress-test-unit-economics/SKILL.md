@@ -5,6 +5,9 @@ description: >-
   finds the one input that kills the business, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
+compatibility: >-
+  Checking and rendering BUSINESS_PLAN.yaml needs uv; without it the YAML is saved unchecked
+  and its Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -16,7 +19,8 @@ are sold. Done is a unit model, a cash timeline, and a sensitivity table in §08
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. Collect
+1. Check and read the plan's `BUSINESS_PLAN.yaml`, as the `business-plan/v3` section of
+   `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md` says, and render it after your edit. Collect
    every number already stated and where it came from.
 2. Define the unit: one customer, one order, one seat, one job. Pick the thing the customer pays
    for. A wrong unit hides the loss, so state it before any arithmetic.
@@ -81,8 +85,10 @@ before applying one.
 
 ## Output
 
-`### Unit model` goes into §08 and `### Cash and sensitivity` into §11. On disk their headings carry
-nested numbers (see Numbering in the schema), so a re-run finds both by title and replaces them:
+`Unit model` goes into `business_model.subsections` (§08) and `Cash and sensitivity` into
+`financials.subsections` (§11) of `BUSINESS_PLAN.yaml`, each with
+`owner: stress-test-unit-economics`, and a re-run finds both by title and replaces them. Rendered,
+without the numbers the renderer adds:
 
 ```markdown
 ### Unit model

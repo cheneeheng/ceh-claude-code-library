@@ -5,6 +5,9 @@ description: >-
   claim traced to a plan section, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
+compatibility: >-
+  Checking and rendering BUSINESS_PLAN.yaml needs uv; without it the YAML is saved unchecked
+  and its Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -17,9 +20,9 @@ and the ask states the amount, the months of runway it buys, and the milestones 
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. Check the
-   frontmatter: `status: validated` and `pmf_gate: 8/8`. Anything less, stop (see Stop
-   conditions).
+1. Check and read the plan's `BUSINESS_PLAN.yaml`, as the `business-plan/v3` section of
+   `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md` says. It must hold `status: validated`
+   and `pmf_gate: 8`. Anything less, stop (see Stop conditions).
 2. Write the one-liner: who it is for, what it does for them, and the one number that proves
    someone wants it. It opens the deck and the email, so draft it first and fit the rest to it.
 3. Draft the deck, one slide per row of the table below, in that order. Each slide is a headline
@@ -77,7 +80,7 @@ notes may name investors and contacts.
 
 ## Stop conditions
 
-- `status` is `draft` or `pmf_gate` is below `8/8` → stop, and name
+- `status` is `draft` or `pmf_gate` is below `8` → stop, and name
   `ceh-business-plan:find-product-market-fit`. Materials built on an unvalidated plan sell its
   assumptions as facts. If the user still wants them, write them with `Draft: gate <N>/8` at the
   top of both files.

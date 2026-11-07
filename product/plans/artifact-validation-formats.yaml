@@ -348,7 +348,18 @@ phases:
       says that step was not run. Each exits 1: a missing section, an extra
       section, `validated` with `pmf_gate: 7`, an unknown `owner`, a seventh heading level.
       `python tools/validate-plugins/validate.py` is green.
-    status: todo
+    status: done
+    evidence: |
+      a scratchpad `BUSINESS_PLAN.yaml` with nested subsections under §04 and §12 rendered (exit 0),
+      all 17 Contents links resolved to rendered headings, and `node
+      plugins/standalone/ceh-business-plan/skills/develop-business-plan/scripts/build-plan-html.cjs`
+      wrote `BUSINESS_PLAN.html` with 17 headings and the gate as `5/8`; the five broken copies
+      exited 1 naming `sections.milestones`, `sections.roadmap`, `(top level)` for the gate,
+      `sections.risks.subsections.0.owner` and `(top level)` for the depth; `python
+      tools/validate-plugins/validate.py` printed "OK: all plugin checks passed".
+    note: |
+      A section `body` may be empty, a departure from Design with a Design changed entry, because a
+      v0 plan opens with the 13 headings and nothing under them.
   - name: Read-time checks in the plan skills
     builds: |
       `vision-model.py`, `strategy-model.py` and `business-plan-model.py` copied into
@@ -436,3 +447,12 @@ record:
   - date: 2026-11-07
     event: PR
     details: "#222 https://github.com/cheneeheng/ceh-claude-code-library/pull/222"
+  - date: 2026-11-07
+    event: Design changed
+    details: |
+      was "each `{body: str, subsections: list}`", checked as non-empty, now `body` may be empty, because a v0 plan opens with the 13 headings and nothing under them
+  - date: 2026-11-07
+    event: Built Phase
+    phase: 4
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"

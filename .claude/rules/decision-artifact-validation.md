@@ -17,8 +17,8 @@ carries its own copy of the model and `artifact.py`, and each plugin holding it 
 `artifact.py` and the hooks at its root for its hooks. The user approved the build plan trial
 (`plan/v2`) on 2026-11-07, and the other spine formats follow it, per
 `product/plans/artifact-validation-formats.yaml`: the evidence report (`evidence/v2`), the
-architecture document (`architecture/v3`), and the vision and strategy (`vision/v2`,
-`strategy/v2`) so far, then the business plan.
+architecture document (`architecture/v3`), the vision and strategy (`vision/v2`,
+`strategy/v2`), and the business plan (`business-plan/v3`).
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

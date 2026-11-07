@@ -1,18 +1,21 @@
 ---
 name: find-product-market-fit
 description: >-
-  The product-market-fit loop that drafts `BUSINESS_PLAN.md` and interrogates its weakest
+  The product-market-fit loop that drafts `BUSINESS_PLAN.yaml` and interrogates its weakest
   assumption until the 8-point readiness gate passes, called by
   ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
+compatibility: >-
+  Checking and rendering BUSINESS_PLAN.yaml needs uv; without it the YAML is saved unchecked
+  and its Markdown is not rendered.
 license: Apache-2.0
 ---
 
 # Find product-market fit
 
 Produce a **validated business plan** — one whose product-market fit has been pressure-tested,
-not asserted. The deliverable is a single living `BUSINESS_PLAN.md` (schema and PMF gate in
+not asserted. The deliverable is a single living `BUSINESS_PLAN.yaml`, rendered to `BUSINESS_PLAN.md` (schema and PMF gate in
 `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`), revised in place across an interview loop until it passes
 the 8-point PMF readiness gate and the user confirms.
 
@@ -30,7 +33,7 @@ interview against it. A concrete draft gives the user something to react to, and
 
 ```
 Phase 0  Intake      → find/read app plans or provided material
-Phase 1  Draft v0    → write BUSINESS_PLAN.md from what's known; score the PMF gate
+Phase 1  Draft v0    → write BUSINESS_PLAN.yaml from what's known; score the PMF gate
 Phase 2  Interview   → attack the lowest-scoring, highest-leverage gate criterion (one question)
 Phase 3  Revise      → fold the answer in; re-tag confidence; re-score the gate
          ↑___________ repeat Phase 2–3 until gate = 8/8 AND user confirms
@@ -60,8 +63,10 @@ Before any question, gather everything that already constrains the plan.
 
 Extract without asking: what the product does, who it seems to be for, the core flow, the stage
 (idea / prototype / launched / revenue), and any pricing or competitor hints already written down.
-If `BUSINESS_PLAN.md` already exists, you are **continuing the loop** — read it, re-score the gate,
-resume at the lowest-scoring criterion.
+If `BUSINESS_PLAN.yaml` already exists, you are **continuing the loop** — check and read it, as
+the schema's `business-plan/v3` section says, re-score the gate, resume at the lowest-scoring
+criterion. A `BUSINESS_PLAN.md` with no YAML beside it is moved to the YAML first, as that section
+says, when no router has already moved it.
 
 **If nothing exists** (no plans, nothing provided): skip the draft-from-source path and open with
 a single grounding question — _"In one or two sentences: what's the product, and who is it for?"_
@@ -71,20 +76,21 @@ a single grounding question — _"In one or two sentences: what's the product, a
 
 ## Phase 1 — Draft v0 proactively
 
-Write a complete `.agents_workspace/product/business/BUSINESS_PLAN.md` from
-`${CLAUDE_SKILL_DIR}/assets/business-plan.template.md`
-per the schema — all 13 sections, even the thin ones. Fill
+Write a complete `.agents_workspace/product/business/BUSINESS_PLAN.yaml` from
+`${CLAUDE_SKILL_DIR}/assets/business-plan.template.yaml`
+per the schema's `business-plan/v3` section — all 13 sections, even the thin ones — then render
+`BUSINESS_PLAN.md` from it with `scripts/artifact.py render`. Fill
 what the source material supports; for everything else, **write your best-guess hypothesis and tag
 it `[assumption]`**, not "TBD". A wrong, specific assumption is useful — it gives the interview a
 target. A blank is not.
 
-Draw it as well as write it: add the schema's default diagrams wherever the draft's text supports
-one, number every heading below h2, and fill the contents list (both under "Diagrams" and
-"Numbering and contents" in the schema). A plan of text alone reads as a wall to a reader who
+Draw it as well as write it: add the schema's default diagrams, in the section `body` text,
+wherever the draft's text supports one (under "Diagrams" in the schema). The renderer numbers the
+headings and writes the contents list. A plan of text alone reads as a wall to a reader who
 scans first.
 
 Tag every load-bearing claim: `[evidence]`, `[assumption]`, or `[hypothesis-to-test]`. Then score
-the PMF gate (N/8) in frontmatter and identify the **lowest-scoring, highest-leverage** criterion
+the PMF gate as `pmf_gate: N` and identify the **lowest-scoring, highest-leverage** criterion
 — that is where the interview starts.
 
 Show the user the draft (or, for a long plan, the executive summary + the gate scorecard with
@@ -140,7 +146,7 @@ the one question that would most move it.
 
 ## Phase 3 — Revise
 
-After each answer (or a small batch), fold it into `BUSINESS_PLAN.md`:
+After each answer (or a small batch), fold it into `BUSINESS_PLAN.yaml`, then render it:
 
 - Update the affected sections; **re-tag** the confidence on every claim the answer touched.
   Redraw any diagram beside text the answer changed, in the same edit, so the picture never
@@ -148,7 +154,7 @@ After each answer (or a small batch), fold it into `BUSINESS_PLAN.md`:
 - Regenerate §01 Executive Summary and §12 Risks ranking — they shift as the plan firms up.
   Leave every specialist subsection and tagged line as it is (see "Specialist subsections" in the
   schema): the premortem's kill criteria in §12 are fixed in advance on purpose.
-- Re-score `pmf_gate: N/8` in frontmatter and bump `updated`.
+- Re-score `pmf_gate: N` and bump `updated`.
 - Tell the user, in one or two lines, what just moved (e.g. _"Criterion 4 went from assumption to
   evidence — you have two LOIs at $49. Lowest now is criterion 5: the market math is still
   top-down. Next question is about that."_).
@@ -171,7 +177,7 @@ criterion with a real, cheap, scheduled test **passes the gate**. Hand-waving do
 When all 8 criteria are met (evidenced or test-attached) **and** the user confirms they are
 satisfied:
 
-- Flip frontmatter `status: validated`, set `pmf_gate: 8/8`, stamp `updated`.
+- Flip `status: validated`, set `pmf_gate: 8`, stamp `updated`.
 - Give a one-paragraph verdict: the sharpest version of who pays, for what, why you, and the one
   experiment that most de-risks the whole thing next.
 - Point onward: if the validation surfaced product changes, the build plan

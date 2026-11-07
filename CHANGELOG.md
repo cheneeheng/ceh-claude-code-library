@@ -11,6 +11,14 @@ before this repo live in
 
 ## 2026-11-07
 
+The business plan follows as a YAML format, the last of the spine files. Every skill of
+`ceh-business-plan` reads and edits `BUSINESS_PLAN.yaml` (`business-plan/v3`), checked against
+its model first, and `BUSINESS_PLAN.md` is rendered from it with every `§` number and the contents
+list, so `develop-business-plan` no longer renumbers headings after each specialist. A section
+missing, a seventh heading level, or `validated` below a full gate is now an error. An older
+Markdown plan moves to the YAML on the next run, with a `BUSINESS_PLAN.v2.md` backup, because
+`.agents_workspace/` is not in git. The HTML build still reads the rendered Markdown.
+
 The vision and strategy follow as YAML formats. `write-vision-and-strategy` saves `VISION.yaml`
 (`vision/v2`) and `STRATEGY.yaml` (`strategy/v2`) beside the Markdown each renders, and an adopted
 doc that still holds `[assumed]` is now an error, not a review finding. `ceh-vision-and-strategy`
@@ -62,7 +70,7 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 | `ceh-codebase-explanation`     | 1.3.0   |
 | `ceh-vision-and-strategy`      | 1.1.0   |
 | `ceh-blog`                     | 1.0.17  |
-| `ceh-business-plan`            | 1.1.15  |
+| `ceh-business-plan`            | 1.2.0   |
 | `ceh-competitor-analysis`      | 1.1.13  |
 | `ceh-documentation`            | 1.0.7   |
 | `ceh-git-workflow`             | 1.5.6   |

@@ -5,6 +5,9 @@ description: >-
   refuse, checked against nine tests, called by ceh-business-plan:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
+compatibility: >-
+  Checking and rendering BUSINESS_PLAN.yaml needs uv; without it the YAML is saved unchecked
+  and its Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -16,7 +19,8 @@ a rival cannot copy cheaply, and that visibly give something up. Done is a §04 
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. Read §02
+1. Check and read the plan's `BUSINESS_PLAN.yaml`, as the `business-plan/v3` section of
+   `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md` says, and render it after your edit. Read §02
    to §09 in full: strategy is a claim about how those sections fit.
 2. Answer three questions from the plan alone, one sentence each: what business is this, who is the
    customer, what does the customer value? (Peter Drucker's questions.) A question the plan cannot
@@ -84,8 +88,9 @@ pond, plus a statement of which source it intends to build first and what would 
 
 ## Output
 
-Written into §04 of `BUSINESS_PLAN.md`. On disk its headings carry nested numbers (see Numbering
-in the schema), so a re-run finds the subsection by its title:
+Written into §04 of `BUSINESS_PLAN.yaml` as one entry of `value_proposition.subsections`, with
+`owner: sharpen-strategy`, which a re-run finds by its title. Its parts are that entry's own
+`subsections`. Rendered, without the numbers the renderer adds:
 
 ```markdown
 ### Strategy
