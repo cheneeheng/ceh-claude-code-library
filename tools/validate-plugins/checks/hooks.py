@@ -346,17 +346,6 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             for a in ("qa", "performance", "security", "usability", "plan")
         )
     )
-    evs = {
-        "ok": good_ev,
-        "passing": good_ev.replace("status: passed", "status: passing"),
-        "no-schema": good_ev.replace("schema: evidence/v2\n", ""),
-    }
-    ev = {}
-    for name, text in evs.items():
-        folder = tmp / f"ev-{name}" / "product"
-        folder.mkdir(parents=True, exist_ok=True)
-        ev[name] = folder / "EVIDENCE.yaml"
-        ev[name].write_text(text, encoding="utf-8")
     stray = tmp / "notes" / "STRATEGY.yaml"
     stray.parent.mkdir(exist_ok=True)
     stray.write_text("key: value\n", encoding="utf-8")
@@ -364,24 +353,54 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     def write_at(p) -> dict:
         return {"tool_name": "Write", "tool_input": {"file_path": p.as_posix()}}
 
-    def ev_rendered() -> str | None:
-        md = ev["ok"].with_suffix(".md")
-        ok = md.is_file() and "| Tests | passed |" in md.read_text(encoding="utf-8")
-        return None if ok else "EVIDENCE.md was not rendered"
+    def spine_fixtures(
+        plugin: str, stem: str, good: str, bad: str, field: str, marker: str
+    ) -> list[dict]:
+        """One spine format's hooks in the plugin that owns it: render a valid file, block a bad
+        one naming `field`, report a missing schema key, leave plan YAML alone, warn without uv."""
+        files = {"ok": good, "bad": bad, "no-schema": good.split("\n", 1)[1]}
+        at = {}
+        for name, text in files.items():
+            folder = tmp / f"{stem}-{name}" / "product"
+            folder.mkdir(parents=True, exist_ok=True)
+            at[name] = folder / f"{stem}.yaml"
+            at[name].write_text(text, encoding="utf-8")
 
-    trh = "ceh-testing/artifact-render-hook.py"
-    evidence_fixtures = ([
-        {"script": trh, "stdin": write_at(ev["ok"]), "out": "", "after": ev_rendered},
-        {"script": trh, "stdin": write_at(ev["passing"]), "out": "runs.0.areas.tests.status"},
-        {"script": trh, "stdin": write_at(ev["no-schema"]), "out": "no 'schema:"},
+        def rendered() -> str | None:
+            md = at["ok"].with_suffix(".md")
+            ok = md.is_file() and marker in md.read_text(encoding="utf-8")
+            return None if ok else f"{stem}.md was not rendered"
+
+        rh = f"{plugin}/artifact-render-hook.py"
+        return ([
+            {"script": rh, "stdin": write_at(at["ok"]), "out": "", "after": rendered},
+            {"script": rh, "stdin": write_at(at["bad"]), "out": field},
+            {"script": rh, "stdin": write_at(at["no-schema"]), "out": "no 'schema:"},
+            # A plan plugin holds no model of this format, so the file is not its to check.
+            {"script": "ceh-check-build-against-plan/artifact-render-hook.py", "stdin": write_at(at["no-schema"]), "out": ""},
+        ] if have_uv else []) + [
+            {"script": rh, "stdin": write_at(at["bad"]), "env": no_uv, "out": "uv is not installed"},
+            {"script": f"{plugin}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+        ]  # fmt: skip
+
+    good_arch = (
+        "schema: architecture/v3\noverview:\n  bullets:\n    - It counts words.\n"
+        "  flow: |\n    flowchart LR\n        a --> b\ndiagrams: []\nkey_decisions: []\n"
+    )
+    evidence_fixtures = [
+        *spine_fixtures(
+            "ceh-testing", "EVIDENCE", good_ev,
+            good_ev.replace("status: passed", "status: passing"),
+            "runs.0.areas.tests.status", "| Tests | passed |",
+        ),
+        *spine_fixtures(
+            "ceh-codebase-explanation", "ARCHITECTURE", good_arch,
+            good_arch.replace("  bullets:\n    - It counts words.\n", "  bullets: []\n"),
+            "overview.bullets", "## 01. Overview",
+        ),
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
-        {"script": trh, "stdin": write("broken.yaml"), "out": ""},
-        # A plan plugin holds no evidence model, so an evidence YAML is not its to check.
-        {"script": "ceh-build-planning/artifact-render-hook.py", "stdin": write_at(ev["no-schema"]), "out": ""},
-    ] if have_uv else []) + [
-        {"script": trh, "stdin": write_at(stray), "env": no_uv, "out": ""},
-        {"script": trh, "stdin": write_at(ev["passing"]), "env": no_uv, "out": "uv is not installed"},
-        {"script": "ceh-testing/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+        *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
+        {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},
     ]  # fmt: skip
 
     # build-record-guard on a plan/v2 YAML: a new `event: Built Phase` entry needs the skill.

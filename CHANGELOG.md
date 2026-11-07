@@ -11,6 +11,12 @@ before this repo live in
 
 ## 2026-11-07
 
+The architecture document follows as the third YAML format. `document-architecture` saves
+`product/ARCHITECTURE.yaml` (`architecture/v3`), and `ARCHITECTURE.md` is rendered from it with
+its section numbers, Contents list and anchors generated, so no skill numbers headings by hand.
+`implement-from-plan` appends its Key Decisions entries to the YAML, and `ceh-codebase-explanation`
+gains the render hook and the generated-Markdown guard.
+
 The user approved the artifact-validation trial, and the evidence report is the first format to
 follow the build plan. `write-evidence-report` now saves `product/EVIDENCE.yaml` (`evidence/v2`),
 checked end to end by a pydantic model, and `product/EVIDENCE.md` is rendered from it in the layout
@@ -45,9 +51,10 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-build-planning`           | 1.2.8   |
-| `ceh-build-from-plan`          | 1.2.5   |
+| `ceh-build-from-plan`          | 1.2.6   |
 | `ceh-check-build-against-plan` | 1.1.5   |
 | `ceh-testing`                  | 1.6.0   |
+| `ceh-codebase-explanation`     | 1.3.0   |
 | `ceh-blog`                     | 1.0.17  |
 | `ceh-business-plan`            | 1.1.15  |
 | `ceh-competitor-analysis`      | 1.1.13  |

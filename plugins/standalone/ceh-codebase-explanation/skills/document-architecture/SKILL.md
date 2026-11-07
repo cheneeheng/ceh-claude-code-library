@@ -6,6 +6,9 @@ description: >-
   architecture doc", "diagram the system", "record this decision", "high-level overview".
 disable-model-invocation: false
 user-invocable: true
+compatibility: >-
+  Checking and rendering ARCHITECTURE.yaml needs uv; without it the file is saved unchecked and
+  its Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -32,8 +35,13 @@ gets the reasoning without opening every plan in `product/plans/`.
 - **Split a diagram when it stops reading cleanly**, not only when it stops fitting one screen:
   edges crossing or back-tracking, or more than about a dozen edges. Split by stage or subsystem,
   one numbered subsection each, and never shrink the labels to buy room.
-- **Number every section and open with a Contents list.** `01.`, `02.` on each `##`, `03.01` on
-  each `###`, and a linked `## Contents` after the title, per `references/architecture-schema.md`.
+- **Write the YAML, never the Markdown.** The document is `ARCHITECTURE.yaml` (`architecture/v3`),
+  and `ARCHITECTURE.md` is rendered from it with its numbers, Contents list and anchors, per
+  `references/architecture-schema.md`. Before an edit, run
+  `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <dir>/ARCHITECTURE.yaml` and stop
+  on exit 1 with its errors. After the last edit, run it with `render` and fix the YAML for each
+  error it lists. On exit 2 or 3, or without uv, say in the report that the file went unchecked
+  and unrendered. An `ARCHITECTURE.md` with no YAML beside it is moved first, as the schema says.
 - **Render every Mermaid block and look at the images before finishing**, per the last rule
   below. Crossing edges survive a read of the source and show only in the picture. When no
   renderer can run, say so in the report.
@@ -158,8 +166,9 @@ single home for decision rationale; record one whenever you choose a framework/r
 strategy, pick between fundamentally different patterns, plan a major dependency upgrade, or reverse
 a prior decision in a new version.
 
-Append entries to the numbered Key Decisions section at the bottom of `ARCHITECTURE.md`, newest last, in
-the entry shape of `assets/architecture.template.md`, per `references/architecture-schema.md`.
+Append entries to `key_decisions` in `ARCHITECTURE.yaml`, newest last, in the shape of
+`assets/architecture.template.yaml`, per `references/architecture-schema.md`. The rendered
+Markdown shows them as the numbered Key Decisions section at the bottom.
 
 - **Never delete a decision.** To change one, append a new entry and mark the old one
   `Superseded by <date title>`. The trail is the cross-version narrative.
@@ -168,12 +177,12 @@ the entry shape of `assets/architecture.template.md`, per `references/architectu
 
 ## Storage
 
-`product/ARCHITECTURE.md` in the target repo, committed, unless the repo's `CLAUDE.md` names another
-path. A new file starts as a copy of `assets/architecture.template.md`, and an existing one
-without its `schema:` line, or on an older version, is brought up to the template on the next update. Later planning reads it and a fresh clone must keep the decision trail, so it never lives in
-a git-ignored folder. `product/` holds the files the people and agents building the product read,
-and `docs/` is left to users of the product. When a `.agents_workspace/ARCHITECTURE.md` from an
-earlier version exists and `product/ARCHITECTURE.md` does not, move it there first and say so. For
-a large system, the diagram set may move to `product/architecture/` with one file per view, but the
-Overview and Key Decisions sections stay in `ARCHITECTURE.md` itself — the spine and the
-decision trail must remain readable and greppable in one place.
+`product/ARCHITECTURE.yaml` and the `ARCHITECTURE.md` rendered beside it, in the target repo,
+committed both, unless the repo's `CLAUDE.md` names another path. A new file starts as a copy of
+`assets/architecture.template.yaml`, and an older Markdown file is moved to the YAML on the next
+update. Later planning reads it and a fresh clone must keep the decision trail, so it never lives
+in a git-ignored folder. `product/` holds the files the people and agents building the product
+read, and `docs/` is left to users of the product. When a `.agents_workspace/ARCHITECTURE.md` from
+an earlier version exists and `product/ARCHITECTURE.md` does not, move it there first and say so.
+The whole document stays in the one YAML, so the spine, the diagrams and the decision trail are
+readable and greppable in one place.
