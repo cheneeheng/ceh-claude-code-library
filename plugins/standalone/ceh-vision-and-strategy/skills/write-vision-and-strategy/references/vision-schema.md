@@ -34,3 +34,30 @@ relative to this file. The `schema: vision/v1` line stays as written.
 
 `[assumed]` follows a statement of intent no source backs. It is the owner's to confirm or correct,
 and it never appears in an adopted file.
+
+## vision/v2: YAML with generated Markdown
+
+A `vision/v2` file is `VISION.yaml` beside the `VISION.md` it renders, a copy of
+`../assets/vision.template.yaml`. The Markdown is generated in the `v1` layout above and committed
+beside it: nobody edits it, and it opens with `generated_from: VISION.yaml` and a do-not-edit
+`generated_note`. The format in code is `vision-model.py` beside this file, and
+`scripts/artifact.py` in the skill checks and renders it through uv (`check <file>`, then
+`render <file>`). Exit `0` is valid, `1` lists each error with its field path, `2` is any other
+failure, and `3` means no model for that version.
+
+**Keys**, each required, and no other key allowed: `schema` (`vision/v2`), `status`, `updated`
+(an unquoted date), `identity` (`name`, `sentence`, which ends with its full stop and renders as
+"<name> is <sentence>", `is` as `trait` and `meaning`, `is_not`), `vision`, `scope` (`text`,
+`test`, `refuses`), `goals` (`goal`, `measure`), `non_goals` (`thing`, `reason`), `principles`
+(`name`, `rule`, `ask`, numbered by position), `conflicts` (`order` as `principle` and `protects`,
+each naming a principle in the list, and `example`), `gaps`, `extra_sections` (`title`, `body`)
+and `changing`. A trait, goal or non-goal renders in bold with a full stop after it, so write it
+without one. An empty `gaps` renders "No known gaps as of <updated>.", and an empty list is `[]`.
+`status: adopted` with `[assumed]` anywhere in the file is an error.
+
+`extra_sections` holds a section an existing file had that the template does not. It renders
+before Changing this file, so its old position is not kept.
+
+A `v1` `VISION.md`, or one with no `schema:` line, is moved on its next update: write `VISION.yaml`
+from it, render, and check `git diff --word-diff` on the Markdown before the update itself. The
+reply names the move and any line the diff shows changed.

@@ -35,3 +35,28 @@ written. Where this file and `VISION.md` disagree, the vision wins until it is c
 
 `[assumed]` follows a statement of intent no source backs. It is the owner's to confirm or correct,
 and it never appears in an adopted file.
+
+## strategy/v2: YAML with generated Markdown
+
+A `strategy/v2` file is `STRATEGY.yaml` beside the `STRATEGY.md` it renders, a copy of
+`../assets/strategy.template.yaml`. The Markdown is generated in the `v1` layout above and
+committed beside it: nobody edits it, and it opens with `generated_from: STRATEGY.yaml` and a
+do-not-edit `generated_note`. The format in code is `strategy-model.py` beside this file, and
+`scripts/artifact.py` in the skill checks and renders it through uv (`check <file>`, then
+`render <file>`). Exit `0` is valid, `1` lists each error with its field path, `2` is any other
+failure, and `3` means no model for that version.
+
+**Keys**, each required, and no other key allowed: `schema` (`strategy/v2`), `status`, `updated`
+(an unquoted date), `concept`, `parts` (`columns`, at least two, and `rows`, each as long as
+`columns`, so a repo can change the columns and keep one row per part), `work` (`rule`, `reason`,
+and `next` as `work` and `why`), `measuring`, `not_to_do` (`approach`, `reason`), `gaps`, `open`
+(`question`, `assumption`), `extra_sections` (`title`, `body`) and `changing`. A rule, work item,
+approach or question renders in bold, so write it with its own full stop where it needs one. An
+empty `gaps` renders "No known gaps as of <updated>.", an empty `open` renders `None`, and an empty
+list is `[]`. `status: adopted` with `[assumed]` anywhere in the file is an error.
+
+`extra_sections` holds a section an existing file had that the template does not. It renders
+before Changing this file, so its old position is not kept.
+
+A `v1` `STRATEGY.md`, or one with no `schema:` line, is moved on its next update, as for the
+vision: write the YAML from it, render, and check `git diff --word-diff` on the Markdown first.

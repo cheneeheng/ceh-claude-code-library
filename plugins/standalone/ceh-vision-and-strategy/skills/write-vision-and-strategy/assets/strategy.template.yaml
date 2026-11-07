@@ -1,0 +1,35 @@
+schema: strategy/v2
+status: <draft | adopted>
+updated: YYYY-MM-DD
+concept: |
+  <concept>
+parts:
+  columns: [Part, What it does, Takes, Passes on]
+  rows:
+    - [<part>, <job>, <input>, <output>]
+work:
+  rule: <work rule>
+  reason: |
+    <reason>
+  next:
+    - work: <work>
+      why: |
+        <why it comes first>
+measuring: |
+  <what is counted, and how>
+not_to_do:
+  - approach: <rejected approach>
+    reason: |
+      <reason>
+gaps:
+  - <gap>
+open:
+  - question: <question>
+    assumption: |
+      <assumption>
+extra_sections:
+  - title: <title>
+    body: |
+      <body>
+changing: |
+  <how a change lands>
