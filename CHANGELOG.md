@@ -56,6 +56,9 @@ its own reviewer instead of the skill, which reviews from a fresh context itself
 - `product/plans/registry-driven-copies.yaml`: the `copies` check compares only the whole-file
   copies `docs/CROSS_REFERENCES.md` registers, and fails drift, stale paths, malformed rows and
   unregistered identical copies. Reviewed from a fresh context, all 9 findings fixed.
+- `product/plans/render-read-during-replace.yaml`: a plan render survives reading the Markdown
+  while another render replaces it on Windows. Reviewed from a fresh context, all 4 findings
+  fixed.
 
 ### Changed
 
