@@ -12,8 +12,9 @@ paths:
 A handoff file one stage writes and another reads is checked by code, not only described: a YAML
 format with a pydantic model (`decision-output-templates.md`), checked by a PostToolUse hook on
 every write and by `artifact.py check` in each skill that reads it, with its Markdown generated
-and a PreToolUse guard denying hand edits to that Markdown. Each plugin that holds the format
-carries its own copy of the model, `artifact.py`, and the hooks. The build plan (`plan/v2`) is the
+and a PreToolUse guard denying hand edits to that Markdown. Each skill that reads the format
+carries its own copy of the model and `artifact.py`, and each plugin holding it keeps
+`artifact.py` and the hooks at its root for its hooks. The build plan (`plan/v2`) is the
 trial. Other formats follow only once the user approves it.
 
 Why: the user asked for handoff files that are deterministic and checkable

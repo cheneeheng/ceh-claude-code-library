@@ -17,7 +17,7 @@ written as a number.
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`. List
+1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. List
    every `[assumption]` tag. Those are the candidate causes of death.
 2. Set the scene and write it down: it is 18 months from today and the business has failed. Write
    five to seven failure stories, each a specific sequence of events with a cause and a month.

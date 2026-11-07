@@ -51,12 +51,11 @@ plugins/                      # All plugins — one directory per plugin, no tie
         ├── tests/                    # Optional — a mod's *.test.tsx, run by `claude plugin test`, not by validate.py
         ├── types/                    # Optional — a mod's state contract, named by plugin.json `types`
         ├── output-styles/            # Optional — output style .md files
-        ├── references/               # Optional — files shared by several skills of this plugin, read via ${CLAUDE_PLUGIN_ROOT}
-        ├── scripts/                  # Optional — hook scripts and shell helpers
+        ├── scripts/                  # Optional — scripts hooks and agents run; nothing else at the plugin root
         └── skills/
             └── <skill-name>/
                 ├── SKILL.md               # Required — frontmatter + full body, all content inline
-                └── references/            # Sparingly — see Skills below (same for assets/, scripts/)
+                └── references/            # Sparingly — see Skills below (same for assets/, scripts/); every file the skill uses lives here, copies included
 tools/
 ├── model-audit/               # README.md pointer only — the tools live in .claude/skills/model-audit/
 ├── skills-sync/               # Copies skills into a project's .claude/skills/ — py/sh/ps1/html, own README.md

@@ -16,7 +16,7 @@ which number to look at each week.
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`. Take the
+1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. Take the
    ranked risks from §12, the channel test from §09, and the cash-out month from §11.
 2. Choose the objectives, three at most. The first is whatever retires the top risk in §12. An
    objective that touches no risk and no revenue is cut. Andy Grove's rule for objectives was few

@@ -6,7 +6,7 @@ description: >-
   notes", "log this under unreleased", "what changed since the last release".
 disable-model-invocation: false
 user-invocable: true
-allowed-tools: Bash(python3 ${CLAUDE_PLUGIN_ROOT}/scripts/check-semver.py *)
+allowed-tools: Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/check-semver.py *)
 compatibility: >-
   Requires the git CLI on PATH and a git working tree, to read history since the last tag. The
   validator step needs Python 3 (stdlib only); without it, the changelog is checked by hand.
@@ -114,7 +114,7 @@ Run the bundled validator. `${CLAUDE_PLUGIN_ROOT}` is substituted with the plugi
 the path resolves wherever the plugin is installed:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/check-semver.py" CHANGELOG.md
+python3 "${CLAUDE_SKILL_DIR}/scripts/check-semver.py" CHANGELOG.md
 ```
 
 If the script cannot be located, scan `CHANGELOG.md` manually: verify all version headers match

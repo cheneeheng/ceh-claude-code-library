@@ -9,8 +9,8 @@ paths:
 
 # Output templates
 
-Every file a skill saves has a versioned template, `<schema>.template.md` in the skill's or the
-plugin's `assets/`, its frontmatter opening with `schema: <schema>/v<N>`. Each template has a
+Every file a skill saves has a versioned template, `<schema>.template.md` in the skill's
+`assets/`, its frontmatter opening with `schema: <schema>/v<N>`. Each template has a
 schema, `<schema>-schema.md` in the `references/` beside that `assets/` folder, which says where the
 file is saved, names the template as `../assets/<schema>.template.md`, and explains every field and
 section. The template is a bare skeleton: short placeholders (`<title>`) and choices as `<a | b>`,

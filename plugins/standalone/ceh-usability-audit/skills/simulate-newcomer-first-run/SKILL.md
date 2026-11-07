@@ -128,7 +128,7 @@ instead of a URL.
 
 #### The personas
 
-Read `${CLAUDE_PLUGIN_ROOT}/references/personas-and-severity.md` before dispatching. It holds the
+Read `${CLAUDE_SKILL_DIR}/references/personas-and-severity.md` before dispatching. It holds the
 five personas, each a constraint catching a distinct failure class, and the severity scale step 5
 ranks with. Run all five unless a surface makes one meaningless (`Small Screen` on a library API);
 skipping one is recorded as a skip, not omitted.
@@ -138,7 +138,7 @@ skipping one is recorded as a skip, not omitted.
 Severity comes from what actually happened to a walker, never from how bad something looks to
 you, so the report records observed outcomes instead of the auditor's preferences. Assign each stall one of the four
 severities (Blocker, Detour, Friction, Polish) by the conditions in
-`${CLAUDE_PLUGIN_ROOT}/references/personas-and-severity.md`.
+`${CLAUDE_SKILL_DIR}/references/personas-and-severity.md`.
 
 Anything you noticed but no walker stalled on is **not a finding**. It goes in a separate
 `Hypotheses` list, unranked, and never counts against the gate. Three measurements make the ranking

@@ -62,7 +62,7 @@ point at a glance, and the HTML page carries the same content as the Markdown.
 9. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" for the
    theme and its review pass. Use the Tidewater theme unless the user names another, copied once to
    `.agents_workspace/competitor-analysis/themes/<theme>.css` and linked from every page. Build
-   `<slug>.html` by filling `${CLAUDE_PLUGIN_ROOT}/references/report-page.html`, keeping its
+   `<slug>.html` by filling `${CLAUDE_SKILL_DIR}/references/report-page.html`, keeping its
    COMPETITOR-ONLY blocks: the hero from the summary line, verdict, and up to three headline
    counts, the Adopt now / Build / Skip board from section 1, the step strip from section 2, one
    expandable card per mechanism from section 3, the inventory bars from section 4, and one

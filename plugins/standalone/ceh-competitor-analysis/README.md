@@ -80,7 +80,7 @@ The plugin reads no environment variables.
 All output goes to `.agents_workspace/competitor-analysis/`: `<competitor>.md` and
 `<competitor>.html` per competitor, `comparison.md` and `comparison.html` for the comparison, and
 the shared theme stylesheet under `themes/` (Tidewater by default). The Markdown is the source; the
-HTML pages carry the same content, built from `references/report-page.html`, with detail folded
+HTML pages carry the same content, built from each skill's `references/report-page.html`, with detail folded
 into expandable cards. Each report states its snapshot date. Each one also says how
 every count was measured and whether each claim was read in the source or only claimed by the
 competitor. Nothing is marked verified, because the target is never run.

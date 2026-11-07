@@ -10,9 +10,11 @@ and `decision-invocation-flags.md`. This file explains how they are checked and 
 ## Skills
 
 `validate.py` (the `templates` check) rejects a template without its schema line or its schema
-file, a template that carries explanation, a template or schema no file in its plugin cites, a copy
-that differs from its twin in another plugin, and a skill whose `## Output` names a saved
-`.agents_workspace/` or `product/` file but cites no template.
+file, a template that carries explanation, a template or schema no file in its plugin cites, and a
+skill whose `## Output` names a saved `.agents_workspace/` or `product/` file but cites no
+template. The `copies` check rejects a bundled file that differs from a file at the same path in
+another skill folder, a plugin root holding `assets/` or `references/`, and a citation of either
+through `${CLAUDE_PLUGIN_ROOT}`.
 
 The two migrated catalog skills keep their bundled files for this reason.
 `ceh-ui-design:design-ui` carries two themes and `examples.md` under `references/`, and
@@ -27,9 +29,9 @@ touches.
 
 The allowed scaffold and script bundles are `ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent`
 `assets/`), `ceh-git-datastore` (`build-git-datastore`, `migrate-git-datastore` `references/` +
-`scripts/`), `ceh-business-plan` (the HTML generator in `scripts/`, with its page shell and
-`brand.css` in `assets/`), and each plugin carrying a YAML format's `<schema>-model.py` (its
-`scripts/artifact.py`, which checks and renders that format).
+`scripts/`), `ceh-business-plan` (`develop-business-plan`'s HTML generator in `scripts/`, with its
+page shell and `brand.css` in `assets/`), and each skill carrying a YAML format's
+`<schema>-model.py` (its `scripts/artifact.py`, which checks and renders that format).
 
 `validate.py` cannot check part of speech, so the naming rule is a review rule.
 

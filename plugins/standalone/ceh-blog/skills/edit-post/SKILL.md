@@ -16,7 +16,7 @@ license: Apache-2.0
 Diagnose an existing blog draft, then produce a full revised version that keeps the author's voice.
 Done means a short diagnosis followed by the complete revision, with one batch of feedback
 questions asked after. Every question this skill asks follows
-`${CLAUDE_PLUGIN_ROOT}/references/ask-the-author.md`: all at once, atomic, each with options. Read
+`${CLAUDE_SKILL_DIR}/references/ask-the-author.md`: all at once, atomic, each with options. Read
 that file before the first question.
 
 ## Procedure
@@ -199,7 +199,7 @@ Wait for their answers, then address what they raise specifically.
 > **Meta:** [~150-character description — the post's specific angle, not just the broad topic; readable without the title]
 ```
 
-**Where it goes:** if the draft came from a file, show the diagnosis in chat and write the revision back to that file, keeping its front matter and putting the meta description in the front matter's existing description field instead of the `> **Meta:**` line. A draft pasted into chat gets its revision in chat, also saved to `.agents_workspace/product/blog/<YYYY-MM-DD>-<slug>-edited.md`, the slug from the title in kebab case, filling `${CLAUDE_PLUGIN_ROOT}/assets/blog-draft.template.md`, per `${CLAUDE_PLUGIN_ROOT}/references/blog-draft-schema.md`, so the revision outlives the session.
+**Where it goes:** if the draft came from a file, show the diagnosis in chat and write the revision back to that file, keeping its front matter and putting the meta description in the front matter's existing description field instead of the `> **Meta:**` line. A draft pasted into chat gets its revision in chat, also saved to `.agents_workspace/product/blog/<YYYY-MM-DD>-<slug>-edited.md`, the slug from the title in kebab case, filling `${CLAUDE_SKILL_DIR}/assets/blog-draft.template.md`, per `${CLAUDE_SKILL_DIR}/references/blog-draft-schema.md`, so the revision outlives the session.
 
 ## Stop conditions
 

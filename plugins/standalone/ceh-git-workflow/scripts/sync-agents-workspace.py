@@ -31,7 +31,7 @@ from pathlib import Path
 WORKSPACE = ".agents_workspace"
 PREFIX = "ceh-ws/"
 # DECISION_LOG.md merge=union: two sessions appending to the log keep both sides' lines.
-UNION = Path(__file__).resolve().parent.parent / "assets" / "union.attributes"
+UNION = Path(__file__).resolve().parent / "union.attributes"
 
 
 def git(cwd, *args):

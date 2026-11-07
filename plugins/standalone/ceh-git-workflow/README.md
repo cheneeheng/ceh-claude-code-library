@@ -119,13 +119,13 @@ transcript, so it starts the skill itself. It fails open. `CEH_SKILL_STARTED_GUA
 
 ## Scripts
 
-| Script                             | Purpose                                                                                                                                                                                    |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `scripts/branch-guard.py`          | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                                                               |
-| `scripts/sync-agents-workspace.py` | `SessionStart`, `PostToolUse` (`EnterWorktree`), `Stop` and `SessionEnd` hook: a git worktree of `.agents_workspace` in each worktree, merged back (see [Workspace sync](#workspace-sync)) |
-| `scripts/skill-started-guard.py`   | `PreToolUse` hook: deny a commit, changelog or README edit until its skill was started (see [Skill-started guard](#skill-started-guard))                                                   |
-| `scripts/check-semver.py`          | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                                                        |
+| Script                                            | Purpose                                                                                                                                                                                    |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `scripts/branch-guard.py`                         | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                                                               |
+| `scripts/sync-agents-workspace.py`                | `SessionStart`, `PostToolUse` (`EnterWorktree`), `Stop` and `SessionEnd` hook: a git worktree of `.agents_workspace` in each worktree, merged back (see [Workspace sync](#workspace-sync)) |
+| `scripts/skill-started-guard.py`                  | `PreToolUse` hook: deny a commit, changelog or README edit until its skill was started (see [Skill-started guard](#skill-started-guard))                                                   |
+| `skills/update-changelog/scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                                                        |
 
 ```bash
-python3 scripts/check-semver.py CHANGELOG.md
+python3 skills/update-changelog/scripts/check-semver.py CHANGELOG.md
 ```

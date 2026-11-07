@@ -65,7 +65,7 @@ Each run writes to the target project, not this repo:
 
 The folder name sorts by start time and carries the session ID, which also names the transcript
 at `~/.claude/projects/<project>/<session-id>.jsonl`. At the close of a run,
-`scripts/token_usage.py` reads that transcript and its subagent transcripts and writes the token
+each skill's `scripts/token_usage.py` reads that transcript and its subagent transcripts and writes the token
 counts by model, from the run's start time on, into `run.md`. `scripts/dispatch_ledger.py` reads
 the same transcript and writes the Ledger: every dispatch with its model, mode, and brief length,
 every resume and report, and every project edit the main session made itself. The session writes
@@ -73,8 +73,8 @@ no Ledger lines while the run is open, because each edit is one more step that r
 context. You can run both by hand on any session:
 
 ```bash
-python scripts/token_usage.py <session-id> [--since 2026-10-09T14:02:11Z]
-python scripts/dispatch_ledger.py <session-id> [--since 2026-10-09T14:02:11Z]
+python skills/orchestrate/scripts/token_usage.py <session-id> [--since 2026-10-09T14:02:11Z]
+python skills/orchestrate/scripts/dispatch_ledger.py <session-id> [--since 2026-10-09T14:02:11Z]
 ```
 
 The skills never commit. If `.agents_workspace/` is not git-ignored in the target project, add it,

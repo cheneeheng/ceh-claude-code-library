@@ -15,19 +15,19 @@ a removed plugin loses its row.
 | Plugin                         | Version | Changed in   |
 | ------------------------------ | ------- | ------------ |
 | `ceh-ag-ui`                    | 1.1.4   | `2026-10-23` |
-| `ceh-blog`                     | 1.0.16  | `2026-10-23` |
+| `ceh-blog`                     | 1.0.17  | `2026-11-07` |
 | `ceh-build-from-plan`          | 1.2.3   | `2026-11-07` |
 | `ceh-build-planning`           | 1.2.6   | `2026-11-07` |
-| `ceh-business-plan`            | 1.1.14  | `2026-11-02` |
+| `ceh-business-plan`            | 1.1.15  | `2026-11-07` |
 | `ceh-check-build-against-plan` | 1.1.3   | `2026-11-07` |
 | `ceh-codebase-explanation`     | 1.2.10  | `2026-10-26` |
 | `ceh-coding-conduct`           | 2.4.0   | `2026-10-28` |
-| `ceh-competitor-analysis`      | 1.1.12  | `2026-10-28` |
-| `ceh-documentation`            | 1.0.6   | `2026-10-26` |
+| `ceh-competitor-analysis`      | 1.1.13  | `2026-11-07` |
+| `ceh-documentation`            | 1.0.7   | `2026-11-07` |
 | `ceh-every-session`            | 2.8.21  | `2026-11-06` |
 | `ceh-git-datastore`            | 1.0.6   | `2026-10-15` |
-| `ceh-git-workflow`             | 1.5.5   | `2026-11-06` |
-| `ceh-orchestration-lab`        | 1.0.6   | `2026-10-22` |
+| `ceh-git-workflow`             | 1.5.6   | `2026-11-07` |
+| `ceh-orchestration-lab`        | 1.0.7   | `2026-11-07` |
 | `ceh-python-library`           | 1.0.4   | `2026-10-15` |
 | `ceh-python-service`           | 1.1.4   | `2026-10-15` |
 | `ceh-security-audit`           | 1.0.6   | `2026-10-23` |
@@ -36,8 +36,8 @@ a removed plugin loses its row.
 | `ceh-session-to-skill`         | 1.0.2   | `2026-10-16` |
 | `ceh-testing`                  | 1.5.3   | `2026-11-06` |
 | `ceh-ui-design`                | 1.0.10  | `2026-11-02` |
-| `ceh-usability-audit`          | 1.1.10  | `2026-10-23` |
+| `ceh-usability-audit`          | 1.1.11  | `2026-11-07` |
 | `ceh-vision-and-strategy`      | 1.0.0   | `2026-11-02` |
 | `ceh-web-frontend`             | 1.3.4   | `2026-10-16` |
-| `ceh-workflow-builder`         | 1.3.11  | `2026-10-23` |
-| `ceh-workflow-runner`          | 1.0.9   | `2026-10-23` |
+| `ceh-workflow-builder`         | 1.3.12  | `2026-11-07` |
+| `ceh-workflow-runner`          | 1.0.10  | `2026-11-07` |

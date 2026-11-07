@@ -34,8 +34,8 @@ The plugin reads no environment variables and installs no docs framework.
 ## What it produces
 
 Markdown under `docs/` in one fixed format, whichever skill writes the page. The format lives in
-`references/docs-standard.md`, which lives once at the plugin root and is read by the four writing
-skills through `${CLAUDE_PLUGIN_ROOT}`:
+`references/docs-standard.md`, copied into each of the four writing skills, which read their own
+copy through `${CLAUDE_SKILL_DIR}`:
 
 - **Layout**: `docs/index.md` front page, site-level `why.md` / `migration.md`, and the sections
   `guide/` (the user's tasks), `operations/` (the operator's runbook), `concepts/`, `reference/`,

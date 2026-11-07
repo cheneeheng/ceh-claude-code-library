@@ -11,7 +11,7 @@ run state for resume, and the `FLOW STATUS:` line. As Claude Code covers one of
 those, that part of the runner goes.
 
 The `flow.yaml` contract is in
-[references/flow-config-schema.md](references/flow-config-schema.md), a
+[skills/run-agentic-workflow/references/flow-config-schema.md](skills/run-agentic-workflow/references/flow-config-schema.md), a
 word-for-word copy of the builder's. How build and run fit together, and the
 tests behind the headless and dynamic-workflow design, are in the builder's
 [docs/ARCHITECTURE.md](../ceh-workflow-builder/docs/ARCHITECTURE.md) and

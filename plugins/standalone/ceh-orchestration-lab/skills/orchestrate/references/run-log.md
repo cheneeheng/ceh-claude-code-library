@@ -4,7 +4,7 @@ Every run of an orchestration-lab skill leaves one folder in the target project,
 compare strategies across real tasks later and turn a run's base commit into a benchmark fixture.
 The log is the point of the experiment: a run without it is lost data.
 
-All paths below are relative to the target project root. `<session id>` and `<plugin root>` are
+All paths below are relative to the target project root. `<session id>` and `<skill folder>` are
 the values the calling skill states at its top: this file is read, not loaded, so Claude Code
 substitutes no variables in it.
 
@@ -46,9 +46,9 @@ abandoned.
 1. Record the end state: `git rev-parse HEAD` is the end SHA. Save `git diff <base sha>` to
    `final.diff` in the run folder and list new untracked files under Notes. Do not commit: the
    user decides what lands.
-2. Run `python <plugin root>/scripts/token_usage.py <session id> --since <started>` and paste its table under Token usage. It covers this session and its subagents from the
+2. Run `python <skill folder>/scripts/token_usage.py <session id> --since <started>` and paste its table under Token usage. It covers this session and its subagents from the
    start of the run. If it fails, write the error there instead.
-3. Run `python <plugin root>/scripts/dispatch_ledger.py <session id> --since <started>` and paste
+3. Run `python <skill folder>/scripts/dispatch_ledger.py <session id> --since <started>` and paste
    its output under Ledger: one line per dispatch, resume, report, and project edit this session
    made itself. If it fails, write the error there instead.
 4. Fill Finished, End, Outcome (`solved`, `partial`, `failed`, or `abandoned`, plus one line on

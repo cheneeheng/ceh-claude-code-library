@@ -25,7 +25,7 @@ this moment has run and the plan's frontmatter agrees with its content.
 
 1. Find the plan: `.agents_workspace/product/business/BUSINESS_PLAN.md`, else Glob `**/BUSINESS_PLAN.md`
    (schema, and what to do with a plan at the old path, in
-   `${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`). When several exist, ask which one.
+   `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`). When several exist, ask which one.
 2. No plan exists → Invoke the Skill tool with skill="ceh-business-plan:find-product-market-fit",
    whatever was asked. It drafts from app plans or supplied material before asking anything. When
    the user asked for a different specialist, say in one line that it needs a plan first. The one
@@ -38,7 +38,7 @@ this moment has run and the plan's frontmatter agrees with its content.
    `status: draft`. Set `updated` to today.
 5. Renumber every heading below h2 and rewrite the `**Contents**` list from the headings, per
    "Numbering and contents" in the schema. A v1 plan gets both now and moves to v2.
-6. Rebuild the HTML: `node ${CLAUDE_PLUGIN_ROOT}/scripts/build-plan-html.cjs <plan path>`, which
+6. Rebuild the HTML: `node ${CLAUDE_SKILL_DIR}/scripts/build-plan-html.cjs <plan path>`, which
    writes `BUSINESS_PLAN.html` next to the plan. When Node is missing or the run fails, say so in
    one line and go on: the markdown is the source.
 7. Report in one or two lines what changed, the HTML's path, and which specialist the result

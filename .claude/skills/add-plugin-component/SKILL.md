@@ -76,10 +76,11 @@ placeholder, then delete the `TEMPLATE-GUIDANCE` comment. Content stays inline. 
 for two cases only: a schema shared by several skills and a standard too large to inline. The
 output template of every file the skill saves, `<schema>.template.md` opening with
 `schema: <schema>/v<N>`, goes in `assets/`, and its schema, `<schema>-schema.md`, in the
-`references/` beside it (see `.claude/rules/decision-output-templates.md`). A file shared by
-skills of the same plugin goes once in `plugins/standalone/ceh-<plugin>/references/` (or `assets/`),
-cited as `${CLAUDE_PLUGIN_ROOT}/references/<file>`. A file used by one skill goes in that skill's
-own `references/` (or `assets/`), cited as `${CLAUDE_SKILL_DIR}/references/<file>`.
+`references/` beside it (see `.claude/rules/decision-output-templates.md`). Every file the skill
+reads, copies or runs goes in its own `references/`, `assets/` or `scripts/`, cited as
+`${CLAUDE_SKILL_DIR}/<folder>/<file>`. A file several skills need is copied into each and
+registered in `docs/CROSS_REFERENCES.md`, and the `copies` check keeps the copies identical. Never
+add `assets/` or `references/` at the plugin root: `validate.py` fails it.
 
 **Agent** — copy `${CLAUDE_SKILL_DIR}/assets/agent.template.md` to
 `plugins/standalone/ceh-<plugin>/agents/<name>.md`, `name` matching the file name. Auto-delegation is driven
@@ -131,7 +132,7 @@ the same job:
 | `context: fork`            | Heavy, self-contained task skills                                                            | The subagent does **not** see the conversation and runs in the background with the reduced tool set below. Set `background: false` if a step needs a tool outside it |
 | `argument-hint`            | Skills the user invokes as `/name <arg>`                                                     | Cosmetic but free                                                                                                                                                    |
 | `${CLAUDE_SKILL_DIR}`      | Referencing a file bundled with the skill                                                    | Substituted in the body _and_ in `allowed-tools` Bash rules                                                                                                          |
-| `${CLAUDE_PLUGIN_ROOT}`    | Referencing a plugin-level script or `references/` file shared by several skills             | Substituted in plugin skill bodies and `allowed-tools`, not in project skills                                                                                        |
+| `${CLAUDE_PLUGIN_ROOT}`    | Referencing a plugin-level hook or agent script                                              | Substituted in plugin skill bodies and `allowed-tools`, not in project skills                                                                                        |
 | `memory`                   | Agents that should learn across sessions                                                     | Auto-enables Read/Write/Edit on that agent                                                                                                                           |
 | `compatibility`            | Skills that need software the machine may lack (`git`, `gh`, `uv`, `bun`, a server, network) | `>-` scalar, max 500 chars. Name runtime + minimum version and what fails without it. Omit for read-files-emit-Markdown skills                                       |
 

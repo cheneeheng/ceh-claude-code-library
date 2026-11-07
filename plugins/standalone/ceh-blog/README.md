@@ -35,7 +35,7 @@ and where they save the new post.
 
 Whenever a skill interviews you or asks for feedback, it sends every question at once, numbered,
 each about one topic and each with lettered options. Answer them in one reply, for example
-`1B, 2A, 3 Other: ...`. The rules live in `references/ask-the-author.md`.
+`1B, 2A, 3 Other: ...`. The rules live in `references/ask-the-author.md`, copied into each of the three skills.
 
 The skills also load automatically when a request clearly matches ("help me write a blog post about
 this repo", "turn these notes into a post", "edit this draft", "make a thread from this"), but

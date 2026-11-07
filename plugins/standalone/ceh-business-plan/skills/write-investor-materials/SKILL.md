@@ -17,7 +17,7 @@ and the ask states the amount, the months of runway it buys, and the milestones 
 
 ## Procedure
 
-1. Read the plan, schema in `${CLAUDE_PLUGIN_ROOT}/references/business-plan-schema.md`. Check the
+1. Read the plan, schema in `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md`. Check the
    frontmatter: `status: validated` and `pmf_gate: 8/8`. Anything less, stop (see Stop
    conditions).
 2. Write the one-liner: who it is for, what it does for them, and the one number that proves
