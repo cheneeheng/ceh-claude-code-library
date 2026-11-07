@@ -1,8 +1,8 @@
 """artifact-models: each YAML format's `<name>-model.py` sits beside its `<name>-schema.md`, with
-`../assets/<name>.template.yaml`, and every copy of a model, of `artifact.py`, and of the two
-artifact hooks is byte-identical across plugins. With uv, each template's keys must also be
-exactly its model's, through `model_vs_template.py`, and each `product/plans/*.yaml` must pass
-`artifact.py check`, so its generated Markdown is not stale."""
+`../assets/<name>.template.yaml`, and a plugin carrying a model ships `artifact.py` and the two
+artifact hooks (the `copies` check keeps their copies identical). With uv, each template's keys
+must also be exactly its model's, through `model_vs_template.py`, and each `product/plans/*.yaml`
+must pass `artifact.py check`, so its generated Markdown is not stale."""
 
 from __future__ import annotations
 
@@ -10,7 +10,6 @@ import os
 import shutil
 import subprocess
 import sys
-from collections import defaultdict
 
 from common import REPO, fail, main, plugin_dirs, rel
 
@@ -20,7 +19,6 @@ SHARED_SCRIPTS = ("artifact.py", "artifact-render-hook.py", "generated-md-guard.
 
 
 def check() -> None:
-    copies = defaultdict(list)
     for d in plugin_dirs():
         models = sorted(d.glob("**/references/*" + MODEL_SUFFIX))
         for model in models:
@@ -29,19 +27,10 @@ def check() -> None:
                 fail(rel(model), f"no {name}-schema.md beside it")
             if not (model.parent.parent / "assets" / f"{name}.template.yaml").is_file():
                 fail(rel(model), f"no ../assets/{name}.template.yaml")
-            copies[model.name].append(model)
         for script in SHARED_SCRIPTS:
             path = d / "scripts" / script
-            if path.is_file():
-                copies[script].append(path)
-            elif models:
+            if models and not path.is_file():
                 fail(rel(d), f"carries a model but no scripts/{script}")
-
-    for name, paths in copies.items():
-        first = paths[0].read_bytes()
-        for other in paths[1:]:
-            if other.read_bytes() != first:
-                fail(rel(other), f"differs from its copy {rel(paths[0])}")
 
     # Comparing a template with its model needs pydantic, so it runs through uv: skipped without
     # uv, as shellcheck is in checks/scripts.py, but required in CI, which installs it.

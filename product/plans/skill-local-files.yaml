@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Every file a skill needs lives in the skill's own folder, and copies are checked byte for byte
-status: ready
+status: building
 created: 2026-11-07
 goal: |
   Every file a skill reads, copies or runs (its templates, schemas, models, reference files and
@@ -191,7 +191,11 @@ phases:
       rerun: it exits 1 with a `copies` error naming that file and its two other copies, in
       `ceh-build-planning/references/` and `ceh-build-from-plan/skills/implement-from-plan/references/`.
       Revert.
-    status: todo
+    status: done
+    evidence: |
+      `python tools/validate-plugins/validate.py`: "OK: all plugin checks passed"; with one byte
+      appended to the check-build-against-plan copy, `[copies]` failed naming it and the other two
+      copies; reverted, OK again.
   - name: The plan plugins in the new layout
     builds: |
       The `ceh-build-planning` and plan-skill moves from Design, What moves where, the SKILL.md
@@ -237,3 +241,8 @@ record:
   - date: 2026-11-07
     event: PR
     details: "#211 https://github.com/cheneeheng/ceh-claude-code-library/pull/211"
+  - date: 2026-11-07
+    event: Built Phase
+    phase: 1
+    details: |
+      validate.py OK, and red on a one-byte change naming all three plan-schema.md copies

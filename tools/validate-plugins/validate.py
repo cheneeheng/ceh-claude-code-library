@@ -38,6 +38,7 @@ CHECKS = [
     "hooks",
     "templates",
     "artifact_models",
+    "copies",
 ]
 
 

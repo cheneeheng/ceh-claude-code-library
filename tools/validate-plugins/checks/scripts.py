@@ -1,4 +1,5 @@
-"""scripts: *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile.
+"""scripts: *.sh pass `bash -n` (+ shellcheck if available); *.py pass py_compile, in a plugin's
+`scripts/` and in each skill's `scripts/`.
 
 `bash` and `shellcheck` are used when present and skipped otherwise, so a missing tool never causes
 a false failure. CI runs both: GitHub-hosted Ubuntu runners ship them.
@@ -22,7 +23,10 @@ def check() -> None:
         return subprocess.run(cmd, capture_output=True, text=True, cwd=REPO)
 
     for d in plugin_dirs():
-        for script in sorted((d / "scripts").glob("*")):
+        # A skill's own scripts/ too, since bundled scripts live in the skill that runs them.
+        for script in sorted(
+            [*(d / "scripts").glob("*"), *d.glob("skills/*/scripts/*")]
+        ):
             where = rel(script)
             if script.suffix == ".sh":
                 if have_bash:

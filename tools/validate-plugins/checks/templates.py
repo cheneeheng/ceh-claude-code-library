@@ -1,12 +1,11 @@
-"""templates: every output template declares its versioned schema, is cited by its plugin, has a
-cited schema file beside it, and matches its copies in other plugins; a skill whose Output section
-names a saved file cites a template."""
+"""templates: every output template declares its versioned schema, is cited by its plugin, and has
+a cited schema file beside it; a skill whose Output section names a saved file cites a template.
+That copies match is the `copies` check's job."""
 
 from __future__ import annotations
 
 import re
 import sys
-from collections import defaultdict
 
 from common import fail, main, plugin_dirs, rel, skill_files
 
@@ -38,7 +37,6 @@ def output_section(text: str) -> str:
 
 
 def check() -> None:
-    by_name = defaultdict(list)
     for d in plugin_dirs():
         templates = sorted(t for s in SUFFIXES for t in d.rglob("*" + s))
         cited = "\n".join(
@@ -66,7 +64,6 @@ def check() -> None:
                 fail(where, "templates live in an assets/ folder")
             if t.name not in cited:
                 fail(where, "no skill, agent, or reference file in its plugin cites it")
-            by_name[t.name].append(t)
             schema = t.parent.parent / "references" / (stem + SCHEMA_SUFFIX)
             if not schema.is_file():
                 fail(where, f"no schema file {rel(schema)}")
@@ -78,13 +75,6 @@ def check() -> None:
                     rel(schema),
                     "no skill, agent, or other reference file in its plugin cites it",
                 )
-            by_name[schema.name].append(schema)
-
-    for name, copies in by_name.items():
-        first = copies[0].read_bytes()
-        for other in copies[1:]:
-            if other.read_bytes() != first:
-                fail(rel(other), f"differs from its copy {rel(copies[0])}")
 
     for skill in skill_files():
         text = skill.read_text(encoding="utf-8")
