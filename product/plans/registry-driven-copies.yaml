@@ -135,3 +135,6 @@ record:
     event: Built Phase
     phase: 1
     details: copies OK with 64 pairs; drift, stale, unregistered, malformed fail; different passes
+  - date: 2026-11-07
+    event: PR
+    details: "#217 https://github.com/cheneeheng/ceh-claude-code-library/pull/217"

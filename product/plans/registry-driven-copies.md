@@ -120,5 +120,6 @@ None
   Check (b) renames the file, giving malformed and unregistered, not stale)
 - 2026-11-07 PR: #216 https://github.com/cheneeheng/ceh-claude-code-library/pull/216
 - 2026-11-07 Built Phase 1: copies OK with 64 pairs; drift, stale, unregistered, malformed fail; different passes
+- 2026-11-07 PR: #217 https://github.com/cheneeheng/ceh-claude-code-library/pull/217
 
 <!-- prettier-ignore-end -->
