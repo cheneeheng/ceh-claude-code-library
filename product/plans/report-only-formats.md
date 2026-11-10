@@ -283,7 +283,9 @@ was checked.
 - **Builds:** One plan per format for the workflow spec, run state, competitor report, glossary, blog voice
   and repeat-mistake report, each with its reader named.
 - **Check:** Planned once Phases 1 to 3 are judged.
-- **Status:** unplanned
+- **Status:** unplanned. The workflow spec is planned and built by `product/plans/workflow-spec-yaml.yaml`
+  (`workflow-spec/v2`). The phase stays `unplanned` until the run state, competitor report,
+  glossary, blog voice and repeat-mistake report are planned.
 
 ## Open
 

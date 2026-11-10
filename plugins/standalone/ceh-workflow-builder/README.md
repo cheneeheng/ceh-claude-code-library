@@ -47,8 +47,9 @@ so a user who has nothing written down can still start there.
 ### `interview-workflow-task`
 
 Pulls the task out of the user's head and onto disk as
-`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.md`, under nine fixed headings
-the builder gates on by name. Records unanswered questions as unanswered
+`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.yaml` (`workflow-spec/v2`), nine
+fixed rows checked by a model, with the Markdown rendered beside it under the
+nine headings the builder gates on by name. Records unanswered questions as unanswered
 rather than as "none" — questions 8 (which steps damage something if run
 twice) and 9 (which steps are irreversible) are the two people skip, and
 assuming them empty is what produces a workflow with no re-run guard that
@@ -92,6 +93,20 @@ Two variables on purpose. Building one workflow must not collide with running
 another. Each run gets its own `<run-dir>/<name>/<run-id>/`, so a second run
 never reads the first one's artifacts, and that directory is expected to be
 git-ignored.
+
+## Hooks
+
+Two hooks on `Edit|Write|MultiEdit`, both Python scripts that need `python3`
+on `PATH`:
+
+- `artifact-render-hook.py` (PostToolUse) checks a written workflow spec YAML
+  against its model and renders its Markdown. The check needs `uv`; without
+  it the agent is told once per session that the spec went unchecked.
+- `generated-md-guard.py` (PreToolUse) denies a hand edit to the generated
+  Markdown, which the next render would overwrite.
+
+`CEH_ARTIFACT_CHECK=off` turns both off, and `CEH_DISABLED_HOOKS` turns off
+either by name.
 
 ## Packaging a generated workflow as a plugin
 

@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: workflow-spec-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from workflow-spec-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The workflow spec as a YAML format, workflow-spec/v2
-status: ready
+status: built
 created: 2026-11-10
 ---
 
@@ -194,7 +194,20 @@ rows by key and state.
   `workflow-spec/v2` file and block a bad one through the `ceh-workflow-builder` render hook,
   print "uv is not installed" without uv, and have its guard deny an edit to a generated `.md`,
   prints "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, The scratchpad `ship-digest-workflow-spec.yaml` rendered with exit 0, its nine headings
+  matching `workflow-spec.template.md`, with one `Declined:`, `Assumed:` and `Unanswered:` row
+  each. The missing proof step, `from: 3` on step 2, the `moment` assumption, `proof` under an
+  unanswered `procedure` and the extra key each exited 1 naming that row or key. The hand-converted
+  `ticket-survey` spec passed `artifact.py check` (exit 0) in both skills. Every `git grep -F`
+  matched, the four format copies share md5s in pairs, the union fixture fails against the old
+  `model_vs_template.py`, and `python tools/validate-plugins/validate.py` printed "OK: all
+  plugin checks passed". `docs/GETTING_STARTED.md` was not changed: its hook-requirements line lists only the core
+  plugins installed first, and `ceh-workflow-builder` is a per-stage plugin, so naming it there
+  would be wrong. The root README's prerequisites line names the workflow spec. Converting the
+  `ticket-survey` spec showed its `v1` tooling answer names no step, so it became `unanswered`
+  with the `v1` words quoted, as Design "Files and paths" says. The fixtures also showed that an
+  unquoted `?` or comma inside a `{...}` flow mapping breaks the YAML, so the schema's Quoting
+  rule names both.
 
 ## Open
 
@@ -211,5 +224,9 @@ rows by key and state.
   teaching model_vs_template.py to pick a oneOf branch by `state`, with a fixture, and the 10
   advisory as the review recommended
 - 2026-11-10 PR: #241 https://github.com/cheneeheng/ceh-claude-code-library/pull/241
+- 2026-11-10 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-10 Checked: 17 Built (5 In, 7 Design, 4 Out absent, 1 phase Check rerun), 1 Deviation (In upkeep:
+  `docs/GETTING_STARTED.md` unchanged, its hook line lists only core plugins, recorded in the
+  phase note), 0 Gap, 0 Extra, 0 Failing, 0 Cannot verify
 
 <!-- prettier-ignore-end -->

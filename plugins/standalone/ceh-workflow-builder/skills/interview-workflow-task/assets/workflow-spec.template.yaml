@@ -1,0 +1,52 @@
+schema: workflow-spec/v2
+name: <name>
+date: YYYY-MM-DD
+moment:
+  state: answered
+  answer: <moment>
+procedure:
+  state: answered
+  steps:
+    - n: 1
+      step: <step>
+proof:
+  state: answered
+  steps:
+    - n: 1
+      before: <precondition>
+      by: <command | file | human>
+      check: <check>
+data_flow:
+  state: answered
+  starts_from: <run input>
+  steps:
+    - n: 1
+      reads:
+        - artifact: <artifact>
+          from: <step n | run start>
+      leaves:
+        - <artifact>
+tooling:
+  state: answered
+  steps:
+    - n: 1
+      needs:
+        - <need>
+done:
+  state: answered
+  answer:
+    - <what is true at the end>
+interruption:
+  state: answered
+  answer: <one sitting | resumable>
+rerun_unsafe:
+  state: answered
+  steps:
+    - n: 1
+      why: <damage on a second run>
+  note: <ordering hazard, see proof>
+irreversible:
+  state: answered
+  steps:
+    - n: 1
+      effect: <outside effect>

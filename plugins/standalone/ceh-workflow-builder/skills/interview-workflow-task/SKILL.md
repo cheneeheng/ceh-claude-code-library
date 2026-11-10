@@ -7,6 +7,10 @@ description: >-
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
+compatibility: >-
+  Checking and rendering the spec needs uv (https://docs.astral.sh/uv/), which runs
+  scripts/artifact.py with pydantic. Without it the spec YAML is still written, but it goes
+  unchecked and its Markdown is not rendered, and the reply says so.
 ---
 
 # Interview a workflow task
@@ -30,18 +34,23 @@ small to ask them.
 
 1. Read the spec file and this conversation, then label every row (Start from what already exists).
 2. Ask only about the rows that fail, using the nine questions below and the rules under How to ask.
-3. Record each answer under its fixed heading in the spec file (see Output).
+3. Record each answer in its fixed row of the spec file (see Output).
 4. Check the file against Done when, then hand off.
 
 ### Start from what already exists
 
 **Read the spec file first if there is one**, along with anything the user already said in this
-conversation. Then label every row before asking anything: each of the nine headings, and each
-numbered step under 3, gets `ok`, `gate`, or `fails` plus the reason. Label the rows that look
-fine too — the one that gets missed is the second soft proof in a section whose first one already
-caught your eye. Ask only about the `fails` rows, and open by naming the ones you are skipping so
-the user can correct you. Then amend those headings in place — never rewrite the file from scratch,
-or you drop the answers that arrived before you did.
+conversation. A `<name>-workflow-spec.yaml` is checked first with
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml`, then read by key. On
+exit 1, fix the errors it lists, unless the only error is a stale `.md`: then run `render` and go
+on. A `.md` with no `.yaml` beside it is a `v1` spec, converted on the first write (see Output).
+
+Then label every row before asking anything: each of the nine rows, and each numbered step under
+3, gets `ok`, `gate`, or `fails` plus the reason. Label the rows that look fine too — the one that
+gets missed is the second soft proof in a section whose first one already caught your eye. Ask
+only about the `fails` rows, and open by naming the ones you are skipping so the user can correct
+you. Then amend those rows in place — never rewrite the file from scratch, or you drop the answers
+that arrived before you did.
 
 Arriving from `build-agentic-workflow` is the common case, and it arrives precisely because some
 rows failed. Re-asking all nine there is the failure mode this section prevents.
@@ -74,10 +83,10 @@ rows failed. Re-asking all nine there is the failure mode this section prevents.
 ### Done when
 
 Check this the way you opened — row by row against the file as written, not against your memory of
-what you fixed. Every one of the nine headings exists with an answer or an explicit `Declined`
-under it, question 1's answer is a moment, every proof under 3 is either something a command or a
-file check can settle or a declared human go/no-go gate, and every artifact read under 4 names the
-step that produces it.
+what you fixed. `artifact.py check` exits 0, every one of the nine rows is `answered` or
+`declined`, question 1's answer is a moment, and every proof under 3 is something a command or a
+file check can settle or a declared human go/no-go gate (`by: human`). The check already enforces
+that every artifact read under 4 names the step that produces it.
 
 ## Rules
 
@@ -97,7 +106,7 @@ step that produces it.
   re-run guard, silence on 9 becomes one that publishes without pausing, and a guessed 4 becomes one
   whose steps hand each other data the user never said they hand.
 - **A decline is not a gap.** When the user says they do not know or will not answer — most often
-  on 8 or 9 — write `Declined` under that heading with their words, and stop asking. Re-asking a
+  on 8 or 9 — set that row to `state: declined` with their `words`, and stop asking. Re-asking a
   declined question is how the interview and the builder's intake gate bounce off each other
   forever. The builder has a conservative fallback for a declined row; it has none for a missing
   one, which is why the two are recorded differently.
@@ -112,20 +121,32 @@ step that produces it.
 
 ### Where the spec goes
 
-`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.md`, defaulting to `.agents_workspace/workflow/`. Use a
-provisional slug until the name is settled, then rename the file — otherwise a second interview
-overwrites the first one's spec.
+`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.yaml`, defaulting to `.agents_workspace/workflow/`,
+with the `.md` rendered beside it by the plugin's hook. Use a provisional slug until the name is
+settled, then rename the `.yaml`, delete the old `.md`, and run
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <new>.yaml` at once, because a
+rename through Bash fires no hook. Otherwise a second interview overwrites the first one's spec.
+Never edit the `.md`: it is generated. Without uv, say in the reply that the spec went unchecked
+and unrendered.
 
 ### The spec file
 
-Fixed headings, in this order, one per question. The consumer gates on them by name, so keep all
-nine as written and in this order — an unanswered question keeps its heading and says so underneath.
-Anything you want to say that no heading covers belongs in the reply, not in a tenth section. A
-new spec is a copy of `assets/workflow-spec.template.md`, per `references/workflow-spec-schema.md`.
+A new spec is a copy of `assets/workflow-spec.template.yaml`, per the `workflow-spec/v2` section of
+`references/workflow-spec-schema.md`, rendered in the layout of `assets/workflow-spec.template.md`.
+Nine fixed rows, one per question, rendered under fixed headings the consumer gates on by name. A
+row holds `state`: `answered` with its content, `unanswered` with the `question` it still needs, or
+`declined` with the user's `words`. Anything you want to say that no row covers belongs in the
+reply, not in a tenth key.
 
-Under 2, 3, and 4, keep the steps numbered and use the same number for the same step across all
-three — the next skill reads them as one table, and a step that is `3.` in one section and `4.` in
-another silently attaches a gate to the wrong step.
+Under 2, 3, and 4, the same step keeps the same `n` across all three, and the check rejects a
+mismatch, because the next skill reads them as one table. Adding or removing a step changes
+`procedure`, `proof` and `data_flow` in one Write or MultiEdit.
+
+**A `v1` spec** (a `.md` with no `.yaml` beside it) is converted before the first write to it:
+delete the `v1` `.md` first, so a run without uv leaves no stale `v1` file behind, then write the
+`.yaml`, carrying every `v1` answer word for word into the key it fits. A row whose answer fits no
+key becomes `unanswered`, with `question` quoting the v1 words, and is labelled `fails`, so it is
+asked again under How to ask.
 
 Never write a credential into the spec. Record where it lives: a secret-manager key, an env var name.
 

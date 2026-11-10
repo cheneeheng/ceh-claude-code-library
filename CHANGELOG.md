@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-11-10
 
+The workflow spec gains a YAML format, `workflow-spec/v2`: `interview-workflow-task` writes
+`<name>-workflow-spec.yaml`, checked by a model, with the Markdown rendered beside it in the `v1`
+layout. A step number in questions 3 or 4 that names no step of question 2, an input read from a
+later step, and an assumption on any row but 8 or 9 are now errors, and each row says whether it is
+answered, unanswered or declined. `build-agentic-workflow` checks the spec and reads it by key, still
+reads a `v1` spec, and either skill converts a `v1` spec before writing to it.
+`ceh-workflow-builder` gains the render hook and guard, and `model_vs_template.py` now compares a row
+that is a union on `state` with the branch its template names.
+
 A new plan, `product/plans/workflow-spec-yaml.yaml`, takes the first Phase 6 format of the report
 formats plan: the workflow spec becomes `workflow-spec/v2`, YAML checked by a model and rendered in
 the `v1` layout, so the same step number across questions 2 to 4, a named producer for every input,
@@ -145,9 +154,13 @@ settled its one open question: the three usability audits will require a `commit
 | `ceh-security-audit`      | 1.1.2   |
 | `ceh-usability-audit`     | 1.2.1   |
 | `ceh-coding-conduct`      | 2.5.1   |
+| `ceh-workflow-builder`    | 1.4.0   |
 
 ### Added
 
+- Add `workflow-spec/v2`, the workflow spec as YAML with its model, in `interview-workflow-task`
+  and `build-agentic-workflow`, and the render hook and the generated-Markdown guard to
+  `ceh-workflow-builder`.
 - Add `handoff/v2`, the session handoff as YAML with its model, in `hand-off-session` and
   `whats-next`, and the render hook and the generated-Markdown guard to `ceh-every-session`.
 - Add `fix-record/v2`, the fix record as YAML with its model, in `find-root-cause` and
@@ -157,6 +170,9 @@ settled its one open question: the three usability audits will require a `commit
 
 ### Changed
 
+- Write and read the workflow spec as `workflow-spec/v2` in `interview-workflow-task` and
+  `build-agentic-workflow`, keeping `v1` specs readable, and teach `model_vs_template.py` to pick a
+  `oneOf` branch by `state`.
 - Save, load and read the session handoff as `handoff/v2` in `hand-off-session` and `whats-next`,
   keeping `v1` files readable, and put `usage-limit-handoff`'s window line in its `header`.
 - Save the fix record as `fix-record/v2` YAML in `find-root-cause` and render its Markdown.

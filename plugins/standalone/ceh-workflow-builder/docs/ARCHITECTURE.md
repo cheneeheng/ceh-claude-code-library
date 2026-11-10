@@ -30,7 +30,7 @@ answer. Running is the part that must work unattended.
 flowchart LR
     subgraph build["Build: interactive, or headless draft"]
         interview["interview-workflow-task"]
-        spec[("&lt;name&gt;-workflow-spec.md<br/>in the build dir")]
+        spec[("&lt;name&gt;-workflow-spec.yaml<br/>in the build dir")]
         builder["build-agentic-workflow"]
     end
 

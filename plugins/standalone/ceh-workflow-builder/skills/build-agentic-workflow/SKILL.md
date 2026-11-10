@@ -7,6 +7,9 @@ description: >-
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
+compatibility: >-
+  Checking the workflow spec needs uv (https://docs.astral.sh/uv/), which runs
+  scripts/artifact.py with pydantic. Without it the spec is read unchecked and the reply says so.
 ---
 
 # Build an agentic workflow
@@ -49,8 +52,16 @@ Assumed capabilities and Directories under Rules apply from step 1.
 ### Phase 1 — Intake
 
 This skill designs from a spec and does not conduct the interview. The nine answers live in
-`<build-dir>/<name>-workflow-spec.md`. If they were given in this conversation, write them there
-now so every later phase reads one source.
+`<build-dir>/<name>-workflow-spec.yaml`, a `workflow-spec/v2` spec per
+`references/workflow-spec-schema.md`, with its Markdown rendered beside it. Check it first with
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml`. On exit 1, stop and
+report the errors, unless the only error is a stale `.md`: then run `render` and go on. Read each
+row by key and `state`. A `.md` with no `.yaml` beside it is a `v1` spec: read it as before, under
+its nine headings. If the answers were given in this conversation, write them into the spec now so
+every later phase reads one source. Before the first write to a `v1` spec, convert it as the
+schema's `v2` section and the interview's Output say: delete the `v1` `.md`, write the `.yaml` with
+every answer word for word in the key it fits, and make a row whose answer fits no key
+`unanswered`, with `question` quoting the v1 words.
 
 | #   | Must be answered                                        | Not satisfied by                                                                              |
 | --- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
@@ -78,9 +89,9 @@ unanswered. The user never chose it. In an interactive build an open row blocks 
 every blocking row and stop. A headless build carries open rows forward as questions, still
 unfilled (Headless build).
 
-**A declined row ends the loop.** When the spec records `Declined` under a heading, do not invoke
-the interview again, or the two skills bounce off each other forever. Take the conservative
-reading, write it into the spec as an assumption, and tell the user what it costs:
+**A declined row ends the loop.** When a row is `state: declined`, do not invoke the interview
+again, or the two skills bounce off each other forever. Take the conservative reading, write it
+into the row's `assumption`, which only rows 8 and 9 allow, and tell the user what it costs:
 
 | Declined      | Assume                                            | Costs                                        |
 | ------------- | ------------------------------------------------- | -------------------------------------------- |
@@ -88,8 +99,8 @@ reading, write it into the spec as an assumption, and tell the user what it cost
 | 9             | every step with an outside effect is irreversible | the flow pauses for confirmation before each |
 | any other row | nothing — these cannot be assumed safely          | stop and say which row blocked the build     |
 
-Write into the spec only under the nine headings. The consumer gates on them by name, so build
-notes go in the reply, never in a tenth section.
+Write into the spec only in the nine rows. The check allows no other key, so build notes go in the
+reply, never in a tenth section.
 
 ### Phase 2 — One skill or a workflow
 
@@ -284,7 +295,7 @@ the flow's `compatibility` names Claude Code v2.1.269+ and the setting.
 | Build time | `$CEH_WORKFLOW_BUILD_DIR` | `.agents_workspace/workflow/` | the workflow spec, build notes and headless drafts    |
 | Run time   | `$CEH_WORKFLOW_RUN_DIR`   | `.agents_workspace/workflow/` | the generated workflow's step artifacts and run state |
 
-Both default to one place, so both namespace by name: `<build-dir>/<name>-workflow-spec.md` and
+Both default to one place, so both namespace by name: `<build-dir>/<name>-workflow-spec.yaml` and
 `<run-dir>/<name>/`. Use a provisional slug until the name is settled, then rename the spec, or a
 second build overwrites the first one's.
 
