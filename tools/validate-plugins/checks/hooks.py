@@ -415,19 +415,26 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     )  # fmt: skip
 
     def report_fixtures(
-        plugin: str, stem: str, good: str, bad: str, field: str, marker: str
+        plugin: str,
+        stem: str,
+        good: str,
+        bad: str,
+        field: str,
+        marker: str,
+        tag: str = "",
     ) -> list[dict]:
         """One report format's render hook: render a valid file, block a bad one naming `field`,
-        and skip one with no schema key, since a report is found by its key, not its place."""
-        folder = tmp / f"report-{stem}"
-        folder.mkdir(exist_ok=True)
+        and skip one with no schema key, since a report is found by its key, not its place. Each
+        file is `<stem>.yaml` in its own folder, `report-<tag or stem>/<ok|bad|none>/`."""
         at = {}
         for name, text in {
             "ok": good,
             "bad": bad,
             "none": good.split("\n", 1)[1],
         }.items():
-            at[name] = folder / f"{name}-{stem}.yaml"
+            folder = tmp / f"report-{tag or stem}" / name
+            folder.mkdir(parents=True, exist_ok=True)
+            at[name] = folder / f"{stem}.yaml"
             at[name].write_text(text, encoding="utf-8")
 
         def rendered() -> str | None:
@@ -465,10 +472,43 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     security_fixtures = [
         *report_fixtures(sec, "SECURITY_AUDIT", good_sec, good_sec.replace("severity: high", "severity: severe"), "findings.0.severity", "# Security audit: wordy"),
         # report_fixtures writes its files with or without uv.
-        {"script": f"{sec}/artifact-render-hook.py", "stdin": write_at(tmp / "report-SECURITY_AUDIT" / "bad-SECURITY_AUDIT.yaml"), "env": no_uv, "out": "uv is not installed"},
+        {"script": f"{sec}/artifact-render-hook.py", "stdin": write_at(tmp / "report-SECURITY_AUDIT" / "bad" / "SECURITY_AUDIT.yaml"), "env": no_uv, "out": "uv is not installed"},
         # ceh-security-audit holds no plan model, so a plan YAML is not its to check.
         {"script": f"{sec}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{sec}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+    ]  # fmt: skip
+    # The three usability audits. Two share the name UX_AUDIT.yaml, and a missing commit is
+    # blocked under each schema.
+    good_fr = (
+        "schema: first-run-audit/v2\ntarget: wordy\nrun: 7\ndate: 2026-11-10\ncommit: abc1234\n"
+        "goal: Count words\nmilestones:\n  - {name: M1, budget: 5}\naudience: A terminal user.\n"
+        "frozen_set: The README.\nwalkers: {run: [Novice], skipped: [], mode: serially}\n"
+        "gate: {score: 4, out_of: 5, na: 0}\nresults: []\nminutes: 5\nfindings: []\n"
+        "hypotheses: []\nnot_covered: []\n"
+    )
+    good_ia = (
+        "schema: interface-audit/v2\ntarget: wordy\nsurface: CLI\nrun: 7\ndate: 2026-11-10\n"
+        "commit: abc1234\ngoals:\n  - {goal: Count words, budget: 5}\naudience: A terminal user.\n"
+        "allowlist: The help text.\nwalkers: {run: [Novice], skipped: []}\n"
+        "gate: {score: 4, out_of: 4, na: 1}\nfive_questions: []\nfindings: []\nhypotheses: []\n"
+        "delegated: []\nnot_covered: []\n"
+    )
+    good_em = (
+        "schema: error-messages-audit/v2\ntarget: wordy\nrun: 7\ndate: 2026-11-10\n"
+        "commit: abc1234\nharvested: 2\nalready_complete: 1\nrows: []\nsystemic: []\n"
+    )
+    ux = "ceh-usability-audit"
+
+    def no_commit(text: str) -> str:
+        return text.replace("commit: abc1234\n", "")
+
+    usability_fixtures = [
+        *report_fixtures(ux, "UX_AUDIT", good_fr, no_commit(good_fr), "commit", "**Gate:** 4/5", "first-run"),
+        *report_fixtures(ux, "UX_AUDIT", good_ia, no_commit(good_ia), "commit", "**Gate:** 4/4, 1 N/A", "interface"),
+        *report_fixtures(ux, "ERROR_MESSAGES", good_em, good_em.replace("already_complete: 1", "already_complete: 3"), "already_complete", "run 007"),
+        {"script": f"{ux}/artifact-render-hook.py", "stdin": write_at(tmp / "report-first-run" / "bad" / "UX_AUDIT.yaml"), "env": no_uv, "out": "uv is not installed"},
+        {"script": f"{ux}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
+        {"script": f"{ux}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
     evidence_fixtures = [
         *spine_fixtures(
@@ -494,6 +534,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *report_fixtures("ceh-testing", "QA_REPORT", good_qa, good_qa.replace("bugs: []", "bugs: [B3]", 1), "charters.0.bugs", "# QA report: Wordy"),
         *report_fixtures("ceh-testing", "search", good_perf, good_perf.replace("low: 110", "low: 125"), "attempts.0", "# Performance: search"),
         *security_fixtures,
+        *usability_fixtures,
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},

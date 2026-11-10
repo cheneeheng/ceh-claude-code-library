@@ -1,0 +1,19 @@
+schema: error-messages-audit/v2
+target: <target>
+run: <n>
+date: YYYY-MM-DD
+commit: <short-sha>
+harvested: <n>
+already_complete: <n>
+rows:
+  - location: <path>:<line>
+    current: <text>
+    checks: [<true | false>, <true | false>, <true | false>]
+    severity: <Blocker | Detour | Friction | Polish>
+    rewrite: <new>
+    applied: <true | false>
+    reason: <reason>
+systemic:
+  - handler: <handler or wrapper>
+    rows: [<n>]
+    fixed: <true | false>

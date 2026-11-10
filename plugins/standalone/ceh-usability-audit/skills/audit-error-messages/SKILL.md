@@ -6,6 +6,9 @@ description: >-
   messages", "this error is useless", "unhelpful error".
 disable-model-invocation: false
 user-invocable: false
+compatibility: >-
+  Checking and rendering the report's YAML needs uv; without it the report is saved unchecked and
+  unrendered.
 license: Apache-2.0
 ---
 
@@ -162,11 +165,17 @@ The message being right is half of it; the other half is whether the reader sees
 
 ## Output
 
-`.agents_workspace/product/ux-audits/<target>/run-<NNN>/ERROR_MESSAGES.md` — the same run-folder convention
+`.agents_workspace/product/ux-audits/<target>/run-<NNN>/ERROR_MESSAGES.yaml` — the same run-folder convention
 the walkthrough skills use, zero-padded index so a re-run never overwrites the previous evidence.
-Create missing parents. It fills `assets/error-messages-audit.template.md`, per
-`references/error-messages-audit-schema.md`: the triage table
-and, per row, whether the rewrite was applied or left with a reason.
+Create missing parents. It fills `assets/error-messages-audit.template.yaml`, per the
+`error-messages-audit/v2` section of `references/error-messages-audit-schema.md`: the triage rows
+and, per row, whether the rewrite was applied or left with a reason, with `commit` from
+`git rev-parse --short HEAD` in the target as audited. After the last edit, run
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <dir>/ERROR_MESSAGES.yaml`, which
+writes `ERROR_MESSAGES.md` beside it in the layout of `assets/error-messages-audit.template.md`,
+and fix the YAML for each error it lists. Before editing a saved report, run it with `check` and
+stop on exit 1 with its errors. Never edit the generated `.md`. On exit 2 or 3, or without uv, say
+in the reply that the report went unchecked and unrendered.
 
 Two counts belong at the top, because they are what tells you whether the next pass is worth
 running: **messages harvested** and **how many satisfied all three parts before you touched
