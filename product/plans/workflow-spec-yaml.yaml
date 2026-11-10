@@ -1,0 +1,228 @@
+schema: plan/v2
+title: The workflow spec as a YAML format, workflow-spec/v2
+status: ready
+created: 2026-11-10
+goal: |
+  The first format of Phase 6 of `product/plans/report-only-formats.yaml`: the workflow spec that
+  `ceh-workflow-builder:interview-workflow-task` writes and `ceh-workflow-builder:build-agentic-workflow`
+  builds from becomes a YAML format checked by a pydantic model, because it is a handoff between two
+  skills, which the user's instruction to make handoff files deterministic and checkable covers. The
+  spec's own rules (the same step number across questions 2, 3 and 4, a producer named for every
+  artifact read, `Declined` kept apart from unanswered) become checks instead of prose. The flow that
+  matters: the interview writes `<name>-workflow-spec.yaml` one answer at a time, the hook checks and
+  renders it on every write, and the builder's Phase 1 checks the file and reads each of the nine
+  rows by key and state.
+scope:
+  in:
+    - |
+      `workflow-spec/v2`: a `.yaml` validated by `workflow-spec-model.py`, with the `.md` of the
+      same stem rendered beside it in the `workflow-spec/v1` layout, written by
+      `interview-workflow-task` and by `build-agentic-workflow` Phase 1 (answers given in the
+      conversation, and the assumption on a declined row 8 or 9).
+    - |
+      `ceh-workflow-builder` gains the render hook and the generated-Markdown guard, so a spec is
+      checked on every write.
+    - |
+      `build-agentic-workflow` Phase 1 and its Headless build check a `v2` spec with
+      `artifact.py check` and read it by key, and still read a `v1` `.md` with no `.yaml` beside it.
+      Either skill converts a `v1` spec to `v2` before its first write to it.
+    - |
+      `tools/validate-plugins/model_vs_template.py` matches a template row against the `oneOf`
+      branch its `state` names, with a fixture, so a per-row state union can be compared at all.
+    - |
+      Repo upkeep: copies registered in `docs/CROSS_REFERENCES.md`, hook fixtures in
+      `tools/validate-plugins/checks/hooks.py`, the `ceh-workflow-builder` README (the spec path
+      line and a new Hooks section) and `docs/ARCHITECTURE.md` (the spec node), the root `README.md`
+      prerequisites and `docs/GETTING_STARTED.md` hook-requirements line naming the plugin's hooks
+      and uv, `docs/ENVIRONMENT_VARIABLES.md` adding `ceh-workflow-builder` to
+      `CEH_ARTIFACT_CHECK` and `workflow-spec/v2` to its formats and `ceh-workflow-builder` to the
+      `CEH_DISABLED_HOOKS` row, which lists every plugin that ships hooks, `compatibility` lines on both
+      skills, `decision-artifact-validation.md` and `decision-output-templates.md` listing
+      `workflow-spec/v2`, the changelog, the version bump in `plugin.json` and
+      `.claude-plugin/marketplace.json`, and `docs/PLUGIN_VERSIONS.md`.
+    - |
+      Phase 6 of `product/plans/report-only-formats.yaml` gets a `note` naming this plan as the
+      workflow spec's, and stays `unplanned` until its other five formats are planned.
+  out:
+    - item: The run state (`run-state.md`, written by the generated workflow, read by `run-agentic-workflow`).
+      reason: |
+        It spans two plugins and a different writer, so it is the next Phase 6 format with its own
+        plan, as `report-only-formats.yaml` says.
+    - item: The approval file and the headless draft's `QUESTIONS.md`.
+      reason: |
+        `report-only-formats.yaml` lists them as report-only, read only inside the build that writes
+        them.
+    - item: Moving the `v1` spec fixtures in both skills' `evals/evals.json` to YAML.
+      reason: |
+        The builder still reads a `v1` `.md` with no `.yaml` beside it, so the fixtures stay valid
+        and now exercise that path. They move when the evals are next run, which happens only when
+        asked (`decision-evaluation.md`).
+    - item: Adding the plugin to `READERS` instead of shipping hooks.
+      reason: |
+        The user chose hooks for the fix record and the handoff, and both writers are in this
+        plugin. The alternative, skills that run `artifact.py render` themselves with no hooks,
+        would save about 85 ms per Edit or Write but leave a hand-written spec unchecked.
+design:
+  - topic: Keys
+    decision: |
+      Each required, and no other key:
+
+      - `schema`: `workflow-spec/v2`. `name`: the workflow's slug, `^[a-z0-9]+(-[a-z0-9]+)*$`.
+        `date`: the date the spec was started, `YYYY-MM-DD`.
+      - Nine rows, one per question, in this order: `moment`, `procedure`, `proof`, `data_flow`,
+        `tooling`, `done`, `interruption`, `rerun_unsafe`, `irreversible`.
+
+      Each row holds `state` and the keys of that state:
+
+      - `unanswered`: `question`, one line, what still has to be asked.
+      - `declined`: `words`, the user's words. On `rerun_unsafe` and `irreversible` only, an
+        optional `assumption`, written by `build-agentic-workflow` per its Declined table, because
+        that table allows no assumption on any other row.
+      - `answered`, with the row's content:
+        - `moment`: `answer`, one line.
+        - `procedure`: `steps`, at least one, each `n` and `step`, numbered 1, 2, 3 in order.
+        - `proof`: `steps`, each `n`, `before` (the precondition), `by` (`command`, `file` or
+          `human`) and `check` (the command, the file check, or for `human` who is shown what and
+          that a no-go stops the run).
+        - `data_flow`: `starts_from` (an argument, or what the previous run left), and `steps`, each
+          `n`, `reads` (a list, `[]` when none, each `artifact` and `from`: an earlier step's `n`, or
+          `run start`) and `leaves` (a list, `[]` when none).
+        - `tooling`: `steps`, each `n` and `needs` (a list, `[]` when none, a credential named by
+          where it lives).
+        - `done`: `answer`, a list of at least one line, rendered as bullets.
+        - `interruption`: `answer`, `one sitting` or `resumable`.
+        - `rerun_unsafe`: `steps`, `[]` when the user said none, each `n` and `why`, and an optional
+          `note` for an ordering hazard cross-referenced to `proof`.
+        - `irreversible`: `steps`, `[]` when the user said none, each `n` and `effect`.
+
+      Cross-row checks: `proof`, `data_flow`, `tooling`, `rerun_unsafe` and `irreversible` may be
+      `answered` only when `procedure` is. Once it is, `proof` and `data_flow` hold exactly its step
+      numbers in order, and every other `n` and every `from` names one of its steps. A `from` names
+      a step before the reading step, because a step reading what a later step leaves can only get
+      it from the previous run, which is `run start`. Every value is one line. Because `proof` and
+      `data_flow` must match `procedure`, adding or removing a step changes all three in one Write
+      or MultiEdit, which `workflow-spec-schema.md` says, so the hook never sees the file half
+      changed.
+
+      Each row is a pydantic discriminated union of three classes on `state`, which emits `oneOf`
+      in the JSON schema. `tools/validate-plugins/model_vs_template.py` `resolve()` today follows
+      only `$ref` and the first non-null `anyOf` branch, so it gains one rule: for a `oneOf`, pick
+      the branch whose `state` constant equals the template dict's `state`. A fixture in
+      `checks/artifact_models.py` pins it (a template row whose keys match its own state's branch
+      passes, one carrying another state's key fails). `workflow-spec.template.yaml` holds every row
+      in its `answered` shape, the one the interview fills, and the schema describes the other two
+      states.
+  - topic: Rendering
+    decision: |
+      `render(doc, source)` writes the `v1` layout of `workflow-spec.template.md`, with
+      `generated_from` and the do-not-edit `generated_note` in its frontmatter and the body in a
+      prettier-ignore range, as the other formats do. Each row renders under its `## <n>. <Title>`
+      heading, so the headless draft's `OPEN: spec row <n>` and the builder's "spec question 7"
+      citations keep their meaning. An `unanswered` row renders `Unanswered: <question>`, a
+      `declined` row `Declined: <words>` and then `Assumed: <assumption>` when set, and step lists
+      render numbered, `proof` as `<n>. Before: <before>. Proof (<by>): <check>`.
+  - topic: Quoting
+    decision: |
+      `workflow-spec-schema.md` says to single-quote any value that starts with `*`, contains `: `
+      or holds a backslash, as the other schemas do since PR #232, because a command in `check` or
+      a path in `needs` often holds one.
+  - topic: Files and paths
+    decision: |
+      The interview writes `$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.yaml`, defaulting to
+      `.agents_workspace/workflow/`, and the hook renders the `.md` beside it. When the provisional
+      slug gives way to the settled name, the interview renames the `.yaml`, deletes the old `.md`,
+      and runs `artifact.py render` on the new file at once, because a rename through Bash fires no
+      hook and no later write may follow. Without uv the reply says the spec went unrendered.
+
+      Both skills find the spec the same way: a path given, or `<build-dir>/<name>-workflow-spec.*`.
+      A stem with a `.yaml` is read from the YAML, checked first with `artifact.py check`, and read
+      by key. On exit 1 it stops and reports the errors, unless the only error is a stale `.md`,
+      when it runs `render` and goes on, as `review-build-plan` step 1 does.
+
+      A `.md` with no `.yaml` beside it is a `v1` spec. The builder only reads it, as before. Before
+      its first write to one (the answers given in the conversation, or a row 8 or 9 assumption) it
+      converts the spec to `v2` the same way the interview does, so no skill writes `v1` any more.
+      The conversion deletes the `v1` `.md` before the first YAML write, as `hand-off-session` save
+      does, so a run without uv leaves no stale `v1` file for a reader to take as current. It
+      carries every `v1` answer word for word into the key it fits. A row whose answer fits no key
+      becomes `unanswered`, with `question` quoting the `v1` words, so they survive and a headless
+      run hands them on as an open row. The interview then asks that row again under its usual
+      rules.
+  - topic: Models and copies
+    decision: |
+      `workflow-spec-model.py` and `workflow-spec.template.yaml` sit beside `workflow-spec-schema.md`
+      in `interview-workflow-task` (canonical), which keeps `workflow-spec.template.md` as the
+      rendered layout. `build-agentic-workflow` gets copies of all four and its own
+      `scripts/artifact.py`, because it reads, checks and writes the spec. A new "Workflow spec
+      format" entry in `docs/CROSS_REFERENCES.md` registers the copies. The two skills'
+      `scripts/artifact.py` and the plugin root's three scripts are rows in the "Build plan format"
+      entry. In the "Workflow spec: the nine questions" entry, the schema row's Diverges names the
+      nine keys, and Shared says the numbering carries through to the rendered `## 1.` to `## 9.`
+      headings.
+  - topic: Hooks in ceh-workflow-builder
+    decision: |
+      `artifact.py`, `artifact-render-hook.py` and `generated-md-guard.py` copied to
+      `plugins/standalone/ceh-workflow-builder/scripts/`, and a new `hooks/hooks.json` with the
+      PreToolUse guard and PostToolUse render entries on `Edit|Write|MultiEdit`, as in
+      `ceh-coding-conduct`. The hooks need `python3` and the check needs uv: without uv the agent is
+      told once per session that the file went unchecked, and both skills gain a `compatibility`
+      line saying so. The plugin holds no other model, so its hook checks only workflow specs. The
+      cost is about 85 ms per Edit or Write in sessions with the plugin enabled, a per-activity
+      plugin rather than an every-session one.
+  - topic: Versions and pull requests
+    decision: |
+      One phase and one PR, because the writer, the reader and the hooks are all in
+      `ceh-workflow-builder`, so no installed version can hold one without the others.
+      `ceh-workflow-builder` bumps MINOR, 1.3.12 to 1.4.0, because it gains hooks, as
+      `ceh-every-session` did for `handoff/v2`.
+phases:
+  - name: The format, the hooks, the writer and the reader
+    builds: |
+      All of Scope In: `workflow-spec-model.py`, `workflow-spec.template.yaml` and a
+      `workflow-spec/v2` section in `workflow-spec-schema.md` beside its `v1` text, with the Quoting
+      rule, in `interview-workflow-task` (canonical) and `build-agentic-workflow` (copies, with
+      `workflow-spec.template.md`); `scripts/artifact.py` in both skills; the interview's Output,
+      rename and `v1` conversion per Design "Files and paths"; the builder's Phase 1, Declined
+      assumption and Headless build reading and writing by key, with the same `v1` conversion;
+      both `compatibility` lines; the root scripts and `hooks/hooks.json`; the `oneOf` rule in
+      `model_vs_template.py` and its fixture; the hook fixtures; the registry rows, docs, rule files,
+      version and changelog; and the `report-only-formats.yaml` Phase 6 note.
+    check: |
+      With uv, a scratchpad `ship-digest-workflow-spec.yaml` with a three-step procedure, a `human`
+      proof, a read `from: run start` and one `from: 1`, a declined `irreversible` with an
+      assumption, an `unanswered` `tooling` and `rerun_unsafe: {state: answered, steps: []}` renders
+      (exit 0) to Markdown whose nine headings match `workflow-spec.template.md` and whose rows read
+      `Declined:`, `Assumed:` and `Unanswered:`. Files with a `proof` missing step 2, a `from: 3` on
+      step 2, an `assumption` on a declined `moment`, an answered `proof` under an unanswered
+      `procedure`, and an extra key each exit 1 naming that path. The `ticket-survey` `v1` spec in
+      `build-agentic-workflow/evals/evals.json`, converted by hand to a scratchpad
+      `ticket-survey-workflow-spec.yaml` per Design "Files and paths", passes `artifact.py check`
+      (exit 0), which shows the keys fit a real spec. `git grep -F` finds
+      `<name>-workflow-spec.yaml` and `artifact.py check` in both `SKILL.md` files, `no .yaml beside
+      it` and `stale` in `build-agentic-workflow/SKILL.md`, `quoting the v1 words` in both, and
+      `one Write or MultiEdit` in `workflow-spec-schema.md`. `python
+      tools/validate-plugins/validate.py`, whose fixtures pass a template row matching its own
+      state's `oneOf` branch and fail one carrying another state's key, render a good
+      `workflow-spec/v2` file and block a bad one through the `ceh-workflow-builder` render hook,
+      print "uv is not installed" without uv, and have its guard deny an edit to a generated `.md`,
+      prints "OK: all plugin checks passed".
+    status: todo
+open:
+  - question: |
+      Should a `data_flow` read be allowed to name a later step's output, for a step that loops
+      back?
+    assumption: |
+      No: `from` names an earlier step or `run start`, because the interview asks for a producer
+      and a later step cannot have produced the input of an earlier one in the same run. The rule
+      loosens when a real spec needs it.
+record:
+  - date: 2026-11-10
+    event: Planned
+    details: status ready
+  - date: 2026-11-10
+    event: Reviewed
+    details: |
+      Revise first, 1 blocking (the per-row state union cannot pass model_vs_template.py, which
+      reads no oneOf and only the first anyOf branch), 10 advisory, all fixed: the blocking one by
+      teaching model_vs_template.py to pick a oneOf branch by `state`, with a fixture, and the 10
+      advisory as the review recommended

@@ -11,6 +11,13 @@ before this repo live in
 
 ## 2026-11-10
 
+A new plan, `product/plans/workflow-spec-yaml.yaml`, takes the first Phase 6 format of the report
+formats plan: the workflow spec becomes `workflow-spec/v2`, YAML checked by a model and rendered in
+the `v1` layout, so the same step number across questions 2 to 4, a named producer for every input,
+and `Declined` kept apart from unanswered become checks. `ceh-workflow-builder` will gain the render
+hook and guard, and `model_vs_template.py` learns to compare a per-row state union. No plugin
+changes in this PR.
+
 The session handoff gains a YAML format, `handoff/v2`: `hand-off-session` saves
 `HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.yaml`, checked by a model, with the Markdown rendered
 beside it in the `v1` layout. A handoff with nothing open, or a Done item that does not say whether
