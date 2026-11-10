@@ -11,6 +11,10 @@ before this repo live in
 
 ## 2026-11-10
 
+`validate.py` no longer fails at random on Windows in the workspace-sync fixtures. The fixture that
+waits for the detached sync worker read `DECISION_LOG.md` while the worker's merge replaced it, and
+a missing file now counts as not settled yet. No plugin changes.
+
 The QA report and the performance file are YAML formats now, the first of the reports
 `write-evidence-report` reads. `explore-app-for-bugs` saves `QA_REPORT.yaml` (`qa-report/v2`) and
 `measure-performance` saves `<metric>.yaml` (`perf-report/v2`), each checked by a pydantic model,
@@ -78,6 +82,11 @@ settled its one open question: the three usability audits will require a `commit
   `review-build-plan` before reading them.
 - Check `product/ARCHITECTURE.yaml` in `find-product-market-fit` before its intake reads it.
 - Check `BUSINESS_PLAN.yaml` in `write-vision-and-strategy` before reading it.
+
+### Fixed
+
+- Treat a missing `DECISION_LOG.md` as not yet settled in the workspace-sync hook fixtures, so a
+  merge by the detached worker no longer crashes `validate.py`.
 
 ## 2026-11-07
 
