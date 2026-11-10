@@ -196,5 +196,6 @@ None
   scripts, which validate.py rejects; Phase 2's grep passed before any edit), all fixed with
   the 10 advisory findings, the owner question answered by the user: hooks in
   ceh-coding-conduct
+- 2026-11-10 PR: #236 https://github.com/cheneeheng/ceh-claude-code-library/pull/236
 
 <!-- prettier-ignore-end -->
