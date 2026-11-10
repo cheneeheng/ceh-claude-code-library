@@ -198,7 +198,12 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         main workspace idle (no merge, no autostash held, no index lock)."""
         deadline = time.time() + 20
         while True:
-            log = set((ws / "DECISION_LOG.md").read_text(encoding="utf-8").split())
+            try:
+                log = set((ws / "DECISION_LOG.md").read_text(encoding="utf-8").split())
+            except (
+                FileNotFoundError
+            ):  # the worker's merge replaces the file: not settled yet
+                log = set()
             busy = [
                 f
                 for f in ("MERGE_HEAD", "MERGE_AUTOSTASH", "index.lock")
