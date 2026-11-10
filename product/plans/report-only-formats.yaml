@@ -327,6 +327,10 @@ phases:
     check: |
       Planned once Phases 1 to 3 are judged.
     status: unplanned
+    note: |
+      The workflow spec is planned and built by `product/plans/workflow-spec-yaml.yaml`
+      (`workflow-spec/v2`). The phase stays `unplanned` until the run state, competitor report,
+      glossary, blog voice and repeat-mistake report are planned.
 open:
   - question: |
       What does a usability audit of a target outside git put in its required `commit`?
@@ -398,3 +402,6 @@ record:
   - date: 2026-11-10
     event: PR
     details: "#240 https://github.com/cheneeheng/ceh-claude-code-library/pull/240"
+  - date: 2026-11-10
+    event: PR
+    details: "#242 https://github.com/cheneeheng/ceh-claude-code-library/pull/242"

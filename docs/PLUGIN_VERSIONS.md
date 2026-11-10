@@ -39,5 +39,5 @@ a removed plugin loses its row.
 | `ceh-usability-audit`          | 1.2.1   | `2026-11-10` |
 | `ceh-vision-and-strategy`      | 1.1.1   | `2026-11-10` |
 | `ceh-web-frontend`             | 1.3.4   | `2026-10-16` |
-| `ceh-workflow-builder`         | 1.3.12  | `2026-11-07` |
+| `ceh-workflow-builder`         | 1.4.0   | `2026-11-10` |
 | `ceh-workflow-runner`          | 1.0.10  | `2026-11-07` |

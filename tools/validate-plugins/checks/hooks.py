@@ -541,6 +541,29 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *report_fixtures(es, "HANDOFF-20261110-1200-abcd1234", good_handoff, good_handoff.replace("open: [Run the tests]", "open: []"), "open", "# Handoff — 2026-11-10 12:00", "handoff"),
         {"script": f"{es}/artifact-render-hook.py", "stdin": write_at(tmp / "report-handoff" / "bad" / "HANDOFF-20261110-1200-abcd1234.yaml"), "env": no_uv, "out": "uv is not installed"},
     ]  # fmt: skip
+    # The workflow spec: interview-workflow-task writes it, build-agentic-workflow reads and amends it.
+    good_spec = (
+        "schema: workflow-spec/v2\nname: ship-digest\ndate: 2026-11-10\n"
+        "moment: {state: answered, answer: Right after a release tag is pushed}\n"
+        "procedure: {state: answered, steps: [{n: 1, step: Collect PRs}, {n: 2, step: Draft the digest}]}\n"
+        "proof: {state: answered, steps: [{n: 1, before: The tag exists, by: command, check: git tag lists it},"
+        " {n: 2, before: prs.json exists, by: file, check: digest.md names every PR}]}\n"
+        "data_flow: {state: answered, starts_from: The tag name, steps: [{n: 1, reads: [], leaves: [prs.json]},"
+        " {n: 2, reads: [{artifact: prs.json, from: 1}], leaves: [digest.md]}]}\n"
+        "tooling: {state: unanswered, question: 'Which token reads the PRs?'}\n"
+        "done: {state: answered, answer: [digest.md exists for the tag]}\n"
+        "interruption: {state: answered, answer: one sitting}\n"
+        "rerun_unsafe: {state: answered, steps: []}\n"
+        "irreversible: {state: declined, words: not sure, assumption: every outside step is irreversible}\n"
+    )
+    wb = "ceh-workflow-builder"
+    workflow_spec_fixtures = [
+        *report_fixtures(wb, "ship-digest-workflow-spec", good_spec, good_spec.replace("from: 1}", "from: 2}"), "data_flow", "## 9. Irreversible steps", "workflow-spec"),
+        {"script": f"{wb}/artifact-render-hook.py", "stdin": write_at(tmp / "report-workflow-spec" / "bad" / "ship-digest-workflow-spec.yaml"), "env": no_uv, "out": "uv is not installed"},
+        # ceh-workflow-builder holds no plan model, so a plan YAML is not its to check.
+        {"script": f"{wb}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
+        {"script": f"{wb}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+    ]  # fmt: skip
     evidence_fixtures = [
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
@@ -568,6 +591,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *usability_fixtures,
         *fix_record_fixtures,
         *handoff_fixtures,
+        *workflow_spec_fixtures,
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},

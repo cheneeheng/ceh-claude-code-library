@@ -61,6 +61,47 @@ def _survives_refused_read() -> None:
         fail(rel(CLI), "write_atomic does not survive a refused read")
 
 
+UNION_MODEL = """
+from typing import Annotated, Literal, Union
+from pydantic import BaseModel, Field
+class Answered(BaseModel):
+    state: Literal["answered"]
+    answer: str
+class Unanswered(BaseModel):
+    state: Literal["unanswered"]
+    question: str
+class Demo(BaseModel):
+    row: Annotated[Union[Answered, Unanswered], Field(discriminator="state")]
+MODEL = Demo
+"""
+
+
+def _compares_union_rows(uv: str, script: pathlib.Path) -> None:
+    """A row that is a union on `state` (workflow-spec/v2) is compared with the branch its
+    template names: its own keys pass, another state's key fails."""
+    for tmpl, want in (
+        ("row:\n  state: answered\n  answer: <a>\n", 0),
+        ("row:\n  state: answered\n  question: <q>\n", 1),
+    ):
+        with tempfile.TemporaryDirectory() as tmp:
+            ref = pathlib.Path(tmp) / "plugins" / "p" / "skills" / "s" / "references"
+            ref.mkdir(parents=True)
+            (ref / "demo-model.py").write_text(UNION_MODEL, encoding="utf-8")
+            (ref.parent / "assets").mkdir()
+            (ref.parent / "assets" / "demo.template.yaml").write_text(
+                tmpl, encoding="utf-8"
+            )
+            r = subprocess.run(
+                [uv, "run", "--quiet", "--script", str(script), tmp],
+                capture_output=True, text=True, encoding="utf-8", timeout=120,
+            )  # fmt: skip
+        if r.returncode != want:
+            fail(
+                rel(script),
+                f"union row fixture exited {r.returncode}, want {want}: {r.stdout.strip()}",
+            )
+
+
 def check() -> None:
     _survives_refused_read()
     for d in plugin_dirs():
@@ -101,6 +142,7 @@ def check() -> None:
         fail(where, f"does not match its model: {problem}")
     if r.returncode not in (0, 1) or (r.returncode == 1 and not r.stdout.strip()):
         fail(rel(script), f"exited {r.returncode}: {r.stderr.strip()[-300:]}")
+    _compares_union_rows(uv, script)
 
     # This repo's own plan/v2 plans: a hand edit to the YAML outside Claude Code leaves its
     # generated Markdown stale, which no hook sees.

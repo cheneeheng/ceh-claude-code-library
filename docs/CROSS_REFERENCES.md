@@ -360,6 +360,11 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-every-session/scripts/artifact.py`                                                                                 | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-every-session/scripts/artifact-render-hook.py`                                                                     | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-every-session/scripts/generated-md-guard.py`                                                                       | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/scripts/artifact.py`                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/scripts/artifact.py`                                                | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-workflow-builder/scripts/artifact.py`                                                                              | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-workflow-builder/scripts/artifact-render-hook.py`                                                                  | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-workflow-builder/scripts/generated-md-guard.py`                                                                    | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/scripts/artifact.py`                                            | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/audit-interface/scripts/artifact.py`                                                        | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
@@ -607,6 +612,22 @@ differs from the canonical file.
 saves and loads the handoff, and `whats-next` reads the newest one, checking a `v2` file with its
 own copy of the model first. `validate.py` fails when a copy differs from the canonical file.
 
+## Workflow spec format
+
+**Canonical:** whole files, `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/references/workflow-spec-schema.md`, `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/references/workflow-spec-model.py`, `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/assets/workflow-spec.template.md`, `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/assets/workflow-spec.template.yaml`
+
+| Copy                                                                                                       | Section    | Diverges |
+| ---------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/workflow-spec-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/workflow-spec-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/assets/workflow-spec.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/assets/workflow-spec.template.yaml` | whole file | none     |
+
+**Shared:** the `workflow-spec/v1` layout and the `workflow-spec/v2` YAML with its model.
+`interview-workflow-task` writes the spec, and `build-agentic-workflow` checks it with its own copy
+of the model, reads it by key, and writes conversation answers and the row 8 or 9 assumption into
+it. `validate.py` fails when a copy differs from the canonical file.
+
 ## Business-plan "No human to answer" clause
 
 **Canonical:** `plugins/standalone/ceh-business-plan/skills/develop-business-plan/SKILL.md` — § Rules, "No human to answer"
@@ -695,13 +716,13 @@ the runner rejects, or the reverse. Keep the two files byte-identical.
 
 **Canonical:** `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/SKILL.md` — § The nine questions, § How to ask, § The spec file
 
-| Copy                                                                                                        | Section             | Diverges                                                                                                                      |
-| ----------------------------------------------------------------------------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/SKILL.md`                            | § Phase 1 — Intake  | compact gate: one label per question plus what does not satisfy it, because it checks answers rather than eliciting them      |
-| `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/references/workflow-spec-schema.md` | § Sections, § Rules | what each of the nine headings holds, one line each, plus the step-numbering and `Declined` rules: the format, not how to ask |
+| Copy                                                                                                        | Section                                 | Diverges                                                                                                                                                           |
+| ----------------------------------------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/SKILL.md`                            | § Phase 1 — Intake                      | compact gate: one label per question plus what does not satisfy it, because it checks answers rather than eliciting them                                           |
+| `plugins/standalone/ceh-workflow-builder/skills/interview-workflow-task/references/workflow-spec-schema.md` | § Sections, § Rules, § workflow-spec/v2 | what each of the nine headings holds, one line each, the step-numbering and `Declined` rules, and the nine `v2` keys with their states: the format, not how to ask |
 
-**Shared:** the nine questions, their numbering, and that numbering carrying through to the spec's
-`## 1.` to `## 9.` headings. Later sections of `build-agentic-workflow` cite them as "spec question
+**Shared:** the nine questions, their numbering, and that numbering carrying through to the nine
+`v2` keys and the rendered `## 1.` to `## 9.` headings. Later sections of `build-agentic-workflow` cite them as "spec question
 6/7/8/9", so renumbering means editing both files plus those citations. Five more things must change
 in both files together:
 
@@ -711,8 +732,8 @@ in both files together:
 - **The human go/no-go gate** is the one proof question 3 accepts that no command can settle. The
   interview records it and the builder's intake row 3 exempts it. Tightening one alone deadlocks a
   task with a real judgement step, because question 3 has no `Declined` escape.
-- **The `Declined` marker.** The interview writes it under a heading the user refuses to answer and
-  stops asking. The builder reads it as "take the conservative reading and stop delegating". The
+- **The `Declined` marker.** The interview writes `state: declined` on a row the user refuses to
+  answer and stops asking. The builder reads it as "take the conservative reading and stop delegating". The
   pair loops forever if only one of them knows the convention.
 - **The closed heading set and `$CEH_WORKFLOW_BUILD_DIR`.** Neither skill may add a heading to the
   spec, and both name the variable and its `.agents_workspace/workflow/` default, because the interview has

@@ -27,18 +27,26 @@ def load(path: Path):
     return mod
 
 
-def resolve(schema: dict, defs: dict) -> dict:
-    """Follow a $ref, and pick the non-null branch of an Optional."""
+def resolve(schema: dict, defs: dict, tmpl=None) -> dict:
+    """Follow a $ref, pick the non-null branch of an Optional, and pick the branch of a
+    discriminated union (`oneOf`) whose `state` constant is the template's `state`."""
     if "$ref" in schema:
         schema = defs[schema["$ref"].rsplit("/", 1)[-1]]
     for branch in schema.get("anyOf", []):
         if branch.get("type") != "null":
-            return resolve(branch, defs)
+            return resolve(branch, defs, tmpl)
+    if "oneOf" in schema and isinstance(tmpl, dict):
+        for branch in schema["oneOf"]:
+            branch = resolve(branch, defs)
+            if branch.get("properties", {}).get("state", {}).get("const") == tmpl.get(
+                "state"
+            ):
+                return branch
     return schema
 
 
 def compare(tmpl, schema: dict, defs: dict, path: str, errors: list[str]) -> None:
-    schema = resolve(schema, defs)
+    schema = resolve(schema, defs, tmpl)
     if isinstance(tmpl, dict):
         props = schema.get("properties", {})
         if set(tmpl) != set(props):
