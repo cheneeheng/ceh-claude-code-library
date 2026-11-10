@@ -1,0 +1,206 @@
+---
+schema: plan/v2
+generated_from: run-state-yaml.yaml
+generated_note: "Do not edit. artifact.py renders this file from run-state-yaml.yaml: edit the YAML, then run artifact.py render."
+title: The run state as a YAML format, run-state/v2
+status: ready
+created: 2026-11-11
+---
+
+<!-- prettier-ignore-start -->
+
+## Goal
+
+The second format of Phase 6 of `product/plans/report-only-formats.yaml`: the run state that
+`ceh-workflow-runner:run-agentic-workflow` writes for a `resumable` flow, and reads back to
+resume it, becomes a YAML format checked by a pydantic model, because it is a handoff to a later
+session, often a fresh headless one, which the user's instruction to make handoff files
+deterministic and checkable covers. Its rules (unique stage ids, an approval naming a real stage,
+a `FLOW STATUS` that agrees with the stage states) become checks instead of prose. The flow that
+matters: the runner writes `{run}/run-state.yaml` after every stage change, the hook checks it and
+renders `run-state.md` beside it, whose last line is still the `FLOW STATUS:` line, and a resumed
+run checks the YAML and reads its stages and approvals by key.
+
+## Scope
+
+**In:**
+
+- `run-state/v2`: a `.yaml` validated by `run-state-model.py`, with `run-state.md` rendered
+  beside it in the `run-state/v1` layout, written and read by `run-agentic-workflow`.
+- `ceh-workflow-runner` gains the render hook and the generated-Markdown guard, so a run state
+  is checked on every write.
+- `run-agentic-workflow` checks a `v2` run state with `artifact.py check` before resuming and
+  reads it by key, and still reads a `v1` `run-state.md` with no `.yaml` beside it, converting
+  it before its first write.
+- A headless resumable flow can run the check: the builder's invocation guide adds
+  `Bash(uv run --script:*)` to `--allowedTools` when `resumable: true`.
+- The `flow.yaml` contract copies stay whole-file identical: the model and the YAML template sit
+  beside `run-state-schema.md` in `build-agentic-workflow` (canonical) and `run-agentic-workflow`
+  (copies), and `flow-config-schema.md`'s `run-state.md` section names the YAML.
+- Repo upkeep: copies registered in `docs/CROSS_REFERENCES.md`, hook fixtures in
+  `tools/validate-plugins/checks/hooks.py`, the `ceh-workflow-runner` README (the run-dir row
+  and a new Hooks section), `ceh-workflow-builder/docs/ARCHITECTURE.md` naming `run-state.yaml`
+  where the runner writes and reads it, the root `README.md` prerequisites naming the run state,
+  `docs/ENVIRONMENT_VARIABLES.md` adding `ceh-workflow-runner` to `CEH_ARTIFACT_CHECK` (with
+  `run-state/v2` in its formats) and to `CEH_DISABLED_HOOKS`, the runner skill's
+  `compatibility` line naming uv, `decision-artifact-validation.md` and
+  `decision-output-templates.md` listing `run-state/v2`, the changelog, both plugins' version
+  bumps in `plugin.json` and `.claude-plugin/marketplace.json`, and `docs/PLUGIN_VERSIONS.md`.
+- Phase 6 of `product/plans/report-only-formats.yaml`: its `note` names this plan as the run
+  state's, and the phase stays `unplanned` until its last four formats are planned.
+
+**Out:**
+
+- The run state a single emitted skill keeps for itself (`build-agentic-workflow` Rules).: That skill runs in the target repo without the runner, so it carries no model and no hook,
+  and keeps the `v1` Markdown layout its body spells out. The `v1` text stays in
+  `run-state-schema.md` for it.
+- The approval file (`approval-<stage-id>.md`).: `report-only-formats.yaml` lists it as report-only: a person reads it once to decide, and
+  the decision lands in the run state.
+- The `FLOW STATUS:` line in the runner's reply.: A headless caller branches on the reply's last line, which does not change. Only its copy in
+  the run state moves into a key.
+- The builder's eval expectation that a single skill emits a `run-state.md`.: It is the single-skill run state above, which stays `v1`.
+
+## Design
+
+- **Keys** Each required unless marked optional, and no other key:
+
+  - `schema`: `run-state/v2`. `flow`: the flow's name, a kebab-case slug. `run_id`: the start
+    time, `YYYYMMDD-HHMM`, quoted. `config`: the path to its `flow.yaml`. `mode`: `interactive`
+    or `headless`.
+  - `inputs`: a list, `[]` when none, each `name` and `value`, rendered `name=value` joined by
+    `, `, or `-` when empty.
+  - `stages`: at least one, each `id` (kebab-case), `state` (`pending`, `done`,
+    `awaiting-approval` or `failed`), `artifacts` (a list of paths, `[]` when none, rendered
+    joined by `, ` or `-`) and `note` (optional, one line, the gate evidence or the fallback
+    chosen, rendered `-` when absent).
+  - `approvals`: a list, `[]` when none, each `stage`, `decision` (`approved` or `rejected`),
+    `source` (`interactive`, `resume-prompt` or `approve=<stage-id>`) and `at` (ISO-8601
+    `YYYY-MM-DDTHH:MM`, with optional seconds and offset, quoted).
+  - `status` (optional): the text after `FLOW STATUS: `, `done`,
+    `awaiting-approval <stage-id>`, or `failed <stage-id or -> <reason>`. Absent while the run
+    is in progress, because `v1` defines the status line only for a run that has ended.
+
+  Cross-key checks: stage ids are unique. Every approval's `stage` names a stage, and an
+  `approve=<id>` source names that same stage. `done` needs every stage `done`.
+  `awaiting-approval <id>` needs stage `<id>` to be `awaiting-approval`. `failed <id> ...` needs
+  `<id>` to name a stage. `failed - ...` puts no constraint on the stages. At most one stage
+  is `awaiting-approval`. Every value is one line. Because a stage's `state` and the `status`
+  must agree, the runner changes both in one Write or Edit, which `run-state-schema.md` says.
+- **Rendering** `render(doc, source)` writes the `v1` layout of `run-state.template.md`, with
+  `generated_from` and the do-not-edit `generated_note` in its frontmatter and the body in a
+  prettier-ignore range, as the other formats do: the `# Run state: <flow>/<run_id>` title, the
+  four header lines, `## Stages` as `- <id>: <state> | <artifacts> | <note>`, `## Approvals` as
+  `- <stage>: <decision> | <source> | <at>`, rendered `- none` when empty, then
+  `FLOW STATUS: <status>` when set. The prettier-ignore end marker is the line before
+  `FLOW STATUS:`, so the status stays the file's last line, as `v1` and a headless caller
+  reading the file expect.
+- **Quoting** `run-state-schema.md` says to single-quote any value that starts with `*`, contains `: ` or
+  ` #`, or holds a backslash, any value that starts with `{` or `[` (a note such as
+  `{run}/approval-publish.md`), and inside a `{...}` flow mapping any value holding `,`, `?`,
+  `[`, `]`, `{` or `}`, as `workflow-spec-schema.md` does. Every input `value` is quoted, so
+  `10`, `true` or `no` stays text under the strict model. A gate note often holds a colon, and
+  `run_id` and `at` are quoted so YAML keeps them as text.
+- **Files and paths** The runner writes `{run}/run-state.yaml`, and the hook renders `{run}/run-state.md` beside it.
+  Only the runner writes it, never a dispatched stage, which the one-level-deep rule already
+  keeps from running the runner. The runner deletes nothing: without uv, or when the hook is off,
+  the `.md` can lag the YAML, so the runner reads only the YAML, and the reply's status line
+  stays the authoritative one a headless caller branches on. `flow-config-schema.md`'s
+  `FLOW STATUS` section says the file's copy is current only when the render ran, and the reply
+  says so when it did not. This needs no `rm` permission in a headless run, and does not depend
+  on the hook's once-per-session warning, which another plugin's hook may already have given.
+
+  Step 4 finds the newest run under `<run-dir>/<name>/` by reading `run-state.yaml`, or a `v1`
+  `run-state.md` when no `.yaml` is beside it. A YAML is checked first with `artifact.py check`.
+  On exit 1 the run ends as `FLOW STATUS: failed - run state invalid: <first error>`, unless the
+  only error is a stale `.md`, when it runs `render` and goes on. On exit 2 or 3, without uv,
+  or when the call is denied, it reads the YAML unchecked, says in the reply that the run state
+  went unchecked, and goes on, as `review-build-plan` step 1 does. A failure in step 4 goes in
+  the reply only and is never written into the run state, so the run stays resumable. A `v1`
+  file is read as before, and the first write converts it: the `.yaml` is written with every
+  stage, approval, input and header line carried over in its key, which the `v1` line formats
+  map one to one, and its render then overwrites the `v1` `run-state.md` at the same path.
+
+  **Headless permissions.** A resumable flow's runner now runs `uv run --script` for the check
+  and render, and headless nobody can approve it. So the builder's invocation guide adds
+  `Bash(uv run --script:*)` to `--allowedTools` when the flow is `resumable: true`, in
+  `build-agentic-workflow/SKILL.md`'s invocation guide rule and the headless example in
+  `ceh-workflow-builder/docs/ARCHITECTURE.md`, and the runner README's headless paragraph names
+  it. The hook itself needs no permission.
+- **Models and copies** `run-state-model.py` and `run-state.template.yaml` sit beside `run-state-schema.md` in
+  `build-agentic-workflow` (canonical, where the `flow.yaml` contract's canonical files already
+  sit) and are copied into `run-agentic-workflow`. `run-agentic-workflow` gains
+  `scripts/artifact.py`. `build-agentic-workflow` already carries it. The "flow.yaml schema"
+  entry in `docs/CROSS_REFERENCES.md` gains the model and YAML template in its canonical list
+  and as copy rows, and its Shared names `run-state/v2`. The runner skill's `scripts/artifact.py`
+  and the runner root's three scripts are rows in the "Build plan format" entry. The builder's
+  hook now also checks a run-state YAML written in its sessions, because it holds the model. That
+  is harmless, as with `ceh-every-session` checking plans.
+- **Hooks in ceh-workflow-runner** `artifact.py`, `artifact-render-hook.py` and `generated-md-guard.py` copied to
+  `plugins/standalone/ceh-workflow-runner/scripts/`, and a new `hooks/hooks.json` with the
+  PreToolUse guard and PostToolUse render entries on `Edit|Write|MultiEdit`, the same file as
+  `ceh-workflow-builder`'s. The runner is installed wherever a flow runs, so the run state is
+  checked in every run, headless included. The hooks need `python3` and the check needs uv, and
+  the runner's `compatibility` line gains one sentence saying so, within its 500 characters.
+  The runner holds no other model, so its hook checks only run states. The cost is about 85 ms
+  per Edit or Write in sessions with the runner enabled, carried over from the handoff plan and
+  not measured here.
+- **Versions and pull requests** One phase and one PR, because the `copies` check keeps the builder's and the runner's
+  contract files identical, so neither plugin can take the format alone.
+  `ceh-workflow-runner` bumps MINOR, 1.0.10 to 1.1.0, because it gains hooks.
+  `ceh-workflow-builder` bumps PATCH, 1.4.0 to 1.4.1, for the changed contract files.
+
+## Phases
+
+### Phase 1: The format, the runner's hooks, the writer and the reader
+
+- **Builds:** All of Scope In: `run-state-model.py`, `run-state.template.yaml` and a `run-state/v2` section
+  in `run-state-schema.md` beside its `v1` text, with the Quoting rule and the one-Write rule,
+  in `build-agentic-workflow` (canonical) and `run-agentic-workflow` (copies);
+  `flow-config-schema.md`'s `run-state.md` section in both; `scripts/artifact.py` in
+  `run-agentic-workflow`; every `run-state.md` mention in `run-agentic-workflow/SKILL.md` (the
+  layout pointer, step 4 find, check and `v1` conversion, step 5.6 record, the `APPROVED
+  <stage-id>` resume message, approvals, the no-secrets rule, and Output) and in both
+  `flow-config-schema.md` copies (the `resumable` row, the `run-state.md` section and the
+  `FLOW STATUS` section), per Design "Files and paths"; the invocation guide's
+  `Bash(uv run --script:*)` rule in `build-agentic-workflow/SKILL.md`, the ARCHITECTURE.md
+  headless example and the runner README; its `compatibility` line; the runner's root scripts
+  and `hooks/hooks.json`; the hook fixtures; the registry rows, docs, rule files, versions and
+  changelog; and the `report-only-formats.yaml` Phase 6 note.
+- **Check:** With uv, a scratchpad `run-state.yaml` holding the `v1` worked example of
+  `run-state-schema.md` (four stages, one `approve=publish` approval, status
+  `awaiting-approval publish`) renders (exit 0) to Markdown whose body, without the frontmatter
+  and the prettier-ignore lines, matches that example line by line and ends with
+  `FLOW STATUS: awaiting-approval publish`. The same file without `status` renders with no
+  status line, and with `approvals: []` renders `- none`. Files with a duplicate stage id, an
+  approval for a missing stage, `source: approve=fix` on the `publish` approval, `status: done`
+  with a stage not `done`, `awaiting-approval verify` while `verify` is `failed`, two stages
+  `awaiting-approval`, `failed ghost tests red` naming no stage, a two-line `note`, and an
+  extra key each exit 1, naming the key or rule, and `failed - inputs changed on resume` with
+  stages `done` exits 0. `git grep -F` finds `run-state.yaml`, `artifact.py check`,
+  `run state invalid` and `went unchecked` in `run-agentic-workflow/SKILL.md`,
+  `run-state.yaml` in both `flow-config-schema.md` copies, `one Write or Edit` in both
+  `run-state-schema.md` copies, and `uv run --script:*` in `build-agentic-workflow/SKILL.md`,
+  `ceh-workflow-builder/docs/ARCHITECTURE.md` and the runner README. `git grep -n
+  "run-state.md"` in the runner skill shows only the `v1` fallback and the rendered file. `python tools/validate-plugins/validate.py`, whose fixtures
+  render a good `run-state/v2` file and block a bad one through the `ceh-workflow-runner` render
+  hook, print "uv is not installed" without uv, stay silent on a plan YAML, and have its guard
+  deny an edit to a generated `.md`, prints "OK: all plugin checks passed".
+- **Status:** todo
+
+## Open
+
+- Does a step 4 failure on a resumed run (an invalid run state, changed inputs) write its
+  `FLOW STATUS` into the run state?: No, the reply only, so the run stays resumable once the cause is fixed. Raised by the review.
+- What does the run state's `status` hold while the run is still going?: Nothing: the key is absent until the run ends, as `v1` writes the `FLOW STATUS:` line only
+  for an ended run. A `running` value would add a fourth status that no caller branches on.
+
+## Record
+
+- 2026-11-11 Planned: status ready
+- 2026-11-11 Reviewed: Revise first: 2 blocking, 4 advisory, all fixed. The headless check gets a
+  `Bash(uv run --script:*)` rule in the invocation guide, and instead of deleting a stale `.md`
+  the runner trusts only the YAML and the reply, so it needs no `rm` and no hook warning. The
+  owner question went under Open on its recommended answer.
+- 2026-11-11 PR: #243 https://github.com/cheneeheng/ceh-claude-code-library/pull/243
+
+<!-- prettier-ignore-end -->
