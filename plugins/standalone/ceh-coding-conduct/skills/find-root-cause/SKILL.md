@@ -7,6 +7,9 @@ description: >-
   hold.
 disable-model-invocation: false
 user-invocable: true
+compatibility: >-
+  Checking and rendering the fix record's YAML needs uv; without it the record is saved unchecked
+  and unrendered.
 license: Apache-2.0
 ---
 
@@ -43,17 +46,22 @@ predict one observation you have not made yet that then comes true.
    also fail, or one that must pass. Run it. A cause that predicts nothing new is still a guess.
 7. **Remove the instrumentation** you added, then hand over with the Output below.
 8. **Write the fix record** when the cause is in this repo's code or config. Save the hand-over to
-   `product/fixes/<slug>.md` with `status: diagnosed`, in the format in
-   `references/fix-record-schema.md`, setting `plan:` and `previous:` as it says. The chat ends
-   with the session, and the record is how a later reader learns why the fix exists. The fix commit
-   carries it. No fix will land here when the cause is outside this repo or the user declined the
-   fix: then the record is committed alone and stays `diagnosed`. A fix that waits on a user
-   decision is open work, and nothing reports the bug as done.
+   `product/fixes/<slug>.yaml` with `status: diagnosed`, a copy of
+   `assets/fix-record.template.yaml` in the `fix-record/v2` format in
+   `references/fix-record-schema.md`, setting `plan:` and `previous:` as it says. Then run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render product/fixes/<slug>.yaml`,
+   which writes the `.md` beside it, and fix the YAML for each error it lists. Never edit the
+   generated `.md`. On exit 2 or 3, or without uv, say in the reply that the record went unchecked
+   and unrendered. The chat ends with the session, and the record is how a later reader learns why
+   the fix exists. The fix commit carries both files. No fix will land here when the cause is
+   outside this repo or the user declined the fix: then the record is committed alone and stays
+   `diagnosed`. A fix that waits on a user decision is open work, and nothing reports the bug as
+   done.
 9. **Hand over the fix.** When the fix lands in this session, load `ceh-testing:test-a-bug-fix`
    before writing it: it turns the step 1 command into a regression test and drives the fix.
-   Without `ceh-testing` installed, write the failing test before the fix yourself, then complete
-   the fix record's Fix section, set `status: fixed`, and commit the record with the fix and the
-   test.
+   Without `ceh-testing` installed, write the failing test before the fix yourself, then in the
+   record's YAML set `fix`, one `tests` item per test and `status: fixed`, render it again, and
+   commit the record with the fix and the test.
 
 ## Rules
 

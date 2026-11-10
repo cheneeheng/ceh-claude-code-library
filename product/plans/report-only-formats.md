@@ -267,7 +267,10 @@ was checked.
 
 - **Builds:** `fix-record/v2` as YAML, written by `find-root-cause` and read by `test-a-bug-fix`.
 - **Check:** Planned once Phases 1 to 3 are judged.
-- **Status:** unplanned
+- **Status:** done, Built by its own plan, `product/plans/fix-record-yaml.yaml`, in PRs #237 and the PR that
+  lands its Phase 2, each with `python tools/validate-plugins/validate.py` printing "OK: all
+  plugin checks passed". Planned and checked in `product/plans/fix-record-yaml.yaml`, whose phases hold the real
+  Checks, because a building plan's unplanned phase gets its own plan file.
 
 ### Phase 5: Session handoff
 

@@ -302,7 +302,14 @@ phases:
       `fix-record/v2` as YAML, written by `find-root-cause` and read by `test-a-bug-fix`.
     check: |
       Planned once Phases 1 to 3 are judged.
-    status: unplanned
+    status: done
+    evidence: |
+      Built by its own plan, `product/plans/fix-record-yaml.yaml`, in PRs #237 and the PR that
+      lands its Phase 2, each with `python tools/validate-plugins/validate.py` printing "OK: all
+      plugin checks passed".
+    note: |
+      Planned and checked in `product/plans/fix-record-yaml.yaml`, whose phases hold the real
+      Checks, because a building plan's unplanned phase gets its own plan file.
   - name: Session handoff
     builds: |
       `handoff/v2` as YAML, written and loaded by `hand-off-session` and read by `whats-next`.

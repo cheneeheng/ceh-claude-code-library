@@ -123,7 +123,8 @@ lifecycle:
   only the frontmatter of built plans.
 - **Fix records are kept.** A bug fix does not go through a build plan, because the bug already
   says what to build. What it needs is the reason, so every fix commits
-  `product/fixes/<slug>.md` with its symptom, diagnosis, cause, and regression tests, written by
+  `product/fixes/<slug>.yaml` (`fix-record/v2`, its `.md` rendered beside it) with its symptom,
+  diagnosis, cause, and regression tests, written by
   `ceh-coding-conduct:find-root-cause` and `ceh-testing:test-a-bug-fix`. A fix that changes a
   contract or the design is a feature, and goes through `ceh-build-planning:write-build-plan`.
 - **Retro reports are kept when their fixes land here.** A retro looks back over one session
