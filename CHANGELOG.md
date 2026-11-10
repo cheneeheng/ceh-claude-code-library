@@ -11,6 +11,12 @@ before this repo live in
 
 ## 2026-11-10
 
+A new plan, `product/plans/handoff-yaml.yaml`, takes Phase 5 of the report formats plan: the
+session handoff becomes `handoff/v2`, YAML checked by a model and rendered in the `v1` layout, with
+`--file` callers such as Nightshift still finding their `state.md`. `ceh-every-session` will gain
+the render hook and guard, at about 85 ms per edit in every session, which the user chose. No
+plugin changes in this PR.
+
 `find-root-cause` now saves the fix record as `product/fixes/<slug>.yaml` (`fix-record/v2`) and
 renders its Markdown, so every new record is checked. Without `ceh-testing`, it completes the
 record by key itself. This closes Phase 4 of the report formats plan.
