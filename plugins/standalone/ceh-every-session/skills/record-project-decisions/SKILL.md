@@ -7,6 +7,9 @@ description: >-
 argument-hint: "[record <decision> | seed]"
 disable-model-invocation: false
 user-invocable: true
+compatibility: >-
+  Uses uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML, to check a
+  plan, ARCHITECTURE or BUSINESS_PLAN YAML before reading it. Without uv they are read unchecked.
 license: Apache-2.0
 ---
 
@@ -71,7 +74,15 @@ installed.
    - **Decisions already written down:** the README, `product/ARCHITECTURE.md` Key Decisions, plans
      under `product/plans/`, ADRs (`docs/adr/`, `docs/decisions/`), business plan files
      (`.agents_workspace/product/business/BUSINESS_PLAN.md`), `GLOSSARY.md`, and
-     manifests (`package.json`, `pyproject.toml`) as evidence of the stack.
+     manifests (`package.json`, `pyproject.toml`) as evidence of the stack. When a plan's
+     `<slug>.yaml`, `ARCHITECTURE.yaml` or `BUSINESS_PLAN.yaml` sits beside its `.md`, read the
+     YAML instead: first run
+     `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` (formats in
+     `${CLAUDE_SKILL_DIR}/references/plan-schema.md`, `architecture-schema.md` and
+     `business-plan-schema.md`). On exit 1, leave that file out and report its errors, unless the
+     only error is a stale `.md`. On exit 2 or 3, or without uv, say in the report that the file
+     went unchecked, and go on. The decisions are a plan's `design`, the architecture's
+     `key_decisions`, and the business plan's `sections.<section>.body`.
    - **Areas no skill asks about:** who the product is for, market, language and locale, what is
      out of scope, stack, hosting, data and authentication, product name and voice. Take only the
      areas this project has reached.

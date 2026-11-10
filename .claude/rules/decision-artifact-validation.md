@@ -13,8 +13,10 @@ A handoff file one stage writes and another reads is checked by code, not only d
 format with a pydantic model (`decision-output-templates.md`), checked by a PostToolUse hook on
 every write and by `artifact.py check` in each skill that reads it, with its Markdown generated
 and a PreToolUse guard denying hand edits to that Markdown. Each skill that reads the format
-carries its own copy of the model and `artifact.py`, and each plugin holding it keeps
-`artifact.py` and the hooks at its root for its hooks. The user approved the build plan trial
+carries its own copy of the model and `artifact.py`, and each plugin whose skills write it keeps
+`artifact.py` and the hooks at its root for its hooks. A plugin in `READERS` in `checks/artifact_models.py`,
+whose skills read a format or, as `write-fastapi-endpoints` does, render it themselves, carries no
+hooks. The user approved the build plan trial
 (`plan/v2`) on 2026-11-07, and the other spine formats follow it, per
 `product/plans/artifact-validation-formats.yaml`: the evidence report (`evidence/v2`), the
 architecture document (`architecture/v3`), the vision and strategy (`vision/v2`,

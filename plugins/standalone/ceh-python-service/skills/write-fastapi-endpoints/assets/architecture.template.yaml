@@ -1,0 +1,33 @@
+schema: architecture/v3
+overview:
+  bullets:
+    - <what the system does, for whom>
+  flow: |
+    flowchart LR
+        <nodes>
+diagrams:
+  - name: <System context | Components | Key flows | Data model | State machines>
+    walkthrough: |
+      <how to read the diagram>
+    notice:
+      - <what to notice>
+    mermaid: |
+      <diagram>
+    parts:
+      - title: <subsection>
+        walkthrough: |
+          <how to read the diagram>
+        notice:
+          - <what to notice>
+        mermaid: |
+          <diagram>
+key_decisions:
+  - date: YYYY-MM-DD
+    title: <title>
+    status: <Accepted | Superseded by YYYY-MM-DD <title>>
+    context: |
+      <context>
+    decision: |
+      <decision>
+    consequences: |
+      <consequences>

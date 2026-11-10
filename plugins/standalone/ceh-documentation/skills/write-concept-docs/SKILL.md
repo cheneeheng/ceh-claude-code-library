@@ -9,7 +9,9 @@ user-invocable: true
 compatibility: >-
   Reads the target project's files. Uses the git CLI on PATH to mine commit and merge messages for
   design rationale (`git log --grep`, `git log -S`); without git that source is skipped and more
-  rationale lands in open items.
+  rationale lands in open items. Uses uv, which runs scripts/artifact.py with Python 3.10+,
+  pydantic 2 and PyYAML, to check an ARCHITECTURE.yaml before reading it; without uv it is read
+  unchecked.
 license: Apache-2.0
 ---
 
@@ -55,6 +57,12 @@ Collect the "why" before writing, ordered by how much to trust each source:
 | Code comments           | Comments next to the behavior, especially `NOTE`, `WHY`, and "we do X because" prose                                                           |
 | Changelog               | `CHANGELOG.md` entries that changed the behavior, and the breaking-change notes                                                                |
 | The code itself         | A constraint the code makes visible (a lock, a bounded queue, a version check) — label it as inferred                                          |
+
+When `ARCHITECTURE.yaml` sits beside `ARCHITECTURE.md`, read its `key_decisions` from the YAML:
+first run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check ARCHITECTURE.yaml`
+(format in `${CLAUDE_SKILL_DIR}/references/architecture-schema.md`). On exit 1, stop and report
+its errors, unless the only error is a stale `.md`. On exit 2 or 3, or without uv, say in the
+reply that the file went unchecked, and go on.
 
 ### 3. Write each page
 

@@ -7,6 +7,9 @@ description: >-
 argument-hint: "[what you want to do]"
 disable-model-invocation: false
 user-invocable: true
+compatibility: >-
+  Uses uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML, to check a
+  plan/v2 plan before reading it. Without uv the plan is read unchecked.
 license: Apache-2.0
 ---
 
@@ -22,7 +25,12 @@ has one to three suggestions, each with the exact way to start it, and the choic
    - in a git repo: `git status`, the current branch, and `git log --oneline -10`
    - the lifecycle handoff files, each of which marks a stage reached: `.agents_workspace/product/business/BUSINESS_PLAN.md`
      (Shape done), `product/plans/*.md` (a plan not `built` is in flight), `product/ARCHITECTURE.md`
-     (built), `product/EVIDENCE.md` (proven)
+     (built), `product/EVIDENCE.md` (proven). When a plan's `<slug>.yaml` sits beside its `.md`,
+     read its `status` from the YAML: first run
+     `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <slug>.yaml` (format in
+     `${CLAUDE_SKILL_DIR}/references/plan-schema.md`). On exit 1, report its errors as the reason
+     to fix the plan first, unless the only error is a stale `.md`. On exit 2 or 3, or without uv,
+     say in the answer that the plan went unchecked, and go on.
    - the newest file in `.agents_workspace/handoff/`, if any, for work a past session left open
 2. Collect the candidates: every skill and agent in this session's listings, any plugin's, plus
    each user-only skill in the table below whose plugin `claude plugin list` shows as enabled.

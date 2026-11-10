@@ -46,3 +46,8 @@ Called by the tester agents via `bash "${CLAUDE_PLUGIN_ROOT}/scripts/<name>.sh"`
 The tester agents preload `ceh-testing:design-test-cases` and `write-pytest-service-tests` invokes it
 on every run, so the plugin declares `ceh-testing` as a dependency and Claude Code installs it
 automatically.
+
+When `write-fastapi-endpoints` records an API version's timeline in `ARCHITECTURE.yaml`, it checks
+the file against its model and renders `ARCHITECTURE.md` through
+[uv](https://docs.astral.sh/uv/), which installs pydantic and PyYAML on first use. Without uv the
+file is saved unchecked and unrendered.
