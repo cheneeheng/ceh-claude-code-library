@@ -63,8 +63,9 @@ baseline.
   otherwise the signed change of the median from the baseline's, to one decimal (`-25.0%`), so no
   model does that arithmetic.
 
-**Free text goes in quotes**, because ` #` starts a YAML comment, and every value is strict, so
-quote a value such as `1.10` that must stay text.
+**Free text goes in `|` blocks or double quotes**, because ` #` starts a YAML comment, and every
+value is strict, so quote a value such as `1.10` that must stay text. Never escape a quote inside
+single quotes: YAML keeps the backslash there, so `'say \"hi\"'` renders as `say \"hi\"`.
 
 **Moving a `v1` file.** A `perf-report/v1` `<metric>.md` with no YAML beside it is moved on the
 next attempt: copy it to `<metric>.v1.md` first, because `.agents_workspace/` is not in git, write
