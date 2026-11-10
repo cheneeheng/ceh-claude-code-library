@@ -11,6 +11,13 @@ before this repo live in
 
 ## 2026-11-10
 
+A new plan, `product/plans/fix-record-yaml.yaml`, takes Phase 4 of the report formats plan: the
+fix record becomes `fix-record/v2`, YAML checked by a model and rendered in the `v1` layout, in
+two phases, the format with `test-a-bug-fix` reading it first, then `find-root-cause` writing it.
+`ceh-coding-conduct` will gain the render hook and guard, at about 85 ms per edit in every coding
+session, which the user chose so a record is checked even without `ceh-testing`. No plugin
+changes in this PR.
+
 `write-evidence-report` no longer marks a QA report in fix mode `stale` because of its own fix
 commits. It counts from the fix commits instead, the smallest `git rev-list --count` over them,
 skipping one no longer in history. The error-messages audit keeps counting from `commit`, because
