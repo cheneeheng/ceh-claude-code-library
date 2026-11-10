@@ -261,7 +261,15 @@ phases:
       naming `findings.0.severity`. A scratchpad script resolves every security key path
       `write-evidence-report` names through its copy's `model_json_schema()`. `python
       tools/validate-plugins/validate.py` is green.
-    status: todo
+    status: done
+    evidence: |
+      a scratchpad `SECURITY_AUDIT-2026-11-10.yaml` with three findings rendered (exit 0), its rows
+      numbered 1, 2 and 3 and its `#`, `|` and `**` lines equal to the `v1` template's (SAME); the
+      three planted copies each exited 1, naming `findings.0.severity`, `findings.1.location` and
+      `owner` (extra input); the `ceh-security-audit` hook fixture blocking a bad severity naming
+      `findings.0.severity` passed in `checks/hooks.py`; a key-path script resolved 4 security
+      paths through both copies, 0 missing; `python tools/validate-plugins/validate.py` printed
+      "OK: all plugin checks passed".
   - name: Usability audits
     builds: |
       The three models, templates and `v2` schema sections in their writer skills, each with
@@ -329,3 +337,8 @@ record:
   - date: 2026-11-10
     event: PR
     details: "#228 https://github.com/cheneeheng/ceh-claude-code-library/pull/228"
+  - date: 2026-11-10
+    event: Built Phase
+    phase: 2
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"

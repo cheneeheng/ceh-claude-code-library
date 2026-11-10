@@ -10,7 +10,7 @@ user-invocable: true
 compatibility: >-
   Needs git to pin the report to a commit. Running the test suite needs the project's own test
   runner; without it the Tests area is written as not run. Checking and rendering EVIDENCE.yaml,
-  and checking the QA and performance YAML it reads, needs uv; without it the files go unchecked
+  and checking the QA, performance and security YAML it reads, needs uv; without it the files go unchecked
   and the Markdown is not rendered.
 license: Apache-2.0
 ---
@@ -40,7 +40,7 @@ on a fresh clone and none answers for the product as a whole. This file is the o
    | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
    | QA          | `.agents_workspace/product/qa/<timestamp>/QA_REPORT.yaml`, else its `.md`                                                                                                                 |
    | Performance | `.agents_workspace/product/perf/<metric>.yaml`, else its `.md`                                                                                                                            |
-   | Security    | `.agents_workspace/product/security-audit/SECURITY_AUDIT-<date>.md`                                                                                                                       |
+   | Security    | `.agents_workspace/product/security-audit/SECURITY_AUDIT-<date>.yaml`, else its `.md`                                                                                                     |
    | Usability   | `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.md` and `ERROR_MESSAGES.md`                                                                                              |
    | Plan        | each plan in `product/plans/` with status `building`, plus each `built` plan whose `## Record` has no Evidence line yet: phases `done` with evidence, and any check-against-plan findings |
 
@@ -53,13 +53,16 @@ on a fresh clone and none answers for the product as a whole. This file is the o
 
    When a report's `.yaml` sits beside its `.md`, read the YAML by key, never the Markdown: first
    run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` (formats in
-   `${CLAUDE_SKILL_DIR}/references/qa-report-schema.md` and `perf-report-schema.md`). On exit 1,
+   `${CLAUDE_SKILL_DIR}/references/qa-report-schema.md`, `perf-report-schema.md` and
+   `security-audit-schema.md`). On exit 1,
    the area is `not run`, naming the errors, because a broken report proves nothing. On exit 3,
    read that report's `.md` instead and say so, because its key paths may not hold. On exit 2, or
    without uv, say in the reply that the report went unchecked, and read the YAML anyway. The
    commit each ran against is `commit`. QA's bugs are `bugs`, each with `severity`, `status` and
    `fix`. Performance takes the last attempt in `attempts` whose `kept` is true, else the baseline
-   `attempts.0`, with its `median`, `low`, `high`, the file's `unit` and `machine`.
+   `attempts.0`, with its `median`, `low`, `high`, the file's `unit` and `machine`. Security
+   counts `findings` by `severity`, and its open issues are the `critical` and `high` ones, each
+   with its `location`.
 
 4. **Mark staleness.** For each result, find the commit it ran against (the report's `commit`, or
    take the last commit before its date). When `git log --oneline <that>..HEAD` is not empty, the

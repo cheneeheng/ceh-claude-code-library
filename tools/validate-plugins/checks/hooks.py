@@ -454,6 +454,22 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "  - {attempt: baseline, change: abc1234, median: 120, low: 110, high: 130,"
         " within_noise: false, kept: false}\n"
     )
+    good_sec = (
+        "schema: security-audit/v2\nrepo: wordy\ncommit: abc1234\ndate: 2026-11-10\n"
+        "attack_surface: |\n  One CLI entry point.\nfindings:\n"
+        "  - {severity: high, confidence: confirmed, category: Injection, attacker: local user,"
+        " location: 'wordy.py:12', attack: Shell from a file name, fix: Pass a list}\n"
+        "possible: []\nnot_checked: []\n"
+    )
+    sec = "ceh-security-audit"
+    security_fixtures = [
+        *report_fixtures(sec, "SECURITY_AUDIT", good_sec, good_sec.replace("severity: high", "severity: severe"), "findings.0.severity", "# Security audit: wordy"),
+        # report_fixtures writes its files with or without uv.
+        {"script": f"{sec}/artifact-render-hook.py", "stdin": write_at(tmp / "report-SECURITY_AUDIT" / "bad-SECURITY_AUDIT.yaml"), "env": no_uv, "out": "uv is not installed"},
+        # ceh-security-audit holds no plan model, so a plan YAML is not its to check.
+        {"script": f"{sec}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
+        {"script": f"{sec}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+    ]  # fmt: skip
     evidence_fixtures = [
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
@@ -477,6 +493,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ),
         *report_fixtures("ceh-testing", "QA_REPORT", good_qa, good_qa.replace("bugs: []", "bugs: [B3]", 1), "charters.0.bugs", "# QA report: Wordy"),
         *report_fixtures("ceh-testing", "search", good_perf, good_perf.replace("low: 110", "low: 125"), "attempts.0", "# Performance: search"),
+        *security_fixtures,
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},

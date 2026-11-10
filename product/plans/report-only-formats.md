@@ -230,7 +230,13 @@ was checked.
   naming `findings.0.severity`. A scratchpad script resolves every security key path
   `write-evidence-report` names through its copy's `model_json_schema()`. `python
   tools/validate-plugins/validate.py` is green.
-- **Status:** todo
+- **Status:** done, a scratchpad `SECURITY_AUDIT-2026-11-10.yaml` with three findings rendered (exit 0), its rows
+  numbered 1, 2 and 3 and its `#`, `|` and `**` lines equal to the `v1` template's (SAME); the
+  three planted copies each exited 1, naming `findings.0.severity`, `findings.1.location` and
+  `owner` (extra input); the `ceh-security-audit` hook fixture blocking a bad severity naming
+  `findings.0.severity` passed in `checks/hooks.py`; a key-path script resolved 4 security
+  paths through both copies, 0 missing; `python tools/validate-plugins/validate.py` printed
+  "OK: all plugin checks passed".
 
 ### Phase 3: Usability audits
 
@@ -282,5 +288,6 @@ None
 - 2026-11-10 Design changed: was "`within_noise` is false on the baseline, and `kept_commit` is required exactly when `kept` is true", now also refuses a kept baseline and a baseline median of 0 or less, because a kept baseline has no win to name and a zero median has no percent change for the renderer to compute
 - 2026-11-10 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-10 PR: #228 https://github.com/cheneeheng/ceh-claude-code-library/pull/228
+- 2026-11-10 Built Phase 2: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 
 <!-- prettier-ignore-end -->
