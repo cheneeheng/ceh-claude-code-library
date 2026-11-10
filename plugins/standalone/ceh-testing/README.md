@@ -54,7 +54,9 @@ through `uv` and renders the Markdown beside it, or reports each error back to t
 the Markdown as it was. It checks a `SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`, `UX_AUDIT.yaml` and
 `ERROR_MESSAGES.yaml` too, through `write-evidence-report`'s copies of their models, so with
 `ceh-security-audit` or `ceh-usability-audit` installed an error in one is reported by both
-plugins. The guard denies a direct
+plugins. `test-a-bug-fix` completes or creates a fix record, `product/fixes/<slug>.yaml`
+(`fix-record/v2`), which the hook checks through the skill's model too, as `ceh-coding-conduct`'s
+does. The guard denies a direct
 edit to a generated Markdown file and names its YAML. Both need `uv`: without it the agent is told
 once per session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS`
 with `artifact-render-hook` or `generated-md-guard`, switches them off.

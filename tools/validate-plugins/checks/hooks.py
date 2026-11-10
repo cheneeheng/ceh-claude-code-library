@@ -510,6 +510,25 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{ux}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{ux}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
+    # The fix record: ceh-coding-conduct writes it and ceh-testing completes it, so both check it.
+    good_fix = (
+        "schema: fix-record/v2\nstatus: diagnosed\ndate: 2026-11-10\ntitle: Count drops the last word\n"
+        "symptom: {command: wordy count a.txt, output: 2 words instead of 3}\ndiagnosis:\n  rows:\n"
+        "    - {hypothesis: The split drops a trailing token, refuted_by: Three words with a newline count 3,"
+        " result: confirmed, output: counts 2}\n"
+        "cause: {location: 'wordy.py:12', chain: The loop stops one short.}\nprediction: []\n"
+        "tests: []\nunverified: none\n"
+    )
+    cc = "ceh-coding-conduct"
+    no_confirmed = good_fix.replace("result: confirmed", "result: standing")
+    fix_record_fixtures = [
+        *report_fixtures(cc, "count-drops-last-word", good_fix, no_confirmed, "diagnosis.rows", "# Count drops the last word", "fix-cc"),
+        *report_fixtures("ceh-testing", "count-drops-last-word", good_fix, no_confirmed, "diagnosis.rows", "# Count drops the last word", "fix-testing"),
+        {"script": f"{cc}/artifact-render-hook.py", "stdin": write_at(tmp / "report-fix-cc" / "bad" / "count-drops-last-word.yaml"), "env": no_uv, "out": "uv is not installed"},
+        # ceh-coding-conduct holds no plan model, so a plan YAML is not its to check.
+        {"script": f"{cc}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
+        {"script": f"{cc}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+    ]  # fmt: skip
     evidence_fixtures = [
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
@@ -535,6 +554,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *report_fixtures("ceh-testing", "search", good_perf, good_perf.replace("low: 110", "low: 125"), "attempts.0", "# Performance: search"),
         *security_fixtures,
         *usability_fixtures,
+        *fix_record_fixtures,
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},

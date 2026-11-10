@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: fix-record-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from fix-record-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The fix record as a YAML format, fix-record/v2
-status: ready
+status: building
 created: 2026-11-10
 ---
 
@@ -166,7 +166,14 @@ the `fix-record/v1` layout.
   file and block a bad one through each plugin's render hook, print "uv is not installed"
   without uv, stay silent on a file with no `schema:` key, and have the `ceh-coding-conduct`
   guard deny an edit to a generated `.md`, prints "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, Scratchpad records `diagnosed`, `fixed`, `fixed` with `known_from_report` and `unreproduced`
+  (one with two predictions) rendered with exit 0 in the `v1` layout. Six bad records exited 1
+  naming `diagnosis`, `cause`, `diagnosis.rows` (twice) and `tests` (twice). The three greps
+  each matched once in `test-a-bug-fix/SKILL.md`. The two copies of each of the four format
+  files share an md5. `python tools/validate-plugins/validate.py` printed "OK: all plugin
+  checks passed", and a fixture with a wrong marker made it fail on
+  `count-drops-last-word.md was not rendered`. The third grep pattern is written in the skill as "no `.yaml` beside it", with backticks, so
+  the check ran `git grep -F` with that exact text instead of the regex the Check names.
 
 ### Phase 2: The writer
 
@@ -197,5 +204,6 @@ None
   the 10 advisory findings, the owner question answered by the user: hooks in
   ceh-coding-conduct
 - 2026-11-10 PR: #236 https://github.com/cheneeheng/ceh-claude-code-library/pull/236
+- 2026-11-10 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 
 <!-- prettier-ignore-end -->

@@ -1,6 +1,7 @@
 # Fix record schema
 
-Every bug fix leaves one committed file, `product/fixes/<slug>.md` in the target repo. The commit
+Every bug fix leaves one committed record, `product/fixes/<slug>.md` in the target repo, or for
+`fix-record/v2` (below) `product/fixes/<slug>.yaml` with that `.md` generated beside it. The commit
 message is written for reviewers of one change and the diagnosis in the chat ends with the session,
 so the record is the only place a later session or person finds why the fix exists. `<slug>` is
 kebab-case and names the behavior that was wrong, as the regression test does
@@ -58,3 +59,59 @@ written.
   elsewhere) is committed alone, so the investigation is not lost.
 - **Only what ran.** Each Result and the Prediction quote output that a command produced. A
   conclusion from reading code is labelled inferred.
+
+## fix-record/v2: YAML with generated Markdown
+
+A `fix-record/v2` record is `product/fixes/<slug>.yaml`, a copy of
+`../assets/fix-record.template.yaml`, and `product/fixes/<slug>.md` is generated from it in the
+`v1` layout above, beside it. The YAML is the source: agents read and edit it, and nobody edits the
+Markdown, which opens with `generated_from: <slug>.yaml` and a do-not-edit `generated_note`. The
+Fields, Sections by status and Rules above still hold. A `v1` record with no `.yaml` beside it
+stays Markdown and is completed in the `v1` form. The format in code is `fix-record-model.py`
+beside this file, and `scripts/artifact.py` in the skill checks and renders it through uv:
+
+```bash
+uv run --script scripts/artifact.py check product/fixes/<slug>.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render product/fixes/<slug>.yaml  # check, then write the .md
+```
+
+Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other
+failure, and `3` means no model for that version. Field paths count from 0, so `diagnosis.rows.0`
+is the first hypothesis.
+
+**Keys**, each required unless marked optional, and no other key allowed:
+
+- `schema`: `fix-record/v2`. `status`: `diagnosed`, `fixed` or `unreproduced`. `date`: an
+  unquoted date. `issue` (optional): as in `v1`. `plan` (optional): a path starting
+  `product/plans/`. `previous` (optional): the earlier record's `.md` path under `product/fixes/`,
+  which exists for a `v1` and a `v2` record alike.
+- `title`: the behavior that was wrong.
+- `symptom`: `command` (optional) and `output`, the failing output line. With no command, as in an
+  `unreproduced` record, `output` is the reported failure.
+- `diagnosis`: exactly one of `rows` and `known_from_report`. `rows`: at least one, each with
+  `hypothesis`, `refuted_by`, `result` (`refuted`, `standing` or `confirmed`) and `output`. In an
+  `unreproduced` record each attempt is a row whose hypothesis reads "it reproduces under
+  <condition>". `known_from_report`: where the report names the cause, such as `issue #12`,
+  rendered as `Cause known from the report: <it>` in place of the table.
+- `cause` (optional): `location`, the `file:line` or condition, or where the fix belongs when it
+  lands elsewhere, and `chain`, cause to symptom.
+- `prediction`: a list, `[]` when none, each with `command` (optional) and `result`, the result
+  predicted and then seen, one sentence each.
+- `fix` (optional): what changed and why. `tests`: a list, `[]` when none, each with `test`,
+  `protects`, `fails_when` and `why_new`.
+- `unverified`: what stayed unrun, or `none`.
+
+**Rules the model enforces**, the Sections by status above:
+
+- `diagnosed`: a `cause`, no `fix`, `tests: []`, and with `rows`, at least one `confirmed`.
+- `fixed`: a `cause`, a `fix` and at least one test, and with `rows`, at least one `confirmed`.
+  Only a `fixed` record may use `known_from_report`.
+- `unreproduced`: `rows` with none `confirmed`, no `cause` or `fix`, and `prediction: []` and
+  `tests: []`.
+- `title`, both `symptom` keys, every `rows` key, `cause.location`, each `prediction` key and each
+  test's four keys are one line, so the table cells and bullets render whole. A `|` in a table cell
+  is escaped by the renderer.
+
+**Free text goes in `|` blocks or double quotes**, because ` #` starts a YAML comment, and every
+value is strict, so quote a value such as `1.10` that must stay text. Never escape a quote inside
+single quotes: YAML keeps the backslash there, so `'say \"hi\"'` renders as `say \"hi\"`.

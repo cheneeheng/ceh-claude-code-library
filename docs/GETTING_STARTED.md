@@ -94,10 +94,10 @@ What each core plugin changes in every session, so you can decide before you ins
 - [`ceh-git-workflow`](../plugins/standalone/ceh-git-workflow/) denies file edits while the default
   branch is checked out.
 - [`ceh-coding-conduct`](../plugins/standalone/ceh-coding-conduct/) loads its coding contract at the
-  start of every session.
+  start of every session, and after every file edit checks the fix record when the edit wrote one.
 
-Their hooks need `python3` on your `PATH` (`ceh-every-session`, `ceh-git-workflow`) and `bash`
-(`ceh-coding-conduct`). `python3 --version` and `bash --version` show whether they are there. Without `python3` the guards do nothing instead of blocking you, and
+Their hooks need `python3` on your `PATH` (`ceh-every-session`, `ceh-git-workflow`,
+`ceh-coding-conduct`) and `bash` (`ceh-coding-conduct`). The fix record check also needs `uv`. `python3 --version` and `bash --version` show whether they are there. Without `python3` the guards do nothing instead of blocking you, and
 installing a plugin never installs `python3` for you.
 
 ```
