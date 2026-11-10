@@ -374,15 +374,19 @@ phases:
       holding an invalid `product/VISION.yaml` asks to plan a small change, and the skill stops
       naming the field. This last check spends model calls, so the builder asks the user whether to
       run it or hand over the steps.
-    status: todo
-    note: |
-      Built on branch `feat/plan-skills-read-checks`, waiting on the paid `claude -p` step. Run so far:
+    status: done
+    evidence: |
       `python tools/validate-plugins/validate.py` printed "OK: all plugin checks passed"; a planted
       line in the `write-build-plan` copy of `vision-model.py` turned `copies` red, then was reverted;
       each new copy's `artifact.py check` on a template-filled `VISION.yaml`, `ARCHITECTURE.yaml` or
-      `BUSINESS_PLAN.yaml` exited 1 naming `status`, `diagrams.0.name` and `status`. A stale `.md`
-      alone makes the reader read the YAML instead, since a reader does not own the file it would
-      render.
+      `BUSINESS_PLAN.yaml` exited 1 naming the field; one `claude -p "plan adding a reset command to
+      tally"` session with the branch's `ceh-build-planning` (`--plugin-dir`), in a scratch repo whose
+      `product/VISION.yaml` ranks a principle `Speed` it does not define, loaded `write-build-plan`,
+      ran the check, and stopped before writing a plan, quoting "conflicts.order names 'Speed', not a
+      principle" (8 turns, USD 0.29).
+    note: |
+      A stale `.md` alone makes the reader read the YAML instead, since a reader does not own the
+      file it would render.
   - name: Readers in other plugins
     builds: |
       The copies in the Phase 6 table under "Who carries what", each reader checking and reading the
@@ -467,3 +471,8 @@ record:
   - date: 2026-11-07
     event: PR
     details: "#223 https://github.com/cheneeheng/ceh-claude-code-library/pull/223"
+  - date: 2026-11-10
+    event: Built Phase
+    phase: 5
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and the live `claude -p` session stopped naming `conflicts.order`

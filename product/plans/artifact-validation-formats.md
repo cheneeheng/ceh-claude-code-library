@@ -334,13 +334,15 @@ reports `runs.0.areas.tests.status` to the agent right after the write and leave
   holding an invalid `product/VISION.yaml` asks to plan a small change, and the skill stops
   naming the field. This last check spends model calls, so the builder asks the user whether to
   run it or hand over the steps.
-- **Status:** todo. Built on branch `feat/plan-skills-read-checks`, waiting on the paid `claude -p` step. Run so far:
-  `python tools/validate-plugins/validate.py` printed "OK: all plugin checks passed"; a planted
+- **Status:** done, `python tools/validate-plugins/validate.py` printed "OK: all plugin checks passed"; a planted
   line in the `write-build-plan` copy of `vision-model.py` turned `copies` red, then was reverted;
   each new copy's `artifact.py check` on a template-filled `VISION.yaml`, `ARCHITECTURE.yaml` or
-  `BUSINESS_PLAN.yaml` exited 1 naming `status`, `diagrams.0.name` and `status`. A stale `.md`
-  alone makes the reader read the YAML instead, since a reader does not own the file it would
-  render.
+  `BUSINESS_PLAN.yaml` exited 1 naming the field; one `claude -p "plan adding a reset command to
+  tally"` session with the branch's `ceh-build-planning` (`--plugin-dir`), in a scratch repo whose
+  `product/VISION.yaml` ranks a principle `Speed` it does not define, loaded `write-build-plan`,
+  ran the check, and stopped before writing a plan, quoting "conflicts.order names 'Speed', not a
+  principle" (8 turns, USD 0.29). A stale `.md` alone makes the reader read the YAML instead, since a reader does not own the
+  file it would render.
 
 ### Phase 6: Readers in other plugins
 
@@ -385,5 +387,6 @@ None
 - 2026-11-07 Design changed: was "each `{body: str, subsections: list}`", checked as non-empty, now `body` may be empty, because a v0 plan opens with the 13 headings and nothing under them
 - 2026-11-07 Built Phase 4: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-07 PR: #223 https://github.com/cheneeheng/ceh-claude-code-library/pull/223
+- 2026-11-10 Built Phase 5: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and the live `claude -p` session stopped naming `conflicts.order`
 
 <!-- prettier-ignore-end -->
