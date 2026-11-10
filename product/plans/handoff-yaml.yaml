@@ -1,0 +1,182 @@
+schema: plan/v2
+title: The session handoff as a YAML format, handoff/v2
+status: ready
+created: 2026-11-10
+goal: |
+  Phase 5 of `product/plans/report-only-formats.yaml`: the handoff file that
+  `ceh-every-session:hand-off-session` saves and loads, and `ceh-every-session:whats-next` reads,
+  becomes a YAML format checked by a pydantic model, because it is a handoff to a later session,
+  which the user's instruction to make handoff files deterministic and checkable covers. The flow
+  that matters: a session saves `HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.yaml` with no Open
+  item, the hook reports `open` right after the write, and the next session's `load` checks the
+  file, reads `open.0` by key as the next step, and resumes.
+scope:
+  in:
+    - |
+      `handoff/v2`: a `.yaml` validated by `handoff-model.py`, with the `.md` of the same stem
+      rendered beside it in the `handoff/v1` layout, written by `hand-off-session`'s save and its
+      `--file` mode.
+    - |
+      `ceh-every-session` gains the render hook and the generated-Markdown guard and leaves
+      `READERS` in `tools/validate-plugins/checks/artifact_models.py`, so a handoff is checked on
+      every write.
+    - |
+      `hand-off-session` load and `whats-next` check a `v2` handoff and read it by key, from a
+      given path, an index line or the newest file, and still read a `v1` `.md` with no `.yaml`
+      beside it.
+    - |
+      `usage-limit-handoff` puts its window line in the handoff's `header`.
+    - |
+      Repo upkeep: copies registered in `docs/CROSS_REFERENCES.md`, hook fixtures in
+      `tools/validate-plugins/checks/hooks.py`, the `ceh-every-session` README (its hooks section
+      and the "Each hook script is stdlib-only Python" line), the root `README.md`
+      `ceh-every-session` cell and `docs/GETTING_STARTED.md` naming the new hooks and uv,
+      `docs/ENVIRONMENT_VARIABLES.md` adding `ceh-every-session` to `CEH_ARTIFACT_CHECK` and
+      `handoff/v2` to its formats, the `READERS` comment in `checks/artifact_models.py`,
+      `compatibility` lines on `hand-off-session` (new) and `whats-next` (naming the handoff),
+      `decision-artifact-validation.md` and `decision-output-templates.md` listing `handoff/v2`,
+      the changelog, the version bump in `plugin.json` and `.claude-plugin/marketplace.json`, and
+      `docs/PLUGIN_VERSIONS.md`.
+    - |
+      Phase 5 of `product/plans/report-only-formats.yaml` set `done`, with this plan as its
+      evidence.
+  out:
+    - item: Moving existing `HANDOFF-*.md` files or the global index lines to YAML.
+      reason: |
+        A handoff is read once and then superseded by the next save, and `load` still reads a
+        `v1` file, so old files age out on their own.
+    - item: A format for the global index, `~/.claude/handoff/index.md`.
+      reason: |
+        It is a one-line-per-save log outside any repo, read by a person or by `load` as a
+        fallback finder, and no failure of it is recorded.
+    - item: Changes in `ceh-nightshift`.
+      reason: |
+        Its `write-job-brief` saves Job state only through `hand-off-session save --file
+        <job folder>/state.md` and reads `state.md` and its `**<Field>:**` lines, which Design
+        "Files and paths" keeps at the same path, so it needs no change.
+    - item: Phase 6 formats.
+      reason: |
+        Planned one per format, as `report-only-formats.yaml` Phase 6 says.
+design:
+  - topic: Keys
+    decision: |
+      Each required unless marked optional, and no other key:
+
+      - `schema`: `handoff/v2`. `saved`: `YYYY-MM-DD HH:MM`, quoted, from one `date` call.
+        `session`: the first 8 characters of the session id.
+      - `header`: a list, `[]` when none, of a caller's own header lines (a usage window, a
+        reason), rendered under the title.
+      - `repo`: the working directory. `branch`: the branch, or `no git`.
+      - `fields`: a list, `[]` when none, each with `name` and `value`, the caller fields in the
+        order the caller named them, rendered `**<name>:** <value>` after Session.
+      - `goal`: a list of at least one item, rendered as bullets.
+      - `done`: a list, `[]` when none, each with `item`, `files` (one line, `none` when no file
+        was touched) and `validated` (a bool, rendered `validated` or `not validated`).
+      - `in_flight`: a list, `[]` when none.
+      - `open`: at least one item, the first the next actionable step. When the work is finished,
+        the item is the check that confirms it or the next task the user named, never a made-up
+        step: `handoff-schema.md` says so.
+      - `decisions_pending`: a list, `[]` when none. `forks_go_to` (optional): the place a caller
+        named for decisions.
+      - `resume_with`: one line.
+
+      Every list item and every other value is one line. An empty `done` or `in_flight` renders as
+      `- none`, and `decisions_pending` renders on its one `v1` line joined with `; `, or `none`
+      when empty, then `, forks go to <place>` when `forks_go_to` is set. The `v1` rules stay
+      prose: a bounded snapshot and exact paths, while validated marked on every Done item is now
+      forced by the bool.
+  - topic: Quoting
+    decision: |
+      `handoff-schema.md` says to single-quote any value that starts with `*`, contains `: ` or
+      holds a backslash, because PyYAML reads a leading `*` as an alias, `: ` as a mapping and
+      `\U` in double quotes as an escape. `usage-limit-handoff` gives its line as
+      `- '**Window:** <name> at N%, resets at HH:MM'`, and the template quotes `repo`.
+  - topic: Files and paths
+    decision: |
+      Save writes `.agents_workspace/handoff/HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.yaml` and
+      renders the `.md` beside it, and the global index line names the `.yaml`. With
+      `--file <path>`, the YAML is `<path>` with its suffix replaced by `.yaml` and the Markdown the
+      same stem with `.md`, so a caller that reads `state.md` still finds its rendered file at the
+      path it named. Before writing that YAML, save deletes the old `<stem>.md`, so a save without
+      uv leaves no stale Markdown behind for a caller to resume from, and the render recreates it.
+      The reply says when the file went unrendered.
+
+      Load resolves its file in this order: a given path, then an index line's path, then the
+      newest `HANDOFF-*` by the timestamp in its name across `.yaml` and `.md`. A path whose stem
+      has a `.yaml` beside it is read from that YAML, checked first with `artifact.py check` (stop
+      on exit 1 with its errors), and read by key. A `.md` with no `.yaml` beside it is a `v1`
+      file, read as before. `whats-next` takes the newest the same way.
+  - topic: Rendering and copies
+    decision: |
+      `handoff-model.py` holds the model and `render(doc, source)`, writing the `v1` layout of
+      `handoff.template.md` with `generated_from` and the do-not-edit `generated_note` in its
+      frontmatter and the body in a prettier-ignore range, as the other formats do. The model and
+      `handoff.template.yaml` sit beside `handoff-schema.md` in `hand-off-session` (canonical) and
+      `whats-next` (copies: the schema, the model and both templates), registered as a new
+      "Handoff format" entry in `docs/CROSS_REFERENCES.md`. `scripts/artifact.py` in
+      `hand-off-session` and the three root scripts of `ceh-every-session` are rows in the "Build
+      plan format" entry, where every other copy is registered. `whats-next` already carries
+      `scripts/artifact.py`. `hand-off-session`'s Output names both templates.
+  - topic: Hooks in ceh-every-session
+    decision: |
+      `artifact.py`, `artifact-render-hook.py` and `generated-md-guard.py` copied to
+      `plugins/standalone/ceh-every-session/scripts/`, and PreToolUse and PostToolUse
+      `Edit|Write|MultiEdit` entries added to the existing `hooks/hooks.json`, beside its Read,
+      Bash, AskUserQuestion and PostToolUse usage-watch entries. The user chose this on
+      2026-11-10 over keeping the plugin in `READERS`. The cost: about 85 ms per Edit or Write in
+      every session, coding or not (measured once on Windows for the same two scripts). The hooks
+      need `python3`, which the plugin's guards already need, and the check needs uv: without it
+      the agent is told once per session that the file went unchecked, and `hand-off-session`
+      gains a `compatibility` line saying so. Side effects the user accepted: the hook also checks
+      and renders any plan, architecture or business-plan YAML, because `whats-next` and
+      `record-project-decisions` hold those models, and when one of those copies lags the writing
+      plugin's version, a session writing that file gets a once-per-session "artifact.py exited 3"
+      warning. Those files are already rendered by their own plugins, and `write_atomic` handles
+      concurrent renders.
+  - topic: Versions and pull requests
+    decision: |
+      One phase and one PR, because the writer, both readers and the hooks are all in
+      `ceh-every-session`, so no installed version can hold one without the others.
+      `ceh-every-session` bumps MINOR, because it gains hooks.
+phases:
+  - name: The format, the hooks, the writer and the readers
+    builds: |
+      All of Scope In: `handoff-model.py`, `handoff.template.yaml` and a `handoff/v2` section in
+      `handoff-schema.md` beside its `v1` text, with the Quoting rule, in `hand-off-session`
+      (canonical) and `whats-next` (copies); `scripts/artifact.py` in `hand-off-session`; save,
+      `--file` and load per Design "Files and paths"; `whats-next` step 1 reading the newest
+      handoff by key; the `usage-limit-handoff` header line; both `compatibility` lines; the root
+      scripts and hook entries; `ceh-every-session` removed from `READERS` with its comment
+      updated; the fixtures, including `artifact_fixtures("ceh-every-session", False)` to pin the
+      plan check the hook now does, with the no-schema handoff fixture outside `product/plans/`;
+      the registry rows, docs, rule files, version and changelog; and `report-only-formats.yaml`
+      Phase 5 set `done`.
+    check: |
+      With uv, a scratchpad `HANDOFF-20261110-1200-abcd1234.yaml` with a quoted
+      `**Window:**` header line, caller fields, a Done item with `files: none`, two pending
+      decisions, `forks_go_to` and two Open items renders (exit 0) to Markdown whose body matches
+      the `v1` layout line by line, and files with `open: []`, a `done` item with no `validated`,
+      and an extra key each exit 1 naming `open`, `done.0.validated` and the key. `git grep -F`
+      finds, in `hand-off-session/SKILL.md`,
+      `HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.yaml`, `artifact.py render`, the `--file`
+      suffix rule (`suffix replaced by .yaml`), the stale `.md` deletion (`deletes the old`),
+      `artifact.py check` and `no .yaml beside it` in its Load section, and `.yaml` on its index
+      line; `artifact.py check` and `no .yaml beside it` in `whats-next/SKILL.md`; and `header` in
+      `usage-limit-handoff/SKILL.md`. `report-only-formats.yaml` shows `status: done` under `name:
+      Session handoff`. `python tools/validate-plugins/validate.py`, whose fixtures render a good
+      `handoff/v2` file and block a bad one through the `ceh-every-session` render hook, print "uv
+      is not installed" without uv, stay silent on a no-schema file outside `product/plans/`, check
+      a plan YAML through `artifact_fixtures("ceh-every-session", False)`, and have its guard deny
+      an edit to a generated `.md`, prints "OK: all plugin checks passed".
+    status: todo
+open: []
+record:
+  - date: 2026-11-10
+    event: Planned
+    details: status ready
+  - date: 2026-11-10
+    event: Reviewed
+    details: |
+      Revise first, 2 blocking (load from a given path read the rendered .md unchecked; a --file
+      save without uv left a stale .md), all fixed with the 9 advisory findings, and the owner
+      question settled on its recommended answer: open keeps at least one item
