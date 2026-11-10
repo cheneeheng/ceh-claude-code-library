@@ -11,6 +11,13 @@ before this repo live in
 
 ## 2026-11-11
 
+A new plan, `product/plans/competitor-report-yaml.yaml`, takes the third Phase 6 format of the
+report formats plan: the per-competitor report becomes `competitor-report/v2`, YAML checked by a
+model and rendered in the `v1` layout. Every Partial or Gap component must be taken, built or
+skipped, the tally and legend are computed, a section the user asked for has its own key, and a
+`v1` report is converted before a second pass amends it. `ceh-competitor-analysis` will gain the
+render hook and guard. No plugin changes in this PR.
+
 A new plan, `product/plans/run-state-yaml.yaml`, takes the second Phase 6 format of the report
 formats plan: the run state becomes `run-state/v2`, YAML checked by a model and rendered as
 `run-state.md` in the `v1` layout, still ending with the `FLOW STATUS:` line. Unique stage ids,
