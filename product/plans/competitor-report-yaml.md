@@ -222,5 +222,6 @@ and reads it by key.
 - 2026-11-11 Reviewed: Revise first, 4 blocking (no key for user-requested sections and section notes, a second pass on a v1 report has no path and the render overwrites it, the `ours` check is unsettled against multi-component cells, `read` rejects a local checkout or pasted material and nothing records missing sources), 10 advisory, all fixed as recommended, with notes and extra
   sections kept out of the HTML page because its layout is fixed. Both owner questions went
   under Open on their recommended answers.
+- 2026-11-11 PR: #244 https://github.com/cheneeheng/ceh-claude-code-library/pull/244
 
 <!-- prettier-ignore-end -->
