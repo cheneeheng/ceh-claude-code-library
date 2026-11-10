@@ -110,5 +110,6 @@ None
 - 2026-11-10 Reviewed: Revise first, 2 blocking (Phase 1 grep forbade the old-name clause the Design asked for,
   date-ordered pick of the newest fix commit breaks on tied dates), all fixed with the 6
   advisory findings
+- 2026-11-10 PR: #233 https://github.com/cheneeheng/ceh-claude-code-library/pull/233
 
 <!-- prettier-ignore-end -->
