@@ -262,5 +262,6 @@ was checked.
 
 - 2026-11-10 Planned: status ready
 - 2026-11-10 Reviewed: Revise first, 7 blocking (gate drops the N/A form, error-messages audit given a gate and findings it lacks, perf model cannot say no measurable change or an IQR spread, perf file treated as never updated, Results budget and total wait underived, Checks never prove the reader, repeat-mistake report has a later-session reader), all fixed with the 6 advisory findings
+- 2026-11-10 PR: #226 https://github.com/cheneeheng/ceh-claude-code-library/pull/226
 
 <!-- prettier-ignore-end -->

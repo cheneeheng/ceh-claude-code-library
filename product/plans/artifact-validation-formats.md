@@ -408,5 +408,6 @@ None
 - 2026-11-10 Built Phase 7: `product/plans/report-only-formats.yaml` saved and reviewed, Revise first with all findings fixed
 - 2026-11-10 Design changed: was "drop every character but letters, digits, spaces and hyphens", now "but word characters (letters, digits, underscores), spaces and hyphens", because GitHub's anchors keep underscores and the renderers (`architecture-model.py:113`, `business-plan-model.py:130`) already do
 - 2026-11-10 Checked: Built 29, Deviation 2, Cannot verify 1, Gap 0, Extra 0, Failing 0. Deviations: the anchor rule keeps underscores (plan corrected, Design changed above), and `docs/STRATEGY.md` named the `.md` files as Build's input (fixed to the YAML). Cannot verify: Phase 5's paid `claude -p` step, not rerun, its 2026-11-10 run is in the phase evidence
+- 2026-11-10 PR: #226 https://github.com/cheneeheng/ceh-claude-code-library/pull/226
 
 <!-- prettier-ignore-end -->

@@ -529,3 +529,6 @@ record:
     event: Checked
     details: |
       Built 29, Deviation 2, Cannot verify 1, Gap 0, Extra 0, Failing 0. Deviations: the anchor rule keeps underscores (plan corrected, Design changed above), and `docs/STRATEGY.md` named the `.md` files as Build's input (fixed to the YAML). Cannot verify: Phase 5's paid `claude -p` step, not rerun, its 2026-11-10 run is in the phase evidence
+  - date: 2026-11-10
+    event: PR
+    details: "#226 https://github.com/cheneeheng/ceh-claude-code-library/pull/226"
