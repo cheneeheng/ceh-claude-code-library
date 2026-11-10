@@ -40,7 +40,7 @@ on a fresh clone and none answers for the product as a whole. This file is the o
    | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
    | QA          | `.agents_workspace/product/qa/<timestamp>/QA_REPORT.yaml`, else its `.md`                                                                                                                 |
    | Performance | `.agents_workspace/product/perf/<metric>.yaml`, else its `.md`                                                                                                                            |
-   | Security    | `.agents_workspace/product/security-audit/SECURITY_AUDIT-<date>.yaml`, else its `.md`                                                                                                     |
+   | Security    | `.agents_workspace/product/security-audit/SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`, else its `.md`, the newest by file name (older date-only names sort first)                                |
    | Usability   | `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.yaml` and `ERROR_MESSAGES.yaml`, else their `.md`                                                                        |
    | Plan        | each plan in `product/plans/` with status `building`, plus each `built` plan whose `## Record` has no Evidence line yet: phases `done` with evidence, and any check-against-plan findings |
 

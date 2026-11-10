@@ -36,7 +36,7 @@ unfixed hole publishes it.
 
 ### Report render and generated Markdown guard
 
-`audit-codebase-security` saves `SECURITY_AUDIT-<date>.yaml` (`security-audit/v2`). After every
+`audit-codebase-security` saves `SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml` (`security-audit/v2`). After every
 write to it, the render hook checks the YAML against its model through `uv` and renders the
 Markdown beside it, or reports each error back to the agent and leaves the Markdown as it was. The
 guard denies a direct edit to a generated Markdown file and names its YAML. Both need `uv`: without

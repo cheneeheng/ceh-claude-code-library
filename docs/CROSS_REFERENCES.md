@@ -504,7 +504,7 @@ file.
 | `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/security-audit.template.yaml` | whole file | none     |
 
 **Shared:** the `security-audit/v2` format with its templates. `audit-codebase-security` writes
-`SECURITY_AUDIT-<date>.yaml`, and `write-evidence-report` reads its `commit` and `findings` by key,
+`SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`, and `write-evidence-report` reads its `commit` and `findings` by key,
 so it carries a copy to check the file first, and `ceh-testing`'s hook checks the file too. With
 both plugins installed an error is reported twice, from the same model. `validate.py` fails when a
 copy differs from the canonical file.
