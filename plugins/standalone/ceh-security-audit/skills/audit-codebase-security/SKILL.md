@@ -77,8 +77,9 @@ saved.
 
 ## Output
 
-Save to `.agents_workspace/product/security-audit/SECURITY_AUDIT-<YYYY-MM-DD>.yaml`, and reply with
-the counts by severity and the critical and high rows. The report fills
+Save to `.agents_workspace/product/security-audit/SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`, the
+timestamp from one `date +%Y%m%d-%H%M` call, so a second audit on the same day keeps the first,
+and reply with the counts by severity and the critical and high rows. The report fills
 `assets/security-audit.template.yaml`, per the `security-audit/v2` section of
 `references/security-audit-schema.md`. After the last edit, run
 `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which writes the

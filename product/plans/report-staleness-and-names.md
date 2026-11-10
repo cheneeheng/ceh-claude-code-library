@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: report-staleness-and-names.yaml
 generated_note: "Do not edit. artifact.py renders this file from report-staleness-and-names.yaml: edit the YAML, then run artifact.py render."
 title: Timed security audit file names, and QA fix-mode staleness from the last fix commit
-status: ready
+status: building
 created: 2026-11-10
 ---
 
@@ -86,7 +86,10 @@ the newest result as up to date.
   matches `audit-codebase-security/SKILL.md`, and `git grep -n "date-only names sort first"`
   matches `write-evidence-report/SKILL.md`. `python tools/validate-plugins/validate.py` prints
   "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, The old-name grep and the `git grep -L` over the nine listed files printed nothing, the date
+  command matched `audit-codebase-security/SKILL.md:81`, the sort clause matched
+  `write-evidence-report/SKILL.md:43`, and `python tools/validate-plugins/validate.py` printed
+  "OK: all plugin checks passed".
 
 ### Phase 2: QA staleness from the last fix commit
 
@@ -111,5 +114,6 @@ None
   date-ordered pick of the newest fix commit breaks on tied dates), all fixed with the 6
   advisory findings
 - 2026-11-10 PR: #233 https://github.com/cheneeheng/ceh-claude-code-library/pull/233
+- 2026-11-10 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 
 <!-- prettier-ignore-end -->

@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Timed security audit file names, and QA fix-mode staleness from the last fix commit
-status: ready
+status: building
 created: 2026-11-10
 goal: |
   The live runs that judged Phases 1 to 3 of `product/plans/report-only-formats.yaml` found two
@@ -90,7 +90,12 @@ phases:
       matches `audit-codebase-security/SKILL.md`, and `git grep -n "date-only names sort first"`
       matches `write-evidence-report/SKILL.md`. `python tools/validate-plugins/validate.py` prints
       "OK: all plugin checks passed".
-    status: todo
+    status: done
+    evidence: |
+      The old-name grep and the `git grep -L` over the nine listed files printed nothing, the date
+      command matched `audit-codebase-security/SKILL.md:81`, the sort clause matched
+      `write-evidence-report/SKILL.md:43`, and `python tools/validate-plugins/validate.py` printed
+      "OK: all plugin checks passed".
   - name: QA staleness from the last fix commit
     builds: |
       Scope In item 3, per Design "QA staleness base", in step 4 of
@@ -117,3 +122,8 @@ record:
   - date: 2026-11-10
     event: PR
     details: "#233 https://github.com/cheneeheng/ceh-claude-code-library/pull/233"
+  - date: 2026-11-10
+    event: Built Phase
+    phase: 1
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"

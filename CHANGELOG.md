@@ -11,6 +11,12 @@ before this repo live in
 
 ## 2026-11-10
 
+`audit-codebase-security` now saves `SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`, so a second audit on
+the same day keeps the first instead of overwriting it. `write-evidence-report` takes the newest
+security audit by file name, and older date-only names sort first. The format stays
+`security-audit/v2`, since no field changed, and the hooks pick the model by `schema:`, not by
+name.
+
 A new plan, `product/plans/report-staleness-and-names.yaml`, takes the two gaps the live runs of
 the report formats found: a second security audit on the same day has no file name of its own,
 and a QA report in fix mode reads `stale` in the evidence report because of its own fix commits.
@@ -86,8 +92,8 @@ settled its one open question: the three usability audits will require a `commit
 | `ceh-seo`                 | 1.1.8   |
 | `ceh-documentation`       | 1.0.8   |
 | `ceh-python-service`      | 1.1.5   |
-| `ceh-testing`             | 1.6.4   |
-| `ceh-security-audit`      | 1.1.1   |
+| `ceh-testing`             | 1.6.5   |
+| `ceh-security-audit`      | 1.1.2   |
 | `ceh-usability-audit`     | 1.2.1   |
 
 ### Added
@@ -96,6 +102,9 @@ settled its one open question: the three usability audits will require a `commit
 - Add the render hook and the generated-Markdown guard to `ceh-usability-audit`.
 
 ### Changed
+
+- Save the security audit as `SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml` in `audit-codebase-security`,
+  and take the newest by file name in `write-evidence-report`.
 
 - Save the first-run and interface audits as `UX_AUDIT.yaml` and the error-messages audit as
   `ERROR_MESSAGES.yaml`, each with a required `commit`, rendered to its Markdown.
