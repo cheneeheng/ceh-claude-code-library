@@ -61,5 +61,6 @@ first charter.
 - `usability_notes`: one string each. `not_explored`: `what` and `why`. An empty list is `[]` and
   renders as `None`.
 
-**Free text goes in `|` blocks or quotes**, because ` #` starts a YAML comment, and every value is
-strict, so quote a value such as `1.10` that must stay text.
+**Free text goes in `|` blocks or double quotes**, because ` #` starts a YAML comment, and every
+value is strict, so quote a value such as `1.10` that must stay text. Never escape a quote inside
+single quotes: YAML keeps the backslash there, so `'say \"hi\"'` renders as `say \"hi\"`.

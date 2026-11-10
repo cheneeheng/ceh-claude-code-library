@@ -11,6 +11,10 @@ before this repo live in
 
 ## 2026-11-10
 
+The six report schemas now say which quotes free text takes: `|` blocks or double quotes. A live
+error-messages audit escaped `"` inside single-quoted YAML, where the backslash stays, so its
+rendered report showed `\"alice\"`. The model accepted the file, so only the wording could catch it.
+
 The three usability audits follow as YAML formats, the last of the reports
 `write-evidence-report` reads. `simulate-newcomer-first-run` and `audit-interface` save
 `UX_AUDIT.yaml` (`first-run-audit/v2`, `interface-audit/v2`), and `audit-error-messages` saves
@@ -76,9 +80,9 @@ settled its one open question: the three usability audits will require a `commit
 | `ceh-seo`                 | 1.1.8   |
 | `ceh-documentation`       | 1.0.8   |
 | `ceh-python-service`      | 1.1.5   |
-| `ceh-testing`             | 1.6.3   |
-| `ceh-security-audit`      | 1.1.0   |
-| `ceh-usability-audit`     | 1.2.0   |
+| `ceh-testing`             | 1.6.4   |
+| `ceh-security-audit`      | 1.1.1   |
+| `ceh-usability-audit`     | 1.2.1   |
 
 ### Added
 
@@ -117,6 +121,8 @@ settled its one open question: the three usability audits will require a `commit
 
 ### Fixed
 
+- Name `|` blocks or double quotes for free text in the QA, performance, security and three
+  usability audit schemas, and warn that a backslash inside single quotes stays in the text.
 - Treat a missing `DECISION_LOG.md` as not yet settled in the workspace-sync hook fixtures, so a
   merge by the detached worker no longer crashes `validate.py`.
 
