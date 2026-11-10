@@ -265,5 +265,6 @@ None
 - 2026-11-10 Reviewed: Revise first, 7 blocking (gate drops the N/A form, error-messages audit given a gate and findings it lacks, perf model cannot say no measurable change or an IQR spread, perf file treated as never updated, Results budget and total wait underived, Checks never prove the reader, repeat-mistake report has a later-session reader), all fixed with the 6 advisory findings
 - 2026-11-10 PR: #226 https://github.com/cheneeheng/ceh-claude-code-library/pull/226
 - 2026-11-10 Design changed: was the Open item "Does the user want the usability audits to require `commit`", now settled in Design as required, because the user chose it
+- 2026-11-10 PR: #227 https://github.com/cheneeheng/ceh-claude-code-library/pull/227
 
 <!-- prettier-ignore-end -->

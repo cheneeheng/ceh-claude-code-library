@@ -297,3 +297,6 @@ record:
     event: Design changed
     details: |
       was the Open item "Does the user want the usability audits to require `commit`", now settled in Design as required, because the user chose it
+  - date: 2026-11-10
+    event: PR
+    details: "#227 https://github.com/cheneeheng/ceh-claude-code-library/pull/227"
