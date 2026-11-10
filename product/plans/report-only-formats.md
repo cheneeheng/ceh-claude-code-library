@@ -275,7 +275,8 @@ was checked.
 
 - **Builds:** `handoff/v2` as YAML, written and loaded by `hand-off-session` and read by `whats-next`.
 - **Check:** Planned once Phases 1 to 3 are judged.
-- **Status:** unplanned
+- **Status:** done, Built by its own plan, `product/plans/handoff-yaml.yaml`, in PR #240, with `python
+  tools/validate-plugins/validate.py` printing "OK: all plugin checks passed". Planned and checked in `product/plans/handoff-yaml.yaml`, whose phase holds the real Check.
 
 ### Phase 6: Other handoff reports
 
@@ -307,5 +308,8 @@ was checked.
 - 2026-11-10 Built Phase 4: Built by `product/plans/fix-record-yaml.yaml`, `python tools/validate-plugins/validate.py`,
   "OK: all plugin checks passed"
 - 2026-11-10 PR: #238 https://github.com/cheneeheng/ceh-claude-code-library/pull/238
+- 2026-11-10 Built Phase 5: Built by `product/plans/handoff-yaml.yaml`, `python tools/validate-plugins/validate.py`, "OK:
+  all plugin checks passed"
+- 2026-11-10 PR: #240 https://github.com/cheneeheng/ceh-claude-code-library/pull/240
 
 <!-- prettier-ignore-end -->

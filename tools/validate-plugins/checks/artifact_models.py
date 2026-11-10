@@ -21,9 +21,9 @@ MODEL_SUFFIX = "-model.py"
 SHARED_SCRIPTS = ("artifact.py", "artifact-render-hook.py", "generated-md-guard.py")
 # Plugins whose skills only read a format (or, as write-fastapi-endpoints, render it themselves)
 # carry the models in their skills and no hooks, per Phase 6 of
-# product/plans/artifact-validation-formats.yaml.
+# product/plans/artifact-validation-formats.yaml. ceh-every-session left it when hand-off-session
+# began writing handoff/v2 (product/plans/handoff-yaml.yaml), so it now ships the hooks.
 READERS = {
-    "ceh-every-session",
     "ceh-blog",
     "ceh-seo",
     "ceh-documentation",

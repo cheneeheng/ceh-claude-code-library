@@ -529,6 +529,18 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{cc}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{cc}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
+    # The session handoff: hand-off-session writes and loads it, whats-next reads it.
+    good_handoff = (
+        'schema: handoff/v2\nsaved: "2026-11-10 12:00"\nsession: abcd1234\n'
+        "header:\n  - '**Window:** 5h at 92%, resets at 14:00'\nrepo: '/work/wordy'\nbranch: main\n"
+        "fields: []\ngoal: [Count words]\ndone: []\nin_flight: []\nopen: [Run the tests]\n"
+        "decisions_pending: []\nresume_with: git checkout main\n"
+    )
+    es = "ceh-every-session"
+    handoff_fixtures = [
+        *report_fixtures(es, "HANDOFF-20261110-1200-abcd1234", good_handoff, good_handoff.replace("open: [Run the tests]", "open: []"), "open", "# Handoff — 2026-11-10 12:00", "handoff"),
+        {"script": f"{es}/artifact-render-hook.py", "stdin": write_at(tmp / "report-handoff" / "bad" / "HANDOFF-20261110-1200-abcd1234.yaml"), "env": no_uv, "out": "uv is not installed"},
+    ]  # fmt: skip
     evidence_fixtures = [
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
@@ -555,6 +567,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *security_fixtures,
         *usability_fixtures,
         *fix_record_fixtures,
+        *handoff_fixtures,
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},
@@ -581,6 +594,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *artifact_fixtures("ceh-build-planning", True),
         *artifact_fixtures("ceh-build-from-plan", False),
         *artifact_fixtures("ceh-check-build-against-plan", False),
+        # ceh-every-session holds the plan model for whats-next, so its hook checks plans too.
+        *artifact_fixtures("ceh-every-session", False),
         *evidence_fixtures,
         {"script": "build-record-guard.py", "stdin": record_yaml(), "out": "implement-from-plan"},
         {"script": "build-record-guard.py", "stdin": record_yaml("skill"), "out": ""},

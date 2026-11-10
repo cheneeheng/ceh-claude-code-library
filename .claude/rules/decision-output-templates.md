@@ -29,7 +29,8 @@ evidence report (`evidence/v2`), the architecture document (`architecture/v3`), 
 strategy (`vision/v2`, `strategy/v2`), the business plan (`business-plan/v3`), the QA report
 (`qa-report/v2`), the performance file (`perf-report/v2`), the security audit
 (`security-audit/v2`), the three usability audits (`first-run-audit/v2`, `interface-audit/v2`,
-`error-messages-audit/v2`), and the fix record (`fix-record/v2`).
+`error-messages-audit/v2`), the fix record (`fix-record/v2`), and the session handoff
+(`handoff/v2`).
 
 Why: the format lives in one pair of files, and each saved file names its version. A YAML format
 adds the model, so every field of the file, body included, is checked rather than described.

@@ -9,7 +9,7 @@ disable-model-invocation: false
 user-invocable: true
 compatibility: >-
   Uses uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML, to check a
-  plan/v2 plan before reading it. Without uv the plan is read unchecked.
+  plan/v2 plan or a handoff/v2 handoff before reading it. Without uv the file is read unchecked.
 license: Apache-2.0
 ---
 
@@ -31,7 +31,10 @@ has one to three suggestions, each with the exact way to start it, and the choic
      `${CLAUDE_SKILL_DIR}/references/plan-schema.md`). On exit 1, report its errors as the reason
      to fix the plan first, unless the only error is a stale `.md`. On exit 2 or 3, or without uv,
      say in the answer that the plan went unchecked, and go on.
-   - the newest file in `.agents_workspace/handoff/`, if any, for work a past session left open
+   - the newest `HANDOFF-*` in `.agents_workspace/handoff/` by the timestamp in its name, if any,
+     for work a past session left open. When its stem has a `.yaml`, run `artifact.py check` on it
+     as for a plan (format in `${CLAUDE_SKILL_DIR}/references/handoff-schema.md`) and read
+     `open.0` by key. A `.md` with no `.yaml` beside it is a `handoff/v1` file, read as before
 2. Collect the candidates: every skill and agent in this session's listings, any plugin's, plus
    each user-only skill in the table below whose plugin `claude plugin list` shows as enabled.
 3. If the request and the repo still leave the goal open, ask one round with `AskUserQuestion`: at

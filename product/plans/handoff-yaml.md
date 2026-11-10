@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: handoff-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from handoff-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The session handoff as a YAML format, handoff/v2
-status: ready
+status: built
 created: 2026-11-10
 ---
 
@@ -158,7 +158,15 @@ file, reads `open.0` by key as the next step, and resumes.
   is not installed" without uv, stay silent on a no-schema file outside `product/plans/`, check
   a plan YAML through `artifact_fixtures("ceh-every-session", False)`, and have its guard deny
   an edit to a generated `.md`, prints "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, The scratchpad handoff with a quoted `**Window:**` header, two caller fields, a `files: none`
+  Done item, two pending decisions, `forks_go_to` and two Open items rendered with exit 0
+  through both skill copies, matching the `v1` layout. `open: []`, a missing
+  `done.0.validated` and an extra key each exited 1 naming that path. All the `git grep -F`
+  lines matched (the index line's "path of the `.yaml`" across a line break), `Session
+  handoff` reads `status: done`, the copies share md5s in pairs, and `python
+  tools/validate-plugins/validate.py` printed "OK: all plugin checks passed". The root README's prerequisites line also said `ceh-coding-conduct` needed only `bash` and
+  that no other plugin ships a hook, both stale since #237 and earlier, so this PR corrects it
+  while naming the new hooks.
 
 ## Open
 
@@ -171,5 +179,9 @@ None
   save without uv left a stale .md), all fixed with the 9 advisory findings, and the owner
   question settled on its recommended answer: open keeps at least one item
 - 2026-11-10 PR: #239 https://github.com/cheneeheng/ceh-claude-code-library/pull/239
+- 2026-11-10 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-10 Checked: 17 Built (6 In, 6 Design, 4 Out absent, 1 phase Check rerun), 0 Gap, 0 Deviation, 0 Extra,
+  0 Failing, 0 Cannot verify
+- 2026-11-10 PR: #240 https://github.com/cheneeheng/ceh-claude-code-library/pull/240
 
 <!-- prettier-ignore-end -->

@@ -356,6 +356,10 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-coding-conduct/scripts/artifact.py`                                                                                | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-coding-conduct/scripts/artifact-render-hook.py`                                                                    | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-coding-conduct/scripts/generated-md-guard.py`                                                                      | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/hand-off-session/scripts/artifact.py`                                                         | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/scripts/artifact.py`                                                                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/scripts/artifact-render-hook.py`                                                                     | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/scripts/generated-md-guard.py`                                                                       | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/scripts/artifact.py`                                            | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/audit-interface/scripts/artifact.py`                                                        | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
@@ -587,6 +591,21 @@ slug rule, the write-only-for-repo-causes rule, the frontmatter with its three s
 committed-alone rules. `find-root-cause` writes the record and `test-a-bug-fix` completes or creates
 it, and each plugin carries a copy so it works installed alone. `validate.py` fails when a copy
 differs from the canonical file.
+
+## Handoff format
+
+**Canonical:** whole files, `plugins/standalone/ceh-every-session/skills/hand-off-session/references/handoff-schema.md`, `plugins/standalone/ceh-every-session/skills/hand-off-session/references/handoff-model.py`, `plugins/standalone/ceh-every-session/skills/hand-off-session/assets/handoff.template.md`, `plugins/standalone/ceh-every-session/skills/hand-off-session/assets/handoff.template.yaml`
+
+| Copy                                                                                  | Section    | Diverges |
+| ------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-every-session/skills/whats-next/references/handoff-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/whats-next/references/handoff-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/whats-next/assets/handoff.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/whats-next/assets/handoff.template.yaml` | whole file | none     |
+
+**Shared:** the `handoff/v1` layout and the `handoff/v2` YAML with its model. `hand-off-session`
+saves and loads the handoff, and `whats-next` reads the newest one, checking a `v2` file with its
+own copy of the model first. `validate.py` fails when a copy differs from the canonical file.
 
 ## Business-plan "No human to answer" clause
 

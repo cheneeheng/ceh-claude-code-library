@@ -314,7 +314,12 @@ phases:
       `handoff/v2` as YAML, written and loaded by `hand-off-session` and read by `whats-next`.
     check: |
       Planned once Phases 1 to 3 are judged.
-    status: unplanned
+    status: done
+    evidence: |
+      Built by its own plan, `product/plans/handoff-yaml.yaml`, in PR #240, with `python
+      tools/validate-plugins/validate.py` printing "OK: all plugin checks passed".
+    note: |
+      Planned and checked in `product/plans/handoff-yaml.yaml`, whose phase holds the real Check.
   - name: Other handoff reports
     builds: |
       One plan per format for the workflow spec, run state, competitor report, glossary, blog voice
@@ -384,3 +389,12 @@ record:
   - date: 2026-11-10
     event: PR
     details: "#238 https://github.com/cheneeheng/ceh-claude-code-library/pull/238"
+  - date: 2026-11-10
+    event: Built Phase
+    phase: 5
+    details: |
+      Built by `product/plans/handoff-yaml.yaml`, `python tools/validate-plugins/validate.py`, "OK:
+      all plugin checks passed"
+  - date: 2026-11-10
+    event: PR
+    details: "#240 https://github.com/cheneeheng/ceh-claude-code-library/pull/240"

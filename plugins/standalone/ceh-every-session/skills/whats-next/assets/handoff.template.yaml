@@ -1,0 +1,24 @@
+schema: handoff/v2
+saved: "YYYY-MM-DD HH:MM"
+session: <session-id-prefix>
+header:
+  - '<caller header line>'
+repo: '<path>'
+branch: <branch or "no git">
+fields:
+  - name: <field>
+    value: <value>
+goal:
+  - <goal>
+done:
+  - item: <item>
+    files: <files touched, or none>
+    validated: <true | false>
+in_flight:
+  - <state>
+open:
+  - <next step>
+decisions_pending:
+  - <fork>
+forks_go_to: <place>
+resume_with: <branch, command, or file>

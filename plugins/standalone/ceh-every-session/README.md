@@ -105,17 +105,32 @@ which `validate.py` does not run.
 
 The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled.
 Each hook script is stdlib-only Python, needs `python3` on PATH, and fails open: a hook that blocked
-work on its own bugs would cost more than it saves. One subsection per guard below.
+work on its own bugs would cost more than it saves. The handoff render hook runs `artifact.py`
+through `uv` for the check itself. One subsection per guard below.
 
-| Guard                                   | Event                            | Script(s)                                       | Default |
-| --------------------------------------- | -------------------------------- | ----------------------------------------------- | ------- |
-| [Usage-limit guard](#usage-limit-guard) | `PostToolUse` (every tool)       | `usage-limit-watch.py`                          | on      |
-| [Bulk-read guards](#bulk-read-guards)   | `PreToolUse` (`Read`, `Bash`)    | `bulk-read-guard.py`, `bulk-read-bash-guard.py` | opt-in  |
-| [Question guard](#question-guard)       | `PreToolUse` (`AskUserQuestion`) | `ask-user-question-guard.py`                    | on      |
+| Guard                                                 | Event                                         | Script(s)                                          | Default |
+| ----------------------------------------------------- | --------------------------------------------- | -------------------------------------------------- | ------- |
+| [Usage-limit guard](#usage-limit-guard)               | `PostToolUse` (every tool)                    | `usage-limit-watch.py`                             | on      |
+| [Bulk-read guards](#bulk-read-guards)                 | `PreToolUse` (`Read`, `Bash`)                 | `bulk-read-guard.py`, `bulk-read-bash-guard.py`    | opt-in  |
+| [Question guard](#question-guard)                     | `PreToolUse` (`AskUserQuestion`)              | `ask-user-question-guard.py`                       | on      |
+| [Handoff render and guard](#handoff-render-and-guard) | `PostToolUse`, `PreToolUse` (`Edit`, `Write`) | `artifact-render-hook.py`, `generated-md-guard.py` | on      |
 
 To switch one hook off without uninstalling the plugin, list its script name in
 `CEH_DISABLED_HOOKS` (comma-separated, no extension): `usage-limit-watch`, `bulk-read-guard`,
-`bulk-read-bash-guard`, `ask-user-question-guard`.
+`bulk-read-bash-guard`, `ask-user-question-guard`, `artifact-render-hook`, `generated-md-guard`.
+
+### Handoff render and guard
+
+**After every file edit** — `hand-off-session` saves the handoff as `handoff/v2`, a `.yaml` with the
+`.md` rendered beside it. A `PostToolUse` hook (`scripts/artifact-render-hook.py`) checks a written
+handoff YAML against its model through `uv` and renders the Markdown, or reports each error back to
+the agent and leaves the Markdown as it was. A `PreToolUse` guard (`scripts/generated-md-guard.py`)
+denies a direct edit to a generated Markdown file and names its YAML. Both run on every Edit or
+Write in every session and return at once for any other file, about 85 ms per edit for the two
+together, measured once on Windows. Because `whats-next` and `record-project-decisions` carry the
+plan, architecture and business-plan models, the hook also checks and renders those files when they
+are written, as their own plugins already do. Without `uv` the agent is told once per session that
+the file went unchecked. `CEH_ARTIFACT_CHECK=off` switches both off.
 
 ### Usage-limit guard
 

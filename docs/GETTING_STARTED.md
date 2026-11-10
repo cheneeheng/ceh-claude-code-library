@@ -90,14 +90,15 @@ you neither write code nor use git, for example you only write business plans or
 What each core plugin changes in every session, so you can decide before you install:
 
 - [`ceh-every-session`](../plugins/standalone/ceh-every-session/) forces its response style over
-  any `outputStyle` you set, and turns Claude's question dialogs into a decision block in the reply.
+  any `outputStyle` you set, turns Claude's question dialogs into a decision block in the reply,
+  and after every file edit checks a handoff or plan file when the edit wrote one.
 - [`ceh-git-workflow`](../plugins/standalone/ceh-git-workflow/) denies file edits while the default
   branch is checked out.
 - [`ceh-coding-conduct`](../plugins/standalone/ceh-coding-conduct/) loads its coding contract at the
   start of every session, and after every file edit checks the fix record when the edit wrote one.
 
 Their hooks need `python3` on your `PATH` (`ceh-every-session`, `ceh-git-workflow`,
-`ceh-coding-conduct`) and `bash` (`ceh-coding-conduct`). The fix record check also needs `uv`. `python3 --version` and `bash --version` show whether they are there. Without `python3` the guards do nothing instead of blocking you, and
+`ceh-coding-conduct`) and `bash` (`ceh-coding-conduct`). The fix record and handoff checks also need `uv`. `python3 --version` and `bash --version` show whether they are there. Without `python3` the guards do nothing instead of blocking you, and
 installing a plugin never installs `python3` for you.
 
 ```
