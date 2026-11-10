@@ -170,5 +170,6 @@ None
 - 2026-11-10 Reviewed: Revise first, 2 blocking (load from a given path read the rendered .md unchecked; a --file
   save without uv left a stale .md), all fixed with the 9 advisory findings, and the owner
   question settled on its recommended answer: open keeps at least one item
+- 2026-11-10 PR: #239 https://github.com/cheneeheng/ceh-claude-code-library/pull/239
 
 <!-- prettier-ignore-end -->

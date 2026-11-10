@@ -180,3 +180,6 @@ record:
       Revise first, 2 blocking (load from a given path read the rendered .md unchecked; a --file
       save without uv left a stale .md), all fixed with the 9 advisory findings, and the owner
       question settled on its recommended answer: open keeps at least one item
+  - date: 2026-11-10
+    event: PR
+    details: "#239 https://github.com/cheneeheng/ceh-claude-code-library/pull/239"
