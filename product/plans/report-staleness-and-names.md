@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: report-staleness-and-names.yaml
 generated_note: "Do not edit. artifact.py renders this file from report-staleness-and-names.yaml: edit the YAML, then run artifact.py render."
 title: Timed security audit file names, and QA fix-mode staleness from the last fix commit
-status: building
+status: built
 created: 2026-11-10
 ---
 
@@ -101,7 +101,10 @@ the newest result as up to date.
   sharing one commit date, the step's rule given fixes `b` and `c` in either order gives 0,
   given `a` and `b` gives 1, and a missing `deadbee` is skipped. `python
   tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, The grep matched step 4 at `write-evidence-report/SKILL.md:75-77`. In a scratchpad repo of
+  three commits at one date, the step's rule gave 0 for `b`,`c` and for `c`,`b`, 1 for `a`,`b`,
+  skipped `deadbee`, and fell back to `commit` with only `deadbee`. `python
+  tools/validate-plugins/validate.py` printed "OK: all plugin checks passed".
 
 ## Open
 
@@ -116,5 +119,7 @@ None
 - 2026-11-10 PR: #233 https://github.com/cheneeheng/ceh-claude-code-library/pull/233
 - 2026-11-10 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-10 PR: #234 https://github.com/cheneeheng/ceh-claude-code-library/pull/234
+- 2026-11-10 Built Phase 2: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-10 Checked: 14 Built, 0 Gap, 0 Deviation, 0 Extra, 0 Failing, 0 Cannot verify
 
 <!-- prettier-ignore-end -->

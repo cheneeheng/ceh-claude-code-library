@@ -71,7 +71,11 @@ on a fresh clone and none answers for the product as a whole. This file is the o
 
 4. **Mark staleness.** For each result, find the commit it ran against (the report's `commit`, or
    take the last commit before its date). When `git log --oneline <that>..HEAD` is not empty, the
-   area is `stale` with the commit count, because the code moved after the check.
+   area is `stale` with the commit count, because the code moved after the check. A QA report
+   whose `bugs` hold any `fix` counts from its fix commits instead: the smallest
+   `git rev-list --count <fix.commit>..HEAD` over them, skipping a `fix.commit` that
+   `git cat-file -e <fix.commit>^{commit}` rejects, and with none left, from `commit`. The run made
+   those commits and re-ran each bug after its fix, so they are not code that moved after the check.
 5. **Write the claims.** List only what a reader outside the team may be told, each one sentence
    with the area and figure behind it: "All 212 tests pass at a1b2c3d", "p95 search latency 38 ms
    on <machine>". A `stale`, `not run`, or `open issues` area yields no positive claim about the

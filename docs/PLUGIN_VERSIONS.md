@@ -34,7 +34,7 @@ a removed plugin loses its row.
 | `ceh-seo`                      | 1.1.8   | `2026-11-10` |
 | `ceh-session-diagnosis`        | 1.0.8   | `2026-10-23` |
 | `ceh-session-to-skill`         | 1.0.2   | `2026-10-16` |
-| `ceh-testing`                  | 1.6.5   | `2026-11-10` |
+| `ceh-testing`                  | 1.6.6   | `2026-11-10` |
 | `ceh-ui-design`                | 1.0.10  | `2026-11-02` |
 | `ceh-usability-audit`          | 1.2.1   | `2026-11-10` |
 | `ceh-vision-and-strategy`      | 1.1.1   | `2026-11-10` |
