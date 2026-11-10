@@ -1,6 +1,6 @@
 schema: plan/v2
 title: The fix record as a YAML format, fix-record/v2
-status: building
+status: built
 created: 2026-11-10
 goal: |
   Phase 4 of `product/plans/report-only-formats.yaml`: the fix record that
@@ -205,7 +205,15 @@ phases:
       matches each file. `uv run --script plugins/standalone/ceh-build-planning/scripts/artifact.py
       check product/plans/report-only-formats.yaml` exits 0. `python
       tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
-    status: todo
+    status: done
+    evidence: |
+      The three greps matched `find-root-cause/SKILL.md`, step 8 holds no
+      `product/fixes/<slug>.md`, `fix-record/v2` matched the three docs, the
+      `report-only-formats.yaml` check exited 0, and `python tools/validate-plugins/validate.py`
+      printed "OK: all plugin checks passed".
+    note: |
+      The `ceh-testing` README row named the old `.md` path too, so `ceh-testing` took a PATCH
+      bump in this phase, as Design "Versions and pull requests" allows.
 open: []
 record:
   - date: 2026-11-10
@@ -229,3 +237,16 @@ record:
   - date: 2026-11-10
     event: PR
     details: "#237 https://github.com/cheneeheng/ceh-claude-code-library/pull/237"
+  - date: 2026-11-10
+    event: Built Phase
+    phase: 2
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+  - date: 2026-11-10
+    event: Checked
+    details: |
+      19 Built (6 In, 6 Design, 5 Out absent, 2 phase Checks rerun), 0 Gap, 0 Deviation, 0 Extra,
+      0 Failing, 0 Cannot verify
+  - date: 2026-11-10
+    event: PR
+    details: "#238 https://github.com/cheneeheng/ceh-claude-code-library/pull/238"

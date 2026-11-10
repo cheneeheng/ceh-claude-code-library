@@ -11,6 +11,10 @@ before this repo live in
 
 ## 2026-11-10
 
+`find-root-cause` now saves the fix record as `product/fixes/<slug>.yaml` (`fix-record/v2`) and
+renders its Markdown, so every new record is checked. Without `ceh-testing`, it completes the
+record by key itself. This closes Phase 4 of the report formats plan.
+
 The fix record gains a YAML format, `fix-record/v2`: `product/fixes/<slug>.yaml` checked by a
 pydantic model, with the Markdown rendered beside it in the `v1` layout. The `v1` rules on which
 sections each status keeps are now errors: a `diagnosed` record with a test or no confirmed
@@ -113,10 +117,10 @@ settled its one open question: the three usability audits will require a `commit
 | `ceh-seo`                 | 1.1.8   |
 | `ceh-documentation`       | 1.0.8   |
 | `ceh-python-service`      | 1.1.5   |
-| `ceh-testing`             | 1.6.7   |
+| `ceh-testing`             | 1.6.8   |
 | `ceh-security-audit`      | 1.1.2   |
 | `ceh-usability-audit`     | 1.2.1   |
-| `ceh-coding-conduct`      | 2.5.0   |
+| `ceh-coding-conduct`      | 2.5.1   |
 
 ### Added
 
@@ -127,6 +131,7 @@ settled its one open question: the three usability audits will require a `commit
 
 ### Changed
 
+- Save the fix record as `fix-record/v2` YAML in `find-root-cause` and render its Markdown.
 - Complete a `fix-record/v2` record by key in `test-a-bug-fix`, checked and rendered, and create
   new records as `v2`, keeping `v1` Markdown records in their own form.
 

@@ -267,7 +267,9 @@ was checked.
 
 - **Builds:** `fix-record/v2` as YAML, written by `find-root-cause` and read by `test-a-bug-fix`.
 - **Check:** Planned once Phases 1 to 3 are judged.
-- **Status:** unplanned
+- **Status:** done, Built by its own plan, `product/plans/fix-record-yaml.yaml`, in PRs #237 and #238, each with `python tools/validate-plugins/validate.py` printing "OK: all
+  plugin checks passed". Planned and checked in `product/plans/fix-record-yaml.yaml`, whose phases hold the real
+  Checks, because a building plan's unplanned phase gets its own plan file.
 
 ### Phase 5: Session handoff
 
@@ -302,5 +304,8 @@ was checked.
 - 2026-11-10 PR: #230 https://github.com/cheneeheng/ceh-claude-code-library/pull/230
 - 2026-11-10 Built Phase 3: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-10 PR: #231 https://github.com/cheneeheng/ceh-claude-code-library/pull/231
+- 2026-11-10 Built Phase 4: Built by `product/plans/fix-record-yaml.yaml`, `python tools/validate-plugins/validate.py`,
+  "OK: all plugin checks passed"
+- 2026-11-10 PR: #238 https://github.com/cheneeheng/ceh-claude-code-library/pull/238
 
 <!-- prettier-ignore-end -->

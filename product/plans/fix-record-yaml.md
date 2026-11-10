@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: fix-record-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from fix-record-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The fix record as a YAML format, fix-record/v2
-status: building
+status: built
 created: 2026-11-10
 ---
 
@@ -190,7 +190,11 @@ the `fix-record/v1` layout.
   matches each file. `uv run --script plugins/standalone/ceh-build-planning/scripts/artifact.py
   check product/plans/report-only-formats.yaml` exits 0. `python
   tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, The three greps matched `find-root-cause/SKILL.md`, step 8 holds no
+  `product/fixes/<slug>.md`, `fix-record/v2` matched the three docs, the
+  `report-only-formats.yaml` check exited 0, and `python tools/validate-plugins/validate.py`
+  printed "OK: all plugin checks passed". The `ceh-testing` README row named the old `.md` path too, so `ceh-testing` took a PATCH
+  bump in this phase, as Design "Versions and pull requests" allows.
 
 ## Open
 
@@ -206,5 +210,9 @@ None
 - 2026-11-10 PR: #236 https://github.com/cheneeheng/ceh-claude-code-library/pull/236
 - 2026-11-10 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-10 PR: #237 https://github.com/cheneeheng/ceh-claude-code-library/pull/237
+- 2026-11-10 Built Phase 2: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-10 Checked: 19 Built (6 In, 6 Design, 5 Out absent, 2 phase Checks rerun), 0 Gap, 0 Deviation, 0 Extra,
+  0 Failing, 0 Cannot verify
+- 2026-11-10 PR: #238 https://github.com/cheneeheng/ceh-claude-code-library/pull/238
 
 <!-- prettier-ignore-end -->
