@@ -9,6 +9,15 @@ before this repo live in
 
 ---
 
+## 2026-11-11
+
+A new plan, `product/plans/run-state-yaml.yaml`, takes the second Phase 6 format of the report
+formats plan: the run state becomes `run-state/v2`, YAML checked by a model and rendered as
+`run-state.md` in the `v1` layout, still ending with the `FLOW STATUS:` line. Unique stage ids,
+approvals that name a real stage, and a status that agrees with the stages become checks.
+`ceh-workflow-runner` will gain the render hook and guard, and a headless resumable flow gets a
+`Bash(uv run --script:*)` rule so the runner can check the file. No plugin changes in this PR.
+
 ## 2026-11-10
 
 The workflow spec gains a YAML format, `workflow-spec/v2`: `interview-workflow-task` writes
