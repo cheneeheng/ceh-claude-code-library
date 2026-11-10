@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: report-only-formats.yaml
 generated_note: "Do not edit. artifact.py renders this file from report-only-formats.yaml: edit the YAML, then run artifact.py render."
 title: YAML formats for the reports another stage reads, and why the rest stay Markdown
-status: ready
+status: building
 created: 2026-11-10
 ---
 
@@ -110,8 +110,9 @@ was checked.
   of {attempt, change, median: float, low: float, high: float, within_noise: bool, kept: bool,
   kept_commit: str optional}}`, at least one attempt. `spread` says whether `low` and `high` are
   the min and max or the interquartile range, as v1 allows either. Validators: the first attempt
-  is `baseline` and only the first, `low <= median <= high`, `within_noise` is false on the
-  baseline, and `kept_commit` is required exactly when `kept` is true. The renderer writes
+  is `baseline` and only the first, `low <= median <= high`, `within_noise` and `kept` are false
+  on the baseline, its median is above 0, and `kept_commit` is required exactly when `kept` is
+  true. The renderer writes
   `vs baseline` as `no measurable change` when `within_noise` is true, and otherwise as the
   signed percent change of the median from the baseline's to one decimal, so no model does that
   arithmetic. `unit` is new, and renders after each median.
@@ -203,7 +204,19 @@ was checked.
   resolves every key path `write-evidence-report` names for QA and performance through each
   copy's `model_json_schema()`, and `grep -n "artifact.py check"` and `grep -n "not run"` find
   the read step in its `SKILL.md`. `python tools/validate-plugins/validate.py` is green.
-- **Status:** todo
+- **Status:** done, a scratchpad `QA_REPORT.yaml` (fix mode, one bug) and `latency.yaml` (three attempts) rendered
+  (exit 0), and a script comparing their `#`, `|` and `**` lines with the `v1` templates printed
+  SAME for both; the rendered `vs baseline` cells read `-25.0%` for 120 to 90 ms and `no
+  measurable change` for `within_noise: true`; the six planted copies each exited 1, naming
+  `charters.0.bugs`, `bugs.0.fix`, `attempts.2 is a second baseline`, `attempts.1` (low above
+  median), `attempts.1` (kept_commit) and `commit`; a key-path script resolved 5 QA and 9
+  performance paths through both copies of each model, 0 missing, and failed on a planted
+  `bugs.0.nope`; `grep -n` found `artifact.py check` at line 55 and `not run` in the read step
+  of `write-evidence-report/SKILL.md`; `python tools/validate-plugins/validate.py` printed "OK:
+  all plugin checks passed". The Starlight page `docs/starlight/src/content/docs/plugins/ceh-testing.md` is git-ignored and
+  built from the plugin README, so the README's rows name `QA_REPORT.yaml` for it. The template
+  shows one generic attempt, because `model_vs_template.py` compares only a list's first item,
+  and the baseline has no `kept_commit`.
 
 ### Phase 2: Security audit
 
@@ -266,5 +279,7 @@ None
 - 2026-11-10 PR: #226 https://github.com/cheneeheng/ceh-claude-code-library/pull/226
 - 2026-11-10 Design changed: was the Open item "Does the user want the usability audits to require `commit`", now settled in Design as required, because the user chose it
 - 2026-11-10 PR: #227 https://github.com/cheneeheng/ceh-claude-code-library/pull/227
+- 2026-11-10 Design changed: was "`within_noise` is false on the baseline, and `kept_commit` is required exactly when `kept` is true", now also refuses a kept baseline and a baseline median of 0 or less, because a kept baseline has no win to name and a zero median has no percent change for the renderer to compute
+- 2026-11-10 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 
 <!-- prettier-ignore-end -->

@@ -1,0 +1,32 @@
+schema: qa-report/v2
+app: <app>
+commit: <short-sha>
+mode: <report | fix>
+date: YYYY-MM-DD HH:MM
+launched_with:
+  command: <command>
+  entry: <url or entry point>
+charters:
+  - charter: Explore <area> with <technique> to find <risk>
+    actions_used: <n>
+    bugs: [<id>]
+bugs:
+  - id: <id>
+    severity: <Critical | Major | Minor | Cosmetic>
+    title: <title>
+    status: <confirmed | unconfirmed>
+    steps:
+      - <step>
+    expected: |
+      <expected>
+    actual: |
+      <actual>
+    evidence: <evidence>
+    fix:
+      commit: <short-sha>
+      rerun: <re-run result>
+usability_notes:
+  - <note>
+not_explored:
+  - what: <flow, role, or environment>
+    why: <why>

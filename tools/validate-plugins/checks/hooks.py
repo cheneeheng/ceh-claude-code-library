@@ -408,6 +408,47 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             )
         )
     )  # fmt: skip
+
+    def report_fixtures(
+        plugin: str, stem: str, good: str, bad: str, field: str, marker: str
+    ) -> list[dict]:
+        """One report format's render hook: render a valid file, block a bad one naming `field`,
+        and skip one with no schema key, since a report is found by its key, not its place."""
+        folder = tmp / f"report-{stem}"
+        folder.mkdir(exist_ok=True)
+        at = {}
+        for name, text in {
+            "ok": good,
+            "bad": bad,
+            "none": good.split("\n", 1)[1],
+        }.items():
+            at[name] = folder / f"{name}-{stem}.yaml"
+            at[name].write_text(text, encoding="utf-8")
+
+        def rendered() -> str | None:
+            md = at["ok"].with_suffix(".md")
+            ok = md.is_file() and marker in md.read_text(encoding="utf-8")
+            return None if ok else f"{md.name} was not rendered"
+
+        rh = f"{plugin}/artifact-render-hook.py"
+        return [
+            {"script": rh, "stdin": write_at(at["ok"]), "out": "", "after": rendered},
+            {"script": rh, "stdin": write_at(at["bad"]), "out": field},
+            {"script": rh, "stdin": write_at(at["none"]), "out": ""},
+        ] if have_uv else []  # fmt: skip
+
+    good_qa = (
+        "schema: qa-report/v2\napp: Wordy\ncommit: abc1234\nmode: report\ndate: 2026-11-10 12:04\n"
+        "launched_with: {command: wordy, entry: CLI}\ncharters:\n"
+        "  - {charter: Explore counting with inputs to find crashes, actions_used: 20, bugs: []}\n"
+        "bugs: []\nusability_notes: []\nnot_explored: []\n"
+    )
+    good_perf = (
+        "schema: perf-report/v2\nmetric: search\ncommit: abc1234\ncommand: wordy search\n"
+        "machine: laptop\ninput: 10k docs\nunit: ms\nspread: range\nattempts:\n"
+        "  - {attempt: baseline, change: abc1234, median: 120, low: 110, high: 130,"
+        " within_noise: false, kept: false}\n"
+    )
     evidence_fixtures = [
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
@@ -429,6 +470,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             good_bp.replace("pmf_gate: 2", "pmf_gate: 9"),
             "pmf_gate", "## §01 Executive Summary",
         ),
+        *report_fixtures("ceh-testing", "QA_REPORT", good_qa, good_qa.replace("bugs: []", "bugs: [B3]", 1), "charters.0.bugs", "# QA report: Wordy"),
+        *report_fixtures("ceh-testing", "search", good_perf, good_perf.replace("low: 110", "low: 125"), "attempts.0", "# Performance: search"),
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},

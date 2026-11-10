@@ -1,0 +1,17 @@
+schema: perf-report/v2
+metric: <metric>
+commit: <baseline short-sha>
+command: <command>
+machine: <machine>
+input: <input>
+unit: <unit>
+spread: <range | iqr>
+attempts:
+  - attempt: <baseline | n>
+    change: <baseline short-sha | change>
+    median: <n>
+    low: <n>
+    high: <n>
+    within_noise: <true | false>
+    kept: <true | false>
+    kept_commit: <short-sha>

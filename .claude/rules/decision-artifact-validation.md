@@ -20,7 +20,9 @@ hooks. The user approved the build plan trial
 (`plan/v2`) on 2026-11-07, and the other spine formats follow it, per
 `product/plans/artifact-validation-formats.yaml`: the evidence report (`evidence/v2`), the
 architecture document (`architecture/v3`), the vision and strategy (`vision/v2`,
-`strategy/v2`), and the business plan (`business-plan/v3`).
+`strategy/v2`), and the business plan (`business-plan/v3`). The reports
+`write-evidence-report` reads follow them, per `product/plans/report-only-formats.yaml`: the QA
+report (`qa-report/v2`) and the performance file (`perf-report/v2`).
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

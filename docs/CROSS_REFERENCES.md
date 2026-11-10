@@ -345,6 +345,8 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-check-build-against-plan/scripts/artifact-render-hook.py`                                                          | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-check-build-against-plan/scripts/generated-md-guard.py`                                                            | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/skills/write-evidence-report/scripts/artifact.py`                                                          | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-testing/skills/explore-app-for-bugs/scripts/artifact.py`                                                           | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-testing/skills/measure-performance/scripts/artifact.py`                                                            | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/artifact.py`                                                                                       | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/artifact-render-hook.py`                                                                           | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/generated-md-guard.py`                                                                             | whole file                                                  | none                                                                             |
@@ -448,6 +450,37 @@ canonical file.
 `product/EVIDENCE.yaml`, and `draft-post` and `write-project-listing-text` read its newest run's
 claims and area statuses, so each carries a copy to check the file before reading it.
 `validate.py` fails when a copy differs from the canonical file.
+
+## QA report format
+
+**Canonical:** whole files, `plugins/standalone/ceh-testing/skills/explore-app-for-bugs/references/qa-report-schema.md`, `plugins/standalone/ceh-testing/skills/explore-app-for-bugs/references/qa-report-model.py`, `plugins/standalone/ceh-testing/skills/explore-app-for-bugs/assets/qa-report.template.md`, `plugins/standalone/ceh-testing/skills/explore-app-for-bugs/assets/qa-report.template.yaml`
+
+| Copy                                                                                         | Section    | Diverges |
+| -------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/qa-report-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/qa-report-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/qa-report.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/qa-report.template.yaml` | whole file | none     |
+
+**Shared:** the `qa-report/v2` format with its templates. `explore-app-for-bugs` writes
+`QA_REPORT.yaml`, and `write-evidence-report` reads its `commit` and `bugs` by key, so it carries a
+copy to check the file first. `validate.py` fails when a copy differs from the canonical file.
+
+## Performance report format
+
+**Canonical:** whole files, `plugins/standalone/ceh-testing/skills/measure-performance/references/perf-report-schema.md`, `plugins/standalone/ceh-testing/skills/measure-performance/references/perf-report-model.py`, `plugins/standalone/ceh-testing/skills/measure-performance/assets/perf-report.template.md`, `plugins/standalone/ceh-testing/skills/measure-performance/assets/perf-report.template.yaml`
+
+| Copy                                                                                           | Section    | Diverges |
+| ---------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/perf-report-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/perf-report-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/perf-report.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/perf-report.template.yaml` | whole file | none     |
+
+**Shared:** the `perf-report/v2` format with its templates. `measure-performance` keeps
+`<metric>.yaml`, and `write-evidence-report` reads its `commit` and `attempts` by key, so it
+carries a copy to check the file first. `validate.py` fails when a copy differs from the canonical
+file.
 
 ## Vision and strategy format
 

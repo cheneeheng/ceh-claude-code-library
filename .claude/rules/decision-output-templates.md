@@ -26,7 +26,8 @@ beside it with `generated_from: <file>.yaml` and a do-not-edit `generated_note` 
 frontmatter, its body inside a prettier-ignore range, and never edited by hand: the skill that
 edits the YAML re-renders it. The YAML formats so far are the build plan (`plan/v2`), the
 evidence report (`evidence/v2`), the architecture document (`architecture/v3`), the vision and
-strategy (`vision/v2`, `strategy/v2`), and the business plan (`business-plan/v3`).
+strategy (`vision/v2`, `strategy/v2`), the business plan (`business-plan/v3`), the QA report
+(`qa-report/v2`), and the performance file (`perf-report/v2`).
 
 Why: the format lives in one pair of files, and each saved file names its version. A YAML format
 adds the model, so every field of the file, body included, is checked rather than described.
