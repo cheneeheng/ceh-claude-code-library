@@ -55,7 +55,11 @@ Before any question, gather everything that already constrains the plan.
    solution detail. A plan whose Goal points to a `BUSINESS_PLAN.md` was written from this plan:
    read it for its Scope and Design only. Record their paths in `derived_from`. Built plans stay in
    the folder with `status: built`: read them too, and `product/ARCHITECTURE.md` Overview and Key
-   Decisions when it exists.
+   Decisions when it exists. When `product/ARCHITECTURE.yaml` sits beside it, run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check product/ARCHITECTURE.yaml`
+   first (format in `references/architecture-schema.md`). On exit 1, stop and report its errors.
+   On a stale `.md` alone, read the YAML instead. On exit 2 or 3, or without uv, say in the reply
+   that it went unchecked, and go on.
 2. **Anything the user provided** — a PRD, pitch deck, spec, README, landing page, a pasted
    description. Read it directly. A GitHub URL: fetch the README.
 3. **Other plan-shaped files** — `PRD.md`, `BRIEF.md`, `docs/` product notes. Use them as input,

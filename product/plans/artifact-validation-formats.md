@@ -334,7 +334,13 @@ reports `runs.0.areas.tests.status` to the agent right after the write and leave
   holding an invalid `product/VISION.yaml` asks to plan a small change, and the skill stops
   naming the field. This last check spends model calls, so the builder asks the user whether to
   run it or hand over the steps.
-- **Status:** todo
+- **Status:** todo. Built on branch `feat/plan-skills-read-checks`, waiting on the paid `claude -p` step. Run so far:
+  `python tools/validate-plugins/validate.py` printed "OK: all plugin checks passed"; a planted
+  line in the `write-build-plan` copy of `vision-model.py` turned `copies` red, then was reverted;
+  each new copy's `artifact.py check` on a template-filled `VISION.yaml`, `ARCHITECTURE.yaml` or
+  `BUSINESS_PLAN.yaml` exited 1 naming `status`, `diagrams.0.name` and `status`. A stale `.md`
+  alone makes the reader read the YAML instead, since a reader does not own the file it would
+  render.
 
 ### Phase 6: Readers in other plugins
 

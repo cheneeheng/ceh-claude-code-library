@@ -7,7 +7,9 @@ description: >-
 argument-hint: "[what to build | <draft plan path>]"
 compatibility: >-
   Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
-  plan/v2 plan and render its Markdown. Without uv the plan is saved unchecked and unrendered.
+  plan/v2 plan and render its Markdown, and to check a VISION, STRATEGY or BUSINESS_PLAN YAML
+  before reading it. Without uv the plan is saved unchecked and unrendered, and those files are
+  read unchecked.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -48,7 +50,14 @@ draft: say so and write a new plan as usual.
    folder that is not `built`, and only the frontmatter of each `built` one (read its full text
    only when the new work touches what it built), the README, and any issue or spec the user
    named. When `.agents_workspace/product/business/BUSINESS_PLAN.md` exists, set `business_plan` and take the goal and target
-   user from it rather than restating them. Put whatever is still unclear into **one round** of
+   user from it rather than restating them. When a `VISION.yaml`, `STRATEGY.yaml` or
+   `BUSINESS_PLAN.yaml` sits beside its `.md`, run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` before reading it
+   (formats in `references/vision-schema.md`, `strategy-schema.md` and
+   `business-plan-schema.md`). On exit 1, stop and report its errors, because a plan built on a
+   broken source carries the error into every phase. On a stale `.md` alone, read the YAML
+   instead. On exit 2 or 3, or without uv, say in the reply that the file went unchecked, and go
+   on. Put whatever is still unclear into **one round** of
    questions, each with a recommended answer. With no human to answer, take each recommended
    answer and list it under Open.
 

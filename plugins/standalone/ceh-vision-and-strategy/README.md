@@ -24,7 +24,9 @@ session.
 
 After every write to either YAML, `artifact-render-hook.py` (`PostToolUse`) checks it against its
 model through `uv` and renders the Markdown, or reports each error back to the agent and leaves the
-Markdown as it was. An adopted doc that still holds `[assumed]` is one such error.
+Markdown as it was. An adopted doc that still holds `[assumed]` is one such error. The skill also
+carries the business plan's model, to check `BUSINESS_PLAN.yaml` before reading it, so the hook
+acts on a write to that file too.
 `generated-md-guard.py` (`PreToolUse`) denies a direct edit to a generated Markdown file and names
 its YAML. Both need `uv`: without it the agent is told once per session that the file went
 unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS` with `artifact-render-hook` or

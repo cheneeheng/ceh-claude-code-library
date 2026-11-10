@@ -23,8 +23,9 @@ or `"review this plan"`.
 ## Hooks
 
 The plugin ships two hooks (`hooks/hooks.json`) that activate automatically when the plugin is
-enabled. They act only on `plan/v2` plans, the YAML format in each skill's
-`references/plan-schema.md`, which the skills write.
+enabled. They act on `plan/v2` plans, the YAML format in each skill's
+`references/plan-schema.md`, which the skills write, and on the `VISION.yaml`, `STRATEGY.yaml` and
+`BUSINESS_PLAN.yaml` the skills check before reading, because the skills carry those models too.
 
 | Hook                 | Event                                        | Script                    | Default |
 | -------------------- | -------------------------------------------- | ------------------------- | ------- |
