@@ -509,3 +509,6 @@ record:
     phase: 6
     details: |
       `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and all 18 reader key paths resolved in their models
+  - date: 2026-11-10
+    event: PR
+    details: "#225 https://github.com/cheneeheng/ceh-claude-code-library/pull/225"

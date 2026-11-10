@@ -402,5 +402,6 @@ None
 - 2026-11-10 Design changed: was "and no hooks, since they write none of these files", now `write-fastapi-endpoints` adds its API versioning entry to `key_decisions` and renders the Markdown itself, because its prose already recorded that timeline in Key Decisions, which a hand edit to the generated Markdown would lose
 - 2026-11-10 Design changed: was "(none)", now `checks/artifact_models.py` exempts the plugins in `READERS` from the root scripts and hooks, because the check asked every plugin carrying a model for them, which contradicts "no hooks" for readers
 - 2026-11-10 Built Phase 6: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and all 18 reader key paths resolved in their models
+- 2026-11-10 PR: #225 https://github.com/cheneeheng/ceh-claude-code-library/pull/225
 
 <!-- prettier-ignore-end -->
