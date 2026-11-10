@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Timed security audit file names, and QA fix-mode staleness from the last fix commit
-status: building
+status: built
 created: 2026-11-10
 goal: |
   The live runs that judged Phases 1 to 3 of `product/plans/report-only-formats.yaml` found two
@@ -107,7 +107,12 @@ phases:
       sharing one commit date, the step's rule given fixes `b` and `c` in either order gives 0,
       given `a` and `b` gives 1, and a missing `deadbee` is skipped. `python
       tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
-    status: todo
+    status: done
+    evidence: |
+      The grep matched step 4 at `write-evidence-report/SKILL.md:75-77`. In a scratchpad repo of
+      three commits at one date, the step's rule gave 0 for `b`,`c` and for `c`,`b`, 1 for `a`,`b`,
+      skipped `deadbee`, and fell back to `commit` with only `deadbee`. `python
+      tools/validate-plugins/validate.py` printed "OK: all plugin checks passed".
 open: []
 record:
   - date: 2026-11-10
@@ -130,3 +135,14 @@ record:
   - date: 2026-11-10
     event: PR
     details: "#234 https://github.com/cheneeheng/ceh-claude-code-library/pull/234"
+  - date: 2026-11-10
+    event: Built Phase
+    phase: 2
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+  - date: 2026-11-10
+    event: Checked
+    details: 14 Built, 0 Gap, 0 Deviation, 0 Extra, 0 Failing, 0 Cannot verify
+  - date: 2026-11-10
+    event: PR
+    details: "#235 https://github.com/cheneeheng/ceh-claude-code-library/pull/235"

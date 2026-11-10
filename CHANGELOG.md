@@ -11,6 +11,11 @@ before this repo live in
 
 ## 2026-11-10
 
+`write-evidence-report` no longer marks a QA report in fix mode `stale` because of its own fix
+commits. It counts from the fix commits instead, the smallest `git rev-list --count` over them,
+skipping one no longer in history. The error-messages audit keeps counting from `commit`, because
+it leaves its rewrites uncommitted.
+
 `audit-codebase-security` now saves `SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`, so a second audit on
 the same day keeps the first instead of overwriting it. `write-evidence-report` takes the newest
 security audit by file name, and older date-only names sort first. The format stays
@@ -92,7 +97,7 @@ settled its one open question: the three usability audits will require a `commit
 | `ceh-seo`                 | 1.1.8   |
 | `ceh-documentation`       | 1.0.8   |
 | `ceh-python-service`      | 1.1.5   |
-| `ceh-testing`             | 1.6.5   |
+| `ceh-testing`             | 1.6.6   |
 | `ceh-security-audit`      | 1.1.2   |
 | `ceh-usability-audit`     | 1.2.1   |
 
@@ -136,6 +141,8 @@ settled its one open question: the three usability audits will require a `commit
 
 ### Fixed
 
+- Count a fix-mode QA report's staleness from its fix commits in `write-evidence-report`, so its
+  own fixes no longer read as `stale`.
 - Name `|` blocks or double quotes for free text in the QA, performance, security and three
   usability audit schemas, and warn that a backslash inside single quotes stays in the text.
 - Treat a missing `DECISION_LOG.md` as not yet settled in the workspace-sync hook fixtures, so a
