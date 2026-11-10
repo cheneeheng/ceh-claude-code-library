@@ -30,7 +30,8 @@ The YAML formats plan is built, and its last phase is a plan of its own,
 `product/plans/report-only-formats.yaml`. It converts the six reports `write-evidence-report`
 reads (QA, performance, security and the three usability audits) and keeps every report only
 its author or a person reads in Markdown, with the reason for each, because VISION principle 7
-asks for an observed failure before enforcement. No plugin changes in this PR.
+asks for an observed failure before enforcement. No plugin changes in this PR. The user then
+settled its one open question: the three usability audits will require a `commit`.
 
 ### Plugin versions
 
