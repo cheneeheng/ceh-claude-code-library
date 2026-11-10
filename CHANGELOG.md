@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-11-10
 
+The three usability audits follow as YAML formats, the last of the reports
+`write-evidence-report` reads. `simulate-newcomer-first-run` and `audit-interface` save
+`UX_AUDIT.yaml` (`first-run-audit/v2`, `interface-audit/v2`), and `audit-error-messages` saves
+`ERROR_MESSAGES.yaml` (`error-messages-audit/v2`), each with its Markdown rendered beside it. Each
+report now names the `commit` it ran against, so `write-evidence-report` no longer guesses the
+commit from the date. A gate whose parts do not add up to five, a first stall naming no finding,
+more complete messages than harvested, or a left rewrite with no reason is now an error.
+`ceh-usability-audit` gains the render hook and the generated-Markdown guard.
+
 The security audit follows as a YAML format. `audit-codebase-security` saves
 `SECURITY_AUDIT-<date>.yaml` (`security-audit/v2`), with the Markdown rendered beside it and the
 findings numbered by the renderer. A severity outside the four, a `location` with no line number,
@@ -67,14 +76,20 @@ settled its one open question: the three usability audits will require a `commit
 | `ceh-seo`                 | 1.1.8   |
 | `ceh-documentation`       | 1.0.8   |
 | `ceh-python-service`      | 1.1.5   |
-| `ceh-testing`             | 1.6.2   |
+| `ceh-testing`             | 1.6.3   |
 | `ceh-security-audit`      | 1.1.0   |
+| `ceh-usability-audit`     | 1.2.0   |
 
 ### Added
 
 - Add the render hook and the generated-Markdown guard to `ceh-security-audit`.
+- Add the render hook and the generated-Markdown guard to `ceh-usability-audit`.
 
 ### Changed
+
+- Save the first-run and interface audits as `UX_AUDIT.yaml` and the error-messages audit as
+  `ERROR_MESSAGES.yaml`, each with a required `commit`, rendered to its Markdown.
+- Check the three usability audits' YAML in `write-evidence-report` and read them by key path.
 
 - Save the security audit as `SECURITY_AUDIT-<date>.yaml` (`security-audit/v2`) in
   `audit-codebase-security`, rendered to its Markdown.

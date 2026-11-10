@@ -351,6 +351,12 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-security-audit/scripts/artifact.py`                                                                                | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-security-audit/scripts/artifact-render-hook.py`                                                                    | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-security-audit/scripts/generated-md-guard.py`                                                                      | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/scripts/artifact.py`                                            | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-usability-audit/skills/audit-interface/scripts/artifact.py`                                                        | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-usability-audit/scripts/artifact.py`                                                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-usability-audit/scripts/artifact-render-hook.py`                                                                   | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-usability-audit/scripts/generated-md-guard.py`                                                                     | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/artifact.py`                                                                                       | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/artifact-render-hook.py`                                                                           | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/generated-md-guard.py`                                                                             | whole file                                                  | none                                                                             |
@@ -502,6 +508,32 @@ file.
 so it carries a copy to check the file first, and `ceh-testing`'s hook checks the file too. With
 both plugins installed an error is reported twice, from the same model. `validate.py` fails when a
 copy differs from the canonical file.
+
+## Usability audit formats
+
+**Canonical:** whole files, `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/references/first-run-audit-schema.md`, `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/references/first-run-audit-model.py`, `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/assets/first-run-audit.template.md`, `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/assets/first-run-audit.template.yaml`, `plugins/standalone/ceh-usability-audit/skills/audit-interface/references/interface-audit-schema.md`, `plugins/standalone/ceh-usability-audit/skills/audit-interface/references/interface-audit-model.py`, `plugins/standalone/ceh-usability-audit/skills/audit-interface/assets/interface-audit.template.md`, `plugins/standalone/ceh-usability-audit/skills/audit-interface/assets/interface-audit.template.yaml`, `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/references/error-messages-audit-schema.md`, `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/references/error-messages-audit-model.py`, `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/assets/error-messages-audit.template.md`, `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/assets/error-messages-audit.template.yaml`
+
+| Copy                                                                                                    | Section    | Diverges |
+| ------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/first-run-audit-schema.md`      | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/first-run-audit-model.py`       | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/first-run-audit.template.md`        | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/first-run-audit.template.yaml`      | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/interface-audit-schema.md`      | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/interface-audit-model.py`       | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/interface-audit.template.md`        | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/interface-audit.template.yaml`      | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/error-messages-audit-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/error-messages-audit-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/error-messages-audit.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/error-messages-audit.template.yaml` | whole file | none     |
+
+**Shared:** the `first-run-audit/v2`, `interface-audit/v2` and `error-messages-audit/v2` formats
+with their templates. Each audit skill writes its own report with a required `commit`, and
+`write-evidence-report` reads their `commit`, `findings`, `gate` and `rows` by key, so it carries a
+copy of each to check the file first, and `ceh-testing`'s hook checks the files too. The first-run
+and interface audits share a finding and gate shape, written into each model rather than shared,
+so each model file stands alone. `validate.py` fails when a copy differs from the canonical file.
 
 ## Vision and strategy format
 

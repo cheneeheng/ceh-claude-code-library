@@ -1,0 +1,48 @@
+schema: interface-audit/v2
+target: <target>
+surface: <surface>
+run: <n>
+date: YYYY-MM-DD
+commit: <short-sha>
+goals:
+  - goal: <goal>
+    budget: <n>
+audience: |
+  <baseline>
+allowlist: |
+  <allowlist>
+walkers:
+  run: [<persona>]
+  skipped:
+    - persona: <persona>
+      why: <why>
+gate:
+  score: <n>
+  out_of: <n>
+  na: <n>
+five_questions:
+  - screen: <screen>
+    where_am_i: <answer>
+    what_for: <answer>
+    primary_action: <answer>
+    what_happened: <answer>
+    way_out: <answer>
+findings:
+  - id: <id>
+    severity: <Blocker | Detour | Friction | Polish>
+    title: <title>
+    where: <screen, command, or file:line>
+    persona: <persona>
+    expected: |
+      <expected>
+    got: |
+      <got>
+    fix: |
+      <fix>
+hypotheses:
+  - <hypothesis>
+delegated:
+  - skill: <skill>
+    what: <what>
+not_covered:
+  - <what>

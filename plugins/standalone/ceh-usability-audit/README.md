@@ -153,8 +153,27 @@ in the main session, or the agent is handed screenshots and page text instead of
   walk writes to the working tree and the personas run in parallel.
 - **Claude in Chrome browser tools, or the CLI under audit installed**: only for `audit-interface`
   on a live web UI or a CLI. Without them it audits screenshots, page text and static artifacts.
+- **uv**: to check and render each report's YAML. Without it the report is saved unchecked and its
+  Markdown is not rendered.
 
-The plugin reads no environment variables.
+## Hooks
+
+| Hook                                                                    | Event                                        | Script                    | Default |
+| ----------------------------------------------------------------------- | -------------------------------------------- | ------------------------- | ------- |
+| [Report render](#report-render-and-generated-markdown-guard)            | `PostToolUse` (`Edit`, `Write`, `MultiEdit`) | `artifact-render-hook.py` | on      |
+| [Generated Markdown guard](#report-render-and-generated-markdown-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`)  | `generated-md-guard.py`   | on      |
+
+### Report render and generated Markdown guard
+
+`simulate-newcomer-first-run` and `audit-interface` save `UX_AUDIT.yaml` (`first-run-audit/v2` and
+`interface-audit/v2`), and `audit-error-messages` saves `ERROR_MESSAGES.yaml`
+(`error-messages-audit/v2`). After every write to one, the render hook picks the model by the
+file's `schema:` key, checks the YAML through `uv` and renders the Markdown beside it, or reports
+each error back to the agent and leaves the Markdown as it was. The guard denies a direct edit to a
+generated Markdown file and names its YAML. Both need `uv`: without it the agent is told once per
+session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS` with
+`artifact-render-hook` or `generated-md-guard`, switches them off, and these are the only
+environment variables the plugin reads.
 
 ## The personas
 
@@ -186,9 +205,10 @@ care about.
 
 ## Output
 
-`.agents_workspace/product/ux-audits/<target>/run-<NNN>/` — `UX_AUDIT.md` from the two walkthrough skills,
-`ERROR_MESSAGES.md` from the error triage, with walker transcripts and any screenshots beside them.
-A zero-padded sequential run index means a re-run never overwrites prior evidence. A finding without
+`.agents_workspace/product/ux-audits/<target>/run-<NNN>/` — `UX_AUDIT.yaml` from the two walkthrough
+skills, `ERROR_MESSAGES.yaml` from the error triage, each with its Markdown rendered beside it and
+the commit the audit ran against, and walker transcripts and any screenshots beside them. A
+zero-padded sequential run index means a re-run never overwrites prior evidence. A finding without
 its transcript is an opinion.
 
 ## Known weak points — check these two first when evaluating

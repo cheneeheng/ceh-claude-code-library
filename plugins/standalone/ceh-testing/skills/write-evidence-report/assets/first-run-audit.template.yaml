@@ -1,0 +1,51 @@
+schema: first-run-audit/v2
+target: <target>
+run: <n>
+date: YYYY-MM-DD
+commit: <short-sha>
+goal: <goal>
+milestones:
+  - name: M1
+    budget: <n>
+audience: |
+  <baseline>
+frozen_set: |
+  <frozen set>
+walkers:
+  run: [<persona>]
+  skipped:
+    - persona: <persona>
+      why: <why>
+  mode: <in parallel | serially | in isolated copies>
+gate:
+  score: <n>
+  out_of: <n>
+  na: <n>
+results:
+  - persona: <persona>
+    furthest: <milestone>
+    stop_reason: <reason>
+    actions: <n>
+    budget: <n>
+    lookups: <n>
+    wait_s: <n>
+    first_stall: <id>
+minutes: <n>
+findings:
+  - id: <id>
+    severity: <Blocker | Detour | Friction | Polish>
+    title: <title>
+    where: <file:line, screen, or command>
+    persona: <persona>
+    expected: |
+      <expected>
+    got: |
+      <got>
+    missing_knowledge: |
+      <fact>
+    fix: |
+      <fix>
+hypotheses:
+  - <hypothesis>
+not_covered:
+  - <what>

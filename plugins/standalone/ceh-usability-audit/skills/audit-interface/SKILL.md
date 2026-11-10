@@ -10,7 +10,8 @@ effort: high
 compatibility: >-
   Probing a live web UI needs the Claude in Chrome browser tools in the main session, and probing a
   CLI needs it installed and runnable. Without them the audit falls back to screenshots, page text
-  and static artifacts, and reports those findings as unwalked.
+  and static artifacts, and reports those findings as unwalked. Checking and rendering the report's
+  YAML needs uv; without it the report is saved unchecked and unrendered.
 license: Apache-2.0
 ---
 
@@ -177,10 +178,16 @@ Mark an unmeasurable criterion **N/A with a reason** and report the gate out of 
 
 ## Output
 
-Write `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.md` (zero-padded sequential run
+Write `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.yaml` (zero-padded sequential run
 index, so a re-run never overwrites prior evidence). Keep the walker transcripts and any screenshots
-in that folder. The report fills `assets/interface-audit.template.md`, per
-`references/interface-audit-schema.md`.
+in that folder. The report fills `assets/interface-audit.template.yaml`, per the
+`interface-audit/v2` section of `references/interface-audit-schema.md`, with `commit` from
+`git rev-parse --short HEAD` in the target as walked. After the last edit, run
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <dir>/UX_AUDIT.yaml`, which writes
+`UX_AUDIT.md` beside it in the layout of `assets/interface-audit.template.md`, and fix the YAML for
+each error it lists. Before editing a saved report, run it with `check` and stop on exit 1 with its
+errors. Never edit the generated `.md`. On exit 2 or 3, or without uv, say in the reply that the
+report went unchecked and unrendered.
 
 ## Stop conditions
 

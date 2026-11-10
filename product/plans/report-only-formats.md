@@ -253,7 +253,15 @@ was checked.
   `commit` is blocked naming `commit`, once with each of the two `UX_AUDIT` schemas. A
   scratchpad script resolves every usability key path `write-evidence-report` names through
   each copy's `model_json_schema()`. `python tools/validate-plugins/validate.py` is green.
-- **Status:** todo
+- **Status:** done, one scratchpad YAML per audit rendered (exit 0), each with its `#`, `|` and `**` lines equal
+  to its `v1` template's (SAME, three times); `run: 7` rendered `007`, the first-run gate `4/5`
+  with `na: 0` and the interface gate `4/4, 1 N/A` with `na: 1`, and the machine wait summed to
+  `20s`; the planted copies each exited 1, naming `commit` (first-run and interface), `gate`
+  (out_of + na of 4), `results.0.first_stall`, `already_complete`, `rows.1` (no reason) and
+  `rows.0.checks` (two bools); the `ceh-usability-audit` hook fixtures blocking a
+  `UX_AUDIT.yaml` with no `commit` under each of the two schemas passed in `checks/hooks.py`; a
+  key-path script resolved 20 usability paths through both copies of each model, 0 missing;
+  `python tools/validate-plugins/validate.py` printed "OK: all plugin checks passed".
 
 ### Phase 4: Fix record
 
@@ -276,7 +284,9 @@ was checked.
 
 ## Open
 
-None
+- What does a usability audit of a target outside git put in its required `commit`?: Nothing yet: the three audits read `git rev-parse --short HEAD` in the target, and every
+  target walked so far is a git repo. If one is not, the report fails its check and the reply
+  says so, and the format gets an optional `commit` then, once a real run shows it.
 
 ## Record
 
@@ -290,5 +300,7 @@ None
 - 2026-11-10 PR: #228 https://github.com/cheneeheng/ceh-claude-code-library/pull/228
 - 2026-11-10 Built Phase 2: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-10 PR: #230 https://github.com/cheneeheng/ceh-claude-code-library/pull/230
+- 2026-11-10 Built Phase 3: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-10 PR: #231 https://github.com/cheneeheng/ceh-claude-code-library/pull/231
 
 <!-- prettier-ignore-end -->

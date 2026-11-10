@@ -11,7 +11,8 @@ compatibility: >-
   Requires whatever the target project's own first-run steps need - `uv`, `npm`, `docker`, a
   database - none of which this skill assumes is installed; a missing prerequisite is itself an
   audit finding. Running personas in parallel additionally needs the git CLI for `git worktree
-  add`, or a container runtime, to isolate each walker.
+  add`, or a container runtime, to isolate each walker. Checking and rendering the report's YAML
+  needs uv; without it the report is saved unchecked and unrendered.
 license: Apache-2.0
 ---
 
@@ -238,11 +239,17 @@ passing.
 
 ## Output
 
-Write `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.md`, where `<NNN>` is a zero-padded
+Write `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.yaml`, where `<NNN>` is a zero-padded
 sequential run index so a re-run never overwrites a prior run's evidence. Create missing parents.
 Keep raw walker transcripts in that run folder — a finding without its transcript is an opinion.
-The report fills `assets/first-run-audit.template.md`, per
-`references/first-run-audit-schema.md`.
+The report fills `assets/first-run-audit.template.yaml`, per the `first-run-audit/v2` section of
+`references/first-run-audit-schema.md`, with `commit` from `git rev-parse --short HEAD` in the
+target as walked. After the last edit, run
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <dir>/UX_AUDIT.yaml`, which writes
+`UX_AUDIT.md` beside it in the layout of `assets/first-run-audit.template.md`, and fix the YAML for
+each error it lists. Before editing a saved report, run it with `check` and stop on exit 1 with its
+errors. Never edit the generated `.md`. On exit 2 or 3, or without uv, say in the reply that the
+report went unchecked and unrendered.
 
 ## Stop conditions
 
