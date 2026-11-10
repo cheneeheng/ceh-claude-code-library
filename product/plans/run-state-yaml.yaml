@@ -221,3 +221,6 @@ record:
       `Bash(uv run --script:*)` rule in the invocation guide, and instead of deleting a stale `.md`
       the runner trusts only the YAML and the reply, so it needs no `rm` and no hook warning. The
       owner question went under Open on its recommended answer.
+  - date: 2026-11-11
+    event: PR
+    details: "#243 https://github.com/cheneeheng/ceh-claude-code-library/pull/243"

@@ -201,5 +201,6 @@ run checks the YAML and reads its stages and approvals by key.
   `Bash(uv run --script:*)` rule in the invocation guide, and instead of deleting a stale `.md`
   the runner trusts only the YAML and the reply, so it needs no `rm` and no hook warning. The
   owner question went under Open on its recommended answer.
+- 2026-11-11 PR: #243 https://github.com/cheneeheng/ceh-claude-code-library/pull/243
 
 <!-- prettier-ignore-end -->
