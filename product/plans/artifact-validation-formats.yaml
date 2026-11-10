@@ -1,6 +1,6 @@
 schema: plan/v2
 title: YAML formats with generated Markdown for evidence, architecture, vision, strategy and the business plan
-status: building
+status: built
 created: 2026-11-07
 goal: |
   The trial in `product/plans/artifact-validation.md` proved the mechanism on the build plan, and
@@ -165,7 +165,7 @@ design:
       would gain a double hyphen. A `mermaid` value holds the diagram only, and the renderer wraps it
       in the fence. The renderer numbers sections `01.` onward and parts `03.01`, writes the
       Contents list, and builds each anchor with GitHub's rule: lowercase, drop every character but
-      letters, digits, spaces and hyphens, spaces to hyphens. `implement-from-plan` appends a
+      word characters (letters, digits, underscores), spaces and hyphens, spaces to hyphens. `implement-from-plan` appends a
       key decision to the YAML and no longer numbers anything.
   - topic: The vision/v2 and strategy/v2 models
     decision: |
@@ -419,7 +419,11 @@ phases:
       each with its case under VISION principle 7.
     check: |
       That plan is saved and reviewed. Its path is this phase's evidence.
-    status: unplanned
+    status: done
+    evidence: |
+      `product/plans/report-only-formats.yaml`, saved with `status: ready` and reviewed from a fresh
+      context (Revise first, 7 blocking, all fixed with the 6 advisory findings), review at
+      `.agents_workspace/product/plan-reviews/report-only-formats-2026-11-10.md`.
 open: []
 record:
   - date: 2026-11-07
@@ -512,3 +516,19 @@ record:
   - date: 2026-11-10
     event: PR
     details: "#225 https://github.com/cheneeheng/ceh-claude-code-library/pull/225"
+  - date: 2026-11-10
+    event: Built Phase
+    phase: 7
+    details: |
+      `product/plans/report-only-formats.yaml` saved and reviewed, Revise first with all findings fixed
+  - date: 2026-11-10
+    event: Design changed
+    details: |
+      was "drop every character but letters, digits, spaces and hyphens", now "but word characters (letters, digits, underscores), spaces and hyphens", because GitHub's anchors keep underscores and the renderers (`architecture-model.py:113`, `business-plan-model.py:130`) already do
+  - date: 2026-11-10
+    event: Checked
+    details: |
+      Built 29, Deviation 2, Cannot verify 1, Gap 0, Extra 0, Failing 0. Deviations: the anchor rule keeps underscores (plan corrected, Design changed above), and `docs/STRATEGY.md` named the `.md` files as Build's input (fixed to the YAML). Cannot verify: Phase 5's paid `claude -p` step, not rerun, its 2026-11-10 run is in the phase evidence
+  - date: 2026-11-10
+    event: PR
+    details: "#226 https://github.com/cheneeheng/ceh-claude-code-library/pull/226"
