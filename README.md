@@ -91,10 +91,11 @@ _alongside_ a stage plugin, not instead of one. Which to install first is in
 
 ### Prerequisites
 
-`python3` on `PATH` (stdlib only, no packages) for the hooks in [`ceh-every-session`](plugins/standalone/ceh-every-session/) and [`ceh-git-workflow`](plugins/standalone/ceh-git-workflow/),
-and `bash` for the hooks in [`ceh-coding-conduct`](plugins/standalone/ceh-coding-conduct/). No other plugin ships a hook. The Python hooks fail
-open: without `python3` the usage-limit guard, the bulk-read guards, and the branch guard do
-nothing instead of blocking you. Install with `winget install Python.Python.3.12` /
+`python3` on `PATH` (stdlib only, no packages) for the hooks in [`ceh-every-session`](plugins/standalone/ceh-every-session/), [`ceh-git-workflow`](plugins/standalone/ceh-git-workflow/)
+and [`ceh-coding-conduct`](plugins/standalone/ceh-coding-conduct/), which also needs `bash`. Every plugin that saves a YAML artifact (a plan, a report, a fix
+record, a handoff) ships a Python hook that checks and renders it, and that check needs `uv`. The
+Python hooks fail open: without `python3` the usage-limit guard, the bulk-read guards, the branch
+guard and the artifact checks do nothing instead of blocking you. Install with `winget install Python.Python.3.12` /
 `brew install python` / `apt install python3`.
 
 Individual **skills** have their own prerequisites, stated in each `SKILL.md`'s `compatibility`

@@ -42,9 +42,9 @@ Execute these steps in order, then end the turn.
 3. **Save the handoff.** Invoke the Skill tool with skill="ceh-every-session:hand-off-session"
    and args `save`, and follow its save procedure: it writes the artifact under
    `.agents_workspace/handoff/`, appends the line to the global index at
-   `~/.claude/handoff/index.md`, and reports the content as your message. Add this header line
-   under the artifact's title, from the guard message:
-   `**Window:** <name> at N%, resets at HH:MM`
+   `~/.claude/handoff/index.md`, and reports the content as your message. Add this line to the
+   handoff's `header`, single-quoted because it starts with `*`, from the guard message:
+   `- '**Window:** <name> at N%, resets at HH:MM'`
 4. **End the turn.** Do not resume work in this session unless the user explicitly says to
    continue — they may prefer to wait for the window reset reported by the guard message.
 

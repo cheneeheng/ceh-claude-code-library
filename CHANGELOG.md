@@ -11,6 +11,17 @@ before this repo live in
 
 ## 2026-11-10
 
+The session handoff gains a YAML format, `handoff/v2`: `hand-off-session` saves
+`HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.yaml`, checked by a model, with the Markdown rendered
+beside it in the `v1` layout. A handoff with nothing open, or a Done item that does not say whether
+it was validated, is now an error. Load and `whats-next` check a `v2` handoff and read it by key,
+and still read a `v1` file. With `--file <path>`, the YAML takes the path's stem and the rendered
+Markdown keeps the path the caller named, so Nightshift's `state.md` stays where it is.
+`ceh-every-session` gains the render hook and guard, at about 85 ms per edit in every session,
+which the user chose, and its hook now also checks the plan files its skills hold models for. The
+root README's prerequisites now name the artifact hooks and `uv`, and the `python3` need of
+`ceh-coding-conduct`'s new hooks.
+
 A new plan, `product/plans/handoff-yaml.yaml`, takes Phase 5 of the report formats plan: the
 session handoff becomes `handoff/v2`, YAML checked by a model and rendered in the `v1` layout, with
 `--file` callers such as Nightshift still finding their `state.md`. `ceh-every-session` will gain
@@ -118,7 +129,7 @@ settled its one open question: the three usability audits will require a `commit
 | `ceh-build-planning`      | 1.2.9   |
 | `ceh-business-plan`       | 1.2.1   |
 | `ceh-vision-and-strategy` | 1.1.1   |
-| `ceh-every-session`       | 2.8.22  |
+| `ceh-every-session`       | 2.9.0   |
 | `ceh-blog`                | 1.0.18  |
 | `ceh-seo`                 | 1.1.8   |
 | `ceh-documentation`       | 1.0.8   |
@@ -130,6 +141,8 @@ settled its one open question: the three usability audits will require a `commit
 
 ### Added
 
+- Add `handoff/v2`, the session handoff as YAML with its model, in `hand-off-session` and
+  `whats-next`, and the render hook and the generated-Markdown guard to `ceh-every-session`.
 - Add `fix-record/v2`, the fix record as YAML with its model, in `find-root-cause` and
   `test-a-bug-fix`, and the render hook and the generated-Markdown guard to `ceh-coding-conduct`.
 - Add the render hook and the generated-Markdown guard to `ceh-security-audit`.
@@ -137,6 +150,8 @@ settled its one open question: the three usability audits will require a `commit
 
 ### Changed
 
+- Save, load and read the session handoff as `handoff/v2` in `hand-off-session` and `whats-next`,
+  keeping `v1` files readable, and put `usage-limit-handoff`'s window line in its `header`.
 - Save the fix record as `fix-record/v2` YAML in `find-root-cause` and render its Markdown.
 - Complete a `fix-record/v2` record by key in `test-a-bug-fix`, checked and rendered, and create
   new records as `v2`, keeping `v1` Markdown records in their own form.

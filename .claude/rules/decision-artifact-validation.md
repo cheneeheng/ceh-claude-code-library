@@ -26,7 +26,9 @@ report (`qa-report/v2`), the performance file (`perf-report/v2`), the security a
 (`security-audit/v2`), and the three usability audits (`first-run-audit/v2`, `interface-audit/v2`,
 `error-messages-audit/v2`). The fix record (`fix-record/v2`) follows, per
 `product/plans/fix-record-yaml.yaml`, with the hooks in core `ceh-coding-conduct` by the user's
-choice, so a record is checked even without `ceh-testing`.
+choice, so a record is checked even without `ceh-testing`. The session handoff (`handoff/v2`)
+follows, per `product/plans/handoff-yaml.yaml`, with the hooks in `ceh-every-session`, which leaves
+`READERS`, also by the user's choice.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

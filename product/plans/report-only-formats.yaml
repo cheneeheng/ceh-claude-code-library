@@ -314,7 +314,12 @@ phases:
       `handoff/v2` as YAML, written and loaded by `hand-off-session` and read by `whats-next`.
     check: |
       Planned once Phases 1 to 3 are judged.
-    status: unplanned
+    status: done
+    evidence: |
+      Built by its own plan, `product/plans/handoff-yaml.yaml`, in one PR, with `python
+      tools/validate-plugins/validate.py` printing "OK: all plugin checks passed".
+    note: |
+      Planned and checked in `product/plans/handoff-yaml.yaml`, whose phase holds the real Check.
   - name: Other handoff reports
     builds: |
       One plan per format for the workflow spec, run state, competitor report, glossary, blog voice

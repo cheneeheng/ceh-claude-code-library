@@ -275,7 +275,8 @@ was checked.
 
 - **Builds:** `handoff/v2` as YAML, written and loaded by `hand-off-session` and read by `whats-next`.
 - **Check:** Planned once Phases 1 to 3 are judged.
-- **Status:** unplanned
+- **Status:** done, Built by its own plan, `product/plans/handoff-yaml.yaml`, in one PR, with `python
+  tools/validate-plugins/validate.py` printing "OK: all plugin checks passed". Planned and checked in `product/plans/handoff-yaml.yaml`, whose phase holds the real Check.
 
 ### Phase 6: Other handoff reports
 
