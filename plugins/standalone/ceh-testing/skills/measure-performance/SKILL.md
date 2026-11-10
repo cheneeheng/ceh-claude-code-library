@@ -6,6 +6,9 @@ description: >-
   this a regression", "benchmark this", "why is this slow", "reduce memory".
 disable-model-invocation: false
 user-invocable: true
+compatibility: >-
+  Checking and rendering <metric>.yaml needs uv; without it the file is saved unchecked and its
+  Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -30,15 +33,23 @@ and either way the baseline and every attempt are recorded.
    - Explain the number. Check it moves the way it should: double the input and the time should
      change in the way the algorithm predicts. A number that does not move is measuring something
      else: a cache hit, lazy initialisation, work the compiler removed.
-3. **Record the baseline** in `.agents_workspace/product/perf/<metric>.md`, filling
-   `assets/perf-report.template.md`: commit, command, machine, input, and the numbers. Every later number is compared against this row and nothing else.
+3. **Record the baseline** in `.agents_workspace/product/perf/<metric>.yaml`, filling
+   `assets/perf-report.template.yaml`: commit, command, machine, input, unit, spread, and the
+   numbers. Every later number is compared against this attempt and nothing else. When only a
+   `perf-report/v1` `<metric>.md` exists, move it first, as the schema's `perf-report/v2` section
+   says, keeping its baseline. Run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <metric>.yaml` before each edit
+   to an existing file and stop on exit 1 with its errors. After each edit, run it with `render`,
+   which writes `<metric>.md`, and fix the YAML for each error it lists. Never edit the generated
+   `.md`. On exit 2 or 3, or without uv, say in the reply that the file went unchecked and
+   unrendered.
 4. **Profile before changing anything.** Find where the time or memory goes with the stack's
    profiler. Change only what the profile points at. Guessing at a hotspot is how a day goes into
    a function that takes 2% of the time.
 5. **One change per measurement.** Make one change, re-measure the same way, and keep it only if
    the gain clears the noise band from step 2. Keep the tests green after each change. Commit each
    kept win on its own, with before and after numbers in the commit message. Revert a change that
-   does not clear the noise.
+   does not clear the noise. Add each attempt to the file's `attempts`, kept or not.
 6. **Check for regressions the same way**: same command, same input, same machine as the baseline.
    A difference inside the noise band is reported as "no measurable change", not as a regression or
    a win.
@@ -53,8 +64,10 @@ and either way the baseline and every attempt are recorded.
 
 ## Output
 
-The attempts table of `assets/perf-report.template.md`, per `references/perf-report-schema.md`,
-one row per attempt, in the file and in the reply.
+`.agents_workspace/product/perf/<metric>.yaml` follows `assets/perf-report.template.yaml`, per the
+`perf-report/v2` section of `references/perf-report-schema.md`, one item per attempt.
+`<metric>.md` is rendered from it in the layout of `assets/perf-report.template.md`, and its
+attempts table goes in the reply.
 
 ## Stop conditions
 

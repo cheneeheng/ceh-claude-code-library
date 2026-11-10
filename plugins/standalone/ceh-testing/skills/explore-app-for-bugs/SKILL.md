@@ -10,7 +10,8 @@ user-invocable: true
 compatibility: >-
   Needs whatever the target app needs to run locally (its runtime, package manager, database).
   Driving a web UI needs the Claude in Chrome tools in the main session, or Playwright through the
-  project's own setup; without either, only a CLI or HTTP API can be explored.
+  project's own setup; without either, only a CLI or HTTP API can be explored. Checking and
+  rendering QA_REPORT.yaml needs uv; without it the report is saved unchecked and unrendered.
 license: Apache-2.0
 ---
 
@@ -46,11 +47,15 @@ each confirmed bug after the report is written. Fix mode runs only when the user
 4. **Confirm each bug.** Reproduce it a second time from a clean start with the fewest steps that
    still trigger it. Capture the evidence: a screenshot, the console line, the response body, or
    the command output. A bug that would not happen twice is listed as unconfirmed, never dropped.
-5. **Write the report** in the Output shape.
+5. **Write the report** as `QA_REPORT.yaml` in the Output shape, then run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <dir>/QA_REPORT.yaml`, which
+   writes `QA_REPORT.md`, and fix the YAML for each error it lists. Never edit the generated `.md`.
+   On exit 2 or 3, or without uv, say in the reply that the report went unchecked and unrendered.
 6. **Fix mode only:** take confirmed bugs in severity order. Find the cause first
    (`ceh-coding-conduct:find-root-cause`, when installed), then invoke the Skill tool with
-   skill="ceh-testing:test-a-bug-fix" to fix it with a failing test first. Re-run the bug's reproduction steps after the fix and record the result in the
-   report.
+   skill="ceh-testing:test-a-bug-fix" to fix it with a failing test first. Re-run the bug's reproduction steps after the fix and record the commit and the result in the
+   bug's `fix`. Run `artifact.py check` on the YAML before the edit, stop on exit 1 with its
+   errors, and run `render` after it.
 
 ## Rules
 
@@ -67,9 +72,10 @@ each confirmed bug after the report is written. Fix mode runs only when the user
 
 ## Output
 
-Write `.agents_workspace/product/qa/<YYYYMMDD-HHMM>/QA_REPORT.md`, timestamp from one `date` call, with
-screenshots and logs beside it, filling `assets/qa-report.template.md`, per
-`references/qa-report-schema.md`.
+Write `.agents_workspace/product/qa/<YYYYMMDD-HHMM>/QA_REPORT.yaml`, timestamp from one `date`
+call, with screenshots and logs beside it, filling `assets/qa-report.template.yaml`, per the
+`qa-report/v2` section of `references/qa-report-schema.md`. `QA_REPORT.md` is rendered from it
+beside it, in the layout of `assets/qa-report.template.md`.
 
 ## Stop conditions
 

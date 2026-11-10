@@ -20,7 +20,7 @@ passing functional suite structurally miss. Load it alongside a stack plugin, no
 | `close-test-risk-gaps`      | `/ceh-testing:close-test-risk-gaps`      | Pre-completion gate: triage concurrency, contract drift, performance, authorization, and migration/rollout gaps. A class whose trigger does not fire is skipped explicitly                                                                                                                                                                           |
 | `write-test-first`          | `/ceh-testing:write-test-first`          | About to write code that adds or changes behavior, asked for tests or not: red, green, refactor per slice. It's working if each slice in the hand-over quotes the failure seen before its code existed                                                                                                                                               |
 | `measure-performance`       | `/ceh-testing:measure-performance`       | Speed, memory, or size is the task: vet the measurement against its noise, record a baseline, profile before changing, one change per measurement and one commit per win. It's working if every number is a median with its spread and a kept change clears the noise band                                                                           |
-| `explore-app-for-bugs`      | `/ceh-testing:explore-app-for-bugs`      | The running app must be tried for bugs, not its suite: charters over the changed areas, inputs, sequence, state, and environment tours, each bug reproduced twice. Report-only unless fix mode is asked for. It's working if `QA_REPORT.md` lists each bug as confirmed or unconfirmed with its steps and evidence                                   |
+| `explore-app-for-bugs`      | `/ceh-testing:explore-app-for-bugs`      | The running app must be tried for bugs, not its suite: charters over the changed areas, inputs, sequence, state, and environment tours, each bug reproduced twice. Report-only unless fix mode is asked for. It's working if `QA_REPORT.yaml`, rendered to `QA_REPORT.md`, lists each bug as confirmed or unconfirmed with its steps and evidence    |
 | `write-evidence-report`     | `/ceh-testing:write-evidence-report`     | Before a launch or a post about the product: one `product/EVIDENCE.md`, with a dated section added per run, rolled up from the latest test run and the QA, performance, security, and usability reports, read by `ceh-blog` and `ceh-seo`. It's working if every area shows passed, open issues, stale, or not run, and every claim names its figure |
 
 The plugin ships no agents. `audit-test-suite` has a report-only mode for a large or slow suite: hand
@@ -47,9 +47,11 @@ PATH (stdlib only) and fails open without it. `CEH_SKILL_STARTED_GUARD=off`, or
 
 ### Evidence render and generated Markdown guard
 
-`write-evidence-report` saves `product/EVIDENCE.yaml` (`evidence/v2`). After every write to it, the
-render hook checks the YAML against its model through `uv` and renders `product/EVIDENCE.md`, or
-reports each error back to the agent and leaves the Markdown as it was. The guard denies a direct
+`write-evidence-report` saves `product/EVIDENCE.yaml` (`evidence/v2`), `explore-app-for-bugs`
+saves `QA_REPORT.yaml` (`qa-report/v2`), and `measure-performance` saves `<metric>.yaml`
+(`perf-report/v2`). After every write to one, the render hook checks the YAML against its model
+through `uv` and renders the Markdown beside it, or reports each error back to the agent and leaves
+the Markdown as it was. The guard denies a direct
 edit to a generated Markdown file and names its YAML. Both need `uv`: without it the agent is told
 once per session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS`
 with `artifact-render-hook` or `generated-md-guard`, switches them off.

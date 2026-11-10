@@ -11,6 +11,16 @@ before this repo live in
 
 ## 2026-11-10
 
+The QA report and the performance file are YAML formats now, the first of the reports
+`write-evidence-report` reads. `explore-app-for-bugs` saves `QA_REPORT.yaml` (`qa-report/v2`) and
+`measure-performance` saves `<metric>.yaml` (`perf-report/v2`), each checked by a pydantic model,
+with the Markdown rendered beside it in the `v1` layout. A charter naming a bug the report does not
+hold, a `fix` in report mode, a second baseline, or a commit such as `HEAD` is now an error. The
+renderer computes the `vs baseline` column, so no model does that arithmetic. A `v1` performance
+file moves to the YAML on its next attempt, with a `<metric>.v1.md` backup. `write-evidence-report`
+checks both reports and reads `commit`, `bugs` and `attempts` by key, and marks an area `not run`
+when its report is broken, because a broken report proves nothing.
+
 The skills that read another stage's spine file now check it first. `write-build-plan` and
 `review-build-plan` run `artifact.py check` on a `VISION.yaml`, `STRATEGY.yaml` or
 `BUSINESS_PLAN.yaml` before reading it, `find-product-market-fit` does the same for
@@ -45,8 +55,14 @@ settled its one open question: the three usability audits will require a `commit
 | `ceh-seo`                 | 1.1.8   |
 | `ceh-documentation`       | 1.0.8   |
 | `ceh-python-service`      | 1.1.5   |
+| `ceh-testing`             | 1.6.1   |
 
 ### Changed
+
+- Save the QA report as `QA_REPORT.yaml` (`qa-report/v2`) in `explore-app-for-bugs`, and the
+  performance file as `<metric>.yaml` (`perf-report/v2`) in `measure-performance`, each rendered
+  to its Markdown, with a `v1` performance file moved on its next attempt.
+- Check the QA and performance YAML in `write-evidence-report` and read them by key path.
 
 - Check and read a plan's YAML in `whats-next`, and a plan, `ARCHITECTURE.yaml` or
   `BUSINESS_PLAN.yaml` in `record-project-decisions`, by key path.
