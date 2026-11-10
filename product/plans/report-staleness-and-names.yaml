@@ -1,0 +1,116 @@
+schema: plan/v2
+title: Timed security audit file names, and QA fix-mode staleness from the last fix commit
+status: ready
+created: 2026-11-10
+goal: |
+  The live runs that judged Phases 1 to 3 of `product/plans/report-only-formats.yaml` found two
+  gaps in how `ceh-testing:write-evidence-report` finds and dates the reports it reads. A second
+  security audit on the same day has no file name of its own, because
+  `ceh-security-audit:audit-codebase-security` saves `SECURITY_AUDIT-<YYYY-MM-DD>.yaml`. And a QA
+  report in fix mode reads `stale (n)` in the evidence report, where the n newer commits are the
+  run's own fixes, because staleness counts from the report's `commit` only. The flow that matters:
+  an agent audits twice in a day, or fixes the bugs it found, and the evidence report still shows
+  the newest result as up to date.
+scope:
+  in:
+    - |
+      `audit-codebase-security` saves each audit as
+      `.agents_workspace/product/security-audit/SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`, so a second
+      audit on the same day keeps the first one.
+    - |
+      `write-evidence-report` takes the newest security audit by file name, old
+      `SECURITY_AUDIT-<YYYY-MM-DD>` files included.
+    - |
+      `write-evidence-report` counts a QA report's staleness from the newest of its bugs'
+      `fix.commit` values when any bug has a `fix`, and from `commit` otherwise.
+  out:
+    - item: |
+        A `fixed_in` commit on the error-messages audit, or any change to the three usability
+        audit formats.
+      reason: |
+        `audit-error-messages` applies its rewrites without committing them, so the user commits
+        them later and `stale` is accurate: the report's counts describe the code before the
+        rewrites. The user chose this on 2026-11-10.
+    - item: Renaming existing `SECURITY_AUDIT-<YYYY-MM-DD>` files.
+      reason: |
+        They live in each user's `.agents_workspace/`, outside this repo, and the reader in Design
+        still finds them.
+    - item: A `security-audit/v3` version.
+      reason: |
+        Only the file name changes. No field or heading is renamed or removed, which is when
+        `decision-output-templates.md` asks for a version bump.
+    - item: Unrequested commits and pushes in a headless audit run.
+      reason: |
+        A separate open issue, investigated after this plan from the run's transcript.
+design:
+  - topic: Security audit file name
+    decision: |
+      `SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml` in `.agents_workspace/product/security-audit/`, the
+      timestamp from one `date +%Y%m%d-%H%M` call, a command the skill's Output names itself.
+      The rendered Markdown takes the same stem. Every mention of `SECURITY_AUDIT-<date>` or
+      `SECURITY_AUDIT-<YYYY-MM-DD>` becomes `SECURITY_AUDIT-<YYYYMMDD-HHMM>`: the skill's Output,
+      `security-audit-schema.md` and `security-audit-model.py` (the canonical files in
+      `audit-codebase-security` and their copies in `write-evidence-report`, kept byte-identical),
+      the Security row of `write-evidence-report`'s source table, both plugin READMEs, and the
+      `security-audit/v2` entry in `docs/CROSS_REFERENCES.md`. The hooks need no change, because
+      they pick the model by the file's `schema:` key, not its name.
+  - topic: Newest security audit
+    decision: |
+      `write-evidence-report` takes the security audit whose file name sorts last. Plain string
+      order already puts every `<YYYYMMDD-HHMM>` name after every `<YYYY-MM-DD>` name, because `-`
+      sorts before a digit. The Security row says so in one clause without the old placeholder,
+      worded "older date-only names sort first". Known limit: on a machine where
+      `ceh-security-audit` is still on the old version but `ceh-testing` is updated, a date-only
+      audit written after a timed one is passed over. Updating both plugins ends it, so no code
+      handles it.
+  - topic: QA staleness base
+    decision: |
+      In step 4 of `write-evidence-report`, a QA report whose `bugs` hold any `fix` is stale by the
+      smallest `git rev-list --count <fix.commit>..HEAD` over those fixes, skipping a `fix.commit`
+      that `git cat-file -e <fix.commit>^{commit}` rejects (rebased or squashed away). With none
+      left, it falls back to `commit`, as every other report does. The smallest count needs no
+      ordering of the fix commits, which commit dates cannot give when two share a second. The
+      reason: the fix commits are the run's own work, each followed by a `rerun` of its bug, so
+      they are not code that moved after the check. The cost: a commit made by someone else
+      between two fix commits is not counted, which is unlikely inside one run.
+  - topic: Pull requests
+    decision: |
+      One PR per phase, each with its own PATCH bumps, `CHANGELOG.md` entry and
+      `docs/PLUGIN_VERSIONS.md` rows, so `ceh-testing` is bumped once per PR, at commit time.
+phases:
+  - name: Timed security audit file name
+    builds: |
+      Scope In items 1 and 2, per Design "Security audit file name" and "Newest security audit".
+      PATCH bumps for `ceh-security-audit` and `ceh-testing`, with the changelog entry and the
+      `docs/PLUGIN_VERSIONS.md` rows.
+    check: |
+      `git grep -n -E "SECURITY_AUDIT-<(date|YYYY-MM-DD)>" -- plugins docs` prints nothing.
+      `git grep -L "SECURITY_AUDIT-<YYYYMMDD-HHMM>"` over the files Design "Security audit file
+      name" lists prints nothing, so each names the new form. `git grep -n "date +%Y%m%d-%H%M"`
+      matches `audit-codebase-security/SKILL.md`, and `git grep -n "date-only names sort first"`
+      matches `write-evidence-report/SKILL.md`. `python tools/validate-plugins/validate.py` prints
+      "OK: all plugin checks passed".
+    status: todo
+  - name: QA staleness from the last fix commit
+    builds: |
+      Scope In item 3, per Design "QA staleness base", in step 4 of
+      `plugins/standalone/ceh-testing/skills/write-evidence-report/SKILL.md`. A PATCH bump for
+      `ceh-testing`, with the changelog entry and the `docs/PLUGIN_VERSIONS.md` row.
+    check: |
+      `git grep -n -e "rev-list --count" -e "fix.commit" -e "cat-file -e"` matches step 4 of
+      `write-evidence-report/SKILL.md`. In a scratchpad git repo with commits `a`, `b` and `c`
+      sharing one commit date, the step's rule given fixes `b` and `c` in either order gives 0,
+      given `a` and `b` gives 1, and a missing `deadbee` is skipped. `python
+      tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
+    status: todo
+open: []
+record:
+  - date: 2026-11-10
+    event: Planned
+    details: status ready
+  - date: 2026-11-10
+    event: Reviewed
+    details: |
+      Revise first, 2 blocking (Phase 1 grep forbade the old-name clause the Design asked for,
+      date-ordered pick of the newest fix commit breaks on tied dates), all fixed with the 6
+      advisory findings

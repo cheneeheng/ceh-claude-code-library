@@ -11,6 +11,12 @@ before this repo live in
 
 ## 2026-11-10
 
+A new plan, `product/plans/report-staleness-and-names.yaml`, takes the two gaps the live runs of
+the report formats found: a second security audit on the same day has no file name of its own,
+and a QA report in fix mode reads `stale` in the evidence report because of its own fix commits.
+The error-messages audit keeps its format, because it leaves its rewrites uncommitted and `stale`
+after the user's commit is accurate. No plugin changes in this PR.
+
 The six report schemas now say which quotes free text takes: `|` blocks or double quotes. A live
 error-messages audit escaped `"` inside single-quoted YAML, where the backslash stays, so its
 rendered report showed `\"alice\"`. The model accepted the file, so only the wording could catch it.
