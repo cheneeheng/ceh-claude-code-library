@@ -10,7 +10,8 @@ user-invocable: true
 compatibility: >-
   Needs git for the secrets search through history. The dependency check needs the ecosystem's
   audit tool (pip-audit, npm audit, bun audit) and network access. Without them the audit runs and
-  lists those checks as not run.
+  lists those checks as not run. Checking and rendering the report's YAML needs uv; without it the
+  report is saved unchecked and its Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -51,7 +52,7 @@ saved.
    the user asked for the dependency check or network use is already authorized. Otherwise put the
    exact command under Not checked.
 4. **Fan out on a large surface.** With more than one service, or more than about fifty entry
-   points, write the surface map to the report first, then dispatch background subagents in
+   points, write the surface map to the report's `attack_surface` first, then dispatch background subagents in
    parallel, one per group of categories, each with the report path and its categories. Merge by
    `path:line`, and re-read every quoted line before it becomes a finding.
 5. **Confirm each finding** by quoting both ends: where the attacker's input enters and the sink
@@ -76,6 +77,12 @@ saved.
 
 ## Output
 
-Save to `.agents_workspace/product/security-audit/SECURITY_AUDIT-<YYYY-MM-DD>.md`, and reply with the
-counts by severity and the critical and high rows. The report fills
-`assets/security-audit.template.md`, per `references/security-audit-schema.md`.
+Save to `.agents_workspace/product/security-audit/SECURITY_AUDIT-<YYYY-MM-DD>.yaml`, and reply with
+the counts by severity and the critical and high rows. The report fills
+`assets/security-audit.template.yaml`, per the `security-audit/v2` section of
+`references/security-audit-schema.md`. After the last edit, run
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which writes the
+`.md` beside it in the layout of `assets/security-audit.template.md`, and fix the YAML for each
+error it lists. Before editing a saved report, run it with `check` and stop on exit 1 with its
+errors. Never edit the generated `.md`. On exit 2 or 3, or without uv, say in the reply that the
+report went unchecked and unrendered.

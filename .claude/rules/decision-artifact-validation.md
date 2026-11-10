@@ -22,7 +22,8 @@ hooks. The user approved the build plan trial
 architecture document (`architecture/v3`), the vision and strategy (`vision/v2`,
 `strategy/v2`), and the business plan (`business-plan/v3`). The reports
 `write-evidence-report` reads follow them, per `product/plans/report-only-formats.yaml`: the QA
-report (`qa-report/v2`) and the performance file (`perf-report/v2`).
+report (`qa-report/v2`), the performance file (`perf-report/v2`), and the security audit
+(`security-audit/v2`).
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

@@ -27,7 +27,8 @@ frontmatter, its body inside a prettier-ignore range, and never edited by hand: 
 edits the YAML re-renders it. The YAML formats so far are the build plan (`plan/v2`), the
 evidence report (`evidence/v2`), the architecture document (`architecture/v3`), the vision and
 strategy (`vision/v2`, `strategy/v2`), the business plan (`business-plan/v3`), the QA report
-(`qa-report/v2`), and the performance file (`perf-report/v2`).
+(`qa-report/v2`), the performance file (`perf-report/v2`), and the security audit
+(`security-audit/v2`).
 
 Why: the format lives in one pair of files, and each saved file names its version. A YAML format
 adds the model, so every field of the file, body included, is checked rather than described.

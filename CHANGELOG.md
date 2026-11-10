@@ -11,6 +11,14 @@ before this repo live in
 
 ## 2026-11-10
 
+The security audit follows as a YAML format. `audit-codebase-security` saves
+`SECURITY_AUDIT-<date>.yaml` (`security-audit/v2`), with the Markdown rendered beside it and the
+findings numbered by the renderer. A severity outside the four, a `location` with no line number,
+or a commit such as `HEAD` is now an error. `ceh-security-audit` gains the render hook and the
+generated-Markdown guard, and `write-evidence-report` reads the findings by `severity`.
+`ceh-testing`'s hook checks the file too, so with both plugins an error is reported twice, from the
+same model.
+
 `validate.py` no longer fails at random on Windows in the workspace-sync fixtures. The fixture that
 waits for the detached sync worker read `DECISION_LOG.md` while the worker's merge replaced it, and
 a missing file now counts as not settled yet. No plugin changes.
@@ -59,9 +67,18 @@ settled its one open question: the three usability audits will require a `commit
 | `ceh-seo`                 | 1.1.8   |
 | `ceh-documentation`       | 1.0.8   |
 | `ceh-python-service`      | 1.1.5   |
-| `ceh-testing`             | 1.6.1   |
+| `ceh-testing`             | 1.6.2   |
+| `ceh-security-audit`      | 1.1.0   |
+
+### Added
+
+- Add the render hook and the generated-Markdown guard to `ceh-security-audit`.
 
 ### Changed
+
+- Save the security audit as `SECURITY_AUDIT-<date>.yaml` (`security-audit/v2`) in
+  `audit-codebase-security`, rendered to its Markdown.
+- Check the security audit YAML in `write-evidence-report` and read its findings by severity.
 
 - Save the QA report as `QA_REPORT.yaml` (`qa-report/v2`) in `explore-app-for-bugs`, and the
   performance file as `<metric>.yaml` (`perf-report/v2`) in `measure-performance`, each rendered

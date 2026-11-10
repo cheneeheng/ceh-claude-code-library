@@ -24,6 +24,24 @@ unfixed hole publishes it.
 - The ecosystem's audit tool (`pip-audit`, `npm audit`, `bun audit`) for the dependency check. It
   sends your dependency list to an advisory database, so it runs only when you ask for the
   dependency check or have already allowed network use. Otherwise the report lists the command.
+- `uv`, to check and render the report's YAML. Without it the report is saved unchecked and its
+  Markdown is not rendered.
+
+## Hooks
+
+| Hook                                                                    | Event                                        | Script                    | Default |
+| ----------------------------------------------------------------------- | -------------------------------------------- | ------------------------- | ------- |
+| [Report render](#report-render-and-generated-markdown-guard)            | `PostToolUse` (`Edit`, `Write`, `MultiEdit`) | `artifact-render-hook.py` | on      |
+| [Generated Markdown guard](#report-render-and-generated-markdown-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`)  | `generated-md-guard.py`   | on      |
+
+### Report render and generated Markdown guard
+
+`audit-codebase-security` saves `SECURITY_AUDIT-<date>.yaml` (`security-audit/v2`). After every
+write to it, the render hook checks the YAML against its model through `uv` and renders the
+Markdown beside it, or reports each error back to the agent and leaves the Markdown as it was. The
+guard denies a direct edit to a generated Markdown file and names its YAML. Both need `uv`: without
+it the agent is told once per session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or
+`CEH_DISABLED_HOOKS` with `artifact-render-hook` or `generated-md-guard`, switches them off.
 
 ## Not this plugin
 

@@ -51,7 +51,9 @@ PATH (stdlib only) and fails open without it. `CEH_SKILL_STARTED_GUARD=off`, or
 saves `QA_REPORT.yaml` (`qa-report/v2`), and `measure-performance` saves `<metric>.yaml`
 (`perf-report/v2`). After every write to one, the render hook checks the YAML against its model
 through `uv` and renders the Markdown beside it, or reports each error back to the agent and leaves
-the Markdown as it was. The guard denies a direct
+the Markdown as it was. It checks a `SECURITY_AUDIT-<date>.yaml` too, through
+`write-evidence-report`'s copy of its model, so with `ceh-security-audit` installed an error in one
+is reported by both plugins. The guard denies a direct
 edit to a generated Markdown file and names its YAML. Both need `uv`: without it the agent is told
 once per session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS`
 with `artifact-render-hook` or `generated-md-guard`, switches them off.

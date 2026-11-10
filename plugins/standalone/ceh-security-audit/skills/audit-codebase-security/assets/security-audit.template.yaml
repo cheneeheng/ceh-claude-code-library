@@ -1,0 +1,21 @@
+schema: security-audit/v2
+repo: <repo>
+commit: <short-sha>
+date: YYYY-MM-DD
+attack_surface: |
+  <attack surface>
+findings:
+  - severity: <critical | high | medium | low>
+    confidence: <confirmed | likely>
+    category: <category>
+    attacker: <attacker>
+    location: <path:line>
+    attack: <attack>
+    fix: <fix>
+possible:
+  - lead: <lead>
+    settle: <what would settle it>
+not_checked:
+  - check: <category or check>
+    reason: <reason>
+    command: <command>

@@ -347,6 +347,10 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-testing/skills/write-evidence-report/scripts/artifact.py`                                                          | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/skills/explore-app-for-bugs/scripts/artifact.py`                                                           | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/skills/measure-performance/scripts/artifact.py`                                                            | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-security-audit/skills/audit-codebase-security/scripts/artifact.py`                                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-security-audit/scripts/artifact.py`                                                                                | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-security-audit/scripts/artifact-render-hook.py`                                                                    | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-security-audit/scripts/generated-md-guard.py`                                                                      | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/artifact.py`                                                                                       | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/artifact-render-hook.py`                                                                           | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/generated-md-guard.py`                                                                             | whole file                                                  | none                                                                             |
@@ -481,6 +485,23 @@ copy to check the file first. `validate.py` fails when a copy differs from the c
 `<metric>.yaml`, and `write-evidence-report` reads its `commit` and `attempts` by key, so it
 carries a copy to check the file first. `validate.py` fails when a copy differs from the canonical
 file.
+
+## Security audit format
+
+**Canonical:** whole files, `plugins/standalone/ceh-security-audit/skills/audit-codebase-security/references/security-audit-schema.md`, `plugins/standalone/ceh-security-audit/skills/audit-codebase-security/references/security-audit-model.py`, `plugins/standalone/ceh-security-audit/skills/audit-codebase-security/assets/security-audit.template.md`, `plugins/standalone/ceh-security-audit/skills/audit-codebase-security/assets/security-audit.template.yaml`
+
+| Copy                                                                                              | Section    | Diverges |
+| ------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/security-audit-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/references/security-audit-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/security-audit.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/security-audit.template.yaml` | whole file | none     |
+
+**Shared:** the `security-audit/v2` format with its templates. `audit-codebase-security` writes
+`SECURITY_AUDIT-<date>.yaml`, and `write-evidence-report` reads its `commit` and `findings` by key,
+so it carries a copy to check the file first, and `ceh-testing`'s hook checks the file too. With
+both plugins installed an error is reported twice, from the same model. `validate.py` fails when a
+copy differs from the canonical file.
 
 ## Vision and strategy format
 
