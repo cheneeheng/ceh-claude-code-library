@@ -125,7 +125,9 @@ was checked.
   high | medium | low, confidence: confirmed | likely, category, attacker, location, attack,
   fix}, possible: list of {lead, settle}, not_checked: list of {check, reason, command}}`.
   `location` matches `^[^\s:]+:\d+$`. The renderer numbers the findings, so no number is stored.
-- **The usability audit models** All three gain a required `commit`. `run` is an int, rendered zero-padded to three digits
+- **The usability audit models** All three gain a required `commit`, which the user chose on 2026-11-10, because without it
+  `write-evidence-report` guesses the commit from the date, and the guess is wrong whenever two
+  commits land on one day. `run` is an int, rendered zero-padded to three digits
   (`007`) to match the `run-<NNN>` folder.
 
   The first-run and interface audits share a finding, `{id, severity: Blocker | Detour |
@@ -255,13 +257,13 @@ was checked.
 
 ## Open
 
-- Does the user want the usability audits to require `commit`, a new field the walkers' skills must now record?: Yes, because without it `write-evidence-report` guesses the commit from the date, and the
-  guess is wrong whenever two commits land on one day.
+None
 
 ## Record
 
 - 2026-11-10 Planned: status ready
 - 2026-11-10 Reviewed: Revise first, 7 blocking (gate drops the N/A form, error-messages audit given a gate and findings it lacks, perf model cannot say no measurable change or an IQR spread, perf file treated as never updated, Results budget and total wait underived, Checks never prove the reader, repeat-mistake report has a later-session reader), all fixed with the 6 advisory findings
 - 2026-11-10 PR: #226 https://github.com/cheneeheng/ceh-claude-code-library/pull/226
+- 2026-11-10 Design changed: was the Open item "Does the user want the usability audits to require `commit`", now settled in Design as required, because the user chose it
 
 <!-- prettier-ignore-end -->

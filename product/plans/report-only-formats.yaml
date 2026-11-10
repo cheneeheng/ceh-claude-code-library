@@ -148,7 +148,9 @@ design:
       `location` matches `^[^\s:]+:\d+$`. The renderer numbers the findings, so no number is stored.
   - topic: The usability audit models
     decision: |
-      All three gain a required `commit`. `run` is an int, rendered zero-padded to three digits
+      All three gain a required `commit`, which the user chose on 2026-11-10, because without it
+      `write-evidence-report` guesses the commit from the date, and the guess is wrong whenever two
+      commits land on one day. `run` is an int, rendered zero-padded to three digits
       (`007`) to match the `run-<NNN>` folder.
 
       The first-run and interface audits share a finding, `{id, severity: Blocker | Detour |
@@ -279,11 +281,7 @@ phases:
     check: |
       Planned once Phases 1 to 3 are judged.
     status: unplanned
-open:
-  - question: Does the user want the usability audits to require `commit`, a new field the walkers' skills must now record?
-    assumption: |
-      Yes, because without it `write-evidence-report` guesses the commit from the date, and the
-      guess is wrong whenever two commits land on one day.
+open: []
 record:
   - date: 2026-11-10
     event: Planned
@@ -295,3 +293,7 @@ record:
   - date: 2026-11-10
     event: PR
     details: "#226 https://github.com/cheneeheng/ceh-claude-code-library/pull/226"
+  - date: 2026-11-10
+    event: Design changed
+    details: |
+      was the Open item "Does the user want the usability audits to require `commit`", now settled in Design as required, because the user chose it
