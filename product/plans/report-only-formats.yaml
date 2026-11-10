@@ -304,8 +304,7 @@ phases:
       Planned once Phases 1 to 3 are judged.
     status: done
     evidence: |
-      Built by its own plan, `product/plans/fix-record-yaml.yaml`, in PRs #237 and the PR that
-      lands its Phase 2, each with `python tools/validate-plugins/validate.py` printing "OK: all
+      Built by its own plan, `product/plans/fix-record-yaml.yaml`, in PRs #237 and #238, each with `python tools/validate-plugins/validate.py` printing "OK: all
       plugin checks passed".
     note: |
       Planned and checked in `product/plans/fix-record-yaml.yaml`, whose phases hold the real
@@ -376,3 +375,12 @@ record:
   - date: 2026-11-10
     event: PR
     details: "#231 https://github.com/cheneeheng/ceh-claude-code-library/pull/231"
+  - date: 2026-11-10
+    event: Built Phase
+    phase: 4
+    details: |
+      Built by `product/plans/fix-record-yaml.yaml`, `python tools/validate-plugins/validate.py`,
+      "OK: all plugin checks passed"
+  - date: 2026-11-10
+    event: PR
+    details: "#238 https://github.com/cheneeheng/ceh-claude-code-library/pull/238"
