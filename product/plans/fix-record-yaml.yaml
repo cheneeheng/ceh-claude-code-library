@@ -1,6 +1,6 @@
 schema: plan/v2
 title: The fix record as a YAML format, fix-record/v2
-status: ready
+status: building
 created: 2026-11-10
 goal: |
   Phase 4 of `product/plans/report-only-formats.yaml`: the fix record that
@@ -177,7 +177,18 @@ phases:
       file and block a bad one through each plugin's render hook, print "uv is not installed"
       without uv, stay silent on a file with no `schema:` key, and have the `ceh-coding-conduct`
       guard deny an edit to a generated `.md`, prints "OK: all plugin checks passed".
-    status: todo
+    status: done
+    evidence: |
+      Scratchpad records `diagnosed`, `fixed`, `fixed` with `known_from_report` and `unreproduced`
+      (one with two predictions) rendered with exit 0 in the `v1` layout. Six bad records exited 1
+      naming `diagnosis`, `cause`, `diagnosis.rows` (twice) and `tests` (twice). The three greps
+      each matched once in `test-a-bug-fix/SKILL.md`. The two copies of each of the four format
+      files share an md5. `python tools/validate-plugins/validate.py` printed "OK: all plugin
+      checks passed", and a fixture with a wrong marker made it fail on
+      `count-drops-last-word.md was not rendered`.
+    note: |
+      The third grep pattern is written in the skill as "no `.yaml` beside it", with backticks, so
+      the check ran `git grep -F` with that exact text instead of the regex the Check names.
   - name: The writer
     builds: |
       Scope In items 4 and 6, with Phase 2's share of item 5: `find-root-cause` steps 8 and 9 and
@@ -210,3 +221,11 @@ record:
   - date: 2026-11-10
     event: PR
     details: "#236 https://github.com/cheneeheng/ceh-claude-code-library/pull/236"
+  - date: 2026-11-10
+    event: Built Phase
+    phase: 1
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+  - date: 2026-11-10
+    event: PR
+    details: "#237 https://github.com/cheneeheng/ceh-claude-code-library/pull/237"

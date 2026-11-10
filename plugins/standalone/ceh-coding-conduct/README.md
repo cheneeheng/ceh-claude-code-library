@@ -72,12 +72,31 @@ Hooks are enforcement, so each one is kept on a failure that guidance alone did 
   stop to look for it. Loaded once, the ladder also drifted out of effect in long sessions and the
   agent over-built.
 
-To switch one off without uninstalling the plugin, list its script name in `CEH_DISABLED_HOOKS`
-(comma-separated, no extension): `load-contract`, `inject-less-code-reminder`.
+- **The fix record is checked on every write.** This one is kept on the user's choice, not on a
+  failure: the fix record (`fix-record/v2`, `product/fixes/<slug>.yaml`) is a handoff to
+  `ceh-testing:test-a-bug-fix` and to later sessions, so it is checked whether or not
+  `ceh-testing` is installed. See Fix record render and generated Markdown guard below.
 
-Both hooks fire in every session where the plugin is enabled, including ones that write no code.
+To switch one off without uninstalling the plugin, list its script name in `CEH_DISABLED_HOOKS`
+(comma-separated, no extension): `load-contract`, `inject-less-code-reminder`,
+`artifact-render-hook`, `generated-md-guard`.
+
+These hooks fire in every session where the plugin is enabled, including ones that write no code.
 So install it only where you write code: `docs/GETTING_STARTED.md` tells writers and planners to
 skip it.
+
+### Fix record render and generated Markdown guard
+
+A `fix-record/v2` record is `product/fixes/<slug>.yaml`, with `<slug>.md` rendered beside it. After
+every Edit or Write to one, a `PostToolUse` hook (`scripts/artifact-render-hook.py`) checks the YAML
+against its model through `uv` and renders the Markdown, or reports each error back to the agent
+and leaves the Markdown as it was. A `PreToolUse` guard (`scripts/generated-md-guard.py`) denies a
+direct edit to a generated Markdown file and names its YAML. Both run `python3` on every Edit or
+Write and return at once for any other file, about 85 ms per edit for the two together, measured
+once on Windows. The check needs `uv`: without it the agent is told once per session that the file
+went unchecked. Without `python3`, both do nothing. With `ceh-testing` installed too, its hooks
+check the same file, so an error is reported twice. `CEH_ARTIFACT_CHECK=off`, or
+`CEH_DISABLED_HOOKS` with `artifact-render-hook` or `generated-md-guard`, switches them off.
 
 ## What the contract enforces
 

@@ -351,6 +351,11 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-security-audit/scripts/artifact.py`                                                                                | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-security-audit/scripts/artifact-render-hook.py`                                                                    | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-security-audit/scripts/generated-md-guard.py`                                                                      | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/scripts/artifact.py`                                                         | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/scripts/artifact.py`                                                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-coding-conduct/scripts/artifact.py`                                                                                | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-coding-conduct/scripts/artifact-render-hook.py`                                                                    | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-coding-conduct/scripts/generated-md-guard.py`                                                                      | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/scripts/artifact.py`                                            | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/audit-interface/scripts/artifact.py`                                                        | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
@@ -565,14 +570,17 @@ them, so each carries a copy to check `VISION.yaml` and `STRATEGY.yaml` before r
 
 ## Fix record format
 
-**Canonical:** whole files, `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/references/fix-record-schema.md`, `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/assets/fix-record.template.md`
+**Canonical:** whole files, `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/references/fix-record-schema.md`, `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/references/fix-record-model.py`, `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/assets/fix-record.template.md`, `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/assets/fix-record.template.yaml`
 
 | Copy                                                                                   | Section    | Diverges |
 | -------------------------------------------------------------------------------------- | ---------- | -------- |
 | `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/references/fix-record-model.py`  | whole file | none     |
 | `plugins/standalone/ceh-testing/skills/test-a-bug-fix/assets/fix-record.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-testing/skills/test-a-bug-fix/assets/fix-record.template.yaml` | whole file | none     |
 
-**Shared:** the whole fix record format and its template `fix-record.template.md` (canonical in
+**Shared:** the whole fix record format, `fix-record/v1` and the `fix-record/v2` YAML with its
+model, which renders the `v1` layout of `fix-record.template.md`, and the templates (canonical in
 `find-root-cause/assets/`, beside the canonical schema's `references/`), byte for byte: the `product/fixes/<slug>.md` location and
 slug rule, the write-only-for-repo-causes rule, the frontmatter with its three statuses and the
 `plan:` and `previous:` rules, the sections each status keeps, and the same-commit and

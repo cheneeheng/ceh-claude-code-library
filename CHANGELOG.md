@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-11-10
 
+The fix record gains a YAML format, `fix-record/v2`: `product/fixes/<slug>.yaml` checked by a
+pydantic model, with the Markdown rendered beside it in the `v1` layout. The `v1` rules on which
+sections each status keeps are now errors: a `diagnosed` record with a test or no confirmed
+hypothesis, an `unreproduced` one with a confirmed hypothesis, or a `fixed` one with no test.
+`test-a-bug-fix` completes a `v2` record by key and still completes a `v1` Markdown record.
+`ceh-coding-conduct` gains the render hook and the generated-Markdown guard, so a record is
+checked on every write even without `ceh-testing`, at about 85 ms per edit and a `python3`
+requirement. `find-root-cause` still writes `v1` until the next PR.
+
 A new plan, `product/plans/fix-record-yaml.yaml`, takes Phase 4 of the report formats plan: the
 fix record becomes `fix-record/v2`, YAML checked by a model and rendered in the `v1` layout, in
 two phases, the format with `test-a-bug-fix` reading it first, then `find-root-cause` writing it.
@@ -104,16 +113,22 @@ settled its one open question: the three usability audits will require a `commit
 | `ceh-seo`                 | 1.1.8   |
 | `ceh-documentation`       | 1.0.8   |
 | `ceh-python-service`      | 1.1.5   |
-| `ceh-testing`             | 1.6.6   |
+| `ceh-testing`             | 1.6.7   |
 | `ceh-security-audit`      | 1.1.2   |
 | `ceh-usability-audit`     | 1.2.1   |
+| `ceh-coding-conduct`      | 2.5.0   |
 
 ### Added
 
+- Add `fix-record/v2`, the fix record as YAML with its model, in `find-root-cause` and
+  `test-a-bug-fix`, and the render hook and the generated-Markdown guard to `ceh-coding-conduct`.
 - Add the render hook and the generated-Markdown guard to `ceh-security-audit`.
 - Add the render hook and the generated-Markdown guard to `ceh-usability-audit`.
 
 ### Changed
+
+- Complete a `fix-record/v2` record by key in `test-a-bug-fix`, checked and rendered, and create
+  new records as `v2`, keeping `v1` Markdown records in their own form.
 
 - Save the security audit as `SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml` in `audit-codebase-security`,
   and take the newest by file name in `write-evidence-report`.
