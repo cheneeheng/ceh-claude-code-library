@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: artifact-validation-formats.yaml
 generated_note: "Do not edit. artifact.py renders this file from artifact-validation-formats.yaml: edit the YAML, then run artifact.py render."
 title: YAML formats with generated Markdown for evidence, architecture, vision, strategy and the business plan
-status: building
+status: built
 created: 2026-11-07
 ---
 
@@ -151,7 +151,7 @@ reports `runs.0.areas.tests.status` to the agent right after the write and leave
   would gain a double hyphen. A `mermaid` value holds the diagram only, and the renderer wraps it
   in the fence. The renderer numbers sections `01.` onward and parts `03.01`, writes the
   Contents list, and builds each anchor with GitHub's rule: lowercase, drop every character but
-  letters, digits, spaces and hyphens, spaces to hyphens. `implement-from-plan` appends a
+  word characters (letters, digits, underscores), spaces and hyphens, spaces to hyphens. `implement-from-plan` appends a
   key decision to the YAML and no longer numbers anything.
 - **The vision/v2 and strategy/v2 models** Both carry `{schema, status: Literal["draft", "adopted"], updated: date}`, and a validator
   rejects `adopted` when any string in the file holds `[assumed]`. Vision:
@@ -371,7 +371,9 @@ reports `runs.0.areas.tests.status` to the agent right after the write and leave
 - **Builds:** A plan of its own for the report-only formats, written once Phase 6 lands, format by format,
   each with its case under VISION principle 7.
 - **Check:** That plan is saved and reviewed. Its path is this phase's evidence.
-- **Status:** unplanned
+- **Status:** done, `product/plans/report-only-formats.yaml`, saved with `status: ready` and reviewed from a fresh
+  context (Revise first, 7 blocking, all fixed with the 6 advisory findings), review at
+  `.agents_workspace/product/plan-reviews/report-only-formats-2026-11-10.md`.
 
 ## Open
 
@@ -403,5 +405,8 @@ None
 - 2026-11-10 Design changed: was "(none)", now `checks/artifact_models.py` exempts the plugins in `READERS` from the root scripts and hooks, because the check asked every plugin carrying a model for them, which contradicts "no hooks" for readers
 - 2026-11-10 Built Phase 6: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and all 18 reader key paths resolved in their models
 - 2026-11-10 PR: #225 https://github.com/cheneeheng/ceh-claude-code-library/pull/225
+- 2026-11-10 Built Phase 7: `product/plans/report-only-formats.yaml` saved and reviewed, Revise first with all findings fixed
+- 2026-11-10 Design changed: was "drop every character but letters, digits, spaces and hyphens", now "but word characters (letters, digits, underscores), spaces and hyphens", because GitHub's anchors keep underscores and the renderers (`architecture-model.py:113`, `business-plan-model.py:130`) already do
+- 2026-11-10 Checked: Built 29, Deviation 2, Cannot verify 1, Gap 0, Extra 0, Failing 0. Deviations: the anchor rule keeps underscores (plan corrected, Design changed above), and `docs/STRATEGY.md` named the `.md` files as Build's input (fixed to the YAML). Cannot verify: Phase 5's paid `claude -p` step, not rerun, its 2026-11-10 run is in the phase evidence
 
 <!-- prettier-ignore-end -->

@@ -26,6 +26,12 @@ Markdown. These plugins carry the models in their skills and no hooks, so `valid
 asks a reader plugin for the render hooks. `write-project-docs` only names `ARCHITECTURE.md` as a
 place to look, so it carries no copy.
 
+The YAML formats plan is built, and its last phase is a plan of its own,
+`product/plans/report-only-formats.yaml`. It converts the six reports `write-evidence-report`
+reads (QA, performance, security and the three usability audits) and keeps every report only
+its author or a person reads in Markdown, with the reason for each, because VISION principle 7
+asks for an observed failure before enforcement. No plugin changes in this PR.
+
 ### Plugin versions
 
 | Plugin                    | Version |

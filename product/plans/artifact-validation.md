@@ -1,7 +1,7 @@
 ---
 schema: plan/v1
 title: Handoff files as YAML validated by pydantic, with Markdown generated from it
-status: building
+status: built
 created: 2026-11-06
 ---
 
@@ -319,8 +319,8 @@ stale, run render`), `2` any other failure with the exception on stdout, `3` no 
   and `strategy`, then the report-only formats, and the read-time check in readers outside the
   trial, planned in full once the user approves the trial.
 - **Check:** planned with the phase.
-- **Status:** unplanned. Planned in full in `product/plans/artifact-validation-formats.yaml`, and
-  done when that plan is built.
+- **Status:** done, `product/plans/artifact-validation-formats.yaml` is `built` (PRs #220 to #226),
+  and the report-only formats continue in `product/plans/report-only-formats.yaml`.
 
 ## Open
 
@@ -345,3 +345,4 @@ None
 - 2026-11-06 PR: #205 https://github.com/cheneeheng/ceh-claude-code-library/pull/205
 - 2026-11-06 Built Phase 5: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and the three greps
 - 2026-11-06 PR: #206 https://github.com/cheneeheng/ceh-claude-code-library/pull/206
+- 2026-11-10 Built Phase 6: `product/plans/artifact-validation-formats.yaml` built
