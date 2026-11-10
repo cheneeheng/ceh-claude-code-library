@@ -281,5 +281,6 @@ None
 - 2026-11-10 PR: #227 https://github.com/cheneeheng/ceh-claude-code-library/pull/227
 - 2026-11-10 Design changed: was "`within_noise` is false on the baseline, and `kept_commit` is required exactly when `kept` is true", now also refuses a kept baseline and a baseline median of 0 or less, because a kept baseline has no win to name and a zero median has no percent change for the renderer to compute
 - 2026-11-10 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-10 PR: #228 https://github.com/cheneeheng/ceh-claude-code-library/pull/228
 
 <!-- prettier-ignore-end -->
