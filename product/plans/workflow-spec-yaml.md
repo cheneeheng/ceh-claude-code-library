@@ -210,5 +210,6 @@ rows by key and state.
   reads no oneOf and only the first anyOf branch), 10 advisory, all fixed: the blocking one by
   teaching model_vs_template.py to pick a oneOf branch by `state`, with a fixture, and the 10
   advisory as the review recommended
+- 2026-11-10 PR: #241 https://github.com/cheneeheng/ceh-claude-code-library/pull/241
 
 <!-- prettier-ignore-end -->
