@@ -41,6 +41,10 @@ The skills also load automatically when a request clearly matches ("help me writ
 this repo", "turn these notes into a post", "edit this draft", "make a thread from this"), but
 invoking them by name is the primary path.
 
+`draft-post` checks `BUSINESS_PLAN.yaml` or `EVIDENCE.yaml` against its model before reading it,
+which needs [uv](https://docs.astral.sh/uv/), installing pydantic and PyYAML on first use. Without
+uv the file is read unchecked, and a repo with none of these files needs no uv.
+
 ## What it produces
 
 A complete, publication-ready blog post with:

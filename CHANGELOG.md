@@ -18,6 +18,14 @@ The skills that read another stage's spine file now check it first. `write-build
 on an error, so a plan or a strategy is never built on a broken source. Each skill carries its own
 copy of the models it reads, so it still works installed alone.
 
+The readers in other plugins follow. `whats-next`, `record-project-decisions`, `draft-post`,
+`write-project-listing-text` and `write-concept-docs` check a spine YAML and read it by its keys,
+such as `runs.0.claims` of `EVIDENCE.yaml`, instead of parsing its Markdown, and
+`write-fastapi-endpoints` adds its API versioning entry to `ARCHITECTURE.yaml` and renders the
+Markdown. These plugins carry the models in their skills and no hooks, so `validate.py` no longer
+asks a reader plugin for the render hooks. `write-project-docs` only names `ARCHITECTURE.md` as a
+place to look, so it carries no copy.
+
 ### Plugin versions
 
 | Plugin                    | Version |
@@ -25,8 +33,23 @@ copy of the models it reads, so it still works installed alone.
 | `ceh-build-planning`      | 1.2.9   |
 | `ceh-business-plan`       | 1.2.1   |
 | `ceh-vision-and-strategy` | 1.1.1   |
+| `ceh-every-session`       | 2.8.22  |
+| `ceh-blog`                | 1.0.18  |
+| `ceh-seo`                 | 1.1.8   |
+| `ceh-documentation`       | 1.0.8   |
+| `ceh-python-service`      | 1.1.5   |
 
 ### Changed
+
+- Check and read a plan's YAML in `whats-next`, and a plan, `ARCHITECTURE.yaml` or
+  `BUSINESS_PLAN.yaml` in `record-project-decisions`, by key path.
+- Check and read `BUSINESS_PLAN.yaml` and `EVIDENCE.yaml` by key path in `draft-post` and
+  `write-project-listing-text`.
+- Check and read `ARCHITECTURE.yaml` `key_decisions` in `write-concept-docs`.
+- Add the API versioning entry to `ARCHITECTURE.yaml` `key_decisions` in
+  `write-fastapi-endpoints`, checked before and rendered after.
+- Exempt reader plugins from the render-hook requirement in `validate.py`'s `artifact-models`
+  check.
 
 - Check `VISION.yaml`, `STRATEGY.yaml` and `BUSINESS_PLAN.yaml` in `write-build-plan` and
   `review-build-plan` before reading them.

@@ -26,6 +26,9 @@ None of these is required. Each skill degrades instead of failing:
   markers come from `CHANGELOG.md` alone and commit rationale is skipped.
 - **The target project's own runtime** (Python and venv or uv, Node or Bun, cargo, go): running
   samples and examples. Without it they are written and reported as not run.
+- **[uv](https://docs.astral.sh/uv/)**: `write-concept-docs` checks `ARCHITECTURE.yaml` against
+  its model before reading it, installing pydantic and PyYAML on first use. Without uv the file is
+  read unchecked.
 - **Network access**: only for `write-examples` recipes that declare their own dependencies,
   fetched into a throwaway environment.
 

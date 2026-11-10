@@ -1,6 +1,6 @@
 """artifact-models: each YAML format's `<name>-model.py` sits beside its `<name>-schema.md`, with
 `../assets/<name>.template.yaml`, and a plugin carrying a model ships `artifact.py` and the two
-artifact hooks (the `copies` check keeps their copies identical). With uv, each template's keys
+artifact hooks (the `copies` check keeps their copies identical), unless it is one of `READERS`. With uv, each template's keys
 must also be exactly its model's, through `model_vs_template.py`, and each `product/plans/*.yaml`
 must pass `artifact.py check`, so its generated Markdown is not stale."""
 
@@ -19,6 +19,16 @@ from common import REPO, fail, main, plugin_dirs, rel
 MODEL_SUFFIX = "-model.py"
 # The scripts every plugin carrying a model ships, which must not drift between plugins.
 SHARED_SCRIPTS = ("artifact.py", "artifact-render-hook.py", "generated-md-guard.py")
+# Plugins whose skills only read a format (or, as write-fastapi-endpoints, render it themselves)
+# carry the models in their skills and no hooks, per Phase 6 of
+# product/plans/artifact-validation-formats.yaml.
+READERS = {
+    "ceh-every-session",
+    "ceh-blog",
+    "ceh-seo",
+    "ceh-documentation",
+    "ceh-python-service",
+}
 CLI = REPO / "plugins" / "standalone" / "ceh-build-planning" / "scripts" / "artifact.py"
 
 
@@ -63,7 +73,7 @@ def check() -> None:
                 fail(rel(model), f"no ../assets/{name}.template.yaml")
         for script in SHARED_SCRIPTS:
             path = d / "scripts" / script
-            if models and not path.is_file():
+            if models and d.name not in READERS and not path.is_file():
                 fail(rel(d), f"carries a model but no scripts/{script}")
 
     # Comparing a template with its model needs pydantic, so it runs through uv: skipped without

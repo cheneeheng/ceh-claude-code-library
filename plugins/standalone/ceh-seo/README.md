@@ -17,6 +17,10 @@ which is also where their trigger moments and file types are disjoint:
 Two skills carry a GEO layer: content structured so AI engines can extract and cite it —
 answer-first sections, standalone quotable facts, question-shaped headings.
 
+`write-project-listing-text` checks `BUSINESS_PLAN.yaml` or `EVIDENCE.yaml` against its model
+before reading it, which needs [uv](https://docs.astral.sh/uv/), installing pydantic and PyYAML on
+first use. Without uv the file is read unchecked, and a repo with none of these files needs no uv.
+
 ## Boundaries
 
 - README **accuracy** after a code change belongs to `ceh-git-workflow:update-readme`. This plugin

@@ -88,7 +88,7 @@ breaking change for every client that read the whole list.
 
 #### API versioning
 
-Prefer backward-compatible additions (new optional fields, new endpoints). Only version when a breaking change cannot be avoided. When required: use a URL prefix (`/v2/resources`), maintain `/v1/` for a documented deprecation period, and record the timeline in `ARCHITECTURE.md` Key Decisions.
+Prefer backward-compatible additions (new optional fields, new endpoints). Only version when a breaking change cannot be avoided. When required: use a URL prefix (`/v2/resources`), maintain `/v1/` for a documented deprecation period, and record the timeline in `ARCHITECTURE.md` Key Decisions. When `ARCHITECTURE.yaml` sits beside it, add the entry to the YAML's `key_decisions` instead, in the shape of `${CLAUDE_SKILL_DIR}/assets/architecture.template.yaml` per `${CLAUDE_SKILL_DIR}/references/architecture-schema.md`: run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check ARCHITECTURE.yaml` before the edit and stop on exit 1 with its errors, then run it with `render` after, and never edit the generated `ARCHITECTURE.md`. On exit 2 or 3, or without uv, say in the reply that the file went unchecked and unrendered.
 
 During the deprecation period, every `/v1/` response carries `Deprecation: true` and a `Sunset`
 header with the removal date (RFC 8594), so clients find out from the API, not from a changelog

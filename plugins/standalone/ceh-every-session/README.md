@@ -44,6 +44,11 @@ fits the user's situation, and leaves the choice to them.
 - `delegate-bulk-reads` — no slash command (hidden from the `/` menu), loaded before dispatching `bulk-reader` or when a read guard names it.
 - `find-available-guide` — no slash command (hidden from the `/` menu), loaded by the output style when the work first names a framework, library, or service.
 
+`whats-next` and `record-project-decisions` check a plan, `ARCHITECTURE.yaml` or
+`BUSINESS_PLAN.yaml` against its model before reading it, which needs
+[uv](https://docs.astral.sh/uv/), installing pydantic and PyYAML on first use. Without uv the file
+is read unchecked, and a repo with none of these files needs no uv.
+
 ## Agents
 
 | Agent         | When to use                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |

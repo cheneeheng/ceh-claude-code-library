@@ -195,16 +195,18 @@ reports `runs.0.areas.tests.status` to the agent right after the write and leave
   existing `hooks.json`. No `dependencies` entry is added, per STRATEGY rule 2.
 
   Phase 6 adds the readers in other plugins, each skill carrying `scripts/artifact.py` and the
-  models of what it reads, with their schema files and templates, and no hooks, since they write
-  none of these files:
+  models of what it reads, with their schema files and templates, and no hooks.
+  `write-fastapi-endpoints` adds its API versioning entry to `key_decisions` and renders the
+  Markdown itself, and `checks/artifact_models.py` lists these plugins in `READERS`, exempt from
+  the root scripts and hooks:
 
   | Skill | Models |
   | --- | --- |
-  | `ceh-every-session:whats-next` | plan, architecture, evidence, business-plan |
+  | `ceh-every-session:whats-next` | plan |
   | `ceh-every-session:record-project-decisions` | plan, architecture, business-plan |
   | `ceh-blog:draft-post` | evidence, business-plan |
   | `ceh-seo:write-project-listing-text` | evidence, business-plan |
-  | `ceh-documentation:write-concept-docs`, `write-project-docs` | architecture |
+  | `ceh-documentation:write-concept-docs` | architecture |
   | `ceh-python-service:write-fastapi-endpoints` | architecture |
 
   The builder confirms each row against what the skill reads before copying, and drops a model
@@ -355,7 +357,14 @@ reports `runs.0.areas.tests.status` to the agent right after the write and leave
   `grep -n "artifact.py check"` finds the step in its `SKILL.md`, and each key path it names
   exists in the model it reads, which a scratchpad script confirms by loading the model's
   `model_json_schema()`.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py` printed "OK: all plugin checks passed"; a planted
+  line in the `whats-next` copy of `plan-model.py` turned `copies` red, then was reverted;
+  `grep -c "artifact.py check"` found the step once in each of the six readers' `SKILL.md`; a
+  scratchpad script resolved all 18 key paths the readers name through each model's
+  `model_json_schema()`, and flagged a planted bogus path. `whats-next` carries only the plan model and `write-project-docs` none, because each names the
+  other files only to see that they exist. `write-fastapi-endpoints` writes a key decision, so it
+  checks and renders itself. A reader plugin carries no hooks, so `artifact-models` exempts the
+  plugins in `READERS`. Each is a departure from Design with a Design changed entry.
 
 ### Phase 7: Report-only formats
 
@@ -389,5 +398,9 @@ None
 - 2026-11-07 PR: #223 https://github.com/cheneeheng/ceh-claude-code-library/pull/223
 - 2026-11-10 Built Phase 5: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and the live `claude -p` session stopped naming `conflicts.order`
 - 2026-11-10 PR: #224 https://github.com/cheneeheng/ceh-claude-code-library/pull/224
+- 2026-11-10 Design changed: was "`ceh-every-session:whats-next` | plan, architecture, evidence, business-plan" and "`write-concept-docs`, `write-project-docs` | architecture", now `whats-next` carries plan only and `write-project-docs` nothing, because both name the other files only to see that they exist
+- 2026-11-10 Design changed: was "and no hooks, since they write none of these files", now `write-fastapi-endpoints` adds its API versioning entry to `key_decisions` and renders the Markdown itself, because its prose already recorded that timeline in Key Decisions, which a hand edit to the generated Markdown would lose
+- 2026-11-10 Design changed: was "(none)", now `checks/artifact_models.py` exempts the plugins in `READERS` from the root scripts and hooks, because the check asked every plugin carrying a model for them, which contradicts "no hooks" for readers
+- 2026-11-10 Built Phase 6: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed", and all 18 reader key paths resolved in their models
 
 <!-- prettier-ignore-end -->

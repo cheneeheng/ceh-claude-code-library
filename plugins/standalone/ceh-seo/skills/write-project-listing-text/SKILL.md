@@ -7,6 +7,9 @@ description: >-
   accurate.
 disable-model-invocation: false
 user-invocable: true
+compatibility: >-
+  Uses uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML, to check a
+  BUSINESS_PLAN or EVIDENCE YAML before reading it. Without uv they are read unchecked.
 license: Apache-2.0
 ---
 
@@ -26,7 +29,15 @@ states its scope facts explicitly. This skill governs findability, not accuracy.
    usable). Read only its newest section, the first one, because earlier sections describe older
    commits. State only what that section's Claims list, and nothing about an area it marks `stale`,
    `not run`, or `open issues`. When either file is missing, carry on from the repo and say which
-   claims rest on nothing proven.
+   claims rest on nothing proven. When `BUSINESS_PLAN.yaml` or `EVIDENCE.yaml` sits beside its
+   `.md`, read the YAML instead: first run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` (formats in
+   `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md` and `evidence-schema.md`). On exit 1,
+   stop and report its errors, unless the only error is a stale `.md`. On exit 2 or 3, or without
+   uv, say in the reply that the file went unchecked, and go on. The user, problem and
+   differentiator are `sections.target_customer.body`, `sections.problem.body` and
+   `sections.value_proposition.body`, the newest run is `runs.0`, its claims `runs.0.claims`, and
+   each area's status `runs.0.areas.<area>.status`.
 2. Write the excerpt: the first ~160 characters of any description, and the first paragraph of any
    README, are what gets shown and quoted. They must contain, in plain searched nouns:
    1. **What it is** — the category noun ("a Python rate-limiting library", "a Claude Code plugin").

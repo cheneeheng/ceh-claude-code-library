@@ -368,6 +368,20 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-business-plan/scripts/artifact.py`                                                                                 | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-business-plan/scripts/artifact-render-hook.py`                                                                     | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-business-plan/scripts/generated-md-guard.py`                                                                       | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/whats-next/references/plan-schema.md`                                                         | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/whats-next/references/plan-model.py`                                                          | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/whats-next/assets/plan.template.md`                                                           | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/whats-next/assets/plan.template.yaml`                                                         | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/references/plan-schema.md`                                           | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/references/plan-model.py`                                            | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/assets/plan.template.md`                                             | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/assets/plan.template.yaml`                                           | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/whats-next/scripts/artifact.py`                                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/scripts/artifact.py`                                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-blog/skills/draft-post/scripts/artifact.py`                                                                        | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/scripts/artifact.py`                                                         | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-documentation/skills/write-concept-docs/scripts/artifact.py`                                                       | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-python-service/skills/write-fastapi-endpoints/scripts/artifact.py`                                                 | whole file                                                  | none                                                                             |
 | `ceh-build-planning:review-build-plan`, `ceh-build-from-plan:implement-from-plan`, `ceh-check-build-against-plan:check-build-against-plan` | the "A `plan/v2` plan is checked first" paragraph in step 1 | `implement-from-plan` adds where a Status note and a Record entry go in the YAML |
 
 **Shared:** the whole plan format, byte for byte: the `product/plans/<slug>.md` location, the
@@ -385,16 +399,28 @@ Design sections.
 
 **Canonical:** whole files, `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/references/architecture-schema.md`, `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/assets/architecture.template.md`, `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/references/architecture-model.py`, `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/assets/architecture.template.yaml`
 
-| Copy                                                                                                    | Section    | Diverges |
-| ------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/architecture-schema.md`   | whole file | none     |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/architecture.template.md`     | whole file | none     |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/architecture-model.py`    | whole file | none     |
-| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/architecture.template.yaml`   | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/references/architecture-schema.md` | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/assets/architecture.template.md`   | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/references/architecture-model.py`  | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/assets/architecture.template.yaml` | whole file | none     |
+| Copy                                                                                                     | Section    | Diverges |
+| -------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/architecture-schema.md`    | whole file | none     |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/architecture.template.md`      | whole file | none     |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/references/architecture-model.py`     | whole file | none     |
+| `plugins/standalone/ceh-build-from-plan/skills/implement-from-plan/assets/architecture.template.yaml`    | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/references/architecture-schema.md`  | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/assets/architecture.template.md`    | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/references/architecture-model.py`   | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/assets/architecture.template.yaml`  | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/references/architecture-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/references/architecture-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/assets/architecture.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/assets/architecture.template.yaml` | whole file | none     |
+| `plugins/standalone/ceh-documentation/skills/write-concept-docs/references/architecture-schema.md`       | whole file | none     |
+| `plugins/standalone/ceh-documentation/skills/write-concept-docs/references/architecture-model.py`        | whole file | none     |
+| `plugins/standalone/ceh-documentation/skills/write-concept-docs/assets/architecture.template.md`         | whole file | none     |
+| `plugins/standalone/ceh-documentation/skills/write-concept-docs/assets/architecture.template.yaml`       | whole file | none     |
+| `plugins/standalone/ceh-python-service/skills/write-fastapi-endpoints/references/architecture-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-python-service/skills/write-fastapi-endpoints/references/architecture-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-python-service/skills/write-fastapi-endpoints/assets/architecture.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-python-service/skills/write-fastapi-endpoints/assets/architecture.template.yaml` | whole file | none     |
 
 **Shared:** the `product/ARCHITECTURE.md` layout: its `schema:` line, the Overview, the diagram
 sections, and the Key Decisions entry shape. `document-architecture` owns the file and
@@ -402,6 +428,26 @@ sections, and the Key Decisions entry shape. `document-architecture` owns the fi
 installed alone. `find-product-market-fit` only reads the file, and carries a copy to check
 `ARCHITECTURE.yaml` before its intake reads it. `validate.py` fails when a copy differs from the
 canonical file.
+
+## Evidence format
+
+**Canonical:** whole files, `plugins/standalone/ceh-testing/skills/write-evidence-report/references/evidence-schema.md`, `plugins/standalone/ceh-testing/skills/write-evidence-report/references/evidence-model.py`, `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/evidence.template.md`, `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/evidence.template.yaml`
+
+| Copy                                                                                         | Section    | Diverges |
+| -------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-blog/skills/draft-post/references/evidence-schema.md`                | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/references/evidence-model.py`                 | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/assets/evidence.template.md`                  | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/assets/evidence.template.yaml`                | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/references/evidence-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/references/evidence-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/assets/evidence.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/assets/evidence.template.yaml` | whole file | none     |
+
+**Shared:** the `evidence/v2` format with its template. `write-evidence-report` owns
+`product/EVIDENCE.yaml`, and `draft-post` and `write-project-listing-text` read its newest run's
+claims and area statuses, so each carries a copy to check the file before reading it.
+`validate.py` fails when a copy differs from the canonical file.
 
 ## Vision and strategy format
 
@@ -753,6 +799,18 @@ skill that asks the author or writes a draft carries its own copy.
 | `plugins/standalone/ceh-vision-and-strategy/skills/write-vision-and-strategy/references/business-plan-model.py`  | whole file | none     |
 | `plugins/standalone/ceh-vision-and-strategy/skills/write-vision-and-strategy/assets/business-plan.template.md`   | whole file | none     |
 | `plugins/standalone/ceh-vision-and-strategy/skills/write-vision-and-strategy/assets/business-plan.template.yaml` | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/references/business-plan-schema.md`        | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/references/business-plan-model.py`         | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/assets/business-plan.template.md`          | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/assets/business-plan.template.yaml`        | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/references/business-plan-schema.md`                               | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/references/business-plan-model.py`                                | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/assets/business-plan.template.md`                                 | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/assets/business-plan.template.yaml`                               | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/references/business-plan-schema.md`                | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/references/business-plan-model.py`                 | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/assets/business-plan.template.md`                  | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/assets/business-plan.template.yaml`                | whole file | none     |
 
 **Shared:** the business plan format and its template. `find-product-market-fit` drafts the plan,
 and every specialist reads it, so each of the nine skills carries a copy. `write-build-plan`,
