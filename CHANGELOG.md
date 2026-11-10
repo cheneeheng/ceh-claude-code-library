@@ -9,6 +9,30 @@ before this repo live in
 
 ---
 
+## 2026-11-10
+
+The skills that read another stage's spine file now check it first. `write-build-plan` and
+`review-build-plan` run `artifact.py check` on a `VISION.yaml`, `STRATEGY.yaml` or
+`BUSINESS_PLAN.yaml` before reading it, `find-product-market-fit` does the same for
+`product/ARCHITECTURE.yaml`, and `write-vision-and-strategy` for `BUSINESS_PLAN.yaml`. Each stops
+on an error, so a plan or a strategy is never built on a broken source. Each skill carries its own
+copy of the models it reads, so it still works installed alone.
+
+### Plugin versions
+
+| Plugin                    | Version |
+| ------------------------- | ------- |
+| `ceh-build-planning`      | 1.2.9   |
+| `ceh-business-plan`       | 1.2.1   |
+| `ceh-vision-and-strategy` | 1.1.1   |
+
+### Changed
+
+- Check `VISION.yaml`, `STRATEGY.yaml` and `BUSINESS_PLAN.yaml` in `write-build-plan` and
+  `review-build-plan` before reading them.
+- Check `product/ARCHITECTURE.yaml` in `find-product-market-fit` before its intake reads it.
+- Check `BUSINESS_PLAN.yaml` in `write-vision-and-strategy` before reading it.
+
 ## 2026-11-07
 
 The business plan follows as a YAML format, the last of the spine files. Every skill of

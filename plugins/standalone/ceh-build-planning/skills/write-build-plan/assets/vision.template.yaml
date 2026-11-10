@@ -1,0 +1,47 @@
+schema: vision/v2
+status: <draft | adopted>
+updated: YYYY-MM-DD
+identity:
+  name: <name>
+  sentence: <one sentence>
+  is:
+    - trait: <trait>
+      meaning: |
+        <what it means>
+  is_not:
+    - <thing>
+vision: |
+  <the end state>
+scope:
+  text: |
+    <what belongs here>
+  test: <one question>
+  refuses: |
+    <the tempting thing it refuses>
+goals:
+  - goal: <goal>
+    measure: |
+      <how someone tells it is met>
+non_goals:
+  - thing: <tempting thing>
+    reason: |
+      <reason>
+principles:
+  - name: <principle>
+    rule: |
+      <the rule and its reason>
+    ask: <review question>
+conflicts:
+  order:
+    - principle: <principle>
+      protects: <what it protects>
+  example: |
+    For example, <one worked conflict>.
+gaps:
+  - <gap>
+extra_sections:
+  - title: <title>
+    body: |
+      <body>
+changing: |
+  <how a change lands>

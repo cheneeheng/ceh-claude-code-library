@@ -8,7 +8,9 @@ description: >-
 argument-hint: "[plan-file]"
 compatibility: >-
   Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
-  plan/v2 plan and render its Markdown. Without uv the plan is saved unchecked and unrendered.
+  plan/v2 plan and render its Markdown, and to check a VISION, STRATEGY or BUSINESS_PLAN YAML
+  before reading it. Without uv the plan is saved unchecked and unrendered, and those files are
+  read unchecked.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -44,7 +46,14 @@ quotes the plan, and the verdict is delivered.
 3. **Read what the plan rests on**: every file, route, model, and dependency it names in the
    repo, and the business plan when `business_plan` is set. A plan claim the code contradicts is a
    finding. A plan claim that contradicts the repo's `VISION.md` or `STRATEGY.md`, in `product/`,
-   `docs/`, the root, or where the repo's `CLAUDE.md` says, is a finding too.
+   `docs/`, the root, or where the repo's `CLAUDE.md` says, is a finding too. When a
+   `VISION.yaml`, `STRATEGY.yaml` or `BUSINESS_PLAN.yaml` sits beside its `.md`, run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` before reading it
+   (formats in `references/vision-schema.md`, `strategy-schema.md` and
+   `business-plan-schema.md`). On exit 1, stop and report its errors, because a review against a
+   broken source judges the plan by the wrong standard. On a stale `.md` alone, read the YAML
+   instead. On exit 2 or 3, or without uv, say in the reply that the file went unchecked, and go
+   on.
 4. **Run each lens that applies**, and name the ones you skip with the reason.
 
    | Lens                     | Applies                                   | Asks                                                                                                                                                                                                                                                                                                                                                     |

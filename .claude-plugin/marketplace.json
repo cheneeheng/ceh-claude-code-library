@@ -77,7 +77,7 @@
     {
       "name": "ceh-build-planning",
       "source": "./plugins/standalone/ceh-build-planning",
-      "version": "1.2.8",
+      "version": "1.2.9",
       "description": "CEH build planning: decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check, then review the plan before anyone builds from it."
     },
     {
@@ -113,7 +113,7 @@
     {
       "name": "ceh-business-plan",
       "source": "./plugins/standalone/ceh-business-plan",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "description": "CEH business plan: turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop — draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes. Then harden it: a report-only board review, and specialist passes on strategy, unit economics, go-to-market, premortem, the 90-day operating plan, and investor materials."
     },
     {
@@ -167,7 +167,7 @@
     {
       "name": "ceh-vision-and-strategy",
       "source": "./plugins/standalone/ceh-vision-and-strategy",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "description": "CEH vision and strategy: write a repo's VISION.md and STRATEGY.md, so agents and people can settle later decisions from them, drafted from what the repo shows and confirmed with its owner."
     }
   ]

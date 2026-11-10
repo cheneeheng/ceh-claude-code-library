@@ -33,7 +33,11 @@ way.
    a later step writes to it, so an adopted doc stays adopted through the move.
 2. **Read what the repo shows:** the README, `CLAUDE.md`, `.claude/rules/`, plans, any architecture,
    ideas, or roadmap file, the changelog, recent `git log`, and
-   `.agents_workspace/product/business/BUSINESS_PLAN.md` when present. When what the repo does and
+   `.agents_workspace/product/business/BUSINESS_PLAN.md` when present. When `BUSINESS_PLAN.yaml`
+   sits beside it, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check` on it first
+   (format in `references/business-plan-schema.md`): stop on exit 1 with its errors, read the YAML
+   instead on a stale `.md` alone, and on exit 2 or 3, or without uv, say in the reply that it
+   went unchecked. When what the repo does and
    what it claims differ, what it does is the evidence.
 3. **Draft each doc that does not exist, now,** with `status: draft`, because a draft on disk survives
    an interrupted session. Mark every statement of intent no source backs with `[assumed]`. An
