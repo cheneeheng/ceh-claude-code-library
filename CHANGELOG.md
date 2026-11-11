@@ -11,6 +11,16 @@ before this repo live in
 
 ## 2026-11-11
 
+Add reviewed build plans for the remaining Phase 6 handoffs: the glossary (`glossary/v2`), blog
+voice profile (`blog-voice/v2`) and repeat-mistake report (`repeat-mistake/v2`). Each plan defines
+its model, generated Markdown, writer and reader changes, legacy conversion and implementation
+checks. All three received independent reviews and rechecks. A second review found two gaps in the
+repeat-mistake plan from a real legacy report (annotated proofs, a labelled file name). The proof
+rule and the review's advisories are fixed in all three plans, and repeat-mistake reports keep the
+dated name only.
+The parent report-formats plan links them and leaves its completion record open after the installed
+guard rejected that record. Planning only: no plugin behavior or versions change in this PR.
+
 A project that is not a business yet can have a dormant business plan. `develop-business-plan` now
 asks, before drafting the first plan, whether the project is a business or a tool its author builds
 for their own use, and offers to wait or to write a `status: dormant` plan. In a dormant plan no
