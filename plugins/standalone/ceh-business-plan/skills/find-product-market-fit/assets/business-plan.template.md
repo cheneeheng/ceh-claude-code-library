@@ -1,6 +1,6 @@
 ---
 schema: business-plan/v2
-status: <draft | validated>
+status: <draft | validated | dormant>
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 product: <product name>

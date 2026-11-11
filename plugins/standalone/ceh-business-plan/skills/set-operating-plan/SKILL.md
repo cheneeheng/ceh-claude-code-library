@@ -109,6 +109,8 @@ Period: <start date> to <end date>
 
 ## Stop conditions
 
+- `status` is `dormant` → stop: a 90-day plan needs a business. Ask whether the project is one
+  now.
 - §12 has no ranked risks or no kill criteria → there is nothing for the objectives to retire.
   Report it and name `ceh-business-plan:run-premortem`.
 - The 90-day spend exceeds the runway → stop and report the shortfall. Do not write a plan the

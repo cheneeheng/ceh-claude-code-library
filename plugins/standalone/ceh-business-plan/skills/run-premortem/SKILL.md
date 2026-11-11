@@ -69,6 +69,10 @@ honoured.
 
 ## Rules
 
+- **Dormant plan** (`status: dormant`): write each test and kill criterion with its number and no
+  date, and add no line to §13, because a date in a plan nobody is selling becomes a deadline
+  nobody set. On a `draft` plan that still holds your undated tests or kill criteria, date them
+  first. The kill criterion's number is still set now, in advance: only its date waits.
 - Stories, not categories. "Market risk" teaches nothing. "By month six, 40 demos and 2 sales,
   because buyers needed sign-off we never planned for" can be tested.
 - Draft the stories before asking. People find it easier to rank failures someone else wrote than

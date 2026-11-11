@@ -209,6 +209,12 @@ assumptions remain untested — an honest draft beats a plan that claims a fit i
 
 ## Edge Cases
 
+**Dormant plan** (`status: dormant`): write each test and kill criterion with its number and no
+date, and add no line to §13, because a date in a plan nobody is selling becomes a deadline nobody
+set. On a `draft` plan that still holds your undated tests or kill criteria, date them first. A
+dormant plan is never set to `validated`, since its tests are not scheduled. When the router's
+brief says "dormant", a new plan gets `status: dormant`.
+
 **App plans exist but are sparse** (skeleton only): draft from the §01 Concept and treat §02–§13
 as mostly `[assumption]` — the interview has more to do, which is fine.
 
