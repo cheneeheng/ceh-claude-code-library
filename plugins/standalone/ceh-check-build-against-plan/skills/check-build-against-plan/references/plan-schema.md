@@ -29,12 +29,12 @@ version of the format a plan follows.
 - `status`: `draft` (an Open question blocks building), `ready` (buildable as written),
   `building` (at least one phase is done), or `built` (every phase is done, with evidence).
 - `created`: the date the plan was first saved.
-- `business_plan`: the path to `.agents_workspace/product/business/BUSINESS_PLAN.md`. Omit the key when there is none.
+- `business_plan` (optional, legacy): accepted so plans written before 2026-11-11 still
+  validate. No skill sets it, and no skill follows it.
 
 **Sections:**
 
 - **Goal:** one paragraph: what gets built, for whom, and the one user flow that matters most.
-  With `business_plan` set, one sentence plus a pointer to its product section instead.
 - **Scope:** **In** has one bullet per capability a user or caller can observe, and this list is
   what done means. **Out** has one bullet per thing deliberately not built, with a one-line reason.
 - **Design:** only the decisions the phases need, each with its reason: stack, components (a
@@ -75,8 +75,8 @@ failure, and `3` means no model for that version sits beside the script. Field p
 
 **Keys**, each one required unless marked optional, and no other key allowed:
 
-- `schema`: `plan/v2`. `title`, `status`, `created`, `business_plan` (optional): as the `plan/v1`
-  frontmatter above. `created` is an unquoted date, `2026-11-06`.
+- `schema`: `plan/v2`. `title`, `status`, `created`, `business_plan` (optional, legacy, see
+  above): as the `plan/v1` frontmatter above. `created` is an unquoted date, `2026-11-06`.
 - `goal`: the Goal paragraph.
 - `scope.in`: one item per capability, at least one. `scope.out`: `item` and `reason` per
   exclusion, `[]` when none.

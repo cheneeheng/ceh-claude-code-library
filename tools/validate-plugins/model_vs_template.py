@@ -49,8 +49,10 @@ def compare(tmpl, schema: dict, defs: dict, path: str, errors: list[str]) -> Non
     schema = resolve(schema, defs, tmpl)
     if isinstance(tmpl, dict):
         props = schema.get("properties", {})
-        if set(tmpl) != set(props):
-            missing = sorted(set(props) - set(tmpl))
+        # A deprecated key stays in the model for old files but is left out of the template.
+        wanted = {k for k, v in props.items() if not v.get("deprecated")}
+        if not wanted <= set(tmpl) <= set(props):
+            missing = sorted(wanted - set(tmpl))
             extra = sorted(set(tmpl) - set(props))
             errors.append(
                 f"{path or '(top level)'}: missing {missing}, not in the model {extra}"

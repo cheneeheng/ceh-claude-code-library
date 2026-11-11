@@ -91,7 +91,11 @@ class Plan(_Strict):
     title: Line
     status: Literal["draft", "ready", "building", "built"]
     created: dt.date
-    business_plan: Optional[Line] = None
+    # Legacy: kept so plans written before 2026-11-11 still validate. No skill sets it, and the
+    # template omits it, which `deprecated` tells model_vs_template.py to allow.
+    business_plan: Optional[Line] = Field(
+        default=None, json_schema_extra={"deprecated": True}
+    )
     goal: Text
     scope: Scope
     design: list[Decision] = Field(min_length=1)

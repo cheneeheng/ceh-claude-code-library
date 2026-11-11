@@ -11,6 +11,13 @@ before this repo live in
 
 ## 2026-11-11
 
+The build plans stop reading the business plan too: `write-build-plan` takes the goal and target
+user from the request, the vision and the strategy, and sets no `business_plan` key, and
+`review-build-plan` judges a plan against the code, the vision and the strategy only. The plan
+format keeps `business_plan` as a legacy optional key, because the model forbids unknown keys and
+older `plan/v2` plans hold it, and the templates drop it. Phase 2 of
+`product/plans/business-plan-one-way.yaml`.
+
 The business plan now flows one way, per the new `decision-business-plan-readers.md`:
 `write-vision-and-strategy` and `record-project-decisions` stop reading it, because a business
 plan's dated tests had become a project's vision goals. The vision skill's guard now also keeps out
@@ -41,13 +48,20 @@ approvals that name a real stage, and a status that agrees with the stages becom
 
 ### Plugin versions
 
-| Plugin                    | Version |
-| ------------------------- | ------- |
-| `ceh-vision-and-strategy` | 1.1.2   |
-| `ceh-every-session`       | 2.9.1   |
-| `ceh-business-plan`       | 1.2.2   |
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-vision-and-strategy`      | 1.1.2   |
+| `ceh-every-session`            | 2.9.2   |
+| `ceh-business-plan`            | 1.2.2   |
+| `ceh-build-planning`           | 1.2.10  |
+| `ceh-build-from-plan`          | 1.2.7   |
+| `ceh-check-build-against-plan` | 1.1.6   |
 
 ### Changed
+
+- `write-build-plan` and `review-build-plan` read no business plan, and the plan format marks
+  `business_plan` as legacy in all six copies.
+- `model_vs_template.py` lets a template omit a model key marked deprecated.
 
 - `write-vision-and-strategy` reads no business plan and keeps its tests, stages, dates and
   experiments out of the vision and the strategy.

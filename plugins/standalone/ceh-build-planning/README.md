@@ -24,8 +24,8 @@ or `"review this plan"`.
 
 The plugin ships two hooks (`hooks/hooks.json`) that activate automatically when the plugin is
 enabled. They act on `plan/v2` plans, the YAML format in each skill's
-`references/plan-schema.md`, which the skills write, and on the `VISION.yaml`, `STRATEGY.yaml` and
-`BUSINESS_PLAN.yaml` the skills check before reading, because the skills carry those models too.
+`references/plan-schema.md`, which the skills write, and on the `VISION.yaml` and `STRATEGY.yaml`
+the skills check before reading, because the skills carry those models too.
 
 | Hook                 | Event                                        | Script                    | Default |
 | -------------------- | -------------------------------------------- | ------------------------- | ------- |
@@ -55,7 +55,6 @@ is a file. Use plan mode to explore an unfamiliar codebase first, then leave it 
 
 ## Not this plugin
 
-- Whether the product is worth building, and who pays: use `ceh-business-plan`. When a
-  `.agents_workspace/product/business/BUSINESS_PLAN.md` exists, the build plan points to it for the goal and target user
-  instead of restating them.
+- Whether the product is worth building, and who pays: use `ceh-business-plan`. Neither skill
+  reads the business plan, so its tests and dates never become a plan's goal.
 - Building or checking the plan: `ceh-build-from-plan` and `ceh-check-build-against-plan`.

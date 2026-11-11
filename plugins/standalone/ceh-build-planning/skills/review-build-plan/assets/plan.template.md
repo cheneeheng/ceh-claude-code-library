@@ -3,7 +3,6 @@ schema: plan/v1
 title: <title>
 status: <draft | ready | building | built>
 created: YYYY-MM-DD
-business_plan: <path>
 ---
 
 ## Goal
