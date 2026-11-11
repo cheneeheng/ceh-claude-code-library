@@ -13,7 +13,7 @@ specs and runs under `.agents_workspace/workflow/`, and the session tools' files
 handoffs, research notes, questionnaires, `CODEBASE_EXPLAINED.md`, competitor analyses,
 orchestration-lab runs) at the top of `.agents_workspace/`. Business material (the business plan,
 investor deck, outreach notes) always stays in `.agents_workspace/product/business/`, even though
-Build and Tell read the plan. Do not move everything to `.agents_workspace/`, and do not git-ignore
+Tell reads the plan (`decision-business-plan-readers.md`). Do not move everything to `.agents_workspace/`, and do not git-ignore
 single `product/` files instead.
 
 Why: business material is confidential, and readers work without it. Moving everything would cut the

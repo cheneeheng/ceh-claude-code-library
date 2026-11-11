@@ -44,8 +44,8 @@ fits the user's situation, and leaves the choice to them.
 - `delegate-bulk-reads` — no slash command (hidden from the `/` menu), loaded before dispatching `bulk-reader` or when a read guard names it.
 - `find-available-guide` — no slash command (hidden from the `/` menu), loaded by the output style when the work first names a framework, library, or service.
 
-`whats-next` and `record-project-decisions` check a plan, `ARCHITECTURE.yaml` or
-`BUSINESS_PLAN.yaml` against its model before reading it, which needs
+`whats-next` and `record-project-decisions` check a plan or `ARCHITECTURE.yaml` against its model
+before reading it, which needs
 [uv](https://docs.astral.sh/uv/), installing pydantic and PyYAML on first use. Without uv the file
 is read unchecked, and a repo with none of these files needs no uv.
 
@@ -128,7 +128,7 @@ the agent and leaves the Markdown as it was. A `PreToolUse` guard (`scripts/gene
 denies a direct edit to a generated Markdown file and names its YAML. Both run on every Edit or
 Write in every session and return at once for any other file, about 85 ms per edit for the two
 together, measured once on Windows. Because `whats-next` and `record-project-decisions` carry the
-plan, architecture and business-plan models, the hook also checks and renders those files when they
+plan and architecture models, the hook also checks and renders those files when they
 are written, as their own plugins already do. Without `uv` the agent is told once per session that
 the file went unchecked. `CEH_ARTIFACT_CHECK=off` switches both off.
 

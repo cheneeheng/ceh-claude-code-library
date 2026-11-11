@@ -32,13 +32,9 @@ way.
    the template go in `extra_sections`, and a required field it lacks reads "Not stated yet." until
    a later step writes to it, so an adopted doc stays adopted through the move.
 2. **Read what the repo shows:** the README, `CLAUDE.md`, `.claude/rules/`, plans, any architecture,
-   ideas, or roadmap file, the changelog, recent `git log`, and
-   `.agents_workspace/product/business/BUSINESS_PLAN.md` when present. When `BUSINESS_PLAN.yaml`
-   sits beside it, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check` on it first
-   (format in `references/business-plan-schema.md`): stop on exit 1 with its errors, read the YAML
-   instead on a stale `.md` alone, and on exit 2 or 3, or without uv, say in the reply that it
-   went unchecked. When what the repo does and
-   what it claims differ, what it does is the evidence.
+   ideas, or roadmap file, the changelog, and recent `git log`. Read no business plan: the vision
+   feeds it, never the reverse, because its dated tests would become the docs' goals. When what
+   the repo does and what it claims differ, what it does is the evidence.
 3. **Draft each doc that does not exist, now,** with `status: draft`, because a draft on disk survives
    an interrupted session. Mark every statement of intent no source backs with `[assumed]`. An
    `adopted` doc stays `adopted` and never gets an `[assumed]`: a change the owner has not confirmed
@@ -61,24 +57,24 @@ way.
 
 ## The tests
 
-| Test           | Ask                                                                                  | Fails when                                                       |
-| -------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
-| Opposite       | Would a sane project choose the opposite of each principle or non-goal?              | Nobody would: "high quality" and "user-focused" are not choices  |
-| Past decision  | Take two real decisions from the plans, ideas, or history. Does the doc settle them? | It settles neither, so the doc only decorates the repo           |
-| Rejected item  | Name one tempting thing the scope test refuses.                                      | The test refuses nothing                                         |
-| Checkable goal | How would someone tell each goal is met or not?                                      | Nobody could tell                                                |
-| Reason         | Could a reader apply each principle to a case the text does not cover?               | The principle has no reason                                      |
-| Strategy adds  | Which strategy lines say how, not what the vision already says?                      | The strategy restates the vision                                 |
-| Chooses work   | Give the work rule two real candidates. Does it pick one?                            | It accepts both or neither with no reason                        |
-| Fits the repo  | Does each major part of the repo appear in The parts?                                | A part appears nowhere, or the doc names one that does not exist |
+| Test           | Ask                                                                                              | Fails when                                                       |
+| -------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| Opposite       | Would a sane project choose the opposite of each principle or non-goal?                          | Nobody would: "high quality" and "user-focused" are not choices  |
+| Past decision  | Take two real decisions from the plans, ideas, or history. Does the doc settle them?             | It settles neither, so the doc only decorates the repo           |
+| Rejected item  | Name one tempting thing the scope test refuses.                                                  | The test refuses nothing                                         |
+| Checkable goal | How would someone tell each goal is met or not, with a measure the owner gave or the repo shows? | Nobody could tell                                                |
+| Reason         | Could a reader apply each principle to a case the text does not cover?                           | The principle has no reason                                      |
+| Strategy adds  | Which strategy lines say how, not what the vision already says?                                  | The strategy restates the vision                                 |
+| Chooses work   | Give the work rule two real candidates. Does it pick one?                                        | It accepts both or neither with no reason                        |
+| Fits the repo  | Does each major part of the repo appear in The parts?                                            | A part appears nowhere, or the doc names one that does not exist |
 
 ## Rules
 
 - Draft first, ask second. A concrete sentence the owner can correct gets a sharper answer than "what
   is your vision?".
-- Both docs are committed, so neither carries pricing, unit economics, kill criteria, contacts, or a
-  home path, and neither quotes `.agents_workspace/`. State the direction a business plan supports in
-  your own words.
+- Both docs are committed, so neither carries pricing, unit economics, kill criteria, contacts, a
+  home path, or any test, stage, date or validation experiment from a business plan, and neither
+  quotes `.agents_workspace/`.
 - Write files only. The caller commits them.
 
 ## Output

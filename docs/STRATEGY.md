@@ -43,22 +43,23 @@ of the vision's Every step row) sit outside the route. They apply at every stage
 A build plan decides how, and it recurs for every feature inside the build loop:
 `ceh-build-planning:write-build-plan` itself triggers on "how should we build this". Keeping it in
 Shape would send "add a feature to my app" through the business-plan stage, the wrong door for a
-new user. The two stay connected through the handoff: the build plan reads `.agents_workspace/product/business/BUSINESS_PLAN.md` when
-one exists.
+new user. The two stay connected through the vision and the strategy, both read by the build plan.
+It never reads the business plan: the business plan flows one way, so its dated tests do not
+become a plan's goals (`decision-business-plan-readers.md`).
 
 ## The spine: handoff files
 
-| Stage | Reads                                                                                                                                                                                 | Writes                                                                                                                                    |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Shape | an idea, a conversation, the repo                                                                                                                                                     | `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, `product/VISION.yaml` and `product/STRATEGY.yaml`, each with its generated `.md` |
-| Build | `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, `product/VISION.yaml` and `product/STRATEGY.yaml` when present, each checked first (the `.md` when no YAML exists), the repo | `product/plans/<slug>.yaml` and its generated `<slug>.md`, the code, `product/ARCHITECTURE.yaml` and its generated `.md`                  |
-| Prove | the plan, the code                                                                                                                                                                    | `product/EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                                      |
-| Tell  | `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, `product/EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists)                                                  | posts, listings, SEO pages                                                                                                                |
+| Stage | Reads                                                                                                                                | Writes                                                                                                                                    |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Shape | an idea, a conversation, the repo                                                                                                    | `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, `product/VISION.yaml` and `product/STRATEGY.yaml`, each with its generated `.md` |
+| Build | `product/VISION.yaml` and `product/STRATEGY.yaml` when present, each checked first (the `.md` when no YAML exists), the repo         | `product/plans/<slug>.yaml` and its generated `<slug>.md`, the code, `product/ARCHITECTURE.yaml` and its generated `.md`                  |
+| Prove | the plan, the code                                                                                                                   | `product/EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                                      |
+| Tell  | `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, `product/EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists) | posts, listings, SEO pages                                                                                                                |
 
-Shape to Build: `ceh-business-plan` writes `.agents_workspace/product/business/BUSINESS_PLAN.md`, and `ceh-build-planning` reads
-it and writes the plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read.
-`ceh-vision-and-strategy` writes `product/VISION.md` and `product/STRATEGY.md`, and `ceh-build-planning`
-reads them too, putting what a plan would contradict under Open. Prove to
+Shape to Build: `ceh-vision-and-strategy` writes `product/VISION.md` and `product/STRATEGY.md`, and
+`ceh-build-planning` reads them, putting what a plan would contradict under Open, and writes the
+plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read. `ceh-business-plan` writes
+`.agents_workspace/product/business/BUSINESS_PLAN.md`, which no Build skill reads. Prove to
 Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.md`, and
 `ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.md`.
 
@@ -103,8 +104,10 @@ The test is who reads the file.
 - **Business material stays local, even as a handoff file.** The business plan, the investor deck,
   and the outreach notes go in `.agents_workspace/product/business/`, because they hold pricing, unit
   economics, kill criteria, and investor contacts that do not belong in a repo others can read.
-  A stage that reads the business plan works without it (rule 1 above), so a fresh clone loses
-  context, not function. Git-ignoring a `product/` file per repo was rejected: nothing makes anyone
+  Only Tell reads the business plan, for audience and positioning, and works without it (rule 1
+  above), so a fresh clone loses context, not function. No skill that writes a committed product
+  document reads it, because its tests, stages and dates would become that document's goals.
+  Git-ignoring a `product/` file per repo was rejected: nothing makes anyone
   remember it, and it breaks silently when a file name changes.
 
 **`product/` for the builders, `docs/` for users.** Committed handoff files go in `product/` in the
