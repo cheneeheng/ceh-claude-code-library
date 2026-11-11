@@ -69,14 +69,17 @@ or notes when an existing glossary is amended.
   edit. Update record-project-decisions Seed step 2 to discover both locations, check YAML
   before reading entries and open, and take entries[].term, entries[].definition,
   entries[].avoid and entries[].not_confused_with as evidence. Undecided open terms authorize
-  no rule. Both skills carry scripts/artifact.py. Exit 1 stops the writer and excludes an
+  no rule. Add scripts/artifact.py to maintain-glossary; record-project-decisions already
+  carries it. Exit 1 stops the writer and excludes an
   invalid source from the reader's evidence with errors reported. A stale Markdown alone is
   repaired by render. Exit 2 or 3, absent uv or denied execution is reported as unchecked;
   the reader may read the YAML with that qualification. The writer reports any unavailable
   Markdown render. Reuse the CLI's atomic Markdown replacement.
 - **Hooks, copies and upkeep** Both plugins already carry hooks. Extend place_format in the canonical
   plugins/standalone/ceh-build-planning/scripts/artifact-render-hook.py to recognize GLOSSARY
-  at the hook payload cwd root or its docs directory, without requiring schema or Markdown.
+  at the hook payload cwd root or its docs directory without requiring a schema key, but only
+  when GLOSSARY.md sits beside it, as SPINE files require a nearby .md. A core-plugin hook
+  must not block a project's unrelated GLOSSARY.yaml, such as i18n data.
   Preserve existing plan and spine matching and the model_names gate. Mirror the script to
   every registered copy in docs/CROSS_REFERENCES.md. The generated-Markdown guard needs no
   new logic. Copy the four format files and CLI into
@@ -107,8 +110,9 @@ or notes when an existing glossary is amended.
   retained and empty optional lines are absent. record-project-decisions' CLI checks it too.
   Copies with a duplicate casefolded term, alias equal to its term, duplicate aliases,
   empty definition or extra key exit 1 naming the field. An all-open glossary also passes.
-  Add and run hook fixtures for valid render, invalid schema, schema-less GLOSSARY.yaml at
-  root and docs, unrelated docs YAML skipped and generated-Markdown edits denied.
+  Add and run hook fixtures for valid render, invalid schema, schema-less GLOSSARY.yaml with
+  a sibling GLOSSARY.md at root and docs, a root GLOSSARY.yaml with no GLOSSARY.md skipped,
+  unrelated docs YAML skipped and generated-Markdown edits denied.
   Exercise absolute and relative paths with payload cwd different from process cwd; a
   correctly named schema-less GLOSSARY.yaml outside the target root/docs locations is skipped.
   A scratch v1 conversion retains every entry and note, a second amendment changes only the
@@ -129,5 +133,8 @@ or notes when an existing glossary is amended.
   shared-hook copy bookkeeping, corrected. Read-only recheck: 0 residual findings.
   Review: .agents_workspace/product/plan-reviews/glossary-yaml-2026-11-11.md.
 - 2026-11-11 PR: #254 https://github.com/cheneeheng/ceh-claude-code-library/pull/254
+- 2026-11-11 Reviewed: Ready to build, 0 blocking, 2 advisory (schema-less root GLOSSARY.yaml matched without a
+  sibling .md; maintain-glossary's scripts/artifact.py is new, not existing).
+  Review: .agents_workspace/product/plan-reviews/glossary-yaml-2026-11-11-r2.md.
 
 <!-- prettier-ignore-end -->

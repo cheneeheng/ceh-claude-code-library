@@ -340,10 +340,7 @@ phases:
       prevent-repeat-mistake step 1). These three are planned, not implemented. Build in that
       order, preserving earlier shared hook additions and rebasing version/bookkeeping changes
       on the current branch. Each format lands separately if landing is authorized.
-      All six plan checks passed on 2026-11-11 and the three new independent reviews returned
-      Ready to build. The phase remains todo because the installed build-record guard rejected
-      the completion record even after its requested absolute-path skill read succeeded. No
-      completion record or parent built status was written, and the guard was not disabled.
+      All six plan checks passed on 2026-11-11. The Built record is not yet written.
 open:
   - question: |
       What does a usability audit of a target outside git put in its required `commit`?
@@ -435,3 +432,9 @@ record:
   - date: 2026-11-11
     event: PR
     details: "#254 https://github.com/cheneeheng/ceh-claude-code-library/pull/254"
+  - date: 2026-11-11
+    event: Reviewed
+    details: |
+      Phase 6 only: Ready to build, 0 blocking, 2 advisory (the guard failure keeping Phase 6
+      todo has no fix record; two overlapping Design changed records).
+      Review: .agents_workspace/product/plan-reviews/report-only-formats-2026-11-11.md.

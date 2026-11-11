@@ -79,7 +79,9 @@ while repeat runs preserve the author's voice without re-deriving or inventing e
   from ceh-build-planning into ceh-blog/scripts. Create hooks/hooks.json using the existing
   Edit|Write|MultiEdit PreToolUse guard and PostToolUse render entries. Remove ceh-blog from
   READERS in tools/validate-plugins/checks/artifact_models.py because it now writes a format.
-  Other model copies in the plugin stay intact. Extend canonical place_format to recognize
+  Other model copies in the plugin stay intact. Because model_names covers every model in the
+  plugin, ceh-blog's hooks will also render and guard EVIDENCE.yaml and BUSINESS_PLAN.yaml
+  writes, as other plugins carrying those copies already do. This is intended. Extend canonical place_format to recognize
   .agents_workspace/product/blog-voice.yaml relative to payload cwd, with no schema or
   Markdown prerequisite. Preserve glossary matching if already landed, mirror to every
   registered script copy and retain the model_names gate. The generic guard already applies.
@@ -114,7 +116,8 @@ while repeat runs preserve the author's voice without re-deriving or inventing e
   model's model_json_schema(), with a planted typo failing.
   Add and run hook fixtures for valid render, a missing-schema profile at its workspace path
   with no Markdown, invalid quote reported, generated-Markdown edit denied and unrelated
-  YAML skipped. Confirm existing evidence and business-plan model copies remain registered.
+  YAML skipped. Confirm existing evidence and business-plan model copies remain registered,
+  and that a valid product/EVIDENCE.yaml write renders through ceh-blog's hook.
   Include absolute and relative tool paths, a payload cwd different from the hook process
   directory, and a correctly named schema-less file outside the workspace location that is
   skipped. The payload-relative workspace file must still render or report missing schema.
@@ -135,5 +138,8 @@ while repeat runs preserve the author's voice without re-deriving or inventing e
   quotation preservation. Independent recheck: Ready to build, 0 residual findings.
   Review: .agents_workspace/product/plan-reviews/blog-voice-yaml-2026-11-11.md.
 - 2026-11-11 PR: #254 https://github.com/cheneeheng/ceh-claude-code-library/pull/254
+- 2026-11-11 Reviewed: Ready to build, 0 blocking, 1 advisory (new hooks will also act on the evidence and
+  business-plan model copies, unstated and unchecked).
+  Review: .agents_workspace/product/plan-reviews/blog-voice-yaml-2026-11-11-r2.md.
 
 <!-- prettier-ignore-end -->

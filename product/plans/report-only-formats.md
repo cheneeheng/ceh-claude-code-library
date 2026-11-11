@@ -295,10 +295,7 @@ was checked.
   prevent-repeat-mistake step 1). These three are planned, not implemented. Build in that
   order, preserving earlier shared hook additions and rebasing version/bookkeeping changes
   on the current branch. Each format lands separately if landing is authorized.
-  All six plan checks passed on 2026-11-11 and the three new independent reviews returned
-  Ready to build. The phase remains todo because the installed build-record guard rejected
-  the completion record even after its requested absolute-path skill read succeeded. No
-  completion record or parent built status was written, and the guard was not disabled.
+  All six plan checks passed on 2026-11-11. The Built record is not yet written.
 
 ## Open
 
@@ -336,5 +333,8 @@ was checked.
   but the completion record was blocked by the installed guard. The phase remains todo,
   the parent building, and the three new child plans ready with their implementation todo.
 - 2026-11-11 PR: #254 https://github.com/cheneeheng/ceh-claude-code-library/pull/254
+- 2026-11-11 Reviewed: Phase 6 only: Ready to build, 0 blocking, 2 advisory (the guard failure keeping Phase 6
+  todo has no fix record; two overlapping Design changed records).
+  Review: .agents_workspace/product/plan-reviews/report-only-formats-2026-11-11.md.
 
 <!-- prettier-ignore-end -->

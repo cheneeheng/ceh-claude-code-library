@@ -49,7 +49,8 @@ statuses change, and repository fixes remain separate from machine-local fixes.
   Other rungs allow either proof value, preserving the v1 vocabulary without inventing proof.
   Optional top-level notes holds context or legacy prose unrelated to one fix. No pending count
   is stored. Quote "yes" in YAML so it remains a string.
-- **Rendering, status and retries** Render the date title from doc.date, never the wall clock, then the seven-column table and
+- **Rendering, status and retries** Render the date title from doc.date, never the wall clock, then the seven-column table
+  (#, Mistake, Evidence, Rung, Fix, Proof, Status, with # the fix id) and
   Why this rung section. Escape pipes
   and line breaks in table cells while preserving source values. Reasons show id, mistake
   and why_rung. Pending drafts contains only awaiting approval fixes, heading <id>: <mistake>
@@ -68,7 +69,10 @@ statuses change, and repository fixes remain separate from machine-local fixes.
   rendered as its Markdown counterpart. The skill checks existence and reciprocal links after
   both saves, not in the per-file model: the first save cannot require an uncreated second file.
   A local report does not authorize committing it or its drafts.
-  Step 1 scans both folders, grouping YAML and Markdown by full stem within each folder.
+  Step 1 scans both folders for the dated name only, <YYYY-MM-DD>-repeat-mistake, the same
+  rule the hook uses, grouping YAML and Markdown by stem within each folder. A labelled name,
+  such as product/retros/2026-10-18-claude-code-command-center-repeat-mistake.md, is not a
+  report location: that file has no fix awaiting approval and stays v1.
   YAML wins. Check it, then select fixes with status awaiting approval and list id, mistake,
   fix and full draft before taking a new mistake. Markdown-only v1 remains readable.
   Before amending v1, carry all rows, reasons, drafts and context into v2, assigning ids in
@@ -76,6 +80,9 @@ statuses change, and repository fixes remain separate from machine-local fixes.
   to each relevant fix, and keep unmatched prose in notes. Never infer approval or proof from
   a draft's presence. A v1 status explicitly beginning applied, awaiting approval or rejected
   maps to that exact enum; preserve the full annotated legacy status in notes keyed by fix id.
+  Proof follows the same rule: a v1 proof that is or explicitly begins yes or not provable, or
+  that states "fails on the real mistake: yes", maps to that value, with the full annotated
+  text in notes keyed by fix id. Any other proof blocks conversion with a report.
   Match a differently worded draft heading to its row by the actual mistake and target files,
   not by exact heading equality. If its association or status is ambiguous, report it and
   leave the source untouched. Missing full drafts for pending v1 rows block conversion with a report,
@@ -123,14 +130,17 @@ statuses change, and repository fixes remain separate from machine-local fixes.
   shared reasons, context and historical drafts survive. Also convert a scratch copy of
   product/retros/2026-10-28-repeat-mistake.md: its annotated applied status maps to applied,
   the full annotation survives in notes and its differently worded draft heading attaches
-  to the correct row. Assert the same doc.date renders identically on different days.
+  to the correct row. A scratch v1 row whose proof reads "fails on the real mistake: yes
+  (replay.py, 11 checks pass)" maps to "yes" with the full text in notes, and one whose proof
+  is unrecognized refuses conversion. Assert the same doc.date renders identically on different days.
   A v1 pending row with no full draft
   refuses conversion without overwriting the original. A scratch intake assertion groups
   stems once, reads both locations and finds exactly the pending ids through MODEL.model_validate;
   resolve step 1's stated key paths through model_json_schema(), with a planted typo failing.
   Check reciprocal other_file links after both scratch files exist. Add and run hook fixtures
   for both schema-less paths, invalid status, valid render, generated-Markdown denial and
-  unrelated retros YAML skipped. `python tools/validate-plugins/validate.py` is green as the
+  unrelated retros YAML skipped, and a labelled <date>-<label>-repeat-mistake.yaml skipped by
+  both the hook and the step 1 scan. `python tools/validate-plugins/validate.py` is green as the
   implementation integration gate. No actual pending fix is applied by these checks.
   Include absolute and relative report paths with payload cwd different from process cwd,
   and a correctly named schema-less dated report outside both supported directories that
@@ -150,5 +160,10 @@ statuses change, and repository fixes remain separate from machine-local fixes.
   Ready to build, 0 residual findings.
   Review: .agents_workspace/product/plan-reviews/repeat-mistake-yaml-2026-11-11.md.
 - 2026-11-11 PR: #254 https://github.com/cheneeheng/ceh-claude-code-library/pull/254
+- 2026-11-11 Reviewed: Revise first, 2 blocking (annotated v1 proofs have no conversion rule; the labelled
+  2026-10-18 report name splits intake from hook matching) and 1 advisory (seventh column
+  unnamed). Review: .agents_workspace/product/plan-reviews/repeat-mistake-yaml-2026-11-11-r2.md.
+  All three fixed: proofs map like statuses, the columns are named, and the owner chose the
+  dated name only, for both intake and the hook. Status ready.
 
 <!-- prettier-ignore-end -->
