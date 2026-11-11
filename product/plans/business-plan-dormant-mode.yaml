@@ -205,3 +205,6 @@ record:
     details: |
       Phase 1 check: the backlog grep prints nothing, both handoff greps find their line,
       `validate.py` prints "OK: all plugin checks passed".
+  - date: 2026-11-11
+    event: PR
+    details: "#252 https://github.com/cheneeheng/ceh-claude-code-library/pull/252"
