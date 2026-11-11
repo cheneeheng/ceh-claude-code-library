@@ -11,7 +11,7 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.9.1",
+      "version": "2.9.2",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, context economy via delegated bulk reads, and replies folded to their summary."
     },
     {
@@ -77,19 +77,19 @@
     {
       "name": "ceh-build-planning",
       "source": "./plugins/standalone/ceh-build-planning",
-      "version": "1.2.9",
+      "version": "1.2.10",
       "description": "CEH build planning: decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check, then review the plan before anyone builds from it."
     },
     {
       "name": "ceh-build-from-plan",
       "source": "./plugins/standalone/ceh-build-from-plan",
-      "version": "1.2.6",
+      "version": "1.2.7",
       "description": "CEH build from plan: build a written plan phase by phase, test first, implementing only what each phase names and proving it with the phase's own check, with the evidence recorded in the plan."
     },
     {
       "name": "ceh-check-build-against-plan",
       "source": "./plugins/standalone/ceh-check-build-against-plan",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "description": "CEH check build against plan: check whether finished code is what its plan said to build, reporting every gap, deviation, and unplanned extra with quoted evidence, and rerunning each phase's check."
     },
     {

@@ -8,8 +8,7 @@ description: >-
 argument-hint: "[plan-file]"
 compatibility: >-
   Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
-  plan/v2 plan and render its Markdown, and to check a VISION, STRATEGY or BUSINESS_PLAN YAML
-  before reading it. Without uv the plan is saved unchecked and unrendered, and those files are
+  plan/v2 plan and render its Markdown, and to check a VISION or STRATEGY YAML before reading it. Without uv the plan is saved unchecked and unrendered, and those files are
   read unchecked.
 disable-model-invocation: false
 user-invocable: true
@@ -44,13 +43,13 @@ quotes the plan, and the verdict is delivered.
    to run steps 3 to 6 and return the Output. The author reads what they meant, a fresh reader
    reads what is written, and only the second is what the builder gets.
 3. **Read what the plan rests on**: every file, route, model, and dependency it names in the
-   repo, and the business plan when `business_plan` is set. A plan claim the code contradicts is a
-   finding. A plan claim that contradicts the repo's `VISION.md` or `STRATEGY.md`, in `product/`,
-   `docs/`, the root, or where the repo's `CLAUDE.md` says, is a finding too. When a
-   `VISION.yaml`, `STRATEGY.yaml` or `BUSINESS_PLAN.yaml` sits beside its `.md`, run
+   repo. Read no business plan, even when an older plan links to one: the review judges
+   the plan against the code, the vision and the strategy only. A plan claim the code contradicts
+   is a finding. A plan claim that contradicts the repo's `VISION.md` or `STRATEGY.md`, in
+   `product/`, `docs/`, the root, or where the repo's `CLAUDE.md` says, is a finding too. When a
+   `VISION.yaml` or `STRATEGY.yaml` sits beside its `.md`, run
    `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` before reading it
-   (formats in `references/vision-schema.md`, `strategy-schema.md` and
-   `business-plan-schema.md`). On exit 1, stop and report its errors, because a review against a
+   (formats in `references/vision-schema.md` and `strategy-schema.md`). On exit 1, stop and report its errors, because a review against a
    broken source judges the plan by the wrong standard. On a stale `.md` alone, read the YAML
    instead. On exit 2 or 3, or without uv, say in the reply that the file went unchecked, and go
    on.

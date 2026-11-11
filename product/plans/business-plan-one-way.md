@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: business-plan-one-way.yaml
 generated_note: "Do not edit. artifact.py renders this file from business-plan-one-way.yaml: edit the YAML, then run artifact.py render."
 title: The business plan feeds no committed product document
-status: building
+status: built
 created: 2026-11-11
 ---
 
@@ -79,7 +79,9 @@ business plan.
 
 - **Legacy key, not a format bump** `plan-model.py` keeps `business_plan: Optional[Line]` and its render line, because the model
   forbids extra keys, and a `plan/v2` plan in another repo that holds the key would fail its
-  check if the field went. No skill writes it any more, so the key dies out without a
+  check if the field went. The field is marked `json_schema_extra={"deprecated": True}`, and
+  `tools/validate-plugins/model_vs_template.py` lets a template omit a deprecated key while
+  still requiring every other one. No skill writes it any more, so the key dies out without a
   `plan/v3`. `plan-schema.md` names the key twice. The `plan/v1` frontmatter bullet (line 32)
   reads: "`business_plan` (optional, legacy): accepted so plans written before 2026-11-11 still
   validate. No skill sets it, and no skill follows it." The `plan/v2` key list (line 78) reads
@@ -145,7 +147,11 @@ business plan.
   lines and `plan-schema.md`'s two legacy lines in each skill. With uv, `artifact.py check` exits 0
   on a scratchpad `plan/v2` YAML holding `business_plan: <path>`, and on the same file without
   it. `python tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, The grep prints only `plan-model.py` lines 96, 154 and 155 and `plan-schema.md` lines 32 and
+  78 in each skill, `artifact.py check` exits 0 on both scratchpad plans, and `validate.py`
+  prints "OK: all plugin checks passed". `model_vs_template.py` required the template to list every model key, so the field is marked
+  deprecated and the check skips deprecated keys. A throwaway run of `compare` showed it still
+  reports a missing required key and an extra key.
 
 ## Open
 
@@ -161,5 +167,12 @@ None
   `record-project-decisions` names a decision file for its topic, not its answer.
 - 2026-11-11 Built Phase 1: Phase 1 check: the greps print nothing, `validate.py` prints "OK: all plugin checks passed".
 - 2026-11-11 PR: #246 https://github.com/cheneeheng/ceh-claude-code-library/pull/246
+- 2026-11-11 Design changed: was "`plan-model.py` keeps `business_plan: Optional[Line]` and its render line", now the field
+  is also marked deprecated and `model_vs_template.py` lets a template omit a deprecated key,
+  because that check required every model key in the template.
+- 2026-11-11 Built Phase 2: Phase 2 check: the grep prints only the legacy lines, `artifact.py check` exits 0 with and
+  without the key, `validate.py` prints "OK: all plugin checks passed".
+- 2026-11-11 Checked: 8 In, 6 Design, 8 Out and 2 phase Checks: all Built. The `model_vs_template.py` change is
+  covered by its Design changed entry.
 
 <!-- prettier-ignore-end -->

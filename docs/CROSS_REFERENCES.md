@@ -921,14 +921,6 @@ skill that asks the author or writes a draft carries its own copy.
 | `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/assets/business-plan.template.yaml` | whole file | none     |
 | `plugins/standalone/ceh-business-plan/skills/write-investor-materials/references/business-plan-model.py`    | whole file | none     |
 | `plugins/standalone/ceh-business-plan/skills/write-investor-materials/assets/business-plan.template.yaml`   | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/write-build-plan/references/business-plan-schema.md`          | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/write-build-plan/references/business-plan-model.py`           | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/write-build-plan/assets/business-plan.template.md`            | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/write-build-plan/assets/business-plan.template.yaml`          | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/review-build-plan/references/business-plan-schema.md`         | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/review-build-plan/references/business-plan-model.py`          | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/review-build-plan/assets/business-plan.template.md`           | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/review-build-plan/assets/business-plan.template.yaml`         | whole file | none     |
 | `plugins/standalone/ceh-blog/skills/draft-post/references/business-plan-schema.md`                          | whole file | none     |
 | `plugins/standalone/ceh-blog/skills/draft-post/references/business-plan-model.py`                           | whole file | none     |
 | `plugins/standalone/ceh-blog/skills/draft-post/assets/business-plan.template.md`                            | whole file | none     |
@@ -939,10 +931,9 @@ skill that asks the author or writes a draft carries its own copy.
 | `plugins/standalone/ceh-seo/skills/write-project-listing-text/assets/business-plan.template.yaml`           | whole file | none     |
 
 **Shared:** the business plan format and its template. `find-product-market-fit` drafts the plan,
-and every specialist reads it, so each of the nine skills carries a copy. `write-build-plan` and
-`review-build-plan` read it too, and carry a copy to check `BUSINESS_PLAN.yaml` before reading it.
-`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it for audience and
-positioning, and carry a copy for the same check.
+and every specialist reads it, so each of the nine skills carries a copy. `ceh-blog:draft-post`
+and `ceh-seo:write-project-listing-text` read it for audience and positioning, and carry a copy to
+check `BUSINESS_PLAN.yaml` before reading it.
 
 ## Competitor report page
 
