@@ -160,5 +160,6 @@ None
 - 2026-11-11 Design changed: was "`decision-business-plan-one-way.md`", now "`decision-business-plan-readers.md`", because
   `record-project-decisions` names a decision file for its topic, not its answer.
 - 2026-11-11 Built Phase 1: Phase 1 check: the greps print nothing, `validate.py` prints "OK: all plugin checks passed".
+- 2026-11-11 PR: #246 https://github.com/cheneeheng/ceh-claude-code-library/pull/246
 
 <!-- prettier-ignore-end -->
