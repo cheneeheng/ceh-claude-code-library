@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: business-plan-dormant-mode.yaml
 generated_note: "Do not edit. artifact.py renders this file from business-plan-dormant-mode.yaml: edit the YAML, then run artifact.py render."
 title: A dormant business plan for a project that is not a business yet
-status: ready
+status: building
 created: 2026-11-11
 ---
 
@@ -148,7 +148,8 @@ specialists date their own tests on their next run.
   finds the Phase 4 bullet, and `git grep -n "not the objective's key results or dates"
   plugins/standalone/ceh-business-plan/skills/set-operating-plan/SKILL.md` finds the handoff.
   `python tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, The first grep prints nothing, the other two find 1 line each, and `validate.py` prints "OK:
+  all plugin checks passed".
 
 ### Phase 2: The dormant status, the router's question and the specialists
 
@@ -179,5 +180,8 @@ None
   missed `sharpen-strategy` and `set-operating-plan` while forbidding record dates), 7
   advisory, all fixed. The no-human question moved from Open into Design.
 - 2026-11-11 PR: #248 https://github.com/cheneeheng/ceh-claude-code-library/pull/248
+- 2026-11-11 Built Phase 1: Phase 1 check: the backlog grep prints nothing, both handoff greps find their line,
+  `validate.py` prints "OK: all plugin checks passed".
+- 2026-11-11 PR: #252 https://github.com/cheneeheng/ceh-claude-code-library/pull/252
 
 <!-- prettier-ignore-end -->

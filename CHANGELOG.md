@@ -11,6 +11,11 @@ before this repo live in
 
 ## 2026-11-11
 
+The business plan's milestones stay in it: `find-product-market-fit` and `set-operating-plan` now
+hand a build plan only the product change, never the plan's experiments, kill criteria, key results
+or dates, because a §13 milestone handed on as a build backlog became a gate the build waited on.
+Phase 1 of `product/plans/business-plan-dormant-mode.yaml`.
+
 The run state gains a YAML format, `run-state/v2`: `run-agentic-workflow` writes
 `{run}/run-state.yaml` after every stage change, checked by a model, and `run-state.md` is rendered
 beside it in the `v1` layout, still ending with the `FLOW STATUS:` line. Unique stage ids,
@@ -82,7 +87,7 @@ approvals that name a real stage, and a status that agrees with the stages becom
 | ------------------------------ | ------- |
 | `ceh-vision-and-strategy`      | 1.1.2   |
 | `ceh-every-session`            | 2.9.2   |
-| `ceh-business-plan`            | 1.2.2   |
+| `ceh-business-plan`            | 1.2.3   |
 | `ceh-build-planning`           | 1.2.10  |
 | `ceh-build-from-plan`          | 1.2.7   |
 | `ceh-check-build-against-plan` | 1.1.6   |
@@ -101,6 +106,8 @@ approvals that name a real stage, and a status that agrees with the stages becom
 
 ### Changed
 
+- `find-product-market-fit` and `set-operating-plan` hand a build plan only the product change,
+  and the business plan keeps its milestones.
 - `run-agentic-workflow` writes and reads `run-state.yaml`, checks it before resuming, and
   converts a `v1` `run-state.md`. Its `compatibility` names `python3` and uv.
 - `ceh-workflow-builder`: the `flow.yaml` contract copies carry the `run-state/v2` model and

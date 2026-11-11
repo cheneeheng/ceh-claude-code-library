@@ -122,5 +122,5 @@ test) and you confirm:
   defers product detail to them rather than duplicating architecture. The flow is one way: no
   build plan, vision, strategy or decision rule reads the business plan, so its tests and dates
   stay in it.
-- Validation that surfaces product changes flows into a new `ceh-build-planning` plan; the plan's
-  §13 milestones become the build/validation backlog.
+- Validation that surfaces product changes flows into a new `ceh-build-planning` plan, stated as
+  product changes. The §13 milestones, experiments and kill criteria stay in the business plan.
