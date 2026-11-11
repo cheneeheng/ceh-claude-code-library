@@ -178,5 +178,6 @@ None
 - 2026-11-11 Reviewed: Revise first: 2 blocking (leaving dormant had no writer for the dates, and the no-date rule
   missed `sharpen-strategy` and `set-operating-plan` while forbidding record dates), 7
   advisory, all fixed. The no-human question moved from Open into Design.
+- 2026-11-11 PR: #248 https://github.com/cheneeheng/ceh-claude-code-library/pull/248
 
 <!-- prettier-ignore-end -->
