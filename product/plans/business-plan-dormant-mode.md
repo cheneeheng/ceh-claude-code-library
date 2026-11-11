@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: business-plan-dormant-mode.yaml
 generated_note: "Do not edit. artifact.py renders this file from business-plan-dormant-mode.yaml: edit the YAML, then run artifact.py render."
 title: A dormant business plan for a project that is not a business yet
-status: building
+status: built
 created: 2026-11-11
 ---
 
@@ -167,7 +167,12 @@ specialists date their own tests on their next run.
   say whether" and "apart from the router's status rows". `git grep -n "is \`dormant\`"
   plugins/standalone/ceh-business-plan/skills/set-operating-plan/SKILL.md` finds its stop.
   `python tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, `artifact.py check` exits 0 on the dormant plan and 1 on `status: paused` ("status: Input
+  should be 'draft', 'validated' or 'dormant'"), each format file has one md5 across its 11
+  copies, 22 templates name `dormant`, every grep finds 1 line, and `validate.py` prints "OK:
+  all plugin checks passed". The scratchpad plan was filled in the shape of the `good_bp` fixture in
+  `tools/validate-plugins/checks/hooks.py` rather than from the template by hand: the same keys,
+  with every section's body empty.
 
 ## Open
 
@@ -183,5 +188,10 @@ None
 - 2026-11-11 Built Phase 1: Phase 1 check: the backlog grep prints nothing, both handoff greps find their line,
   `validate.py` prints "OK: all plugin checks passed".
 - 2026-11-11 PR: #252 https://github.com/cheneeheng/ceh-claude-code-library/pull/252
+- 2026-11-11 Built Phase 2: Phase 2 check: the dormant plan checks clean and `paused` fails on `status`, the copies match,
+  every grep finds its line, `validate.py` prints "OK: all plugin checks passed".
+- 2026-11-11 Checked: 5 In, 6 Design, 7 Out and 2 phase Checks: all Built. The Out items are absent: no edit to
+  `stress-test-unit-economics`, `review-business-plan`, the Tell skills or `whats-next`.
+- 2026-11-11 PR: #253 https://github.com/cheneeheng/ceh-claude-code-library/pull/253
 
 <!-- prettier-ignore-end -->

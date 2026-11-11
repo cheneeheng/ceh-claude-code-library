@@ -15,10 +15,10 @@ a removed plugin loses its row.
 | Plugin                         | Version | Changed in   |
 | ------------------------------ | ------- | ------------ |
 | `ceh-ag-ui`                    | 1.1.4   | `2026-10-23` |
-| `ceh-blog`                     | 1.0.18  | `2026-11-10` |
+| `ceh-blog`                     | 1.0.19  | `2026-11-11` |
 | `ceh-build-from-plan`          | 1.2.7   | `2026-11-11` |
 | `ceh-build-planning`           | 1.2.10  | `2026-11-11` |
-| `ceh-business-plan`            | 1.2.3   | `2026-11-11` |
+| `ceh-business-plan`            | 1.2.4   | `2026-11-11` |
 | `ceh-check-build-against-plan` | 1.1.6   | `2026-11-11` |
 | `ceh-codebase-explanation`     | 1.3.0   | `2026-11-07` |
 | `ceh-coding-conduct`           | 2.5.1   | `2026-11-10` |
@@ -31,7 +31,7 @@ a removed plugin loses its row.
 | `ceh-python-library`           | 1.0.4   | `2026-10-15` |
 | `ceh-python-service`           | 1.1.5   | `2026-11-10` |
 | `ceh-security-audit`           | 1.1.2   | `2026-11-10` |
-| `ceh-seo`                      | 1.1.8   | `2026-11-10` |
+| `ceh-seo`                      | 1.1.9   | `2026-11-11` |
 | `ceh-session-diagnosis`        | 1.0.8   | `2026-10-23` |
 | `ceh-session-to-skill`         | 1.0.2   | `2026-10-16` |
 | `ceh-testing`                  | 1.6.8   | `2026-11-10` |

@@ -74,6 +74,10 @@ pond, plus a statement of which source it intends to build first and what would 
 
 ## Rules
 
+- **Dormant plan** (`status: dormant`): write each test and kill criterion with its number and no
+  date, and add no line to §13, because a date in a plan nobody is selling becomes a deadline
+  nobody set. On a `draft` plan that still holds your undated tests or kill criteria, date them
+  first.
 - Draft first, ask second. A concrete strategy the user can correct gets a sharper answer than
   "what is your strategy?".
 - One question per turn, aimed at the worst failing test.

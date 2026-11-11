@@ -11,6 +11,13 @@ before this repo live in
 
 ## 2026-11-11
 
+A project that is not a business yet can have a dormant business plan. `develop-business-plan` now
+asks, before drafting the first plan, whether the project is a business or a tool its author builds
+for their own use, and offers to wait or to write a `status: dormant` plan. In a dormant plan no
+specialist writes a test, kill or milestone date, so a personal tool is not held to a business's
+deadlines, and saying the project is now a business makes the plan a `draft` whose specialists date
+their own tests. Phase 2 of `product/plans/business-plan-dormant-mode.yaml`.
+
 The business plan's milestones stay in it: `find-product-market-fit` and `set-operating-plan` now
 hand a build plan only the product change, never the plan's experiments, kill criteria, key results
 or dates, because a §13 milestone handed on as a build backlog became a gate the build waited on.
@@ -87,7 +94,9 @@ approvals that name a real stage, and a status that agrees with the stages becom
 | ------------------------------ | ------- |
 | `ceh-vision-and-strategy`      | 1.1.2   |
 | `ceh-every-session`            | 2.9.2   |
-| `ceh-business-plan`            | 1.2.3   |
+| `ceh-business-plan`            | 1.2.4   |
+| `ceh-blog`                     | 1.0.19  |
+| `ceh-seo`                      | 1.1.9   |
 | `ceh-build-planning`           | 1.2.10  |
 | `ceh-build-from-plan`          | 1.2.7   |
 | `ceh-check-build-against-plan` | 1.1.6   |
@@ -103,8 +112,14 @@ approvals that name a real stage, and a status that agrees with the stages becom
 - Add `competitor-report/v2`, the competitor report as YAML with its model, in
   `analyze-competitor` and `compare-competitors`, and the render hook and the generated-Markdown
   guard to `ceh-competitor-analysis`.
+- `business-plan/v3` accepts `status: dormant`, in all 11 copies of the model, schema and
+  templates. `develop-business-plan` asks whether a project is a business before drafting, and
+  gains rows to make a plan dormant and to make a dormant plan a business.
 
 ### Changed
+
+- On a dormant plan, `find-product-market-fit`, `run-premortem`, `plan-go-to-market` and
+  `sharpen-strategy` write tests and kill criteria with no date, and `set-operating-plan` stops.
 
 - `find-product-market-fit` and `set-operating-plan` hand a build plan only the product change,
   and the business plan keeps its milestones.

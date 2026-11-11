@@ -23,7 +23,10 @@ stays as written. Two older forms move up on the next revision:
 
 **Frontmatter:**
 
-- `status`: `draft`, or `validated` once the PMF Readiness Gate passes and the user confirms it.
+- `status`: `draft`, `validated` once the PMF Readiness Gate passes and the user confirms it, or
+  `dormant` for a project its author builds for their own use and is not selling yet. A dormant
+  plan holds no deadline: no test, kill or milestone date. Dates that record when something
+  happened, such as `created`, `updated` and a premortem's "Run on", are not deadlines.
 - `created`, `updated`: the date the plan was first saved and last revised.
 - `product`: the product name, one line.
 - `stage`: `idea`, `prototype`, `launched`, or `revenue`.
@@ -122,7 +125,7 @@ shows its source text instead.
 | §10 | Traction & Validation      | Evidence to date: signups, LOIs, pre-orders, interviews, waitlist, prototype usage. Empty is allowed and honest at idea stage — but then §10 names the **next validation experiment** instead. |
 | §11 | Financials                 | A lightweight model: revenue drivers, key costs, runway, the break-even or next-raise milestone. Not a 5-year spreadsheet — the three numbers that decide viability.                           |
 | §12 | Risks & Unknowns           | The assumptions that, if wrong, kill the business — ranked. Each paired with the cheapest test that would de-risk it. This section feeds the next interview loop.                              |
-| §13 | Milestones                 | The next 3–4 dated, falsifiable milestones (each one validates or kills an assumption from §12).                                                                                               |
+| §13 | Milestones                 | The next 3–4 dated, falsifiable milestones (undated in a dormant plan), each one validating or killing an assumption from §12.                                                                 |
 
 §05 deliberately defers product detail to the app plan when one exists — the business plan owns
 the _why it sells_, the app plan owns the _how it is built_. Do not duplicate architecture, data
@@ -151,7 +154,7 @@ Three rules keep the writers apart:
 - No skill edits another skill's subsection or tagged lines. `find-product-market-fit` revises
   the section content above the subsections and leaves them as they are.
 - A skill that re-scores a gate criterion updates `pmf_gate`. Whenever `pmf_gate` is below `8/8`,
-  `status` is `draft`.
+  `status` is `draft` or `dormant`.
 
 ## business-plan/v3: YAML with generated Markdown
 
@@ -207,7 +210,8 @@ the gate honestly in frontmatter (`pmf_gate: N/8`) and report which criteria rem
 
 A criterion is "met" when its claim is either backed by `[evidence]` **or** reduced to a named
 `[hypothesis-to-test]` with a concrete, cheap, time-boxed experiment — not left as a bare
-`[assumption]`. Honest "we will test this next" passes; hand-waving does not.
+`[assumption]`. Honest "we will test this next" passes; hand-waving does not. An undated test in a
+dormant plan does not meet its criterion.
 
 1. **Problem is real and acute** — §02 names a specific customer who feels this often enough and
    painfully enough to act. Not "would be nice." Severity is evidenced or has a test.

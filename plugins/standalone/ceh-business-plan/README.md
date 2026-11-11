@@ -8,8 +8,11 @@ exists, then runs a disciplined interview loop that attacks the plan's weakest a
 ## How it works
 
 `develop-business-plan` is a thin entry point: it finds `BUSINESS_PLAN.yaml`, works out which moment
-this is, and calls the specialist skill that owns it. With no plan on disk it always calls
-`find-product-market-fit`, which is a loop, not a one-shot generator:
+this is, and calls the specialist skill that owns it. With no plan on disk it first asks whether the
+project is a business now or a tool you build for your own use. For your own use it offers to wait,
+or to write a `status: dormant` plan, where no specialist writes a test, kill or milestone date
+until you say the project is a business. Then it calls `find-product-market-fit`, which is a loop,
+not a one-shot generator:
 
 ```
 Intake   → read build plans (product/plans/*.md) or any PRD/spec/pitch you provide

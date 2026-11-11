@@ -86,7 +86,7 @@ class Sections(_Strict):
 
 class BusinessPlan(_Strict):
     schema_: Literal["business-plan/v3"] = Field(alias="schema")
-    status: Literal["draft", "validated"]
+    status: Literal["draft", "validated", "dormant"]
     created: dt.date
     updated: dt.date
     product: Line

@@ -70,6 +70,10 @@ Pick the one that passes both, and write down why the others were declined.
 
 ## Rules
 
+- **Dormant plan** (`status: dormant`): write each test and kill criterion with its number and no
+  date, and add no line to §13, because a date in a plan nobody is selling becomes a deadline
+  nobody set. On a `draft` plan that still holds your undated tests or kill criteria, date them
+  first.
 - One channel until it works or fails its test. Several half-run channels teach nothing about any
   of them.
 - People before populations. Push every "small businesses" to "name one".

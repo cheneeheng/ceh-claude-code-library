@@ -160,4 +160,7 @@ These are my proposals, not decisions. None is applied.
   `record-project-decisions`. `draft-post`, `write-project-listing-text` and `whats-next` keep
   reading it. This settles proposals 1 to 3 and 6 and the second open question, in
   `product/plans/business-plan-one-way.yaml` and `.claude/rules/decision-business-plan-readers.md`.
-- Proposals 4, 5 and 7 and the first open question stay open.
+- 2026-11-11: the author chose to plan proposals 4 and 5 together, in
+  `product/plans/business-plan-dormant-mode.yaml`: the business plan keeps its milestones, and a
+  project that is not a business yet gets a `status: dormant` plan with no deadlines.
+- Proposal 7 and the first open question stay open.
