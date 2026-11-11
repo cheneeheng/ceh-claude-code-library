@@ -9,6 +9,51 @@ before this repo live in
 
 ---
 
+## 2026-11-12
+
+The glossary gains a YAML format, `glossary/v2`: `maintain-glossary` writes `GLOSSARY.yaml`,
+checked by a model, and `GLOSSARY.md` is rendered beside it in the `v1` layout, sorted by term.
+Unique terms, an alias that is not its own term, and no alias listed twice are now checks, and a
+Markdown-only glossary is converted before it is amended, stopping when an entry would be lost.
+`record-project-decisions` checks the glossary with its own copy of the model during Seed, reads its
+entries by key, and treats an open term as undecided. The artifact render hook now finds a
+`GLOSSARY.yaml` without its schema key only at the session root or in `docs/` beside its
+`GLOSSARY.md`, and resolves a relative file path against the session's cwd, so every plugin that
+carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
+`product/plans/report-only-formats.yaml`, per `product/plans/glossary-yaml.yaml`.
+
+### Plugin versions
+
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-build-from-plan`          | 1.2.8   |
+| `ceh-build-planning`           | 1.2.11  |
+| `ceh-business-plan`            | 1.2.5   |
+| `ceh-check-build-against-plan` | 1.1.7   |
+| `ceh-codebase-explanation`     | 1.3.1   |
+| `ceh-coding-conduct`           | 2.5.2   |
+| `ceh-competitor-analysis`      | 1.2.1   |
+| `ceh-every-session`            | 2.9.3   |
+| `ceh-security-audit`           | 1.1.3   |
+| `ceh-testing`                  | 1.6.9   |
+| `ceh-usability-audit`          | 1.2.3   |
+| `ceh-vision-and-strategy`      | 1.1.3   |
+| `ceh-workflow-builder`         | 1.4.2   |
+| `ceh-workflow-runner`          | 1.1.1   |
+
+### Added
+
+- Add `glossary/v2`, the glossary as YAML with its model, YAML template and `artifact.py`, in
+  `maintain-glossary`, with the format files copied into `record-project-decisions`.
+
+### Changed
+
+- Write the glossary as `GLOSSARY.yaml` in `maintain-glossary`, converting a `v1` `GLOSSARY.md`
+  losslessly first, and check and read it by key in `record-project-decisions` Seed.
+- The artifact render hook, in all 14 plugins that carry it, checks a schema-less
+  `GLOSSARY.yaml` at the session root or `docs/` beside its `GLOSSARY.md`, and resolves a relative
+  `file_path` against the payload `cwd`.
+
 ## 2026-11-11
 
 Add reviewed build plans for the remaining Phase 6 handoffs: the glossary (`glossary/v2`), blog

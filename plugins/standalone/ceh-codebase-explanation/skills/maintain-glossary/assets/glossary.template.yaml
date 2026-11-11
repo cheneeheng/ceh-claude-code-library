@@ -1,0 +1,15 @@
+schema: glossary/v2
+entries:
+  - term: <Term>
+    definition: |
+      <definition>.
+    avoid:
+      - <alias>
+    not_confused_with:
+      - <Other term>
+open:
+  - term: <term>
+    question: |
+      <question>
+notes: |
+  <notes>

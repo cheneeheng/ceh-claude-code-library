@@ -384,6 +384,7 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-testing/scripts/artifact-render-hook.py`                                                                           | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/scripts/generated-md-guard.py`                                                                             | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-codebase-explanation/skills/document-architecture/scripts/artifact.py`                                             | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-codebase-explanation/skills/maintain-glossary/scripts/artifact.py`                                                 | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-codebase-explanation/scripts/artifact.py`                                                                          | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-codebase-explanation/scripts/artifact-render-hook.py`                                                              | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-codebase-explanation/scripts/generated-md-guard.py`                                                                | whole file                                                  | none                                                                             |
@@ -651,6 +652,22 @@ it. `validate.py` fails when a copy differs from the canonical file.
 **Shared:** the `competitor-report/v1` layout and the `competitor-report/v2` YAML with its model.
 `analyze-competitor` writes the report, and `compare-competitors` checks each one with its own copy
 of the model and reads it by key. `validate.py` fails when a copy differs from the canonical file.
+
+## Glossary format
+
+**Canonical:** whole files, `plugins/standalone/ceh-codebase-explanation/skills/maintain-glossary/references/glossary-schema.md`, `plugins/standalone/ceh-codebase-explanation/skills/maintain-glossary/references/glossary-model.py`, `plugins/standalone/ceh-codebase-explanation/skills/maintain-glossary/assets/glossary.template.md`, `plugins/standalone/ceh-codebase-explanation/skills/maintain-glossary/assets/glossary.template.yaml`
+
+| Copy                                                                                                 | Section    | Diverges |
+| ---------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/references/glossary-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/references/glossary-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/assets/glossary.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/record-project-decisions/assets/glossary.template.yaml` | whole file | none     |
+
+**Shared:** the `glossary/v1` layout and the `glossary/v2` YAML with its model. `maintain-glossary`
+writes `GLOSSARY.yaml`, and `record-project-decisions` checks it with its own copy of the model
+during Seed and reads its entries by key. `validate.py` fails when a copy differs from the
+canonical file.
 
 ## Business-plan "No human to answer" clause
 

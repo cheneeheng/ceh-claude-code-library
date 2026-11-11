@@ -605,7 +605,77 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{ca}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{ca}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
+    # The glossary: maintain-glossary writes it, record-project-decisions reads it. It is found by
+    # its schema key, or at the session root or docs/ beside its GLOSSARY.md, so a schema-less one
+    # there is reported and any other GLOSSARY.yaml is left alone. Paths are given relative to the
+    # payload cwd, which differs from the fixture's process cwd (the repo).
+    good_gl = (
+        "schema: glossary/v2\nentries:\n"
+        "  - {term: Stage, definition: One step of a workflow., avoid: [step], not_confused_with: []}\n"
+        "  - {term: Artifact, definition: A file a stage writes., avoid: [], not_confused_with: [Stage]}\n"
+        "open: []\n"
+    )
+    gl = tmp / "glossary"
+    gl_files = {
+        "ok/GLOSSARY": good_gl,
+        "bad/GLOSSARY": good_gl.replace("avoid: [step]", "avoid: [stage]"),
+        "root/GLOSSARY": "key: value\n",
+        "root/docs/GLOSSARY": "key: value\n",
+        "root/sub/GLOSSARY": "key: value\n",
+        "root/docs/other": "key: value\n",
+        "alone/GLOSSARY": "key: value\n",
+    }
+    for name, text in gl_files.items():
+        (gl / name).parent.mkdir(parents=True, exist_ok=True)
+        (gl / f"{name}.yaml").write_text(text, encoding="utf-8")
+        if name != "alone/GLOSSARY":
+            (gl / f"{name}.md").write_text("# Glossary\n", encoding="utf-8")
+    gl_generated = gl / "gen" / "GLOSSARY.md"
+    gl_generated.parent.mkdir()
+    gl_generated.write_text(
+        "---\nschema: glossary/v2\ngenerated_from: GLOSSARY.yaml\n---\n",
+        encoding="utf-8",
+    )
+
+    def write_rel(cwd: Path, path: str) -> dict:
+        return {
+            "tool_name": "Write",
+            "tool_input": {"file_path": path},
+            "cwd": str(cwd),
+        }
+
+    def gl_rendered(where: str):
+        def after() -> str | None:
+            text = (gl / where / "GLOSSARY.md").read_text(encoding="utf-8")
+            ok = "generated_from: GLOSSARY.yaml" in text and text.index(
+                "**Artifact**"
+            ) < text.index("**Stage**")
+            return None if ok else f"{where}/GLOSSARY.md was not rendered in order"
+
+        return after
+
+    ce, rh_ce = (
+        "ceh-codebase-explanation",
+        "ceh-codebase-explanation/artifact-render-hook.py",
+    )
+    glossary_fixtures = ([
+        {"script": rh_ce, "stdin": write_rel(gl / "ok", "GLOSSARY.yaml"), "out": "", "after": gl_rendered("ok")},
+        {"script": rh_ce, "stdin": write_at(gl / "bad" / "GLOSSARY.yaml"), "out": "entries.0"},
+        {"script": rh_ce, "stdin": write_rel(gl / "root", "GLOSSARY.yaml"), "out": "no 'schema:"},
+        {"script": rh_ce, "stdin": write_rel(gl / "root", "docs/GLOSSARY.yaml"), "out": "no 'schema:"},
+        # record-project-decisions carries the model, so ceh-every-session's hook checks it too.
+        {"script": f"{es}/artifact-render-hook.py", "stdin": write_rel(gl / "ok", "GLOSSARY.yaml"), "out": ""},
+    ] if have_uv else []) + [
+        # A matched file without uv warns, so an empty output shows each of these was skipped.
+        {"script": rh_ce, "stdin": write_rel(gl / "root", "docs/GLOSSARY.yaml"), "env": no_uv, "out": "uv is not installed"},
+        {"script": rh_ce, "stdin": write_rel(gl / "alone", "GLOSSARY.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_ce, "stdin": write_rel(gl / "root", "docs/other.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_ce, "stdin": write_rel(gl / "root", "sub/GLOSSARY.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_ce, "stdin": write_at(gl / "root" / "sub" / "GLOSSARY.yaml"), "env": no_uv, "out": ""},
+        {"script": f"{ce}/generated-md-guard.py", "stdin": edit(gl_generated.as_posix()), "out": "GLOSSARY.yaml"},
+    ]  # fmt: skip
     evidence_fixtures = [
+        *glossary_fixtures,
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
             good_ev.replace("status: passed", "status: passing"),
