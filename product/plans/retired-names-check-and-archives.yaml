@@ -168,12 +168,6 @@ open:
     assumption: |
       They may, per "The vision's stage table in the archive PRs". The audit called one PR
       defensible, and the changelog entry says so.
-  - question: |
-      Another session is building `product/plans/repeat-mistake-yaml.yaml` on its own branch, which
-      edits `ceh-every-session`. Which lands first?
-    assumption: |
-      Whichever is ready. The later one rebases, and the only shared file is the
-      `ceh-every-session` manifest and its version rows.
 record:
   - date: 2026-11-12
     event: Planned

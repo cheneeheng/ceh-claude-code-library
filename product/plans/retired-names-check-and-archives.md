@@ -152,9 +152,6 @@ skill body elsewhere still names it, and `validate.py` fails with the file and l
 - May the archive PRs edit the stage table in `docs/VISION.md`, or does that need its own PR
   first?: They may, per "The vision's stage table in the archive PRs". The audit called one PR
   defensible, and the changelog entry says so.
-- Another session is building `product/plans/repeat-mistake-yaml.yaml` on its own branch, which
-  edits `ceh-every-session`. Which lands first?: Whichever is ready. The later one rebases, and the only shared file is the
-  `ceh-every-session` manifest and its version rows.
 
 ## Record
 
