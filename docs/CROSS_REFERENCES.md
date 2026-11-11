@@ -415,6 +415,10 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-every-session/skills/whats-next/scripts/artifact.py`                                                               | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-every-session/skills/record-project-decisions/scripts/artifact.py`                                                 | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-blog/skills/draft-post/scripts/artifact.py`                                                                        | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-blog/skills/edit-post/scripts/artifact.py`                                                                         | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-blog/scripts/artifact.py`                                                                                          | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-blog/scripts/artifact-render-hook.py`                                                                              | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-blog/scripts/generated-md-guard.py`                                                                                | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-seo/skills/write-project-listing-text/scripts/artifact.py`                                                         | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-documentation/skills/write-concept-docs/scripts/artifact.py`                                                       | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-python-service/skills/write-fastapi-endpoints/scripts/artifact.py`                                                 | whole file                                                  | none                                                                             |
@@ -667,6 +671,22 @@ of the model and reads it by key. `validate.py` fails when a copy differs from t
 **Shared:** the `glossary/v1` layout and the `glossary/v2` YAML with its model. `maintain-glossary`
 writes `GLOSSARY.yaml`, and `record-project-decisions` checks it with its own copy of the model
 during Seed and reads its entries by key. `validate.py` fails when a copy differs from the
+canonical file.
+
+## Blog voice format
+
+**Canonical:** whole files, `plugins/standalone/ceh-blog/skills/draft-post/references/blog-voice-schema.md`, `plugins/standalone/ceh-blog/skills/draft-post/references/blog-voice-model.py`, `plugins/standalone/ceh-blog/skills/draft-post/assets/blog-voice.template.md`, `plugins/standalone/ceh-blog/skills/draft-post/assets/blog-voice.template.yaml`
+
+| Copy                                                                           | Section    | Diverges |
+| ------------------------------------------------------------------------------ | ---------- | -------- |
+| `plugins/standalone/ceh-blog/skills/edit-post/references/blog-voice-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/edit-post/references/blog-voice-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/edit-post/assets/blog-voice.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/edit-post/assets/blog-voice.template.yaml` | whole file | none     |
+
+**Shared:** the `blog-voice/v1` layout and the `blog-voice/v2` YAML with its model. `draft-post`
+captures the profile once and reads it on later runs, and `edit-post` checks it with its own copy
+of the model and reads its sections by key. `validate.py` fails when a copy differs from the
 canonical file.
 
 ## Business-plan "No human to answer" clause

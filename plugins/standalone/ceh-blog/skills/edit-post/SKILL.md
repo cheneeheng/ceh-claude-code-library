@@ -8,6 +8,9 @@ description: >-
 argument-hint: "[draft file or pasted draft]"
 disable-model-invocation: false
 user-invocable: true
+compatibility: >-
+  Uses uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML, to check the
+  voice profile YAML before reading it. Without uv it is read unchecked.
 license: Apache-2.0
 ---
 
@@ -28,9 +31,18 @@ type (Lessons Learned, How-To, Opinion, Launch, Thought Leadership, Personal Sto
 audience and register; the author's voice markers (rhythm, vocabulary, formality); the thesis, and
 where it actually appears.
 
-If `.agents_workspace/product/blog-voice.md` exists (`ceh-blog:draft-post` writes it from published posts),
-read it and judge the draft's voice markers against it: a draft that drifts from the author's usual
-register is a finding, not a style to preserve.
+If a voice profile exists in `.agents_workspace/product/` (`ceh-blog:draft-post` writes it from
+published posts), read it and judge the draft's voice markers against it: a draft that drifts from
+the author's usual register is a finding, not a style to preserve. When `blog-voice.yaml` is there,
+read it, not `blog-voice.md`: first run
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` (format in
+`${CLAUDE_SKILL_DIR}/references/blog-voice-schema.md`). On exit 1, use no profile and report its
+errors, unless the only error is a stale `.md`, which the same command with `render` repairs. On
+exit 2 or 3, or without uv, say in the diagnosis that the profile went unchecked, and read it
+anyway. The markers are `rhythm`, `register`, `recurring_words`, `never_used` and
+`openings_closings`, each observation's `point` backed by its `quote` and `source`. A
+`blog-voice.md` with no YAML is a `v1` profile, read as it is. A blog voice in the target repo's
+`CLAUDE.md` still overrides the profile.
 
 ### 2. Diagnose
 

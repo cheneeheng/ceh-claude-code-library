@@ -37,7 +37,9 @@ competitor report (`competitor-report/v2`) follows, per
 `product/plans/competitor-report-yaml.yaml`, with the hooks in `ceh-competitor-analysis`, which
 holds both its writer and its reader. The glossary (`glossary/v2`) follows, per
 `product/plans/glossary-yaml.yaml`, with the hooks in `ceh-codebase-explanation`, which writes it,
-and its model copied into `record-project-decisions` in `ceh-every-session`, which reads it.
+and its model copied into `record-project-decisions` in `ceh-every-session`, which reads it. The
+blog voice profile (`blog-voice/v2`) follows, per `product/plans/blog-voice-yaml.yaml`, with the
+hooks in `ceh-blog`, which leaves `READERS` because `draft-post` writes it and `edit-post` reads it.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

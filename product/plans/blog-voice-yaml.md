@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: blog-voice-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from blog-voice-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The blog voice profile as a YAML format, blog-voice/v2
-status: ready
+status: built
 created: 2026-11-11
 ---
 
@@ -123,7 +123,17 @@ while repeat runs preserve the author's voice without re-deriving or inventing e
   skipped. The payload-relative workspace file must still render or report missing schema.
   `python tools/validate-plugins/validate.py` is green as the implementation integration gate.
   Paid drafting and editing evals are excluded.
-- **Status:** todo
+- **Status:** done, Scratch fixture (3 posts, five sections, multiline quote, notes, a null source): render and
+  check exit 0 with draft-post's CLI, check exit 0 with edit-post's; headings match v1, every
+  quote line survives, both empty lists render "None established.". posts_read 2, a blank
+  quote, a missing section and an extra key each exit 1 naming the field. A v1 profile with
+  an empty Recurring section converts with no line lost and no source invented; a check
+  leaves the YAML byte-identical. Both skills' key paths resolve in both models, a planted
+  `openings_closing` fails. Hook fixtures (relative and absolute paths, payload cwd unlike
+  the process cwd, missing schema at the workspace path, invalid quote, unrelated YAML and a
+  root blog-voice.yaml skipped, guard denial, EVIDENCE.yaml rendered by ceh-blog's hook)
+  pass: "OK: hooks check passed". `python tools/validate-plugins/validate.py`: "OK: all
+  plugin checks passed".
 
 ## Open
 
@@ -141,5 +151,14 @@ while repeat runs preserve the author's voice without re-deriving or inventing e
 - 2026-11-11 Reviewed: Ready to build, 0 blocking, 1 advisory (new hooks will also act on the evidence and
   business-plan model copies, unstated and unchecked).
   Review: .agents_workspace/product/plan-reviews/blog-voice-yaml-2026-11-11-r2.md.
+- 2026-11-12 Built Phase 1: blog-voice/v2 model, template, schema section in draft-post, copied with artifact.py into
+  edit-post; both skills updated; ceh-blog gains scripts and hooks.json and leaves READERS;
+  the hook's workspace-path rule mirrored to all 15 copies; fixtures; ceh-blog MINOR and 14
+  PATCH bumps. The model takes `register` through a `register_` field with an alias,
+  because `register` is a pydantic BaseModel attribute; the YAML key is unchanged.
+- 2026-11-12 Checked: All Scope In, Design, Scope Out and Phase 1 Check items Built; 0 Gap, 0 Deviation,
+  0 Extra, 0 Failing, 0 Cannot verify. Checked in the building session, not by a fresh
+  reviewer.
+- 2026-11-12 PR: #256 https://github.com/cheneeheng/ceh-claude-code-library/pull/256
 
 <!-- prettier-ignore-end -->

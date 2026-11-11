@@ -3,7 +3,8 @@
 
 Matches Edit|Write|MultiEdit. It acts on a `.yaml` whose `schema: <name>/v<N>` names a model in
 this plugin, and on a `.yaml` in the place a format lives (`place_format`) when this plugin holds
-that format's model, so a spine file or glossary missing its schema key is reported, not skipped.
+that format's model, so a spine file, glossary or voice profile missing its schema key is
+reported, not skipped.
 A relative `file_path` is resolved against the payload's `cwd`. It runs `scripts/artifact.py render` through uv. Errors go back to the agent as a block
 reason. The tool has already run, so the file stays on disk until the agent fixes it, and the
 Markdown is not regenerated. When the check cannot run (no uv, a failed install, an unknown
@@ -49,6 +50,8 @@ def place_format(file: Path, root: Path) -> str | None:
     if file.name == "GLOSSARY.yaml":
         home = file.parent in (root, root / "docs")
         return "glossary" if home and file.with_suffix(".md").exists() else None
+    if file == root / ".agents_workspace" / "product" / "blog-voice.yaml":
+        return "blog-voice"
     name = SPINE.get(file.stem)
     near = (
         file.parent.name in ("product", "business") or file.with_suffix(".md").exists()

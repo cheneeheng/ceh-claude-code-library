@@ -9,7 +9,8 @@ disable-model-invocation: false
 user-invocable: true
 compatibility: >-
   Uses uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML, to check a
-  BUSINESS_PLAN or EVIDENCE YAML before reading it. Without uv they are read unchecked.
+  BUSINESS_PLAN or EVIDENCE YAML before reading it, and to check and render the voice profile.
+  Without uv they are read or written unchecked, and the profile's Markdown is not rendered.
 license: Apache-2.0
 ---
 
@@ -45,13 +46,22 @@ Read the previous posts, especially the latest episode in the same series. Then:
 - **Leave a thread**: plan what this episode leaves open. Closure instead if the series is
   finished.
 - **Capture the voice once**: if the blog has three or more posts, the target repo's `CLAUDE.md`
-  defines no blog voice, and `.agents_workspace/product/blog-voice.md` does not exist yet, write that file
-  from the posts, filling `${CLAUDE_SKILL_DIR}/assets/blog-voice.template.md`, per
-  `${CLAUDE_SKILL_DIR}/references/blog-voice-schema.md`, each point backed by a quoted line. On
-  later
-  runs read the file instead of re-deriving it, and offer once to move it into `CLAUDE.md` so it
-  outlives the workspace. The profile governs vocabulary, register, and rhythm. The banned tells
-  in Voice still apply.
+  defines no blog voice, and neither `.agents_workspace/product/blog-voice.yaml` nor
+  `blog-voice.md` exists there yet, write `blog-voice.yaml` from the posts, filling
+  `${CLAUDE_SKILL_DIR}/assets/blog-voice.template.yaml`, per the `blog-voice/v2` section of
+  `${CLAUDE_SKILL_DIR}/references/blog-voice-schema.md`, each point backed by a line quoted word
+  for word with the post it came from. After the last edit, run
+  `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which checks it
+  and writes `blog-voice.md` beside it. On exit 1, fix each error it lists and render again. On
+  exit 2 or 3, or without uv, say in the reply that the profile went unchecked and unrendered. On
+  later runs read the profile instead of re-deriving it, the YAML when there is one: first run the
+  same command with `check`. On exit 1, use no profile and report its errors, unless the only
+  error is a stale `.md`, which `render` repairs. On exit 2 or 3, or without uv, say it went
+  unchecked and read it anyway. A `blog-voice.md` with no YAML is a `v1` profile, read as it is,
+  and converted as the schema says only before an amendment the author asked for. Offer once to
+  move the profile into `CLAUDE.md` so it outlives the workspace, and move it only with the
+  author's agreement. The profile governs vocabulary, register, and rhythm. The banned tells in
+  Voice still apply.
 
 ### 2. Read the material and pick the route
 
