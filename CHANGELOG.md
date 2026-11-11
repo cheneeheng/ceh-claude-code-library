@@ -11,6 +11,12 @@ before this repo live in
 
 ## 2026-11-11
 
+The three usability skills that edit the target (`audit-error-messages`, `audit-interface`,
+`write-plain-language`) now leave their edits uncommitted unless asked, and report a defect outside
+their kind instead of fixing it. A headless test of `audit-error-messages` had branched, committed,
+pushed and fixed an SQL injection unasked, with no push guard loaded. The fixes and why they are
+written guidance are in `product/retros/2026-11-11-repeat-mistake.md`.
+
 A new plan, `product/plans/business-plan-dormant-mode.yaml`, takes retro items 4 and 5: the
 business plan's experiments, kill criteria and §13 milestones stay inside it instead of becoming a
 build backlog, and `develop-business-plan` will ask whether a project is a business yet. A tool its
@@ -62,9 +68,12 @@ approvals that name a real stage, and a status that agrees with the stages becom
 | `ceh-build-planning`           | 1.2.10  |
 | `ceh-build-from-plan`          | 1.2.7   |
 | `ceh-check-build-against-plan` | 1.1.6   |
+| `ceh-usability-audit`          | 1.2.2   |
 
 ### Changed
 
+- `audit-error-messages`, `audit-interface` and `write-plain-language` make no branch, commit, push
+  or pull request unless asked, and report other defects rather than fixing them.
 - `write-build-plan` and `review-build-plan` read no business plan, and the plan format marks
   `business_plan` as legacy in all six copies.
 - `model_vs_template.py` lets a template omit a model key marked deprecated.

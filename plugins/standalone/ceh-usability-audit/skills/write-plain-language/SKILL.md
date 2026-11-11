@@ -127,6 +127,13 @@ A rewrite table, shown before any string is changed in place:
 | ---------------------- | ------------------------- | -------------------------------- | ------------- |
 | `SettingsPanel.tsx:42` | `Configure sync interval` | `How often to check for updates` | floor, jargon |
 
+**Leave your edits in the working tree.** Make no branch, commit, push, or pull request unless the
+request asks for one, because the user reviews the diff before anything lands.
+
+**Report other defects, do not fix them.** A security hole or a logic bug found on the way is
+reported as a finding, even on a line you are already rewriting, because the user expects the
+diff to hold only this skill's edits.
+
 ## Stop conditions
 
 - **The term is the user's own word.** Accountants say "reconcile"; doctors say "triage".

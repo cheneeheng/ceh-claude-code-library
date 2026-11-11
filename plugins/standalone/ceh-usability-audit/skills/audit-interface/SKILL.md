@@ -161,6 +161,13 @@ personas that stalled on it**. Repeat until the gate reads 5/5: the gate is the 
 user who is present may still stop the loop early or accept a lower score; record that in the
 report.
 
+**Leave your edits in the working tree.** Make no branch, commit, push, or pull request unless the
+request asks for one, because the user reviews the diff before anything lands.
+
+**Report other defects, do not fix them.** A security hole or a logic bug found on the way is
+reported as a finding, even on a line you are already rewriting, because the user expects the
+diff to hold only this skill's edits.
+
 ## Rules
 
 ### The gate
