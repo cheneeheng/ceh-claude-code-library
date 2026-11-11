@@ -1,6 +1,6 @@
 schema: plan/v2
 title: A dormant business plan for a project that is not a business yet
-status: ready
+status: building
 created: 2026-11-11
 goal: |
   Retro items 4 and 5 of `product/retros/2026-11-11-39c94071-business-plan-leak.md`, which the user
@@ -163,7 +163,10 @@ phases:
       finds the Phase 4 bullet, and `git grep -n "not the objective's key results or dates"
       plugins/standalone/ceh-business-plan/skills/set-operating-plan/SKILL.md` finds the handoff.
       `python tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
-    status: todo
+    status: done
+    evidence: |
+      The first grep prints nothing, the other two find 1 line each, and `validate.py` prints "OK:
+      all plugin checks passed".
   - name: The dormant status, the router's question and the specialists
     builds: |
       Scope In items 2 to 4, per Designs "The status value", "The router's question", "The
@@ -196,3 +199,9 @@ record:
   - date: 2026-11-11
     event: PR
     details: "#248 https://github.com/cheneeheng/ceh-claude-code-library/pull/248"
+  - date: 2026-11-11
+    event: Built Phase
+    phase: 1
+    details: |
+      Phase 1 check: the backlog grep prints nothing, both handoff greps find their line,
+      `validate.py` prints "OK: all plugin checks passed".

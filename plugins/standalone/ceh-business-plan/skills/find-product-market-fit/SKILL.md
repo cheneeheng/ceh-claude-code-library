@@ -184,9 +184,9 @@ satisfied:
 - Flip `status: validated`, set `pmf_gate: 8`, stamp `updated`.
 - Give a one-paragraph verdict: the sharpest version of who pays, for what, why you, and the one
   experiment that most de-risks the whole thing next.
-- Point onward: if the validation surfaced product changes, the build plan
-  (`ceh-build-planning`) should absorb them in a new plan; the §13 milestones become the
-  build/validation backlog.
+- Point onward: if the validation surfaced product changes, suggest `ceh-build-planning` for
+  them, stated as product changes. The plan's experiments, kill criteria and §13 milestones
+  stay in the plan: a build plan does not read it.
 - Name the plan's softest remaining area (edge, numbers, first customers, risks, or the next 90
   days). The gate proves a fit exists, not that the business is sound, and
   `ceh-business-plan:develop-business-plan` routes that area to the specialist that owns it.
