@@ -152,5 +152,6 @@ or notes when an existing glossary is amended.
 - 2026-11-12 Checked: 11 Built (3 Scope In, 4 Design, 2 Scope Out absent, Phase 1 Check, Open assumption held),
   0 Gap, 0 Deviation, 0 Extra, 0 Failing, 0 Cannot verify. Checked in the building session,
   not by a fresh reviewer.
+- 2026-11-12 PR: #255 https://github.com/cheneeheng/ceh-claude-code-library/pull/255
 
 <!-- prettier-ignore-end -->
