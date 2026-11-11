@@ -340,5 +340,6 @@ was checked.
 - 2026-11-12 Built Phase 6: All six child plans built and checked. The guard that blocked this record on 2026-11-11
   allowed it here, from a session that started implement-from-plan, so the block was the
   guard working as designed rather than a defect, and no fix record is written for it.
+- 2026-11-12 PR: #257 https://github.com/cheneeheng/ceh-claude-code-library/pull/257
 
 <!-- prettier-ignore-end -->
