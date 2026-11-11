@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: repeat-mistake-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from repeat-mistake-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The repeat-mistake report as a YAML format, repeat-mistake/v2
-status: ready
+status: built
 created: 2026-11-11
 ---
 
@@ -145,7 +145,22 @@ statuses change, and repository fixes remain separate from machine-local fixes.
   Include absolute and relative report paths with payload cwd different from process cwd,
   and a correctly named schema-less dated report outside both supported directories that
   must be skipped.
-- **Status:** todo
+- **Status:** done, Scratch fixture (pending, applied, rejected): render and check exit 0; only the pending id
+  is under Pending drafts, history under Previous drafts, the python fence survives and a
+  pipe in evidence stays in its cell. Pending to applied moves it to history keeping draft
+  and evidence, a second render is byte-identical. Missing pending draft, duplicate id, rung
+  0, rung 5 with "yes", unknown status and an extra key each exit 1 naming the field. Scratch
+  copies of 2026-11-11 and 2026-10-28 convert with no line lost; 10-28 maps to applied/yes
+  with its annotation in notes and its draft on fix 1. "fails on the real mistake: yes
+  (replay.py, 11 checks pass)" maps to "yes" with the text kept; an unknown proof and a
+  pending row with no draft refuse, the v1 file unchanged. The renderer reads no clock.
+  Intake over both folders reads each dated stem once, skips the labelled name, finds the
+  pending ids by model_validate; step 1's key paths resolve, a planted `fixes[].stauts`
+  fails; other_file links are reciprocal. Hook fixtures (both schema-less paths, relative
+  and absolute with a payload cwd unlike the process cwd, invalid status, valid render,
+  guard denial, unrelated, labelled and out-of-folder files skipped) pass: "OK: hooks check
+  passed". `python tools/validate-plugins/validate.py`: "OK: all plugin checks passed". No
+  real pending fix was applied.
 
 ## Open
 
@@ -165,5 +180,12 @@ statuses change, and repository fixes remain separate from machine-local fixes.
   unnamed). Review: .agents_workspace/product/plan-reviews/repeat-mistake-yaml-2026-11-11-r2.md.
   All three fixed: proofs map like statuses, the columns are named, and the owner chose the
   dated name only, for both intake and the hook. Status ready.
+- 2026-11-12 Built Phase 1: repeat-mistake/v2 model, template, schema section and artifact.py in
+  prevent-repeat-mistake; step 1 and Output rewritten; the hook's dated retros-path rule
+  mirrored to all 15 copies; fixtures; RETRO_WORKFLOW.md and the retro-location
+  cross-reference updated; 15 PATCH bumps.
+- 2026-11-12 Checked: All Scope In, Design, Scope Out and Phase 1 Check items Built; 0 Gap, 0 Deviation,
+  0 Extra, 0 Failing, 0 Cannot verify. Checked in the building session, not by a fresh
+  reviewer.
 
 <!-- prettier-ignore-end -->

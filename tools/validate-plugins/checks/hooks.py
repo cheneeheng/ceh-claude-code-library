@@ -734,9 +734,65 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": rh_bl, "stdin": write_at(bv / "none" / bv_ws / "blog-voice.yaml"), "env": no_uv, "out": ""},
         {"script": "ceh-blog/generated-md-guard.py", "stdin": edit(bv_generated.as_posix()), "out": "blog-voice.yaml"},
     ]  # fmt: skip
+    # The repeat-mistake report: prevent-repeat-mistake writes and reads it. It is found by its
+    # schema key, or by its dated name in product/retros/ or .agents_workspace/product/retros/
+    # under the payload cwd. A labelled name and the dated name anywhere else are left alone.
+    good_rm = (
+        "schema: repeat-mistake/v2\ndate: 2026-11-12\nother_file: null\nfixes:\n"
+        "  - id: 1\n    mistake: Dates written as 10/09/2026\n    evidence: 'roadmap.md:14'\n"
+        '    rung: 3\n    fix: A date hook\n    proof: "yes"\n    status: awaiting approval\n'
+        "    why_rung: A pattern match catches it.\n    draft: |\n      ```python\n      deny()\n      ```\n"
+    )
+    rm = tmp / "repeat-mistake"
+    day = "2026-11-12-repeat-mistake"
+    rm_files = {
+        f"ok/product/retros/{day}.yaml": good_rm,
+        f"bad/product/retros/{day}.yaml": good_rm.replace(
+            "status: awaiting approval", "status: done"
+        ),
+        f"none/product/retros/{day}.yaml": "key: value\n",
+        f"none/.agents_workspace/product/retros/{day}.yaml": "key: value\n",
+        "none/product/retros/notes.yaml": "key: value\n",
+        "none/product/retros/2026-11-12-cockpit-repeat-mistake.yaml": "key: value\n",
+        f"none/{day}.yaml": "key: value\n",
+    }
+    for name, text in rm_files.items():
+        (rm / name).parent.mkdir(parents=True, exist_ok=True)
+        (rm / name).write_text(text, encoding="utf-8")
+    rm_generated = rm / "gen" / f"{day}.md"
+    rm_generated.parent.mkdir()
+    rm_generated.write_text(
+        f"---\nschema: repeat-mistake/v2\ngenerated_from: {day}.yaml\n---\n",
+        encoding="utf-8",
+    )
+
+    def rm_rendered() -> str | None:
+        md = rm / "ok" / "product" / "retros" / f"{day}.md"
+        text = md.read_text(encoding="utf-8") if md.is_file() else ""
+        ok = "### 1: Dates written as 10/09/2026\n\n```python\ndeny()\n```" in text
+        return None if ok else f"{day}.md was not rendered"
+
+    rh_es = f"{es}/artifact-render-hook.py"
+    local = (
+        rm / "none" / ".agents_workspace" / "product" / "retros" / f"{day}.yaml"
+    ).as_posix()
+    repeat_mistake_fixtures = ([
+        {"script": rh_es, "stdin": write_rel(rm / "ok", f"product/retros/{day}.yaml"), "out": "", "after": rm_rendered},
+        {"script": rh_es, "stdin": write_at(rm / "bad" / "product" / "retros" / f"{day}.yaml"), "out": "fixes.0.status"},
+        {"script": rh_es, "stdin": write_rel(rm / "none", f"product/retros/{day}.yaml"), "out": "no 'schema:"},
+        {"script": rh_es, "stdin": write_rel(rm / "none", local), "out": "no 'schema:"},
+    ] if have_uv else []) + [
+        {"script": rh_es, "stdin": write_rel(rm / "none", f".agents_workspace/product/retros/{day}.yaml"), "env": no_uv, "out": "uv is not installed"},
+        {"script": rh_es, "stdin": write_rel(rm / "none", "product/retros/notes.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_es, "stdin": write_rel(rm / "none", "product/retros/2026-11-12-cockpit-repeat-mistake.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_es, "stdin": write_rel(rm / "none", f"{day}.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_es, "stdin": write_at(rm / "none" / "product" / "retros" / f"{day}.yaml"), "env": no_uv, "out": ""},
+        {"script": f"{es}/generated-md-guard.py", "stdin": edit(rm_generated.as_posix()), "out": f"{day}.yaml"},
+    ]  # fmt: skip
     evidence_fixtures = [
         *glossary_fixtures,
         *blog_voice_fixtures,
+        *repeat_mistake_fixtures,
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
             good_ev.replace("status: passed", "status: passing"),

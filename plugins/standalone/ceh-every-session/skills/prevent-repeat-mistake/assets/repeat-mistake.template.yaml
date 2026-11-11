@@ -1,0 +1,19 @@
+schema: repeat-mistake/v2
+date: YYYY-MM-DD
+other_file: <path | null>
+fixes:
+  - id: <N>
+    mistake: <mistake>
+    evidence: |
+      <evidence>
+    rung: <1-5>
+    fix: |
+      <fix>
+    proof: <"yes" | not provable>
+    status: <applied | awaiting approval | rejected>
+    why_rung: |
+      <reason>
+    draft: |
+      <draft>
+notes: |
+  <context>

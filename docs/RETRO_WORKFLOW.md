@@ -88,7 +88,8 @@ A committed report leaves the machine on the next push, so it is cleaned before 
 2. Each root cause is classed (request, guidance, environment, model, Claude Code) and routed. A
    guidance or model cause usually goes to `prevent-repeat-mistake`.
 3. `prevent-repeat-mistake` picks the rung, builds or drafts the fix, and saves
-   `product/retros/<date>-repeat-mistake.md`. Its next run lists every draft still
+   `product/retros/<date>-repeat-mistake.yaml`, with the `.md` rendered beside it. Its next run
+   checks each report and lists every draft still
    `awaiting approval` before taking a new mistake, so a draft is not lost between sessions.
 
 `product/retros/2026-10-22-session-de93dc4b.md` and `product/retros/2026-10-22-repeat-mistake.md`

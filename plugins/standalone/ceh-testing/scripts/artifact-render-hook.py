@@ -3,8 +3,8 @@
 
 Matches Edit|Write|MultiEdit. It acts on a `.yaml` whose `schema: <name>/v<N>` names a model in
 this plugin, and on a `.yaml` in the place a format lives (`place_format`) when this plugin holds
-that format's model, so a spine file, glossary or voice profile missing its schema key is
-reported, not skipped.
+that format's model, so a spine file, glossary, voice profile or repeat-mistake report missing its
+schema key is reported, not skipped.
 A relative `file_path` is resolved against the payload's `cwd`. It runs `scripts/artifact.py render` through uv. Errors go back to the agent as a block
 reason. The tool has already run, so the file stays on disk until the agent fixes it, and the
 Markdown is not regenerated. When the check cannot run (no uv, a failed install, an unknown
@@ -25,6 +25,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CLI = ROOT / "scripts" / "artifact.py"
 SCHEMA = re.compile(r"""^schema:\s*["']?([a-z0-9]+(?:-[a-z0-9]+)*)/v\d+""", re.M)
+REPEAT = re.compile(r"^\d{4}-\d{2}-\d{2}-repeat-mistake\.yaml$")
 UV_HELP = "Install uv (https://docs.astral.sh/uv/) so the check can run."
 # Spine file stems and their formats, matched in a `product` or `business` folder or beside a
 # `.md` of the same stem, so an unrelated STRATEGY.yaml elsewhere is left alone.
@@ -52,6 +53,13 @@ def place_format(file: Path, root: Path) -> str | None:
         return "glossary" if home and file.with_suffix(".md").exists() else None
     if file == root / ".agents_workspace" / "product" / "blog-voice.yaml":
         return "blog-voice"
+    # The dated name only, in either retros folder: a labelled <date>-<label>-repeat-mistake is not one.
+    retros = (
+        root / "product" / "retros",
+        root / ".agents_workspace" / "product" / "retros",
+    )
+    if REPEAT.match(file.name) and file.parent in retros:
+        return "repeat-mistake"
     name = SPINE.get(file.stem)
     near = (
         file.parent.name in ("product", "business") or file.with_suffix(".md").exists()
