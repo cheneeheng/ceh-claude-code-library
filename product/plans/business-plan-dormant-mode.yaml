@@ -1,0 +1,198 @@
+schema: plan/v2
+title: A dormant business plan for a project that is not a business yet
+status: ready
+created: 2026-11-11
+goal: |
+  Retro items 4 and 5 of `product/retros/2026-11-11-39c94071-business-plan-leak.md`, which the user
+  chose on 2026-11-11 to plan together. Item 5: the business plan's experiments, kill criteria and
+  §13 milestones stay inside it, so no `ceh-business-plan` skill hands them to a build plan as a
+  backlog. Item 4: `ceh-business-plan:develop-business-plan` asks, before the first plan is
+  drafted, whether the project is a business now or a tool its author builds for their own use.
+  For the second it offers to wait, or to write the plan as `status: dormant`, where no specialist
+  writes a deadline. The flow that matters: an author starting a plan for a personal tool answers
+  "my own use", gets a dormant plan with who it is for, the problem, its risks and tests but no
+  deadlines, and later says "it's a business now", which makes the plan a `draft` whose
+  specialists date their own tests on their next run.
+scope:
+  in:
+    - |
+      Item 5: `find-product-market-fit` Phase 4 stops saying the §13 milestones "become the
+      build/validation backlog", and its handoff to `ceh-build-planning` names only the product
+      changes the validation surfaced, without the plan's dates, tests or kill criteria.
+      `set-operating-plan`'s Hands off line and the `ceh-business-plan` README (lines 125 to 126)
+      say the same.
+    - |
+      Item 4, the format: `business-plan/v3` gains `status: dormant`. `business-plan-model.py`
+      accepts it, `business-plan-schema.md` says what it means (the Frontmatter bullet, the
+      Specialist subsections status rule, the §13 row and the gate's scheduled-test rule), and the
+      `status` placeholder of `business-plan.template.yaml` and `business-plan.template.md` names
+      it. All 11 copies of each of the four files change together.
+    - |
+      Item 4, the router: `develop-business-plan` asks the business-or-own-use question when no
+      plan exists, with the wait and dormant options, gains two status rows, keeps `dormant`
+      through its step 4 status rule, routes a dormant plan with no named moment to the first row,
+      stops `set-operating-plan` and `write-investor-materials` on a dormant plan, and says in a
+      bullet of its own what it does with no human to answer. Its Rules lines on the one edit it
+      makes and on who sets `status` name the two status rows.
+    - |
+      Item 4, the specialists: `find-product-market-fit`, `run-premortem`, `plan-go-to-market` and
+      `sharpen-strategy` gain the same Dormant plan bullet: no deadline in a dormant plan, and on a
+      `draft` plan they date their own undated tests and kill criteria first.
+      `find-product-market-fit` never sets `validated` on a dormant plan, and sets
+      `status: dormant` on a new plan when its brief says so. `set-operating-plan` stops on a
+      dormant plan.
+    - |
+      Repo upkeep: the `ceh-business-plan` README, the changelog, the version bumps of
+      `ceh-business-plan`, `ceh-blog` and `ceh-seo` (which carry the format copies), and
+      `docs/PLUGIN_VERSIONS.md`. The retro's Decided section names this plan.
+  out:
+    - item: Removing deadlines already written in a plan that is made dormant.
+      reason: |
+        `run-premortem` refuses to rewrite a kill criterion after the fact. Dormancy stops new
+        deadlines and keeps what is written.
+    - item: A model check that a dormant plan holds no deadline.
+      reason: |
+        Deadlines sit in free text across several sections, so a check would be a guess. The rule
+        is prose, as the other specialist rules are, until a miss shows it is needed.
+    - item: Changes to the readers of `status` outside the suite.
+      reason: |
+        `ceh-blog:draft-post`, `ceh-seo:write-project-listing-text` and
+        `ceh-every-session:whats-next` read audience or whether the plan exists, never `status`,
+        and `write-investor-materials` already requires `validated`, so a dormant plan stops it
+        unchanged.
+    - item: A dormant rule in `stress-test-unit-economics` and `review-business-plan`.
+      reason: |
+        The unit-economics cash low point is a month index from the model, not a deadline. The
+        review scores Money and Execution lower on a plan with no dates, which is the honest score
+        for a plan that is not a business yet.
+    - item: Retro item 7, a grep check for `BUSINESS_PLAN` in committed documents.
+      reason: |
+        The retro defers it to a second measured miss.
+    - item: The retro's first open question, `find-product-market-fit` Phase 0 reading `product/plans/`.
+      reason: |
+        That is the allowed direction, product documents feeding the business plan.
+    - item: Asking the question again on a plan that already exists.
+      reason: |
+        An existing plan is made dormant on request through the new status row, so a plan that is
+        a business is never questioned in every session.
+design:
+  - topic: The status value
+    decision: |
+      `status: Literal["draft", "validated", "dormant"]` in `business-plan-model.py`. The existing
+      rule (`validated` needs `pmf_gate 8`) is unchanged, and `dormant` puts no constraint on
+      `pmf_gate`. Adding an allowed value removes nothing a reader relies on, so the format stays
+      `business-plan/v3`. The template placeholders become `status: <draft | validated | dormant>`.
+      The schema's Frontmatter bullet becomes: "`status`: `draft`, `validated` once the PMF
+      Readiness Gate passes and the user confirms it, or `dormant` for a project its author builds
+      for their own use and is not selling yet. A dormant plan holds no deadline: no test, kill or
+      milestone date." The Specialist subsections rule "Whenever `pmf_gate` is below `8/8`,
+      `status` is `draft`" gains "or `dormant`". The §13 row's "dated, falsifiable milestones"
+      gains "(undated in a dormant plan)", and the gate's rule that a test-attached criterion
+      passes gains "An undated test in a dormant plan does not meet its criterion." Dates that
+      record when something happened, `created`, `updated` and a premortem's "Run on", are not
+      deadlines and stay.
+  - topic: The router's question
+    decision: |
+      `develop-business-plan` step 2, before invoking `find-product-market-fit`, asks one question:
+      "Is this a business now, something you mean to sell, share for money or raise for, or a tool
+      you build for your own use?" Business: go on as today. Own use: offer two options, "wait,
+      and write no plan yet" (recommended, because a plan written before the product works makes
+      every number a guess) and "write it as a dormant plan, with no deadlines". Wait writes
+      nothing and stops. Dormant invokes `find-product-market-fit` with "dormant" in its brief.
+      When the request already says which (a pitch deck, a launch, "for myself"), the router takes
+      that answer and does not ask. With no human to answer, a new bullet after the "No human to
+      answer" bullet says: "When no plan exists and the request does not say whether the project
+      is a business, draft a `draft` plan, as before, and end with that question." The registered
+      "No human to answer" clause stays word for word, so its `CROSS_REFERENCES.md` entry is
+      unchanged.
+  - topic: The router's rows and status rule
+    decision: |
+      Two rows are added to the routing table, handled by the router itself because they change
+      only `status`. "The project is not a business yet: make the plan dormant" sets
+      `status: dormant` and keeps every written line. "A dormant project is now a business" sets
+      `status: draft` and names, as next steps one at a time, each specialist that owns an undated
+      test or kill criterion in the plan (`find-product-market-fit`, `run-premortem`,
+      `plan-go-to-market`, `sharpen-strategy`), because each dates only its own lines. Step 4
+      becomes: "If `pmf_gate` is below `8` and `status` is not `dormant`, set `status: draft`."
+      Step 3's default for a request with no moment routes `status: dormant` to the first row, as
+      `draft` does. On a dormant plan, a request routed to `set-operating-plan` or
+      `write-investor-materials` stops with one line: the plan is dormant and that skill needs a
+      business, so ask whether it is one now. The Rules line "The one edit it makes is step 5's
+      numbers and contents list" becomes "The edits it makes are `status` and `updated` (steps 4
+      and the two status rows) and step 5's numbers and contents list", and "only
+      `find-product-market-fit` sets `status`" gains "apart from the router's status rows".
+  - topic: The specialists on a dormant plan
+    decision: |
+      `find-product-market-fit`, `run-premortem`, `plan-go-to-market` and `sharpen-strategy` each
+      gain one bullet, worded the same: "**Dormant plan** (`status: dormant`): write each test and
+      kill criterion with its number and no date, and add no line to §13, because a date in a plan
+      nobody is selling becomes a deadline nobody set. On a `draft` plan that still holds your
+      undated tests or kill criteria, date them first." `find-product-market-fit` adds that a
+      dormant plan is never set to `validated`, and that a brief saying "dormant" gives a new plan
+      `status: dormant`. `run-premortem` adds that the kill criterion's number is still set now, and
+      only its date waits. The bullet goes in Rules for `run-premortem`, `plan-go-to-market` and
+      `sharpen-strategy`, and in Edge Cases for `find-product-market-fit`, where its other modes
+      sit. `set-operating-plan` gains a Stop condition: "`status` is `dormant` → stop: a 90-day
+      plan needs a business. Ask whether the project is one now."
+  - topic: The handoff wording (item 5)
+    decision: |
+      `find-product-market-fit` Phase 4's "Point onward" bullet becomes: "If the validation
+      surfaced product changes, suggest `ceh-build-planning` for them, stated as product changes.
+      The plan's experiments, kill criteria and §13 milestones stay in the plan: a build plan does
+      not read it." `set-operating-plan`'s line becomes: "When an objective is a product build,
+      suggest `ceh-build-planning` for the technical plan, describing the product change, not the
+      objective's key results or dates." The README bullet at lines 125 to 126 says the
+      milestones stay in the business plan.
+  - topic: Copies, pull requests and versions
+    decision: |
+      `business-plan-model.py`, `business-plan-schema.md`, `business-plan.template.yaml` and
+      `business-plan.template.md` are whole-file copies in 11 skills: the nine `ceh-business-plan`
+      skills, `ceh-blog:draft-post` and `ceh-seo:write-project-listing-text`. The canonical is
+      `find-product-market-fit`'s, edited first and copied to the rest. Two phases, two PRs.
+      Phase 1 (item 5) bumps `ceh-business-plan` PATCH. Phase 2 (item 4) bumps
+      `ceh-business-plan`, `ceh-blog` and `ceh-seo` PATCH: a new allowed value is a content change.
+      On 2026-11-11 they are 1.2.2, 1.0.18 and 1.1.8, and each PR bumps from what `main` holds
+      then.
+phases:
+  - name: The business plan's milestones stay in it
+    builds: |
+      Scope In item 1, per Design "The handoff wording (item 5)", with its upkeep from item 5.
+    check: |
+      `git grep -nE "backlog|absorb them" plugins/standalone/ceh-business-plan` prints nothing.
+      `git grep -n "stay in the plan" plugins/standalone/ceh-business-plan/skills/find-product-market-fit/SKILL.md`
+      finds the Phase 4 bullet, and `git grep -n "not the objective's key results or dates"
+      plugins/standalone/ceh-business-plan/skills/set-operating-plan/SKILL.md` finds the handoff.
+      `python tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
+    status: todo
+  - name: The dormant status, the router's question and the specialists
+    builds: |
+      Scope In items 2 to 4, per Designs "The status value", "The router's question", "The
+      router's rows and status rule" and "The specialists on a dormant plan", with their upkeep
+      from item 5 and the retro's Decided line.
+    check: |
+      With uv, the canonical `artifact.py check` exits 0 on a scratchpad `BUSINESS_PLAN.yaml`
+      copied from `business-plan.template.yaml` and filled, with `status: dormant` and
+      `pmf_gate: 3`, and exits 1 naming `status` on the same file with `status: paused`. Each of
+      the four format files' 11 copies shares one md5, and `git grep -c "validated | dormant"`
+      finds each template copy. `git grep -c "Dormant plan"` finds one line in each of
+      `find-product-market-fit`, `run-premortem`, `plan-go-to-market` and `sharpen-strategy`
+      `SKILL.md`. In `develop-business-plan/SKILL.md`, `git grep` finds "own use", "make the plan
+      dormant", "A dormant project is now a business", "is not `dormant`", "the request does not
+      say whether" and "apart from the router's status rows". `git grep -n "is \`dormant\`"
+      plugins/standalone/ceh-business-plan/skills/set-operating-plan/SKILL.md` finds its stop.
+      `python tools/validate-plugins/validate.py` prints "OK: all plugin checks passed".
+    status: todo
+open: []
+record:
+  - date: 2026-11-11
+    event: Planned
+    details: status ready
+  - date: 2026-11-11
+    event: Reviewed
+    details: |
+      Revise first: 2 blocking (leaving dormant had no writer for the dates, and the no-date rule
+      missed `sharpen-strategy` and `set-operating-plan` while forbidding record dates), 7
+      advisory, all fixed. The no-human question moved from Open into Design.
+  - date: 2026-11-11
+    event: PR
+    details: "#248 https://github.com/cheneeheng/ceh-claude-code-library/pull/248"

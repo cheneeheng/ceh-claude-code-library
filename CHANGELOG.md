@@ -11,6 +11,12 @@ before this repo live in
 
 ## 2026-11-11
 
+A new plan, `product/plans/business-plan-dormant-mode.yaml`, takes retro items 4 and 5: the
+business plan's experiments, kill criteria and §13 milestones stay inside it instead of becoming a
+build backlog, and `develop-business-plan` will ask whether a project is a business yet. A tool its
+author builds for their own use gets a `status: dormant` plan, where no specialist writes a
+deadline. No plugin changes in this PR.
+
 The build plans stop reading the business plan too: `write-build-plan` takes the goal and target
 user from the request, the vision and the strategy, and sets no `business_plan` key, and
 `review-build-plan` judges a plan against the code, the vision and the strategy only. The plan
