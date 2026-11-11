@@ -1,6 +1,6 @@
 schema: plan/v2
 title: The competitor report as a YAML format, competitor-report/v2
-status: ready
+status: built
 created: 2026-11-11
 goal: |
   The third format of Phase 6 of `product/plans/report-only-formats.yaml`: the per-competitor report
@@ -213,7 +213,23 @@ phases:
       `competitor-report/v2` file and block a bad one through the `ceh-competitor-analysis` render
       hook, print "uv is not installed" without uv, stay silent on a plan YAML, and have its guard
       deny an edit to a generated `.md`, prints "OK: all plugin checks passed".
-    status: todo
+    status: done
+    evidence: |
+      a scratchpad `acme.yaml` rendered (exit 0) with the five numbered headings,
+      `**Tally (4 components):** 1 covered, 1 partial, 1 gaps, 1 N/A.`, the fixed legend, `Covers`
+      after the two taken rows' reasons, `None found.` under section 3, `fields.missing` in the
+      Source row, a two-component `ours` with a note, `notes` under `## 1.` and `## Memory system`
+      after section 5; the ten bad copies each exited 1 naming their rule (`no take row covers`,
+      `names no Partial or Gap`, `needs ours`, `names no ceh-`, `takes no ours`,
+      `sorted by count`, `repeat`, `take.build.0.effort`, `how_it_works`, `tagline`); the real
+      `openclaw.md` (306 lines, with a section 6), converted to a scratchpad YAML, passed
+      `artifact.py check` and `render` (exit 0), its computed tally equal to the hand tally
+      (79 components: 5, 31, 22, 21); every `git grep -F` named in the Check matched; `python
+      tools/validate-plugins/validate.py` printed "OK: all plugin checks passed".
+    note: |
+      Beyond Design, from the real reports: a table cell's bare `|` is escaped by the renderer, a
+      name holding a backtick renders in a double-backtick code span, and several size commands are
+      joined with `; `. See Open for the `evidence` of a converted `v1` row.
 open:
   - question: |
       Is a section the user asked for still honoured in `v2`?
@@ -236,6 +252,12 @@ open:
     assumption: |
       Exactly, by the row's `component` text, which is why component names are unique. A looser
       match would let a typo pass the completeness check.
+  - question: |
+      What `evidence` does a converted `v1` coverage row get, when none of the 10 real `v1` reports
+      records a path per row?
+    assumption: |
+      `evidence: not recorded in v1`, because `evidence` stays required for new reports, as step 6
+      demands, and a converted row may not gain a claim the `v1` report lacks. Found while building.
 record:
   - date: 2026-11-11
     event: Planned
@@ -249,3 +271,14 @@ record:
   - date: 2026-11-11
     event: PR
     details: "#244 https://github.com/cheneeheng/ceh-claude-code-library/pull/244"
+  - date: 2026-11-11
+    event: Built Phase
+    phase: 1
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+  - date: 2026-11-11
+    event: Checked
+    details: |
+      17 Built, 2 Extra, 0 Gap, 0 Deviation, 0 Failing. Extra: the renderer escapes a bare `|` in
+      table cells and fences a name holding a backtick in a double-backtick span
+      (`competitor-report-model.py:199`, `:209`), both needed to render the real `openclaw.md`.

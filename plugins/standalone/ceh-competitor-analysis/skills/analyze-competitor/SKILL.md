@@ -10,17 +10,20 @@ user-invocable: true
 compatibility: >-
   Repo targets need git 2.x and network access for the shallow clone. Product targets need WebFetch
   or WebSearch. Without them the skill can analyse only a local checkout or pasted material, and the
-  report says which sources were missing.
+  report says which sources were missing. Checking and rendering the report needs uv
+  (https://docs.astral.sh/uv/), which runs scripts/artifact.py with pydantic. Without it the YAML
+  goes unchecked and its Markdown is not rendered, and the reply says so.
 license: Apache-2.0
 ---
 
 # Analyze competitor
 
-Write one report per competitor to `.agents_workspace/competitor-analysis/<slug>.md`, and render it
-as `<slug>.html` beside it. Done means every claim in it traces to a file, a URL, or a command you
-ran, every idea we take names the place in our work where it would land, every competitor
-component our work covers only partly or not at all appears in "What we take", a new reader gets the
-point at a glance, and the HTML page carries the same content as the Markdown.
+Write one report per competitor to `.agents_workspace/competitor-analysis/<slug>.yaml`, with its
+Markdown rendered beside it as `<slug>.md` and its page built as `<slug>.html`. Done means every
+claim in it traces to a file, a URL, or a command you ran, every idea we take names the place in our
+work where it would land, every competitor component our work covers only partly or not at all
+appears in "What we take", `artifact.py check` exits 0 on the YAML, a new reader gets the point at
+a glance, and the HTML page carries the same content as the YAML.
 
 ## Procedure
 
@@ -53,24 +56,34 @@ point at a glance, and the HTML page carries the same content as the Markdown.
    sides: the competitor component carries its path or URL, and a Covered or Partial row names
    our component as `ceh-<plugin>:<name>` or a repo path. A Covered or Partial rating with no
    component of ours to name is a Gap. Rate each row on its own and add no overall score.
-7. **Fill "What we take" from the coverage.** Every Partial or Gap item lands in Adopt now, Build,
-   or Skip. One row may take several related items, and its why names each one it covers
-   ("Covers `<item>` and `<item>`."). Before writing, check that every Partial or Gap name appears
-   somewhere in section 1, and add the missing ones.
-8. **Write the report** in the shape under Output, one file per competitor. Create the directory
-   if it does not exist.
+7. **Fill "What we take" from the coverage.** Every Partial or Gap component lands in Adopt now,
+   Build, or Skip. One row may take several related components, each named exactly in its
+   `covers`, and the renderer writes its "Covers" sentence. Write `coverage` and `take` in one
+   Write or MultiEdit, because the check rejects a Partial or Gap no row covers.
+8. **Write the report** as `.agents_workspace/competitor-analysis/<slug>.yaml`, in the shape under
+   Output, one file per competitor. Create the directory if it does not exist. After the last
+   write, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <slug>.yaml` and fix
+   every error it lists, and run the same command with `render` when the hook is off, since the
+   hook renders `<slug>.md` on each write. Without uv, say in the reply that the report went
+   unchecked and unrendered.
+   **A slug that already has a report.** A fresh analysis replaces it, and the reply names the file
+   it replaced. A second pass on a `v1` report (a `<slug>.md` with no `.yaml` beside it) amends it
+   in place, so convert it before the first write that amends it, because a new `<slug>.yaml` would
+   render straight over the `v1` Markdown: carry every `v1` row and paragraph word for word into
+   its key, per the schema's "Converting a `v1` report", then amend the YAML.
 9. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" for the
    theme and its review pass. Use the Tidewater theme unless the user names another, copied once to
    `.agents_workspace/competitor-analysis/themes/<theme>.css` and linked from every page. Build
-   `<slug>.html` by filling `${CLAUDE_SKILL_DIR}/references/report-page.html`, keeping its
-   COMPETITOR-ONLY blocks: the hero from the summary line, verdict, and up to three headline
-   counts, the Adopt now / Build / Skip board from section 1, the step strip from section 2, one
-   expandable card per mechanism from section 3, the inventory bars from section 4, and one
-   coverage table per component group from section 5. The layout
-   is fixed by the template: do not add sections or restyle it. Every closed card shows only a name
-   and one line, and the detail goes inside it. The Markdown stays the source: the page may fold
-   detail into cards but adds no claim the Markdown lacks, and is rebuilt whenever the Markdown
-   changes.
+   `<slug>.html` from the YAML by filling `${CLAUDE_SKILL_DIR}/references/report-page.html`,
+   keeping its COMPETITOR-ONLY blocks: the hero from `summary`, `verdict`, and up to three headline
+   counts, the Adopt now / Build / Skip board from `take`, the step strip from `how_it_works`, one
+   expandable card per mechanism from `oh_wow`, the inventory bars from `inventory`, and one
+   coverage table per component group from `coverage`, with the tally and legend as the Markdown
+   renders them. An empty `oh_wow` shows `None found.` in place of the cards, and an empty board
+   column shows `None`. The layout is fixed by the template: do not add sections or restyle it, so
+   the `notes` blocks and `extra_sections` stay in the Markdown only. Every closed card shows only
+   a name and one line, and the detail goes inside it. The YAML stays the source: the page may fold
+   detail into cards but adds no claim the YAML lacks, and is rebuilt whenever the YAML changes.
 
 ## Rules
 
@@ -102,7 +115,10 @@ point at a glance, and the HTML page carries the same content as the Markdown.
 ## Output
 
 The decision comes first, so a reader who stops after section 1 still has the answer. The report
-fills `assets/competitor-report.template.md`, per `references/competitor-report-schema.md`.
+is `<slug>.yaml`, a copy of `assets/competitor-report.template.yaml` filled per the
+`competitor-report/v2` section of `references/competitor-report-schema.md`, and its `<slug>.md` is
+generated in the layout of `assets/competitor-report.template.md`. Never edit the `.md`: edit the
+YAML, which the hook or `artifact.py render` renders again.
 
 ## Stop conditions
 

@@ -7,6 +7,9 @@ description: >-
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
+compatibility: >-
+  Checking a competitor report needs uv (https://docs.astral.sh/uv/), which runs
+  scripts/artifact.py with pydantic. Without it each report is read unchecked and the reply says so.
 ---
 
 # Compare competitors
@@ -20,8 +23,18 @@ the Markdown.
 ## Procedure
 
 1. **Gather the inputs.** Read every per-competitor report in
-   `.agents_workspace/competitor-analysis/`. When a competitor the user named has no report yet,
-   invoke the Skill tool with skill="ceh-competitor-analysis:analyze-competitor" for it first. Do not compare from memory.
+   `.agents_workspace/competitor-analysis/`, per `references/competitor-report-schema.md`. A stem
+   with a `<slug>.yaml` is a `competitor-report/v2` report: check it first with
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <slug>.yaml`, then read it by
+   key. On exit 1, stop and report the errors, because a comparison built on a broken report
+   carries the error into every cell, unless the only error is a stale `.md`, when you run the same
+   command with `render` and go on. On exit 2 or 3, without uv, or when the call is denied, read
+   the YAML unchecked and say so in the reply. A `.md` with no `.yaml` beside it is a `v1` report
+   only when it has `schema: competitor-report/v1` or opens with a `# Competitor analysis:` title,
+   because most `v1` reports have no `schema:` line and the folder also holds `comparison.md`,
+   a `CLAUDE.md` and side-by-side notes. Skip any other `.md`. When a competitor the user named has
+   no report yet, invoke the Skill tool with skill="ceh-competitor-analysis:analyze-competitor"
+   for it first. Do not compare from memory.
 2. **Measure our side fresh.** Count our components with commands (`ls`, `find`, `wc -l`) rather
    than copying numbers from our own README, which drifts. Note the date.
 3. **Pick the dimensions.** Start from the fixed rows under Output. Add rows for any axis on which

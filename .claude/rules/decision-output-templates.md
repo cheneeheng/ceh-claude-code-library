@@ -30,7 +30,8 @@ strategy (`vision/v2`, `strategy/v2`), the business plan (`business-plan/v3`), t
 (`qa-report/v2`), the performance file (`perf-report/v2`), the security audit
 (`security-audit/v2`), the three usability audits (`first-run-audit/v2`, `interface-audit/v2`,
 `error-messages-audit/v2`), the fix record (`fix-record/v2`), the session handoff
-(`handoff/v2`), the workflow spec (`workflow-spec/v2`), and the run state (`run-state/v2`).
+(`handoff/v2`), the workflow spec (`workflow-spec/v2`), the run state (`run-state/v2`), and the
+competitor report (`competitor-report/v2`).
 
 Why: the format lives in one pair of files, and each saved file names its version. A YAML format
 adds the model, so every field of the file, body included, is checked rather than described.

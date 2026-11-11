@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: competitor-report-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from competitor-report-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The competitor report as a YAML format, competitor-report/v2
-status: ready
+status: built
 created: 2026-11-11
 ---
 
@@ -202,7 +202,19 @@ and reads it by key.
   `competitor-report/v2` file and block a bad one through the `ceh-competitor-analysis` render
   hook, print "uv is not installed" without uv, stay silent on a plan YAML, and have its guard
   deny an edit to a generated `.md`, prints "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, a scratchpad `acme.yaml` rendered (exit 0) with the five numbered headings,
+  `**Tally (4 components):** 1 covered, 1 partial, 1 gaps, 1 N/A.`, the fixed legend, `Covers`
+  after the two taken rows' reasons, `None found.` under section 3, `fields.missing` in the
+  Source row, a two-component `ours` with a note, `notes` under `## 1.` and `## Memory system`
+  after section 5; the ten bad copies each exited 1 naming their rule (`no take row covers`,
+  `names no Partial or Gap`, `needs ours`, `names no ceh-`, `takes no ours`,
+  `sorted by count`, `repeat`, `take.build.0.effort`, `how_it_works`, `tagline`); the real
+  `openclaw.md` (306 lines, with a section 6), converted to a scratchpad YAML, passed
+  `artifact.py check` and `render` (exit 0), its computed tally equal to the hand tally
+  (79 components: 5, 31, 22, 21); every `git grep -F` named in the Check matched; `python
+  tools/validate-plugins/validate.py` printed "OK: all plugin checks passed". Beyond Design, from the real reports: a table cell's bare `|` is escaped by the renderer, a
+  name holding a backtick renders in a double-backtick code span, and several size commands are
+  joined with `; `. See Open for the `evidence` of a converted `v1` row.
 
 ## Open
 
@@ -215,6 +227,9 @@ and reads it by key.
   which the skill's rules forbid.
 - How does a `covers` name match a coverage row?: Exactly, by the row's `component` text, which is why component names are unique. A looser
   match would let a typo pass the completeness check.
+- What `evidence` does a converted `v1` coverage row get, when none of the 10 real `v1` reports
+  records a path per row?: `evidence: not recorded in v1`, because `evidence` stays required for new reports, as step 6
+  demands, and a converted row may not gain a claim the `v1` report lacks. Found while building.
 
 ## Record
 
@@ -223,5 +238,9 @@ and reads it by key.
   sections kept out of the HTML page because its layout is fixed. Both owner questions went
   under Open on their recommended answers.
 - 2026-11-11 PR: #244 https://github.com/cheneeheng/ceh-claude-code-library/pull/244
+- 2026-11-11 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-11 Checked: 17 Built, 2 Extra, 0 Gap, 0 Deviation, 0 Failing. Extra: the renderer escapes a bare `|` in
+  table cells and fences a name holding a backtick in a double-backtick span
+  (`competitor-report-model.py:199`, `:209`), both needed to render the real `openclaw.md`.
 
 <!-- prettier-ignore-end -->

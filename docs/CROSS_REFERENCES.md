@@ -369,6 +369,11 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-workflow-runner/scripts/artifact.py`                                                                               | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-workflow-runner/scripts/artifact-render-hook.py`                                                                   | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-workflow-runner/scripts/generated-md-guard.py`                                                                     | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-competitor-analysis/skills/analyze-competitor/scripts/artifact.py`                                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-competitor-analysis/skills/compare-competitors/scripts/artifact.py`                                                | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-competitor-analysis/scripts/artifact.py`                                                                           | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-competitor-analysis/scripts/artifact-render-hook.py`                                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-competitor-analysis/scripts/generated-md-guard.py`                                                                 | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/scripts/artifact.py`                                            | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/audit-interface/scripts/artifact.py`                                                        | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
@@ -631,6 +636,21 @@ own copy of the model first. `validate.py` fails when a copy differs from the ca
 `interview-workflow-task` writes the spec, and `build-agentic-workflow` checks it with its own copy
 of the model, reads it by key, and writes conversation answers and the row 8 or 9 assumption into
 it. `validate.py` fails when a copy differs from the canonical file.
+
+## Competitor report format
+
+**Canonical:** whole files, `plugins/standalone/ceh-competitor-analysis/skills/analyze-competitor/references/competitor-report-schema.md`, `plugins/standalone/ceh-competitor-analysis/skills/analyze-competitor/references/competitor-report-model.py`, `plugins/standalone/ceh-competitor-analysis/skills/analyze-competitor/assets/competitor-report.template.md`, `plugins/standalone/ceh-competitor-analysis/skills/analyze-competitor/assets/competitor-report.template.yaml`
+
+| Copy                                                                                                           | Section    | Diverges |
+| -------------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-competitor-analysis/skills/compare-competitors/references/competitor-report-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-competitor-analysis/skills/compare-competitors/references/competitor-report-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-competitor-analysis/skills/compare-competitors/assets/competitor-report.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-competitor-analysis/skills/compare-competitors/assets/competitor-report.template.yaml` | whole file | none     |
+
+**Shared:** the `competitor-report/v1` layout and the `competitor-report/v2` YAML with its model.
+`analyze-competitor` writes the report, and `compare-competitors` checks each one with its own copy
+of the model and reads it by key. `validate.py` fails when a copy differs from the canonical file.
 
 ## Business-plan "No human to answer" clause
 
