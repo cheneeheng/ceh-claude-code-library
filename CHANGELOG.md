@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-11-11
 
+The run state gains a YAML format, `run-state/v2`: `run-agentic-workflow` writes
+`{run}/run-state.yaml` after every stage change, checked by a model, and `run-state.md` is rendered
+beside it in the `v1` layout, still ending with the `FLOW STATUS:` line. Unique stage ids,
+approvals that name a real stage, and a status that agrees with the stages are now checks. A
+resumed run checks the YAML first and ends as `failed - run state invalid` on a broken one, and a
+`v1` `run-state.md` is converted at the first write. `ceh-workflow-runner` gains the render hook
+and guard, and the builder's invocation guide adds `Bash(uv run --script:*)` for a resumable flow.
+Built from `product/plans/run-state-yaml.yaml`.
+
 The three usability skills that edit the target (`audit-error-messages`, `audit-interface`,
 `write-plain-language`) now leave their edits uncommitted unless asked, and report a defect outside
 their kind instead of fixing it. A headless test of `audit-error-messages` had branched, committed,
@@ -69,11 +78,23 @@ approvals that name a real stage, and a status that agrees with the stages becom
 | `ceh-build-from-plan`          | 1.2.7   |
 | `ceh-check-build-against-plan` | 1.1.6   |
 | `ceh-usability-audit`          | 1.2.2   |
+| `ceh-workflow-runner`          | 1.1.0   |
+| `ceh-workflow-builder`         | 1.4.1   |
+
+### Added
+
+- `ceh-workflow-runner`: the `run-state/v2` model, YAML template and `artifact.py` in
+  `run-agentic-workflow`, and the render hook and generated-Markdown guard at the plugin root.
 
 ### Changed
 
+- `run-agentic-workflow` writes and reads `run-state.yaml`, checks it before resuming, and
+  converts a `v1` `run-state.md`. Its `compatibility` names `python3` and uv.
+- `ceh-workflow-builder`: the `flow.yaml` contract copies carry the `run-state/v2` model and
+  template, and the invocation guide adds `Bash(uv run --script:*)` for a resumable flow.
 - `audit-error-messages`, `audit-interface` and `write-plain-language` make no branch, commit, push
   or pull request unless asked, and report other defects rather than fixing them.
+
 - `write-build-plan` and `review-build-plan` read no business plan, and the plan format marks
   `business_plan` as legacy in all six copies.
 - `model_vs_template.py` lets a template omit a model key marked deprecated.

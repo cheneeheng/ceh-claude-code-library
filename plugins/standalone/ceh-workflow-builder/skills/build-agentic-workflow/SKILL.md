@@ -234,7 +234,9 @@ the plugin must be installed, and never runs the stages by hand.
 **The invocation guide** gives the interactive and headless commands, derived from the config:
 
 - `--allowedTools` is the union of every stage's `tools`, `Workflow(<workflow>)` per saved workflow
-  stage, and a `Bash` rule per `script` stage, because headless nobody can approve a prompt.
+  stage, and a `Bash` rule per `script` stage, because headless nobody can approve a prompt. A
+  `resumable: true` flow adds `Bash(uv run --script:*)`, so the runner can check and render its
+  run state.
 - `--settings '{"enableWorkflows": true, "disableWorkflows": false}'` only when a `workflow` stage
   exists, noting that the `enableWorkflows` key is undocumented and may change.
 - PowerShell and Bash forms apart: PowerShell cuts a Bash-style `\"` at the first quote, so use a

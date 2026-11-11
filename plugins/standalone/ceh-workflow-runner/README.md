@@ -56,8 +56,9 @@ the state file is the record, `--resume` only keeps context.
 
 **Headless needs explicit permissions.** Nobody is there to prompt, so pass
 every tool a stage needs in `--allowedTools` (the builder derives the list into
-the flow's guide). Pass `--output-format json` and branch on the status line in
-`result`.
+the flow's guide), and for a resumable flow `Bash(uv run --script:*)`, which
+checks and renders the run state. Pass `--output-format json` and branch on the
+status line in `result`.
 
 **Saved dynamic workflows are optional.** The Workflow tool is off by default.
 Interactive: turn on Dynamic workflows in `/config`. Headless: pass `--settings
@@ -66,11 +67,26 @@ key is undocumented and may change) plus `--allowedTools 'Workflow(<name>)'`.
 Without the tool a workflow stage runs its declared fallback or fails; the
 runner never imitates it by hand. Workflow `.js` files need LF line endings.
 
+## Hooks
+
+Two hooks on `Edit|Write|MultiEdit`, both Python scripts that need `python3`
+on `PATH`:
+
+- `artifact-render-hook.py` (PostToolUse) checks a written `run-state.yaml`
+  against its model and renders `run-state.md` beside it. The check needs
+  `uv`; without it the agent is told once per session that the run state went
+  unchecked.
+- `generated-md-guard.py` (PreToolUse) denies a hand edit to the generated
+  Markdown, which the next render would overwrite.
+
+`CEH_ARTIFACT_CHECK=off` turns both off, and `CEH_DISABLED_HOOKS` turns off
+either by name.
+
 ## Environment variables
 
-| Variable                | Required | Default                       | Holds                                                                                                     |
-| ----------------------- | -------- | ----------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `$CEH_WORKFLOW_RUN_DIR` | no       | `.agents_workspace/workflow/` | a run's step artifacts and `run-state.md`, under `<run-dir>/<name>/<run-id>/`, expected to be git-ignored |
+| Variable                | Required | Default                       | Holds                                                                                                                                        |
+| ----------------------- | -------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `$CEH_WORKFLOW_RUN_DIR` | no       | `.agents_workspace/workflow/` | a run's step artifacts and `run-state.yaml` with its rendered `run-state.md`, under `<run-dir>/<name>/<run-id>/`, expected to be git-ignored |
 
 ## Not this plugin
 

@@ -16,7 +16,7 @@ Evidence for every runtime claim marked `Fn` is in [TEST_RESULTS.md](TEST_RESULT
 | Phase     | Who drives                                                        | Mode                           | Produces                                                                       |
 | --------- | ----------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------ |
 | **Build** | `interview-workflow-task`, `build-agentic-workflow`               | Interactive, or headless draft | Files committed to the target repo, or a draft plus questions in the build dir |
-| **Run**   | `ceh-workflow-runner:run-agentic-workflow`, following `flow.yaml` | Interactive or headless        | Run artifacts and `run-state.md` under the git-ignored run directory           |
+| **Run**   | `ceh-workflow-runner:run-agentic-workflow`, following `flow.yaml` | Interactive or headless        | Run artifacts and `run-state.yaml` under the git-ignored run directory         |
 
 Building asks a person by construction: the interview draws out intent nobody wrote down, the
 intake gate refuses to infer missing answers, and nothing reaches the target repo until the user
@@ -43,7 +43,7 @@ flowchart LR
 
     subgraph run["Run: interactive or headless"]
         runner["run-agentic-workflow"]
-        rundir[("run-state.md + artifacts<br/>in the run dir, git-ignored")]
+        rundir[("run-state.yaml + artifacts<br/>in the run dir, git-ignored")]
     end
 
     schema[("references/flow-config-schema.md<br/>the flow.yaml contract")]
@@ -128,7 +128,7 @@ flowchart TD
     inputs -->|"missing, headless"| prefail
     inputs --> pre{"3. Preflight: Workflow tool<br/>and plugin skills present?"}
     pre -->|"absent, fallback=fail"| prefail
-    pre -->|"present, or fallback<br/>agent / inline"| state["4. Create or resume run dir<br/>and run-state.md"]
+    pre -->|"present, or fallback<br/>agent / inline"| state["4. Create or resume run dir<br/>and run-state.yaml, checked"]
     state --> next{"5. Next stage<br/>not done?"}
     next -->|none left| done(["FLOW STATUS: done"])
     next -->|yes| reads{"reads files exist?"}
@@ -147,15 +147,16 @@ flowchart TD
     run --> gate{"Gate green?"}
     gate -->|"red, stop or bound spent"| failed
     gate -->|"red, retries left"| world
-    gate -->|yes| mark["Record done and gate<br/>evidence in run-state.md"] --> next
+    gate -->|yes| mark["Record done and gate<br/>evidence in run-state.yaml"] --> next
 ```
 
 The numbers match the steps in the runner's procedure. A retry goes back through the world check,
 because the runner re-runs `world_check` before every attempt. A stage pre-approved with `approve=`
 takes the `no` branch at the approval check, so `preapproved-only` without it stops.
 
-The final `FLOW STATUS:` line is written to `run-state.md` too, so a headless caller can branch on
-either the reply or the file. Failures before any stage runs use `-` as the stage id. A declined
+The final `FLOW STATUS:` line is written to `run-state.yaml` too, as its `status` key, and the
+render hook makes it the last line of `run-state.md` beside it. A headless caller branches on the
+reply, which is current even when the render did not run. Failures before any stage runs use `-` as the stage id. A declined
 approval ends as `failed <stage> declined` with the stage left `pending`, so a resumed run asks again.
 `on_fail: retry` is not allowed on a stage with an `approval` or a `fan_out`, so a retry can never
 fire an irreversible step or a whole fan-out twice.
@@ -188,7 +189,7 @@ answer. Both continuation routes were tested (F11):
 sequenceDiagram
     participant C as Caller (shell, CI, scheduler)
     participant S1 as claude -p session
-    participant R as run-state.md
+    participant R as run-state.yaml
     participant H as Human
 
     C->>S1: /name-flow mode=headless ...
@@ -201,29 +202,30 @@ sequenceDiagram
         Note over S1: same session_id (F14), keeps context
     else session gone
         C->>S1: claude -p '/name-flow mode=headless resume=latest approve=publish'
-        Note over S1: fresh session, state from run-state.md only
+        Note over S1: fresh session, state from run-state.yaml only
     end
     S1->>R: record approval (stage, time, source), run stage k+1 ...
     S1-->>C: "FLOW STATUS: done" or the next awaiting-approval
 ```
 
-`run-state.md` is the record; `--resume` is a convenience that keeps the conversation context.
+`run-state.yaml` is the record; `--resume` is a convenience that keeps the conversation context.
 Every approval is written to the state file with its source, so a resumed run never relies on prompt
 text alone. `approval-<stage>.md` holds exactly what the approval's `show` names, so the person
 approving headless sees what an interactive user would have been shown. On resume the inputs come
-from `run-state.md`; re-passing a different value fails the run (`inputs changed on resume`).
+from `run-state.yaml`; re-passing a different value fails the run (`inputs changed on resume`).
 
 Example headless invocation (pwsh; Bash is the same apart from line continuation):
 
 ```powershell
 claude -p '/prepublish-flow mode=headless repo=.' `
   --settings '{"enableWorkflows": true, "disableWorkflows": false}' `
-  --allowedTools 'Workflow(prepublish-audit)' 'Read' 'Edit' 'Write' 'Bash(uv run pytest:*)' `
+  --allowedTools 'Workflow(prepublish-audit)' 'Read' 'Edit' 'Write' 'Bash(uv run pytest:*)' 'Bash(uv run --script:*)' `
   --output-format json
 ```
 
 The builder writes this command into the flow's `README.md`, with `--allowedTools` collected from
-each stage's `tools`, and includes `--settings` only when a `workflow` stage exists. A flow with a
+each stage's `tools` plus `Bash(uv run --script:*)` for a resumable flow's run-state check, and
+includes `--settings` only when a `workflow` stage exists. A flow with a
 `workflow` stage requires Claude Code v2.1.269 or later. That floor comes from the documented
 feature versions. The tests ran on v2.1.288, so the undocumented `enableWorkflows` behaviour (F8) is
 verified only there.

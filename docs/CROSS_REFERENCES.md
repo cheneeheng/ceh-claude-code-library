@@ -365,6 +365,10 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-workflow-builder/scripts/artifact.py`                                                                              | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-workflow-builder/scripts/artifact-render-hook.py`                                                                  | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-workflow-builder/scripts/generated-md-guard.py`                                                                    | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-workflow-runner/scripts/artifact.py`                                                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-workflow-runner/scripts/artifact-render-hook.py`                                                                   | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-workflow-runner/scripts/generated-md-guard.py`                                                                     | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/scripts/artifact.py`                                            | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/audit-interface/scripts/artifact.py`                                                        | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
@@ -694,7 +698,7 @@ fails. The doc carries the two stops as reading material.
 
 ## flow.yaml schema
 
-**Canonical:** whole files, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/flow-config-schema.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/run-state-schema.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/approval-schema.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/assets/run-state.template.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/assets/approval.template.md`
+**Canonical:** whole files, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/flow-config-schema.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/run-state-schema.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/approval-schema.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/assets/run-state.template.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/assets/approval.template.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/run-state-model.py`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/assets/run-state.template.yaml`
 
 | Copy                                                                                                  | Section    | Diverges |
 | ----------------------------------------------------------------------------------------------------- | ---------- | -------- |
@@ -703,9 +707,12 @@ fails. The doc carries the two stops as reading material.
 | `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/references/approval-schema.md`    | whole file | none     |
 | `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/assets/run-state.template.md`     | whole file | none     |
 | `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/assets/approval.template.md`      | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/references/run-state-model.py`    | whole file | none     |
+| `plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/assets/run-state.template.yaml`   | whole file | none     |
 
-**Shared:** the entire `flow.yaml` contract: keys, stage kinds, validation rules, the `run-state.md`
-layout (`run-state-schema.md`) and its template, the approval file (`approval-schema.md`) and its
+**Shared:** the entire `flow.yaml` contract: keys, stage kinds, validation rules, the run state
+(`run-state-schema.md`): its `v1` layout and template, and `run-state/v2` with its model and YAML
+template, the approval file (`approval-schema.md`) and its
 template, and the `FLOW STATUS:` line. The canonical schemas sit beside `flow-config-schema.md` in
 `build-agentic-workflow/references/`, and the canonical templates in its `assets/`.
 The `copies` check fails when a template or schema differs from its copy. The builder writes and checks a config against it, the runner

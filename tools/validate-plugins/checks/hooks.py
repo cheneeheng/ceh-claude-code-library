@@ -564,6 +564,23 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{wb}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{wb}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
+    # The run state: run-agentic-workflow writes it after every stage change and reads it to resume.
+    good_run = (
+        'schema: run-state/v2\nflow: prepublish\nrun_id: "20261003-0930"\n'
+        "config: .claude/skills/prepublish-flow/flow.yaml\nmode: headless\n"
+        "inputs: [{name: repo, value: '.'}]\nstages:\n"
+        "  - {id: audit, state: done, artifacts: [findings.md], note: 'fallback: agent'}\n"
+        "  - {id: publish, state: awaiting-approval, artifacts: []}\n"
+        "approvals: []\nstatus: awaiting-approval publish\n"
+    )
+    wr = "ceh-workflow-runner"
+    run_state_fixtures = [
+        *report_fixtures(wr, "run-state", good_run, good_run.replace("status: awaiting-approval publish", "status: done"), "status: done while a stage is not done", "FLOW STATUS: awaiting-approval publish", "run-state"),
+        {"script": f"{wr}/artifact-render-hook.py", "stdin": write_at(tmp / "report-run-state" / "bad" / "run-state.yaml"), "env": no_uv, "out": "uv is not installed"},
+        # ceh-workflow-runner holds no plan model, so a plan YAML is not its to check.
+        {"script": f"{wr}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
+        {"script": f"{wr}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+    ]  # fmt: skip
     evidence_fixtures = [
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
@@ -592,6 +609,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *fix_record_fixtures,
         *handoff_fixtures,
         *workflow_spec_fixtures,
+        *run_state_fixtures,
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},

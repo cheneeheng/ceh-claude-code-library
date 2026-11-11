@@ -31,14 +31,14 @@ repo root.
 
 ## Top-level keys
 
-| Key           | Required | Meaning                                                                                                           |
-| ------------- | -------- | ----------------------------------------------------------------------------------------------------------------- |
-| `version`     | yes      | The integer `1`. Any other value fails.                                                                           |
-| `name`        | yes      | Kebab-case flow name, the `<name>` in `<name>-flow` and in the run path. Not one of the reserved launch args.     |
-| `description` | yes      | One line: what the flow does.                                                                                     |
-| `resumable`   | no       | `true` writes `run-state.md` and allows resume (spec question 7). Default `false`: one sitting, always a new run. |
-| `inputs`      | no       | List of launch arguments the flow accepts, below.                                                                 |
-| `stages`      | yes      | Non-empty list, run in order.                                                                                     |
+| Key           | Required | Meaning                                                                                                             |
+| ------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| `version`     | yes      | The integer `1`. Any other value fails.                                                                             |
+| `name`        | yes      | Kebab-case flow name, the `<name>` in `<name>-flow` and in the run path. Not one of the reserved launch args.       |
+| `description` | yes      | One line: what the flow does.                                                                                       |
+| `resumable`   | no       | `true` writes `run-state.yaml` and allows resume (spec question 7). Default `false`: one sitting, always a new run. |
+| `inputs`      | no       | List of launch arguments the flow accepts, below.                                                                   |
+| `stages`      | yes      | Non-empty list, run in order.                                                                                       |
 
 ### `inputs`
 
@@ -179,17 +179,21 @@ The builder and the runner check these, in this order. Each failure names the ru
    skill it names invokes it. Nesting is capped at one level.
 10. No value is a literal secret.
 
-## `run-state.md`
+## `run-state.yaml`
 
-Written to `{run}/run-state.md` when `resumable: true`, updated after every stage change, in the
-format of `run-state-schema.md` beside this file. When a stage reaches `awaiting-approval`, the
+Written to `{run}/run-state.yaml` when `resumable: true`, updated after every stage change, in the
+`run-state/v2` format of `run-state-schema.md` beside this file, with `{run}/run-state.md`
+rendered beside it. Only the runner writes it, and it reads back only the YAML, because without uv
+or the render hook the `.md` can lag. When a stage reaches `awaiting-approval`, the
 runner also writes what `show` asks for to `{run}/approval-<stage-id>.md`, in the format of
 `approval-schema.md` beside this file, so the person approving sees the same thing the run would
 have asked about.
 
 ## The `FLOW STATUS` line
 
-The run's last line, in the reply and in `run-state.md`. A headless caller branches on it.
+The run's last line, in the reply and, as the `status` key of `run-state.yaml`, in the rendered
+`run-state.md`. A headless caller branches on the reply's line. The file's copy is current only
+when the render ran, and the reply says so when it did not.
 
 ```
 FLOW STATUS: done

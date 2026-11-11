@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: run-state-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from run-state-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The run state as a YAML format, run-state/v2
-status: ready
+status: built
 created: 2026-11-11
 ---
 
@@ -65,7 +65,8 @@ run checks the YAML and reads its stages and approvals by key.
 - **Keys** Each required unless marked optional, and no other key:
 
   - `schema`: `run-state/v2`. `flow`: the flow's name, a kebab-case slug. `run_id`: the start
-    time, `YYYYMMDD-HHMM`, quoted. `config`: the path to its `flow.yaml`. `mode`: `interactive`
+    time, `YYYYMMDD-HHMM`, with the `-2`, `-3` suffix `flow-config-schema.md` gives a clash,
+    quoted. `config`: the path to its `flow.yaml`. `mode`: `interactive`
     or `headless`.
   - `inputs`: a list, `[]` when none, each `name` and `value`, rendered `name=value` joined by
     `, `, or `-` when empty.
@@ -185,7 +186,16 @@ run checks the YAML and reads its stages and approvals by key.
   render a good `run-state/v2` file and block a bad one through the `ceh-workflow-runner` render
   hook, print "uv is not installed" without uv, stay silent on a plan YAML, and have its guard
   deny an edit to a generated `.md`, prints "OK: all plugin checks passed".
-- **Status:** todo
+- **Status:** done, A scratchpad fixture script ran all 13 cases through the runner's `artifact.py`: the worked
+  example renders to the `v1` example line for line and ends with
+  `FLOW STATUS: awaiting-approval publish`, no `status` renders no status line, `approvals: []`
+  renders `- none`, the nine bad files exit 1 naming the key or rule, and
+  `failed - inputs changed on resume` exits 0. Every `git grep` string is found, `run-state.md`
+  in the runner skill appears only for the `v1` fallback and the rendered file, and
+  `validate.py` prints "OK: all plugin checks passed" with the new `ceh-workflow-runner` hook
+  fixtures. The model sits in `references/` and the YAML template in `assets/`, beside
+  `run-state.template.md`, as every other format does. Design "Keys" now allows the run id's
+  clash suffix, which `flow-config-schema.md` already gives `{run_id}`.
 
 ## Open
 
@@ -202,5 +212,12 @@ run checks the YAML and reads its stages and approvals by key.
   the runner trusts only the YAML and the reply, so it needs no `rm` and no hook warning. The
   owner question went under Open on its recommended answer.
 - 2026-11-11 PR: #243 https://github.com/cheneeheng/ceh-claude-code-library/pull/243
+- 2026-11-11 Design changed: was "`run_id`: the start time, `YYYYMMDD-HHMM`, quoted.", now allows the `-2`, `-3` clash
+  suffix, because `flow-config-schema.md` gives `{run_id}` that suffix and a model without it
+  would reject a real run.
+- 2026-11-11 Built Phase 1: The format, the runner's hooks, the writer and the reader
+- 2026-11-11 Checked: Built 18, Deviation 1. Deviation: Design "Models and copies" puts `run-state.template.yaml`
+  beside `run-state-schema.md`, and it sits in `assets/` beside `run-state.template.md`, where
+  `checks/artifact_models.py` requires a model's `../assets/<name>.template.yaml`.
 
 <!-- prettier-ignore-end -->

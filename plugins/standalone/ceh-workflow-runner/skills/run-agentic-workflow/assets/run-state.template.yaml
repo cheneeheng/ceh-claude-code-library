@@ -1,0 +1,20 @@
+schema: run-state/v2
+flow: <flow>
+run_id: "<YYYYMMDD-HHMM>"
+config: <flow.yaml path>
+mode: <interactive | headless>
+inputs:
+  - name: <name>
+    value: "<value>"
+stages:
+  - id: <id>
+    state: <pending | done | awaiting-approval | failed>
+    artifacts:
+      - <artifact path>
+    note: <note>
+approvals:
+  - stage: <id>
+    decision: <approved | rejected>
+    source: <interactive | resume-prompt | approve=<id>>
+    at: "<YYYY-MM-DDTHH:MM>"
+status: <done | awaiting-approval <stage-id> | failed <stage-id or -> <reason>>
