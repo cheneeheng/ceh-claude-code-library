@@ -82,6 +82,13 @@ which rows you changed and which you left. A row left alone with a stated reason
 wording is deliberate — auth") is a result; a row that silently vanished between the table and the
 diff is not.
 
+**Leave your edits in the working tree.** Make no branch, commit, push, or pull request unless the
+request asks for one, because the user reviews the diff before anything lands.
+
+**Report other defects, do not fix them.** A security hole or a logic bug found on the way is
+reported as a finding, even on a line you are already rewriting, because the user expects the
+diff to hold only this skill's edits.
+
 ## Rules
 
 ### The three-part rule

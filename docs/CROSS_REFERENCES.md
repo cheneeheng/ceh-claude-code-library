@@ -974,6 +974,19 @@ check `BUSINESS_PLAN.yaml` before reading it.
 **Shared:** how a run folder is opened, kept and closed, its two formats, and the two scripts that
 fill Token usage and Ledger.
 
+## Usability edit boundary
+
+**Canonical:** `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/SKILL.md` — § 5. Apply the rewrites, last two paragraphs
+
+| Copy                                                                          | Section                                   | Diverges |
+| ----------------------------------------------------------------------------- | ----------------------------------------- | -------- |
+| `plugins/standalone/ceh-usability-audit/skills/audit-interface/SKILL.md`      | § 7. Report and loop, last two paragraphs | none     |
+| `plugins/standalone/ceh-usability-audit/skills/write-plain-language/SKILL.md` | § Output, last two paragraphs             | none     |
+
+**Shared:** the two paragraphs "Leave your edits in the working tree" (no branch, commit, push, or
+pull request unless asked) and "Report other defects, do not fix them", word for word, in each
+skill that edits the target.
+
 ## Update protocol
 
 When changing a shared block:
