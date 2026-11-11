@@ -11,6 +11,13 @@ before this repo live in
 
 ## 2026-11-12
 
+Six build plans carry out the plugin audit of 2026-11-11, which takes the library from 27 plugins
+to 21. `retired-names-check-and-archives` adds a `validate.py` check for retired plugin names, then
+archives `ceh-orchestration-lab` and `ceh-git-datastore`. Four plans each merge two plugins:
+`merge-session-learning`, `merge-blog-and-seo`, `merge-build-plan` and `merge-product-direction`.
+`plugin-audit-findings` fixes the audit's open findings in six phases, after the merges, so each
+fix lands once at its final path. The plans change no plugin, so no version moves.
+
 The repeat-mistake report gains a YAML format, `repeat-mistake/v2`: `prevent-repeat-mistake` saves
 `<date>-repeat-mistake.yaml`, checked by a model, in the same two folders as before, and the `.md`
 is rendered beside it in the `v1` layout. Each fix has an id, a fix awaiting approval must carry its
@@ -67,6 +74,8 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 ### Added
 
+- Add six build plans in `product/plans/` for the 2026-11-11 plugin audit: the retired-names check
+  with two archives, four plugin merges, and the audit's findings.
 - Add `repeat-mistake/v2`, the repeat-mistake report as YAML with its model, YAML template and
   `artifact.py`, in `prevent-repeat-mistake`.
 

@@ -1,0 +1,488 @@
+schema: plan/v2
+title: Fix the findings of the 2026-11-11 plugin audit
+status: ready
+created: 2026-11-12
+goal: |
+  The plugin audit of 2026-11-11 read all 98 skills, 13 agents and 25 scripts and left findings in
+  most plugins: wording that tells an agent to call a tool the core plugin denies, guards that
+  stop the repo's own agents, examples in the stack plugins that fail on copy, and skills that
+  contradict a decision the user has since taken. This plan fixes every finding that is still
+  open after the decisions of 2026-11-11, grouped by how the fix is proven, for the agents that
+  run these skills with nobody watching. The flow that matters most: an agent reaches a stop
+  condition in `agent-coding-contract`, is told to ask the user with no tool named, and ends its
+  turn on a decision block with no denied call first.
+scope:
+  in:
+    - |
+      No skill, agent or reference file tells an agent to call `AskUserQuestion`. Each says to ask
+      the user, and `run-agentic-workflow` says what an interactive ask does when it cannot be
+      answered.
+    - |
+      `agent-coding-contract` asks for the task tools only when they are available, and no skill
+      dispatches a reviewer "on the most capable model".
+    - |
+      Every skill names a YAML handoff file by its `.yaml` name where the YAML is the source, and
+      the `.md` name only for the rendered file or the fallback.
+    - |
+      Meridian is the default theme in every plugin that picks one without asking.
+    - |
+      A report saved under `.agents_workspace/` with only a date in its name is named
+      `<YYYYMMDD-HHMM>-<session-id-prefix>`, so a second run on the same day keeps the first.
+    - |
+      A guard that sends work to an agent lets that agent through: `bulk-reader` may read whole
+      files, and the read-only agents no longer receive the coding contract.
+    - |
+      `usage-limit-watch.py` warns again in the window after a reset, the commit rule catches a
+      commit on a later line of a multi-line command, `branch-guard.py` allows an edit to a
+      git-ignored file, and every guard's denial says the user can turn it off.
+    - |
+      The stack plugins' examples and runner scripts work as written: hand-written Alembic
+      migrations, the middleware order, the flat ESLint config, one owner for the Docker stack, a
+      shared transaction in the integration fixture, `bun` in every web script, and a stop before
+      `uv publish`.
+    - |
+      `implement-from-plan` sets a phase `done` on a check the user reports having run, with the
+      evidence "reported by the user, not run by the agent", and lists such phases apart.
+    - |
+      `record-project-decisions` writes user-wide rules to a configurable path that defaults to
+      `~/.claude/rules/`, the `release` hotfix path stops after publishing and reports what a
+      person deploys, and the three usability skills create a branch when a guard requires one.
+    - |
+      The remaining low findings of each plugin are fixed as listed under "Per-plugin polish".
+  out:
+    - item: Every "shorten the description toward 200 characters" finding.
+      reason: |
+        Withdrawn on 2026-11-11: the listing budget is raised in the planned setup script, and
+        the limit stays at 300.
+    - item: |
+        A line about `skillListingBudgetFraction` in `docs/GETTING_STARTED.md`.
+      reason: |
+        It belongs to the setup script's own plan.
+    - item: |
+        The one-phrase change to `docs/VISION.md`, dropping "or a blog interview".
+      reason: |
+        The vision asks for its own PR, and one phrase needs no plan. It is done directly, apart
+        from this plan.
+    - item: |
+        `pull-request` deleting the remote branch, and trimming `pull-request`.
+      reason: |
+        Decided on 2026-11-11: the skill stays as it is.
+    - item: New eval cases, and running any eval.
+      reason: |
+        Evals run only when asked (`decision-evaluation.md`). The one case edited is
+        `user-says-passed`, because the skill change makes it wrong.
+    - item: |
+        Narrowing the `SessionStart` load of the coding contract to repos that hold code.
+      reason: |
+        The audit asks for a measured miss first.
+    - item: |
+        Renaming `BULK_READER_MIN_LINES` and `BULK_READER_ALLOW` to carry the `CEH_` prefix, and
+        the commit rule firing for a commit in another repository.
+      reason: |
+        Renaming a variable users have set breaks their setup, and the audit accepts the second
+        as a rare case.
+    - item: |
+        The names of `product/retros/` files and of the repeat-mistake report.
+      reason: |
+        The user chose the dated name for both on 2026-11-11, and hooks and Records match it.
+    - item: |
+        Em dashes, the long-skill trims the audit withdrew, moving rungs 5, 7 and 8 of
+        `design-test-cases` to `references/`, `make-ui-accessible`, the every-session README,
+        the headless section of `build-agentic-workflow`, the temp-folder marker files the hook
+        scripts leave, and the spot-check of `ceh-usability-audit`'s conditional handoffs.
+      reason: |
+        The audit marks each as cosmetic, optional, or to do when the skill is next edited.
+    - item: Findings of the two archived plugins, and findings the merges resolve.
+      reason: |
+        The first wait until a plugin is re-enabled, and the second are closed by the four merge
+        plans.
+design:
+  - topic: Depends on
+    decision: |
+      This plan is built after `product/plans/retired-names-check-and-archives.yaml` and the four
+      merge plans (`merge-session-learning`, `merge-blog-and-seo`, `merge-build-plan`,
+      `merge-product-direction`), so each finding is fixed once, at its final path, with one
+      version bump. It uses the names after the merges: `ceh-build-plan`, `ceh-product-direction`,
+      `ceh-blog-and-seo`, `ceh-session-learning`. Line numbers are the audit's, read at commit
+      `6941599`. They have moved, so each edit is found by the quoted text.
+  - topic: Source of the findings
+    decision: |
+      The audit lives in the user's workspace, at
+      `.agents_workspace/plugin-audit/20261111-140832_6dde4319-0e14-4ae2-b964-0626ea7761e8/`:
+      `SUMMARY.md` and one report per plugin. It is not committed, so this plan restates every
+      finding it fixes. A builder without that folder builds from this file alone.
+  - topic: What every phase carries
+    decision: |
+      One PR per phase. Each PR bumps every plugin it touches by PATCH in `plugin.json` and
+      `marketplace.json` (MINOR is not needed: no skill, agent or dependency is added or
+      removed), adds its `CHANGELOG.md` entry and `docs/PLUGIN_VERSIONS.md` rows, and keeps
+      `python tools/validate-plugins/validate.py` green. Before editing a skill, the builder
+      checks `docs/CROSS_REFERENCES.md`: a registered block is edited in its canonical file
+      first and mirrored to every copy. A script that exists as byte-identical copies is edited
+      once and copied to every plugin that carries it, and the `copies` check proves they match.
+  - topic: "Phase 1 rule: ask the user, with no tool name"
+    decision: |
+      The wording is "ask the user", or "stop and ask the user" for a stop condition, as
+      `ask-the-author.md` in the blog skills already has it. The files:
+
+      - `ceh-coding-conduct` `agent-coding-contract`: the Decide rule, the Authority hierarchy,
+        and the Stop conditions (audit lines 80, 86, 140), and the Multi-agent line, which
+        becomes "a sub-agent cannot ask the user".
+      - `ceh-every-session` `record-project-decisions` (95), `stress-test-plan` (32),
+        `whats-next` (40).
+      - `ceh-ui-design` `design-ui` (371).
+      - `ceh-workflow-builder` `interview-workflow-task` (97).
+      - `ceh-workflow-runner` `run-agentic-workflow` (50, 148), which also gains one sentence for
+        its three interactive asks (a missing input, an approval, resume or new): an ask that
+        cannot be answered in the turn takes the headless path the skill already has, marking
+        the stage `awaiting-approval`, ending the turn, and accepting `APPROVED <stage-id>` on
+        resume.
+
+      A line that only states a fact about the tool stays: that it is stripped from every
+      subagent (`build-agentic-workflow`, `run-agentic-workflow` line 140) or must not be used
+      (`ask-the-author.md`).
+  - topic: "Phase 1 rules: task tools and the reviewer's model"
+    decision: |
+      `agent-coding-contract` (53) reads "when the task tools are available, track every subtask
+      with them". `review-build-plan` (42), `check-build-against-plan` (61) and `code-review`
+      (85) say "the session's own model" where they say "the most capable model", the wording
+      `write-research-note` uses.
+  - topic: "Phase 1 rule: the YAML name where the YAML is the source"
+    decision: |
+      Name the `.yaml` where a skill reads or writes the source, and the `.md` only as the
+      rendered file or the fallback when no YAML exists. The files: `docs/STRATEGY.md` (the two
+      paragraphs under the handoff table, which name `product/VISION.md`, `product/STRATEGY.md`,
+      `BUSINESS_PLAN.md` and `product/EVIDENCE.md`), `draft-post` (68 to 69) and
+      `write-project-listing-text` (26 to 27), which share one passage and change together,
+      `write-evidence-report`, `whats-next` step 1, and the first paragraph of the five business
+      plan specialists `plan-go-to-market`, `run-premortem`, `set-operating-plan`,
+      `sharpen-strategy` and `stress-test-unit-economics`.
+  - topic: "Phase 1 rule: Meridian everywhere"
+    decision: |
+      `design-ui` already takes Meridian when nobody chooses. Every line that makes Tidewater the
+      default says Meridian: in `ceh-ag-ui`, `build-ag-ui` (50, and its step 2), the README, the
+      `plugin.json` description, and the canvas template's README and `app.css` comment, and in
+      `ceh-competitor-analysis`, `analyze-competitor` (75), `compare-competitors` (55) and the
+      README. Both skills install their theme through `design-ui`. If the builder finds a
+      Tidewater `brand.css` bundled in either plugin, it is replaced by a copy of the Meridian
+      file from `design-ui`, registered in `docs/CROSS_REFERENCES.md`. Both themes share one
+      token and class contract, so no markup changes. Tidewater stays a theme the user can choose. A report already rendered keeps its
+      look until it is rebuilt.
+  - topic: "Phase 2: one name form for saved reports"
+    decision: |
+      The form is `<YYYYMMDD-HHMM>-<session-id-prefix>`, taken word for word from
+      `ceh-every-session:hand-off-session`, including how it gets the session id prefix. It
+      replaces the date part, where it stands, in the name of each report a skill saves under
+      `.agents_workspace/` with only a date:
+
+      | Skill                  | Saved today as                                   |
+      | ---------------------- | ------------------------------------------------ |
+      | `review-build-plan`    | `product/plan-reviews/<slug>-<YYYY-MM-DD>.md`    |
+      | `review-business-plan` | `product/business-plan-reviews/<YYYY-MM-DD>.md`  |
+      | `refactor-repo`        | `product/refactor/<YYYY-MM-DD>.md`               |
+      | `stress-test-plan`     | `product/stress-tests/<YYYY-MM-DD>-<topic>.md`   |
+      | `code-review`          | `product/code-reviews/<branch>-<YYYY-MM-DD>.md`  |
+      | `audit-test-suite`     | `product/test-audits/<YYYY-MM-DD>.md`            |
+      | `write-research-note`  | `research/<YYYYMMDD>-<topic>.md`                 |
+      | `write-questionnaire`  | `questionnaires/<YYYYMMDD>-<topic>.md`           |
+
+      Each changes in the skill body and in its schema file together, and in any other file
+      that spells the path. Names that already carry the time (security audits, QA reports,
+      handoffs) stay, and the QA report path, which `write-evidence-report` spells
+      `qa/<timestamp>/`, gets `explore-app-for-bugs`'s spelling, `qa/<YYYYMMDD-HHMM>/`. No hook
+      script and no validator check matches any of these eight names today, so no fixture
+      changes. A blog draft's name is left alone, because a draft is content the user ships,
+      not a report. Files already saved are not renamed.
+  - topic: "Phase 3: a guard lets through the agent it sends work to"
+    decision: |
+      Hooks fire for tool calls inside a subagent, and the payload then carries `agent_type`.
+
+      - `ceh-every-session/scripts/bulk-read-guard.py` returns early, allowing the read, when
+        `agent_type` ends in `bulk-reader`.
+      - `ceh-coding-conduct/hooks/hooks.json`: both `SubagentStart` matchers (the contract
+        loader and the less-code reminder) exclude the read-only agents, as
+        `^(?!(Explore|Plan|.*(bulk-reader|newcomer-simulator|competitor-analyst|transcript-analyst|-reviewer))$)`.
+      - `ceh-testing/scripts/skill-started-guard.py` and the six tester agents: see Open. The
+        edit, if the dispatch shows a denial, passes a Write or Edit of a test file when
+        `agent_type` names one of the six testers.
+  - topic: "Phase 3: the other hook fixes"
+    decision: |
+      - `usage-limit-watch.py`: when the reading is below the threshold, delete the state file
+        that holds the last percentage it fired at (audit line 157), so the next window warns
+        again.
+      - `ceh-git-workflow/scripts/skill-started-guard.py`: the commit rule's separators (audit
+        line 25) include a newline, so `git add -A`, a newline, then the commit is denied like
+        the same two joined by `&&`.
+      - `branch-guard.py`: one `git check-ignore -q` on the edited path just before the denial,
+        and an ignored path is allowed.
+      - `artifact-render-hook.py` (every copy): pass the session id where it passes an empty
+        one (audit line 117), so "the hook failed" is said once per session.
+      - `bulk-read-bash-guard.py`: `BULK_READER_ALLOW` splits on `os.pathsep`, so a Windows
+        pattern with a drive letter survives.
+      - Denial text: `generated-md-guard.py` (every copy), `build-record-guard.py` and both
+        `skill-started-guard.py` files say "The user can turn this guard off with
+        `CEH_...=off`", the wording `branch-guard.py` uses, in place of "`CEH_...=off` turns
+        this guard off".
+
+      Every change gets a fixture in `tools/validate-plugins/checks/hooks.py`, written first and
+      seen failing against the script as it is.
+  - topic: "Phase 4: ceh-python-service"
+    decision: |
+      Skills:
+
+      - `write-postgresql-code`: migrations are hand-written with `alembic revision -m`. The
+        `--autogenerate` command (191) and "review every autogenerated file" (208) go. The sync
+        driver stays, since Alembic runs migrations with it.
+      - `write-fastapi-endpoints`: the middleware passage (170) says "Add them in reverse of this
+        list, so correlation ID is added last and runs outermost". The log-level table and the
+        header table go, about 20 lines.
+      - `configure-python-service-env`: the naming table and the three-group import example go,
+        about 25 lines, as the library copy already dropped them. Its `pyproject.toml` block
+        registers the markers `integration`, `system` and `e2e` and lists `pytest-timeout`.
+      - `paths` is added to a skill only where its description's trigger is a file pattern and
+        nothing else. Otherwise "Auto-load when" becomes "Trigger on".
+
+      Agents and scripts:
+
+      - One owner for the Docker stack: `run-system-tests.sh` starts and tears it down, and
+        `pytest-system-tester` no longer teaches the `autouse` session fixture (59 to 67), so
+        `--no-docker` leaves the user's stack up.
+      - `pytest-integration-tester` (44 to 55): its example shows `async_client` overriding the
+        app's connection dependency with `db_conn` through `app.dependency_overrides`, so the
+        request and the assertion share one transaction.
+      - `run-integration-tests.sh` (31) prints the host and database name only.
+      - `run-system-tests.sh` waits with `docker compose up -d --wait` and sets its cleanup trap
+        before the start.
+      - `pytest-unit-tester` (27) offers `uv sync` only.
+      - `python-service-reviewer` sets `model: inherit` and caps its written findings at fifteen
+        and lists the rest, the rule `ceh-web-frontend`'s reviewer has.
+  - topic: "Phase 4: ceh-python-library"
+    decision: |
+      - `publish-python-library`: a `## Stop conditions` section stops after build and check,
+        before `uv publish` to TestPyPI or PyPI, unless a human authorized publishing ahead of
+        time, as `ceh-git-workflow:release` has it. It gains a `## Output` section.
+      - `configure-python-library-env` (78) and `write-pytest-library-tests`: `pytest-asyncio`
+        and `asyncio_mode` are added only when the library has async code.
+      - Both skills that say "Auto-load when" get `paths` or "Trigger on", by the rule above.
+  - topic: "Phase 4: ceh-web-frontend"
+    decision: |
+      Skills:
+
+      - `configure-bun-vite-env` (143 to 149): the flat `eslint.config.js` example uses the
+        `typescript-eslint` package and `tseslint.configs.recommendedTypeChecked`, checked
+        against the current typescript-eslint docs. It gets `paths` for the config files it
+        names.
+      - `visualize-graph-cytoscape`: `bun add cytoscape`, and one line at the minimal skeleton
+        pointing to rule 3 and `references/theming.md` for colours.
+
+      Agents and scripts:
+
+      - Every runner script uses `bun` and `bunx` where it uses `node -e` and `npx`, and the
+        agents give one install command, `bun install`.
+      - `run-e2e.sh`: the array expansion (72) is `${extra[@]+"${extra[@]}"}`. The production
+        guard (52) is turned round: `localhost`, `127.0.0.1` and a compose stack are allowed,
+        and any other host requires `smoke`. The `NODE_ENV` check runs whether or not a URL is
+        set, and the error text no longer names a way around it.
+      - `check-coverage.sh`: it passes `--coverage.include="$SRC"` and the test file, matches on
+        the base name, checks for `@vitest/coverage-v8`, and writes to a temporary file it
+        creates.
+      - `vitest-integration-tester` names both testing libraries as its preloaded skill does.
+      - `vitest-unit-tester`, `detect-test-framework.sh` and `run-integration-tests.sh` lose the
+        backend leftovers: HTTP endpoints, database queries, supertest, NestJS, Prisma, TypeORM
+        and `pg`, and the default glob matches the name the agent's own example uses.
+      - `playwright-system-tester` step 3 keeps only the note for a stack that is already
+        running.
+      - `web-frontend-reviewer` sets `model: inherit`.
+  - topic: "Phase 4: what is run before an edit"
+    decision: |
+      Four claims rest on how a tool behaves and were not run in the audit. Each is run once in
+      a scratch project in the session's temporary folder before its skill is edited, and the
+      command and one line of output go into the phase's evidence:
+
+      1. Starlette: two middlewares that log, added in two orders, and one request shows which
+         runs outermost.
+      2. typescript-eslint: the new flat config lints one TypeScript file with `bunx eslint`.
+      3. pytest: `asyncio_mode = "auto"` with no `pytest-asyncio` installed prints the unknown
+         option warning.
+      4. Vitest: a coverage run on a nested file shows what the text reporter prints for it.
+
+      If a run contradicts the audit, the finding is dropped and the phase's note says so.
+  - topic: "Phase 5: the decided skill changes"
+    decision: |
+      - `ceh-build-plan` `implement-from-plan`: the last rule under Rules, which leaves a phase
+        `todo` "even when the user says it passed", becomes: a check the user reports having run
+        sets the phase `done` with `evidence: reported by the user, not run by the agent`. The
+        Output section lists such phases apart from the ones the agent ran. The eval case
+        `evals/user-says-passed/` is rewritten to grade the new behaviour, and is not run.
+      - `ceh-every-session` `record-project-decisions`: a decision that binds all projects goes
+        to `$CEH_USER_RULES_DIR`, default `~/.claude/rules/`. The sentence saying a user
+        decision is never committed goes. The skill says how a rule outside the default folder
+        gets loaded, after the builder reads the Claude Code memory docs on where user rules
+        load from, with an `@` import in the global `CLAUDE.md` as the expected answer. The
+        variable gets a row in `docs/ENVIRONMENT_VARIABLES.md` and in the plugin README.
+      - `ceh-git-workflow` `release`: the hotfix path (72) ends at publishing. Deploying,
+        staging first, and the post-mortem move out of the numbered steps into what the skill
+        reports for a person to do, and deploying joins the stop condition that covers
+        publishing.
+      - `ceh-usability-audit` `audit-error-messages` (85), `audit-interface` (164) and
+        `write-plain-language` (130): "Make no branch" becomes the sentence
+        `ceh-documentation:write-project-docs` has, "If the environment requires a branch before
+        editing, create one; still do not commit."
+  - topic: "Phase 6: per-plugin polish"
+    decision: |
+      - `ceh-git-workflow`: `code-review`'s description says it is not for finding defects in a
+        diff and names the built-in `/code-review`. `commit` cuts its type table and examples to
+        a few lines and keeps the temp-file rule and the attribution line. `update-readme` (40)
+        reads the change with `git diff <base>...HEAD` plus `git status` and `git diff`.
+        `update-changelog` (113) names `${CLAUDE_SKILL_DIR}`.
+      - `ceh-every-session`: `stress-test-plan` gains one "Not for" pointer to
+        `review-build-plan`. The `bulk-reader` agent says "analyst" and "the heading, key, or
+        symbol".
+      - `ceh-codebase-explanation`: `document-architecture` gains a numbered Procedure (check
+        the YAML, edit, render the Mermaid blocks, render the Markdown) and a done condition,
+        leads with `ARCHITECTURE.yaml` as the file it maintains, names the plan's `design`
+        diagram where it says "§02", drops the ADR history, and says "the project's own entity
+        and status rules" with the Python skill as an example. `explain-until-understood`'s
+        description opens "Load this skill when" with two trigger phrases, and its body states
+        the two rules it borrows in one line each. `explain-codebase` (155) reports a tracked
+        output file and leaves untracking to the user.
+      - `ceh-product-direction`: `find-product-market-fit` takes the template's shape (the
+        phases become numbered Procedure steps, `Stop Conditions` becomes `Stop conditions`,
+        `Edge Cases` folds into Rules) with its content unchanged, and its sentence about a
+        sparse app plan (218) says "from the plan's Goal" and keeps the business plan's own
+        sections apart.
+      - `ceh-blog-and-seo`: `draft-post` is titled "Draft post", moves its interview step,
+        about 45 lines, to `references/`, and says "when the blog is a series". `edit-post`
+        (202) checks `git ls-files` and saves an untracked draft's revision beside it as
+        `<name>-edited.md`. `make-page-crawlable` and `write-project-listing-text` are titled
+        after their names, and the three SEO skills each gain a two-line `## Output`.
+      - `ceh-session-learning`: `transcript-analyst` (62) names `python3` first and `jq` "if
+        installed". `turn-session-into-skill` says the target repo's own conventions win.
+      - `ceh-usability-audit`: a wording change that breaks a public contract is flagged "for
+        whoever owns the release", with the Python skill as an example. `newcomer-simulator`'s
+        description says "Never edits the target's files. Runs setup commands only when told it
+        may", its body says to expect page text and not a URL, and
+        `simulate-newcomer-first-run` names resuming the agent as the first option after it runs
+        out of turns. The README is cut to what the plugin is, its table, and what a user must
+        do before a skill works.
+      - `ceh-testing`: `verify-behavior-preserved` (114 to 129) uses "a temporary directory
+        outside the repo" where it uses `/tmp/before`. Where a technique skill's example is one
+        or two lines, the TypeScript form goes beside it. `close-test-risk-gaps` gains its
+        `## Rules`.
+      - `ceh-ui-design`: `design-ui` gains a `## Output` with its done condition.
+      - `ceh-competitor-analysis`: `report-page.html` moves from `references/` to `assets/`.
+      - `ceh-workflow-builder`: minimum Claude Code versions stay in `compatibility` only, and
+        `build-agentic-workflow` says which of `run-state.md` and `run-state.yaml` it means in
+        its three mentions. `ceh-workflow-runner`: the `argument-hint` becomes
+        `config=<path> [mode=...] [resume=...]`.
+      - `.claude/skills/add-plugin-component/assets/SKILL.template.md`: "What waits for a
+        request" is an optional section, as five `ceh-testing` skills use it.
+      - `docs/CROSS_REFERENCES.md`: each of these blocks has an entry, added where missing: the
+        six post-type templates in `draft-post` and `edit-post`, the centralized API client in
+        the React and SvelteKit skills, the four Mermaid pitfalls in `design-ui` and
+        `document-architecture`, the retroactive ladder in three `ceh-coding-conduct` skills,
+        and the "Dormant plan" rule and "No human to answer" stop condition in the business plan
+        specialists.
+phases:
+  - name: One wording across plugins
+    builds: |
+      "Phase 1 rule: ask the user, with no tool name", "Phase 1 rules: task tools and the
+      reviewer's model", "Phase 1 rule: the YAML name where the YAML is the source", and "Phase
+      1 rule: Meridian everywhere", with "What every phase carries".
+    check: |
+      `git grep -n AskUserQuestion -- "plugins/standalone/*/skills" "plugins/standalone/*/agents"`
+      shows only lines that say not to use the tool or that a subagent lacks it: the three
+      `ask-the-author.md` files, `build-agentic-workflow` (its body and its `evals.json`), and
+      one line of `run-agentic-workflow`.
+      `git grep -n "most capable model" -- plugins/standalone` prints nothing.
+      `git grep -n "TaskCreate" -- plugins/standalone` shows the one line, which opens "when the
+      task tools are available".
+      `git grep -n "Tidewater" -- plugins/standalone/ceh-ag-ui plugins/standalone/ceh-competitor-analysis`
+      shows no line that makes it the default.
+      `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`.
+    status: todo
+  - name: One name form for saved reports
+    builds: |
+      "Phase 2: one name form for saved reports", with "What every phase carries".
+    check: |
+      `git grep -nE "(plan-reviews|business-plan-reviews|refactor|stress-tests|code-reviews|test-audits|research|questionnaires)/[^ ]*<(YYYY-MM-DD|YYYYMMDD)>" -- plugins/standalone`
+      prints nothing, and so does `git grep -n "qa/<timestamp>" -- plugins/standalone`.
+      `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`.
+    status: todo
+  - name: Hooks and guards
+    builds: |
+      "Phase 3: a guard lets through the agent it sends work to" and "Phase 3: the other hook
+      fixes", with "What every phase carries".
+    check: |
+      `python tools/validate-plugins/checks/hooks.py` passes with a new fixture for each change:
+      a `bulk-reader` payload allowed, a commit on a second line denied, an ignored path
+      allowed on the default branch, a second window warned after a drop below the threshold,
+      a drive-letter pattern kept whole, and each denial's off-switch sentence. Each fixture
+      failed before its script edit. `python tools/validate-plugins/validate.py` prints
+      `OK: all plugin checks passed`.
+    status: todo
+    note: |
+      The tester agents' case is built only after the dispatch under Open. Without it, the
+      phase is done with that case reported as not built.
+  - name: Stack plugins
+    builds: |
+      "Phase 4: what is run before an edit" first, then "Phase 4: ceh-python-service", "Phase
+      4: ceh-python-library" and "Phase 4: ceh-web-frontend", with "What every phase carries".
+    check: |
+      The four scratch runs of "Phase 4: what is run before an edit", each with its command and
+      one line of output. `bash -n` on every edited runner script, and
+      `bash plugins/standalone/ceh-web-frontend/scripts/run-e2e.sh` refusing a non-local URL
+      without `smoke` and accepting `http://localhost:3000/products`.
+      `git grep -nE "npx|node -e|npm (install|ci)" -- plugins/standalone/ceh-web-frontend`
+      prints nothing. `python tools/validate-plugins/validate.py` prints
+      `OK: all plugin checks passed`.
+    status: todo
+  - name: Decided skill changes
+    builds: |
+      "Phase 5: the decided skill changes", with "What every phase carries".
+    check: |
+      `git grep -n "report is not a run" -- plugins/standalone` prints nothing.
+      `git grep -n "CEH_USER_RULES_DIR" -- docs/ENVIRONMENT_VARIABLES.md plugins/standalone/ceh-every-session`
+      shows the row, the README line and the skill.
+      `git grep -n "Make no branch" -- plugins/standalone/ceh-usability-audit` prints nothing.
+      `git grep -n "deploy staging then production" -- plugins/standalone/ceh-git-workflow`
+      prints nothing. `python tools/validate-plugins/validate.py` prints
+      `OK: all plugin checks passed`, and `claude plugin validate` passes on each of the four
+      plugins.
+    status: todo
+  - name: Per-plugin polish
+    builds: |
+      "Phase 6: per-plugin polish", one commit per plugin, with "What every phase carries".
+    check: |
+      `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`, which
+      covers the moved `report-page.html`, the new `references/` file of `draft-post`, and the
+      new `docs/CROSS_REFERENCES.md` entries. `claude plugin validate` passes on each plugin
+      touched. `git grep -n "HEAD~1 HEAD" -- plugins/standalone/ceh-git-workflow`,
+      `git grep -n "/tmp/before" -- plugins/standalone/ceh-testing` and
+      `git grep -n "§02" -- plugins/standalone/ceh-codebase-explanation` each print nothing.
+    status: todo
+open:
+  - question: |
+      Does `ceh-testing`'s `skill-started-guard.py` deny the six tester agents their own test
+      files? The audit could not settle which transcript the hook reads inside a subagent.
+    assumption: |
+      Unknown until one dispatch of `pytest-unit-tester` with `ceh-testing` and
+      `ceh-python-service` installed. That is a real model call, so it waits for the user's go.
+      If the Write is denied, Phase 3 adds the pass-through. If it is not, nothing changes.
+  - question: |
+      `usage-limit-watch.py` tells every user without the statusline export that the guard is
+      inactive, once per session, and lists a folder on every tool call. Ship the export script,
+      or show the notice only to a user who switched the guard on?
+    assumption: |
+      Neither in this plan. The audit offers both and the user chose neither, so the finding
+      stays open, and Phase 3 fixes only the reset.
+  - question: |
+      Do the names of saved reports that already carry the time, security audits and QA
+      reports, also gain the session id prefix?
+    assumption: |
+      No. They are not overwritten by a second run, and the evidence roll-up and the hooks
+      match their current names.
+record:
+  - date: 2026-11-12
+    event: Planned
+    details: status ready
