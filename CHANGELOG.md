@@ -11,6 +11,18 @@ before this repo live in
 
 ## 2026-11-12
 
+The repeat-mistake report gains a YAML format, `repeat-mistake/v2`: `prevent-repeat-mistake` saves
+`<date>-repeat-mistake.yaml`, checked by a model, in the same two folders as before, and the `.md`
+is rendered beside it in the `v1` layout. Each fix has an id, a fix awaiting approval must carry its
+full draft, and a rung 5 fix cannot claim `yes` as proof. Pending drafts lists only fixes awaiting
+approval, while applied and rejected drafts stay as history under Previous drafts. A later session
+checks each dated report and lists the pending fixes by key, says the intake is incomplete when a
+report fails its check, and skips a labelled report name. A `v1` report is converted only before it
+is amended, refusing when a status, a proof or a draft's row is unclear. The render hook also finds
+a schema-less dated report in either retros folder. The last slice of Phase 6 of
+`product/plans/report-only-formats.yaml`, per `product/plans/repeat-mistake-yaml.yaml`, so that
+phase and the report-formats plan are now built.
+
 The blog voice profile gains a YAML format, `blog-voice/v2`: `draft-post` captures it once into
 `.agents_workspace/product/blog-voice.yaml`, checked by a model, and `blog-voice.md` is rendered
 beside it in the `v1` layout. Every observation quotes a post word for word and names it, an empty
@@ -37,23 +49,26 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog`                     | 1.1.0   |
-| `ceh-build-from-plan`          | 1.2.9   |
-| `ceh-build-planning`           | 1.2.12  |
-| `ceh-business-plan`            | 1.2.6   |
-| `ceh-check-build-against-plan` | 1.1.8   |
-| `ceh-codebase-explanation`     | 1.3.2   |
-| `ceh-coding-conduct`           | 2.5.3   |
-| `ceh-competitor-analysis`      | 1.2.2   |
-| `ceh-every-session`            | 2.9.4   |
-| `ceh-security-audit`           | 1.1.4   |
-| `ceh-testing`                  | 1.6.10  |
-| `ceh-usability-audit`          | 1.2.4   |
-| `ceh-vision-and-strategy`      | 1.1.4   |
-| `ceh-workflow-builder`         | 1.4.3   |
-| `ceh-workflow-runner`          | 1.1.2   |
+| `ceh-blog`                     | 1.1.1   |
+| `ceh-build-from-plan`          | 1.2.10  |
+| `ceh-build-planning`           | 1.2.13  |
+| `ceh-business-plan`            | 1.2.7   |
+| `ceh-check-build-against-plan` | 1.1.9   |
+| `ceh-codebase-explanation`     | 1.3.3   |
+| `ceh-coding-conduct`           | 2.5.4   |
+| `ceh-competitor-analysis`      | 1.2.3   |
+| `ceh-every-session`            | 2.9.5   |
+| `ceh-security-audit`           | 1.1.5   |
+| `ceh-testing`                  | 1.6.11  |
+| `ceh-usability-audit`          | 1.2.5   |
+| `ceh-vision-and-strategy`      | 1.1.5   |
+| `ceh-workflow-builder`         | 1.4.4   |
+| `ceh-workflow-runner`          | 1.1.3   |
 
 ### Added
+
+- Add `repeat-mistake/v2`, the repeat-mistake report as YAML with its model, YAML template and
+  `artifact.py`, in `prevent-repeat-mistake`.
 
 - Add `blog-voice/v2`, the voice profile as YAML with its model and YAML template, in
   `draft-post` and `edit-post`, with `artifact.py` in `edit-post`, and the render hook and
@@ -64,6 +79,11 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 ### Changed
 
+- Save the repeat-mistake report as YAML in `prevent-repeat-mistake`, check each dated report
+  before step 1 lists its pending fixes by key, and convert a `v1` report only before amending it.
+  Its `compatibility` names uv, and `docs/RETRO_WORKFLOW.md` names the YAML.
+- The artifact render hook, in all 15 plugins that carry it, checks a schema-less dated
+  `<date>-repeat-mistake.yaml` in `product/retros/` or `.agents_workspace/product/retros/`.
 - Capture the voice profile as `blog-voice.yaml` in `draft-post` and read it by key there and in
   `edit-post`, checking it first and keeping `v1` profiles readable. Both name uv in
   `compatibility`.

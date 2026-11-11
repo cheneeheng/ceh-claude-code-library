@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: report-only-formats.yaml
 generated_note: "Do not edit. artifact.py renders this file from report-only-formats.yaml: edit the YAML, then run artifact.py render."
 title: YAML formats for the reports another stage reads, and why the rest stay Markdown
-status: building
+status: built
 created: 2026-11-10
 ---
 
@@ -285,17 +285,18 @@ was checked.
 - **Check:** All six linked plans exist, name their readers and have completed plan reviews. Check each with
   `uv run --script plugins/standalone/ceh-build-planning/scripts/artifact.py check <plan.yaml>`.
   Every check exits 0. This phase delivers plans; the child plans track their implementations.
-- **Status:** todo. The workflow spec is planned and built by `product/plans/workflow-spec-yaml.yaml`
-  (`workflow-spec/v2`), the run state by `product/plans/run-state-yaml.yaml`
-  (`run-state/v2`), and the competitor report by `product/plans/competitor-report-yaml.yaml`
-  (`competitor-report/v2`), and the glossary by `product/plans/glossary-yaml.yaml`
-  (`glossary/v2`, reader record-project-decisions), and the blog voice profile by
-  `product/plans/blog-voice-yaml.yaml` (`blog-voice/v2`, readers draft-post and edit-post).
-  The remaining format is planned in `product/plans/repeat-mistake-yaml.yaml`
-  (`repeat-mistake/v2`, reader prevent-repeat-mistake step 1), not implemented. Build in that
-  order, preserving earlier shared hook additions and rebasing version/bookkeeping changes
-  on the current branch. Each format lands separately if landing is authorized.
-  All six plan checks passed on 2026-11-11. The Built record is not yet written.
+- **Status:** done, 2026-11-12: all six plans exist, each reviewed and `status: built`, and
+  `uv run --script plugins/standalone/ceh-build-planning/scripts/artifact.py check <plan.yaml>`
+  exits 0 for workflow-spec-yaml, run-state-yaml, competitor-report-yaml, glossary-yaml,
+  blog-voice-yaml and repeat-mistake-yaml. Each format is planned and built by its own plan: the workflow spec by
+  `product/plans/workflow-spec-yaml.yaml` (`workflow-spec/v2`), the run state by
+  `product/plans/run-state-yaml.yaml` (`run-state/v2`), the competitor report by
+  `product/plans/competitor-report-yaml.yaml` (`competitor-report/v2`), the glossary by
+  `product/plans/glossary-yaml.yaml` (`glossary/v2`, reader record-project-decisions, PR
+  #255), the blog voice profile by `product/plans/blog-voice-yaml.yaml` (`blog-voice/v2`,
+  readers draft-post and edit-post, PR #256), and the repeat-mistake report by
+  `product/plans/repeat-mistake-yaml.yaml` (`repeat-mistake/v2`, reader
+  prevent-repeat-mistake step 1).
 
 ## Open
 
@@ -336,5 +337,9 @@ was checked.
 - 2026-11-11 Reviewed: Phase 6 only: Ready to build, 0 blocking, 2 advisory (the guard failure keeping Phase 6
   todo has no fix record; two overlapping Design changed records).
   Review: .agents_workspace/product/plan-reviews/report-only-formats-2026-11-11.md.
+- 2026-11-12 Built Phase 6: All six child plans built and checked. The guard that blocked this record on 2026-11-11
+  allowed it here, from a session that started implement-from-plan, so the block was the
+  guard working as designed rather than a defect, and no fix record is written for it.
+- 2026-11-12 PR: #257 https://github.com/cheneeheng/ceh-claude-code-library/pull/257
 
 <!-- prettier-ignore-end -->

@@ -7,6 +7,9 @@ description: >-
 argument-hint: "[the mistake]"
 disable-model-invocation: false
 user-invocable: true
+compatibility: >-
+  Uses uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML, to check and
+  render the repeat-mistake report. Without uv it is read and written unchecked and unrendered.
 license: Apache-2.0
 ---
 
@@ -21,9 +24,17 @@ waiting for the user's approval.
 
 ## Procedure
 
-1. **Pick up pending drafts.** Read `*-repeat-mistake.md` in `product/retros/` and
-   `.agents_workspace/product/retros/` and list every fix still `awaiting approval` before taking a new
-   mistake, so a draft from an earlier session is not lost.
+1. **Pick up pending drafts.** In `product/retros/` and `.agents_workspace/product/retros/`, find
+   every report with the dated name `<YYYY-MM-DD>-repeat-mistake`, `.yaml` or `.md`, and read each
+   once per folder, the YAML when there is one. A labelled name such as
+   `<YYYY-MM-DD>-<label>-repeat-mistake.md` is not a report. Before reading a YAML, run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml`. On exit 1, use
+   nothing from that report, report its errors, and say the intake is incomplete, never that no
+   fix is pending, unless the only error is a stale `.md`, which the same command with `render`
+   repairs. On exit 2 or 3, or without uv, say the report went unchecked, and read it anyway. List
+   every fix still awaiting approval, `fixes[].status: awaiting approval` in a YAML, with its
+   `fixes[].id`, `fixes[].mistake`, `fixes[].fix` and full `fixes[].draft`, before taking a new
+   mistake, so a draft from an earlier session is not lost. A `v1` `.md` is read as it is.
 2. **Name the mistake from evidence.** Quote what went wrong: the tool call, the file and line,
    the wrong output, and the correction that preceded it. "Was sloppy" is not a mistake, "wrote
    dates as `10/09/2026` in `roadmap.md:14` after being told ISO dates" is. If you cannot quote it,
@@ -64,17 +75,23 @@ waiting for the user's approval.
 
 ## Output
 
-Save by where each fix lands, appending when the file exists and creating the directory if needed.
-Fixes that land in the current repository go to `product/retros/<YYYY-MM-DD>-repeat-mistake.md`,
-committed with the first fix applied, because a later session working in the repo reads it. Mask
-secrets in its quotes as `<secret>`: a committed file leaves the machine on the next push. Fixes
-outside it (user settings, the global `CLAUDE.md`, memory, an installed plugin) go to
-`.agents_workspace/product/retros/<YYYY-MM-DD>-repeat-mistake.md`, local, because only the user acts on
-them. When both files exist, each links the other through `other_file`. Reply with the same table. Each fix `awaiting approval` carries its full draft below the table, so
-a later session can apply it from the file alone. When a draft is applied or rejected, update its
-Status in the file it was saved in.
+Save by where each fix lands, adding to today's file when it exists and creating the directory if
+needed. Fixes that land in the current repository go to
+`product/retros/<YYYY-MM-DD>-repeat-mistake.yaml`, committed with the first fix applied, because a
+later session working in the repo reads it. Mask secrets in every text value as `<secret>`: a
+committed file leaves the machine on the next push. Fixes outside it (user settings, the global
+`CLAUDE.md`, memory, an installed plugin) go to
+`.agents_workspace/product/retros/<YYYY-MM-DD>-repeat-mistake.yaml`, local, because only the user
+acts on them, and saving one there authorizes no commit of it or its drafts. When both files exist,
+each links the other through `other_file`: check both links once both are saved, and report a pair
+left half-updated. Reply with the same table. Each fix awaiting approval carries its full draft, so
+a later session can apply it from the file alone. When a draft is applied or rejected, change that
+fix's `status` in the file it was saved in, keeping its draft and evidence.
 
-Each file fills `assets/repeat-mistake.template.md`, per `references/repeat-mistake-schema.md`:
-the table, then for each rung chosen one
-line on why the rungs above it did not fit, then each pending draft in full. Appending to an
-existing file adds rows and drafts, and leaves its frontmatter as it is.
+Each file fills `assets/repeat-mistake.template.yaml`, per the `repeat-mistake/v2` section of
+`references/repeat-mistake-schema.md`, which also says how a new fix takes its `id`, how a retry
+avoids a duplicate, and how a `v1` `.md` is converted before it is amended. After the last edit,
+run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which checks it
+and writes the `.md` beside it in the layout of `assets/repeat-mistake.template.md`. On exit 1,
+fix each error it lists and render again. On exit 2 or 3, or without uv, say in the reply that the
+report went unchecked and its Markdown was not rendered. Never edit the generated `.md`.
