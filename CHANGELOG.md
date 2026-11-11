@@ -11,6 +11,13 @@ before this repo live in
 
 ## 2026-11-11
 
+A new plan, `product/plans/business-plan-one-way.yaml`, takes the fixes of a retro on a business
+plan whose gates and dates leaked into a project's vision, strategy and build plans. The business
+plan will flow one way: the skills that write committed product documents
+(`write-vision-and-strategy`, `write-build-plan`, `review-build-plan`, `record-project-decisions`)
+stop reading it, while the Tell skills and `whats-next` keep reading it. The plan format keeps
+`business_plan` as a legacy key so existing plans still validate. No plugin changes in this PR.
+
 A new plan, `product/plans/competitor-report-yaml.yaml`, takes the third Phase 6 format of the
 report formats plan: the per-competitor report becomes `competitor-report/v2`, YAML checked by a
 model and rendered in the `v1` layout. Every Partial or Gap component must be taken, built or
