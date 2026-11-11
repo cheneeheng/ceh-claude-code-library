@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: business-plan-one-way.yaml
 generated_note: "Do not edit. artifact.py renders this file from business-plan-one-way.yaml: edit the YAML, then run artifact.py render."
 title: The business plan feeds no committed product document
-status: ready
+status: building
 created: 2026-11-11
 ---
 
@@ -29,7 +29,7 @@ business plan.
 
 - One rule, the business plan flows one way: the vision, the strategy and the build plans may
   feed it, and no skill that writes a committed product document reads it. A new
-  `.claude/rules/decision-business-plan-one-way.md`, written through
+  `.claude/rules/decision-business-plan-readers.md`, written through
   `ceh-every-session:record-project-decisions`, and `decision-artifact-locations.md` changed
   from "even though Build and Tell read the plan" to "even though Tell reads the plan".
 - `docs/STRATEGY.md` says the same: the Build-planning paragraph (line 46), the spine table's
@@ -96,7 +96,7 @@ business plan.
   plan supports in your own words" sentence goes, since the skill no longer reads one. The
   Checkable goal row's Ask gains "with a measure the owner gave or the repo shows". Step 2
   drops the business plan and its `artifact.py check` sentence.
-- **The rule file** `decision-business-plan-one-way.md`: "The business plan flows one way. The vision, the
+- **The rule file** `decision-business-plan-readers.md`: "The business plan flows one way. The vision, the
   strategy and the build plans may feed it, and no skill that writes a committed product
   document (vision, strategy, build plan, decision rule, architecture) reads it. Tell may read
   it for audience and positioning, and `whats-next` for whether it exists." Why: a business
@@ -131,7 +131,9 @@ business plan.
   prints nothing. `git grep -n "test, stage, date or validation experiment"` finds the vision
   skill's Rules bullet. `python tools/validate-plugins/validate.py` prints "OK: all plugin
   checks passed".
-- **Status:** todo
+- **Status:** done, The four greps print nothing, the eight `test ! -e` hold, the guard grep finds 1 line in
+  `write-vision-and-strategy/SKILL.md`, and `validate.py` prints "OK: all plugin checks passed". The rule file is `decision-business-plan-readers.md`, not `decision-business-plan-one-way.md`,
+  because `record-project-decisions` names a file for its topic, not its answer.
 
 ### Phase 2: The build plans stop reading the business plan
 
@@ -155,5 +157,8 @@ None
 - 2026-11-11 Reviewed: Revise first: 1 blocking (Phase 1's grep covered record-project-decisions' plan-format copies,
   which change only in Phase 2), 7 advisory, all fixed.
 - 2026-11-11 PR: #245 https://github.com/cheneeheng/ceh-claude-code-library/pull/245
+- 2026-11-11 Design changed: was "`decision-business-plan-one-way.md`", now "`decision-business-plan-readers.md`", because
+  `record-project-decisions` names a decision file for its topic, not its answer.
+- 2026-11-11 Built Phase 1: Phase 1 check: the greps print nothing, `validate.py` prints "OK: all plugin checks passed".
 
 <!-- prettier-ignore-end -->

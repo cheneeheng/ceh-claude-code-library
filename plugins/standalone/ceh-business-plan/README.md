@@ -119,7 +119,8 @@ test) and you confirm:
 
 - `ceh-build-planning` owns the **technical** build plan (how the app is built). This plugin
   owns the **business** plan (why it sells, who pays). It reads the build plans as input and
-  defers product detail to them rather than duplicating architecture. A build plan in turn points
-  to `BUSINESS_PLAN.md` for the goal and target user instead of restating them.
+  defers product detail to them rather than duplicating architecture. The flow is one way: no
+  build plan, vision, strategy or decision rule reads the business plan, so its tests and dates
+  stay in it.
 - Validation that surfaces product changes flows into a new `ceh-build-planning` plan; the plan's
   §13 milestones become the build/validation backlog.

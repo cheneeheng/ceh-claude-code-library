@@ -1,6 +1,6 @@
 schema: plan/v2
 title: The business plan feeds no committed product document
-status: ready
+status: building
 created: 2026-11-11
 goal: |
   The fixes from `product/retros/2026-11-11-39c94071-business-plan-leak.md`, on the reader split the
@@ -19,7 +19,7 @@ scope:
     - |
       One rule, the business plan flows one way: the vision, the strategy and the build plans may
       feed it, and no skill that writes a committed product document reads it. A new
-      `.claude/rules/decision-business-plan-one-way.md`, written through
+      `.claude/rules/decision-business-plan-readers.md`, written through
       `ceh-every-session:record-project-decisions`, and `decision-artifact-locations.md` changed
       from "even though Build and Tell read the plan" to "even though Tell reads the plan".
     - |
@@ -113,7 +113,7 @@ design:
       drops the business plan and its `artifact.py check` sentence.
   - topic: The rule file
     decision: |
-      `decision-business-plan-one-way.md`: "The business plan flows one way. The vision, the
+      `decision-business-plan-readers.md`: "The business plan flows one way. The vision, the
       strategy and the build plans may feed it, and no skill that writes a committed product
       document (vision, strategy, build plan, decision rule, architecture) reads it. Tell may read
       it for audience and positioning, and `whats-next` for whether it exists." Why: a business
@@ -149,7 +149,13 @@ phases:
       prints nothing. `git grep -n "test, stage, date or validation experiment"` finds the vision
       skill's Rules bullet. `python tools/validate-plugins/validate.py` prints "OK: all plugin
       checks passed".
-    status: todo
+    status: done
+    evidence: |
+      The four greps print nothing, the eight `test ! -e` hold, the guard grep finds 1 line in
+      `write-vision-and-strategy/SKILL.md`, and `validate.py` prints "OK: all plugin checks passed".
+    note: |
+      The rule file is `decision-business-plan-readers.md`, not `decision-business-plan-one-way.md`,
+      because `record-project-decisions` names a file for its topic, not its answer.
   - name: The build plans stop reading the business plan
     builds: |
       Scope In items 5 and 6, the orphans of item 7 for `write-build-plan` and `review-build-plan`,
@@ -175,3 +181,13 @@ record:
   - date: 2026-11-11
     event: PR
     details: "#245 https://github.com/cheneeheng/ceh-claude-code-library/pull/245"
+  - date: 2026-11-11
+    event: Design changed
+    details: |
+      was "`decision-business-plan-one-way.md`", now "`decision-business-plan-readers.md`", because
+      `record-project-decisions` names a decision file for its topic, not its answer.
+  - date: 2026-11-11
+    event: Built Phase
+    phase: 1
+    details: |
+      Phase 1 check: the greps print nothing, `validate.py` prints "OK: all plugin checks passed".

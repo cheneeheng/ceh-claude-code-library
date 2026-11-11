@@ -887,69 +887,62 @@ skill that asks the author or writes a draft carries its own copy.
 
 **Canonical:** whole files, `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/references/business-plan-schema.md`, `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/assets/business-plan.template.md`, `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/references/business-plan-model.py`, `plugins/standalone/ceh-business-plan/skills/find-product-market-fit/assets/business-plan.template.yaml`
 
-| Copy                                                                                                             | Section    | Diverges |
-| ---------------------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/references/business-plan-schema.md`           | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/assets/business-plan.template.md`             | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/references/business-plan-schema.md`               | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/assets/business-plan.template.md`                 | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/review-business-plan/references/business-plan-schema.md`            | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/review-business-plan/assets/business-plan.template.md`              | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/run-premortem/references/business-plan-schema.md`                   | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/run-premortem/assets/business-plan.template.md`                     | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/references/business-plan-schema.md`              | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/assets/business-plan.template.md`                | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/references/business-plan-schema.md`                | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/assets/business-plan.template.md`                  | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/references/business-plan-schema.md`      | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/assets/business-plan.template.md`        | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/references/business-plan-schema.md`        | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/assets/business-plan.template.md`          | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/references/business-plan-model.py`            | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/assets/business-plan.template.yaml`           | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/references/business-plan-model.py`                | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/assets/business-plan.template.yaml`               | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/review-business-plan/references/business-plan-model.py`             | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/review-business-plan/assets/business-plan.template.yaml`            | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/run-premortem/references/business-plan-model.py`                    | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/run-premortem/assets/business-plan.template.yaml`                   | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/references/business-plan-model.py`               | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/assets/business-plan.template.yaml`              | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/references/business-plan-model.py`                 | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/assets/business-plan.template.yaml`                | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/references/business-plan-model.py`       | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/assets/business-plan.template.yaml`      | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/references/business-plan-model.py`         | whole file | none     |
-| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/assets/business-plan.template.yaml`        | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/write-build-plan/references/business-plan-schema.md`               | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/write-build-plan/references/business-plan-model.py`                | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/write-build-plan/assets/business-plan.template.md`                 | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/write-build-plan/assets/business-plan.template.yaml`               | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/review-build-plan/references/business-plan-schema.md`              | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/review-build-plan/references/business-plan-model.py`               | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/review-build-plan/assets/business-plan.template.md`                | whole file | none     |
-| `plugins/standalone/ceh-build-planning/skills/review-build-plan/assets/business-plan.template.yaml`              | whole file | none     |
-| `plugins/standalone/ceh-vision-and-strategy/skills/write-vision-and-strategy/references/business-plan-schema.md` | whole file | none     |
-| `plugins/standalone/ceh-vision-and-strategy/skills/write-vision-and-strategy/references/business-plan-model.py`  | whole file | none     |
-| `plugins/standalone/ceh-vision-and-strategy/skills/write-vision-and-strategy/assets/business-plan.template.md`   | whole file | none     |
-| `plugins/standalone/ceh-vision-and-strategy/skills/write-vision-and-strategy/assets/business-plan.template.yaml` | whole file | none     |
-| `plugins/standalone/ceh-every-session/skills/record-project-decisions/references/business-plan-schema.md`        | whole file | none     |
-| `plugins/standalone/ceh-every-session/skills/record-project-decisions/references/business-plan-model.py`         | whole file | none     |
-| `plugins/standalone/ceh-every-session/skills/record-project-decisions/assets/business-plan.template.md`          | whole file | none     |
-| `plugins/standalone/ceh-every-session/skills/record-project-decisions/assets/business-plan.template.yaml`        | whole file | none     |
-| `plugins/standalone/ceh-blog/skills/draft-post/references/business-plan-schema.md`                               | whole file | none     |
-| `plugins/standalone/ceh-blog/skills/draft-post/references/business-plan-model.py`                                | whole file | none     |
-| `plugins/standalone/ceh-blog/skills/draft-post/assets/business-plan.template.md`                                 | whole file | none     |
-| `plugins/standalone/ceh-blog/skills/draft-post/assets/business-plan.template.yaml`                               | whole file | none     |
-| `plugins/standalone/ceh-seo/skills/write-project-listing-text/references/business-plan-schema.md`                | whole file | none     |
-| `plugins/standalone/ceh-seo/skills/write-project-listing-text/references/business-plan-model.py`                 | whole file | none     |
-| `plugins/standalone/ceh-seo/skills/write-project-listing-text/assets/business-plan.template.md`                  | whole file | none     |
-| `plugins/standalone/ceh-seo/skills/write-project-listing-text/assets/business-plan.template.yaml`                | whole file | none     |
+| Copy                                                                                                        | Section    | Diverges |
+| ----------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/references/business-plan-schema.md`      | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/assets/business-plan.template.md`        | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/references/business-plan-schema.md`          | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/assets/business-plan.template.md`            | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/review-business-plan/references/business-plan-schema.md`       | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/review-business-plan/assets/business-plan.template.md`         | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/run-premortem/references/business-plan-schema.md`              | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/run-premortem/assets/business-plan.template.md`                | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/references/business-plan-schema.md`         | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/assets/business-plan.template.md`           | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/references/business-plan-schema.md`           | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/assets/business-plan.template.md`             | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/references/business-plan-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/assets/business-plan.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/references/business-plan-schema.md`   | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/assets/business-plan.template.md`     | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/references/business-plan-model.py`       | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/develop-business-plan/assets/business-plan.template.yaml`      | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/references/business-plan-model.py`           | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/plan-go-to-market/assets/business-plan.template.yaml`          | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/review-business-plan/references/business-plan-model.py`        | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/review-business-plan/assets/business-plan.template.yaml`       | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/run-premortem/references/business-plan-model.py`               | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/run-premortem/assets/business-plan.template.yaml`              | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/references/business-plan-model.py`          | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/set-operating-plan/assets/business-plan.template.yaml`         | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/references/business-plan-model.py`            | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/sharpen-strategy/assets/business-plan.template.yaml`           | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/references/business-plan-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/stress-test-unit-economics/assets/business-plan.template.yaml` | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/references/business-plan-model.py`    | whole file | none     |
+| `plugins/standalone/ceh-business-plan/skills/write-investor-materials/assets/business-plan.template.yaml`   | whole file | none     |
+| `plugins/standalone/ceh-build-planning/skills/write-build-plan/references/business-plan-schema.md`          | whole file | none     |
+| `plugins/standalone/ceh-build-planning/skills/write-build-plan/references/business-plan-model.py`           | whole file | none     |
+| `plugins/standalone/ceh-build-planning/skills/write-build-plan/assets/business-plan.template.md`            | whole file | none     |
+| `plugins/standalone/ceh-build-planning/skills/write-build-plan/assets/business-plan.template.yaml`          | whole file | none     |
+| `plugins/standalone/ceh-build-planning/skills/review-build-plan/references/business-plan-schema.md`         | whole file | none     |
+| `plugins/standalone/ceh-build-planning/skills/review-build-plan/references/business-plan-model.py`          | whole file | none     |
+| `plugins/standalone/ceh-build-planning/skills/review-build-plan/assets/business-plan.template.md`           | whole file | none     |
+| `plugins/standalone/ceh-build-planning/skills/review-build-plan/assets/business-plan.template.yaml`         | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/references/business-plan-schema.md`                          | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/references/business-plan-model.py`                           | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/assets/business-plan.template.md`                            | whole file | none     |
+| `plugins/standalone/ceh-blog/skills/draft-post/assets/business-plan.template.yaml`                          | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/references/business-plan-schema.md`           | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/references/business-plan-model.py`            | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/assets/business-plan.template.md`             | whole file | none     |
+| `plugins/standalone/ceh-seo/skills/write-project-listing-text/assets/business-plan.template.yaml`           | whole file | none     |
 
 **Shared:** the business plan format and its template. `find-product-market-fit` drafts the plan,
-and every specialist reads it, so each of the nine skills carries a copy. `write-build-plan`,
-`review-build-plan` and `write-vision-and-strategy` read it too, and carry a copy to check
-`BUSINESS_PLAN.yaml` before reading it.
+and every specialist reads it, so each of the nine skills carries a copy. `write-build-plan` and
+`review-build-plan` read it too, and carry a copy to check `BUSINESS_PLAN.yaml` before reading it.
+`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it for audience and
+positioning, and carry a copy for the same check.
 
 ## Competitor report page
 

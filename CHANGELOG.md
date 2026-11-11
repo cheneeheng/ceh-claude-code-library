@@ -11,6 +11,13 @@ before this repo live in
 
 ## 2026-11-11
 
+The business plan now flows one way, per the new `decision-business-plan-readers.md`:
+`write-vision-and-strategy` and `record-project-decisions` stop reading it, because a business
+plan's dated tests had become a project's vision goals. The vision skill's guard now also keeps out
+every test, stage, date and validation experiment from a business plan, and a goal's measure comes
+from the owner or the repo. `docs/STRATEGY.md` and `decision-artifact-locations.md` say only Tell
+reads the plan. Phase 1 of `product/plans/business-plan-one-way.yaml`, with its retro committed.
+
 A new plan, `product/plans/business-plan-one-way.yaml`, takes the fixes of a retro on a business
 plan whose gates and dates leaked into a project's vision, strategy and build plans. The business
 plan will flow one way: the skills that write committed product documents
@@ -31,6 +38,21 @@ formats plan: the run state becomes `run-state/v2`, YAML checked by a model and 
 approvals that name a real stage, and a status that agrees with the stages become checks.
 `ceh-workflow-runner` will gain the render hook and guard, and a headless resumable flow gets a
 `Bash(uv run --script:*)` rule so the runner can check the file. No plugin changes in this PR.
+
+### Plugin versions
+
+| Plugin                    | Version |
+| ------------------------- | ------- |
+| `ceh-vision-and-strategy` | 1.1.2   |
+| `ceh-every-session`       | 2.9.1   |
+| `ceh-business-plan`       | 1.2.2   |
+
+### Changed
+
+- `write-vision-and-strategy` reads no business plan and keeps its tests, stages, dates and
+  experiments out of the vision and the strategy.
+- `record-project-decisions` reads no business plan when seeding decisions.
+- The `ceh-business-plan` README no longer says a build plan points to the business plan.
 
 ## 2026-11-10
 
