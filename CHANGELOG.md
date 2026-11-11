@@ -11,6 +11,17 @@ before this repo live in
 
 ## 2026-11-12
 
+The blog voice profile gains a YAML format, `blog-voice/v2`: `draft-post` captures it once into
+`.agents_workspace/product/blog-voice.yaml`, checked by a model, and `blog-voice.md` is rendered
+beside it in the `v1` layout. Every observation quotes a post word for word and names it, an empty
+section renders `None established.`, and a profile read from fewer than three posts fails the
+check. Later drafts and `edit-post` check the profile and read its sections by key, and a `v1`
+profile is still read, and converted only before an amendment the author asked for, with an unknown
+source kept as `null` rather than invented. `ceh-blog` gains the artifact hooks, which also render
+the evidence and business plan files it carries models for, and leaves the reader-only list. The
+render hook also finds a schema-less profile at its workspace path. The blog voice slice of Phase 6
+of `product/plans/report-only-formats.yaml`, per `product/plans/blog-voice-yaml.yaml`.
+
 The glossary gains a YAML format, `glossary/v2`: `maintain-glossary` writes `GLOSSARY.yaml`,
 checked by a model, and `GLOSSARY.md` is rendered beside it in the `v1` layout, sorted by term.
 Unique terms, an alias that is not its own term, and no alias listed twice are now checks, and a
@@ -26,28 +37,39 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-build-from-plan`          | 1.2.8   |
-| `ceh-build-planning`           | 1.2.11  |
-| `ceh-business-plan`            | 1.2.5   |
-| `ceh-check-build-against-plan` | 1.1.7   |
-| `ceh-codebase-explanation`     | 1.3.1   |
-| `ceh-coding-conduct`           | 2.5.2   |
-| `ceh-competitor-analysis`      | 1.2.1   |
-| `ceh-every-session`            | 2.9.3   |
-| `ceh-security-audit`           | 1.1.3   |
-| `ceh-testing`                  | 1.6.9   |
-| `ceh-usability-audit`          | 1.2.3   |
-| `ceh-vision-and-strategy`      | 1.1.3   |
-| `ceh-workflow-builder`         | 1.4.2   |
-| `ceh-workflow-runner`          | 1.1.1   |
+| `ceh-blog`                     | 1.1.0   |
+| `ceh-build-from-plan`          | 1.2.9   |
+| `ceh-build-planning`           | 1.2.12  |
+| `ceh-business-plan`            | 1.2.6   |
+| `ceh-check-build-against-plan` | 1.1.8   |
+| `ceh-codebase-explanation`     | 1.3.2   |
+| `ceh-coding-conduct`           | 2.5.3   |
+| `ceh-competitor-analysis`      | 1.2.2   |
+| `ceh-every-session`            | 2.9.4   |
+| `ceh-security-audit`           | 1.1.4   |
+| `ceh-testing`                  | 1.6.10  |
+| `ceh-usability-audit`          | 1.2.4   |
+| `ceh-vision-and-strategy`      | 1.1.4   |
+| `ceh-workflow-builder`         | 1.4.3   |
+| `ceh-workflow-runner`          | 1.1.2   |
 
 ### Added
+
+- Add `blog-voice/v2`, the voice profile as YAML with its model and YAML template, in
+  `draft-post` and `edit-post`, with `artifact.py` in `edit-post`, and the render hook and
+  generated-Markdown guard to `ceh-blog`.
 
 - Add `glossary/v2`, the glossary as YAML with its model, YAML template and `artifact.py`, in
   `maintain-glossary`, with the format files copied into `record-project-decisions`.
 
 ### Changed
 
+- Capture the voice profile as `blog-voice.yaml` in `draft-post` and read it by key there and in
+  `edit-post`, checking it first and keeping `v1` profiles readable. Both name uv in
+  `compatibility`.
+- The artifact render hook, in all 15 plugins that carry it, checks a schema-less
+  `.agents_workspace/product/blog-voice.yaml` under the payload `cwd`.
+- `ceh-blog` leaves `READERS` in `checks/artifact_models.py`, since it now writes a format.
 - Write the glossary as `GLOSSARY.yaml` in `maintain-glossary`, converting a `v1` `GLOSSARY.md`
   losslessly first, and check and read it by key in `record-project-decisions` Seed.
 - The artifact render hook, in all 14 plugins that carry it, checks a schema-less

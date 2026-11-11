@@ -1,0 +1,28 @@
+schema: blog-voice/v2
+blog: <blog path or URL>
+posts_read: <N>
+date: YYYY-MM-DD
+rhythm:
+  - point: <point>
+    quote: |
+      <quoted line>
+    source: <post path or URL>
+register:
+  - point: <point>
+    quote: |
+      <quoted line>
+    source: <post path or URL>
+recurring_words:
+  - point: <point>
+    quote: |
+      <quoted line>
+    source: <post path or URL>
+never_used:
+  - <point>
+openings_closings:
+  - point: <point>
+    quote: |
+      <quoted line>
+    source: <post path or URL>
+notes: |
+  <notes>

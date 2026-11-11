@@ -289,10 +289,10 @@ was checked.
   (`workflow-spec/v2`), the run state by `product/plans/run-state-yaml.yaml`
   (`run-state/v2`), and the competitor report by `product/plans/competitor-report-yaml.yaml`
   (`competitor-report/v2`), and the glossary by `product/plans/glossary-yaml.yaml`
-  (`glossary/v2`, reader record-project-decisions). The remaining formats are planned in
-  `product/plans/blog-voice-yaml.yaml` (`blog-voice/v2`, readers draft-post and edit-post),
-  and `product/plans/repeat-mistake-yaml.yaml` (`repeat-mistake/v2`, reader
-  prevent-repeat-mistake step 1). These two are planned, not implemented. Build in that
+  (`glossary/v2`, reader record-project-decisions), and the blog voice profile by
+  `product/plans/blog-voice-yaml.yaml` (`blog-voice/v2`, readers draft-post and edit-post).
+  The remaining format is planned in `product/plans/repeat-mistake-yaml.yaml`
+  (`repeat-mistake/v2`, reader prevent-repeat-mistake step 1), not implemented. Build in that
   order, preserving earlier shared hook additions and rebasing version/bookkeeping changes
   on the current branch. Each format lands separately if landing is authorized.
   All six plan checks passed on 2026-11-11. The Built record is not yet written.

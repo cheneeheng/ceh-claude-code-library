@@ -22,9 +22,9 @@ SHARED_SCRIPTS = ("artifact.py", "artifact-render-hook.py", "generated-md-guard.
 # Plugins whose skills only read a format (or, as write-fastapi-endpoints, render it themselves)
 # carry the models in their skills and no hooks, per Phase 6 of
 # product/plans/artifact-validation-formats.yaml. ceh-every-session left it when hand-off-session
-# began writing handoff/v2 (product/plans/handoff-yaml.yaml), so it now ships the hooks.
+# began writing handoff/v2 (product/plans/handoff-yaml.yaml), so it now ships the hooks, and
+# ceh-blog when draft-post began writing blog-voice/v2 (product/plans/blog-voice-yaml.yaml).
 READERS = {
-    "ceh-blog",
     "ceh-seo",
     "ceh-documentation",
     "ceh-python-service",
