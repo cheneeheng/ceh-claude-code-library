@@ -1,0 +1,138 @@
+schema: plan/v2
+title: The blog voice profile as a YAML format, blog-voice/v2
+status: ready
+created: 2026-11-11
+goal: |
+  Finish the blog voice slice of Phase 6 of `product/plans/report-only-formats.yaml`.
+  `ceh-blog:draft-post` saves a checked voice profile once, and both later drafts and
+  `ceh-blog:edit-post` read observations and quoted evidence by key. Markdown remains readable
+  while repeat runs preserve the author's voice without re-deriving or inventing evidence.
+scope:
+  in:
+    - |
+      blog-voice/v2, its model, YAML template, schema and renderer in draft-post, copied with the
+      artifact CLI to edit-post, preserving the five sections and evidence requirements.
+    - |
+      YAML-first capture and reads, validation, legacy reading and lossless conversion on
+      amendment, preserving the three-post threshold and CLAUDE.md precedence.
+    - |
+      Artifact hooks installed in ceh-blog, removal from the reader-only exemption, location
+      recognition, fixtures, registered copies and documentation/version bookkeeping.
+  out:
+    - item: Blog drafts, SEO, repurposed posts and publishing.
+      reason: |
+        Only the reusable voice handoff is converted, not content shipped to readers.
+    - item: Re-analysis of profiles, automatic CLAUDE.md promotion and plugin consolidation.
+      reason: |
+        These change author choices or plugin boundaries independently of the file format.
+design:
+  - topic: Format and interface
+    decision: |
+      Canonical skill is plugins/standalone/ceh-blog/skills/draft-post/. Add
+      references/blog-voice-model.py and assets/blog-voice.template.yaml, extend the existing
+      references/blog-voice-schema.md with v2 and retain assets/blog-voice.template.md as layout.
+      Export NAME = "blog-voice", VERSION = 2, MODEL and render(doc, source) -> str.
+      Strict pydantic types forbid extra keys and empty text. Required keys: schema (blog-voice/v2),
+      blog (nonempty single-line path or URL), posts_read (integer at least 3), date (a YAML date),
+      rhythm, register, recurring_words, never_used and openings_closings. Each of the four
+      evidence-bearing sections is a list of {point, quote, source}, empty when no observation
+      was established, because v1 sets no minimum per section. point and quote
+      are nonempty text, source a nonempty single line or null. New profiles record the post
+      path or URL. Null preserves legacy quotations whose original profile did not identify a
+      post. Never invent a citation. never_used is a list of nonempty text, empty when no absence
+      was established, with no fabricated quotation. Optional notes holds extra legacy Markdown.
+      Shape validation cannot prove a quote exists in a post or an absence is true.
+      Validate that quote is not whitespace-only without stripping or otherwise modifying the
+      stored quotation. Preserve notes verbatim too.
+  - topic: Rendering and paths
+    decision: |
+      Save .agents_workspace/product/blog-voice.yaml and render blog-voice.md beside it. Keep
+      Rhythm, Register, Recurring words and phrases, Never used, and Openings and closings as the
+      five section headings, in that order. Render evidence rows as point, quoted line and source
+      when known. Every empty section renders None established. beneath its retained heading,
+      including empty evidence-bearing lists and never_used. Render notes last
+      under ## Notes when present. Preserve point, quote and notes Markdown without normalizing
+      the author's words. Frontmatter retains blog, posts_read and date with schema,
+      generated_from and generated_note; the body uses prettier-ignore markers. Document quoted
+      scalars for YAML punctuation and | blocks for quotations.
+  - topic: Capture, reads and migration
+    decision: |
+      draft-post step 1 retains its gate: at least three posts, no voice defined in target
+      CLAUDE.md and no saved profile. Check both YAML and Markdown so a missing generated view
+      never triggers a second capture. Later reads prefer YAML. edit-post reads rhythm, register,
+      recurring_words, never_used and openings_closings, including each observation's quote and
+      source. Preserve author-voice precedence and banned-tell rules. Moving the profile into
+      CLAUDE.md remains a one-time offer requiring the author's agreement.
+      A Markdown-only v1 profile remains readable. Before an expressly requested amendment,
+      convert every observation and quotation, extra paragraphs into notes and unknown sources
+      into null, and validate before rendering over its Markdown. An invalid old profile is
+      reported, not repaired by inventing posts, quotations or a larger posts_read. No bulk move.
+      Retries update the same profile without recapture. Each skill runs its own artifact.py
+      check before reading YAML. Exit 1 stops use with errors, except stale Markdown alone is
+      rendered and reading continues. Exit 2 or 3, absent uv or denied execution is reported as
+      unchecked. Writers render after the final write when the hook is disabled and report any
+      unavailable render. Reuse atomic Markdown replacement for interrupted renders.
+  - topic: Hooks, copies and upkeep
+    decision: |
+      Copy the four format files into plugins/standalone/ceh-blog/skills/edit-post/; both skills
+      carry scripts/artifact.py. Copy artifact.py, artifact-render-hook.py and generated-md-guard.py
+      from ceh-build-planning into ceh-blog/scripts. Create hooks/hooks.json using the existing
+      Edit|Write|MultiEdit PreToolUse guard and PostToolUse render entries. Remove ceh-blog from
+      READERS in tools/validate-plugins/checks/artifact_models.py because it now writes a format.
+      Other model copies in the plugin stay intact. Extend canonical place_format to recognize
+      .agents_workspace/product/blog-voice.yaml relative to payload cwd, with no schema or
+      Markdown prerequisite. Preserve glossary matching if already landed, mirror to every
+      registered script copy and retain the model_names gate. The generic guard already applies.
+      Resolve relative tool_input.file_path against payload cwd before file-existence checks,
+      format detection and passing its path to the CLI. When cwd is absent, retain process-cwd
+      resolution for existing payloads. Use the resolved path for location comparisons.
+      Register format and script copies in docs/CROSS_REFERENCES.md. Add fixtures in
+      tools/validate-plugins/checks/hooks.py. Update ceh-blog/README.md paths and Hooks,
+      root README.md prerequisites, both skills' compatibility lines, docs/ENVIRONMENT_VARIABLES.md
+      for CEH_ARTIFACT_CHECK and CEH_DISABLED_HOOKS, .claude/rules/decision-artifact-validation.md
+      and decision-output-templates.md, dated CHANGELOG.md, the ceh-blog MINOR version in
+      plugin.json and .claude-plugin/marketplace.json, and docs/PLUGIN_VERSIONS.md.
+      The MINOR follows the parent plan's rule for a plugin newly gaining hooks. Every other
+      plugin whose registered hook copy changes gets a PATCH bump in its manifest, marketplace
+      entry and version table, with dated changelog coverage. Resolve versions at commit time.
+phases:
+  - name: Build the voice contract, capture and both readers
+    builds: |
+      All Scope In: format, generated view, copies, draft-post and edit-post updates, hook
+      installation and location matching, ceh-blog writer classification, fixtures and upkeep.
+    check: |
+      A scratch blog-voice/v2 fixture with three posts, five sections, a multiline quote, notes
+      and one unknown legacy source passes render and check through
+      `uv run --script plugins/standalone/ceh-blog/skills/draft-post/scripts/artifact.py render <fixture.yaml>`
+      and the same CLI's check, then check through edit-post's CLI. Assert the five headings match
+      v1, quotes survive exactly and every empty list renders None established. Invalid copies
+      with posts_read 2, an empty quote, missing section or extra key exit 1 naming the field.
+      A scratch v1 conversion retains all observations and quotations without invented sources;
+      include a v1 profile with no recurring phrases, whose empty section remains valid. Repeat
+      reads leave YAML unchanged. Resolve the key paths named by both skills through each
+      model's model_json_schema(), with a planted typo failing.
+      Add and run hook fixtures for valid render, a missing-schema profile at its workspace path
+      with no Markdown, invalid quote reported, generated-Markdown edit denied and unrelated
+      YAML skipped. Confirm existing evidence and business-plan model copies remain registered.
+      Include absolute and relative tool paths, a payload cwd different from the hook process
+      directory, and a correctly named schema-less file outside the workspace location that is
+      skipped. The payload-relative workspace file must still render or report missing schema.
+      `python tools/validate-plugins/validate.py` is green as the implementation integration gate.
+      Paid drafting and editing evals are excluded.
+    status: todo
+open:
+  - question: Must a migrated quotation gain a source URL absent from v1?
+    assumption: |
+      No. Preserve the quote and use null until the author supplies the source or a requested
+      refresh finds it. New profiles cite the posts actually read.
+record:
+  - date: 2026-11-11
+    event: Planned
+    details: status ready
+  - date: 2026-11-11
+    event: Reviewed
+    details: |
+      Revise first, 2 blocking (empty legacy evidence sections rejected; shared-hook copy plugin
+      versions omitted) and 1 advisory (cwd/location fixture gaps). All fixed, including verbatim
+      quotation preservation. Independent recheck: Ready to build, 0 residual findings.
+      Review: .agents_workspace/product/plan-reviews/blog-voice-yaml-2026-11-11.md.

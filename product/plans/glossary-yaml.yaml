@@ -1,0 +1,132 @@
+schema: plan/v2
+title: The glossary as a YAML format, glossary/v2
+status: ready
+created: 2026-11-11
+goal: |
+  Finish the glossary slice of Phase 6 of `product/plans/report-only-formats.yaml`. The glossary
+  `ceh-codebase-explanation:maintain-glossary` writes and
+  `ceh-every-session:record-project-decisions` reads becomes checked YAML with generated Markdown.
+  Later sessions read chosen terms by key without losing definitions, aliases, unresolved terms
+  or notes when an existing glossary is amended.
+scope:
+  in:
+    - |
+      glossary/v2, its model, YAML template, schema and Markdown renderer in maintain-glossary,
+      with the same four format files and artifact CLI copied into record-project-decisions.
+    - |
+      YAML-first writer and reader instructions, validation, legacy reads and lossless conversion
+      on amendment. Definitions still require the user's agreement to change.
+    - |
+      Existing artifact hooks extended to recognize a glossary without its schema key, fixtures,
+      registered copies and documentation/version bookkeeping.
+  out:
+    - item: Bulk conversion of glossaries or renaming rejected aliases in code.
+      reason: |
+        Untouched v1 files remain readable. Identifier and prose renames need a separate request.
+    - item: Plugin consolidation, a shared format package or new runtime dependencies.
+      reason: |
+        This is one conversion using the existing self-contained artifact machinery.
+design:
+  - topic: Format and interface
+    decision: |
+      Canonical skill is plugins/standalone/ceh-codebase-explanation/skills/maintain-glossary/.
+      Add references/glossary-model.py and assets/glossary.template.yaml. Extend the existing
+      references/glossary-schema.md with v2 while retaining v1. Keep assets/glossary.template.md
+      as the rendered layout. Export NAME = "glossary", VERSION = 2, MODEL and
+      render(doc, source) -> str, as the existing plan model does.
+      Strict pydantic types forbid extra keys and empty text. Required keys: schema (glossary/v2),
+      entries (a list of {term, definition, avoid, not_confused_with}) and open (a list of
+      {term, question}). term is a nonempty single line, definition and question are nonempty
+      text, and avoid and not_confused_with are lists of nonempty single lines, empty when absent.
+      Nearby concepts need not have their own entry: v1 does not require that. Chosen terms are
+      unique after casefold and whitespace stripping. An alias cannot equal its own term under
+      that comparison, and duplicate aliases within an entry are rejected. entries may be empty
+      when every proposed term is still open. open may be empty or name a settled term whose
+      definition is disputed. Optional notes is nonempty Markdown for extra legacy paragraphs.
+  - topic: Rendering and quoting
+    decision: |
+      Render # Glossary, then entries sorted by term.casefold(), in the existing bold-term,
+      definition, Avoid and Not to be confused with layout. Omit empty optional alias/nearby-term
+      lines. Add ## Open terms when open is nonempty, then ## Notes when notes exists. Sorting
+      never rewrites definitions. Frontmatter has schema, generated_from and generated_note;
+      the body uses the existing prettier-ignore range. Escape Markdown delimiters in term and
+      alias labels while preserving their stored text. Definitions and notes remain Markdown.
+      Document the existing Quoting convention: quoted scalars for YAML punctuation and
+      backslashes, block lists for aliases and | blocks for prose.
+  - topic: Writer, reader and migration
+    decision: |
+      Keep the existing location rule: root GLOSSARY.yaml, or docs/GLOSSARY.yaml when the repo
+      keeps its docs there. Prefer an existing glossary at either location. If both locations
+      contain distinct glossaries, report the ambiguity and overwrite neither. A retry updates
+      that same YAML, never appending duplicate terms. Before amending Markdown-only v1, carry
+      every entry and paragraph into v2, unmatched prose into notes and unresolved terms into
+      open. Validate the complete YAML before rendering over its Markdown. If preservation
+      cannot be established, stop and report why. Introduce no automatic Markdown parser or bulk
+      migration. Read-only v1 use stays supported when no matching YAML exists.
+      Update maintain-glossary step 4 and Output to write YAML and render/check after the final
+      edit. Update record-project-decisions Seed step 2 to discover both locations, check YAML
+      before reading entries and open, and take entries[].term, entries[].definition,
+      entries[].avoid and entries[].not_confused_with as evidence. Undecided open terms authorize
+      no rule. Both skills carry scripts/artifact.py. Exit 1 stops the writer and excludes an
+      invalid source from the reader's evidence with errors reported. A stale Markdown alone is
+      repaired by render. Exit 2 or 3, absent uv or denied execution is reported as unchecked;
+      the reader may read the YAML with that qualification. The writer reports any unavailable
+      Markdown render. Reuse the CLI's atomic Markdown replacement.
+  - topic: Hooks, copies and upkeep
+    decision: |
+      Both plugins already carry hooks. Extend place_format in the canonical
+      plugins/standalone/ceh-build-planning/scripts/artifact-render-hook.py to recognize GLOSSARY
+      at the hook payload cwd root or its docs directory, without requiring schema or Markdown.
+      Preserve existing plan and spine matching and the model_names gate. Mirror the script to
+      every registered copy in docs/CROSS_REFERENCES.md. The generated-Markdown guard needs no
+      new logic. Copy the four format files and CLI into
+      plugins/standalone/ceh-every-session/skills/record-project-decisions/.
+      Resolve relative tool_input.file_path against payload cwd before file-existence checks,
+      format detection and CLI invocation. When cwd is absent retain process-cwd resolution.
+      Use the resolved file path for root/docs location matching.
+      Register format copies and CLIs. Add fixtures in tools/validate-plugins/checks/hooks.py.
+      Update both plugin READMEs and skill compatibility lines, docs/ENVIRONMENT_VARIABLES.md's
+      format list, .claude/rules/decision-artifact-validation.md and decision-output-templates.md,
+      dated CHANGELOG.md, both plugin versions in plugin.json and .claude-plugin/marketplace.json,
+      and docs/PLUGIN_VERSIONS.md. Both plugins use PATCH bumps at commit time, since they
+      already have hooks. Every other plugin whose registered hook copy changes also gets a
+      PATCH bump in its manifest, marketplace entry, version table and dated changelog coverage.
+      Resolve current versions when building, not from this planning snapshot.
+      No new hook wiring or plugin dependency.
+phases:
+  - name: Build the glossary contract and complete writer-reader path
+    builds: |
+      All Scope In: format and copies, both skill updates, hook location recognition, fixtures
+      and upkeep. Reuse artifact.py and atomic Markdown writes.
+    check: |
+      In a scratch directory, write a glossary/v2 fixture with two unsorted entries, an alias,
+      a nearby term, an open question, a multiline definition and notes. Run
+      `uv run --script plugins/standalone/ceh-codebase-explanation/skills/maintain-glossary/scripts/artifact.py render <fixture.yaml>`
+      and the same CLI's check: both exit 0. Assert entries render alphabetically, all prose is
+      retained and empty optional lines are absent. record-project-decisions' CLI checks it too.
+      Copies with a duplicate casefolded term, alias equal to its term, duplicate aliases,
+      empty definition or extra key exit 1 naming the field. An all-open glossary also passes.
+      Add and run hook fixtures for valid render, invalid schema, schema-less GLOSSARY.yaml at
+      root and docs, unrelated docs YAML skipped and generated-Markdown edits denied.
+      Exercise absolute and relative paths with payload cwd different from process cwd; a
+      correctly named schema-less GLOSSARY.yaml outside the target root/docs locations is skipped.
+      A scratch v1 conversion retains every entry and note, a second amendment changes only the
+      requested term and a reader visits each stem once. Resolve the glossary key paths stated
+      in record-project-decisions through both models' model_json_schema(); a planted typo fails.
+      `python tools/validate-plugins/validate.py` is green as the implementation integration gate.
+    status: todo
+open:
+  - question: Which plugin paths apply if the agreed consolidation lands first?
+    assumption: |
+      Plan against the current writer and reader. Re-resolve paths against that branch if plugin
+      consolidation lands before implementation. This plan performs no consolidation.
+record:
+  - date: 2026-11-11
+    event: Planned
+    details: status ready
+  - date: 2026-11-11
+    event: Reviewed
+    details: |
+      Ready to build. Independent review: 0 blocking, 1 advisory on version levels and all
+      shared-hook copy bookkeeping, corrected. Read-only recheck: 0 residual findings.
+      Review: .agents_workspace/product/plan-reviews/glossary-yaml-2026-11-11.md.

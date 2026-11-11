@@ -282,12 +282,23 @@ was checked.
 
 - **Builds:** One plan per format for the workflow spec, run state, competitor report, glossary, blog voice
   and repeat-mistake report, each with its reader named.
-- **Check:** Planned once Phases 1 to 3 are judged.
-- **Status:** unplanned. The workflow spec is planned and built by `product/plans/workflow-spec-yaml.yaml`
+- **Check:** All six linked plans exist, name their readers and have completed plan reviews. Check each with
+  `uv run --script plugins/standalone/ceh-build-planning/scripts/artifact.py check <plan.yaml>`.
+  Every check exits 0. This phase delivers plans; the child plans track their implementations.
+- **Status:** todo. The workflow spec is planned and built by `product/plans/workflow-spec-yaml.yaml`
   (`workflow-spec/v2`), the run state by `product/plans/run-state-yaml.yaml`
   (`run-state/v2`), and the competitor report by `product/plans/competitor-report-yaml.yaml`
-  (`competitor-report/v2`). The phase stays `unplanned` until the glossary, blog voice and
-  repeat-mistake report are planned.
+  (`competitor-report/v2`). The remaining formats are planned in
+  `product/plans/glossary-yaml.yaml` (`glossary/v2`, reader record-project-decisions),
+  `product/plans/blog-voice-yaml.yaml` (`blog-voice/v2`, readers draft-post and edit-post),
+  and `product/plans/repeat-mistake-yaml.yaml` (`repeat-mistake/v2`, reader
+  prevent-repeat-mistake step 1). These three are planned, not implemented. Build in that
+  order, preserving earlier shared hook additions and rebasing version/bookkeeping changes
+  on the current branch. Each format lands separately if landing is authorized.
+  All six plan checks passed on 2026-11-11 and the three new independent reviews returned
+  Ready to build. The phase remains todo because the installed build-record guard rejected
+  the completion record even after its requested absolute-path skill read succeeded. No
+  completion record or parent built status was written, and the guard was not disabled.
 
 ## Open
 
@@ -316,5 +327,13 @@ was checked.
   all plugin checks passed"
 - 2026-11-10 PR: #240 https://github.com/cheneeheng/ceh-claude-code-library/pull/240
 - 2026-11-10 PR: #242 https://github.com/cheneeheng/ceh-claude-code-library/pull/242
+- 2026-11-11 Design changed: Phase 6 was unplanned with its Check deferred until Phases 1 to 3 were judged. It now names
+  all six child plans, has a Check requiring their builds and recorded evidence, and is todo.
+  The three new plans cover glossary, blog voice and repeat-mistake reports. No new format
+  implementation is claimed by this planning update.
+- 2026-11-11 Design changed: Retained the original Phase 6 planning-only Builds after independent review, replacing
+  the interim child-build Check with six plan validations and reviews. All six checks passed,
+  but the completion record was blocked by the installed guard. The phase remains todo,
+  the parent building, and the three new child plans ready with their implementation todo.
 
 <!-- prettier-ignore-end -->
