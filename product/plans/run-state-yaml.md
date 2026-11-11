@@ -219,5 +219,6 @@ run checks the YAML and reads its stages and approvals by key.
 - 2026-11-11 Checked: Built 18, Deviation 1. Deviation: Design "Models and copies" puts `run-state.template.yaml`
   beside `run-state-schema.md`, and it sits in `assets/` beside `run-state.template.md`, where
   `checks/artifact_models.py` requires a model's `../assets/<name>.template.yaml`.
+- 2026-11-11 PR: #250 https://github.com/cheneeheng/ceh-claude-code-library/pull/250
 
 <!-- prettier-ignore-end -->
