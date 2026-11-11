@@ -154,5 +154,6 @@ None
 - 2026-11-11 Planned: status ready
 - 2026-11-11 Reviewed: Revise first: 1 blocking (Phase 1's grep covered record-project-decisions' plan-format copies,
   which change only in Phase 2), 7 advisory, all fixed.
+- 2026-11-11 PR: #245 https://github.com/cheneeheng/ceh-claude-code-library/pull/245
 
 <!-- prettier-ignore-end -->

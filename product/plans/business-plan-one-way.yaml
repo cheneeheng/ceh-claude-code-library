@@ -172,3 +172,6 @@ record:
     details: |
       Revise first: 1 blocking (Phase 1's grep covered record-project-decisions' plan-format copies,
       which change only in Phase 2), 7 advisory, all fixed.
+  - date: 2026-11-11
+    event: PR
+    details: "#245 https://github.com/cheneeheng/ceh-claude-code-library/pull/245"
