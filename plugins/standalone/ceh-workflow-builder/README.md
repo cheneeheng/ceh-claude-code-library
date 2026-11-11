@@ -99,8 +99,8 @@ git-ignored.
 Two hooks on `Edit|Write|MultiEdit`, both Python scripts that need `python3`
 on `PATH`:
 
-- `artifact-render-hook.py` (PostToolUse) checks a written workflow spec YAML
-  against its model and renders its Markdown. The check needs `uv`; without
+- `artifact-render-hook.py` (PostToolUse) checks a written workflow spec or
+  run state YAML against its model and renders its Markdown. The check needs `uv`; without
   it the agent is told once per session that the spec went unchecked.
 - `generated-md-guard.py` (PreToolUse) denies a hand edit to the generated
   Markdown, which the next render would overwrite.

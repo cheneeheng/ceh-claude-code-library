@@ -1,8 +1,10 @@
 # Run state schema
 
-`{run}/run-state.md`, written by the runner when a flow is `resumable: true` and updated after every
-stage change, per `flow-config-schema.md` beside this file. A new file is a copy of
-`../assets/run-state.template.md`, relative to this file. The `schema: run-state/v1` line stays as
+The run's state, updated after every stage change. The runner writes it as `run-state/v2`
+(below), `{run}/run-state.yaml` with `{run}/run-state.md` rendered beside it, when a flow is
+`resumable: true`, per `flow-config-schema.md` beside this file. The `v1` layout here is that
+rendered Markdown, and the file a single emitted skill keeps for itself: a copy of
+`../assets/run-state.template.md`, relative to this file, its `schema: run-state/v1` line kept as
 written. This file is copied word for word into `ceh-workflow-builder` and `ceh-workflow-runner`.
 
 ## Header
@@ -50,3 +52,52 @@ inputs: repo=.
 
 FLOW STATUS: awaiting-approval publish
 ```
+
+## run-state/v2: YAML with generated Markdown
+
+A `run-state/v2` run state is `{run}/run-state.yaml`, a copy of `../assets/run-state.template.yaml`,
+and `{run}/run-state.md` is generated from it in the `v1` layout above, beside it. The YAML is the
+source: only the runner writes it, and nobody edits the Markdown, which opens with
+`generated_from: run-state.yaml` and a do-not-edit `generated_note`. A `v1` `run-state.md` with no
+`.yaml` beside it is still read as `v1`, and converted at the first write. The format in code is
+`run-state-model.py` beside this file, and `scripts/artifact.py` in the skill checks and renders
+it through uv:
+
+```bash
+uv run --script scripts/artifact.py check <run>/run-state.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render <run>/run-state.yaml  # check, then write the .md
+```
+
+Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other
+failure, and `3` means no model for that version. A rule across keys reports `(top level)` and
+names the key in its message.
+
+**Keys**, each required unless marked optional, and no other key allowed:
+
+- `schema`: `run-state/v2`. `flow`: the flow's name, a kebab-case slug. `run_id`: the start time,
+  `YYYYMMDD-HHMM`, with the `-2`, `-3` suffix of a clash, quoted. `config`: the path to its
+  `flow.yaml`. `mode`: `interactive` or `headless`.
+- `inputs`: `[]` when none, each `name` and `value`, rendered `name=value` joined by `, `, or `-`
+  when empty.
+- `stages`: at least one, each `id` (kebab-case), `state` (`pending`, `done`, `awaiting-approval`
+  or `failed`), `artifacts` (paths, `[]` when none, rendered joined by `, ` or `-`) and `note`
+  (optional, the gate evidence or the fallback chosen, rendered `-` when absent).
+- `approvals`: `[]` when none, rendered `- none`, each `stage`, `decision` (`approved` or
+  `rejected`), `source` (`interactive`, `resume-prompt` or `approve=<stage-id>`) and `at`
+  (ISO-8601 `YYYY-MM-DDTHH:MM`, with optional seconds and offset, quoted).
+- `status` (optional): the text after `FLOW STATUS: `, `done`, `awaiting-approval <stage-id>` or
+  `failed <stage-id or -> <reason>`, rendered as the file's last line. Absent while the run is in
+  progress.
+
+**Across keys.** Stage ids are unique, and at most one stage is `awaiting-approval`. Every
+approval's `stage` names a stage, and an `approve=<id>` source names that same stage. `done` needs
+every stage `done`, `awaiting-approval <id>` needs stage `<id>` to be `awaiting-approval`, and
+`failed <id> ...` needs `<id>` to name a stage, while `failed - ...` constrains no stage. Every
+value is one line. So a stage's `state` and the `status` change in one Write or Edit, never one at
+a time, or the check rejects the file in between.
+
+**Quoting:** single-quote any value that starts with `*`, `{` or `[`, contains `: ` or ` #`, or
+holds a backslash, such as `'attempt 3 of 3: 2 tests red'` or `'{run}/approval-publish.md'`. Inside
+a `{...}` flow mapping, also quote a value holding `,`, `?`, `[`, `]`, `{` or `}`, or YAML splits it
+or fails to parse it. Quote every input `value`, so `10`, `true` or `no` stays text under the
+strict model, and quote `run_id` and `at`.

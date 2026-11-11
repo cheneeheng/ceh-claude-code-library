@@ -30,7 +30,9 @@ choice, so a record is checked even without `ceh-testing`. The session handoff (
 follows, per `product/plans/handoff-yaml.yaml`, with the hooks in `ceh-every-session`, which leaves
 `READERS`, also by the user's choice. The workflow spec (`workflow-spec/v2`) follows, per
 `product/plans/workflow-spec-yaml.yaml`, with the hooks in `ceh-workflow-builder`, which holds both
-its writer and its reader.
+its writer and its reader. The run state (`run-state/v2`) follows, per
+`product/plans/run-state-yaml.yaml`, with the hooks in `ceh-workflow-runner`, which writes and
+reads it, and its model copied beside the `flow.yaml` contract in `ceh-workflow-builder`.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

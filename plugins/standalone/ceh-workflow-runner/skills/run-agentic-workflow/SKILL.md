@@ -11,6 +11,8 @@ compatibility: >-
   Only for flows with a `workflow` stage: Claude Code v2.1.269+ with the Workflow tool on. Interactive:
   turn on Dynamic workflows in /config. Headless: pass --settings '{"enableWorkflows": true,
   "disableWorkflows": false}'. Without the tool that stage runs its declared fallback or fails.
+  Resumable flows: python3 for the run-state hooks and uv for its check, without which the run
+  state goes unchecked.
 license: Apache-2.0
 ---
 
@@ -29,9 +31,11 @@ survives the session for resume, and the `FLOW STATUS:` line. Ordering and gates
 those four. The reason is that native capabilities keep growing: when Claude Code covers one of the
 four, that part of the runner goes, so the runner shrinks rather than competes with it.
 
-The config format, the validation rules, the `run-state.md` layout and the status line are in
-`${CLAUDE_SKILL_DIR}/references/flow-config-schema.md`. Read it before step 1; this skill does not
-restate it.
+The config format, the validation rules and the status line are in
+`${CLAUDE_SKILL_DIR}/references/flow-config-schema.md`, and the run state's `run-state/v2` keys in
+`${CLAUDE_SKILL_DIR}/references/run-state-schema.md`. A new run state is a copy of
+`${CLAUDE_SKILL_DIR}/assets/run-state.template.yaml`. Read both docs before step 1; this skill does
+not restate them.
 
 ## Procedure
 
@@ -57,11 +61,23 @@ restate it.
    `YYYYMMDD-HHMM`. Create it unless the flow is not `resumable`, writes no artifact and has no
    `fan_out`, in which case it has no run directory at all.
    - A flow that is not `resumable` always starts a new run and ignores `resume`.
-   - Otherwise take the newest run under `<run-dir>/<name>/` whose `run-state.md` has a stage that is
-     not `done`. `resume=latest` resumes it, `resume=new` starts a new run, and with neither,
-     interactive mode asks and headless mode starts new. With no such run, start new.
-   - On resume, take the inputs recorded in `run-state.md`; a re-passed input that differs ends the
+   - Otherwise take the newest run under `<run-dir>/<name>/` whose `run-state.yaml`, or a `v1`
+     `run-state.md` when no `.yaml` is beside it, has a stage that is not `done`. `resume=latest`
+     resumes it, `resume=new` starts a new run, and with neither, interactive mode asks and
+     headless mode starts new. With no such run, start new.
+   - Before resuming, run
+     `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <run>/run-state.yaml`. On exit
+     1 end as `FLOW STATUS: failed - run state invalid: <first error>`, unless the only error is a
+     stale `.md`, when you run the same command with `render` and go on. On exit 2 or 3, without
+     uv, or when the call is denied, read the YAML unchecked, say in the reply that the run state
+     went unchecked, and go on. Read its stages, approvals and inputs by key.
+   - A `v1` `run-state.md` is read by its lines. Your first write converts it: write
+     `run-state.yaml` with every stage, approval, input and header line carried over to its key,
+     and its render then overwrites the `v1` file.
+   - On resume, take the inputs recorded in the run state; a re-passed input that differs ends the
      run as `FLOW STATUS: failed - inputs changed on resume`.
+   - A failure in this step goes in the reply only, never into the run state, so the run stays
+     resumable once its cause is fixed.
    - Check now that the repo's `.gitignore` ignores the run directory, and append it if not. Run
      artifacts are never committed.
 5. **Walk the stages** in order, skipping those already `done`. For each stage:
@@ -74,7 +90,7 @@ restate it.
       not skip the stage and do not guess that it finished.
    4. **Dispatch** per `run.kind`, below.
    5. **Gate**, below.
-   6. **Record** the stage in `run-state.md` right away, with the gate evidence in its note.
+   6. **Record** the stage in `run-state.yaml` right away, with the gate evidence in its note.
 6. **End** with the status line, under Output.
 
 ### Launch arguments
@@ -90,7 +106,7 @@ The arguments are `key=value` tokens. Quote values that contain spaces.
 | other     | The flow's own `inputs`. An unknown key fails the run, so a typo is not silently ignored.                                                                                                          |
 
 A resumed session may instead carry the message `APPROVED <stage-id>`. Treat it as approval of that
-stage when `run-state.md` shows it `awaiting-approval`, with source `resume-prompt`; otherwise ignore
+stage when the run state shows it `awaiting-approval`, with source `resume-prompt`; otherwise ignore
 it.
 
 ### Dispatch
@@ -124,7 +140,7 @@ isolated stage sees nothing else. Substitute placeholders in every value first.
 The approval belongs to the runner, never to a stage: `AskUserQuestion` is stripped from every
 subagent, so a dispatched stage cannot ask and would run straight through. Never let a stage ask.
 
-If the stage id is in `approve=` or recorded as approved in `run-state.md`, proceed and record the
+If the stage id is in `approve=` or recorded as approved in the run state, proceed and record the
 source. Otherwise:
 
 | Mode        | Behaviour                                                                                                                                                                                                                                                                                                                          |
@@ -133,7 +149,7 @@ source. Otherwise:
 | headless    | Follow `approval.headless`: `stop` writes `{run}/approval-<id>.md` with the `show` content, marks the stage `awaiting-approval`, prints that content above the status line and ends as `awaiting-approval <id>`. `preapproved-only` does the same unless the id was in `approve=`. `fail` ends as `failed <id> approval-required`. |
 
 A stage named in another stage's `covers` shares that approval and does not ask again. Record each
-approval in `run-state.md` with its source and time. Never proceed on silence.
+approval in `run-state.yaml` with its source and time. Never proceed on silence.
 
 ### Gates
 
@@ -164,20 +180,22 @@ is to edit those files.
   so a run that edits them is no longer the approved workflow.
 - **Never imitate an absent tool and never fall back after a denial.**
 - **One level deep.** A stage may not run this skill, and a stage you dispatch is told so.
-- **No secrets on disk.** Run artifacts and `run-state.md` hold references to secrets, never values.
+- **No secrets on disk.** Run artifacts and the run state hold references to secrets, never values.
 - **In headless mode, ask only through the approval path above.**
 
 ## Output
 
 ### Run state and the status line
 
-When the flow is `resumable`, keep `{run}/run-state.md` in the layout the schema doc gives: stage
-states, approvals, and the status line. Update it after every stage change, not at the end, because
-context that dies mid-run takes anything unwritten with it. A resumed run skips stages marked `done`
-and re-enters the first that is not.
+When the flow is `resumable`, keep `{run}/run-state.yaml` in the `run-state/v2` format of
+`run-state-schema.md`: stage states, approvals, and at the end the `status` key. Update it after
+every stage change, not at the end, because context that dies mid-run takes anything unwritten with
+it, and change a stage's `state` and the `status` in one Write or Edit. A resumed run skips stages
+marked `done` and re-enters the first that is not. The render hook writes `run-state.md` beside it,
+whose last line is the status line. Without uv or the hook, run `artifact.py render` yourself, and
+when that fails too, say in the reply that `run-state.md` was not rendered.
 
-The last line of your reply is the status line, and with `run-state.md` it is the last line of that
-file too. Say nothing after it.
+The last line of your reply is the status line. Say nothing after it.
 
 ## Stop conditions
 

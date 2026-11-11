@@ -125,7 +125,7 @@
     {
       "name": "ceh-workflow-builder",
       "source": "./plugins/standalone/ceh-workflow-builder",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "description": "CEH workflow builder: turn product work that repeats in the same shape (a weekly SEO pass, a pre-release check) into a runnable artifact — one skill when it is simple, or a flow.yaml config with gates and approvals plus a thin trigger skill — emitted into the target repo's .claude/skills/. Running a flow needs ceh-workflow-runner."
     },
     {
@@ -155,7 +155,7 @@
     {
       "name": "ceh-workflow-runner",
       "source": "./plugins/standalone/ceh-workflow-runner",
-      "version": "1.0.10",
+      "version": "1.1.0",
       "description": "CEH workflow runner: run a built flow.yaml for repeated product work, interactively or headless — stages on Claude Code's native tools, plus only what native lacks: approvals between stages, re-run checks, resume state and a FLOW STATUS line. Install it wherever a flow runs; building one needs ceh-workflow-builder instead."
     },
     {
