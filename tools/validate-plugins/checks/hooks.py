@@ -581,6 +581,30 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{wr}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{wr}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
+    # The competitor report: analyze-competitor writes it, compare-competitors reads it.
+    good_cr = (
+        "schema: competitor-report/v2\ncompetitor: Acme\nsource: https://github.com/acme/kit\n"
+        "analysed: 2026-11-11\nsummary: A kit that gates changes.\nverdict: Take the gate.\n"
+        "fields: {read: shallow clone, author: Acme, version: 1.0.0, version_from: package.json,"
+        " license: MIT, size: 2 skills, size_command: ls skills}\n"
+        "take:\n  adopt_now:\n    - {idea: Gate, lands_in: ceh-git-workflow:pull-request, why: Stops a bad merge.,"
+        " covers: [gate]}\n  build: []\n  skip: []\n"
+        "how_it_works: [Init, Gate, Merge]\noh_wow: []\n"
+        "inventory:\n  groups:\n    - {group: Skills, count: 2, items: 'gate, review'}\n"
+        "coverage:\n  - group: Skills\n    rows:\n"
+        "      - {component: gate, evidence: skills/gate, what: Gates a merge, rating: Partial,"
+        " ours: ceh-git-workflow:pull-request}\n"
+        "      - {component: review, evidence: skills/review, what: Reviews, rating: Covered,"
+        " ours: ceh-git-workflow:code-review}\n"
+    )
+    ca = "ceh-competitor-analysis"
+    competitor_report_fixtures = [
+        *report_fixtures(ca, "acme", good_cr, good_cr.replace("covers: [gate]", "covers: []"), "no take row covers", "**Tally (2 components):** 1 covered, 1 partial, 0 gaps, 0 N/A.", "competitor-report"),
+        {"script": f"{ca}/artifact-render-hook.py", "stdin": write_at(tmp / "report-competitor-report" / "bad" / "acme.yaml"), "env": no_uv, "out": "uv is not installed"},
+        # ceh-competitor-analysis holds no plan model, so a plan YAML is not its to check.
+        {"script": f"{ca}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
+        {"script": f"{ca}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+    ]  # fmt: skip
     evidence_fixtures = [
         *spine_fixtures(
             "ceh-testing", "EVIDENCE", good_ev,
@@ -610,6 +634,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *handoff_fixtures,
         *workflow_spec_fixtures,
         *run_state_fixtures,
+        *competitor_report_fixtures,
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},

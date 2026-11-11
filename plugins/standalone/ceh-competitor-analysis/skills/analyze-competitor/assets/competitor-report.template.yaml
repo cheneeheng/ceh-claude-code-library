@@ -1,0 +1,67 @@
+schema: competitor-report/v2
+competitor: <name>
+source: <url>
+analysed: YYYY-MM-DD
+summary: <summary>
+verdict: <verdict>
+fields:
+  read: <shallow clone | web pages | local checkout | pasted material>
+  author: <author>
+  version: <version>
+  version_from: <where from>
+  license: <license>
+  size: <counts>
+  size_command: <command>
+  missing: <missing>
+take:
+  notes: |
+    <note>
+  adopt_now:
+    - idea: <idea>
+      lands_in: <component>
+      why: <why>
+      covers:
+        - <component>
+  build:
+    - idea: <idea>
+      lands_in: <component>
+      effort: <M | L>
+      why: <why>
+      covers:
+        - <component>
+  skip:
+    - idea: <idea>
+      why_not: <reason>
+      covers:
+        - <component>
+how_it_works:
+  - <step>
+  - <step>
+  - <step>
+oh_wow:
+  - what: <name>
+    one_line: <one line>
+    how: <how it works>
+    evidence: <evidence>
+inventory:
+  groups:
+    - group: <group>
+      count: <n>
+      items: <items>
+  notes: |
+    <note>
+coverage_notes: |
+  <note>
+extra_sections:
+  - after: <1 to 5>
+    heading: <heading>
+    body: |
+      <markdown>
+coverage:
+  - group: <component group>
+    rows:
+      - component: <component>
+        evidence: <path or url>
+        what: <what>
+        rating: <Covered | Partial | Gap | N/A>
+        ours: <our component>

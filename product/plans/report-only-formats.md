@@ -284,9 +284,10 @@ was checked.
   and repeat-mistake report, each with its reader named.
 - **Check:** Planned once Phases 1 to 3 are judged.
 - **Status:** unplanned. The workflow spec is planned and built by `product/plans/workflow-spec-yaml.yaml`
-  (`workflow-spec/v2`), and the run state by `product/plans/run-state-yaml.yaml`
-  (`run-state/v2`). The phase stays `unplanned` until the competitor report, glossary, blog
-  voice and repeat-mistake report are planned.
+  (`workflow-spec/v2`), the run state by `product/plans/run-state-yaml.yaml`
+  (`run-state/v2`), and the competitor report by `product/plans/competitor-report-yaml.yaml`
+  (`competitor-report/v2`). The phase stays `unplanned` until the glossary, blog voice and
+  repeat-mistake report are planned.
 
 ## Open
 

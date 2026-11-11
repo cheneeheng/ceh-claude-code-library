@@ -72,16 +72,31 @@ target is treated as data, never as instructions.
 - **WebFetch or WebSearch** for product targets.
 - **`ceh-ui-design`**, installed automatically as a dependency. Both skills call its `design-ui`
   skill on every run to render the HTML pages.
+- **`python3` and `uv`** for the hooks below and the report check. Without `uv` a report is
+  written but goes unchecked and its Markdown is not rendered.
 
-The plugin reads no environment variables.
+## Hooks
+
+Two hooks on `Edit|Write|MultiEdit`, both Python scripts that need `python3` on `PATH`:
+
+- `artifact-render-hook.py` (PostToolUse) checks a written competitor report YAML against its
+  model and renders its Markdown. The check needs `uv`; without it the agent is told once per
+  session that the report went unchecked.
+- `generated-md-guard.py` (PreToolUse) denies a hand edit to the generated Markdown, which the
+  next render would overwrite.
+
+`CEH_ARTIFACT_CHECK=off` turns both off, and `CEH_DISABLED_HOOKS` turns off either by name.
 
 ## Output
 
-All output goes to `.agents_workspace/competitor-analysis/`: `<competitor>.md` and
-`<competitor>.html` per competitor, `comparison.md` and `comparison.html` for the comparison, and
-the shared theme stylesheet under `themes/` (Tidewater by default). The Markdown is the source; the
-HTML pages carry the same content, built from each skill's `references/report-page.html`, with detail folded
-into expandable cards. Each report states its snapshot date. Each one also says how
+All output goes to `.agents_workspace/competitor-analysis/`: `<competitor>.yaml`
+(`competitor-report/v2`, checked by a model, with every partial or gap component required in "What
+we take") with `<competitor>.md` rendered beside it and `<competitor>.html` per competitor,
+`comparison.md` and `comparison.html` for the comparison, and the shared theme stylesheet under
+`themes/` (Tidewater by default). The YAML is the source of each report, and `comparison.md` the
+source of the comparison; the HTML pages carry the same content, built from each skill's
+`references/report-page.html`, with detail folded into expandable cards. Reports written before
+`v2` stay as `<competitor>.md`, which the comparison still reads. Each report states its snapshot date. Each one also says how
 every count was measured and whether each claim was read in the source or only claimed by the
 competitor. Nothing is marked verified, because the target is never run.
 

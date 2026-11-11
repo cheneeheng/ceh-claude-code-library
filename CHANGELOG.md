@@ -20,6 +20,15 @@ resumed run checks the YAML first and ends as `failed - run state invalid` on a 
 and guard, and the builder's invocation guide adds `Bash(uv run --script:*)` for a resumable flow.
 Built from `product/plans/run-state-yaml.yaml`.
 
+The competitor report gains a YAML format, `competitor-report/v2`: `analyze-competitor` writes
+`<slug>.yaml`, checked by a model, with the Markdown rendered beside it in the `v1` layout and the
+HTML page built from the YAML. A Partial or Gap component that no Adopt now, Build or Skip row
+covers is now an error, as is a Covered or Partial row that names no component of ours, and the
+tally and legend are computed from the rows. A section the user asked for has its own key.
+`compare-competitors` checks each `v2` report and reads it by key, and still reads a `v1` report,
+which `analyze-competitor` converts before a second pass amends it. `ceh-competitor-analysis` gains
+the render hook and guard. Per `product/plans/competitor-report-yaml.yaml`.
+
 The three usability skills that edit the target (`audit-error-messages`, `audit-interface`,
 `write-plain-language`) now leave their edits uncommitted unless asked, and report a defect outside
 their kind instead of fixing it. A headless test of `audit-error-messages` had branched, committed,
@@ -80,11 +89,15 @@ approvals that name a real stage, and a status that agrees with the stages becom
 | `ceh-usability-audit`          | 1.2.2   |
 | `ceh-workflow-runner`          | 1.1.0   |
 | `ceh-workflow-builder`         | 1.4.1   |
+| `ceh-competitor-analysis`      | 1.2.0   |
 
 ### Added
 
 - `ceh-workflow-runner`: the `run-state/v2` model, YAML template and `artifact.py` in
   `run-agentic-workflow`, and the render hook and generated-Markdown guard at the plugin root.
+- Add `competitor-report/v2`, the competitor report as YAML with its model, in
+  `analyze-competitor` and `compare-competitors`, and the render hook and the generated-Markdown
+  guard to `ceh-competitor-analysis`.
 
 ### Changed
 
@@ -92,6 +105,9 @@ approvals that name a real stage, and a status that agrees with the stages becom
   converts a `v1` `run-state.md`. Its `compatibility` names `python3` and uv.
 - `ceh-workflow-builder`: the `flow.yaml` contract copies carry the `run-state/v2` model and
   template, and the invocation guide adds `Bash(uv run --script:*)` for a resumable flow.
+- Write the competitor report as `competitor-report/v2` in `analyze-competitor` and build its page
+  from the YAML, and check and read it by key in `compare-competitors`, keeping `v1` reports
+  readable.
 - `audit-error-messages`, `audit-interface` and `write-plain-language` make no branch, commit, push
   or pull request unless asked, and report other defects rather than fixing them.
 
