@@ -61,6 +61,7 @@ approvals that name a real stage, and a status that agrees with the stages becom
 
 - `write-build-plan` and `review-build-plan` read no business plan, and the plan format marks
   `business_plan` as legacy in all six copies.
+- `model_vs_template.py` lets a template omit a model key marked deprecated.
 
 - `write-vision-and-strategy` reads no business plan and keeps its tests, stages, dates and
   experiments out of the vision and the strategy.

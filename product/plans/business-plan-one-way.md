@@ -174,5 +174,6 @@ None
   without the key, `validate.py` prints "OK: all plugin checks passed".
 - 2026-11-11 Checked: 8 In, 6 Design, 8 Out and 2 phase Checks: all Built. The `model_vs_template.py` change is
   covered by its Design changed entry.
+- 2026-11-11 PR: #247 https://github.com/cheneeheng/ceh-claude-code-library/pull/247
 
 <!-- prettier-ignore-end -->
