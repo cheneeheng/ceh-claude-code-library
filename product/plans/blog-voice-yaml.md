@@ -134,5 +134,6 @@ while repeat runs preserve the author's voice without re-deriving or inventing e
   versions omitted) and 1 advisory (cwd/location fixture gaps). All fixed, including verbatim
   quotation preservation. Independent recheck: Ready to build, 0 residual findings.
   Review: .agents_workspace/product/plan-reviews/blog-voice-yaml-2026-11-11.md.
+- 2026-11-11 PR: #254 https://github.com/cheneeheng/ceh-claude-code-library/pull/254
 
 <!-- prettier-ignore-end -->

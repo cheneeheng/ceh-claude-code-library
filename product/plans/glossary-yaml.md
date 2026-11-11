@@ -128,5 +128,6 @@ or notes when an existing glossary is amended.
 - 2026-11-11 Reviewed: Ready to build. Independent review: 0 blocking, 1 advisory on version levels and all
   shared-hook copy bookkeeping, corrected. Read-only recheck: 0 residual findings.
   Review: .agents_workspace/product/plan-reviews/glossary-yaml-2026-11-11.md.
+- 2026-11-11 PR: #254 https://github.com/cheneeheng/ceh-claude-code-library/pull/254
 
 <!-- prettier-ignore-end -->

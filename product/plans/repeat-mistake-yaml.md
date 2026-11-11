@@ -149,5 +149,6 @@ statuses change, and repository fixes remain separate from machine-local fixes.
   statuses and draft associations, cwd/location fixtures). All fixed. Independent recheck:
   Ready to build, 0 residual findings.
   Review: .agents_workspace/product/plan-reviews/repeat-mistake-yaml-2026-11-11.md.
+- 2026-11-11 PR: #254 https://github.com/cheneeheng/ceh-claude-code-library/pull/254
 
 <!-- prettier-ignore-end -->
