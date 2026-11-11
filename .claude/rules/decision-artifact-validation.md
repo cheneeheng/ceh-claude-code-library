@@ -35,7 +35,9 @@ its writer and its reader. The run state (`run-state/v2`) follows, per
 reads it, and its model copied beside the `flow.yaml` contract in `ceh-workflow-builder`. The
 competitor report (`competitor-report/v2`) follows, per
 `product/plans/competitor-report-yaml.yaml`, with the hooks in `ceh-competitor-analysis`, which
-holds both its writer and its reader.
+holds both its writer and its reader. The glossary (`glossary/v2`) follows, per
+`product/plans/glossary-yaml.yaml`, with the hooks in `ceh-codebase-explanation`, which writes it,
+and its model copied into `record-project-decisions` in `ceh-every-session`, which reads it.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

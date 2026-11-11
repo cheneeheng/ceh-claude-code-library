@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: glossary-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from glossary-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The glossary as a YAML format, glossary/v2
-status: ready
+status: built
 created: 2026-11-11
 ---
 
@@ -119,7 +119,15 @@ or notes when an existing glossary is amended.
   requested term and a reader visits each stem once. Resolve the glossary key paths stated
   in record-project-decisions through both models' model_json_schema(); a planted typo fails.
   `python tools/validate-plugins/validate.py` is green as the implementation integration gate.
-- **Status:** todo
+- **Status:** done, Scratch fixture: render and check exit 0 with both CLIs, entries sorted, open and notes kept;
+  duplicate term, alias equal to its term, duplicate alias, empty definition and extra key each
+  exit 1 naming the field; an all-open glossary exits 0. The hook fixtures, valid render,
+  invalid schema, schema-less root and docs, no sibling .md, unrelated docs YAML, sub folder,
+  relative and absolute paths with a payload cwd other than the process cwd, and the guard,
+  pass in `python tools/validate-plugins/checks/hooks.py`: "OK: hooks check passed". A v1
+  conversion lost no line, a second amendment changed only the Tenant line, and the reader's
+  key paths resolve in both models while a planted `entries[].defintion` fails.
+  `python tools/validate-plugins/validate.py`: "OK: all plugin checks passed".
 
 ## Open
 
@@ -136,5 +144,14 @@ or notes when an existing glossary is amended.
 - 2026-11-11 Reviewed: Ready to build, 0 blocking, 2 advisory (schema-less root GLOSSARY.yaml matched without a
   sibling .md; maintain-glossary's scripts/artifact.py is new, not existing).
   Review: .agents_workspace/product/plan-reviews/glossary-yaml-2026-11-11-r2.md.
+- 2026-11-11 Built Phase 1: glossary/v2 model, template, schema section and CLI in maintain-glossary, copied into
+  record-project-decisions; both skills updated; hook glossary place and cwd resolution
+  mirrored to all 14 copies; fixtures; 14 PATCH bumps. An empty glossary, with no entry and
+  no open term, is rejected, reading "entries may be empty when every proposed term is still
+  open" as a condition.
+- 2026-11-12 Checked: 11 Built (3 Scope In, 4 Design, 2 Scope Out absent, Phase 1 Check, Open assumption held),
+  0 Gap, 0 Deviation, 0 Extra, 0 Failing, 0 Cannot verify. Checked in the building session,
+  not by a fresh reviewer.
+- 2026-11-12 PR: #255 https://github.com/cheneeheng/ceh-claude-code-library/pull/255
 
 <!-- prettier-ignore-end -->

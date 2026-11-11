@@ -3,7 +3,8 @@
 
 Matches Edit|Write|MultiEdit. It acts on a `.yaml` whose `schema: <name>/v<N>` names a model in
 this plugin, and on a `.yaml` in the place a format lives (`place_format`) when this plugin holds
-that format's model, so a spine file missing its schema key is reported, not skipped. It runs `scripts/artifact.py render` through uv. Errors go back to the agent as a block
+that format's model, so a spine file or glossary missing its schema key is reported, not skipped.
+A relative `file_path` is resolved against the payload's `cwd`. It runs `scripts/artifact.py render` through uv. Errors go back to the agent as a block
 reason. The tool has already run, so the file stays on disk until the agent fixes it, and the
 Markdown is not regenerated. When the check cannot run (no uv, a failed install, an unknown
 version), the agent is told once per session and reason, never left with a silent pass.
@@ -39,10 +40,15 @@ def model_names() -> set[str]:
     return {p.name[: -len("-model.py")] for p in ROOT.glob("**/references/*-model.py")}
 
 
-def place_format(file: Path) -> str | None:
-    """The format a file's place says it holds, or None."""
+def place_format(file: Path, root: Path) -> str | None:
+    """The format a file's place says it holds, or None. `root` is the session's cwd."""
     if file.parent.name == "plans" and file.parent.parent.name == "product":
         return "plan"
+    # Only at the root or in docs/, and only beside its GLOSSARY.md, so a project's unrelated
+    # GLOSSARY.yaml (i18n data, say) is left alone.
+    if file.name == "GLOSSARY.yaml":
+        home = file.parent in (root, root / "docs")
+        return "glossary" if home and file.with_suffix(".md").exists() else None
     name = SPINE.get(file.stem)
     near = (
         file.parent.name in ("product", "business") or file.with_suffix(".md").exists()
@@ -76,12 +82,15 @@ def main() -> None:
 
     payload = json.load(sys.stdin)
     path = payload.get("tool_input", {}).get("file_path", "")
-    file = Path(path)
+    # A relative path is the session's, not this process's: resolve it against the payload cwd.
+    root = Path(payload.get("cwd") or os.getcwd()).resolve()
+    file = (root / path).resolve() if path else Path()
+    path = str(file)
     if file.suffix != ".yaml" or not file.is_file():
         return
     m = SCHEMA.search(file.read_text(encoding="utf-8"))
     names = model_names()
-    if not (m and m.group(1) in names) and place_format(file) not in names:
+    if not (m and m.group(1) in names) and place_format(file, root) not in names:
         return
 
     session = str(payload.get("session_id", ""))
