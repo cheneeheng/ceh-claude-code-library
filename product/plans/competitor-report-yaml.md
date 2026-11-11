@@ -242,5 +242,6 @@ and reads it by key.
 - 2026-11-11 Checked: 17 Built, 2 Extra, 0 Gap, 0 Deviation, 0 Failing. Extra: the renderer escapes a bare `|` in
   table cells and fences a name holding a backtick in a double-backtick span
   (`competitor-report-model.py:199`, `:209`), both needed to render the real `openclaw.md`.
+- 2026-11-11 PR: #251 https://github.com/cheneeheng/ceh-claude-code-library/pull/251
 
 <!-- prettier-ignore-end -->
