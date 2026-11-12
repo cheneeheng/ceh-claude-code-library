@@ -28,8 +28,7 @@ installs one of its two themes, and `visualize-graph-cytoscape` opens the topic 
 touches.
 
 The allowed scaffold and script bundles are `ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent`
-`assets/`), `ceh-git-datastore` (`build-git-datastore`, `migrate-git-datastore` `references/` +
-`scripts/`), `ceh-business-plan` (`develop-business-plan`'s HTML generator in `scripts/`, with its
+`assets/`), `ceh-business-plan` (`develop-business-plan`'s HTML generator in `scripts/`, with its
 page shell and `brand.css` in `assets/`), and each skill carrying a YAML format's
 `<schema>-model.py` (its `scripts/artifact.py`, which checks and renders that format).
 
@@ -70,7 +69,6 @@ Model only covers every skill a hook names (`agent-coding-contract`, `write-less
 the path-scoped stack standards, and standards like `design-test-cases` and
 `write-plain-language`. User only is rare because the library is agents-first: such a skill drops
 out of the skill listing, so no natural-language request, agent, workflow stage, or
-`Invoke the Skill tool` call can start it. Today it covers `refactor-repo` and the two
-`ceh-orchestration-lab` skills. A standard that holds the whole session, such as
+`Invoke the Skill tool` call can start it. Today it covers only `refactor-repo`. A standard that holds the whole session, such as
 `write-less-code`, has no moment of its own, so the hook is its delivery and trigger phrases only
 cost listing space.

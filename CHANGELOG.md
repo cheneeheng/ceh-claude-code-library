@@ -11,6 +11,20 @@ before this repo live in
 
 ## 2026-11-12
 
+Two plugins move to `archive/`, the first step of the 2026-11-11 plugin audit, which takes the
+library from 27 plugins to 21. `ceh-orchestration-lab` is archived because its experiment ended:
+its lessons were dropped by decision, and the run folders stay in each project's
+`.agents_workspace/orchestration-lab/`. `ceh-git-datastore` is archived unused, not rejected, and
+moving its folder back under `plugins/standalone/` re-enables it. Both are gone from the
+marketplace, so **uninstall them**: `claude plugin uninstall ceh-orchestration-lab` and
+`claude plugin uninstall ceh-git-datastore`. An installed copy keeps working but gets no more
+updates. `ceh-every-session:whats-next` no longer lists the two orchestration skills, a PATCH bump.
+The stage table in `docs/VISION.md` loses both plugins and the paragraph about the experiment,
+because the vision itself said the plugin "moves to `archive/`" when the experiment ends: no
+principle, goal or scope test changes. Phases 2 and 3 of
+`product/plans/retired-names-check-and-archives.yaml`, in one PR at the user's request, which
+builds that plan.
+
 `validate.py` gains a `retired-names` check. Until now a `ceh-<plugin>:<skill>` name was resolved
 only while its plugin existed, and a plugin named on its own was never checked, so an archived or
 renamed plugin left stale names behind that no check saw. The check fails, with file and line, on
@@ -81,7 +95,7 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 | `ceh-codebase-explanation`     | 1.3.4   |
 | `ceh-coding-conduct`           | 2.5.4   |
 | `ceh-competitor-analysis`      | 1.2.3   |
-| `ceh-every-session`            | 2.9.6   |
+| `ceh-every-session`            | 2.9.7   |
 | `ceh-security-audit`           | 1.1.5   |
 | `ceh-testing`                  | 1.6.11  |
 | `ceh-usability-audit`          | 1.2.5   |
@@ -107,6 +121,11 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 ### Changed
 
+- Archive `ceh-orchestration-lab` (last version 1.0.7) and `ceh-git-datastore` (last version
+  1.0.6): both move to `archive/` whole and leave the marketplace, the catalog, the README,
+  getting-started, vision and strategy tables, and every index under `docs/`. Uninstall them.
+- Drop the two orchestration skills from the User-only skills table in `whats-next`.
+- Lower `MAX_TOTAL_DESCRIPTION_LEN` in `checks/budget.py` from 27329 to 26214, the new total.
 - Save the repeat-mistake report as YAML in `prevent-repeat-mistake`, check each dated report
   before step 1 lists its pending fixes by key, and convert a `v1` report only before amending it.
   Its `compatibility` names uv, and `docs/RETRO_WORKFLOW.md` names the YAML.

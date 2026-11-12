@@ -126,11 +126,11 @@ design:
       `.claude/rules/decision-skill-bundled-files.md`, and its README row in
       `docs/PLUGIN_DEPENDENCIES.md`. The archive section reads: archived unused on 2026-11-11, not
       rejected, and moving the folder back under `plugins/standalone/` re-enables it.
-  - topic: One PR per phase
+  - topic: The check in its own PR, both archives in one
     decision: |
-      The check merges first, so each archive PR runs against it in CI. A green run on an archive
+      The check merges first, so the archive PR runs against it in CI. A green run on the archive
       PR then shows the check finding nothing left, which a single PR for all three could not
-      show.
+      show. Both archives share one PR, at the user's request on 2026-11-12.
 phases:
   - name: The retired-names check
     builds: |
@@ -188,3 +188,10 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#260 https://github.com/cheneeheng/ceh-claude-code-library/pull/260"
+  - date: 2026-11-12
+    event: Design changed
+    details: |
+      "One PR per phase: The check merges first, so each archive PR runs against it in CI. A green
+      run on an archive PR then shows the check finding nothing left, which a single PR for all
+      three could not show." became one PR for the check and one for both archives, because the
+      user asked in the session for phases 2 and 3 in a single PR.

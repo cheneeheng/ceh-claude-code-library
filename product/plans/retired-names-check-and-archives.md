@@ -112,9 +112,9 @@ skill body elsewhere still names it, and `validate.py` fails with the file and l
   `.claude/rules/decision-skill-bundled-files.md`, and its README row in
   `docs/PLUGIN_DEPENDENCIES.md`. The archive section reads: archived unused on 2026-11-11, not
   rejected, and moving the folder back under `plugins/standalone/` re-enables it.
-- **One PR per phase** The check merges first, so each archive PR runs against it in CI. A green run on an archive
+- **The check in its own PR, both archives in one** The check merges first, so the archive PR runs against it in CI. A green run on the archive
   PR then shows the check finding nothing left, which a single PR for all three could not
-  show.
+  show. Both archives share one PR, at the user's request on 2026-11-12.
 
 ## Phases
 
@@ -162,5 +162,9 @@ skill body elsewhere still names it, and `validate.py` fails with the file and l
 - 2026-11-12 Built Phase 1: `checks/retired_names.py`, its line in `CHECKS`, and its README row. The negative probe
   failed on `ceh-advisor` and passed once deleted.
 - 2026-11-12 PR: #260 https://github.com/cheneeheng/ceh-claude-code-library/pull/260
+- 2026-11-12 Design changed: "One PR per phase: The check merges first, so each archive PR runs against it in CI. A green
+  run on an archive PR then shows the check finding nothing left, which a single PR for all
+  three could not show." became one PR for the check and one for both archives, because the
+  user asked in the session for phases 2 and 3 in a single PR.
 
 <!-- prettier-ignore-end -->

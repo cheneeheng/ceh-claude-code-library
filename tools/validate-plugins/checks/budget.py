@@ -8,7 +8,7 @@ from common import doc_files, fail, main, parse_frontmatter
 
 # Ratchet on the sum of every skill and agent description. Lower it when the total drops; raise it
 # only in the PR that adds a component, by that component's description length.
-MAX_TOTAL_DESCRIPTION_LEN = 27329
+MAX_TOTAL_DESCRIPTION_LEN = 26214
 
 
 def check() -> None:
