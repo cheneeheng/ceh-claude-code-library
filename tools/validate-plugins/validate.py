@@ -29,6 +29,7 @@ CHECKS = [
     "references",
     "budget",
     "skill_refs",
+    "retired_names",
     "deps",
     "invocations",
     "repo_rules",

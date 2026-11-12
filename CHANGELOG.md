@@ -11,6 +11,14 @@ before this repo live in
 
 ## 2026-11-12
 
+`validate.py` gains a `retired-names` check. Until now a `ceh-<plugin>:<skill>` name was resolved
+only while its plugin existed, and a plugin named on its own was never checked, so an archived or
+renamed plugin left stale names behind that no check saw. The check fails, with file and line, on
+any mention of a plugin that has a folder under `archive/` and no live plugin, or that is listed as
+renamed. It skips `CHANGELOG.md`, `product/`, `audits/` and `archive/`, which are records, and a
+file that states history on purpose is listed for that name in the check. Phase 1 of
+`product/plans/retired-names-check-and-archives.yaml`. It changes no plugin, so no version moves.
+
 Fresh-context reviews of the three new formats found that converting a `v1` file could lose it:
 the schemas said to render and then compare, but the render hook writes the new Markdown over the
 `v1` file the moment the YAML is saved. The glossary, blog voice and repeat-mistake schemas now copy
@@ -83,6 +91,8 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 ### Added
 
+- Add the `retired-names` check to `tools/validate-plugins/`, which fails on a mention of an
+  archived or renamed plugin.
 - Add six build plans in `product/plans/` for the 2026-11-11 plugin audit: the retired-names check
   with two archives, four plugin merges, and the audit's findings.
 - Add `repeat-mistake/v2`, the repeat-mistake report as YAML with its model, YAML template and

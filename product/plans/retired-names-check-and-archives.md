@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: retired-names-check-and-archives.yaml
 generated_note: "Do not edit. artifact.py renders this file from retired-names-check-and-archives.yaml: edit the YAML, then run artifact.py render."
 title: A validator check for retired plugin names, then two plugins archived
-status: ready
+status: building
 created: 2026-11-12
 ---
 
@@ -127,7 +127,9 @@ skill body elsewhere still names it, and `validate.py` fails with the file and l
   negative probe: write `docs/_probe.md` holding the line `see ceh-advisor`, run
   `python tools/validate-plugins/checks/retired_names.py`, and it exits 1 naming
   `docs/_probe.md:1` and `ceh-advisor`. Delete the file, run it again, and it exits 0.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py` printed `OK: all plugin checks passed`. With the
+  probe, `retired_names.py` exited 1 with
+  `docs/_probe.md:1: retired plugin name 'ceh-advisor' (archived)`, and 0 once it was deleted.
 
 ### Phase 2: Archive ceh-orchestration-lab
 
@@ -157,5 +159,7 @@ skill body elsewhere still names it, and `validate.py` fails with the file and l
 
 - 2026-11-12 Planned: status ready
 - 2026-11-12 PR: #258 https://github.com/cheneeheng/ceh-claude-code-library/pull/258
+- 2026-11-12 Built Phase 1: `checks/retired_names.py`, its line in `CHECKS`, and its README row. The negative probe
+  failed on `ceh-advisor` and passed once deleted.
 
 <!-- prettier-ignore-end -->
