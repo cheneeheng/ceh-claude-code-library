@@ -1,6 +1,6 @@
 # Research note schema
 
-The note `write-research-note` saves to `.agents_workspace/research/<YYYYMMDD>-<topic>.md`. A new
+The note `write-research-note` saves to `.agents_workspace/research/<YYYYMMDD-HHMMSS>-<session-id>-<topic>.md`. A new
 note is a copy of `../assets/research-note.template.md`, relative to this file. The
 `schema: research-note/v1` line stays as written.
 

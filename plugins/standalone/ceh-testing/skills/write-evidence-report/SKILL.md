@@ -36,13 +36,13 @@ on a fresh clone and none answers for the product as a whole. This file is the o
 3. **Collect the latest result per area.** Read, newest first, and take one per area (per metric
    for performance, per target for usability):
 
-   | Area        | Source                                                                                                                                                                                    |
-   | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   | QA          | `.agents_workspace/product/qa/<timestamp>/QA_REPORT.yaml`, else its `.md`                                                                                                                 |
-   | Performance | `.agents_workspace/product/perf/<metric>.yaml`, else its `.md`                                                                                                                            |
-   | Security    | `.agents_workspace/product/security-audit/SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`, else its `.md`, the newest by file name (older date-only names sort first)                                |
-   | Usability   | `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.yaml` and `ERROR_MESSAGES.yaml`, else their `.md`                                                                        |
-   | Plan        | each plan in `product/plans/` with status `building`, plus each `built` plan whose `## Record` has no Evidence line yet: phases `done` with evidence, and any check-against-plan findings |
+   | Area        | Source                                                                                                                                                                                                                                              |
+   | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | QA          | `.agents_workspace/product/qa/<YYYYMMDD-HHMMSS>-<session-id>/QA_REPORT.yaml`, else its `.md`                                                                                                                                                        |
+   | Performance | `.agents_workspace/product/perf/<metric>.yaml`, else its `.md`                                                                                                                                                                                      |
+   | Security    | `.agents_workspace/product/security-audit/<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml`, else its `.md`. A `*-security-audit` name is newer than every older `SECURITY_AUDIT-*` name, and within one form the last by file name is the newest |
+   | Usability   | `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.yaml` and `ERROR_MESSAGES.yaml`, else their `.md`                                                                                                                                  |
+   | Plan        | each plan in `product/plans/` with status `building`, plus each `built` plan whose `## Record` has no Evidence line yet: phases `done` with evidence, and any check-against-plan findings                                                           |
 
    With no such plan, the Plan area reads `none in flight`, not `not run`: nothing was skipped.
    Any other area with no source is

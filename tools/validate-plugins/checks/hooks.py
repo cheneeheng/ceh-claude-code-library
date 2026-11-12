@@ -539,8 +539,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     )
     es = "ceh-every-session"
     handoff_fixtures = [
-        *report_fixtures(es, "HANDOFF-20261110-1200-abcd1234", good_handoff, good_handoff.replace("open: [Run the tests]", "open: []"), "open", "# Handoff — 2026-11-10 12:00", "handoff"),
-        {"script": f"{es}/artifact-render-hook.py", "stdin": write_at(tmp / "report-handoff" / "bad" / "HANDOFF-20261110-1200-abcd1234.yaml"), "env": no_uv, "out": "uv is not installed"},
+        *report_fixtures(es, "20261110-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-handoff", good_handoff, good_handoff.replace("open: [Run the tests]", "open: []"), "open", "# Handoff — 2026-11-10 12:00", "handoff"),
+        {"script": f"{es}/artifact-render-hook.py", "stdin": write_at(tmp / "report-handoff" / "bad" / "20261110-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-handoff.yaml"), "env": no_uv, "out": "uv is not installed"},
     ]  # fmt: skip
     # The workflow spec: interview-workflow-task writes it, build-agentic-workflow reads and amends it.
     good_spec = (
@@ -575,7 +575,18 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "approvals: []\nstatus: awaiting-approval publish\n"
     )
     wr = "ceh-workflow-runner"
-    run_state_fixtures = [
+    # A run id in the newer form, start time and session id, is accepted beside the older one.
+    new_run = tmp / "report-run-state-new" / "run-state.yaml"
+    new_run.parent.mkdir()
+    new_run.write_text(
+        good_run.replace(
+            "20261003-0930", "20261003-093000-7c9e6679-7425-40de-944b-e07fc1f90ae7"
+        ),
+        encoding="utf-8",
+    )
+    run_state_fixtures = ([
+        {"script": f"{wr}/artifact-render-hook.py", "stdin": write_at(new_run), "out": ""},
+    ] if have_uv else []) + [
         *report_fixtures(wr, "run-state", good_run, good_run.replace("status: awaiting-approval publish", "status: done"), "status: done while a stage is not done", "FLOW STATUS: awaiting-approval publish", "run-state"),
         {"script": f"{wr}/artifact-render-hook.py", "stdin": write_at(tmp / "report-run-state" / "bad" / "run-state.yaml"), "env": no_uv, "out": "uv is not installed"},
         # ceh-workflow-runner holds no plan model, so a plan YAML is not its to check.
@@ -747,7 +758,14 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     )
     rm = tmp / "repeat-mistake"
     day = "2026-11-12-repeat-mistake"
+    # The newer name form, start time and session id first, and the same with a label.
+    stamped = "20261112-103000-7c9e6679-7425-40de-944b-e07fc1f90ae7-repeat-mistake"
+    stamped_label = (
+        "20261112-103000-7c9e6679-7425-40de-944b-e07fc1f90ae7-cockpit-repeat-mistake"
+    )
     rm_files = {
+        f"none/product/retros/{stamped}.yaml": "key: value\n",
+        f"none/product/retros/{stamped_label}.yaml": "key: value\n",
         f"ok/product/retros/{day}.yaml": good_rm,
         f"bad/product/retros/{day}.yaml": good_rm.replace(
             "status: awaiting approval", "status: done"
@@ -785,6 +803,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": rh_es, "stdin": write_rel(rm / "none", local), "out": "no 'schema:"},
     ] if have_uv else []) + [
         {"script": rh_es, "stdin": write_rel(rm / "none", f".agents_workspace/product/retros/{day}.yaml"), "env": no_uv, "out": "uv is not installed"},
+        {"script": rh_es, "stdin": write_rel(rm / "none", f"product/retros/{stamped}.yaml"), "env": no_uv, "out": "uv is not installed"},
+        {"script": rh_es, "stdin": write_rel(rm / "none", f"product/retros/{stamped_label}.yaml"), "env": no_uv, "out": ""},
         {"script": rh_es, "stdin": write_rel(rm / "none", "product/retros/notes.yaml"), "env": no_uv, "out": ""},
         {"script": rh_es, "stdin": write_rel(rm / "none", "product/retros/2026-11-12-cockpit-repeat-mistake.yaml"), "env": no_uv, "out": ""},
         {"script": rh_es, "stdin": write_rel(rm / "none", f"{day}.yaml"), "env": no_uv, "out": ""},

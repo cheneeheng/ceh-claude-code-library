@@ -1,6 +1,6 @@
 {
   "name": "ceh-session-learning",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "CEH session learning: turn one Claude Code session's transcript into something durable. When the session went wrong, parallel analysts find why, every finding citing a transcript line and each root cause routed to a fix, with a scrubbed copy for sharing. When it went right, the steps that worked become a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments.",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/ceh-claude-code-library",

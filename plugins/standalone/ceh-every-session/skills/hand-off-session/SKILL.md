@@ -30,11 +30,11 @@ spare handoff file costs nothing and a missing one loses the state.
 2. **Describe the working tree, do not change it.** Commit uncommitted changes only if committing
    was already authorized. Saving a handoff authorizes no commit, stash, or push.
 3. **Write the handoff file** to
-   `.agents_workspace/handoff/HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.yaml` in the working
+   `.agents_workspace/handoff/<YYYYMMDD-HHMMSS>-<session-id>-handoff.yaml` in the working
    directory, filling `assets/handoff.template.yaml` in the `handoff/v2` format in
    `references/handoff-schema.md`, quoting values as its Quoting rule says. Create the directory if
-   needed. Take the timestamp from a single `date` call and the session id prefix from the first 8
-   characters of `${CLAUDE_SESSION_ID}`. A caller that passes its own header lines (a usage window,
+   needed. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`. The `session` field keeps the first 8
+   characters of the session id. A caller that passes its own header lines (a usage window,
    a reason) gets them in `header`. With `--file <path>`, the YAML is that path with its suffix
    replaced by `.yaml`, overwritten, so a calling program keeps its state under a fixed name and
    still reads the rendered Markdown at the path it named. Before writing it, delete the old
@@ -66,7 +66,7 @@ one file.
 
 ## Load
 
-1. **Find the file.** Use the path given. Otherwise take the newest `HANDOFF-*` in
+1. **Find the file.** Use the path given. Otherwise take the newest `*-handoff.*` or older `HANDOFF-*` in
    `.agents_workspace/handoff/` by the timestamp in its name, `.yaml` and `.md` alike, and if there
    is none, the newest index line in `~/.claude/handoff/index.md` whose cwd matches. If several
    plausible files exist and none was named, list the newest few with their one-line state and

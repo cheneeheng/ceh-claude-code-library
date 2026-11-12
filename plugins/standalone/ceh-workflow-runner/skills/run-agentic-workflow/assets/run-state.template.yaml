@@ -1,6 +1,6 @@
 schema: run-state/v2
 flow: <flow>
-run_id: "<YYYYMMDD-HHMM>"
+run_id: "<YYYYMMDD-HHMMSS>-<session-id>"
 config: <flow.yaml path>
 mode: <interactive | headless>
 inputs:

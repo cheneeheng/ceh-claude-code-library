@@ -72,10 +72,10 @@ each confirmed bug after the report is written. Fix mode runs only when the user
 
 ## Output
 
-Write `.agents_workspace/product/qa/<YYYYMMDD-HHMM>/QA_REPORT.yaml`, timestamp from one `date`
-call, with screenshots and logs beside it, filling `assets/qa-report.template.yaml`, per the
+Write `.agents_workspace/product/qa/<YYYYMMDD-HHMMSS>-<session-id>/QA_REPORT.yaml`, with
+screenshots and logs beside it, filling `assets/qa-report.template.yaml`, per the
 `qa-report/v2` section of `references/qa-report-schema.md`. `QA_REPORT.md` is rendered from it
-beside it, in the layout of `assets/qa-report.template.md`.
+beside it, in the layout of `assets/qa-report.template.md`. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
 
 ## Stop conditions
 
