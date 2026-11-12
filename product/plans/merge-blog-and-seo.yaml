@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Merge ceh-blog and ceh-seo into ceh-blog-and-seo
-status: ready
+status: built
 created: 2026-11-12
 goal: |
   The plugin audit of 2026-11-11 decided that `ceh-blog` and `ceh-seo` become one plugin,
@@ -119,8 +119,16 @@ phases:
       `claude plugin validate plugins/standalone/ceh-blog-and-seo` passes.
       `ls plugins/standalone/ceh-blog-and-seo/skills` lists the six skills, and neither old
       folder exists. CI is green on the PR.
-    status: todo
+    status: done
+    evidence: |
+      Commit c92970e. `python tools/validate-plugins/validate.py` printed
+      `OK: all plugin checks passed`. `claude plugin validate plugins/standalone/ceh-blog-and-seo`
+      printed `Validation passed`. `skills/` lists the six skills, and neither old folder exists.
+      CI run 43202288693 on PR #262 succeeded.
     note: |
+      The longer prefix lengthened the skill names inside descriptions, so
+      `MAX_TOTAL_DESCRIPTION_LEN` in `checks/budget.py` was raised to the new total, which this
+      plan did not foresee. No description was reworded for it.
       Not covered by a command: loading the plugin in a fresh session with
       `claude --plugin-dir plugins/standalone/ceh-blog-and-seo` and seeing the six skills listed.
       The builder reports it as not run unless the user asks for it.
@@ -137,3 +145,14 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#258 https://github.com/cheneeheng/ceh-claude-code-library/pull/258"
+  - date: 2026-11-12
+    event: Built Phase
+    phase: 1
+    details: |
+      `ceh-blog` and `ceh-seo` merged into `ceh-blog-and-seo` 2.0.0, with `ceh-seo` out of
+      `READERS`, the hook fixtures under the new folder name, and `ceh-testing` and
+      `ceh-usability-audit` bumped. Built in one PR with the three other merge plans, at the
+      user's request.
+  - date: 2026-11-12
+    event: PR
+    details: "#262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262"

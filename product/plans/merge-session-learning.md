@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: merge-session-learning.yaml
 generated_note: "Do not edit. artifact.py renders this file from merge-session-learning.yaml: edit the YAML, then run artifact.py render."
 title: Merge ceh-session-diagnosis and ceh-session-to-skill into ceh-session-learning
-status: ready
+status: built
 created: 2026-11-12
 ---
 
@@ -96,7 +96,11 @@ dispatches `ceh-session-learning:transcript-analyst`, and
   `ls plugins/standalone/ceh-session-learning/skills` lists `diagnose-session` and
   `turn-session-into-skill`, `ls plugins/standalone/ceh-session-learning/agents` lists
   `transcript-analyst.md`, and neither old folder exists. CI is green on the PR.
-- **Status:** todo. Not covered by a command: loading the plugin in a fresh session with
+- **Status:** done, Commit dcd8adb. `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`. `claude plugin validate plugins/standalone/ceh-session-learning`
+  printed `Validation passed`. `skills/` lists `diagnose-session` and `turn-session-into-skill`,
+  `agents/` lists `transcript-analyst.md`, and neither old folder exists. CI run 43202288693 on
+  PR #262 succeeded. Not covered by a command: loading the plugin in a fresh session with
   `claude --plugin-dir plugins/standalone/ceh-session-learning` and seeing both skills and the
   agent listed. The builder reports it as not run unless the user asks for it.
 
@@ -112,5 +116,9 @@ dispatches `ceh-session-learning:transcript-analyst`, and
 
 - 2026-11-12 Planned: status ready
 - 2026-11-12 PR: #258 https://github.com/cheneeheng/ceh-claude-code-library/pull/258
+- 2026-11-12 Built Phase 1: `ceh-session-diagnosis` and `ceh-session-to-skill` merged into `ceh-session-learning` 2.0.0,
+  with both old names in `RENAMED` and `ceh-every-session` bumped. Built in one PR with the
+  three other merge plans, at the user's request.
+- 2026-11-12 PR: #262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262
 
 <!-- prettier-ignore-end -->
