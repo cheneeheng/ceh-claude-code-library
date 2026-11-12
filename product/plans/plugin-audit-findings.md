@@ -544,5 +544,6 @@ turn on a decision block with no denied call first.
   `OK: hooks check passed`. `bulk-read-guard.py` also splits `BULK_READER_ALLOW` on
   `os.pathsep`, since both guards read the variable, and the usage watch's message gives
   the whole session id for the handoff name, after Phase 2.
+- 2026-11-12 PR: #267 https://github.com/cheneeheng/ceh-claude-code-library/pull/267
 
 <!-- prettier-ignore-end -->
