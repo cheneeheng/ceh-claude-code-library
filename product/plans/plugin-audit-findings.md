@@ -32,9 +32,9 @@ turn on a decision block with no denied call first.
 - Every skill names a YAML handoff file by its `.yaml` name where the YAML is the source, and
   the `.md` name only for the rendered file or the fallback.
 - Meridian is the default theme in every plugin that picks one without asking.
-- Every file or folder a skill saves with a date or time in its name is named
-  `<YYYYMMDD-HHMMSS>-<session-id>-<name>`, the same form repo-wide, recorded as a decision
-  rule. A second run keeps the first, and every reader and hook still finds a file saved
+- Every file or folder a skill saves with a date or time in its name, except the two under
+  Out, is named `<YYYYMMDD-HHMMSS>-<session-id>-<name>`, the same form repo-wide, recorded
+  as a decision rule that names both exceptions. A second run keeps the first, and every reader and hook still finds a file saved
   under an older form.
 - A guard that sends work to an agent lets that agent through: `bulk-reader` may read whole
   files, and the read-only agents no longer receive the coding contract.
@@ -144,8 +144,14 @@ turn on a decision block with no denied call first.
   one `date +%Y%m%d-%H%M%S` call, `<session-id>` is the whole of `${CLAUDE_SESSION_ID}`,
   and `<name>` says what the file is. Each skill body carries the same sentence: "Take
   `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from
-  `${CLAUDE_SESSION_ID}`." The rule is recorded in
-  `.claude/rules/decision-saved-file-names.md`, in this phase's commit.
+  `${CLAUDE_SESSION_ID}`." The variable is filled in only when the Skill tool loads a
+  skill body, so a schema file, a README and a doc spell the placeholder `<session-id>`,
+  never the variable. A subagent that reads a `SKILL.md` by path sees the variable
+  unfilled, so where a subagent writes the file (`review-build-plan`,
+  `write-research-note`, `audit-test-suite`), the dispatching session builds the whole
+  save path and passes it in the subagent's prompt. The rule is recorded in
+  `.claude/rules/decision-saved-file-names.md`, in this phase's commit, with its two
+  exceptions.
 
   | Skill                     | Saved today as                                        | Saved as                                                    |
   | ------------------------- | ----------------------------------------------------- | ----------------------------------------------------------- |
@@ -180,18 +186,26 @@ turn on a decision block with no denied call first.
 
   Files already saved are not renamed, so each reader and hook takes both forms:
 
-  - `hand-off-session` Load takes the newest of `HANDOFF-*` and `*-handoff.*` by the
-    timestamp in the name.
+  - `hand-off-session` Load and `whats-next` step 1 take the newest of `HANDOFF-*` and
+    `*-handoff.*` by the timestamp in the name.
   - `write-evidence-report` takes a `*-security-audit` name as newer than every
-    `SECURITY_AUDIT-*` name, and among names of one form the last by file name. QA folders
-    of both forms sort by name as they are.
+    `SECURITY_AUDIT-*` name, and among names of one form the last by file name. This
+    replaces "the newest by file name" in its Security row, because a plain sort puts a
+    digit before `S`. QA folders of both forms sort by name as they are.
+  - `review-recent-work` reads the date of the newest `*-period.md` from either form, and
+    `write-questionnaire` takes the newest file by the date in the name, then by modified
+    time.
   - `prevent-repeat-mistake` step 1 and `REPEAT` in `artifact-render-hook.py` (every copy)
     match `<YYYY-MM-DD>-repeat-mistake` and
     `<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake`, the session id as a UUID, so a
-    labelled name is still not a report.
+    labelled name is still not a report. The hook's comment on the labelled name is
+    reworded to cover both forms.
   - `RunId` in `run-state-model.py` (both copies) accepts the old pattern and
     `^\d{8}-\d{6}-<UUID>$`. The clash suffix stays valid for old ids and is no longer
-    written, because two sessions cannot share a new id.
+    written, because two sessions cannot share a new id. A resumed run keeps the id of
+    the session that started it. The run id is spelled without angle brackets in
+    `run-agentic-workflow` step 4 and in `flow-config-schema.md` and
+    `run-state-schema.md` (both copies of each), and all five change with the template.
 
   `tools/validate-plugins/checks/hooks.py` gains a fixture for a repeat-mistake report
   under the new name, a labelled new-form name left alone, and a run state with a new run
@@ -383,7 +397,7 @@ turn on a decision block with no denied call first.
 - **Builds:** "Phase 1 rule: ask the user, with no tool name", "Phase 1 rules: task tools and the
   reviewer's model", "Phase 1 rule: the YAML name where the YAML is the source", and "Phase
   1 rule: Meridian everywhere", with "What every phase carries".
-- **Check:** `git grep -n AskUserQuestion -- "plugins/standalone/*/skills" "plugins/standalone/*/agents"`
+- **Check:** `git grep -n AskUserQuestion -- "plugins/standalone/*/skills/*" "plugins/standalone/*/agents/*"`
   shows only lines that say not to use the tool or that a subagent lacks it: the three
   `ask-the-author.md` files, `build-agentic-workflow` (its body and its `evals.json`), and
   one line of `run-agentic-workflow`.
@@ -399,11 +413,16 @@ turn on a decision block with no denied call first.
 ### Phase 2: One name form for saved reports
 
 - **Builds:** "Phase 2: one name form for saved reports", with "What every phase carries".
-- **Check:** `git grep -nE "<YYYYMMDD(-HHMM)?>|<YYYY-MM-DD(-HHMM)?>[-.]|[-/]<YYYY-MM-DD>|<session-id-prefix>\.|qa/<timestamp>|/<date>-" -- plugins/standalone docs/RETRO_WORKFLOW.md docs/STRATEGY.md docs/CROSS_REFERENCES.md .claude/skills/evaluate-plugin`
-  shows only the blog draft's `<YYYY-MM-DD>-<slug>` and the lines that name an older form
-  as one a reader still accepts.
-  `git grep -c "date +%Y%m%d-%H%M%S" -- "plugins/standalone/*/skills/*/SKILL.md"` counts
-  the fifteen skills of the table.
+- **Check:** `git grep -nE "<YYYYMMDD(-HHMM)?>|<YYYY-MM-DD(-HHMM)?>[-.]|[-/]<YYYY-MM-DD>|<session-id-prefix>\.|qa/<timestamp>|/<date>-|YYYYMMDD-HHMM([^S]|$)|on a clash" -- plugins/standalone docs/RETRO_WORKFLOW.md docs/STRATEGY.md docs/CROSS_REFERENCES.md .claude/skills/evaluate-plugin`
+  shows only the three blog draft lines (`docs/CROSS_REFERENCES.md`, `draft-post` and
+  `edit-post` "Where it goes") and the lines where a reader names the older form it still
+  accepts: `hand-off-session` Load, `whats-next` step 1, `write-evidence-report`'s
+  Security row, `prevent-repeat-mistake` step 1 with its schema, and the run id's older
+  pattern in `run-state-schema.md`.
+  `git grep -c "date +%Y%m%d-%H%M%S" -- "plugins/standalone/*/skills/*/SKILL.md"` prints
+  15 lines, one per skill of the table, and
+  `git grep -c "date +%Y%m%d-%H%M%S" -- .claude/skills/evaluate-plugin/SKILL.md` prints
+  one.
   `python tools/validate-plugins/checks/hooks.py` passes with the new fixtures, each seen
   failing before its edit. `.claude/rules/decision-saved-file-names.md` exists.
   `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`.
@@ -471,6 +490,8 @@ turn on a decision block with no denied call first.
   stays open, and Phase 3 fixes only the reset.
 - Is `<session-id>` the whole session id or its first 8 characters?: The whole id, `${CLAUDE_SESSION_ID}`, because the user wrote "sessionid" and the plugin
   audit's own folder carries it whole. A name is then about 52 characters before `<name>`.
+  The `REPEAT` and `RunId` patterns assume the id is a UUID, which is not checked for
+  headless and cloud sessions.
 - Do a blog draft, `<YYYY-MM-DD>-<slug>`, and the model-audit folder, `audits/<date>/`,
   take the new form too?: No, for the reasons under Scope. Either joins Phase 2 if the user says so.
 
@@ -486,5 +507,9 @@ turn on a decision block with no denied call first.
   user asked for that one form repo-wide, with existing file names left as they are. This
   takes the retros and repeat-mistake names out of Scope out and closes the open question
   on security audits and QA reports.
+- 2026-11-12 Reviewed: Revise first, 3 blocking (`whats-next` missing from the handoff readers, the run id
+  spelled without brackets where the check cannot see it, a subagent reading `SKILL.md` by
+  path gets the session variable unfilled). All ten findings fixed in the plan the same
+  day.
 
 <!-- prettier-ignore-end -->
