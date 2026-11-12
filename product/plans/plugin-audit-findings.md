@@ -564,5 +564,6 @@ turn on a decision block with no denied call first.
   `OK: all plugin checks passed`. No skill got `paths`: every "Auto-load when" in the
   three plugins names a trigger that is not a file, or the skill has `paths` already.
   The Docker and database paths of the service scripts were syntax-checked, not run.
+- 2026-11-12 PR: #268 https://github.com/cheneeheng/ceh-claude-code-library/pull/268
 
 <!-- prettier-ignore-end -->
