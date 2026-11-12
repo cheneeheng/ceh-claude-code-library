@@ -96,7 +96,7 @@ on a fresh clone and none answers for the product as a whole. This file is the o
    YAML, not the `.md`, which can lag behind it, and append to the YAML's `record` list instead,
    as `date`, `event: Evidence`, and a quoted `details`, never editing the generated `.md`. Commit
    both files. When the `.md` did not change, because the hook that renders it
-   (`ceh-build-planning`) is not installed, say so in the reply.
+   (`ceh-build-plan`) is not installed, say so in the reply.
 
 ## Rules
 

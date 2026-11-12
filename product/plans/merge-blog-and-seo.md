@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: merge-blog-and-seo.yaml
 generated_note: "Do not edit. artifact.py renders this file from merge-blog-and-seo.yaml: edit the YAML, then run artifact.py render."
 title: Merge ceh-blog and ceh-seo into ceh-blog-and-seo
-status: ready
+status: built
 created: 2026-11-12
 ---
 
@@ -108,7 +108,13 @@ one plugin for it. The flow that matters most: with only `ceh-blog-and-seo` inst
   `claude plugin validate plugins/standalone/ceh-blog-and-seo` passes.
   `ls plugins/standalone/ceh-blog-and-seo/skills` lists the six skills, and neither old
   folder exists. CI is green on the PR.
-- **Status:** todo. Not covered by a command: loading the plugin in a fresh session with
+- **Status:** done, Commit c92970e. `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`. `claude plugin validate plugins/standalone/ceh-blog-and-seo`
+  printed `Validation passed`. `skills/` lists the six skills, and neither old folder exists.
+  CI run 43202288693 on PR #262 succeeded. The longer prefix lengthened the skill names inside descriptions, so
+  `MAX_TOTAL_DESCRIPTION_LEN` in `checks/budget.py` was raised to the new total, which this
+  plan did not foresee. No description was reworded for it.
+  Not covered by a command: loading the plugin in a fresh session with
   `claude --plugin-dir plugins/standalone/ceh-blog-and-seo` and seeing the six skills listed.
   The builder reports it as not run unless the user asks for it.
 
@@ -121,5 +127,10 @@ one plugin for it. The flow that matters most: with only `ceh-blog-and-seo` inst
 
 - 2026-11-12 Planned: status ready
 - 2026-11-12 PR: #258 https://github.com/cheneeheng/ceh-claude-code-library/pull/258
+- 2026-11-12 Built Phase 1: `ceh-blog` and `ceh-seo` merged into `ceh-blog-and-seo` 2.0.0, with `ceh-seo` out of
+  `READERS`, the hook fixtures under the new folder name, and `ceh-testing` and
+  `ceh-usability-audit` bumped. Built in one PR with the three other merge plans, at the
+  user's request.
+- 2026-11-12 PR: #262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262
 
 <!-- prettier-ignore-end -->

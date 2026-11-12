@@ -39,7 +39,8 @@ holds both its writer and its reader. The glossary (`glossary/v2`) follows, per
 `product/plans/glossary-yaml.yaml`, with the hooks in `ceh-codebase-explanation`, which writes it,
 and its model copied into `record-project-decisions` in `ceh-every-session`, which reads it. The
 blog voice profile (`blog-voice/v2`) follows, per `product/plans/blog-voice-yaml.yaml`, with the
-hooks in `ceh-blog`, which leaves `READERS` because `draft-post` writes it and `edit-post` reads it.
+hooks in `ceh-blog-and-seo`, which is not in `READERS` because `draft-post` writes it and
+`edit-post` reads it.
 The repeat-mistake report (`repeat-mistake/v2`) follows, per
 `product/plans/repeat-mistake-yaml.yaml`, with the hooks already in `ceh-every-session`, whose
 `prevent-repeat-mistake` both writes it and reads it in a later session.

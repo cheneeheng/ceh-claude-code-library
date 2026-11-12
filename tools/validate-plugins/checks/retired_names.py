@@ -10,7 +10,16 @@ from common import REPO, fail, main, plugin_dirs, rel
 from hygiene import HYGIENE_SUFFIXES, committable_files
 
 # Old plugin name -> the plugin that replaced it. A merge adds its old names in its own PR.
-RENAMED: dict[str, str] = {}
+RENAMED: dict[str, str] = {
+    "ceh-session-diagnosis": "ceh-session-learning",
+    "ceh-session-to-skill": "ceh-session-learning",
+    "ceh-blog": "ceh-blog-and-seo",
+    "ceh-seo": "ceh-blog-and-seo",
+    "ceh-build-planning": "ceh-build-plan",
+    "ceh-build-from-plan": "ceh-build-plan",
+    "ceh-vision-and-strategy": "ceh-product-direction",
+    "ceh-business-plan": "ceh-product-direction",
+}
 # Retired name -> repo-relative files that may still name it, because they state history.
 ALLOWED: dict[str, set[str]] = {
     "ceh-evaluation": {

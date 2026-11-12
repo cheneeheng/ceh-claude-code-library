@@ -24,6 +24,7 @@ output templates live in `assets/` instead:
 Never general reference material a model already knows. A rule that applies on every run stays
 inline. Exceptions: `ceh-ui-design:design-ui` and `ceh-web-frontend:visualize-graph-cytoscape`
 keep their catalog files, a new catalog skill argues its own exception in its PR, and scaffold or
-script bundles a skill executes or copies are allowed (`ceh-ag-ui`, `ceh-business-plan`, and `scripts/artifact.py` in each skill that carries a YAML format's model).
+script bundles a skill executes or copies are allowed (`ceh-ag-ui`, `ceh-product-direction`, and
+`scripts/artifact.py` in each skill that carries a YAML format's model).
 
 Why: a model can skip a link and never see it, so only what a run reads in part leaves the body.

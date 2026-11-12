@@ -23,13 +23,14 @@ SHARED_SCRIPTS = ("artifact.py", "artifact-render-hook.py", "generated-md-guard.
 # carry the models in their skills and no hooks, per Phase 6 of
 # product/plans/artifact-validation-formats.yaml. ceh-every-session left it when hand-off-session
 # began writing handoff/v2 (product/plans/handoff-yaml.yaml), so it now ships the hooks, and
-# ceh-blog when draft-post began writing blog-voice/v2 (product/plans/blog-voice-yaml.yaml).
+# the blog plugin when draft-post began writing blog-voice/v2 (product/plans/blog-voice-yaml.yaml).
+# The three SEO skills left it when they joined that plugin as ceh-blog-and-seo, which carries the
+# hooks (product/plans/merge-blog-and-seo.yaml).
 READERS = {
-    "ceh-seo",
     "ceh-documentation",
     "ceh-python-service",
 }
-CLI = REPO / "plugins" / "standalone" / "ceh-build-planning" / "scripts" / "artifact.py"
+CLI = REPO / "plugins" / "standalone" / "ceh-build-plan" / "scripts" / "artifact.py"
 
 
 def _survives_refused_read() -> None:

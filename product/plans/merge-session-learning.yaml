@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Merge ceh-session-diagnosis and ceh-session-to-skill into ceh-session-learning
-status: ready
+status: built
 created: 2026-11-12
 goal: |
   The plugin audit of 2026-11-11 decided that `ceh-session-diagnosis` and `ceh-session-to-skill`
@@ -105,7 +105,13 @@ phases:
       `ls plugins/standalone/ceh-session-learning/skills` lists `diagnose-session` and
       `turn-session-into-skill`, `ls plugins/standalone/ceh-session-learning/agents` lists
       `transcript-analyst.md`, and neither old folder exists. CI is green on the PR.
-    status: todo
+    status: done
+    evidence: |
+      Commit dcd8adb. `python tools/validate-plugins/validate.py` printed
+      `OK: all plugin checks passed`. `claude plugin validate plugins/standalone/ceh-session-learning`
+      printed `Validation passed`. `skills/` lists `diagnose-session` and `turn-session-into-skill`,
+      `agents/` lists `transcript-analyst.md`, and neither old folder exists. CI run 43202288693 on
+      PR #262 succeeded.
     note: |
       Not covered by a command: loading the plugin in a fresh session with
       `claude --plugin-dir plugins/standalone/ceh-session-learning` and seeing both skills and the
@@ -129,3 +135,13 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#258 https://github.com/cheneeheng/ceh-claude-code-library/pull/258"
+  - date: 2026-11-12
+    event: Built Phase
+    phase: 1
+    details: |
+      `ceh-session-diagnosis` and `ceh-session-to-skill` merged into `ceh-session-learning` 2.0.0,
+      with both old names in `RENAMED` and `ceh-every-session` bumped. Built in one PR with the
+      three other merge plans, at the user's request.
+  - date: 2026-11-12
+    event: PR
+    details: "#262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262"

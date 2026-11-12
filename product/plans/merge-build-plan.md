@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: merge-build-plan.yaml
 generated_note: "Do not edit. artifact.py renders this file from merge-build-plan.yaml: edit the YAML, then run artifact.py render."
 title: Merge ceh-build-planning and ceh-build-from-plan into ceh-build-plan
-status: ready
+status: built
 created: 2026-11-12
 ---
 
@@ -158,7 +158,13 @@ Built Phase line because it knows the skill under its new name.
   `ls plugins/standalone/ceh-build-plan/skills` lists the three skills,
   `ls plugins/standalone/ceh-build-plan/evals` lists 37 case folders, and neither old folder
   exists. CI is green on the PR.
-- **Status:** todo. Not covered by a command: loading the plugin in a fresh session with
+- **Status:** done, Commit de4c279. `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`. `claude plugin validate plugins/standalone/ceh-build-plan`
+  printed `Validation passed`. `skills/` lists the three skills, `evals/` holds 37 case
+  folders, and neither old folder exists. CI run 43202288693 on PR #262 succeeded. Both old plugins had a git-ignored `evals/results/` folder of local eval run output. The
+  base's moved with its folder. The one under `ceh-build-from-plan` was deleted with that
+  folder during the build and could not be restored, since git never tracked it.
+  Not covered by a command: loading the plugin in a fresh session with
   `claude --plugin-dir plugins/standalone/ceh-build-plan` and seeing the three skills listed,
   and a run of the eval cases. The builder reports both as not run unless the user asks.
 
@@ -175,5 +181,10 @@ Built Phase line because it knows the skill under its new name.
 
 - 2026-11-12 Planned: status ready
 - 2026-11-12 PR: #258 https://github.com/cheneeheng/ceh-claude-code-library/pull/258
+- 2026-11-12 Built Phase 1: `ceh-build-planning` and `ceh-build-from-plan` merged into `ceh-build-plan` 2.0.0, with the
+  three-hook `hooks.json`, the record guard on the new skill name, the handoffs reworded, the
+  six plan schema copies edited, and every plugin that named either old plugin bumped. Built
+  in one PR with the three other merge plans, at the user's request.
+- 2026-11-12 PR: #262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262
 
 <!-- prettier-ignore-end -->

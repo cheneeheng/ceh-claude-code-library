@@ -136,22 +136,23 @@ Each moment names the plugin, the command that starts it, and the file it writes
 
 **Shape**
 
-- Test whether an idea is worth building: install `ceh-business-plan`, start with
-  `/ceh-business-plan:develop-business-plan`. Writes `.agents_workspace/product/business/BUSINESS_PLAN.md`.
+- Test whether an idea is worth building: install `ceh-product-direction`, start with
+  `/ceh-product-direction:develop-business-plan`. Writes
+  `.agents_workspace/product/business/BUSINESS_PLAN.md`.
 - Learn from a competitor's repo or product: install `ceh-competitor-analysis`, start with
   `/ceh-competitor-analysis:analyze-competitor`. Writes reports in `.agents_workspace/`.
-- Write down the repo's direction: install `ceh-vision-and-strategy`, start with
-  `/ceh-vision-and-strategy:write-vision-and-strategy`. Writes `product/VISION.md` and
+- Write down the repo's direction: the same plugin, start with
+  `/ceh-product-direction:write-vision-and-strategy`. Writes `product/VISION.md` and
   `product/STRATEGY.md`.
 
 **Build**
 
-- Plan a new app or one feature: install `ceh-build-planning`, start with
-  `/ceh-build-planning:write-build-plan`. Writes `product/plans/<slug>.yaml` and the
+- Plan a new app or one feature: install `ceh-build-plan`, start with
+  `/ceh-build-plan:write-build-plan`. Writes `product/plans/<slug>.yaml` and the
   `<slug>.md` generated from it, and deleting both discards the plan. It needs `uv` to check and
   render the plan, and saves it unchecked without.
-- Build from that plan: install `ceh-build-from-plan` and your stack plugin (below), start with
-  `/ceh-build-from-plan:implement-from-plan`. Writes the code and the plan's evidence.
+- Build from that plan: the same plugin and your stack plugin (below), start with
+  `/ceh-build-plan:implement-from-plan`. Writes the code and the plan's evidence.
 - Write the user and operator docs: install `ceh-documentation`, start with
   `/ceh-documentation:write-project-docs`. Writes `docs/`.
 
@@ -170,9 +171,10 @@ Each moment names the plugin, the command that starts it, and the file it writes
 
 **Tell**
 
-- Write a launch post: install `ceh-blog`, start with `/ceh-blog:draft-post`. Writes a post.
-- Make it findable: install `ceh-seo`, start with `/ceh-seo:write-project-listing-text` for the
-  README first screen and listings, or `/ceh-seo:make-page-crawlable` for web pages.
+- Write a launch post: install `ceh-blog-and-seo`, start with `/ceh-blog-and-seo:draft-post`.
+  Writes a post.
+- Make it findable: the same plugin, start with `/ceh-blog-and-seo:write-project-listing-text` for
+  the README first screen and listings, or `/ceh-blog-and-seo:make-page-crawlable` for web pages.
 
 Pick one stack plugin for the build. Each brings `ceh-testing`, and the web one also brings
 `ceh-ui-design`:
@@ -184,16 +186,15 @@ Pick one stack plugin for the build. Each brings `ceh-testing`, and the web one 
 | a web frontend             | `ceh-web-frontend`   |
 
 For example, a new Python backend service starts with a plan and adds the build plugins once the
-plan is written. In a Claude Code session opened in that repo, install the planning plugin now:
+plan is written. In a Claude Code session opened in that repo, install the plan plugin now:
 
 ```
-/plugin install ceh-build-planning@ceh-claude-code-library --scope project
+/plugin install ceh-build-plan@ceh-claude-code-library --scope project
 ```
 
 Then, when you build from the plan:
 
 ```
-/plugin install ceh-build-from-plan@ceh-claude-code-library --scope project
 /plugin install ceh-python-service@ceh-claude-code-library --scope project
 ```
 
@@ -204,15 +205,14 @@ still runs, and says which claims rest on nothing proven.
 
 ## 4. Add these only when the moment arrives
 
-| Plugin                     | Install when                                                                              |
-| -------------------------- | ----------------------------------------------------------------------------------------- |
-| `ceh-codebase-explanation` | you inherit a repo, or need an architecture doc, a glossary, or why code is the way it is |
-| `ceh-ui-design`            | you design a UI or HTML page without `ceh-web-frontend`                                   |
-| `ceh-ag-ui`                | you build a generative-UI canvas for an AG-UI agent                                       |
-| `ceh-workflow-builder`     | the same product work repeats and an agent should run it                                  |
-| `ceh-workflow-runner`      | a built `flow.yaml` must run, here or headless                                            |
-| `ceh-session-to-skill`     | a task just went well and you want it as a reusable skill                                 |
-| `ceh-session-diagnosis`    | a session went wrong and you want to know why from its transcript                         |
+| Plugin                     | Install when                                                                               |
+| -------------------------- | ------------------------------------------------------------------------------------------ |
+| `ceh-codebase-explanation` | you inherit a repo, or need an architecture doc, a glossary, or why code is the way it is  |
+| `ceh-ui-design`            | you design a UI or HTML page without `ceh-web-frontend`                                    |
+| `ceh-ag-ui`                | you build a generative-UI canvas for an AG-UI agent                                        |
+| `ceh-workflow-builder`     | the same product work repeats and an agent should run it                                   |
+| `ceh-workflow-runner`      | a built `flow.yaml` must run, here or headless                                             |
+| `ceh-session-learning`     | a session went wrong and you want to know why, or one went well and you want it as a skill |
 
 ## 5. Check it worked
 

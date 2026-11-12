@@ -29,19 +29,19 @@ at once. This repo keeps its granularity and adds the second kind of idea withou
 
 ## The stages
 
-| Stage | The question it answers                                | Plugins                                                                                                                                                                                    |
-| ----- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Shape | What should exist, for whom, and is it worth building? | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-vision-and-strategy`                                                                                                                  |
-| Build | How is it built? Then build it: code, UI, docs         | `ceh-build-planning`, `ceh-build-from-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-documentation`, `ceh-codebase-explanation` |
-| Prove | Does it work, is it safe, and can a person use it?     | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                                                 |
-| Tell  | Who should find it, and what do they read?             | `ceh-blog`, `ceh-seo`                                                                                                                                                                      |
+| Stage | The question it answers                                | Plugins                                                                                                                                                         |
+| ----- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shape | What should exist, for whom, and is it worth building? | `ceh-product-direction`, `ceh-competitor-analysis`                                                                                                              |
+| Build | How is it built? Then build it: code, UI, docs         | `ceh-build-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-documentation`, `ceh-codebase-explanation` |
+| Prove | Does it work, is it safe, and can a person use it?     | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                      |
+| Tell  | Who should find it, and what do they read?             | `ceh-blog-and-seo`                                                                                                                                              |
 
 The every-step plugins (`ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, and the rest
 of the vision's Every step row) sit outside the route. They apply at every stage.
 
 **Build planning belongs to Build, not Shape.** Shape decides what and whether, once per product.
 A build plan decides how, and it recurs for every feature inside the build loop:
-`ceh-build-planning:write-build-plan` itself triggers on "how should we build this". Keeping it in
+`ceh-build-plan:write-build-plan` itself triggers on "how should we build this". Keeping it in
 Shape would send "add a feature to my app" through the business-plan stage, the wrong door for a
 new user. The two stay connected through the vision and the strategy, both read by the build plan.
 It never reads the business plan: the business plan flows one way, so its dated tests do not
@@ -56,12 +56,12 @@ become a plan's goals (`decision-business-plan-readers.md`).
 | Prove | the plan, the code                                                                                                                   | `product/EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                                      |
 | Tell  | `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, `product/EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists) | posts, listings, SEO pages                                                                                                                |
 
-Shape to Build: `ceh-vision-and-strategy` writes `product/VISION.md` and `product/STRATEGY.md`, and
-`ceh-build-planning` reads them, putting what a plan would contradict under Open, and writes the
-plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read. `ceh-business-plan` writes
+Shape to Build: `ceh-product-direction` writes `product/VISION.md` and `product/STRATEGY.md`, and
+`ceh-build-plan` reads them, putting what a plan would contradict under Open, and writes the
+plan that it builds from and `ceh-check-build-against-plan` reads. `ceh-product-direction` also writes
 `.agents_workspace/product/business/BUSINESS_PLAN.md`, which no Build skill reads. Prove to
 Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.md`, and
-`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.md`.
+`ceh-blog-and-seo:draft-post` and `ceh-blog-and-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.md`.
 
 Three rules hold for every handoff file:
 
@@ -122,16 +122,16 @@ lifecycle:
 - **Plans are kept.** A built plan stays in `product/plans/` with `status: built` and an append-only
   Record of how it was planned, reviewed, built, checked, proven, and merged, so the plan is the
   audit trail of its change. Its lasting decisions are also copied to the Key Decisions log in
-  `product/ARCHITECTURE.md`. Planning stays cheap because `ceh-build-planning:write-build-plan` reads
+  `product/ARCHITECTURE.md`. Planning stays cheap because `ceh-build-plan:write-build-plan` reads
   only the frontmatter of built plans.
 - **Fix records are kept.** A bug fix does not go through a build plan, because the bug already
   says what to build. What it needs is the reason, so every fix commits
   `product/fixes/<slug>.yaml` (`fix-record/v2`, its `.md` rendered beside it) with its symptom,
   diagnosis, cause, and regression tests, written by
   `ceh-coding-conduct:find-root-cause` and `ceh-testing:test-a-bug-fix`. A fix that changes a
-  contract or the design is a feature, and goes through `ceh-build-planning:write-build-plan`.
+  contract or the design is a feature, and goes through `ceh-build-plan:write-build-plan`.
 - **Retro reports are kept when their fixes land here.** A retro looks back over one session
-  (`ceh-session-diagnosis:diagnose-session`) or a period (`ceh-git-workflow:review-recent-work`)
+  (`ceh-session-learning:diagnose-session`) or a period (`ceh-git-workflow:review-recent-work`)
   and routes each issue to the skill that fixes it: a bug to `find-root-cause`, a design change to
   `write-build-plan`, an agent mistake to `prevent-repeat-mistake`, a working rule to
   `record-project-decisions`. The agent acts on every route in the repo in the same session, and
@@ -162,7 +162,7 @@ The likely order next, judged from the current gaps and not yet confirmed by a r
 
 1. **The learning loop catches recurring overrides.** The vision says an override that keeps
    recurring is a plugin defect. `ceh-every-session:prevent-repeat-mistake` fixes one once a human
-   names it, and `ceh-session-diagnosis:diagnose-session` finds one inside a session, but nothing
+   names it, and `ceh-session-learning:diagnose-session` finds one inside a session, but nothing
    notices one recurring across sessions.
 2. **Parallel builds.** Only what Claude Code's native worktrees and subagents lack, per the
    vision's non-goal on rebuilding Claude Code.

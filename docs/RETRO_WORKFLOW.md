@@ -11,7 +11,7 @@ what no single skill can document: the routing _between_ them and the files they
 | Skill                                      | Looks back over                     | Reads                                         | Report kind           |
 | ------------------------------------------ | ----------------------------------- | --------------------------------------------- | --------------------- |
 | `ceh-git-workflow:review-recent-work`      | A period of work in a repo          | `git log`, and merged PRs when `gh` is set up | `period`              |
-| `ceh-session-diagnosis:diagnose-session`   | One Claude Code session             | The session transcript and its subagents'     | `session-<id-prefix>` |
+| `ceh-session-learning:diagnose-session`    | One Claude Code session             | The session transcript and its subagents'     | `session-<id-prefix>` |
 | `ceh-every-session:prevent-repeat-mistake` | One mistake that must not come back | The quoted evidence of that mistake           | `repeat-mistake`      |
 
 The first two find issues and route them. The third fixes one kind of issue, an agent mistake, and
@@ -39,7 +39,7 @@ session" is the current one, "the last session" the newest other transcript.
 | Issue is                                                              | Route                                                     |
 | --------------------------------------------------------------------- | --------------------------------------------------------- |
 | A bug in this repo's code or config                                   | `ceh-coding-conduct:find-root-cause`, writes a fix record |
-| A feature or design change in this repo                               | `ceh-build-planning:write-build-plan`                     |
+| A feature or design change in this repo                               | `ceh-build-plan:write-build-plan`                         |
 | An agent mistake a check or guidance in this repo should have stopped | `ceh-every-session:prevent-repeat-mistake`                |
 | A rule for how work is done in this repo                              | `ceh-every-session:record-project-decisions`              |
 | Anything else in this repo                                            | Fixed directly, with the check that proves it             |

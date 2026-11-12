@@ -77,13 +77,13 @@ How it asks:
 A plugin belongs here when it helps shape, build, prove, or tell people about a product. The
 cross-cutting plugins hold the disciplines that apply at every stage.
 
-| Stage      | What happens                                                             | Plugins today                                                                                                                                                                              |
-| ---------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Shape      | Decide what to build and whether it is worth it                          | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-vision-and-strategy`                                                                                                                  |
-| Build      | Decide how to build it, then write the code, the UI, and the docs        | `ceh-build-planning`, `ceh-build-from-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-documentation`, `ceh-codebase-explanation` |
-| Prove      | Show it works and that a person can use it                               | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                                                 |
-| Tell       | Get it in front of the people who should find it                         | `ceh-blog`, `ceh-seo`                                                                                                                                                                      |
-| Every step | How the agent behaves, commits, spends context, and runs repeatable work | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-to-skill`, `ceh-session-diagnosis`                              |
+| Stage      | What happens                                                             | Plugins today                                                                                                                                                   |
+| ---------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shape      | Decide what to build and whether it is worth it                          | `ceh-product-direction`, `ceh-competitor-analysis`                                                                                                              |
+| Build      | Decide how to build it, then write the code, the UI, and the docs        | `ceh-build-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-documentation`, `ceh-codebase-explanation` |
+| Prove      | Show it works and that a person can use it                               | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                      |
+| Tell       | Get it in front of the people who should find it                         | `ceh-blog-and-seo`                                                                                                                                              |
+| Every step | How the agent behaves, commits, spends context, and runs repeatable work | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`                            |
 
 The stages are a route, not only a filing system: each one writes handoff files the next
 one reads, so installed plugins chain without a router. How they chain, and how the next piece of

@@ -15,8 +15,8 @@ for a whole codebase.
 > `ceh-every-session` plugin: they hold however Claude Code is used, not only when coding. The
 > output style followed, rewritten without its coding-specific rules, as `CEH Every Session`.
 >
-> The plan-driven workflow skills moved out to one plugin per stage: `ceh-build-planning`,
-> `ceh-build-from-plan` (`implement-from-plan`), and `ceh-check-build-against-plan`.
+> The plan-driven workflow skills moved out: planning and `implement-from-plan` to
+> `ceh-build-plan`, and the check to `ceh-check-build-against-plan`.
 
 ## Skills
 

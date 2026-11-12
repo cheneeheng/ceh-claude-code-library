@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: merge-product-direction.yaml
 generated_note: "Do not edit. artifact.py renders this file from merge-product-direction.yaml: edit the YAML, then run artifact.py render."
 title: Merge ceh-vision-and-strategy into ceh-business-plan as ceh-product-direction
-status: ready
+status: built
 created: 2026-11-12
 ---
 
@@ -130,7 +130,13 @@ Shape and installs one plugin for it. The flow that matters most: with only
   `claude plugin validate plugins/standalone/ceh-product-direction` passes.
   `ls plugins/standalone/ceh-product-direction/skills` lists ten skills, neither old folder
   exists, and `ls plugins/standalone` lists 21 plugins. CI is green on the PR.
-- **Status:** todo. Not covered by a command: loading the plugin in a fresh session with
+- **Status:** done, Commit c6bcf02. `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`, with `write-vision-and-strategy`'s description at 299
+  characters. `claude plugin validate plugins/standalone/ceh-product-direction` printed
+  `Validation passed`. `skills/` lists ten skills, neither old folder exists, and
+  `ls plugins/standalone | wc -l` printed 21. CI run 43202288693 on PR #262 succeeded. The eight specialists name the router by its longer prefix, so `MAX_TOTAL_DESCRIPTION_LEN`
+  in `checks/budget.py` was raised to the new total, 26261, which this plan did not foresee.
+  Not covered by a command: loading the plugin in a fresh session with
   `claude --plugin-dir plugins/standalone/ceh-product-direction` and seeing the two entry
   points listed. The builder reports it as not run unless the user asks for it.
 
@@ -143,5 +149,10 @@ Shape and installs one plugin for it. The flow that matters most: with only
 
 - 2026-11-12 Planned: status ready
 - 2026-11-12 PR: #258 https://github.com/cheneeheng/ceh-claude-code-library/pull/258
+- 2026-11-12 Built Phase 1: `ceh-vision-and-strategy` merged into `ceh-business-plan` as `ceh-product-direction` 2.0.0,
+  with the reader rule in the README, the vision skill's description reworded to 299
+  characters, both fixture groups on the new folder, and `ceh-competitor-analysis` bumped.
+  Built in one PR with the three other merge plans, at the user's request.
+- 2026-11-12 PR: #262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262
 
 <!-- prettier-ignore-end -->
