@@ -471,7 +471,16 @@ turn on a decision block with no denied call first.
   `git grep -nE "npx|node -e|npm (install|ci)" -- plugins/standalone/ceh-web-frontend`
   prints nothing. `python tools/validate-plugins/validate.py` prints
   `OK: all plugin checks passed`.
-- **Status:** todo
+- **Status:** done, Commit 5f3c658. The four scratch runs: `uv run --script app.py` with two logging
+  middlewares printed `enter added-last` first. `bunx eslint src/a.ts` with the new flat
+  config printed `2 problems (2 errors, 0 warnings)`, after `typescript@6` replaced 7.
+  `pytest -q` with `asyncio_mode` and no plugin printed
+  `PytestConfigWarning: Unknown config option: asyncio_mode`. `bunx vitest run --coverage`
+  on `src/lib/deep/math.ts` printed the row `math.ts | 75 | 100 | 50 | 100`.
+  `bash -n` passed on all eight runner scripts. `run-e2e.sh test` exited 3 on
+  `https://shop.example.com/products` and passed the guard on
+  `http://localhost:3000/products`. The `npx` grep printed nothing.
+  `python tools/validate-plugins/validate.py` printed `OK: all plugin checks passed`.
 
 ### Phase 5: Decided skill changes
 
@@ -545,5 +554,15 @@ turn on a decision block with no denied call first.
   `os.pathsep`, since both guards read the variable, and the usage watch's message gives
   the whole session id for the handoff name, after Phase 2.
 - 2026-11-12 PR: #267 https://github.com/cheneeheng/ceh-claude-code-library/pull/267
+- 2026-11-12 Design changed: was "It gets `paths` for the config files it names", now no `paths` on
+  `configure-bun-vite-env`, because its description also triggers on a bun command and
+  `paths` would narrow that away, which the plan's own rule for `paths` forbids.
+- 2026-11-12 Design changed: was "checked against the current typescript-eslint docs", now checked by a run, because
+  the run showed typescript-eslint 8.72 refuses TypeScript 7, so the example says to pin
+  `typescript@6`.
+- 2026-11-12 Built Phase 4: 5f3c658, `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`. No skill got `paths`: every "Auto-load when" in the
+  three plugins names a trigger that is not a file, or the skill has `paths` already.
+  The Docker and database paths of the service scripts were syntax-checked, not run.
 
 <!-- prettier-ignore-end -->
