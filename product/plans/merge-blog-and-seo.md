@@ -132,5 +132,12 @@ one plugin for it. The flow that matters most: with only `ceh-blog-and-seo` inst
   `ceh-usability-audit` bumped. Built in one PR with the three other merge plans, at the
   user's request.
 - 2026-11-12 PR: #262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262
+- 2026-11-12 Checked: 17 items: 16 Built, 1 Deviation, and 1 Extra outside the plan. The phase Check was rerun on
+  `main` after the merge, and a fresh `claude -p --plugin-dir` session listed the six skills.
+  Deviation, Out "Any change to what the six skills do":
+  `skills/draft-post/references/ask-the-author.md:3` and its two copies now read "Every blog
+  skill in `ceh-blog-and-seo` follows these rules", because the plain rename would have said
+  the SEO skills follow them. Extra: `tools/validate-plugins/checks/budget.py:13`
+  `MAX_TOTAL_DESCRIPTION_LEN = 26261`, raised from 26214 for the longer prefixes.
 
 <!-- prettier-ignore-end -->

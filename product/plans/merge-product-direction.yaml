@@ -188,3 +188,10 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262"
+  - date: 2026-11-12
+    event: Checked
+    details: |
+      23 items: 23 Built, and 1 Extra outside the plan. The phase Check was rerun on `main` after
+      the merge, and a fresh `claude -p --plugin-dir` session listed the ten skills. Extra:
+      `tools/validate-plugins/checks/budget.py:13` `MAX_TOTAL_DESCRIPTION_LEN = 26261`, raised
+      from 26214 for the longer prefixes.

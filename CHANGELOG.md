@@ -47,6 +47,11 @@ rule: the vision writer never reads the business plan. A user who wants only the
 carries nine more descriptions in the skill listing. Per
 `product/plans/merge-product-direction.yaml`.
 
+The four merge plans each record a check of the merged code against the plan: 79 of 80 items
+built as planned, one sentence in `ask-the-author.md` reworded beyond the rename, and the
+description ratchet raised outside the plans. Each merged plugin also loaded in a fresh session
+with its skills and agent listed. It changes no plugin, so no version moves.
+
 Two plugins move to `archive/`, the first step of the 2026-11-11 plugin audit, which takes the
 library from 27 plugins to 21. `ceh-orchestration-lab` is archived because its experiment ended:
 its lessons were dropped by decision, and the run folders stay in each project's

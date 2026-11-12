@@ -145,3 +145,10 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262"
+  - date: 2026-11-12
+    event: Checked
+    details: |
+      15 items: 15 Built, no Gap, Deviation, Extra, Failing or Cannot verify. The phase Check was
+      rerun on `main` after the merge, and a fresh `claude -p --plugin-dir` session listed both
+      skills and the agent. `docs/STRATEGY.md` has no Every step row, so only the vision's table
+      changed.
