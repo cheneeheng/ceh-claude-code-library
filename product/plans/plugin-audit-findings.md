@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: plugin-audit-findings.yaml
 generated_note: "Do not edit. artifact.py renders this file from plugin-audit-findings.yaml: edit the YAML, then run artifact.py render."
 title: Fix the findings of the 2026-11-11 plugin audit
-status: ready
+status: building
 created: 2026-11-12
 ---
 
@@ -408,7 +408,11 @@ turn on a decision block with no denied call first.
   `git grep -n "Tidewater" -- plugins/standalone/ceh-ag-ui plugins/standalone/ceh-competitor-analysis`
   shows no line that makes it the default.
   `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`.
-- **Status:** todo
+- **Status:** done, Commit 326f92f. The `AskUserQuestion` grep showed the six expected lines, the "most
+  capable model" and `TaskCreate|TaskUpdate` greps printed nothing, the `TodoWrite` grep
+  showed `agent-coding-contract/SKILL.md:53`, the `Tidewater` grep showed two lines that
+  name it as the theme a user may pick, and `python tools/validate-plugins/validate.py`
+  printed `OK: all plugin checks passed`.
 
 ### Phase 2: One name form for saved reports
 
@@ -511,5 +515,10 @@ turn on a decision block with no denied call first.
   spelled without brackets where the check cannot see it, a subagent reading `SKILL.md` by
   path gets the session variable unfilled). All ten findings fixed in the plan the same
   day.
+- 2026-11-12 Built Phase 1: 326f92f, `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`. `write-evidence-report`'s description keeps
+  `product/EVIDENCE.md`, because the `.yaml` name put the description total over its
+  ratchet. The workflow builder's `docs/ARCHITECTURE.md` and the root `README.md` took
+  the same wording, beyond the files the Design lists.
 
 <!-- prettier-ignore-end -->
