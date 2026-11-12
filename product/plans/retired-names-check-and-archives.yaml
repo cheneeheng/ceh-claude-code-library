@@ -185,3 +185,6 @@ record:
     details: |
       `checks/retired_names.py`, its line in `CHECKS`, and its README row. The negative probe
       failed on `ceh-advisor` and passed once deleted.
+  - date: 2026-11-12
+    event: PR
+    details: "#260 https://github.com/cheneeheng/ceh-claude-code-library/pull/260"

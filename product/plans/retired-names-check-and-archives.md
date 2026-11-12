@@ -161,5 +161,6 @@ skill body elsewhere still names it, and `validate.py` fails with the file and l
 - 2026-11-12 PR: #258 https://github.com/cheneeheng/ceh-claude-code-library/pull/258
 - 2026-11-12 Built Phase 1: `checks/retired_names.py`, its line in `CHECKS`, and its README row. The negative probe
   failed on `ceh-advisor` and passed once deleted.
+- 2026-11-12 PR: #260 https://github.com/cheneeheng/ceh-claude-code-library/pull/260
 
 <!-- prettier-ignore-end -->
