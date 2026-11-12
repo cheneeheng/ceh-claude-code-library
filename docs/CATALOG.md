@@ -194,17 +194,12 @@ its prerequisites, hooks, and environment variables.
 | ------------------------------------------------------------------------------------------------------ | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Run Agentic Workflow](../plugins/standalone/ceh-workflow-runner/skills/run-agentic-workflow/SKILL.md) | `/ceh-workflow-runner:run-agentic-workflow` | Running a built workflow from its `flow.yaml`, interactive or headless: native stages, approvals, gates, run state, resume, a final status line |
 
-### [Session to Skill (`ceh-session-to-skill`)](../plugins/standalone/ceh-session-to-skill/)
+### [Session Learning (`ceh-session-learning`)](../plugins/standalone/ceh-session-learning/)
 
 | Skill                                                                                                         | Invoke                                          | When                                                                                                                                                                      |
 | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Turn Session Into Skill](../plugins/standalone/ceh-session-to-skill/skills/turn-session-into-skill/SKILL.md) | `/ceh-session-to-skill:turn-session-into-skill` | A task was just done in this session and should be repeatable: one `SKILL.md` from the steps that worked, corrections as rules, per-run values as arguments, no interview |
-
-### [Session Diagnosis (`ceh-session-diagnosis`)](../plugins/standalone/ceh-session-diagnosis/)
-
-| Skill                                                                                            | Invoke                                    | When                                                                                                                                               |
-| ------------------------------------------------------------------------------------------------ | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Diagnose Session](../plugins/standalone/ceh-session-diagnosis/skills/diagnose-session/SKILL.md) | `/ceh-session-diagnosis:diagnose-session` | A session went wrong: four analysts read its transcript in parallel, root causes cited to transcript lines, each routed to the skill that fixes it |
+| [Diagnose Session](../plugins/standalone/ceh-session-learning/skills/diagnose-session/SKILL.md)               | `/ceh-session-learning:diagnose-session`        | A session went wrong: four analysts read its transcript in parallel, root causes cited to transcript lines, each routed to the skill that fixes it                        |
+| [Turn Session Into Skill](../plugins/standalone/ceh-session-learning/skills/turn-session-into-skill/SKILL.md) | `/ceh-session-learning:turn-session-into-skill` | A task was just done in this session and should be repeatable: one `SKILL.md` from the steps that worked, corrections as rules, per-run values as arguments, no interview |
 
 ### [Security Audit (`ceh-security-audit`)](../plugins/standalone/ceh-security-audit/)
 
@@ -282,8 +277,8 @@ Agents run autonomously for a defined task and hand results back to the parent s
 | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | [Competitor Analyst](../plugins/standalone/ceh-competitor-analysis/agents/competitor-analyst.md) | `@"ceh-competitor-analysis:competitor-analyst (agent)"` | Read one competitor repo or product in isolation and return an evidence-anchored fact sheet (read-only, never runs it) |
 
-### [Session Diagnosis (`ceh-session-diagnosis`)](../plugins/standalone/ceh-session-diagnosis/)
+### [Session Learning (`ceh-session-learning`)](../plugins/standalone/ceh-session-learning/)
 
-| Agent                                                                                          | Invoke                                                | When                                                                                                                                         |
-| ---------------------------------------------------------------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Transcript Analyst](../plugins/standalone/ceh-session-diagnosis/agents/transcript-analyst.md) | `@"ceh-session-diagnosis:transcript-analyst (agent)"` | Read one session transcript through one lens and return findings that each cite a line, dispatched by `diagnose-session` (Sonnet, read-only) |
+| Agent                                                                                         | Invoke                                               | When                                                                                                                                         |
+| --------------------------------------------------------------------------------------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Transcript Analyst](../plugins/standalone/ceh-session-learning/agents/transcript-analyst.md) | `@"ceh-session-learning:transcript-analyst (agent)"` | Read one session transcript through one lens and return findings that each cite a line, dispatched by `diagnose-session` (Sonnet, read-only) |

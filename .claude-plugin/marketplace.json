@@ -11,7 +11,7 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.9.7",
+      "version": "2.9.8",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, context economy via delegated bulk reads, and replies folded to their summary."
     },
     {
@@ -123,16 +123,10 @@
       "description": "CEH workflow builder: turn product work that repeats in the same shape (a weekly SEO pass, a pre-release check) into a runnable artifact — one skill when it is simple, or a flow.yaml config with gates and approvals plus a thin trigger skill — emitted into the target repo's .claude/skills/. Running a flow needs ceh-workflow-runner."
     },
     {
-      "name": "ceh-session-to-skill",
-      "source": "./plugins/standalone/ceh-session-to-skill",
-      "version": "1.0.2",
-      "description": "CEH session to skill: right after a task is done, turn the steps that worked in this session into a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments."
-    },
-    {
-      "name": "ceh-session-diagnosis",
-      "source": "./plugins/standalone/ceh-session-diagnosis",
-      "version": "1.0.8",
-      "description": "CEH session diagnosis: find why a Claude Code session went wrong from its transcript, with parallel analysts whose every finding cites a transcript line, each root cause routed to a fix, and a scrubbed copy for sharing."
+      "name": "ceh-session-learning",
+      "source": "./plugins/standalone/ceh-session-learning",
+      "version": "2.0.0",
+      "description": "CEH session learning: turn one Claude Code session's transcript into something durable. When the session went wrong, parallel analysts find why, every finding citing a transcript line and each root cause routed to a fix, with a scrubbed copy for sharing. When it went right, the steps that worked become a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments."
     },
     {
       "name": "ceh-security-audit",

@@ -25,7 +25,7 @@ route in this repo's scope has been acted on, and the report is saved.
    transcript in this project's folder that is not this one. Say which file you chose.
 2. **Name the symptom**: what the user says went wrong, in one line. With none given, the symptom
    is "find what went wrong", and every lens runs with no hint.
-3. **Dispatch the analysts.** Send `ceh-session-diagnosis:transcript-analyst` four times, in the
+3. **Dispatch the analysts.** Send `ceh-session-learning:transcript-analyst` four times, in the
    background and in parallel, one per lens: `instructions`, `tools`, `context`, `claims`. Each
    brief carries the transcript paths, the lens, and the symptom. Parallel lenses keep one
    reader's first theory from shaping what the others look for.

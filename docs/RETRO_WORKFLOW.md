@@ -11,7 +11,7 @@ what no single skill can document: the routing _between_ them and the files they
 | Skill                                      | Looks back over                     | Reads                                         | Report kind           |
 | ------------------------------------------ | ----------------------------------- | --------------------------------------------- | --------------------- |
 | `ceh-git-workflow:review-recent-work`      | A period of work in a repo          | `git log`, and merged PRs when `gh` is set up | `period`              |
-| `ceh-session-diagnosis:diagnose-session`   | One Claude Code session             | The session transcript and its subagents'     | `session-<id-prefix>` |
+| `ceh-session-learning:diagnose-session`    | One Claude Code session             | The session transcript and its subagents'     | `session-<id-prefix>` |
 | `ceh-every-session:prevent-repeat-mistake` | One mistake that must not come back | The quoted evidence of that mistake           | `repeat-mistake`      |
 
 The first two find issues and route them. The third fixes one kind of issue, an agent mistake, and

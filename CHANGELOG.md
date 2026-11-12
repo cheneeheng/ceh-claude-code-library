@@ -11,6 +11,20 @@ before this repo live in
 
 ## 2026-11-12
 
+Four pairs of plugins merge, the second step of the 2026-11-11 plugin audit, which takes the
+library from 25 plugins to 21. Each merge only moves and renames: no skill, agent or hook changes
+what it does, and every skill and agent keeps its name under the new plugin prefix. The old plugins
+are gone from the marketplace, so **uninstall each old pair and install its replacement**. An
+installed copy of an old plugin keeps working but gets no more updates. The stage tables in
+`docs/VISION.md` and `docs/STRATEGY.md` name the merged plugins, because
+`decision-vision-governs.md` has a file and the vision that disagree fixed in the same PR: each
+pair sat in one stage row, so no principle, goal or scope test changes. All four plans are built
+in one PR at the user's request.
+
+`ceh-session-diagnosis` and `ceh-session-to-skill` become `ceh-session-learning`, at 2.0.0. Both
+read one session's transcript and turn it into something durable: a fix when the session went
+wrong, a skill when it went right. Per `product/plans/merge-session-learning.yaml`.
+
 Two plugins move to `archive/`, the first step of the 2026-11-11 plugin audit, which takes the
 library from 27 plugins to 21. `ceh-orchestration-lab` is archived because its experiment ended:
 its lessons were dropped by decision, and the run folders stay in each project's
@@ -95,8 +109,9 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 | `ceh-codebase-explanation`     | 1.3.4   |
 | `ceh-coding-conduct`           | 2.5.4   |
 | `ceh-competitor-analysis`      | 1.2.3   |
-| `ceh-every-session`            | 2.9.7   |
+| `ceh-every-session`            | 2.9.8   |
 | `ceh-security-audit`           | 1.1.5   |
+| `ceh-session-learning`         | 2.0.0   |
 | `ceh-testing`                  | 1.6.11  |
 | `ceh-usability-audit`          | 1.2.5   |
 | `ceh-vision-and-strategy`      | 1.1.5   |
@@ -121,6 +136,11 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 ### Changed
 
+- Merge `ceh-session-diagnosis` (last version 1.0.8) and `ceh-session-to-skill` (last version
+  1.0.2) into `ceh-session-learning` 2.0.0. Uninstall both and install `ceh-session-learning`:
+  `diagnose-session`, `turn-session-into-skill` and the `transcript-analyst` agent keep their
+  names under the new prefix. `prevent-repeat-mistake` in `ceh-every-session` names the skill by
+  its new prefix, a PATCH bump.
 - Archive `ceh-orchestration-lab` (last version 1.0.7) and `ceh-git-datastore` (last version
   1.0.6): both move to `archive/` whole and leave the marketplace, the catalog, the README,
   getting-started, vision and strategy tables, and every index under `docs/`. Uninstall them.

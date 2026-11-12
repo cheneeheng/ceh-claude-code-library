@@ -39,7 +39,7 @@ waiting for the user's approval.
    the wrong output, and the correction that preceded it. "Was sloppy" is not a mistake, "wrote
    dates as `10/09/2026` in `roadmap.md:14` after being told ISO dates" is. If you cannot quote it,
    stop: there is nothing to fix yet. To find the mistakes in a whole session rather than one,
-   `ceh-session-diagnosis:diagnose-session` reads its transcript and routes each one here.
+   `ceh-session-learning:diagnose-session` reads its transcript and routes each one here.
 3. **Climb the ladder, strongest first.** Stop at the first rung that would have caught this exact
    mistake:
 

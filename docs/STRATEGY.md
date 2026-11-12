@@ -131,7 +131,7 @@ lifecycle:
   `ceh-coding-conduct:find-root-cause` and `ceh-testing:test-a-bug-fix`. A fix that changes a
   contract or the design is a feature, and goes through `ceh-build-planning:write-build-plan`.
 - **Retro reports are kept when their fixes land here.** A retro looks back over one session
-  (`ceh-session-diagnosis:diagnose-session`) or a period (`ceh-git-workflow:review-recent-work`)
+  (`ceh-session-learning:diagnose-session`) or a period (`ceh-git-workflow:review-recent-work`)
   and routes each issue to the skill that fixes it: a bug to `find-root-cause`, a design change to
   `write-build-plan`, an agent mistake to `prevent-repeat-mistake`, a working rule to
   `record-project-decisions`. The agent acts on every route in the repo in the same session, and
@@ -162,7 +162,7 @@ The likely order next, judged from the current gaps and not yet confirmed by a r
 
 1. **The learning loop catches recurring overrides.** The vision says an override that keeps
    recurring is a plugin defect. `ceh-every-session:prevent-repeat-mistake` fixes one once a human
-   names it, and `ceh-session-diagnosis:diagnose-session` finds one inside a session, but nothing
+   names it, and `ceh-session-learning:diagnose-session` finds one inside a session, but nothing
    notices one recurring across sessions.
 2. **Parallel builds.** Only what Claude Code's native worktrees and subagents lack, per the
    vision's non-goal on rebuilding Claude Code.
