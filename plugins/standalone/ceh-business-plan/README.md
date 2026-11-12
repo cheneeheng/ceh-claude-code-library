@@ -23,7 +23,7 @@ Revise   → fold the answer in, re-tag confidence, re-score the gate
 Validate → flip status to validated; hand off the next experiment
 ```
 
-If `ceh-build-planning` build plans exist, they seed the draft (their Goal, Scope, and Design
+If `ceh-build-plan` build plans exist, they seed the draft (their Goal, Scope, and Design
 become the product and target-user starting point). If nothing exists, the skill
 opens with one grounding question, drafts from your answer, then interrogates.
 
@@ -120,10 +120,10 @@ test) and you confirm:
 
 ## Relationship to other plugins
 
-- `ceh-build-planning` owns the **technical** build plan (how the app is built). This plugin
+- `ceh-build-plan` owns the **technical** build plan (how the app is built). This plugin
   owns the **business** plan (why it sells, who pays). It reads the build plans as input and
   defers product detail to them rather than duplicating architecture. The flow is one way: no
   build plan, vision, strategy or decision rule reads the business plan, so its tests and dates
   stay in it.
-- Validation that surfaces product changes flows into a new `ceh-build-planning` plan, stated as
+- Validation that surfaces product changes flows into a new `ceh-build-plan` plan, stated as
   product changes. The §13 milestones, experiments and kill criteria stay in the business plan.

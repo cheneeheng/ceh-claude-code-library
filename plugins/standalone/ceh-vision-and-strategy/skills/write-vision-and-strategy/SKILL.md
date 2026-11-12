@@ -103,4 +103,4 @@ open questions.
 ## Hands off to
 
 - To question the finished docs, suggest `ceh-every-session:stress-test-plan`.
-- To plan the first piece of work they choose, suggest `ceh-build-planning:write-build-plan`.
+- To plan the first piece of work they choose, suggest `ceh-build-plan:write-build-plan`.

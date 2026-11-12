@@ -39,7 +39,7 @@ session" is the current one, "the last session" the newest other transcript.
 | Issue is                                                              | Route                                                     |
 | --------------------------------------------------------------------- | --------------------------------------------------------- |
 | A bug in this repo's code or config                                   | `ceh-coding-conduct:find-root-cause`, writes a fix record |
-| A feature or design change in this repo                               | `ceh-build-planning:write-build-plan`                     |
+| A feature or design change in this repo                               | `ceh-build-plan:write-build-plan`                         |
 | An agent mistake a check or guidance in this repo should have stopped | `ceh-every-session:prevent-repeat-mistake`                |
 | A rule for how work is done in this repo                              | `ceh-every-session:record-project-decisions`              |
 | Anything else in this repo                                            | Fixed directly, with the check that proves it             |

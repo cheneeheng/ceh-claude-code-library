@@ -111,7 +111,7 @@ draft: say so and write a new plan as usual.
    `.md` by hand: it is generated. When the command exits 3 or uv is missing, say in the reply
    that the plan was saved unchecked and unrendered.
 
-8. **Have it reviewed.** Invoke the Skill tool with skill="ceh-build-planning:review-build-plan"
+8. **Have it reviewed.** Invoke the Skill tool with skill="ceh-build-plan:review-build-plan"
    with the plan's YAML path, for every plan saved, whatever its label. That skill reviews from a
    fresh context on its own, so do not dispatch a reviewer yourself.
 
@@ -133,5 +133,4 @@ Close the reply with:
 
 ## Hands off to
 
-- When `ceh-build-from-plan` is installed, `ceh-build-from-plan:implement-from-plan` builds the
-  plan phase by phase.
+- `ceh-build-plan:implement-from-plan` builds the plan phase by phase.

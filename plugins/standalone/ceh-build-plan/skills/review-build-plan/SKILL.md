@@ -105,5 +105,4 @@ needs the findings. Reply with the verdict, the blocking findings, and the path.
 
 ## Hands off to
 
-- On **Ready to build**, when `ceh-build-from-plan` is installed,
-  `ceh-build-from-plan:implement-from-plan` builds the plan phase by phase.
+- On **Ready to build**, `ceh-build-plan:implement-from-plan` builds the plan phase by phase.

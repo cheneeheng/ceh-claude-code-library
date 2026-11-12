@@ -31,6 +31,14 @@ through copies of the same two models. The plugin's one pair of artifact hooks n
 renders those two files when an SEO skill is the only one in use. Per
 `product/plans/merge-blog-and-seo.yaml`.
 
+`ceh-build-planning` and `ceh-build-from-plan` become `ceh-build-plan`, at 2.0.0. The two exist
+for one file, the `plan/v2` build plan: each registered the same hook pair and carried the same
+root scripts. The merged plugin ships one set of hooks, with the build record guard knowing
+`implement-from-plan` by its new name, and one `evals/` folder with the 37 cases of both. The three
+skills now name each other as plain next steps, with no "when installed" condition.
+`ceh-check-build-against-plan` stays its own Prove plugin. A session started before the reinstall
+still runs the old plugins from its cache. Per `product/plans/merge-build-plan.yaml`.
+
 Two plugins move to `archive/`, the first step of the 2026-11-11 plugin audit, which takes the
 library from 27 plugins to 21. `ceh-orchestration-lab` is archived because its experiment ended:
 its lessons were dropped by decision, and the run folders stay in each project's
@@ -108,19 +116,21 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-blog-and-seo`             | 2.0.0   |
-| `ceh-build-from-plan`          | 1.2.10  |
-| `ceh-build-planning`           | 1.2.13  |
-| `ceh-business-plan`            | 1.2.7   |
-| `ceh-check-build-against-plan` | 1.1.9   |
-| `ceh-codebase-explanation`     | 1.3.4   |
-| `ceh-coding-conduct`           | 2.5.4   |
+| `ceh-build-plan`               | 2.0.0   |
+| `ceh-business-plan`            | 1.2.8   |
+| `ceh-check-build-against-plan` | 1.1.10  |
+| `ceh-codebase-explanation`     | 1.3.5   |
+| `ceh-coding-conduct`           | 2.5.5   |
 | `ceh-competitor-analysis`      | 1.2.3   |
+| `ceh-documentation`            | 1.0.9   |
 | `ceh-every-session`            | 2.9.8   |
+| `ceh-git-workflow`             | 1.5.7   |
+| `ceh-python-service`           | 1.1.6   |
 | `ceh-security-audit`           | 1.1.5   |
 | `ceh-session-learning`         | 2.0.0   |
 | `ceh-testing`                  | 1.6.12  |
 | `ceh-usability-audit`          | 1.2.6   |
-| `ceh-vision-and-strategy`      | 1.1.5   |
+| `ceh-vision-and-strategy`      | 1.1.6   |
 | `ceh-workflow-builder`         | 1.4.4   |
 | `ceh-workflow-runner`          | 1.1.3   |
 
@@ -153,6 +163,18 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
   each.
 - `ceh-seo` leaves `READERS` in `checks/artifact_models.py`, since its skills now sit in a plugin
   that carries the hooks.
+- Merge `ceh-build-planning` (last version 1.2.13) and `ceh-build-from-plan` (last version 1.2.10)
+  into `ceh-build-plan` 2.0.0. Uninstall both and install `ceh-build-plan`: `write-build-plan`,
+  `review-build-plan` and `implement-from-plan` keep their names under the new prefix.
+- The handoffs between the three build plan skills drop "when installed", and
+  `build-record-guard.py` accepts `ceh-build-plan:implement-from-plan`.
+- `plan-schema.md` names `ceh-build-plan` in its first paragraph, in all six copies, and every
+  skill, schema copy and README that named either old plugin names the new one: a PATCH bump for
+  `ceh-business-plan`, `ceh-check-build-against-plan`, `ceh-codebase-explanation`,
+  `ceh-coding-conduct`, `ceh-documentation`, `ceh-git-workflow`, `ceh-python-service` and
+  `ceh-vision-and-strategy`.
+- The hook fixtures in `checks/hooks.py` run the plan artifact set once for `ceh-build-plan`
+  instead of once per old plugin.
 - Raise `MAX_TOTAL_DESCRIPTION_LEN` in `checks/budget.py` from 26214 to 26229: the longer plugin
   prefix lengthens the skill names inside descriptions, and no description is reworded.
 - Archive `ceh-orchestration-lab` (last version 1.0.7) and `ceh-git-datastore` (last version

@@ -81,11 +81,11 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ("none", '{"type":"user","message":{"content":"implement-from-plan, later"}}'),
         (
             "skill",
-            '{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Skill","input":{"skill":"ceh-build-from-plan:implement-from-plan"}}]}}',
+            '{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Skill","input":{"skill":"ceh-build-plan:implement-from-plan"}}]}}',
         ),
         (
             "slash",
-            '{"type":"user","message":{"content":"<command-name>/ceh-build-from-plan:implement-from-plan</command-name>"}}',
+            '{"type":"user","message":{"content":"<command-name>/ceh-build-plan:implement-from-plan</command-name>"}}',
         ),
     ):
         (tmp / f"tx-{name}.jsonl").write_text(line + "\n", encoding="utf-8")
@@ -846,8 +846,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         # artifact-render-hook: block an invalid plan YAML, render a valid one, skip other files,
         # and warn once when uv is missing. generated-md-guard: deny an edit to a generated .md,
         # naming its YAML.
-        *artifact_fixtures("ceh-build-planning", True),
-        *artifact_fixtures("ceh-build-from-plan", False),
+        *artifact_fixtures("ceh-build-plan", True),
         *artifact_fixtures("ceh-check-build-against-plan", False),
         # ceh-every-session holds the plan model for whats-next, so its hook checks plans too.
         *artifact_fixtures("ceh-every-session", False),

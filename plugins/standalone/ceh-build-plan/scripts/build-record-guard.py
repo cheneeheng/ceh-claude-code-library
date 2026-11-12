@@ -22,13 +22,13 @@ BUILT = {
 }
 # The records a started skill leaves, a Skill tool call or a user's slash command, never a mention.
 STARTED = re.compile(
-    r'"skill":\s*"ceh-build-from-plan:implement-from-plan"'
-    r"|<command-name>/ceh-build-from-plan:implement-from-plan</command-name>"
+    r'"skill":\s*"ceh-build-plan:implement-from-plan"'
+    r"|<command-name>/ceh-build-plan:implement-from-plan</command-name>"
 )
 REASON = (
-    "A Built Phase line or record entry records a phase built by ceh-build-from-plan:implement-from-plan, which "
+    "A Built Phase line or record entry records a phase built by ceh-build-plan:implement-from-plan, which "
     "has not run in this session. Invoke the Skill tool with "
-    'skill="ceh-build-from-plan:implement-from-plan" and build the phase through it. '
+    'skill="ceh-build-plan:implement-from-plan" and build the phase through it. '
     "CEH_BUILD_RECORD_GUARD=off turns this guard off."
 )
 

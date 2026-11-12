@@ -92,8 +92,8 @@ to `product/ARCHITECTURE.yaml`.
 
 ## Stop conditions
 
-- An Open item blocks building, or the next phase is `unplanned` → stop and name it. With
-  `ceh-build-planning` installed, `ceh-build-planning:write-build-plan` plans it.
+- An Open item blocks building, or the next phase is `unplanned` → stop and name it.
+  `ceh-build-plan:write-build-plan` plans it.
 - A Check needs a secret, a service, or a device the session cannot reach → stop at that phase,
   record what it needs, leave it `todo`, and report.
 - The same check failure survives two fixes → stop as in step 3.4.

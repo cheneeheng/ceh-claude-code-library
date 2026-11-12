@@ -31,7 +31,7 @@ stays as written. Two older forms move up on the next revision:
 - `product`: the product name, one line.
 - `stage`: `idea`, `prototype`, `launched`, or `revenue`.
 - `derived_from`: the build plans this was built on, for example `[product/plans/mvp.md]`, or
-  `[]` when none. It names `ceh-build-planning` plans by their repo-relative path. Built plans are
+  `[]` when none. It names `ceh-build-plan` plans by their repo-relative path. Built plans are
   kept, so the path stays valid.
 - `pmf_gate`: criteria met out of 8, per the PMF Readiness Gate below.
 

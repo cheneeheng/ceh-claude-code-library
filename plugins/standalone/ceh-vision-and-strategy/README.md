@@ -35,5 +35,5 @@ unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS` with `artifact-rend
 
 - Whether a product is worth building, and who pays: use `ceh-business-plan`. Its material stays
   private, and these docs are committed, so they carry no pricing or unit economics.
-- How to build one feature: use `ceh-build-planning`, which reads these docs when they exist.
+- How to build one feature: use `ceh-build-plan`, which reads these docs when they exist.
 - Docs for users of the product: use `ceh-documentation`.

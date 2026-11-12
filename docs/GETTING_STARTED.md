@@ -146,12 +146,12 @@ Each moment names the plugin, the command that starts it, and the file it writes
 
 **Build**
 
-- Plan a new app or one feature: install `ceh-build-planning`, start with
-  `/ceh-build-planning:write-build-plan`. Writes `product/plans/<slug>.yaml` and the
+- Plan a new app or one feature: install `ceh-build-plan`, start with
+  `/ceh-build-plan:write-build-plan`. Writes `product/plans/<slug>.yaml` and the
   `<slug>.md` generated from it, and deleting both discards the plan. It needs `uv` to check and
   render the plan, and saves it unchecked without.
-- Build from that plan: install `ceh-build-from-plan` and your stack plugin (below), start with
-  `/ceh-build-from-plan:implement-from-plan`. Writes the code and the plan's evidence.
+- Build from that plan: the same plugin and your stack plugin (below), start with
+  `/ceh-build-plan:implement-from-plan`. Writes the code and the plan's evidence.
 - Write the user and operator docs: install `ceh-documentation`, start with
   `/ceh-documentation:write-project-docs`. Writes `docs/`.
 
@@ -185,16 +185,15 @@ Pick one stack plugin for the build. Each brings `ceh-testing`, and the web one 
 | a web frontend             | `ceh-web-frontend`   |
 
 For example, a new Python backend service starts with a plan and adds the build plugins once the
-plan is written. In a Claude Code session opened in that repo, install the planning plugin now:
+plan is written. In a Claude Code session opened in that repo, install the plan plugin now:
 
 ```
-/plugin install ceh-build-planning@ceh-claude-code-library --scope project
+/plugin install ceh-build-plan@ceh-claude-code-library --scope project
 ```
 
 Then, when you build from the plan:
 
 ```
-/plugin install ceh-build-from-plan@ceh-claude-code-library --scope project
 /plugin install ceh-python-service@ceh-claude-code-library --scope project
 ```
 

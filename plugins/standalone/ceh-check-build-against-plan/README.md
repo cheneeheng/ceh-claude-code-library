@@ -4,7 +4,7 @@ Check whether finished code is what its plan said to build. Tests show that what
 This check shows whether what exists is what was planned: every planned item built, nothing built
 that the plan left out, and each phase's check still passing.
 
-It reads the plan format `ceh-build-planning` writes, copied into
+It reads the plan format `ceh-build-plan` writes, copied into
 `skills/check-build-against-plan/references/plan-schema.md`. Without a plan, it checks against the
 spec you name, so it works installed alone.
 
@@ -22,7 +22,7 @@ line to the plan's append-only `## Record` in `product/plans/`.
 
 The plugin ships two hooks (`hooks/hooks.json`) that activate automatically when the plugin is
 enabled. They act only on `plan/v2` plans, the YAML format in the skill's
-`references/plan-schema.md`, and are the same hooks `ceh-build-planning` ships, so the check works
+`references/plan-schema.md`, and are the same hooks `ceh-build-plan` ships, so the check works
 with this plugin installed alone.
 
 | Hook                 | Event                                        | Script                    | Default |

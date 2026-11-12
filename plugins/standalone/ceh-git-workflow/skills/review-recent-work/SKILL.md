@@ -58,7 +58,7 @@ repo's scope has been handed to its route, and the path, headline numbers, and r
    | Issue is                                                                                          | Route                                                             |
    | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
    | A bug in this repo's code or config                                                               | `ceh-coding-conduct:find-root-cause`, which writes the fix record |
-   | A feature or design change in this repo                                                           | `ceh-build-planning:write-build-plan`                             |
+   | A feature or design change in this repo                                                           | `ceh-build-plan:write-build-plan`                                 |
    | An agent mistake a check or guidance in this repo should have stopped                             | `ceh-every-session:prevent-repeat-mistake`                        |
    | A rule for how work is done in this repo                                                          | `ceh-every-session:record-project-decisions`                      |
    | Anything else in this repo                                                                        | Fix it directly, with the check that proves it                    |

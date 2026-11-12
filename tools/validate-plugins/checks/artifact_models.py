@@ -30,7 +30,7 @@ READERS = {
     "ceh-documentation",
     "ceh-python-service",
 }
-CLI = REPO / "plugins" / "standalone" / "ceh-build-planning" / "scripts" / "artifact.py"
+CLI = REPO / "plugins" / "standalone" / "ceh-build-plan" / "scripts" / "artifact.py"
 
 
 def _survives_refused_read() -> None:

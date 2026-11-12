@@ -1,8 +1,8 @@
 # Plan schema
 
 A build plan is one Markdown file (`plan/v1`), or a YAML file with its Markdown generated beside
-it (`plan/v2`, below). `ceh-build-planning` writes it, `ceh-build-from-plan` builds
-from it and records evidence in it, and `ceh-check-build-against-plan` checks the code against it.
+it (`plan/v2`, below). `ceh-build-plan` writes it, builds from it and records evidence in it, and
+`ceh-check-build-against-plan` checks the code against it.
 This file is copied word for word into every skill that reads a plan, so each skill folder works on
 its own.
 

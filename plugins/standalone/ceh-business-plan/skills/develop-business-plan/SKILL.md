@@ -101,4 +101,4 @@ test or kill criterion in the plan (`find-product-market-fit`, `run-premortem`,
 ## Stop conditions
 
 - The request is for the app's technical plan or architecture → say this plugin owns the business
-  plan only and name `ceh-build-planning`.
+  plan only and name `ceh-build-plan`.

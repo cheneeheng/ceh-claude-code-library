@@ -49,7 +49,7 @@ a fixed questionnaire.
 
 Before any question, gather everything that already constrains the plan.
 
-1. **Build plans in the repo** — the `ceh-build-planning` plans in `product/plans/*.md` (or the
+1. **Build plans in the repo** — the `ceh-build-plan` plans in `product/plans/*.md` (or the
    plans folder the repo's `CLAUDE.md` names). If found, read them. Their Goal (what it does,
    who it's for, the key flow), Scope, and Design carry your product, target-user hint, and
    solution detail. A plan whose Goal points to a `BUSINESS_PLAN.md` was written from this plan:
@@ -184,7 +184,7 @@ satisfied:
 - Flip `status: validated`, set `pmf_gate: 8`, stamp `updated`.
 - Give a one-paragraph verdict: the sharpest version of who pays, for what, why you, and the one
   experiment that most de-risks the whole thing next.
-- Point onward: if the validation surfaced product changes, suggest `ceh-build-planning` for
+- Point onward: if the validation surfaced product changes, suggest `ceh-build-plan` for
   them, stated as product changes. The plan's experiments, kill criteria and §13 milestones
   stay in the plan: a build plan does not read it.
 - Name the plan's softest remaining area (edge, numbers, first customers, risks, or the next 90

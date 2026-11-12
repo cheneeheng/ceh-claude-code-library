@@ -2,7 +2,7 @@
 
 `product/ARCHITECTURE.md` in the target repo, committed, unless the repo's `CLAUDE.md` names another
 path. `ceh-codebase-explanation:document-architecture` writes it, and
-`ceh-build-from-plan:implement-from-plan` appends Key Decisions to it. This file is copied word for
+`ceh-build-plan:implement-from-plan` appends Key Decisions to it. This file is copied word for
 word into both plugins. A new file is a copy of `../assets/architecture.template.md`, relative to
 this file. The `schema: architecture/v2` line stays as written. A `v1` file gets its sections
 numbered, a Contents list, and the `v2` line on its next update.
