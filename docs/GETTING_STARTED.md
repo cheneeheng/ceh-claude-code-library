@@ -170,9 +170,10 @@ Each moment names the plugin, the command that starts it, and the file it writes
 
 **Tell**
 
-- Write a launch post: install `ceh-blog`, start with `/ceh-blog:draft-post`. Writes a post.
-- Make it findable: install `ceh-seo`, start with `/ceh-seo:write-project-listing-text` for the
-  README first screen and listings, or `/ceh-seo:make-page-crawlable` for web pages.
+- Write a launch post: install `ceh-blog-and-seo`, start with `/ceh-blog-and-seo:draft-post`.
+  Writes a post.
+- Make it findable: the same plugin, start with `/ceh-blog-and-seo:write-project-listing-text` for
+  the README first screen and listings, or `/ceh-blog-and-seo:make-page-crawlable` for web pages.
 
 Pick one stack plugin for the build. Each brings `ceh-testing`, and the web one also brings
 `ceh-ui-design`:

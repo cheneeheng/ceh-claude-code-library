@@ -340,5 +340,5 @@ they cost the author, not warnings issued to the reader.
 
 ## Hands off to
 
-- Once the user is satisfied, mention: _"When you're ready to share this, `/ceh-blog:repurpose-post` can adapt it into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb."_
-- If the input turns out to be an existing prose draft rather than notes, offer `/ceh-blog:edit-post` instead of drafting over it.
+- Once the user is satisfied, mention: _"When you're ready to share this, `/ceh-blog-and-seo:repurpose-post` can adapt it into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb."_
+- If the input turns out to be an existing prose draft rather than notes, offer `/ceh-blog-and-seo:edit-post` instead of drafting over it.

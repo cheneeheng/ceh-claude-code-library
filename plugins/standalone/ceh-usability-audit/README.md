@@ -264,4 +264,4 @@ bias is confirmed and the screenshot handoff is the better path.
 | A/B tests, funnel analytics, session replay, heatmaps        | Needs production traffic and instrumentation, not a coding-session moment                                                                           |
 | Localization and internationalization review                 | A tooling and translation-pipeline investment; no in-session trigger                                                                                |
 | Information architecture for a whole product                 | A design exercise, not an audit. `ceh-codebase-explanation:document-architecture` for structure, `ceh-ui-design:design-ui` for navigation placement |
-| Marketing copy, landing-page conversion, SEO wording         | `ceh-seo:write-project-listing-text`                                                                                                                |
+| Marketing copy, landing-page conversion, SEO wording         | `ceh-blog-and-seo:write-project-listing-text`                                                                                                       |

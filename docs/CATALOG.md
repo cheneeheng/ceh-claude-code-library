@@ -103,21 +103,16 @@ its prerequisites, hooks, and environment variables.
 | -------------------------------------------------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Design UI](../plugins/standalone/ceh-ui-design/skills/design-ui/SKILL.md) | `/ceh-ui-design:design-ui` | Any visual design decision for a UI or HTML page: layout, hierarchy, navigation, in-page contents, states, finishing recipes, a variants board, Meridian and Tidewater themes |
 
-### [SEO (`ceh-seo`)](../plugins/standalone/ceh-seo/)
+### [Blog and SEO (`ceh-blog-and-seo`)](../plugins/standalone/ceh-blog-and-seo/)
 
-| Skill                                                                                                  | Invoke                                | When                                                                                                                                          |
-| ------------------------------------------------------------------------------------------------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Make Page Crawlable](../plugins/standalone/ceh-seo/skills/make-page-crawlable/SKILL.md)               | `/ceh-seo:make-page-crawlable`        | Shipping or creating a public web page: per-page head checklist, sitemap and robots, JSON-LD, content in the initial HTML, GEO citation rules |
-| [Write llms.txt](../plugins/standalone/ceh-seo/skills/write-llms-txt/SKILL.md)                         | `/ceh-seo:write-llms-txt`             | Creating or updating the `llms.txt` reading list for AI agents: positional format, link curation, `## Optional`, markdown over HTML           |
-| [Write Project Listing Text](../plugins/standalone/ceh-seo/skills/write-project-listing-text/SKILL.md) | `/ceh-seo:write-project-listing-text` | Writing the README first screen, package description and keywords, GitHub topics, marketplace listings, or landing copy                       |
-
-### [Blog (`ceh-blog`)](../plugins/standalone/ceh-blog/)
-
-| Skill                                                                           | Invoke                     | When                                                                                                                        |
-| ------------------------------------------------------------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| [Draft Post](../plugins/standalone/ceh-blog/skills/draft-post/SKILL.md)         | `/ceh-blog:draft-post`     | A new post from a topic, idea, repo, or experience (interview first) or from notes, bullets, or an outline (draft directly) |
-| [Edit Post](../plugins/standalone/ceh-blog/skills/edit-post/SKILL.md)           | `/ceh-blog:edit-post`      | An existing draft: diagnosis first, then a full revision that keeps the author's voice                                      |
-| [Repurpose Post](../plugins/standalone/ceh-blog/skills/repurpose-post/SKILL.md) | `/ceh-blog:repurpose-post` | A finished post to adapt into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb                                 |
+| Skill                                                                                                           | Invoke                                         | When                                                                                                                                          |
+| --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Make Page Crawlable](../plugins/standalone/ceh-blog-and-seo/skills/make-page-crawlable/SKILL.md)               | `/ceh-blog-and-seo:make-page-crawlable`        | Shipping or creating a public web page: per-page head checklist, sitemap and robots, JSON-LD, content in the initial HTML, GEO citation rules |
+| [Write llms.txt](../plugins/standalone/ceh-blog-and-seo/skills/write-llms-txt/SKILL.md)                         | `/ceh-blog-and-seo:write-llms-txt`             | Creating or updating the `llms.txt` reading list for AI agents: positional format, link curation, `## Optional`, markdown over HTML           |
+| [Write Project Listing Text](../plugins/standalone/ceh-blog-and-seo/skills/write-project-listing-text/SKILL.md) | `/ceh-blog-and-seo:write-project-listing-text` | Writing the README first screen, package description and keywords, GitHub topics, marketplace listings, or landing copy                       |
+| [Draft Post](../plugins/standalone/ceh-blog-and-seo/skills/draft-post/SKILL.md)                                 | `/ceh-blog-and-seo:draft-post`                 | A new post from a topic, idea, repo, or experience (interview first) or from notes, bullets, or an outline (draft directly)                   |
+| [Edit Post](../plugins/standalone/ceh-blog-and-seo/skills/edit-post/SKILL.md)                                   | `/ceh-blog-and-seo:edit-post`                  | An existing draft: diagnosis first, then a full revision that keeps the author's voice                                                        |
+| [Repurpose Post](../plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/SKILL.md)                         | `/ceh-blog-and-seo:repurpose-post`             | A finished post to adapt into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb                                                   |
 
 ### [Build Planning (`ceh-build-planning`)](../plugins/standalone/ceh-build-planning/)
 

@@ -269,4 +269,4 @@ report went unchecked and unrendered.
   `ceh-git-workflow:update-readme` for the README.
 - The project has no docs set at all: `ceh-documentation:write-project-docs`.
 - The stall was keyboard, contrast, or screen-reader: `ceh-web-frontend:make-ui-accessible`.
-- The README's first screen does not say what this is: `ceh-seo:write-project-listing-text`.
+- The README's first screen does not say what this is: `ceh-blog-and-seo:write-project-listing-text`.

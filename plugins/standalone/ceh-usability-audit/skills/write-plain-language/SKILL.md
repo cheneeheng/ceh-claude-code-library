@@ -152,6 +152,6 @@ diff to hold only this skill's edits.
 - Does a newcomer get far enough to read this at all? `ceh-usability-audit:simulate-newcomer-first-run`.
 - It's a docs page, not in-product copy: `ceh-documentation:write-guides-and-runbooks` for a guide
   or runbook, `ceh-documentation:write-concept-docs` for an explanation.
-- It's the README first screen or a package description: `ceh-seo:write-project-listing-text`.
+- It's the README first screen or a package description: `ceh-blog-and-seo:write-project-listing-text`.
 - The label is unreadable to a screen reader or has no accessible name:
   `ceh-web-frontend:make-ui-accessible`.

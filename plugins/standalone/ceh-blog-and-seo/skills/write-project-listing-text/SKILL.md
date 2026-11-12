@@ -79,4 +79,4 @@ and zero external dependencies.`
 - No keyword-stuffed descriptions — package indexes and engines both derank them.
 - Use the one canonical one-liner from step 3 on every surface.
 - Post-change accuracy of the README belongs to `ceh-git-workflow:update-readme`. Head tags,
-  sitemaps, and structured data on HTML pages belong to `ceh-seo:make-page-crawlable`.
+  sitemaps, and structured data on HTML pages belong to `ceh-blog-and-seo:make-page-crawlable`.

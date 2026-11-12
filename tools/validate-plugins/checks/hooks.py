@@ -676,7 +676,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     ]  # fmt: skip
     # The blog voice profile: draft-post writes it, edit-post reads it. It is found by its schema
     # key, or at .agents_workspace/product/blog-voice.yaml under the payload cwd with no Markdown
-    # needed. ceh-blog also carries the evidence model, so its hook renders EVIDENCE.yaml too.
+    # needed. ceh-blog-and-seo also carries the evidence model, so its hook renders EVIDENCE.yaml
+    # too.
     good_bv = (
         "schema: blog-voice/v2\nblog: content/posts\nposts_read: 3\ndate: 2026-11-12\n"
         "rhythm:\n  - point: Short, then long\n    quote: |\n      It broke.\n      Then it broke again.\n"
@@ -718,9 +719,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     def ev_rendered() -> str | None:
         md = bv / "ev" / "product" / "EVIDENCE.md"
         ok = md.is_file() and "| Tests | passed |" in md.read_text(encoding="utf-8")
-        return None if ok else "EVIDENCE.md was not rendered by ceh-blog's hook"
+        return None if ok else "EVIDENCE.md was not rendered by ceh-blog-and-seo's hook"
 
-    rh_bl = "ceh-blog/artifact-render-hook.py"
+    rh_bl = "ceh-blog-and-seo/artifact-render-hook.py"
     blog_voice_fixtures = ([
         {"script": rh_bl, "stdin": write_rel(bv / "ok", f"{bv_ws.as_posix()}/blog-voice.yaml"), "out": "", "after": bv_rendered},
         {"script": rh_bl, "stdin": write_at(bv / "bad" / bv_ws / "blog-voice.yaml"), "out": "register.0.quote"},
@@ -732,7 +733,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": rh_bl, "stdin": write_rel(bv / "none", f"{bv_ws.as_posix()}/other.yaml"), "env": no_uv, "out": ""},
         {"script": rh_bl, "stdin": write_rel(bv / "none", "blog-voice.yaml"), "env": no_uv, "out": ""},
         {"script": rh_bl, "stdin": write_at(bv / "none" / bv_ws / "blog-voice.yaml"), "env": no_uv, "out": ""},
-        {"script": "ceh-blog/generated-md-guard.py", "stdin": edit(bv_generated.as_posix()), "out": "blog-voice.yaml"},
+        {"script": "ceh-blog-and-seo/generated-md-guard.py", "stdin": edit(bv_generated.as_posix()), "out": "blog-voice.yaml"},
     ]  # fmt: skip
     # The repeat-mistake report: prevent-repeat-mistake writes and reads it. It is found by its
     # schema key, or by its dated name in product/retros/ or .agents_workspace/product/retros/

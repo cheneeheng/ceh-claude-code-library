@@ -39,7 +39,7 @@ not as a later "SEO pass".
      crawlers (GPTBot, ClaudeBot, PerplexityBot) is a product decision, not a default — flag it
      to the user rather than deciding either way silently.
    - **`llms.txt`** at the site root — a curated markdown reading list for AI agents, shipped
-     alongside the sitemap and kept current as public pages change. `ceh-seo:write-llms-txt` owns
+     alongside the sitemap and kept current as public pages change. `ceh-blog-and-seo:write-llms-txt` owns
      its format and curation.
    - **404s return HTTP 404.** An SPA fallback serving every unknown path as 200 poisons the
      index with phantom pages.

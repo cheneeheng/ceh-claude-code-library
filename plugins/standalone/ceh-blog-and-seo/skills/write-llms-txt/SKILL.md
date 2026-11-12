@@ -45,7 +45,7 @@ and the links are ordered by what a newcomer needs first.
    - **H1 is the only required element.** Everything else is optional, but a file with no blockquote
      wastes the one line an agent reads first.
    - **The blockquote is a summary, not a tagline.** It is the same job as the README first screen —
-     category noun, who it is for, the differentiator (see `ceh-seo:write-project-listing-text`).
+     category noun, who it is for, the differentiator (see `ceh-blog-and-seo:write-project-listing-text`).
    - **Prose sits between the blockquote and the first H2, and may not contain headings.** A heading
      there silently starts the file-list region early and swallows the prose.
    - **Every H2 section is a list of links and nothing else.** Format is `- [name](url): notes`. The
@@ -94,4 +94,4 @@ and the links are ordered by what a newcomer needs first.
 - **Keep page content on its own page.** `llms.txt` links; it does not host. That is what
   `llms-full.txt` is for.
 - **Do not treat it as a substitute for the HTML head surface.** `llms.txt` has no bearing on
-  search indexing or link previews — those still need `ceh-seo:make-page-crawlable`.
+  search indexing or link previews — those still need `ceh-blog-and-seo:make-page-crawlable`.

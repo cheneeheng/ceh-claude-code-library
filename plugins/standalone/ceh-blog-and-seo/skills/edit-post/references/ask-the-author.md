@@ -1,6 +1,6 @@
 # Asking the author
 
-Every `ceh-blog` skill follows these rules whenever it interviews the author or asks for feedback.
+Every blog skill in `ceh-blog-and-seo` follows these rules whenever it interviews the author or asks for feedback.
 Read this file before the first question.
 
 1. **One batch, never turn by turn.** Collect every question while reading, then send them all in

@@ -25,6 +25,12 @@ in one PR at the user's request.
 read one session's transcript and turn it into something durable: a fix when the session went
 wrong, a skill when it went right. Per `product/plans/merge-session-learning.yaml`.
 
+`ceh-blog` and `ceh-seo` become `ceh-blog-and-seo`, at 2.0.0. The two are the whole Tell stage, and
+`draft-post` and `write-project-listing-text` read the same business plan and evidence report
+through copies of the same two models. The plugin's one pair of artifact hooks now also checks and
+renders those two files when an SEO skill is the only one in use. Per
+`product/plans/merge-blog-and-seo.yaml`.
+
 Two plugins move to `archive/`, the first step of the 2026-11-11 plugin audit, which takes the
 library from 27 plugins to 21. `ceh-orchestration-lab` is archived because its experiment ended:
 its lessons were dropped by decision, and the run folders stay in each project's
@@ -101,7 +107,7 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog`                     | 1.1.2   |
+| `ceh-blog-and-seo`             | 2.0.0   |
 | `ceh-build-from-plan`          | 1.2.10  |
 | `ceh-build-planning`           | 1.2.13  |
 | `ceh-business-plan`            | 1.2.7   |
@@ -112,8 +118,8 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 | `ceh-every-session`            | 2.9.8   |
 | `ceh-security-audit`           | 1.1.5   |
 | `ceh-session-learning`         | 2.0.0   |
-| `ceh-testing`                  | 1.6.11  |
-| `ceh-usability-audit`          | 1.2.5   |
+| `ceh-testing`                  | 1.6.12  |
+| `ceh-usability-audit`          | 1.2.6   |
 | `ceh-vision-and-strategy`      | 1.1.5   |
 | `ceh-workflow-builder`         | 1.4.4   |
 | `ceh-workflow-runner`          | 1.1.3   |
@@ -141,6 +147,14 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
   `diagnose-session`, `turn-session-into-skill` and the `transcript-analyst` agent keep their
   names under the new prefix. `prevent-repeat-mistake` in `ceh-every-session` names the skill by
   its new prefix, a PATCH bump.
+- Merge `ceh-blog` (last version 1.1.2) and `ceh-seo` (last version 1.1.9) into `ceh-blog-and-seo`
+  2.0.0. Uninstall both and install `ceh-blog-and-seo`: the six skills keep their names under the
+  new prefix. `ceh-testing` and `ceh-usability-audit` name the plugin by its new name, a PATCH bump
+  each.
+- `ceh-seo` leaves `READERS` in `checks/artifact_models.py`, since its skills now sit in a plugin
+  that carries the hooks.
+- Raise `MAX_TOTAL_DESCRIPTION_LEN` in `checks/budget.py` from 26214 to 26229: the longer plugin
+  prefix lengthens the skill names inside descriptions, and no description is reworded.
 - Archive `ceh-orchestration-lab` (last version 1.0.7) and `ceh-git-datastore` (last version
   1.0.6): both move to `archive/` whole and leave the marketplace, the catalog, the README,
   getting-started, vision and strategy tables, and every index under `docs/`. Uninstall them.

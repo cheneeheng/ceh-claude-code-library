@@ -4,7 +4,7 @@ description: >-
   Load this skill when revising an existing blog draft: diagnose it, then polish, tighten, or fix
   its structure while preserving the author's voice. Trigger on "edit this draft", "polish this
   post", "tighten this", "review my blog post". Not for notes or a bare topic (use
-  ceh-blog:draft-post).
+  ceh-blog-and-seo:draft-post).
 argument-hint: "[draft file or pasted draft]"
 disable-model-invocation: false
 user-invocable: true
@@ -31,7 +31,7 @@ type (Lessons Learned, How-To, Opinion, Launch, Thought Leadership, Personal Sto
 audience and register; the author's voice markers (rhythm, vocabulary, formality); the thesis, and
 where it actually appears.
 
-If a voice profile exists in `.agents_workspace/product/` (`ceh-blog:draft-post` writes it from
+If a voice profile exists in `.agents_workspace/product/` (`ceh-blog-and-seo:draft-post` writes it from
 published posts), read it and judge the draft's voice markers against it: a draft that drifts from
 the author's usual register is a finding, not a style to preserve. When `blog-voice.yaml` is there,
 read it, not `blog-voice.md`: first run
@@ -219,5 +219,5 @@ Wait for their answers, then address what they raise specifically.
 
 ## Hands off to
 
-- Once the user is satisfied, mention: _"When you're ready to share this, `/ceh-blog:repurpose-post` can adapt it into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb."_
-- If the input is bullet notes rather than prose, offer to route: _"These look like notes rather than a draft. For turning notes into a post from scratch, `/ceh-blog:draft-post` is a better fit. A. Switch to `/ceh-blog:draft-post` (recommended) B. Stay here, I have a draft in mind C. Other: say what"_
+- Once the user is satisfied, mention: _"When you're ready to share this, `/ceh-blog-and-seo:repurpose-post` can adapt it into a Twitter/X thread, LinkedIn post, TL;DR, or newsletter blurb."_
+- If the input is bullet notes rather than prose, offer to route: _"These look like notes rather than a draft. For turning notes into a post from scratch, `/ceh-blog-and-seo:draft-post` is a better fit. A. Switch to `/ceh-blog-and-seo:draft-post` (recommended) B. Stay here, I have a draft in mind C. Other: say what"_

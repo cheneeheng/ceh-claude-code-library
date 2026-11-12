@@ -34,7 +34,7 @@ at once. This repo keeps its granularity and adds the second kind of idea withou
 | Shape | What should exist, for whom, and is it worth building? | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-vision-and-strategy`                                                                                                                  |
 | Build | How is it built? Then build it: code, UI, docs         | `ceh-build-planning`, `ceh-build-from-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-documentation`, `ceh-codebase-explanation` |
 | Prove | Does it work, is it safe, and can a person use it?     | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                                                 |
-| Tell  | Who should find it, and what do they read?             | `ceh-blog`, `ceh-seo`                                                                                                                                                                      |
+| Tell  | Who should find it, and what do they read?             | `ceh-blog-and-seo`                                                                                                                                                                         |
 
 The every-step plugins (`ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, and the rest
 of the vision's Every step row) sit outside the route. They apply at every stage.
@@ -61,7 +61,7 @@ Shape to Build: `ceh-vision-and-strategy` writes `product/VISION.md` and `produc
 plan that `ceh-build-from-plan` and `ceh-check-build-against-plan` read. `ceh-business-plan` writes
 `.agents_workspace/product/business/BUSINESS_PLAN.md`, which no Build skill reads. Prove to
 Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.md`, and
-`ceh-blog:draft-post` and `ceh-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.md`.
+`ceh-blog-and-seo:draft-post` and `ceh-blog-and-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.md`.
 
 Three rules hold for every handoff file:
 

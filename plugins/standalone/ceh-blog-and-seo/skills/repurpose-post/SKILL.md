@@ -3,7 +3,7 @@ name: repurpose-post
 description: >-
   Load this skill when adapting a finished blog post into a Twitter/X thread, LinkedIn post, TL;DR,
   or newsletter blurb. Trigger on "make a thread from this", "turn this into a LinkedIn post",
-  "write a TL;DR". Not for an unfinished draft (use ceh-blog:edit-post).
+  "write a TL;DR". Not for an unfinished draft (use ceh-blog-and-seo:edit-post).
 argument-hint: "[post file or URL] [thread | linkedin | tldr | newsletter]"
 disable-model-invocation: false
 user-invocable: true
@@ -43,7 +43,7 @@ With no human to answer (a headless run), produce all four, since each is cheap 
 is easier for the author than asking again later.
 
 **No clear thesis**: flag before repurposing, because a fuzzy post produces fuzzy content. Add a
-question: _"A. Sharpen first with `/ceh-blog:edit-post` B. Proceed as-is C. Other: say what"_
+question: _"A. Sharpen first with `/ceh-blog-and-seo:edit-post` B. Proceed as-is C. Other: say what"_
 
 **Too short to thread** (under ~400 words or only 2–3 distinct points): flag it and add a
 question: _"A. LinkedIn or TL;DR instead (recommended) B. Thread anyway, noting where it feels thin
