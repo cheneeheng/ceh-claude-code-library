@@ -29,12 +29,12 @@ at once. This repo keeps its granularity and adds the second kind of idea withou
 
 ## The stages
 
-| Stage | The question it answers                                | Plugins                                                                                                                                                                                                         |
-| ----- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Shape | What should exist, for whom, and is it worth building? | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-vision-and-strategy`                                                                                                                                       |
-| Build | How is it built? Then build it: code, UI, docs         | `ceh-build-planning`, `ceh-build-from-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-git-datastore`, `ceh-documentation`, `ceh-codebase-explanation` |
-| Prove | Does it work, is it safe, and can a person use it?     | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                                                                      |
-| Tell  | Who should find it, and what do they read?             | `ceh-blog`, `ceh-seo`                                                                                                                                                                                           |
+| Stage | The question it answers                                | Plugins                                                                                                                                                                                    |
+| ----- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Shape | What should exist, for whom, and is it worth building? | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-vision-and-strategy`                                                                                                                  |
+| Build | How is it built? Then build it: code, UI, docs         | `ceh-build-planning`, `ceh-build-from-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-documentation`, `ceh-codebase-explanation` |
+| Prove | Does it work, is it safe, and can a person use it?     | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                                                 |
+| Tell  | Who should find it, and what do they read?             | `ceh-blog`, `ceh-seo`                                                                                                                                                                      |
 
 The every-step plugins (`ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, and the rest
 of the vision's Every step row) sit outside the route. They apply at every stage.

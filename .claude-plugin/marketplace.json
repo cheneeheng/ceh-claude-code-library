@@ -11,7 +11,7 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.9.6",
+      "version": "2.9.7",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, context economy via delegated bulk reads, and replies folded to their summary."
     },
     {
@@ -117,22 +117,10 @@
       "description": "CEH business plan: turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop — draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes. Then harden it: a report-only board review, and specialist passes on strategy, unit economics, go-to-market, premortem, the 90-day operating plan, and investor materials."
     },
     {
-      "name": "ceh-git-datastore",
-      "source": "./plugins/standalone/ceh-git-datastore",
-      "version": "1.0.6",
-      "description": "CEH git-backed datastore: run an app on a bare git repo instead of a database while that still fits — a gate that talks you out of it when it does not, a working plumbing-only store, and the pinned-snapshot migration to Postgres or SQLite when a trigger fires."
-    },
-    {
       "name": "ceh-workflow-builder",
       "source": "./plugins/standalone/ceh-workflow-builder",
       "version": "1.4.4",
       "description": "CEH workflow builder: turn product work that repeats in the same shape (a weekly SEO pass, a pre-release check) into a runnable artifact — one skill when it is simple, or a flow.yaml config with gates and approvals plus a thin trigger skill — emitted into the target repo's .claude/skills/. Running a flow needs ceh-workflow-runner."
-    },
-    {
-      "name": "ceh-orchestration-lab",
-      "source": "./plugins/standalone/ceh-orchestration-lab",
-      "version": "1.0.7",
-      "description": "EXPERIMENTAL. CEH orchestration lab: run real coding tasks under one of two orchestration strategies (plan then implement, or a supervised orchestrate loop) with a cheaper worker model, and log every run for later comparison."
     },
     {
       "name": "ceh-session-to-skill",

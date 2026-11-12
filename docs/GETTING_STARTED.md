@@ -209,12 +209,10 @@ still runs, and says which claims rest on nothing proven.
 | `ceh-codebase-explanation` | you inherit a repo, or need an architecture doc, a glossary, or why code is the way it is |
 | `ceh-ui-design`            | you design a UI or HTML page without `ceh-web-frontend`                                   |
 | `ceh-ag-ui`                | you build a generative-UI canvas for an AG-UI agent                                       |
-| `ceh-git-datastore`        | you want an app to run on a bare git repo instead of a database                           |
 | `ceh-workflow-builder`     | the same product work repeats and an agent should run it                                  |
 | `ceh-workflow-runner`      | a built `flow.yaml` must run, here or headless                                            |
 | `ceh-session-to-skill`     | a task just went well and you want it as a reusable skill                                 |
 | `ceh-session-diagnosis`    | a session went wrong and you want to know why from its transcript                         |
-| `ceh-orchestration-lab`    | experimental: you want to compare orchestration strategies on real tasks                  |
 
 ## 5. Check it worked
 

@@ -69,11 +69,9 @@ has one to three suggestions, each with the exact way to start it, and the choic
 These set `disable-model-invocation: true`, so they never appear in the session's skill listing.
 Suggest one only when its plugin is enabled.
 
-| Skill                                       | Start it                                                    | When it fits                                                                                              |
-| ------------------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `ceh-coding-conduct:refactor-repo`          | `/ceh-coding-conduct:refactor-repo [module-or-path]`        | A whole codebase or module has grown complex and should shrink, not one branch's diff                     |
-| `ceh-orchestration-lab:orchestrate`         | `/ceh-orchestration-lab:orchestrate [model] [task]`         | Experimental: run a coding task as a supervised loop, with cheaper implementer subagents doing every edit |
-| `ceh-orchestration-lab:plan-then-implement` | `/ceh-orchestration-lab:plan-then-implement [model] [task]` | Experimental: run a coding task as one complete plan handed to one cheaper implementer subagent           |
+| Skill                              | Start it                                             | When it fits                                                                          |
+| ---------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `ceh-coding-conduct:refactor-repo` | `/ceh-coding-conduct:refactor-repo [module-or-path]` | A whole codebase or module has grown complex and should shrink, not one branch's diff |
 
 ## Output
 

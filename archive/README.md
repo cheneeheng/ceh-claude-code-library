@@ -22,3 +22,16 @@ followed without it: 57 of 61 branch creations in one project skipped the skill,
 session reviewed still named its branch by the convention. The prefix list stays in `branch-guard.py`'s deny message, rebasing stays in
 `pull-request`, and the worktree guidance moved to `ceh-coding-conduct:agent-coding-contract`'s
 Task decomposition.
+
+## `ceh-orchestration-lab` (archived 2026-11-12)
+
+The experiment ended on 2026-11-11, with the plugin audit of that day. The plugin ran real coding
+tasks under two orchestration strategies and logged each run, so the strategy that worked could
+become guidance. Its lessons were dropped by decision and moved into no other skill. The run
+folders stay in each project's `.agents_workspace/orchestration-lab/`.
+
+## `ceh-git-datastore` (archived 2026-11-12)
+
+Archived unused on 2026-11-11, by the plugin audit of that day, not rejected: nothing in it was
+found wrong. The folder is whole, so moving it back under `plugins/standalone/` and re-registering
+it per `CLAUDE.md` re-enables it.

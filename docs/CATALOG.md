@@ -181,13 +181,6 @@ its prerequisites, hooks, and environment variables.
 | [Set Operating Plan](../plugins/standalone/ceh-business-plan/skills/set-operating-plan/SKILL.md)                 | Model-only, no slash command               | The plan is agreed and work must start: 90 days of at most three objectives, owned key results, weekly inputs, a stop-doing list                    |
 | [Write Investor Materials](../plugins/standalone/ceh-business-plan/skills/write-investor-materials/SKILL.md)     | Model-only, no slash command               | Money must be raised on a validated plan: a deck outline with every claim traced to a plan section, an ask tied to milestones, and outreach notes   |
 
-### [Git Datastore (`ceh-git-datastore`)](../plugins/standalone/ceh-git-datastore/)
-
-| Skill                                                                                                  | Invoke                                     | When                                                                                                                                                       |
-| ------------------------------------------------------------------------------------------------------ | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Build Git Datastore](../plugins/standalone/ceh-git-datastore/skills/build-git-datastore/SKILL.md)     | `/ceh-git-datastore:build-git-datastore`   | An app needs persistence but not a database yet: a gate that often says no, then a plumbing-only store on a bare git repo                                  |
-| [Migrate Git Datastore](../plugins/standalone/ceh-git-datastore/skills/migrate-git-datastore/SKILL.md) | `/ceh-git-datastore:migrate-git-datastore` | The store has to become a real database, or you need to know whether it is time: schema inference, pinned-snapshot export, backfill, verification, cutover |
-
 ### [Workflow Builder (`ceh-workflow-builder`)](../plugins/standalone/ceh-workflow-builder/)
 
 | Skill                                                                                                         | Invoke                                          | When                                                                                                                                                                  |
@@ -231,15 +224,6 @@ its prerequisites, hooks, and environment variables.
 | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Analyze Competitor](../plugins/standalone/ceh-competitor-analysis/skills/analyze-competitor/SKILL.md)   | `/ceh-competitor-analysis:analyze-competitor`  | Analysing a competitor repo or product: breakdown, full inventory, "oh wow" mechanisms with evidence, what to incorporate and where it lands |
 | [Compare Competitors](../plugins/standalone/ceh-competitor-analysis/skills/compare-competitors/SKILL.md) | `/ceh-competitor-analysis:compare-competitors` | Putting the analysed competitors side by side with your own work: at-a-glance table, inventory by capability, strengths and weaknesses       |
-
-### [Orchestration Lab (`ceh-orchestration-lab`)](../plugins/standalone/ceh-orchestration-lab/)
-
-Experimental, and user-invoked only.
-
-| Skill                                                                                                  | Invoke                                       | When                                                                                                                                                                                  |
-| ------------------------------------------------------------------------------------------------------ | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Plan Then Implement](../plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/SKILL.md) | `/ceh-orchestration-lab:plan-then-implement` | Trying a task as one plan and one handoff: this session plans, one implementer on a cheaper model carries it out, the run is logged                                                   |
-| [Orchestrate](../plugins/standalone/ceh-orchestration-lab/skills/orchestrate/SKILL.md)                 | `/ceh-orchestration-lab:orchestrate`         | Trying a task as a supervised loop: a scout maps the code, this session splits, briefs and reviews, implementers on a cheaper model do the pieces worth delegating, the run is logged |
 
 ---
 
@@ -297,12 +281,6 @@ Agents run autonomously for a defined task and hand results back to the parent s
 | Agent                                                                                            | Invoke                                                  | When                                                                                                                   |
 | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | [Competitor Analyst](../plugins/standalone/ceh-competitor-analysis/agents/competitor-analyst.md) | `@"ceh-competitor-analysis:competitor-analyst (agent)"` | Read one competitor repo or product in isolation and return an evidence-anchored fact sheet (read-only, never runs it) |
-
-### [Orchestration Lab (`ceh-orchestration-lab`)](../plugins/standalone/ceh-orchestration-lab/)
-
-| Agent                                                                            | Invoke                                         | When                                                                                                             |
-| -------------------------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| [Implementer](../plugins/standalone/ceh-orchestration-lab/agents/implementer.md) | `@"ceh-orchestration-lab:implementer (agent)"` | Carry out one brief and run its check, as the worker of both orchestration-lab skills, on the model the run sets |
 
 ### [Session Diagnosis (`ceh-session-diagnosis`)](../plugins/standalone/ceh-session-diagnosis/)
 

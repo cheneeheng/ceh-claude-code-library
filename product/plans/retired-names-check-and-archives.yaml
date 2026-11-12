@@ -1,6 +1,6 @@
 schema: plan/v2
 title: A validator check for retired plugin names, then two plugins archived
-status: building
+status: built
 created: 2026-11-12
 goal: |
   The plugin audit of 2026-11-11 ended with 27 plugins becoming 21: two archived and four merges.
@@ -126,11 +126,11 @@ design:
       `.claude/rules/decision-skill-bundled-files.md`, and its README row in
       `docs/PLUGIN_DEPENDENCIES.md`. The archive section reads: archived unused on 2026-11-11, not
       rejected, and moving the folder back under `plugins/standalone/` re-enables it.
-  - topic: One PR per phase
+  - topic: The check in its own PR, both archives in one
     decision: |
-      The check merges first, so each archive PR runs against it in CI. A green run on an archive
+      The check merges first, so the archive PR runs against it in CI. A green run on the archive
       PR then shows the check finding nothing left, which a single PR for all three could not
-      show.
+      show. Both archives share one PR, at the user's request on 2026-11-12.
 phases:
   - name: The retired-names check
     builds: |
@@ -155,7 +155,12 @@ phases:
       `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`, with the
       folder at `archive/ceh-orchestration-lab/` and absent from `plugins/standalone/`.
       `claude plugin validate plugins/standalone/ceh-every-session` passes. CI is green on the PR.
-    status: todo
+    status: done
+    evidence: |
+      Commit 6fd6701. `python tools/validate-plugins/validate.py` printed
+      `OK: all plugin checks passed` with the folder at `archive/ceh-orchestration-lab/`.
+      `claude plugin validate plugins/standalone/ceh-every-session` printed `Validation passed`.
+      CI run 43195604334 on PR #261 succeeded.
   - name: Archive ceh-git-datastore
     builds: |
       "How a plugin is archived" applied to `ceh-git-datastore`, with "The vision's stage table in
@@ -164,7 +169,11 @@ phases:
       `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`, with the
       folder at `archive/ceh-git-datastore/` and absent from `plugins/standalone/`, and
       `ls plugins/standalone` lists 25 plugins. CI is green on the PR.
-    status: todo
+    status: done
+    evidence: |
+      Commit 6fd6701. `python tools/validate-plugins/validate.py` printed
+      `OK: all plugin checks passed` with the folder at `archive/ceh-git-datastore/`, and
+      `ls plugins/standalone | wc -l` printed 25. CI run 43195604334 on PR #261 succeeded.
 open:
   - question: |
       May the archive PRs edit the stage table in `docs/VISION.md`, or does that need its own PR
@@ -188,3 +197,30 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#260 https://github.com/cheneeheng/ceh-claude-code-library/pull/260"
+  - date: 2026-11-12
+    event: Design changed
+    details: |
+      "One PR per phase: The check merges first, so each archive PR runs against it in CI. A green
+      run on an archive PR then shows the check finding nothing left, which a single PR for all
+      three could not show." became one PR for the check and one for both archives, because the
+      user asked in the session for phases 2 and 3 in a single PR.
+  - date: 2026-11-12
+    event: Built Phase
+    phase: 2
+    details: |
+      `ceh-orchestration-lab` moved to `archive/` and removed from the marketplace, the tables and
+      indexes, `whats-next`, and the vision's stage table and experiment paragraph.
+  - date: 2026-11-12
+    event: Built Phase
+    phase: 3
+    details: |
+      `ceh-git-datastore` moved to `archive/` whole and removed from the marketplace, the tables
+      and indexes, and the allowed-bundle lists. 25 plugins remain.
+  - date: 2026-11-12
+    event: PR
+    details: "#261 https://github.com/cheneeheng/ceh-claude-code-library/pull/261"
+  - date: 2026-11-12
+    event: Checked
+    details: |
+      20 items: 20 Built, no Gap, Deviation, Extra, Failing or Cannot verify. The three phase
+      Checks were rerun, with the probe also naming `ceh-git-datastore:build-git-datastore`.

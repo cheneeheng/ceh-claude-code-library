@@ -740,20 +740,6 @@ visual choice is a semantic enum mapped to a theme class, agent output is render
 `add-human-approval` also inline code that edits the template's `useAgent.ts` and the mock's
 `respond`, so a change to the shape of the template's hook or mock goes to both skills' snippets.
 
-## Git datastore hard stops (serverless / right to erasure)
-
-**Canonical:** `plugins/standalone/ceh-git-datastore/skills/build-git-datastore/SKILL.md` — § Procedure, Start with the gate
-
-| Copy                                                         | Section            | Diverges                                                                                                                       |
-| ------------------------------------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| `plugins/standalone/ceh-git-datastore/docs/git-datastore.md` | § Before you start | human-facing copy of the two hard stops only; points at the skill for the rest of the gate and links to its deployment section |
-
-**Shared:** serverless or multi-node hosting is disqualifying, because the store is a directory on a
-disk and two nodes with two disks are two databases. A right-to-erasure obligation is disqualifying,
-because git history is append-only and erasure means rewriting every commit and invalidating every
-clone and backup. The skill runs the gate as a step with a verdict and refuses to build when a row
-fails. The doc carries the two stops as reading material.
-
 ## flow.yaml schema
 
 **Canonical:** whole files, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/flow-config-schema.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/run-state-schema.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/approval-schema.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/assets/run-state.template.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/assets/approval.template.md`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/references/run-state-model.py`, `plugins/standalone/ceh-workflow-builder/skills/build-agentic-workflow/assets/run-state.template.yaml`
@@ -1021,23 +1007,6 @@ check `BUSINESS_PLAN.yaml` before reading it.
 | `plugins/standalone/ceh-documentation/skills/write-project-docs/references/docs-standard.md`        | whole file | none     |
 
 **Shared:** the one docs format every writing skill follows.
-
-## Orchestration run log
-
-**Canonical:** whole files, `plugins/standalone/ceh-orchestration-lab/skills/orchestrate/references/run-log.md`, `plugins/standalone/ceh-orchestration-lab/skills/orchestrate/references/run-schema.md`, `plugins/standalone/ceh-orchestration-lab/skills/orchestrate/references/runs-index-schema.md`, `plugins/standalone/ceh-orchestration-lab/skills/orchestrate/assets/run.template.md`, `plugins/standalone/ceh-orchestration-lab/skills/orchestrate/assets/runs-index.template.md`, `plugins/standalone/ceh-orchestration-lab/skills/orchestrate/scripts/token_usage.py`, `plugins/standalone/ceh-orchestration-lab/skills/orchestrate/scripts/dispatch_ledger.py`
-
-| Copy                                                                                                  | Section    | Diverges |
-| ----------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/references/run-log.md`           | whole file | none     |
-| `plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/references/run-schema.md`        | whole file | none     |
-| `plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/references/runs-index-schema.md` | whole file | none     |
-| `plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/assets/run.template.md`          | whole file | none     |
-| `plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/assets/runs-index.template.md`   | whole file | none     |
-| `plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/scripts/token_usage.py`          | whole file | none     |
-| `plugins/standalone/ceh-orchestration-lab/skills/plan-then-implement/scripts/dispatch_ledger.py`      | whole file | none     |
-
-**Shared:** how a run folder is opened, kept and closed, its two formats, and the two scripts that
-fill Token usage and Ledger.
 
 ## Usability edit boundary
 
