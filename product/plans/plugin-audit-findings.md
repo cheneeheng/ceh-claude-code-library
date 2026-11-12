@@ -450,8 +450,15 @@ turn on a decision block with no denied call first.
   a drive-letter pattern kept whole, and each denial's off-switch sentence. Each fixture
   failed before its script edit. `python tools/validate-plugins/validate.py` prints
   `OK: all plugin checks passed`.
-- **Status:** todo. The tester agents' case is built only after the dispatch under Open. Without it, the
-  phase is done with that case reported as not built.
+- **Status:** done, Commit 26d8f67. Before the script edits `python tools/validate-plugins/checks/hooks.py`
+  failed twelve new fixtures: 58, 178, 193 and 205 (the off-switch sentence), 60 (a second
+  session not told "the hook failed"), 152 (an ignored path denied), 159 (a `bulk-reader`
+  payload denied), 160 and 166 (a drive-letter pattern split), 173 (no second warning
+  after a reset) and 192 (a commit on a second line allowed). After them it printed
+  `OK: hooks check passed`, and `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`. The tester agents' case is not built: the dispatch under Open has not run. The
+  `SubagentStart` matcher has no fixture, since it is a pattern in `hooks.json`. It was
+  checked once by hand against seven agent names.
 
 ### Phase 4: Stack plugins
 
@@ -533,5 +540,9 @@ turn on a decision block with no denied call first.
   `OK: all plugin checks passed`. The labelled new-form fixture passed before and after
   the edit, because the old pattern already left it alone.
 - 2026-11-12 PR: #266 https://github.com/cheneeheng/ceh-claude-code-library/pull/266
+- 2026-11-12 Built Phase 3: 26d8f67, `python tools/validate-plugins/checks/hooks.py` printed
+  `OK: hooks check passed`. `bulk-read-guard.py` also splits `BULK_READER_ALLOW` on
+  `os.pathsep`, since both guards read the variable, and the usage watch's message gives
+  the whole session id for the handoff name, after Phase 2.
 
 <!-- prettier-ignore-end -->
