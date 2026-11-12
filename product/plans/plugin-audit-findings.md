@@ -520,5 +520,6 @@ turn on a decision block with no denied call first.
   `product/EVIDENCE.md`, because the `.yaml` name put the description total over its
   ratchet. The workflow builder's `docs/ARCHITECTURE.md` and the root `README.md` took
   the same wording, beyond the files the Design lists.
+- 2026-11-12 PR: #265 https://github.com/cheneeheng/ceh-claude-code-library/pull/265
 
 <!-- prettier-ignore-end -->
