@@ -47,9 +47,9 @@ the empty state offers starter prompts built from the catalogue.
 ### 2. Install the theme
 
 Invoke the Skill tool with skill="ceh-ui-design:design-ui" and follow its _Theme layer_, with
-one override: the theme is already chosen. Use **Tidewater** without asking, unless the user named
-Meridian or brought their own token file with the same token and class contract. Copy the
-`tidewater/brand.css` file from that skill's references directory to `web/src/brand.css`, which
+one override: the theme is already chosen. Use **Meridian** without asking, unless the user named
+Tidewater or brought their own token file with the same token and class contract. Copy the
+`meridian/brand.css` file from that skill's references directory to `web/src/brand.css`, which
 `app.css` imports first. Switching later means replacing that one file, and no markup changes, so a
 canvas build never stalls on a look-and-feel question.
 

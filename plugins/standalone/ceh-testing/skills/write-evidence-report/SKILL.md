@@ -17,8 +17,8 @@ license: Apache-2.0
 
 # Write the evidence report
 
-Roll every Prove result into one committed file, `product/EVIDENCE.md`, that a later stage reads
-instead of the scattered reports. Done means a dated section for the current commit sits at the top
+Roll every Prove result into one committed file, `product/EVIDENCE.yaml`, that a later stage
+reads instead of the scattered reports, with `product/EVIDENCE.md` rendered from it. Done means a dated section for the current commit sits at the top
 of the file, every area has a status, and every claim under Claims cites the result behind it.
 
 The checks leave their reports in the git-ignored `.agents_workspace/`, dated, one folder each. A

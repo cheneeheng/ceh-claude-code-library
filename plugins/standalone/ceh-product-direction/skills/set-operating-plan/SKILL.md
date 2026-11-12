@@ -13,7 +13,7 @@ license: Apache-2.0
 
 # Set operating plan
 
-Convert a plan into the next 90 days of work. Done is a §13 in `BUSINESS_PLAN.md` where every
+Convert a plan into the next 90 days of work. Done is a §13 in `BUSINESS_PLAN.yaml` where every
 objective retires a named risk, every key result has one owner and a date, and the team knows
 which number to look at each week.
 

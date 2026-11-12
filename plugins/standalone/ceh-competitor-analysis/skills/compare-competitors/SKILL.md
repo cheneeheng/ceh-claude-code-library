@@ -52,7 +52,7 @@ the Markdown.
 6. **Write the comparison** in the shape under Output.
 7. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" for the
    theme and its review pass, with the same theme file the per-competitor pages link
-   (`themes/<theme>.css`, Tidewater unless the user names another). Build `comparison.html` by
+   (`themes/<theme>.css`, Meridian unless the user names another). Build `comparison.html` by
    filling `${CLAUDE_SKILL_DIR}/references/report-page.html`, keeping its COMPARISON-ONLY blocks:
    the hero from the positioning line and up to three headline counts, one table panel each for
    "At a glance", "Inventory by capability", and "Scores", and one expandable card per repo from "Where each

@@ -96,8 +96,8 @@ installed.
    `CLAUDE.md`: write no file, and report it as a candidate to move. Inferred, when another file
    answers it, citing that file. Otherwise it is a question. An existing project `decision-` file
    that reads as user scope is reported as a candidate to move, and not moved.
-5. **Settle the questions.** Interactive: ask them up front with `AskUserQuestion`, at most four per
-   call, calls back to back, each with a recommended answer listed first. Show the inferred
+5. **Settle the questions.** Interactive: ask the user up front, at most four questions per
+   round, each with a recommended answer listed first. Show the inferred
    decisions in the same pass so the user can correct one. No human (a subagent, a headless run):
    write only the inferred decisions and report the rest as open.
 6. **Write one file per decision**, then report.

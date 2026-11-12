@@ -56,12 +56,13 @@ become a plan's goals (`decision-business-plan-readers.md`).
 | Prove | the plan, the code                                                                                                                   | `product/EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                                      |
 | Tell  | `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, `product/EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists) | posts, listings, SEO pages                                                                                                                |
 
-Shape to Build: `ceh-product-direction` writes `product/VISION.md` and `product/STRATEGY.md`, and
+Shape to Build: `ceh-product-direction` writes `product/VISION.yaml` and `product/STRATEGY.yaml`, and
 `ceh-build-plan` reads them, putting what a plan would contradict under Open, and writes the
 plan that it builds from and `ceh-check-build-against-plan` reads. `ceh-product-direction` also writes
-`.agents_workspace/product/business/BUSINESS_PLAN.md`, which no Build skill reads. Prove to
-Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.md`, and
-`ceh-blog-and-seo:draft-post` and `ceh-blog-and-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.md`.
+`.agents_workspace/product/business/BUSINESS_PLAN.yaml`, which no Build skill reads. Prove to
+Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.yaml`, and
+`ceh-blog-and-seo:draft-post` and `ceh-blog-and-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.yaml`. Each YAML has its
+Markdown rendered beside it, and a reader takes the `.md` only where no YAML exists.
 
 Three rules hold for every handoff file:
 

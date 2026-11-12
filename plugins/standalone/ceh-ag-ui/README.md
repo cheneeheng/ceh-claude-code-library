@@ -2,7 +2,7 @@
 
 Generative-UI canvases for agents that speak the [AG-UI](https://docs.ag-ui.com) protocol. The
 user types, and the agent answers by placing components from a **catalogue fixed at build time**,
-styled only by the theme (Tidewater by default, from `ceh-ui-design:design-ui`). The agent picks
+styled only by the theme (Meridian by default, from `ceh-ui-design:design-ui`). The agent picks
 the component and fills in the content. It can never change how anything looks.
 
 All five skills are **build-time**: Claude Code loads one while writing your app, and none runs
@@ -11,13 +11,13 @@ inside the running app. Worked examples, prompt by prompt:
 
 ## Skills
 
-| Skill                  | Invoke                            | Triggers when                                                                                                                                                                                                                                                                       |
-| ---------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `build-ag-ui`          | `/ceh-ag-ui:build-ag-ui`          | Starting a generative-UI canvas for an AG-UI agent: uses the user's own template or copies the bundled one (React + Vite + `@ag-ui/client`, seven Tidewater-styled catalogue components, a deterministic mock agent), installs the theme, and enforces the three-layer styling lock |
-| `add-canvas-component` | `/ceh-ag-ui:add-canvas-component` | Adding or changing a catalogue component: the tool name and agent-facing description, a content-only zod schema (no styling props), the example that doubles as a fixture, a theme-only component, and verification against the mock                                                |
-| `build-ag-ui-agent`    | `/ceh-ag-ui:build-ag-ui-agent`    | Building the agent server behind the canvas: a bundled FastAPI + Claude server that keeps the model's own append-only transcript per thread, ends the run on a frontend tool call, and holds backend results until the canvas answers                                               |
-| `add-live-state-panel` | `/ceh-ag-ui:add-live-state-panel` | The canvas needs a live value the agent updates as it works: `STATE_SNAPSHOT` / `STATE_DELTA` (JSON Patch), one writer per key, a fixed validated state panel, UI-to-agent state                                                                                                    |
-| `add-human-approval`   | `/ceh-ag-ui:add-human-approval`   | The agent must get the user's decision before acting: AG-UI 1.0 interrupts with the interrupt outcome, a fixed approval card, one `resume` covering every open interrupt, cancel-on-type, single-use approvals                                                                      |
+| Skill                  | Invoke                            | Triggers when                                                                                                                                                                                                                                                                   |
+| ---------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `build-ag-ui`          | `/ceh-ag-ui:build-ag-ui`          | Starting a generative-UI canvas for an AG-UI agent: uses the user's own template or copies the bundled one (React + Vite + `@ag-ui/client`, seven theme-styled catalogue components, a deterministic mock agent), installs the theme, and enforces the three-layer styling lock |
+| `add-canvas-component` | `/ceh-ag-ui:add-canvas-component` | Adding or changing a catalogue component: the tool name and agent-facing description, a content-only zod schema (no styling props), the example that doubles as a fixture, a theme-only component, and verification against the mock                                            |
+| `build-ag-ui-agent`    | `/ceh-ag-ui:build-ag-ui-agent`    | Building the agent server behind the canvas: a bundled FastAPI + Claude server that keeps the model's own append-only transcript per thread, ends the run on a frontend tool call, and holds backend results until the canvas answers                                           |
+| `add-live-state-panel` | `/ceh-ag-ui:add-live-state-panel` | The canvas needs a live value the agent updates as it works: `STATE_SNAPSHOT` / `STATE_DELTA` (JSON Patch), one writer per key, a fixed validated state panel, UI-to-agent state                                                                                                |
+| `add-human-approval`   | `/ceh-ag-ui:add-human-approval`   | The agent must get the user's decision before acting: AG-UI 1.0 interrupts with the interrupt outcome, a fixed approval card, one `resume` covering every open interrupt, cancel-on-type, single-use approvals                                                                  |
 
 ## Prerequisites
 

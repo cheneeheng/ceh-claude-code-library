@@ -211,8 +211,8 @@ editing both.
 | -------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------ |
 | `plugins/standalone/ceh-blog-and-seo/skills/write-project-listing-text/SKILL.md` | § Procedure, 1. Read the product handoff files | a numbered step, not a paragraph; same sentences |
 
-**Shared:** what Tell takes from `.agents_workspace/product/business/BUSINESS_PLAN.md` (user, problem, differentiator), that
-`product/EVIDENCE.md` bounds every product claim to the Claims of its newest section with nothing said about a
+**Shared:** what Tell takes from `.agents_workspace/product/business/BUSINESS_PLAN.yaml` (user, problem, differentiator), that
+`product/EVIDENCE.yaml` bounds every product claim to the Claims of its newest section with nothing said about a
 `stale`, `not run`, or `open issues` area, and the missing-file fallback. The file names and
 statuses must match `ceh-testing:write-evidence-report` and `docs/STRATEGY.md`.
 

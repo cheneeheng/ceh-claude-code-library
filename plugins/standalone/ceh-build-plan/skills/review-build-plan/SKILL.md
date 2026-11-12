@@ -39,7 +39,7 @@ quotes the plan, and the verdict is delivered.
    After the last write to the YAML, run `render`.
 
 2. **Review from a fresh context when this session wrote the plan.** Dispatch one background
-   subagent on the most capable model with the plan path and `${CLAUDE_SKILL_DIR}/SKILL.md`, told
+   subagent on the session's own model with the plan path and `${CLAUDE_SKILL_DIR}/SKILL.md`, told
    to run steps 3 to 6 and return the Output. The author reads what they meant, a fresh reader
    reads what is written, and only the second is what the builder gets.
 3. **Read what the plan rests on**: every file, route, model, and dependency it names in the

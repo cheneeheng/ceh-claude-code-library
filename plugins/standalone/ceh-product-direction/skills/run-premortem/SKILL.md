@@ -14,7 +14,7 @@ license: Apache-2.0
 # Run premortem
 
 Work backward from failure. Charlie Munger's rule is to invert: find what would guarantee the
-outcome you fear, then avoid it. Done is a §12 in `BUSINESS_PLAN.md` where every top risk has a
+outcome you fear, then avoid it. Done is a §12 in `BUSINESS_PLAN.yaml` where every top risk has a
 story, a signal, a kill criterion with a date, and a cap, and where the most that can be lost is
 written as a number.
 

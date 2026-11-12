@@ -72,7 +72,7 @@ a glance, and the HTML page carries the same content as the YAML.
    render straight over the `v1` Markdown: carry every `v1` row and paragraph word for word into
    its key, per the schema's "Converting a `v1` report", then amend the YAML.
 9. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" for the
-   theme and its review pass. Use the Tidewater theme unless the user names another, copied once to
+   theme and its review pass. Use the Meridian theme unless the user names another, copied once to
    `.agents_workspace/competitor-analysis/themes/<theme>.css` and linked from every page. Build
    `<slug>.html` from the YAML by filling `${CLAUDE_SKILL_DIR}/references/report-page.html`,
    keeping its COMPETITOR-ONLY blocks: the hero from `summary`, `verdict`, and up to three headline

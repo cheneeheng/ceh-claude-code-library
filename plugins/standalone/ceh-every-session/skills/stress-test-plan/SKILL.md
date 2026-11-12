@@ -29,7 +29,7 @@ the user ends the session, and the plan records the outcome.
    web), several in parallel, and fold the answers in. The user is asked only what only the user
    can decide.
 4. **Ask a round.** Take the decision questions whose prerequisites are all settled, at most four,
-   most consequential first, and ask them with `AskUserQuestion`. Each question carries a
+   most consequential first, and ask the user. Each question carries a
    recommended option, listed first and marked "(Recommended)", with its reason in the
    description. "Yes", "go with your recommendations", or no objection accepts every recommendation
    in the round.
