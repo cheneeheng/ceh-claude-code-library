@@ -81,7 +81,7 @@ References that look like edges but deliberately are not:
 | `ceh-build-plan:implement-from-plan` → `ceh-testing:write-test-first`                                                                            | Conditional, "when `ceh-testing` is installed"                                                                                               |
 | `ceh-python-library` → `ceh-python-service` (testing and environment skills)                                                                     | Negative routing                                                                                                                             |
 | `ceh-web-frontend:visualize-graph-cytoscape` → `ceh-codebase-explanation:document-architecture`                                                  | Negative routing                                                                                                                             |
-| `ceh-business-plan:find-product-market-fit` → the `ceh-build-plan` plan format                                                                   | It reads only the plans folder and three section names (see `docs/CROSS_REFERENCES.md`, "Build plan format")                                 |
+| `ceh-product-direction:find-product-market-fit` → the `ceh-build-plan` plan format                                                               | It reads only the plans folder and three section names (see `docs/CROSS_REFERENCES.md`, "Build plan format")                                 |
 
 ## Checking and changing the graph
 

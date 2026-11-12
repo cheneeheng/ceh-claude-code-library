@@ -75,7 +75,7 @@ run the skill.
 
 ## Not this plugin
 
-- Whether the product is worth building, and who pays: use `ceh-business-plan`. No skill here
+- Whether the product is worth building, and who pays: use `ceh-product-direction`. No skill here
   reads the business plan, so its tests and dates never become a plan's goal.
 - Checking finished code against the plan: `ceh-check-build-against-plan`.
 - How to write the code itself: the stack plugins (`ceh-python-service`, `ceh-web-frontend`, and

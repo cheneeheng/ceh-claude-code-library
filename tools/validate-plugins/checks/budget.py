@@ -10,7 +10,7 @@ from common import doc_files, fail, main, parse_frontmatter
 # only in the PR that adds a component, by that component's description length.
 # A plugin rename that lengthens the `ceh-<plugin>:<skill>` pointers inside descriptions raises it
 # to the new total.
-MAX_TOTAL_DESCRIPTION_LEN = 26229
+MAX_TOTAL_DESCRIPTION_LEN = 26261
 
 
 def check() -> None:

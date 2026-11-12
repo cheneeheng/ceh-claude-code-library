@@ -3,8 +3,8 @@ name: write-vision-and-strategy
 description: >-
   Load this skill when a repo's direction must be written down to settle later decisions:
   VISION.md and STRATEGY.md, drafted from the repo, then confirmed with its owner. Trigger on "write
-  the vision doc", "create a strategy doc". Not for a business plan (use
-  ceh-business-plan:develop-business-plan).
+  the vision", "create a strategy doc". Not for a business plan (use
+  ceh-product-direction:develop-business-plan).
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

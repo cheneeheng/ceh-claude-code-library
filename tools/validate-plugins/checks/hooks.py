@@ -805,12 +805,12 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             "overview.bullets", "## 01. Overview",
         ),
         *spine_fixtures(
-            "ceh-vision-and-strategy", "VISION", good_vision,
+            "ceh-product-direction", "VISION", good_vision,
             good_vision.replace("status: draft", "status: adopted"),
             "status adopted allows no [assumed]", "## Identity",
         ),
         *spine_fixtures(
-            "ceh-business-plan", "BUSINESS_PLAN", good_bp,
+            "ceh-product-direction", "BUSINESS_PLAN", good_bp,
             good_bp.replace("pmf_gate: 2", "pmf_gate: 9"),
             "pmf_gate", "## §01 Executive Summary",
         ),

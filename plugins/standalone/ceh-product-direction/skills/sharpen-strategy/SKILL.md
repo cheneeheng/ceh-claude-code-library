@@ -2,7 +2,7 @@
 name: sharpen-strategy
 description: >-
   Turns a business plan's strengths into a strategy of where to play, how to win, and what to
-  refuse, checked against nine tests, called by ceh-business-plan:develop-business-plan.
+  refuse, checked against nine tests, called by ceh-product-direction:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -112,7 +112,7 @@ Written into §04 of `BUSINESS_PLAN.yaml` as one entry of `value_proposition.sub
 ## Stop conditions
 
 - The plan has no named customer or no stated problem → strategy has nothing to stand on. Report
-  that and name `ceh-business-plan:find-product-market-fit`.
+  that and name `ceh-product-direction:find-product-market-fit`.
 - Every candidate advantage fails the copy-cost test and the user has no further material → write
   the block with the failures showing and say plainly that the plan has no defensible edge yet.
 - **No human to answer** (a headless run, or called by another agent): ask nothing. Draft and
@@ -123,6 +123,6 @@ Written into §04 of `BUSINESS_PLAN.yaml` as one entry of `value_proposition.sub
 ## Hands off to
 
 - When the pricing-power test fails or is untested, suggest
-  `ceh-business-plan:stress-test-unit-economics`.
-- When the small-pond test changes the segment, suggest `ceh-business-plan:plan-go-to-market`,
+  `ceh-product-direction:stress-test-unit-economics`.
+- When the small-pond test changes the segment, suggest `ceh-product-direction:plan-go-to-market`,
   because the first-ten list is now wrong.

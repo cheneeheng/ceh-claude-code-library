@@ -39,6 +39,14 @@ skills now name each other as plain next steps, with no "when installed" conditi
 `ceh-check-build-against-plan` stays its own Prove plugin. A session started before the reinstall
 still runs the old plugins from its cache. Per `product/plans/merge-build-plan.yaml`.
 
+`ceh-vision-and-strategy` merges into `ceh-business-plan` as `ceh-product-direction`, at 2.0.0.
+Both are Shape, both decide what to build and whether it is worth it, and the business plan also
+covers a project that is not a business, so the two serve the same repos. The plugin has two entry
+points, `write-vision-and-strategy` and `develop-business-plan`, and its README states the reader
+rule: the vision writer never reads the business plan. A user who wants only the vision now
+carries nine more descriptions in the skill listing. Per
+`product/plans/merge-product-direction.yaml`.
+
 Two plugins move to `archive/`, the first step of the 2026-11-11 plugin audit, which takes the
 library from 27 plugins to 21. `ceh-orchestration-lab` is archived because its experiment ended:
 its lessons were dropped by decision, and the run folders stay in each project's
@@ -117,20 +125,19 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 | ------------------------------ | ------- |
 | `ceh-blog-and-seo`             | 2.0.0   |
 | `ceh-build-plan`               | 2.0.0   |
-| `ceh-business-plan`            | 1.2.8   |
 | `ceh-check-build-against-plan` | 1.1.10  |
 | `ceh-codebase-explanation`     | 1.3.5   |
 | `ceh-coding-conduct`           | 2.5.5   |
-| `ceh-competitor-analysis`      | 1.2.3   |
+| `ceh-competitor-analysis`      | 1.2.4   |
 | `ceh-documentation`            | 1.0.9   |
 | `ceh-every-session`            | 2.9.8   |
 | `ceh-git-workflow`             | 1.5.7   |
+| `ceh-product-direction`        | 2.0.0   |
 | `ceh-python-service`           | 1.1.6   |
 | `ceh-security-audit`           | 1.1.5   |
 | `ceh-session-learning`         | 2.0.0   |
 | `ceh-testing`                  | 1.6.12  |
 | `ceh-usability-audit`          | 1.2.6   |
-| `ceh-vision-and-strategy`      | 1.1.6   |
 | `ceh-workflow-builder`         | 1.4.4   |
 | `ceh-workflow-runner`          | 1.1.3   |
 
@@ -170,13 +177,18 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
   `build-record-guard.py` accepts `ceh-build-plan:implement-from-plan`.
 - `plan-schema.md` names `ceh-build-plan` in its first paragraph, in all six copies, and every
   skill, schema copy and README that named either old plugin names the new one: a PATCH bump for
-  `ceh-business-plan`, `ceh-check-build-against-plan`, `ceh-codebase-explanation`,
-  `ceh-coding-conduct`, `ceh-documentation`, `ceh-git-workflow`, `ceh-python-service` and
-  `ceh-vision-and-strategy`.
+  `ceh-check-build-against-plan`, `ceh-codebase-explanation`, `ceh-coding-conduct`,
+  `ceh-documentation`, `ceh-git-workflow` and `ceh-python-service`.
 - The hook fixtures in `checks/hooks.py` run the plan artifact set once for `ceh-build-plan`
   instead of once per old plugin.
-- Raise `MAX_TOTAL_DESCRIPTION_LEN` in `checks/budget.py` from 26214 to 26229: the longer plugin
-  prefix lengthens the skill names inside descriptions, and no description is reworded.
+- Merge `ceh-vision-and-strategy` (last version 1.1.5) and `ceh-business-plan` (last version
+  1.2.7) into `ceh-product-direction` 2.0.0. Uninstall both and install `ceh-product-direction`:
+  the ten skills keep their names under the new prefix. `ceh-competitor-analysis` and
+  `ceh-build-plan` name the plugin by its new name.
+- Shorten one trigger phrase in `write-vision-and-strategy`'s description, "write the vision doc"
+  to "write the vision", so it stays within 300 characters with the longer "Not for" pointer.
+- Raise `MAX_TOTAL_DESCRIPTION_LEN` in `checks/budget.py` from 26214 to 26261: the longer plugin
+  prefixes lengthen the skill names inside descriptions, and no other description is reworded.
 - Archive `ceh-orchestration-lab` (last version 1.0.7) and `ceh-git-datastore` (last version
   1.0.6): both move to `archive/` whole and leave the marketplace, the catalog, the README,
   getting-started, vision and strategy tables, and every index under `docs/`. Uninstall them.

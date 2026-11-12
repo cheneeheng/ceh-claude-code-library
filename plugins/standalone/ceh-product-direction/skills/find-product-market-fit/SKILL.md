@@ -3,7 +3,7 @@ name: find-product-market-fit
 description: >-
   The product-market-fit loop that drafts `BUSINESS_PLAN.yaml` and interrogates its weakest
   assumption until the 8-point readiness gate passes, called by
-  ceh-business-plan:develop-business-plan.
+  ceh-product-direction:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -189,7 +189,7 @@ satisfied:
   stay in the plan: a build plan does not read it.
 - Name the plan's softest remaining area (edge, numbers, first customers, risks, or the next 90
   days). The gate proves a fit exists, not that the business is sound, and
-  `ceh-business-plan:develop-business-plan` routes that area to the specialist that owns it.
+  `ceh-product-direction:develop-business-plan` routes that area to the specialist that owns it.
 
 **Do not flip to validated to end the loop early.** If the user wants to stop before the gate
 passes, leave `status: draft`, record the open criteria honestly, and say plainly which

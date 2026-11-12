@@ -2,7 +2,7 @@
 name: stress-test-unit-economics
 description: >-
   Builds a business plan's per-unit model with the arithmetic shown, dates the cash low point, and
-  finds the one input that kills the business, called by ceh-business-plan:develop-business-plan.
+  finds the one input that kills the business, called by ceh-product-direction:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -126,7 +126,7 @@ Unit: <one customer per month>
 - The unit loses money at the base case and no price or cost change the user accepts fixes it →
   report that the business does not work as planned, with the gap in money per unit.
 - There is no price and no customer signal to anchor one → stop and name
-  `ceh-business-plan:find-product-market-fit`. A model on a guessed price tests nothing.
+  `ceh-product-direction:find-product-market-fit`. A model on a guessed price tests nothing.
 - **No human to answer** (a headless run, or called by another agent): ask nothing. Draft and
   revise from what the plan holds, tag every gap `[assumption]`, and end with the questions you
   would have asked, in order, each with the assumption you used instead.
@@ -134,6 +134,6 @@ Unit: <one customer per month>
 ## Hands off to
 
 - When the kill input is acquisition cost or conversion, suggest
-  `ceh-business-plan:plan-go-to-market` to test the channel.
+  `ceh-product-direction:plan-go-to-market` to test the channel.
 - When the model only works at a price the customer has not signaled, suggest
-  `ceh-business-plan:sharpen-strategy` for the pricing-power test.
+  `ceh-product-direction:sharpen-strategy` for the pricing-power test.

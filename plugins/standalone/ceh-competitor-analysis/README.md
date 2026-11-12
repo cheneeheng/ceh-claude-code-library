@@ -102,8 +102,8 @@ competitor. Nothing is marked verified, because the target is never run.
 
 ## Deliberately out of scope
 
-| Not here                                               | Why                                                                            |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| Running, installing, or benchmarking a competitor      | Untrusted code. The reports stay read-only and say so                          |
-| Market sizing, pricing strategy, positioning decisions | `ceh-business-plan:sharpen-strategy` owns strategy against named competitors   |
-| An adoption roadmap or ranked backlog                  | Each report's incorporate table feeds your own planning. Ask for it explicitly |
+| Not here                                               | Why                                                                              |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| Running, installing, or benchmarking a competitor      | Untrusted code. The reports stay read-only and say so                            |
+| Market sizing, pricing strategy, positioning decisions | `ceh-product-direction:sharpen-strategy` owns strategy against named competitors |
+| An adoption roadmap or ranked backlog                  | Each report's incorporate table feeds your own planning. Ask for it explicitly   |

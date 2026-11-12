@@ -2,7 +2,7 @@
 name: plan-go-to-market
 description: >-
   Writes a business plan's go-to-market section, with the first ten customers, one channel, its
-  arithmetic, and a pass-or-fail channel test, called by ceh-business-plan:develop-business-plan.
+  arithmetic, and a pass-or-fail channel test, called by ceh-product-direction:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -134,16 +134,16 @@ are that entry's own `subsections`. Rendered, without the numbers the renderer a
 ## Stop conditions
 
 - The user cannot name a single candidate customer or the list they come from → stop. The segment
-  is not yet real. Name `ceh-business-plan:find-product-market-fit`.
+  is not yet real. Name `ceh-product-direction:find-product-market-fit`.
 - Every plausible channel costs more than the §08 ceiling → report that the business cannot reach
   its customers at this price, with the gap in money per customer.
 - §08 has no price or no acquisition ceiling → stop before step 6, because no channel can be
-  judged without one. Name `ceh-business-plan:stress-test-unit-economics`.
+  judged without one. Name `ceh-product-direction:stress-test-unit-economics`.
 - **No human to answer** (a headless run, or called by another agent): ask nothing. Draft and
   revise from what the plan holds, tag every gap `[assumption]`, and end with the questions you
   would have asked, in order, each with the assumption you used instead.
 
 ## Hands off to
 
-- When the channel test is set, suggest `ceh-business-plan:set-operating-plan` to give it an owner
+- When the channel test is set, suggest `ceh-product-direction:set-operating-plan` to give it an owner
   and a weekly number.

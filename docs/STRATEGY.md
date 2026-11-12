@@ -31,7 +31,7 @@ at once. This repo keeps its granularity and adds the second kind of idea withou
 
 | Stage | The question it answers                                | Plugins                                                                                                                                                         |
 | ----- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Shape | What should exist, for whom, and is it worth building? | `ceh-business-plan`, `ceh-competitor-analysis`, `ceh-vision-and-strategy`                                                                                       |
+| Shape | What should exist, for whom, and is it worth building? | `ceh-product-direction`, `ceh-competitor-analysis`                                                                                                              |
 | Build | How is it built? Then build it: code, UI, docs         | `ceh-build-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-documentation`, `ceh-codebase-explanation` |
 | Prove | Does it work, is it safe, and can a person use it?     | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                      |
 | Tell  | Who should find it, and what do they read?             | `ceh-blog-and-seo`                                                                                                                                              |
@@ -56,9 +56,9 @@ become a plan's goals (`decision-business-plan-readers.md`).
 | Prove | the plan, the code                                                                                                                   | `product/EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                                      |
 | Tell  | `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, `product/EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists) | posts, listings, SEO pages                                                                                                                |
 
-Shape to Build: `ceh-vision-and-strategy` writes `product/VISION.md` and `product/STRATEGY.md`, and
+Shape to Build: `ceh-product-direction` writes `product/VISION.md` and `product/STRATEGY.md`, and
 `ceh-build-plan` reads them, putting what a plan would contradict under Open, and writes the
-plan that it builds from and `ceh-check-build-against-plan` reads. `ceh-business-plan` writes
+plan that it builds from and `ceh-check-build-against-plan` reads. `ceh-product-direction` also writes
 `.agents_workspace/product/business/BUSINESS_PLAN.md`, which no Build skill reads. Prove to
 Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.md`, and
 `ceh-blog-and-seo:draft-post` and `ceh-blog-and-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.md`.

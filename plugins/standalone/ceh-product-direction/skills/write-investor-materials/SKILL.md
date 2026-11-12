@@ -2,7 +2,7 @@
 name: write-investor-materials
 description: >-
   Turns a validated business plan into a pitch deck outline and investor outreach notes, every
-  claim traced to a plan section, called by ceh-business-plan:develop-business-plan.
+  claim traced to a plan section, called by ceh-product-direction:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -81,11 +81,11 @@ notes may name investors and contacts.
 ## Stop conditions
 
 - `status` is `draft` or `pmf_gate` is below `8` → stop, and name
-  `ceh-business-plan:find-product-market-fit`. Materials built on an unvalidated plan sell its
+  `ceh-product-direction:find-product-market-fit`. Materials built on an unvalidated plan sell its
   assumptions as facts. If the user still wants them, write them with `Draft: gate <N>/8` at the
   top of both files.
 - §11 has no burn or runway → the ask cannot say what the money buys. Name
-  `ceh-business-plan:stress-test-unit-economics`.
+  `ceh-product-direction:stress-test-unit-economics`.
 - **No human to answer** (a headless run, or called by another agent): ask nothing. Draft from the
   plan, tag every gap `[assumption]`, and end with the questions you would have asked, in order,
   each with the assumption you used instead.

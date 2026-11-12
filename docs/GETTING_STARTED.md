@@ -136,12 +136,13 @@ Each moment names the plugin, the command that starts it, and the file it writes
 
 **Shape**
 
-- Test whether an idea is worth building: install `ceh-business-plan`, start with
-  `/ceh-business-plan:develop-business-plan`. Writes `.agents_workspace/product/business/BUSINESS_PLAN.md`.
+- Test whether an idea is worth building: install `ceh-product-direction`, start with
+  `/ceh-product-direction:develop-business-plan`. Writes
+  `.agents_workspace/product/business/BUSINESS_PLAN.md`.
 - Learn from a competitor's repo or product: install `ceh-competitor-analysis`, start with
   `/ceh-competitor-analysis:analyze-competitor`. Writes reports in `.agents_workspace/`.
-- Write down the repo's direction: install `ceh-vision-and-strategy`, start with
-  `/ceh-vision-and-strategy:write-vision-and-strategy`. Writes `product/VISION.md` and
+- Write down the repo's direction: the same plugin, start with
+  `/ceh-product-direction:write-vision-and-strategy`. Writes `product/VISION.md` and
   `product/STRATEGY.md`.
 
 **Build**

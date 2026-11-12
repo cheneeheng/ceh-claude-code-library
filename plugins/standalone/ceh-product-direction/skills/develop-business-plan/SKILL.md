@@ -37,7 +37,7 @@ this moment has run and the plan's frontmatter agrees with its content.
    go on. Own use: offer "wait, and write no plan yet" (recommended, because a plan written before
    the product works makes every number a guess) or "write it as a dormant plan, with no
    deadlines". Wait writes nothing and stops. Dormant passes "dormant" in the brief. Then
-   Invoke the Skill tool with skill="ceh-business-plan:find-product-market-fit", whatever was
+   Invoke the Skill tool with skill="ceh-product-direction:find-product-market-fit", whatever was
    asked. It drafts from app plans or supplied material before asking anything. When
    the user asked for a different specialist, say in one line that it needs a plan first. The one
    exception: a request to review a plan, deck, or memo the user supplied goes straight to the
@@ -61,18 +61,18 @@ this moment has run and the plan's frontmatter agrees with its content.
 
 ## Routing
 
-| The moment                                                                   | Call                                                                            |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| No plan yet, the gate is below 8/8, or the customer or problem is in doubt   | Invoke the Skill tool with skill="ceh-business-plan:find-product-market-fit"    |
-| A verdict is wanted before time or money goes in                             | Invoke the Skill tool with skill="ceh-business-plan:review-business-plan"       |
-| The plan cannot say why it wins, what it refuses, or what stops a copy       | Invoke the Skill tool with skill="ceh-business-plan:sharpen-strategy"           |
-| The numbers must be believed: price, unit economics, runway, break-even      | Invoke the Skill tool with skill="ceh-business-plan:stress-test-unit-economics" |
-| The first customers must be won: channel, launch, acquisition                | Invoke the Skill tool with skill="ceh-business-plan:plan-go-to-market"          |
-| A hard-to-undo commitment is near, or the question is what could go wrong    | Invoke the Skill tool with skill="ceh-business-plan:run-premortem"              |
-| The plan is agreed and work must start: objectives, owners, the next 90 days | Invoke the Skill tool with skill="ceh-business-plan:set-operating-plan"         |
-| Money must be raised: a pitch deck, investor outreach, a fundraising email   | Invoke the Skill tool with skill="ceh-business-plan:write-investor-materials"   |
-| The project is not a business yet: make the plan dormant                     | Set `status: dormant` here, and keep every written line                         |
-| A dormant project is now a business                                          | Set `status: draft` here, then name the owners of undated tests, one at a time  |
+| The moment                                                                   | Call                                                                                |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| No plan yet, the gate is below 8/8, or the customer or problem is in doubt   | Invoke the Skill tool with skill="ceh-product-direction:find-product-market-fit"    |
+| A verdict is wanted before time or money goes in                             | Invoke the Skill tool with skill="ceh-product-direction:review-business-plan"       |
+| The plan cannot say why it wins, what it refuses, or what stops a copy       | Invoke the Skill tool with skill="ceh-product-direction:sharpen-strategy"           |
+| The numbers must be believed: price, unit economics, runway, break-even      | Invoke the Skill tool with skill="ceh-product-direction:stress-test-unit-economics" |
+| The first customers must be won: channel, launch, acquisition                | Invoke the Skill tool with skill="ceh-product-direction:plan-go-to-market"          |
+| A hard-to-undo commitment is near, or the question is what could go wrong    | Invoke the Skill tool with skill="ceh-product-direction:run-premortem"              |
+| The plan is agreed and work must start: objectives, owners, the next 90 days | Invoke the Skill tool with skill="ceh-product-direction:set-operating-plan"         |
+| Money must be raised: a pitch deck, investor outreach, a fundraising email   | Invoke the Skill tool with skill="ceh-product-direction:write-investor-materials"   |
+| The project is not a business yet: make the plan dormant                     | Set `status: dormant` here, and keep every written line                             |
+| A dormant project is now a business                                          | Set `status: draft` here, then name the owners of undated tests, one at a time      |
 
 The last two rows change only `status`, so the router runs them itself. After "A dormant project
 is now a business", it names as next steps, one at a time, each specialist that owns an undated

@@ -17,6 +17,8 @@ RENAMED: dict[str, str] = {
     "ceh-seo": "ceh-blog-and-seo",
     "ceh-build-planning": "ceh-build-plan",
     "ceh-build-from-plan": "ceh-build-plan",
+    "ceh-vision-and-strategy": "ceh-product-direction",
+    "ceh-business-plan": "ceh-product-direction",
 }
 # Retired name -> repo-relative files that may still name it, because they state history.
 ALLOWED: dict[str, set[str]] = {

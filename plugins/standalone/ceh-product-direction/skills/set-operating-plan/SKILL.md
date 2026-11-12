@@ -2,7 +2,7 @@
 name: set-operating-plan
 description: >-
   Turns an agreed business plan into a 90-day operating plan of at most three objectives with owned
-  key results and weekly inputs, called by ceh-business-plan:develop-business-plan.
+  key results and weekly inputs, called by ceh-product-direction:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -112,7 +112,7 @@ Period: <start date> to <end date>
 - `status` is `dormant` → stop: a 90-day plan needs a business. Ask whether the project is one
   now.
 - §12 has no ranked risks or no kill criteria → there is nothing for the objectives to retire.
-  Report it and name `ceh-business-plan:run-premortem`.
+  Report it and name `ceh-product-direction:run-premortem`.
 - The 90-day spend exceeds the runway → stop and report the shortfall. Do not write a plan the
   cash cannot carry.
 - **No human to answer** (a headless run, or called by another agent): ask nothing. Draft and
@@ -124,5 +124,5 @@ Period: <start date> to <end date>
 - When an objective is a product build, suggest `ceh-build-plan` for the technical plan,
   describing the product change, not the objective's key results or dates. This skill owns the
   business objective, not the architecture.
-- When §11 has no cash-out month, suggest `ceh-business-plan:stress-test-unit-economics` first.
-- When §09 has no channel test, suggest `ceh-business-plan:plan-go-to-market` first.
+- When §11 has no cash-out month, suggest `ceh-product-direction:stress-test-unit-economics` first.
+- When §09 has no channel test, suggest `ceh-product-direction:plan-go-to-market` first.

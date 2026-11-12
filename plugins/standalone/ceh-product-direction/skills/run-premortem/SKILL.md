@@ -2,7 +2,7 @@
 name: run-premortem
 description: >-
   Premortem on a business plan that writes how it fails and gives each top risk a warning signal, a
-  kill criterion set in advance, and a loss cap, called by ceh-business-plan:develop-business-plan.
+  kill criterion set in advance, and a loss cap, called by ceh-product-direction:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -127,6 +127,6 @@ Most this can cost: <money> and <months>. If it fails, what remains: <list>.
 
 ## Hands off to
 
-- When the top story is about cash, suggest `ceh-business-plan:stress-test-unit-economics`.
-- When the top story is about an incumbent, suggest `ceh-business-plan:sharpen-strategy`.
-- When the guards are set, suggest `ceh-business-plan:set-operating-plan` so each has an owner.
+- When the top story is about cash, suggest `ceh-product-direction:stress-test-unit-economics`.
+- When the top story is about an incumbent, suggest `ceh-product-direction:sharpen-strategy`.
+- When the guards are set, suggest `ceh-product-direction:set-operating-plan` so each has an owner.

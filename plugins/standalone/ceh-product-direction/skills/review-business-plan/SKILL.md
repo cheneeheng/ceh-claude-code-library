@@ -2,7 +2,7 @@
 name: review-business-plan
 description: >-
   Report-only board review of a business plan that scores seven lenses and names the one finding
-  that most changes it, called by ceh-business-plan:develop-business-plan.
+  that most changes it, called by ceh-product-direction:develop-business-plan.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -78,7 +78,7 @@ the path in the reply.
 ## Stop conditions
 
 - No plan exists, only an idea → say there is nothing to review yet and name
-  `ceh-business-plan:find-product-market-fit` as the place to start.
+  `ceh-product-direction:find-product-market-fit` as the place to start.
 - The plan describes a different product than the app plan or repository it sits beside → report
   the mismatch as the headline finding. Every other score is unreliable until it is settled.
 
@@ -86,9 +86,9 @@ the path in the reply.
 
 Each handoff is conditional on the lens scoring below 2, so the user chooses which to run.
 
-- Customer → `ceh-business-plan:find-product-market-fit`
-- Edge or Focus → `ceh-business-plan:sharpen-strategy`
-- Money → `ceh-business-plan:stress-test-unit-economics`
-- Reach → `ceh-business-plan:plan-go-to-market`
-- Survival → `ceh-business-plan:run-premortem`
-- Execution → `ceh-business-plan:set-operating-plan`
+- Customer → `ceh-product-direction:find-product-market-fit`
+- Edge or Focus → `ceh-product-direction:sharpen-strategy`
+- Money → `ceh-product-direction:stress-test-unit-economics`
+- Reach → `ceh-product-direction:plan-go-to-market`
+- Survival → `ceh-product-direction:run-premortem`
+- Execution → `ceh-product-direction:set-operating-plan`

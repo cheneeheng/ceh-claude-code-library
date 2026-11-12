@@ -99,10 +99,10 @@
       "description": "CEH usability audit: measure whether a non-expert can actually use what you built — cold zero-context walkthroughs by persona-constrained subagents that report where they stalled and how many steps each milestone cost against a budget set before the walk, a five-question interface audit across web UI/CLI/library/app surfaces, a three-part rewrite pass over every user-reachable error message, and a plain-language pass over labels and copy. Findings are ranked by observed outcome, not by how bad they look."
     },
     {
-      "name": "ceh-business-plan",
-      "source": "./plugins/standalone/ceh-business-plan",
-      "version": "1.2.8",
-      "description": "CEH business plan: turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop — draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes. Then harden it: a report-only board review, and specialist passes on strategy, unit economics, go-to-market, premortem, the 90-day operating plan, and investor materials."
+      "name": "ceh-product-direction",
+      "source": "./plugins/standalone/ceh-product-direction",
+      "version": "2.0.0",
+      "description": "CEH product direction: decide what to build and whether it is worth it. Write a repo's VISION.md and STRATEGY.md, so agents and people can settle later decisions from them, drafted from what the repo shows and confirmed with its owner. And turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop: draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes. Then harden it: a report-only board review, and specialist passes on strategy, unit economics, go-to-market, premortem, the 90-day operating plan, and investor materials."
     },
     {
       "name": "ceh-workflow-builder",
@@ -131,14 +131,8 @@
     {
       "name": "ceh-competitor-analysis",
       "source": "./plugins/standalone/ceh-competitor-analysis",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "description": "CEH competitor analysis: study a competitor's repo or product and learn from it — one evidence-anchored report per competitor (breakdown, full inventory, the \"oh wow\" mechanisms worth learning from, what to incorporate and where it lands in our work), then a side-by-side comparison with our own work, each as Markdown plus a styled HTML page. Repos are shallow-cloned and read as untrusted data, never run."
-    },
-    {
-      "name": "ceh-vision-and-strategy",
-      "source": "./plugins/standalone/ceh-vision-and-strategy",
-      "version": "1.1.6",
-      "description": "CEH vision and strategy: write a repo's VISION.md and STRATEGY.md, so agents and people can settle later decisions from them, drafted from what the repo shows and confirmed with its owner."
     }
   ]
 }
