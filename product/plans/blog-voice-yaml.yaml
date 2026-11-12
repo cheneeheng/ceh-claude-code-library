@@ -178,3 +178,13 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#256 https://github.com/cheneeheng/ceh-claude-code-library/pull/256"
+  - date: 2026-11-12
+    event: Checked
+    details: |
+      Fresh-context reviewer: 34 Built, 1 Deviation, 1 Gap, 0 Extra, 0 Failing, 1 Cannot verify.
+      Deviation, blog-voice-schema.md opened with the v1 save rule: rewritten for v2. Gap, the
+      skills never named a denied command among the unchecked cases: added. The caller also
+      fixed the v1 conversion, which the render hook would overwrite before comparing (found in
+      the glossary review), and the README's sourcing claim. Cannot verify: lossless conversion
+      and the capture gate are agent behaviour. Report:
+      .agents_workspace/product/build-checks/blog-voice-yaml-20261112-0108-ff98dab3.md.

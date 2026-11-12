@@ -188,5 +188,11 @@ statuses change, and repository fixes remain separate from machine-local fixes.
   0 Extra, 0 Failing, 0 Cannot verify. Checked in the building session, not by a fresh
   reviewer.
 - 2026-11-12 PR: #257 https://github.com/cheneeheng/ceh-claude-code-library/pull/257
+- 2026-11-12 Checked: Fresh-context reviewer: 31 Built, 1 Gap, 0 Deviation, 0 Extra, 0 Failing, 0 Cannot verify.
+  Gap, Design's "Concurrent agents must serialize updates to the same dated report" was
+  stated nowhere: the schema now says one agent writes a dated report at a time. The caller
+  also fixed the v1 conversion, which the render hook would overwrite before comparing,
+  which this reviewer missed and the glossary review found. Report:
+  .agents_workspace/product/build-checks/repeat-mistake-yaml-20261112-0108-ff98dab3.md.
 
 <!-- prettier-ignore-end -->

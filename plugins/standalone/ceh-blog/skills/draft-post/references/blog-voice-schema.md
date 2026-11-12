@@ -1,8 +1,9 @@
 # Blog voice schema
 
-The voice profile `draft-post` saves to `.agents_workspace/product/blog-voice.md`, taken from three or more
-of the blog's posts. A new profile is a copy of `../assets/blog-voice.template.md`, relative to
-this file. The `schema: blog-voice/v1` line stays as written.
+The voice profile `draft-post` saves to `.agents_workspace/product/`, taken from three or more of
+the blog's posts. A new profile is a `blog-voice/v2` YAML (see the last section), and its
+`blog-voice.md` is rendered in the `v1` layout of `../assets/blog-voice.template.md`, relative to
+this file, described below. A `v1` profile's `schema: blog-voice/v1` line stays as written.
 
 ## Frontmatter
 
@@ -61,9 +62,13 @@ observation renders `- <point>: "<quote>"`, followed by `(<source>)` when the so
 check proves only the shape: it cannot prove a quote is in a post or an absence is real, so never
 write a quote or a source that was not read.
 
-**Converting a `v1` profile.** Before amending a `blog-voice.md` that has no YAML, carry every
-point and quotation into its section word for word, every paragraph outside the five sections into
-`notes`, and an unknown source as `null`. Keep its `blog`, `posts_read` and `date`. A `v1` profile
+**Converting a `v1` profile.** Before amending a `blog-voice.md` that has no YAML, first copy it
+outside the repository, to the session's scratch or temp directory: the render hook writes the new
+Markdown over it as soon as the YAML is saved. Then carry every point and quotation into its
+section word for word, every paragraph outside the five sections into `notes`, and an unknown
+source as `null`, keeping its `blog`, `posts_read` and `date`, and compare the rendered Markdown
+with the copy. When any point, quotation or paragraph of the copy is missing, restore the copy,
+delete the YAML, and report what was lost. A `v1` profile
 that does not fit `v2`, such as one read from two posts, is reported, never repaired by inventing a
 post, a quotation or a larger `posts_read`.
 

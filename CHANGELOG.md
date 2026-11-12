@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-11-12
 
+Fresh-context reviews of the three new formats found that converting a `v1` file could lose it:
+the schemas said to render and then compare, but the render hook writes the new Markdown over the
+`v1` file the moment the YAML is saved. The glossary, blog voice and repeat-mistake schemas now copy
+the `v1` file out of the repository first, compare against the copy, and restore it on any loss.
+The reviews also found the schemas' opening lines still describing the `v1` save, five skills not
+naming a denied command among the unchecked cases, the repeat-mistake report never saying that
+one agent writes a dated report at a time, and the `ceh-blog` README overstating how every
+observation is sourced. All are fixed.
+
 Six build plans carry out the plugin audit of 2026-11-11, which takes the library from 27 plugins
 to 21. `retired-names-check-and-archives` adds a `validate.py` check for retired plugin names, then
 archives `ceh-orchestration-lab` and `ceh-git-datastore`. Four plans each merge two plugins:
@@ -56,15 +65,15 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog`                     | 1.1.1   |
+| `ceh-blog`                     | 1.1.2   |
 | `ceh-build-from-plan`          | 1.2.10  |
 | `ceh-build-planning`           | 1.2.13  |
 | `ceh-business-plan`            | 1.2.7   |
 | `ceh-check-build-against-plan` | 1.1.9   |
-| `ceh-codebase-explanation`     | 1.3.3   |
+| `ceh-codebase-explanation`     | 1.3.4   |
 | `ceh-coding-conduct`           | 2.5.4   |
 | `ceh-competitor-analysis`      | 1.2.3   |
-| `ceh-every-session`            | 2.9.5   |
+| `ceh-every-session`            | 2.9.6   |
 | `ceh-security-audit`           | 1.1.5   |
 | `ceh-testing`                  | 1.6.11  |
 | `ceh-usability-audit`          | 1.2.5   |
@@ -104,6 +113,16 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 - The artifact render hook, in all 14 plugins that carry it, checks a schema-less
   `GLOSSARY.yaml` at the session root or `docs/` beside its `GLOSSARY.md`, and resolves a relative
   `file_path` against the payload `cwd`.
+
+### Fixed
+
+- Converting a `v1` glossary, voice profile or repeat-mistake report first copies the `v1` file
+  out of the repository, because the render hook overwrites it when the YAML is saved, and
+  restores it when the comparison finds a loss.
+- The three schemas open with the `v2` save, `maintain-glossary`, `record-project-decisions`,
+  `draft-post`, `edit-post` and `prevent-repeat-mistake` treat a denied command as unchecked, the
+  repeat-mistake schema says one agent writes a dated report at a time, and the `ceh-blog` README
+  says a legacy observation may have no source.
 
 ## 2026-11-11
 

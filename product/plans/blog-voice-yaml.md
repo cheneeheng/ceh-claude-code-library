@@ -160,5 +160,12 @@ while repeat runs preserve the author's voice without re-deriving or inventing e
   0 Extra, 0 Failing, 0 Cannot verify. Checked in the building session, not by a fresh
   reviewer.
 - 2026-11-12 PR: #256 https://github.com/cheneeheng/ceh-claude-code-library/pull/256
+- 2026-11-12 Checked: Fresh-context reviewer: 34 Built, 1 Deviation, 1 Gap, 0 Extra, 0 Failing, 1 Cannot verify.
+  Deviation, blog-voice-schema.md opened with the v1 save rule: rewritten for v2. Gap, the
+  skills never named a denied command among the unchecked cases: added. The caller also
+  fixed the v1 conversion, which the render hook would overwrite before comparing (found in
+  the glossary review), and the README's sourcing claim. Cannot verify: lossless conversion
+  and the capture gate are agent behaviour. Report:
+  .agents_workspace/product/build-checks/blog-voice-yaml-20261112-0108-ff98dab3.md.
 
 <!-- prettier-ignore-end -->

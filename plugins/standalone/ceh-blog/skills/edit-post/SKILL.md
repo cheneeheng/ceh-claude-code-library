@@ -38,7 +38,7 @@ read it, not `blog-voice.md`: first run
 `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` (format in
 `${CLAUDE_SKILL_DIR}/references/blog-voice-schema.md`). On exit 1, use no profile and report its
 errors, unless the only error is a stale `.md`, which the same command with `render` repairs. On
-exit 2 or 3, or without uv, say in the diagnosis that the profile went unchecked, and read it
+exit 2 or 3, without uv, or when the command is denied, say in the diagnosis that the profile went unchecked, and read it
 anyway. The markers are `rhythm`, `register`, `recurring_words`, `never_used` and
 `openings_closings`, each observation's `point` backed by its `quote` and `source`. A
 `blog-voice.md` with no YAML is a `v1` profile, read as it is. A blog voice in the target repo's

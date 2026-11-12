@@ -1,8 +1,9 @@
 # Glossary schema
 
-The committed `GLOSSARY.md` that `maintain-glossary` keeps. A new file is a copy of
-`../assets/glossary.template.md`, relative to this file. The `schema: glossary/v1` line stays as
-written.
+The committed glossary that `maintain-glossary` keeps. A new glossary is a `glossary/v2` YAML (see
+the last section), and its `GLOSSARY.md` is rendered in the `v1` layout of
+`../assets/glossary.template.md`, relative to this file, described below. A `v1` file's
+`schema: glossary/v1` line stays as written.
 
 ## Entries
 
@@ -47,10 +48,12 @@ alias twice under the same comparison. Write entries in any order: the renderer 
 term, ignoring case, and never rewrites a definition. Empty `avoid` and `not_confused_with` lines
 are left out. Terms and aliases render as literal text, with Markdown delimiters escaped.
 
-**Converting a `v1` file.** Before amending a `GLOSSARY.md` that has no YAML, carry every entry
-into `entries` word for word, every paragraph outside an entry into `notes`, and every term still
-unresolved into `open`. Render, then compare: when any entry or paragraph of the old file is
-missing from the new Markdown, stop and report it rather than overwrite the old file.
+**Converting a `v1` file.** Before amending a `GLOSSARY.md` that has no YAML, first copy it
+outside the repository, to the session's scratch or temp directory: the render hook writes the new
+Markdown over it as soon as the YAML is saved. Then carry every entry into `entries` word for word,
+every paragraph outside an entry into `notes`, and every term still unresolved into `open`, and
+compare the rendered Markdown with the copy. When any entry or paragraph of the copy is missing,
+restore the copy, delete the YAML, and report what was lost.
 
 **Quoting:** single-quote any value that starts with `*`, `{`, `[` or `` ` ``, contains `: ` or
 ` #`, or holds a backslash, such as `'C:\tools'`. Aliases and nearby terms are block lists in the
