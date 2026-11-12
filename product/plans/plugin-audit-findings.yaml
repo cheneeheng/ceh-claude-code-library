@@ -484,7 +484,17 @@ phases:
       `python tools/validate-plugins/checks/hooks.py` passes with the new fixtures, each seen
       failing before its edit. `.claude/rules/decision-saved-file-names.md` exists.
       `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`.
-    status: todo
+    status: done
+    evidence: |
+      Commit c2bafa0. The name grep showed the three blog draft lines and the older-form
+      lines of `prevent-repeat-mistake` (skill and schema) and both `run-state-schema.md`
+      copies. `hand-off-session`, `whats-next` and `write-evidence-report` name the older
+      form as `HANDOFF-*` and `SECURITY_AUDIT-*`, which the grep does not match. The count
+      grep printed 15 lines and one for `evaluate-plugin`. Before the script edits,
+      `python tools/validate-plugins/checks/hooks.py` failed fixture 51 (the new repeat-mistake
+      name, "stdout lacks 'uv is not installed'") and fixture 125 (the new run id, "String
+      should match pattern"), and after them it printed `OK: hooks check passed`.
+      `python tools/validate-plugins/validate.py` printed `OK: all plugin checks passed`.
   - name: Hooks and guards
     builds: |
       "Phase 3: a guard lets through the agent it sends work to" and "Phase 3: the other hook
@@ -604,3 +614,13 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#265 https://github.com/cheneeheng/ceh-claude-code-library/pull/265"
+  - date: 2026-11-12
+    event: Built Phase
+    phase: 2
+    details: |
+      c2bafa0, `python tools/validate-plugins/validate.py` printed
+      `OK: all plugin checks passed`. The labelled new-form fixture passed before and after
+      the edit, because the old pattern already left it alone.
+  - date: 2026-11-12
+    event: PR
+    details: "#266 https://github.com/cheneeheng/ceh-claude-code-library/pull/266"

@@ -1,7 +1,7 @@
 """handoff/v2: the session handoff's model and its Markdown renderer.
 
 The format in code, per handoff-schema.md beside this file: `artifact.py` validates a
-`HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.yaml`, or a caller's `--file` YAML, with `MODEL` and
+`<YYYYMMDD-HHMMSS>-<session-id>-handoff.yaml`, or a caller's `--file` YAML, with `MODEL` and
 writes `render(doc, source)` beside it, in the `handoff/v1` layout. Copied word for word into
 every skill that holds handoff-schema.md.
 """

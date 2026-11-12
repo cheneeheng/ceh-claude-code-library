@@ -136,7 +136,7 @@ lifecycle:
   and routes each issue to the skill that fixes it: a bug to `find-root-cause`, a design change to
   `write-build-plan`, an agent mistake to `prevent-repeat-mistake`, a working rule to
   `record-project-decisions`. The agent acts on every route in the repo in the same session, and
-  commits those issues to `product/retros/<date>-<kind>.md`, scrubbed when they quote a transcript,
+  commits those issues to `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`, scrubbed when they quote a transcript,
   because the routed work reads them. Issues whose fix lands outside the repo, in user settings,
   an installed plugin, or Claude Code, stay local in `.agents_workspace/product/retros/` for the user.
   `prevent-repeat-mistake` saves its own report the same way, split by where each fix lands.

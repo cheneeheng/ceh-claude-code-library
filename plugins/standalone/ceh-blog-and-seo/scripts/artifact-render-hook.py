@@ -25,7 +25,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CLI = ROOT / "scripts" / "artifact.py"
 SCHEMA = re.compile(r"""^schema:\s*["']?([a-z0-9]+(?:-[a-z0-9]+)*)/v\d+""", re.M)
-REPEAT = re.compile(r"^\d{4}-\d{2}-\d{2}-repeat-mistake\.yaml$")
+# The session id is matched as a UUID, so a label after it is not taken for part of the id.
+REPEAT = re.compile(
+    r"^(\d{4}-\d{2}-\d{2}|\d{8}-\d{6}-[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12})"
+    r"-repeat-mistake\.yaml$"
+)
 UV_HELP = "Install uv (https://docs.astral.sh/uv/) so the check can run."
 # Spine file stems and their formats, matched in a `product` or `business` folder or beside a
 # `.md` of the same stem, so an unrelated STRATEGY.yaml elsewhere is left alone.
@@ -53,7 +57,8 @@ def place_format(file: Path, root: Path) -> str | None:
         return "glossary" if home and file.with_suffix(".md").exists() else None
     if file == root / ".agents_workspace" / "product" / "blog-voice.yaml":
         return "blog-voice"
-    # The dated name only, in either retros folder: a labelled <date>-<label>-repeat-mistake is not one.
+    # The dated name only, older or newer form, in either retros folder: a name with a label
+    # before `repeat-mistake` is not one.
     retros = (
         root / "product" / "retros",
         root / ".agents_workspace" / "product" / "retros",

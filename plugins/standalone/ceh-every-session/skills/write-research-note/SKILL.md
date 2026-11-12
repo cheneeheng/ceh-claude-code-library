@@ -54,6 +54,8 @@ spot-checked, and its path and short answer are reported.
 
 ## Output
 
-Save to `.agents_workspace/research/<YYYYMMDD>-<topic>.md` in the working directory, creating the
+Save to `.agents_workspace/research/<YYYYMMDD-HHMMSS>-<session-id>-<topic>.md` in the working directory, creating the
 directory if needed, filling `assets/research-note.template.md`, per
-`references/research-note-schema.md`.
+`references/research-note-schema.md`. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+Build the path in this session and put it in the agent's brief, because the agent does not see
+the session id.

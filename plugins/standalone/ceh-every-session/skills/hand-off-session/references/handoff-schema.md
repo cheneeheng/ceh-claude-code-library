@@ -1,7 +1,7 @@
 # Handoff schema
 
 The file `hand-off-session` saves to
-`.agents_workspace/handoff/HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.md`, or to the path a
+`.agents_workspace/handoff/<YYYYMMDD-HHMMSS>-<session-id>-handoff.md`, or to the path a
 caller passes with `save --file <path>`, overwritten on each save, and `load` reads back. For
 `handoff/v2` (below) the saved file is the `.yaml` of that stem, with the `.md` rendered beside it. A
 new handoff is a copy of `../assets/handoff.template.md`, relative to this file. The
@@ -34,7 +34,7 @@ new handoff is a copy of `../assets/handoff.template.md`, relative to this file.
 
 ## handoff/v2: YAML with generated Markdown
 
-A `handoff/v2` handoff is `HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>.yaml`, a copy of
+A `handoff/v2` handoff is `<YYYYMMDD-HHMMSS>-<session-id>-handoff.yaml`, a copy of
 `../assets/handoff.template.yaml`, and the `.md` of the same stem is generated from it in the `v1`
 layout above, beside it. With `save --file <path>`, the YAML is `<path>` with its suffix replaced
 by `.yaml`, and the Markdown keeps the path the caller named. The YAML is the source: agents read

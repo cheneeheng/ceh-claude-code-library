@@ -22,7 +22,13 @@ Line = Annotated[
 ]
 SLUG = r"[a-z0-9]+(?:-[a-z0-9]+)*"
 Slug = Annotated[str, StringConstraints(pattern=rf"^{SLUG}$")]
-RunId = Annotated[str, StringConstraints(pattern=r"^\d{8}-\d{4}(-\d+)?$")]
+# The start time and the session id, or the older start time with its clash suffix.
+RunId = Annotated[
+    str,
+    StringConstraints(
+        pattern=r"^(\d{8}-\d{6}-[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}|\d{8}-\d{4}(-\d+)?)$"
+    ),
+]
 Time = Annotated[
     str,
     StringConstraints(

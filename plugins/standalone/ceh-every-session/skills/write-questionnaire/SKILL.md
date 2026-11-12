@@ -30,8 +30,8 @@ in read mode, every answer is applied or listed as still open.
    no session jargon or file paths the reader cannot open.
 4. **Give options where the answer is a choice**, each with its consequence, and mark the one you
    recommend. A free-text question still states what form of answer you can use.
-5. **Save** to `.agents_workspace/questionnaires/<YYYYMMDD>-<topic>.md` in the working directory,
-   creating the directory if needed, and report the path and the question count.
+5. **Save** to `.agents_workspace/questionnaires/<YYYYMMDD-HHMMSS>-<session-id>-<topic>.md` in the working directory,
+   creating the directory if needed, and report the path and the question count. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
 
    **With `--issue <owner/repo> --labels <list>`**, post the questionnaire as an issue instead and
    save no file. The body is the same filled template, frontmatter included, with this intro line
@@ -51,7 +51,7 @@ in read mode, every answer is applied or listed as still open.
 ### Read
 
 1. **Find the file**: the path given, otherwise the newest file in
-   `.agents_workspace/questionnaires/`. With `--issue <owner/repo>#<n>`, run
+   `.agents_workspace/questionnaires/`, by the date in its name, then by modified time. With `--issue <owner/repo>#<n>`, run
    `gh issue view <n> --repo <owner/repo> --json body,comments` instead.
 2. **Read every `Answer:` line.** Apply each answer to the work it unblocks, in question order. For
    an issue, a question's answer is the newest of its `**Answer:**` line in the body and every

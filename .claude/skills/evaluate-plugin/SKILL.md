@@ -146,8 +146,9 @@ Tell the guide three things:
 
 ## Output
 
-Save the report to `.agents_workspace/skill-evals/<plugin>/<YYYY-MM-DD-HHMM>-${CLAUDE_SESSION_ID}.md`,
-written for someone who has never seen the plugin:
+Save the report to `.agents_workspace/skill-evals/<plugin>/<YYYYMMDD-HHMMSS>-<session-id>-eval.md`,
+written for someone who has never seen the plugin. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+It holds:
 
 1. What the plugin and the evaluated components do, in two sentences.
 2. A table per component: cases, runs, pass rate with and without the plugin, `Δ`, cost. Say what

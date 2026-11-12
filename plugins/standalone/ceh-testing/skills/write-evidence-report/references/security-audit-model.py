@@ -1,7 +1,7 @@
 """security-audit/v2: the security audit's model and its Markdown renderer.
 
 The format in code, per security-audit-schema.md beside this file: `artifact.py` validates a
-`SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml` with `MODEL` and writes `render(doc, source)` beside it, in the
+`<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml` with `MODEL` and writes `render(doc, source)` beside it, in the
 `security-audit/v1` layout. Copied word for word into every skill that holds
 security-audit-schema.md.
 """

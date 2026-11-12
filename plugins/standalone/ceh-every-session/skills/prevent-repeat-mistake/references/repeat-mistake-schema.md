@@ -1,7 +1,7 @@
 # Repeat mistake schema
 
-The file `prevent-repeat-mistake` saves: `product/retros/<YYYY-MM-DD>-repeat-mistake.md` for fixes
-that land in the current repository, `.agents_workspace/product/retros/<YYYY-MM-DD>-repeat-mistake.md` for
+The file `prevent-repeat-mistake` saves: `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.md` for fixes
+that land in the current repository, `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.md` for
 fixes only the user acts on. A new report is a `repeat-mistake/v2` YAML (see the last section),
 and its `.md` is rendered in the `v1` layout of `../assets/repeat-mistake.template.md`, relative
 to this file, described below. A `v1` file's `schema: repeat-mistake/v1` line stays as written.
@@ -24,12 +24,12 @@ to this file, described below. A `v1` file's `schema: repeat-mistake/v1` line st
 
 ## repeat-mistake/v2: YAML with generated Markdown
 
-A `repeat-mistake/v2` report is `product/retros/<YYYY-MM-DD>-repeat-mistake.yaml` for fixes that
-land in the current repository, or `.agents_workspace/product/retros/<YYYY-MM-DD>-repeat-mistake.yaml`
+A `repeat-mistake/v2` report is `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml` for fixes that
+land in the current repository, or `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`
 for fixes only the user acts on, a copy of `../assets/repeat-mistake.template.yaml`. The `.md` of
-the same stem is generated from it in the `v1` layout above, beside it. Only the dated name is a
-report: a labelled name such as `<YYYY-MM-DD>-<label>-repeat-mistake.md` is not, and stays as it
-is. The YAML is the source: agents read and edit it, and nobody edits the Markdown, which opens
+the same stem is generated from it in the `v1` layout above, beside it. A file saved under the
+older name, `<YYYY-MM-DD>-repeat-mistake`, is still a report. A name with a label before
+`repeat-mistake`, such as `<YYYY-MM-DD>-<label>-repeat-mistake.md`, is not, and stays as it is. The YAML is the source: agents read and edit it, and nobody edits the Markdown, which opens
 with `generated_from: <file>.yaml` and a do-not-edit `generated_note`. A `v1` `.md` with no YAML
 beside it is still read as `v1`, and converted before anything amends it. The format in code is
 `repeat-mistake-model.py` beside this file, and `scripts/artifact.py` in the skill checks and

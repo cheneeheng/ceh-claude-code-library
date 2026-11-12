@@ -430,7 +430,15 @@ turn on a decision block with no denied call first.
   `python tools/validate-plugins/checks/hooks.py` passes with the new fixtures, each seen
   failing before its edit. `.claude/rules/decision-saved-file-names.md` exists.
   `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`.
-- **Status:** todo
+- **Status:** done, Commit c2bafa0. The name grep showed the three blog draft lines and the older-form
+  lines of `prevent-repeat-mistake` (skill and schema) and both `run-state-schema.md`
+  copies. `hand-off-session`, `whats-next` and `write-evidence-report` name the older
+  form as `HANDOFF-*` and `SECURITY_AUDIT-*`, which the grep does not match. The count
+  grep printed 15 lines and one for `evaluate-plugin`. Before the script edits,
+  `python tools/validate-plugins/checks/hooks.py` failed fixture 51 (the new repeat-mistake
+  name, "stdout lacks 'uv is not installed'") and fixture 125 (the new run id, "String
+  should match pattern"), and after them it printed `OK: hooks check passed`.
+  `python tools/validate-plugins/validate.py` printed `OK: all plugin checks passed`.
 
 ### Phase 3: Hooks and guards
 
@@ -521,5 +529,9 @@ turn on a decision block with no denied call first.
   ratchet. The workflow builder's `docs/ARCHITECTURE.md` and the root `README.md` took
   the same wording, beyond the files the Design lists.
 - 2026-11-12 PR: #265 https://github.com/cheneeheng/ceh-claude-code-library/pull/265
+- 2026-11-12 Built Phase 2: c2bafa0, `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`. The labelled new-form fixture passed before and after
+  the edit, because the old pattern already left it alone.
+- 2026-11-12 PR: #266 https://github.com/cheneeheng/ceh-claude-code-library/pull/266
 
 <!-- prettier-ignore-end -->

@@ -25,9 +25,10 @@ waiting for the user's approval.
 ## Procedure
 
 1. **Pick up pending drafts.** In `product/retros/` and `.agents_workspace/product/retros/`, find
-   every report with the dated name `<YYYY-MM-DD>-repeat-mistake`, `.yaml` or `.md`, and read each
+   every report named `<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake` or, in the older form,
+   `<YYYY-MM-DD>-repeat-mistake`, `.yaml` or `.md`, and read each
    once per folder, the YAML when there is one. A labelled name such as
-   `<YYYY-MM-DD>-<label>-repeat-mistake.md` is not a report. Before reading a YAML, run
+   `<YYYY-MM-DD>-<label>-repeat-mistake.md`, with a label before `repeat-mistake`, is not a report. Before reading a YAML, run
    `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml`. On exit 1, use
    nothing from that report, report its errors, and say the intake is incomplete, never that no
    fix is pending, unless the only error is a stale `.md`, which the same command with `render`
@@ -77,14 +78,14 @@ waiting for the user's approval.
 
 Save by where each fix lands, adding to today's file when it exists and creating the directory if
 needed. Fixes that land in the current repository go to
-`product/retros/<YYYY-MM-DD>-repeat-mistake.yaml`, committed with the first fix applied, because a
+`product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, committed with the first fix applied, because a
 later session working in the repo reads it. Mask secrets in every text value as `<secret>`: a
 committed file leaves the machine on the next push. Fixes outside it (user settings, the global
 `CLAUDE.md`, memory, an installed plugin) go to
-`.agents_workspace/product/retros/<YYYY-MM-DD>-repeat-mistake.yaml`, local, because only the user
+`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, local, because only the user
 acts on them, and saving one there authorizes no commit of it or its drafts. When both files exist,
 each links the other through `other_file`: check both links once both are saved, and report a pair
-left half-updated. Reply with the same table. Each fix awaiting approval carries its full draft, so
+left half-updated. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`. Reply with the same table. Each fix awaiting approval carries its full draft, so
 a later session can apply it from the file alone. When a draft is applied or rejected, change that
 fix's `status` in the file it was saved in, keeping its draft and evidence.
 

@@ -11,6 +11,17 @@ before this repo live in
 
 ## 2026-11-12
 
+Every file or folder a skill saves with a date or time in its name now takes one form,
+`<YYYYMMDD-HHMMSS>-<session-id>-<name>`, phase 2 of `product/plans/plugin-audit-findings.yaml` and
+the rule in `.claude/rules/decision-saved-file-names.md`. The time comes from one
+`date +%Y%m%d-%H%M%S` call and the session id is whole, so a second run never overwrites the first
+and a file traces to the session that wrote it. **Files already saved keep their names**: every
+reader and hook accepts both forms. A handoff is now `<...>-handoff.yaml`, a security audit
+`<...>-security-audit.yaml`, a QA folder `qa/<...>/`, a retro `<...>-period.md`,
+`<...>-session-<diagnosed-id>.md` or `<...>-repeat-mistake.yaml`, and a workflow run id the start
+time and the starting session, with no clash suffix. Two names stay as they are: a blog draft,
+dated by its post, and the model-audit folder, which CI also writes.
+
 The 2026-11-11 plugin audit's findings start landing, phase 1 of
 `product/plans/plugin-audit-findings.yaml`: one wording across plugins. The plan itself changed
 first, at the user's request: the coding contract names the todo list tool where it named the task
@@ -147,27 +158,29 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-ag-ui`                    | 1.1.5   |
-| `ceh-blog-and-seo`             | 2.0.1   |
-| `ceh-build-plan`               | 2.0.1   |
-| `ceh-check-build-against-plan` | 1.1.11  |
-| `ceh-codebase-explanation`     | 1.3.5   |
-| `ceh-coding-conduct`           | 2.5.6   |
-| `ceh-competitor-analysis`      | 1.2.5   |
+| `ceh-blog-and-seo`             | 2.0.2   |
+| `ceh-build-plan`               | 2.0.2   |
+| `ceh-check-build-against-plan` | 1.1.12  |
+| `ceh-codebase-explanation`     | 1.3.6   |
+| `ceh-coding-conduct`           | 2.5.7   |
+| `ceh-competitor-analysis`      | 1.2.6   |
 | `ceh-documentation`            | 1.0.9   |
-| `ceh-every-session`            | 2.9.9   |
-| `ceh-git-workflow`             | 1.5.8   |
-| `ceh-product-direction`        | 2.0.1   |
+| `ceh-every-session`            | 2.9.10  |
+| `ceh-git-workflow`             | 1.5.9   |
+| `ceh-product-direction`        | 2.0.2   |
 | `ceh-python-service`           | 1.1.6   |
-| `ceh-security-audit`           | 1.1.5   |
-| `ceh-session-learning`         | 2.0.0   |
-| `ceh-testing`                  | 1.6.13  |
+| `ceh-security-audit`           | 1.1.6   |
+| `ceh-session-learning`         | 2.0.1   |
+| `ceh-testing`                  | 1.6.14  |
 | `ceh-ui-design`                | 1.0.11  |
-| `ceh-usability-audit`          | 1.2.6   |
-| `ceh-workflow-builder`         | 1.4.5   |
-| `ceh-workflow-runner`          | 1.1.4   |
+| `ceh-usability-audit`          | 1.2.7   |
+| `ceh-workflow-builder`         | 1.4.6   |
+| `ceh-workflow-runner`          | 1.1.5   |
 
 ### Added
 
+- Add `.claude/rules/decision-saved-file-names.md`, the one name form for saved files and its two
+  exceptions.
 - Add the `retired-names` check to `tools/validate-plugins/`, which fails on a mention of an
   archived or renamed plugin.
 - Add six build plans in `product/plans/` for the 2026-11-11 plugin audit: the retired-names check
@@ -184,6 +197,16 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 ### Changed
 
+- Name every dated file a skill saves `<YYYYMMDD-HHMMSS>-<session-id>-<name>`: plan reviews,
+  business plan reviews, refactor reports, stress tests, code reviews, test audits, research
+  notes, questionnaires, handoffs, security audits, QA folders, the three retro kinds, workflow
+  run ids, and the repo-local `evaluate-plugin` report.
+- Accept both name forms where a file is found by name: `hand-off-session` Load, `whats-next`,
+  `write-evidence-report`'s Security row, `prevent-repeat-mistake`, `review-recent-work`,
+  `write-questionnaire`, the repeat-mistake pattern in every `artifact-render-hook.py`, and
+  `RunId` in both `run-state-model.py` copies.
+- Have the dispatching session build the save path where a subagent writes the file, in
+  `review-build-plan` and `write-research-note`.
 - Say "ask the user" where a skill named `AskUserQuestion`, in `agent-coding-contract`,
   `record-project-decisions`, `stress-test-plan`, `whats-next`, `design-ui`,
   `interview-workflow-task` and `run-agentic-workflow`, whose interactive ask that cannot be

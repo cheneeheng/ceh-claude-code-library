@@ -1,6 +1,6 @@
 # Refactor report schema
 
-The Phase 4 report `refactor-repo` saves to `.agents_workspace/product/refactor/<YYYY-MM-DD>.md`. A new
+The Phase 4 report `refactor-repo` saves to `.agents_workspace/product/refactor/<YYYYMMDD-HHMMSS>-<session-id>-refactor.md`. A new
 report is a copy of `../assets/refactor-report.template.md`, relative to this file. The
 `schema: refactor-report/v1` line stays as written.
 

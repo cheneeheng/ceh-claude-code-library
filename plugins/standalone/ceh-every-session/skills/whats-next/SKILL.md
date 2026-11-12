@@ -31,7 +31,7 @@ has one to three suggestions, each with the exact way to start it, and the choic
      `${CLAUDE_SKILL_DIR}/references/plan-schema.md`). On exit 1, report its errors as the reason
      to fix the plan first, unless the only error is a stale `.md`. On exit 2 or 3, or without uv,
      say in the answer that the plan went unchecked, and go on.
-   - the newest `HANDOFF-*` in `.agents_workspace/handoff/` by the timestamp in its name, if any,
+   - the newest `*-handoff.*` or older `HANDOFF-*` in `.agents_workspace/handoff/` by the timestamp in its name, if any,
      for work a past session left open. When its stem has a `.yaml`, run `artifact.py check` on it
      as for a plan (format in `${CLAUDE_SKILL_DIR}/references/handoff-schema.md`) and read
      `open.0` by key. A `.md` with no `.yaml` beside it is a `handoff/v1` file, read as before

@@ -58,10 +58,10 @@ sessions behave (`CLAUDE.md`, memory, a skill, a hook) for the user to approve.
 
 Every retro splits its report by where each fix lands:
 
-| Fix lands         | File                                                      | Committed |
-| ----------------- | --------------------------------------------------------- | --------- |
-| In this repo      | `product/retros/<YYYY-MM-DD>-<kind>.md`                   | Yes       |
-| Outside this repo | `.agents_workspace/product/retros/<YYYY-MM-DD>-<kind>.md` | No        |
+| Fix lands         | File                                                                        | Committed |
+| ----------------- | --------------------------------------------------------------------------- | --------- |
+| In this repo      | `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`                   | Yes       |
+| Outside this repo | `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md` | No        |
 
 The committed file lands with the first fix it routes, because the routed work and the next retro
 read it. The local file is for the user alone. When both exist, each names the other in its
@@ -79,7 +79,7 @@ A committed report leaves the machine on the next push, so it is cleaned before 
    what shipped, reads the flow, and names at most three issues, each with the PRs that show it.
 2. Each in-repo issue goes to its route in the same session: a fix-of-a-fix to `find-root-cause`, a
    churn hotspot to `write-build-plan`, slow or unreviewed merges to `record-project-decisions`.
-3. The retro is saved to `product/retros/<date>-period.md` and committed with the first fix.
+3. The retro is saved to `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.md` and committed with the first fix.
 
 ## Scenario B: a session that went wrong
 
@@ -88,7 +88,7 @@ A committed report leaves the machine on the next push, so it is cleaned before 
 2. Each root cause is classed (request, guidance, environment, model, Claude Code) and routed. A
    guidance or model cause usually goes to `prevent-repeat-mistake`.
 3. `prevent-repeat-mistake` picks the rung, builds or drafts the fix, and saves
-   `product/retros/<date>-repeat-mistake.yaml`, with the `.md` rendered beside it. Its next run
+   `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, with the `.md` rendered beside it. Its next run
    checks each report and lists every draft still
    `awaiting approval` before taking a new mistake, so a draft is not lost between sessions.
 

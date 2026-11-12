@@ -1,7 +1,7 @@
 # Security audit schema
 
 The report `audit-codebase-security` saves to
-`.agents_workspace/product/security-audit/SECURITY_AUDIT-<YYYYMMDD-HHMM>.md`, never a committed path. Its
+`.agents_workspace/product/security-audit/<YYYYMMDD-HHMMSS>-<session-id>-security-audit.md`, never a committed path. Its
 layout is `../assets/security-audit.template.md`, relative to this file. A new report is written
 as `security-audit/v2` YAML, per the section at the end, and an older `security-audit/v1` report
 stays as written, its `schema:` line included.
@@ -26,16 +26,16 @@ stays as written, its `schema:` line included.
 
 ## security-audit/v2: YAML with generated Markdown
 
-A `security-audit/v2` report is `SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`, a copy of
+A `security-audit/v2` report is `<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml`, a copy of
 `../assets/security-audit.template.yaml`, and the `.md` of the same name is generated from it in
 the `v1` layout above, beside it. The YAML is the source: agents read and edit it, and nobody
-edits the Markdown, which opens with `generated_from: SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml` and a
+edits the Markdown, which opens with `generated_from: <YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml` and a
 do-not-edit `generated_note`. The format in code is `security-audit-model.py` beside this file, and
 `scripts/artifact.py` in the skill checks and renders it through uv:
 
 ```bash
-uv run --script scripts/artifact.py check <dir>/SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml   # errors, or a stale .md
-uv run --script scripts/artifact.py render <dir>/SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml  # check, then write the .md
+uv run --script scripts/artifact.py check <dir>/<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render <dir>/<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml  # check, then write the .md
 ```
 
 Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other

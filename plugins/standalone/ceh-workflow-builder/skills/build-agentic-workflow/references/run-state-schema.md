@@ -74,8 +74,9 @@ names the key in its message.
 
 **Keys**, each required unless marked optional, and no other key allowed:
 
-- `schema`: `run-state/v2`. `flow`: the flow's name, a kebab-case slug. `run_id`: the start time,
-  `YYYYMMDD-HHMM`, with the `-2`, `-3` suffix of a clash, quoted. `config`: the path to its
+- `schema`: `run-state/v2`. `flow`: the flow's name, a kebab-case slug. `run_id`: the start time and
+  the id of the session that started the run, `<YYYYMMDD-HHMMSS>-<session-id>`, quoted. A run
+  started under the older form keeps its id, `<YYYYMMDD-HHMM>` with a `-2`, `-3` suffix. `config`: the path to its
   `flow.yaml`. `mode`: `interactive` or `headless`.
 - `inputs`: `[]` when none, each `name` and `value`, rendered `name=value` joined by `, `, or `-`
   when empty.

@@ -533,7 +533,7 @@ file.
 | `plugins/standalone/ceh-testing/skills/write-evidence-report/assets/security-audit.template.yaml` | whole file | none     |
 
 **Shared:** the `security-audit/v2` format with its templates. `audit-codebase-security` writes
-`SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`, and `write-evidence-report` reads its `commit` and `findings` by key,
+`<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml`, and `write-evidence-report` reads its `commit` and `findings` by key,
 so it carries a copy to check the file first, and `ceh-testing`'s hook checks the file too. With
 both plugins installed an error is reported twice, from the same model. `validate.py` fails when a
 copy differs from the canonical file.
@@ -860,7 +860,7 @@ delete".
 `write-build-plan`, agent mistake to `prevent-repeat-mistake`, working rule to
 `record-project-decisions`, anything else in the repo fixed directly, outside the repo left for the
 user), acting on every in-scope route in the same session, an uninstalled route left open, and the
-split save: in-scope issues committed to `product/retros/<YYYY-MM-DD>-<kind>.md`, out-of-scope ones
+split save: in-scope issues committed to `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`, out-of-scope ones
 local in `.agents_workspace/product/retros/`, each file linking the other through its `other_file`
 frontmatter field. Each skill keeps its own report template (`period-retro`, `session-retro`,
 `repeat-mistake`), because the three reports differ.

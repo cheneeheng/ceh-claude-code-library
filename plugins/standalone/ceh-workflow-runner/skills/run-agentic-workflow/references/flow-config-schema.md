@@ -19,12 +19,12 @@ repo root.
   config.
 - Placeholders, substituted by the runner in every string value:
 
-| Placeholder      | Becomes                                                            |
-| ---------------- | ------------------------------------------------------------------ |
-| `{run}`          | absolute path of this run's directory                              |
-| `{run_id}`       | the run id, the start time `YYYYMMDD-HHMM` (`-2`, `-3` on a clash) |
-| `{input.<name>}` | the value of a declared input                                      |
-| `{item}`         | the current fan-out item id, in `fan_out.output` only              |
+| Placeholder      | Becomes                                                                               |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| `{run}`          | absolute path of this run's directory                                                 |
+| `{run_id}`       | the run id, `<YYYYMMDD-HHMMSS>-<session-id>`: the start time and the starting session |
+| `{input.<name>}` | the value of a declared input                                                         |
+| `{item}`         | the current fan-out item id, in `fan_out.output` only                                 |
 
 - **Secrets only by reference.** A value names the environment variable or secret-manager key, never
   the secret. The stage that needs it resolves it. A literal credential in the file is an error.

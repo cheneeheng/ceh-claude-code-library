@@ -1,7 +1,7 @@
 """repeat-mistake/v2: the repeat-mistake report's model and its Markdown renderer.
 
 The format in code, per repeat-mistake-schema.md beside this file: `artifact.py` validates a
-`<YYYY-MM-DD>-repeat-mistake.yaml` with `MODEL` and writes `render(doc, source)` beside it, in the
+`<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml` with `MODEL` and writes `render(doc, source)` beside it, in the
 `repeat-mistake/v1` layout.
 """
 

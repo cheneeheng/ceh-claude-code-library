@@ -1,6 +1,6 @@
 # Questionnaire schema
 
-The file `write-questionnaire` saves to `.agents_workspace/questionnaires/<YYYYMMDD>-<topic>.md`,
+The file `write-questionnaire` saves to `.agents_workspace/questionnaires/<YYYYMMDD-HHMMSS>-<session-id>-<topic>.md`,
 for someone not in the session to answer. A new file is a copy of
 `../assets/questionnaire.template.md`, relative to this file. The `schema: questionnaire/v1` line
 stays as written.
