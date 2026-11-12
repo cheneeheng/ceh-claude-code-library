@@ -50,5 +50,6 @@ None
 - 2026-11-12 Reviewed: Independent review Ready to build, no blocking or advisory findings. Private roots and same-family ordering address existing shared state.
 - 2026-11-12 Built Phase 1: Isolation regression first failed on shared roots, then all nine tests passed. Full before/after reports match with exit code 0, 76.85s versus 43.32s.
 - 2026-11-12 Checked: Scope, design and phase checks match implementation. No fixture coverage removed, no hook implementation changes, and no merge or edits to the original checkout. Native Linux execution was not run.
+- 2026-11-12 PR: #264 https://github.com/cheneeheng/ceh-claude-code-library/pull/264
 
 <!-- prettier-ignore-end -->

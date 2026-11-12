@@ -50,3 +50,6 @@ record:
   - date: 2026-11-12
     event: Checked
     details: All scope, design and phase items match the code and completed checks. No gaps or extras. Native Linux execution remains untested. No merge, push or changes to the original checkout.
+  - date: 2026-11-12
+    event: PR
+    details: "#264 https://github.com/cheneeheng/ceh-claude-code-library/pull/264"

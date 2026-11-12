@@ -41,3 +41,6 @@ record:
   - date: 2026-11-12
     event: Checked
     details: Scope, design and phase checks match implementation. No fixture coverage removed, no hook implementation changes, and no merge or edits to the original checkout. Native Linux execution was not run.
+  - date: 2026-11-12
+    event: PR
+    details: "#264 https://github.com/cheneeheng/ceh-claude-code-library/pull/264"
