@@ -2,7 +2,7 @@
 name: write-pytest-library-tests
 description: >-
   Load this skill when writing pytest tests for a Python library: unit tests, public-API tests,
-  fixtures, and what to mock versus test for real. Auto-load when a test file is created or
+  fixtures, and what to mock versus test for real. Trigger on a test file created or
   modified.
 disable-model-invocation: false
 user-invocable: false
@@ -20,7 +20,8 @@ license: Apache-2.0
 
 # Write pytest Tests for a Library
 
-Framework: **pytest** with **pytest-asyncio** (`asyncio_mode = "auto"` in `pyproject.toml`)
+Framework: **pytest**. Add **pytest-asyncio** (`asyncio_mode = "auto"` in `pyproject.toml`) only when
+the library has async code
 
 Write library tests against the public API at the lowest tier that can show the behavior, with no
 I/O. Done when each test asserts one behavior and the suite touches no network or filesystem.
@@ -81,10 +82,10 @@ def test_public_entry_point_is_importable():
 A floor for finding blind spots, not a goal. Below the number, look for the untested regions.
 Reaching it proves nothing and is never a reason to add tests.
 
-| Area                                  | Floor |
-| ------------------------------------- | ----- |
-| Library package                       | 80%   |
-| Public API and core logic             | 95%   |
+| Area                      | Floor |
+| ------------------------- | ----- |
+| Library package           | 80%   |
+| Public API and core logic | 95%   |
 
 ```bash
 uv run pytest --cov=your_library --cov-report=term-missing

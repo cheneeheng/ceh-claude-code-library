@@ -53,19 +53,8 @@ def live_app():
     proc.wait()
 ```
 
-**Docker Compose (v2) for full infra:**
-
-```python
-@pytest.fixture(scope="session", autouse=True)
-def docker_services():
-    subprocess.run(
-        ["docker", "compose", "-f", "docker-compose.test.yml", "up", "-d"], check=True
-    )
-    yield
-    subprocess.run(
-        ["docker", "compose", "-f", "docker-compose.test.yml", "down", "-v"], check=True
-    )
-```
+**Docker Compose (v2) for full infra:** `run-system-tests.sh` starts the stack and tears it down.
+Do not start or stop it from a fixture: with `--no-docker` the stack is the user's and stays up.
 
 Use an `autouse` fixture to reset every stateful service the scenarios touch after each scenario:
 the DB (truncate tables or re-run migrations), queues (purge), and any cache or file store.

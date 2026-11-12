@@ -4,7 +4,7 @@ description: >-
   Use this agent to review the frontend part of a diff (React, SvelteKit, TypeScript, styles,
   tests) against this plugin's standards, in parallel with the main review. Dispatched by
   ceh-git-workflow:code-review with a diff file path. Read-only: returns findings, never edits.
-model: sonnet
+model: inherit
 tools: Read, Grep, Glob, Skill
 ---
 

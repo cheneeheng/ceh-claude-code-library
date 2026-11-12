@@ -4,7 +4,7 @@ description: >-
   Use this agent to review the Python service part of a diff (FastAPI, PostgreSQL, pytest) against
   this plugin's standards, in parallel with the main review. Dispatched by
   ceh-git-workflow:code-review with a diff file path. Read-only: returns findings, never edits.
-model: sonnet
+model: inherit
 tools: Read, Grep, Glob, Skill
 ---
 
@@ -39,8 +39,9 @@ own.
 ## Output to parent session
 
 Lead with the counts. Then every finding, most severe first, in code-review's format: a prefix,
-`path:line`, the quoted line, the problem, and for `[blocking]` what would resolve it. Leave the
-list uncapped, because code-review applies its own cap after it merges. A problem you suspect but
+`path:line`, the quoted line, the problem, and for `[blocking]` what would resolve it. Write out up
+to fifteen findings in full. Past fifteen, list the rest by prefix and `path:line` under
+Dismissed as over the cap, because code-review applies its own cap after it merges. A problem you suspect but
 cannot confirm from the code goes in as `[question]`, so the parent can rank it instead of never
 seeing it.
 

@@ -2,7 +2,7 @@
 # run-e2e.sh
 # Drives end-to-end tests: optionally brings up a docker-compose.test.yml stack,
 # runs the detected E2E runner (Playwright or Cypress) against it, and tears down.
-# Refuses to run against what looks like a production URL.
+# Runs the full suite against a local target only; any other host takes 'smoke'.
 #
 # Usage:
 #   bash run-e2e.sh up              # stack only, no tests
@@ -22,7 +22,7 @@ for f in docker-compose.test.yml docker-compose.test.yaml compose.test.yml; do
 done
 
 has_dep() {
-  node -e '
+  bun -e '
     const p = require("./package.json");
     const all = { ...(p.dependencies||{}), ...(p.devDependencies||{}) };
     process.exit(all["'"$1"'"] ? 0 : 1);
@@ -44,20 +44,20 @@ compose_down() {
   docker compose -f "$COMPOSE_FILE" down -v
 }
 
-# Safety rail: refuse to target what looks like production.
+# Safety rail: the full suite writes data, so it runs only against a local target. Local means
+# localhost, 127.0.0.1, or the compose stack this script starts. Any other host takes 'smoke'.
 guard_target() {
   local url="${E2E_BASE_URL:-${BASE_URL:-}}"
-  if [[ -n "$url" ]]; then
-    # Block anything that smells like prod unless the caller explicitly tagged it smoke-safe.
-    if [[ "$url" =~ prod|production ]] && [[ "$CMD" != "smoke" ]]; then
-      echo "ERROR: refusing to run full E2E against prod-looking URL: $url" >&2
-      echo "       use 'smoke' for read-only checks, or override by unsetting the URL." >&2
-      exit 3
-    fi
-    if [[ "${NODE_ENV:-}" == "production" ]] && [[ "$CMD" != "smoke" ]]; then
-      echo "ERROR: NODE_ENV=production with non-smoke E2E is not allowed" >&2
-      exit 3
-    fi
+  [[ "$CMD" == "smoke" ]] && return 0
+  if [[ "${NODE_ENV:-}" == "production" ]]; then
+    echo "ERROR: NODE_ENV=production allows only 'smoke'" >&2
+    exit 3
+  fi
+  [[ -z "$url" || -n "$COMPOSE_FILE" ]] && return 0
+  if [[ ! "$url" =~ ^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?(/|$) ]]; then
+    echo "ERROR: refusing to run the full E2E suite against a non-local URL: $url" >&2
+    echo "       only 'smoke' runs against it." >&2
+    exit 3
   fi
 }
 
@@ -69,13 +69,13 @@ run_tests() {
     if [[ "$CMD" == "smoke" ]]; then
       extra+=(--grep "@smoke")
     fi
-    npx playwright test "${extra[@]}" ${PATTERN:+"$PATTERN"}
+    bunx playwright test ${extra[@]+"${extra[@]}"} ${PATTERN:+"$PATTERN"}
   elif has_dep cypress; then
     echo ">> running Cypress${PATTERN:+ — $PATTERN}"
     if [[ "$CMD" == "smoke" ]]; then
-      npx cypress run --env grepTags=@smoke ${PATTERN:+--spec "$PATTERN"}
+      bunx cypress run --env grepTags=@smoke ${PATTERN:+--spec "$PATTERN"}
     else
-      npx cypress run ${PATTERN:+--spec "$PATTERN"}
+      bunx cypress run ${PATTERN:+--spec "$PATTERN"}
     fi
   else
     echo "ERROR: no E2E runner found (expected @playwright/test or cypress)" >&2

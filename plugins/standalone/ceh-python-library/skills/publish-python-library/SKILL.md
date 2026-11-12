@@ -2,8 +2,8 @@
 name: publish-python-library
 description: >-
   Load this skill when packaging, versioning, or publishing a Python library: build backend, src/
-  layout, wheels, PyPI, the public API in __init__.py / __all__, deprecations, semver. Auto-load
-  when build config or __all__ is edited, a public signature changes, or uv build runs.
+  layout, wheels, PyPI, the public API in __init__.py / __all__, deprecations, semver. Trigger on
+  a build config or __all__ edit, a changed public signature, or a uv build run.
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-
@@ -27,7 +27,8 @@ and a TestPyPI install imports the public API.
    earns.
 2. Deprecate a public symbol before removing it.
 3. Build with an explicit backend in the `src/` layout, a wheel and an sdist, with `py.typed`.
-4. Publish to TestPyPI, install from it once, then publish to PyPI.
+4. Run `uv build` and `uvx twine check dist/*`, then stop if the Stop conditions say so.
+5. Publish to TestPyPI, install from it once, then publish to PyPI.
 
 ## Rules
 
@@ -133,3 +134,17 @@ uv publish                    # then the real PyPI
 A library must not pull in application/web-server dependencies (`fastapi`, `uvicorn`, `asyncpg`, web
 frameworks). If web behavior is needed, expose a clean API and let the consuming application wire the
 transport. Optional integrations go under `[project.optional-dependencies]`, never the base set.
+
+## Output
+
+Reply with the version and the semver level it earned, the files in `dist/`, the result of
+`twine check`, and what was published where. When the run stopped before publishing, give the two
+`uv publish` commands for a person to run.
+
+## Stop conditions
+
+- No human authorized publishing ahead of time → stop after `uv build` and `twine check`, before
+  `uv publish` to TestPyPI or PyPI, and report. A published version cannot be taken back or
+  uploaded again.
+- The bump level is unclear between MINOR and MAJOR → state the breaking candidate and ask the
+  user. With no human to answer, take MAJOR and say why.

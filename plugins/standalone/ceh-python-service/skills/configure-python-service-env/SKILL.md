@@ -2,8 +2,8 @@
 name: configure-python-service-env
 description: >-
   Load this skill when setting up a Python service's environment, code style, or secrets: uv,
-  pyproject.toml, type hints, ruff/mypy, settings from environment variables and .env. Auto-load
-  when pyproject.toml is edited, a uv command runs, or a secret or BaseSettings class is added.
+  pyproject.toml, type hints, ruff/mypy, settings from environment variables and .env. Trigger on
+  a pyproject.toml edit, a uv command, or a new secret or BaseSettings class.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -75,6 +75,14 @@ ignore_missing_imports = false
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+markers = [
+    "integration: needs a real database",
+    "system: needs the whole stack",
+    "e2e: a full user scenario",
+]
+
+[dependency-groups]
+dev = ["pytest", "pytest-asyncio", "pytest-timeout", "httpx", "ruff", "mypy"]
 ```
 
 ### Secrets management
@@ -111,29 +119,6 @@ def reserve_stock(order: Order, qty: int) -> ReservationResult:
 ```
 
 One-line summary, then `Args` / `Returns` / `Raises` sections as needed. Omit sections that don't apply.
-
-**Naming:**
-
-| Kind                 | Convention            | Example                        |
-| -------------------- | --------------------- | ------------------------------ |
-| Variables, functions | `snake_case`          | `session_id`, `validate_event` |
-| Classes              | `PascalCase`          | `SessionState`                 |
-| Constants            | `UPPER_SNAKE_CASE`    | `MAX_CHALLENGES`               |
-| Private members      | `_leading_underscore` | `_apply_event`                 |
-
-**Imports** (three groups, separated by blank lines):
-
-```python
-# 1. Standard library
-import asyncio
-
-# 2. Third-party
-from fastapi import HTTPException
-from pydantic import BaseModel
-
-# 3. Local application
-from app.models.session import SessionState
-```
 
 **Pydantic v2:** Use `BaseModel` for all API request/response types and domain entities.
 

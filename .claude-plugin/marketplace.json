@@ -41,19 +41,19 @@
     {
       "name": "ceh-python-service",
       "source": "./plugins/standalone/ceh-python-service",
-      "version": "1.1.6",
+      "version": "1.1.7",
       "description": "CEH Python service: FastAPI, asyncpg, PostgreSQL schema, Alembic migrations, uv, and testing (unit/integration/system) standards for web services."
     },
     {
       "name": "ceh-python-library",
       "source": "./plugins/standalone/ceh-python-library",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "description": "CEH Python library: packaging and publishing, public API surface discipline, semantic versioning, uv environment, and pytest testing standards for distributable libraries (no web dependencies)."
     },
     {
       "name": "ceh-web-frontend",
       "source": "./plugins/standalone/ceh-web-frontend",
-      "version": "1.3.4",
+      "version": "1.3.5",
       "description": "CEH web frontend: SvelteKit and React (Vite) conventions, Bun, TypeScript style, ESLint/Prettier, Vitest, Testing Library, Playwright, screenshot parity checks, accessibility, Cytoscape.js graph visualization, and testing agents (unit/integration/system). UI visual design comes from the ceh-ui-design dependency."
     },
     {

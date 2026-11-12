@@ -35,7 +35,7 @@ via MSW.
 ## Process
 
 1. **Detect the framework.** Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/detect-test-framework.sh"` to confirm
-   Vitest is present and check for `@testing-library/svelte` and `msw` in devDependencies.
+   Vitest is present and check for `@testing-library/svelte` or `@testing-library/react`, and `msw`, in devDependencies.
 
 2. **Read the target.** Read the page/feature component and any shared state modules it uses. Identify:
    - Which API calls happen (what MSW handlers are needed)
@@ -50,7 +50,7 @@ via MSW.
 4. **Write the tests.**
    - Set up MSW server in `beforeAll` / `afterAll` with `onUnhandledRequest: 'error'`
    - Reset handlers and shared state in `beforeEach`
-   - Render the root component under test using `@testing-library/svelte`
+   - Render the root component under test using `@testing-library/svelte` or `@testing-library/react`
    - Drive interactions with `userEvent` (prefer over `fireEvent` — it dispatches real browser events)
    - Assert on what the user sees: rendered text, ARIA roles, disabled states — not internal state values
    - To verify a state side effect, read the exported `$state` object (or its accessor function) after the action settles
@@ -101,8 +101,7 @@ via MSW.
 5. **Run and verify.** Execute `bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-integration-tests.sh" <pattern>`.
    Only a run that executes the new tests counts. A syntax or type check alone, or a run that
    failed to start, does not. If the run fails only because the project's declared dependencies are
-   missing, install them with the project's own package manager and lockfile (for example
-   `npm install`), never with sudo or the system package manager.
+   missing, install them with `bun install`, never with sudo or the system package manager.
    Iterate until green by fixing the tests, not by loosening assertions or editing the component.
    If the component itself is wrong, keep the failing test and report it as the result.
    Confirm the suite passes twice — flakes on the second run mean state leak.

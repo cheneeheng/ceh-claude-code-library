@@ -18,7 +18,7 @@ if [[ ! -f package.json ]]; then
 fi
 
 has_dep() {
-  node -e '
+  bun -e '
     const p = require("./package.json");
     const all = { ...(p.dependencies||{}), ...(p.devDependencies||{}) };
     process.exit(all["'"$1"'"] ? 0 : 1);
@@ -41,14 +41,14 @@ echo ">> running unit tests with $RUNNER${TARGET:+ — target: $TARGET}"
 case "$RUNNER" in
 vitest)
   # --run = single-shot, no watch. --reporter=verbose for per-test visibility.
-  npx vitest run --reporter=verbose ${TARGET:+"$TARGET"}
+  bunx vitest run --reporter=verbose ${TARGET:+"$TARGET"}
   ;;
 jest)
   # --runInBand avoids flakes from parallel workers when the agent is iterating.
-  npx jest --runInBand --colors ${TARGET:+"$TARGET"}
+  bunx jest --runInBand --colors ${TARGET:+"$TARGET"}
   ;;
 mocha)
   # Assume ts-node/register is already configured in .mocharc; if not, add -r ts-node/register.
-  npx mocha --reporter spec ${TARGET:+"$TARGET"}
+  bunx mocha --reporter spec ${TARGET:+"$TARGET"}
   ;;
 esac

@@ -192,7 +192,8 @@ failures that only appear at runtime.
 
 ### Minimal working skeleton
 
-This runs as-is. Use it as the starting point rather than writing init from memory.
+This runs as-is. Use it as the starting point rather than writing init from memory. Its colours
+are literal strings: for theme colours, follow rule 3 above and `references/theming.md`.
 
 ```html
 <style>
@@ -268,7 +269,7 @@ This runs as-is. Use it as the starting point rather than writing init from memo
 
 ### Loading the library
 
-- **npm**: `npm install cytoscape`, then `import cytoscape from 'cytoscape'`.
+- **bun**: `bun add cytoscape`, then `import cytoscape from 'cytoscape'`.
   `import * as cytoscape from 'cytoscape'` does **not** work — the default export is
   required.
 - **CDN**: cdnjs, jsDelivr, or unpkg. Pin the version. `dist/cytoscape.min.js` is UMD

@@ -28,7 +28,8 @@ if ! command -v uv &>/dev/null; then
   exit 1
 fi
 
-echo "==> Using database: $TEST_DATABASE_URL"
+# Host and database name only: the URL holds a password.
+echo "==> Using database: ${TEST_DATABASE_URL##*@}"
 
 # Filter by marker so tests without @pytest.mark.integration are skipped.
 # The integration agent is instructed to add this marker to every test.

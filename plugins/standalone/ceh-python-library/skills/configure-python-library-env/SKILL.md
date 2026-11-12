@@ -2,8 +2,8 @@
 name: configure-python-library-env
 description: >-
   Load this skill when setting up a Python library's environment or code style: uv dependencies,
-  pyproject.toml, type hints, docstrings, naming, ruff/mypy. Auto-load when pyproject.toml is edited
-  or a uv command runs.
+  pyproject.toml, type hints, docstrings, naming, ruff/mypy. Trigger on a pyproject.toml edit or a
+  uv command.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -75,7 +75,9 @@ python_version = "3.12"
 ignore_missing_imports = false
 
 [tool.pytest.ini_options]
-asyncio_mode = "auto"
+# Only when the library has async code, with pytest-asyncio as a dev dependency. Without the
+# plugin pytest warns "Unknown config option: asyncio_mode".
+# asyncio_mode = "auto"
 ```
 
 ### Coding style

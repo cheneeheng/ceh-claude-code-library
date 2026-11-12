@@ -2,8 +2,8 @@
 name: configure-bun-vite-env
 description: >-
   Load this skill when setting up or configuring a Bun + Vite frontend: scripts, dependencies,
-  TypeScript, linting, formatting. Auto-load when bun runs, or eslint.config.js, .prettierrc, or
-  tsconfig.json is created or modified.
+  TypeScript, linting, formatting. Trigger on a bun command, or on eslint.config.js, .prettierrc
+  or tsconfig.json created or modified.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -140,15 +140,21 @@ every commit, so they run before the PR. Never commit with `--no-verify` to get 
 
 ```js
 // eslint.config.js
-import ts from "@typescript-eslint/eslint-plugin";
+import tseslint from "typescript-eslint";
 import svelte from "eslint-plugin-svelte"; // SvelteKit projects
 // import react from 'eslint-plugin-react';   // React projects
 // import reactHooks from 'eslint-plugin-react-hooks';
 
-export default [
-  ...ts.configs["recommended-type-checked"],
+export default tseslint.config(
+  ...tseslint.configs.recommendedTypeChecked,
   ...svelte.configs["flat/recommended"], // or react / react-hooks configs
   {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-unused-vars": [
@@ -157,5 +163,10 @@ export default [
       ],
     },
   },
-];
+);
 ```
+
+Install it with `bun add -d eslint typescript-eslint`. The type-checked rules need
+`parserOptions.projectService`, or every file fails with a parsing error. typescript-eslint 8
+refuses TypeScript 7 ("typescript-eslint does not support TS 7.0"), so pin `typescript@6` until it
+supports it.

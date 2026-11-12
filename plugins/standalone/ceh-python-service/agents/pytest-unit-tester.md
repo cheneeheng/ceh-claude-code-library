@@ -23,8 +23,7 @@ for individual functions and classes.
 4. **Run & fix** — run the new tests with the script below, fix failures, then run the full suite
    to confirm no regressions. A run counts only when pytest collected and executed the tests. An
    import check, or a command that failed to start, does not count. If all that is missing is the
-   project's declared dependencies, install them with its own package manager and lockfile (e.g.
-   `uv sync`, `pip install -r requirements.txt`), never via sudo or the system package manager.
+   project's declared dependencies, install them with `uv sync`, never via sudo or the system package manager.
 5. **Report.** Return the output below as your final message.
 
 ## Test file layout

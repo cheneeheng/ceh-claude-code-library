@@ -16,7 +16,7 @@ if [[ ! -f package.json ]]; then
 fi
 
 has_dep() {
-  node -e '
+  bun -e '
     const p = require("./package.json");
     const all = { ...(p.dependencies||{}), ...(p.devDependencies||{}) };
     process.exit(all["'"$1"'"] ? 0 : 1);
@@ -31,8 +31,11 @@ if [[ -z "$PATTERN" ]]; then
     PATTERN="test/integration"
   elif [[ -d src/__tests__/integration ]]; then
     PATTERN="src/__tests__/integration"
+  elif [[ -d src/routes ]]; then
+    # Component tests sit beside the page they render, as src/routes/<page>/<Component>.test.ts.
+    PATTERN="src/routes"
   else
-    PATTERN="**/*.integration.{test,spec}.ts"
+    PATTERN="src"
   fi
 fi
 
@@ -42,13 +45,13 @@ export NODE_ENV=test
 
 if has_dep vitest; then
   # --pool=forks gives each test file its own process — safer when tests touch
-  # shared resources (DB connections, in-memory singletons).
-  npx vitest run --pool=forks --reporter=verbose "$PATTERN"
+  # shared resources (stores, in-memory singletons).
+  bunx vitest run --pool=forks --reporter=verbose "$PATTERN"
 elif has_dep jest || has_dep ts-jest; then
-  # --runInBand is essential for integration tests that share a DB.
-  npx jest --runInBand --colors --testPathPattern="$PATTERN"
+  # --runInBand keeps tests that share state from running at once.
+  bunx jest --runInBand --colors --testPathPattern="$PATTERN"
 elif has_dep mocha; then
-  npx mocha --reporter spec --recursive "$PATTERN"
+  bunx mocha --reporter spec --recursive "$PATTERN"
 else
   echo "ERROR: no supported test runner found" >&2
   exit 2

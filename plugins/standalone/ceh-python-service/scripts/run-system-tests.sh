@@ -35,30 +35,8 @@ if [[ -z "${TEST_DATABASE_URL:-}" && -z "${APP_BASE_URL:-}" ]]; then
   echo "         System tests may fail if the app cannot connect to infrastructure."
 fi
 
-# Optionally start Docker services
-if [[ "$NO_DOCKER" == false && -f "docker-compose.test.yml" ]]; then
-  echo "==> Starting Docker test services..."
-  docker compose -f docker-compose.test.yml up -d
-
-  # Only wait for 'healthy' status if services define healthchecks.
-  # Otherwise fall back to a short fixed wait.
-  if grep -q "healthcheck:" docker-compose.test.yml; then
-    echo "==> Waiting for services to be healthy..."
-    RETRIES=30
-    until docker compose -f docker-compose.test.yml ps | grep -q "healthy" || [[ $RETRIES -eq 0 ]]; do
-      sleep 1
-      ((RETRIES--)) || true
-    done
-    if [[ $RETRIES -eq 0 ]]; then
-      echo "WARNING: Services did not report healthy within 30s — proceeding anyway."
-    fi
-  else
-    echo "==> No healthchecks defined in docker-compose.test.yml — waiting 5s..."
-    sleep 5
-  fi
-fi
-
-# Cleanup trap — always tear down Docker on exit (success or failure)
+# Cleanup trap — always tear down Docker on exit (success or failure). Set before the start,
+# so a start that fails halfway is torn down too.
 cleanup() {
   local exit_code=$?
   if [[ "$NO_DOCKER" == false && -f "docker-compose.test.yml" ]]; then
@@ -73,6 +51,13 @@ cleanup() {
   exit $exit_code
 }
 trap cleanup EXIT
+
+# Start the Docker services and wait until they are running, or healthy where they define a
+# healthcheck. This script owns the stack: it starts it here and the trap above tears it down.
+if [[ "$NO_DOCKER" == false && -f "docker-compose.test.yml" ]]; then
+  echo "==> Starting Docker test services..."
+  docker compose -f docker-compose.test.yml up -d --wait
+fi
 
 # Ensure uv is available
 if ! command -v uv &>/dev/null; then
