@@ -120,5 +120,9 @@ dispatches `ceh-session-learning:transcript-analyst`, and
   with both old names in `RENAMED` and `ceh-every-session` bumped. Built in one PR with the
   three other merge plans, at the user's request.
 - 2026-11-12 PR: #262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262
+- 2026-11-12 Checked: 15 items: 15 Built, no Gap, Deviation, Extra, Failing or Cannot verify. The phase Check was
+  rerun on `main` after the merge, and a fresh `claude -p --plugin-dir` session listed both
+  skills and the agent. `docs/STRATEGY.md` has no Every step row, so only the vision's table
+  changed.
 
 <!-- prettier-ignore-end -->

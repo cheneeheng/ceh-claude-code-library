@@ -154,5 +154,9 @@ Shape and installs one plugin for it. The flow that matters most: with only
   characters, both fixture groups on the new folder, and `ceh-competitor-analysis` bumped.
   Built in one PR with the three other merge plans, at the user's request.
 - 2026-11-12 PR: #262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262
+- 2026-11-12 Checked: 23 items: 23 Built, and 1 Extra outside the plan. The phase Check was rerun on `main` after
+  the merge, and a fresh `claude -p --plugin-dir` session listed the ten skills. Extra:
+  `tools/validate-plugins/checks/budget.py:13` `MAX_TOTAL_DESCRIPTION_LEN = 26261`, raised
+  from 26214 for the longer prefixes.
 
 <!-- prettier-ignore-end -->

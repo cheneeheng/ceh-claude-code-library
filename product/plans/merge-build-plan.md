@@ -186,5 +186,8 @@ Built Phase line because it knows the skill under its new name.
   six plan schema copies edited, and every plugin that named either old plugin bumped. Built
   in one PR with the three other merge plans, at the user's request.
 - 2026-11-12 PR: #262 https://github.com/cheneeheng/ceh-claude-code-library/pull/262
+- 2026-11-12 Checked: 25 items: 25 Built, no Gap, Deviation, Extra, Failing or Cannot verify. The phase Check was
+  rerun on `main` after the merge, and a fresh `claude -p --plugin-dir` session listed the
+  three skills. The eval cases were not run.
 
 <!-- prettier-ignore-end -->
