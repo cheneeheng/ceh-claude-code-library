@@ -11,12 +11,12 @@ import shutil
 import subprocess
 import sys
 
-from common import REPO, fail, main, plugin_dirs, rel
+from common import REPO, check_bash, fail, main, plugin_dirs, rel
 
 
 def check() -> None:
     have_shellcheck = shutil.which("shellcheck") is not None
-    have_bash = shutil.which("bash") is not None
+    bash = check_bash()
 
     def run(cmd: list[str]) -> subprocess.CompletedProcess:
         # cwd=REPO + POSIX-relative paths so Git Bash on Windows resolves them.
@@ -29,8 +29,8 @@ def check() -> None:
         ):
             where = rel(script)
             if script.suffix == ".sh":
-                if have_bash:
-                    r = run(["bash", "-n", where])
+                if bash:
+                    r = run([bash, "-n", where])
                     if r.returncode != 0:
                         fail(where, f"bash syntax error: {r.stderr.strip()}")
                 if have_shellcheck:

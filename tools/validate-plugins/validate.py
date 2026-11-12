@@ -12,14 +12,16 @@ Each check is one module in checks/ and also runs alone, e.g.
 from __future__ import annotations
 
 import importlib
+import os
 import sys
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "checks"))
 
 from common import report, run_check  # noqa: E402
 
-# Run in this order. A module name with `_` shows as `-` in the report.
+# Report in this order. A module name with `_` shows as `-` in the report.
 CHECKS = [
     "manifests",
     "skills",
@@ -43,11 +45,21 @@ CHECKS = [
 ]
 
 
+def run_group(name: str) -> list[str]:
+    return run_check(importlib.import_module(name).check)
+
+
 def main() -> int:
-    results = {
-        name.replace("_", "-"): run_check(importlib.import_module(name).check)
-        for name in CHECKS
-    }
+    # less-code: parallelize groups only; split slow groups if measurements justify it.
+    with ProcessPoolExecutor(
+        max_workers=min(4, os.cpu_count() or 1, len(CHECKS))
+    ) as pool:
+        results = dict(
+            zip(
+                (name.replace("_", "-") for name in CHECKS),
+                pool.map(run_group, CHECKS),
+            )
+        )
     return report(results)
 
 

@@ -7,7 +7,9 @@ runs them all. A check also runs alone: `python tools/validate-plugins/checks/<n
 from __future__ import annotations
 
 import json
+import os
 import re
+import shutil
 import sys
 from pathlib import Path
 from typing import Callable
@@ -22,6 +24,40 @@ MAX_DESCRIPTION_LEN = 300
 MAX_COMPATIBILITY_LEN = 500
 
 errors: list[str] = []
+
+
+def find_bash() -> str | None:
+    if sys.platform != "win32":
+        return shutil.which("bash")
+    git = shutil.which("git")
+    if not git:
+        return None
+    directory = Path(git).resolve().parent
+    root = directory.parent
+    if root.name in ("mingw64", "mingw32", "usr"):
+        root = root.parent
+    for candidate in (
+        directory / "bash.exe",
+        root / "bin/bash.exe",
+        root / "usr/bin/bash.exe",
+    ):
+        if candidate.is_file():
+            return str(candidate)
+    return None
+
+
+def check_bash() -> str | None:
+    bash = find_bash()
+    if bash:
+        print(f"Bash checks: {bash}", file=sys.stderr)
+    elif os.environ.get("CI"):
+        fail("bash", "Git Bash (Windows) or bash (macOS/Linux) is required in CI")
+    else:
+        print(
+            "Bash checks skipped: Git Bash (Windows) or bash (macOS/Linux) not found",
+            file=sys.stderr,
+        )
+    return bash
 
 
 def fail(where: str, msg: str) -> None:
