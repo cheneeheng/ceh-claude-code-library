@@ -18,16 +18,18 @@ scope:
       the user, and `run-agentic-workflow` says what an interactive ask does when it cannot be
       answered.
     - |
-      `agent-coding-contract` asks for the task tools only when they are available, and no skill
-      dispatches a reviewer "on the most capable model".
+      `agent-coding-contract` tracks subtasks with the todo list tool, `TodoWrite`, when it is
+      available, and no skill dispatches a reviewer "on the most capable model".
     - |
       Every skill names a YAML handoff file by its `.yaml` name where the YAML is the source, and
       the `.md` name only for the rendered file or the fallback.
     - |
       Meridian is the default theme in every plugin that picks one without asking.
     - |
-      A report saved under `.agents_workspace/` with only a date in its name is named
-      `<YYYYMMDD-HHMM>-<session-id-prefix>`, so a second run on the same day keeps the first.
+      Every file or folder a skill saves with a date or time in its name is named
+      `<YYYYMMDD-HHMMSS>-<session-id>-<name>`, the same form repo-wide, recorded as a decision
+      rule. A second run keeps the first, and every reader and hook still finds a file saved
+      under an older form.
     - |
       A guard that sends work to an agent lets that agent through: `bulk-reader` may read whole
       files, and the read-only agents no longer receive the coding contract.
@@ -81,10 +83,17 @@ scope:
       reason: |
         Renaming a variable users have set breaks their setup, and the audit accepts the second
         as a rare case.
-    - item: |
-        The names of `product/retros/` files and of the repeat-mistake report.
+    - item: Renaming files already saved under an older name form.
       reason: |
-        The user chose the dated name for both on 2026-11-11, and hooks and Records match it.
+        The user said on 2026-11-12 that existing names stay. Readers and hooks accept both
+        forms.
+    - item: |
+        The name of a blog draft, `<YYYY-MM-DD>-<slug>`, and of the model-audit folder,
+        `audits/<date>/`.
+      reason: |
+        A draft is content the user ships, and its date is the post's date. The audit folder is
+        written by a script that also runs in CI, where there is no session, and its branch and
+        PR title carry the same date. Both are listed under Open.
     - item: |
         Em dashes, the long-skill trims the audit withdrew, moving rungs 5, 7 and 8 of
         `design-test-cases` to `references/`, `make-ui-accessible`, the every-session README,
@@ -143,8 +152,9 @@ design:
       (`ask-the-author.md`).
   - topic: "Phase 1 rules: task tools and the reviewer's model"
     decision: |
-      `agent-coding-contract` (53) reads "when the task tools are available, track every subtask
-      with them". `review-build-plan` (42), `check-build-against-plan` (61) and `code-review`
+      `agent-coding-contract` (53) reads "When the todo list tool (`TodoWrite`) is available,
+      track every subtask with it", because the latest Claude Code models carry the todo list
+      tool and not `TaskCreate` and `TaskUpdate`. `review-build-plan` (42), `check-build-against-plan` (61) and `code-review`
       (85) say "the session's own model" where they say "the most capable model", the wording
       `write-research-note` uses.
   - topic: "Phase 1 rule: the YAML name where the YAML is the source"
@@ -170,29 +180,64 @@ design:
       look until it is rebuilt.
   - topic: "Phase 2: one name form for saved reports"
     decision: |
-      The form is `<YYYYMMDD-HHMM>-<session-id-prefix>`, taken word for word from
-      `ceh-every-session:hand-off-session`, including how it gets the session id prefix. It
-      replaces the date part, where it stands, in the name of each report a skill saves under
-      `.agents_workspace/` with only a date:
+      The user set the form on 2026-11-12: `<YYYYMMDD-HHMMSS>-<session-id>-<name>`, always, the
+      same repo-wide, with names already saved left as they are. `<YYYYMMDD-HHMMSS>` comes from
+      one `date +%Y%m%d-%H%M%S` call, `<session-id>` is the whole of `${CLAUDE_SESSION_ID}`,
+      and `<name>` says what the file is. Each skill body carries the same sentence: "Take
+      `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from
+      `${CLAUDE_SESSION_ID}`." The rule is recorded in
+      `.claude/rules/decision-saved-file-names.md`, in this phase's commit.
 
-      | Skill                  | Saved today as                                   |
-      | ---------------------- | ------------------------------------------------ |
-      | `review-build-plan`    | `product/plan-reviews/<slug>-<YYYY-MM-DD>.md`    |
-      | `review-business-plan` | `product/business-plan-reviews/<YYYY-MM-DD>.md`  |
-      | `refactor-repo`        | `product/refactor/<YYYY-MM-DD>.md`               |
-      | `stress-test-plan`     | `product/stress-tests/<YYYY-MM-DD>-<topic>.md`   |
-      | `code-review`          | `product/code-reviews/<branch>-<YYYY-MM-DD>.md`  |
-      | `audit-test-suite`     | `product/test-audits/<YYYY-MM-DD>.md`            |
-      | `write-research-note`  | `research/<YYYYMMDD>-<topic>.md`                 |
-      | `write-questionnaire`  | `questionnaires/<YYYYMMDD>-<topic>.md`           |
+      | Skill                     | Saved today as                                        | Saved as                                                    |
+      | ------------------------- | ----------------------------------------------------- | ----------------------------------------------------------- |
+      | `review-build-plan`       | `product/plan-reviews/<slug>-<YYYY-MM-DD>.md`         | `<YYYYMMDD-HHMMSS>-<session-id>-<slug>.md`                  |
+      | `review-business-plan`    | `product/business-plan-reviews/<YYYY-MM-DD>.md`       | `<YYYYMMDD-HHMMSS>-<session-id>-business-plan-review.md`    |
+      | `refactor-repo`           | `product/refactor/<YYYY-MM-DD>.md`                    | `<YYYYMMDD-HHMMSS>-<session-id>-refactor.md`                |
+      | `stress-test-plan`        | `product/stress-tests/<YYYY-MM-DD>-<topic>.md`        | `<YYYYMMDD-HHMMSS>-<session-id>-<topic>.md`                 |
+      | `code-review`             | `product/code-reviews/<branch>-<YYYY-MM-DD>.md`       | `<YYYYMMDD-HHMMSS>-<session-id>-<branch>.md`                |
+      | `audit-test-suite`        | `product/test-audits/<YYYY-MM-DD>.md`                 | `<YYYYMMDD-HHMMSS>-<session-id>-test-audit.md`              |
+      | `write-research-note`     | `research/<YYYYMMDD>-<topic>.md`                      | `<YYYYMMDD-HHMMSS>-<session-id>-<topic>.md`                 |
+      | `write-questionnaire`     | `questionnaires/<YYYYMMDD>-<topic>.md`                | `<YYYYMMDD-HHMMSS>-<session-id>-<topic>.md`                 |
+      | `hand-off-session`        | `handoff/HANDOFF-<YYYYMMDD-HHMM>-<session-id-prefix>` | `<YYYYMMDD-HHMMSS>-<session-id>-handoff.yaml`               |
+      | `audit-codebase-security` | `security-audit/SECURITY_AUDIT-<YYYYMMDD-HHMM>.yaml`  | `<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml`        |
+      | `explore-app-for-bugs`    | `qa/<YYYYMMDD-HHMM>/QA_REPORT.yaml`                   | `qa/<YYYYMMDD-HHMMSS>-<session-id>/QA_REPORT.yaml`          |
+      | `review-recent-work`      | `retros/<YYYY-MM-DD>-period.md`                       | `<YYYYMMDD-HHMMSS>-<session-id>-period.md`                  |
+      | `diagnose-session`        | `retros/<YYYY-MM-DD>-session-<session-id-prefix>.md`  | `<YYYYMMDD-HHMMSS>-<session-id>-session-<diagnosed-id>.md`  |
+      | `prevent-repeat-mistake`  | `retros/<YYYY-MM-DD>-repeat-mistake.yaml`             | `<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`        |
+      | `run-agentic-workflow`    | run id `<YYYYMMDD-HHMM>`, `-2` on a clash             | run id `<YYYYMMDD-HHMMSS>-<session-id>`                     |
+      | `evaluate-plugin` (local) | `<YYYY-MM-DD-HHMM>-${CLAUDE_SESSION_ID}.md`           | `<YYYYMMDD-HHMMSS>-<session-id>-eval.md`                    |
 
-      Each changes in the skill body and in its schema file together, and in any other file
-      that spells the path. Names that already carry the time (security audits, QA reports,
-      handoffs) stay, and the QA report path, which `write-evidence-report` spells
-      `qa/<timestamp>/`, gets `explore-app-for-bugs`'s spelling, `qa/<YYYYMMDD-HHMM>/`. No hook
-      script and no validator check matches any of these eight names today, so no fixture
-      changes. A blog draft's name is left alone, because a draft is content the user ships,
-      not a report. Files already saved are not renamed.
+      In `diagnose-session`, `<session-id>` is the session that writes the retro and
+      `<diagnosed-id>` is the first 8 characters of the session it diagnoses, as today. Both
+      retros folders, `product/retros/` and `.agents_workspace/product/retros/`, take the same
+      name.
+
+      Each name changes in the skill body and its schema file together, and in every other file
+      that spells it: the model docstrings, the copies registered in `docs/CROSS_REFERENCES.md`,
+      the plugin READMEs, `docs/RETRO_WORKFLOW.md`, `docs/STRATEGY.md`,
+      `docs/CROSS_REFERENCES.md`, and `write-evidence-report`, whose `qa/<timestamp>/` takes
+      the new spelling. A data field inside a file keeps its format: the handoff's `saved` and
+      `session`, the QA report's `date`, a retro's `date`.
+
+      Files already saved are not renamed, so each reader and hook takes both forms:
+
+      - `hand-off-session` Load takes the newest of `HANDOFF-*` and `*-handoff.*` by the
+        timestamp in the name.
+      - `write-evidence-report` takes a `*-security-audit` name as newer than every
+        `SECURITY_AUDIT-*` name, and among names of one form the last by file name. QA folders
+        of both forms sort by name as they are.
+      - `prevent-repeat-mistake` step 1 and `REPEAT` in `artifact-render-hook.py` (every copy)
+        match `<YYYY-MM-DD>-repeat-mistake` and
+        `<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake`, the session id as a UUID, so a
+        labelled name is still not a report.
+      - `RunId` in `run-state-model.py` (both copies) accepts the old pattern and
+        `^\d{8}-\d{6}-<UUID>$`. The clash suffix stays valid for old ids and is no longer
+        written, because two sessions cannot share a new id.
+
+      `tools/validate-plugins/checks/hooks.py` gains a fixture for a repeat-mistake report
+      under the new name, a labelled new-form name left alone, and a run state with a new run
+      id, each written first and seen failing. The handoff fixture takes the new name, since
+      the hook finds a handoff by its `schema` key.
   - topic: "Phase 3: a guard lets through the agent it sends work to"
     decision: |
       Hooks fire for tool calls inside a subagent, and the payload then carries `agent_type`.
@@ -395,8 +440,9 @@ phases:
       `ask-the-author.md` files, `build-agentic-workflow` (its body and its `evals.json`), and
       one line of `run-agentic-workflow`.
       `git grep -n "most capable model" -- plugins/standalone` prints nothing.
-      `git grep -n "TaskCreate" -- plugins/standalone` shows the one line, which opens "when the
-      task tools are available".
+      `git grep -nE "TaskCreate|TaskUpdate" -- plugins/standalone` prints nothing, and
+      `git grep -n "TodoWrite" -- plugins/standalone/ceh-coding-conduct/skills` shows the one
+      line, which opens "When the todo list tool".
       `git grep -n "Tidewater" -- plugins/standalone/ceh-ag-ui plugins/standalone/ceh-competitor-analysis`
       shows no line that makes it the default.
       `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`.
@@ -405,8 +451,13 @@ phases:
     builds: |
       "Phase 2: one name form for saved reports", with "What every phase carries".
     check: |
-      `git grep -nE "(plan-reviews|business-plan-reviews|refactor|stress-tests|code-reviews|test-audits|research|questionnaires)/[^ ]*<(YYYY-MM-DD|YYYYMMDD)>" -- plugins/standalone`
-      prints nothing, and so does `git grep -n "qa/<timestamp>" -- plugins/standalone`.
+      `git grep -nE "<YYYYMMDD(-HHMM)?>|<YYYY-MM-DD(-HHMM)?>[-.]|[-/]<YYYY-MM-DD>|<session-id-prefix>\.|qa/<timestamp>|/<date>-" -- plugins/standalone docs/RETRO_WORKFLOW.md docs/STRATEGY.md docs/CROSS_REFERENCES.md .claude/skills/evaluate-plugin`
+      shows only the blog draft's `<YYYY-MM-DD>-<slug>` and the lines that name an older form
+      as one a reader still accepts.
+      `git grep -c "date +%Y%m%d-%H%M%S" -- "plugins/standalone/*/skills/*/SKILL.md"` counts
+      the fifteen skills of the table.
+      `python tools/validate-plugins/checks/hooks.py` passes with the new fixtures, each seen
+      failing before its edit. `.claude/rules/decision-saved-file-names.md` exists.
       `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`.
     status: todo
   - name: Hooks and guards
@@ -477,11 +528,15 @@ open:
       Neither in this plan. The audit offers both and the user chose neither, so the finding
       stays open, and Phase 3 fixes only the reset.
   - question: |
-      Do the names of saved reports that already carry the time, security audits and QA
-      reports, also gain the session id prefix?
+      Is `<session-id>` the whole session id or its first 8 characters?
     assumption: |
-      No. They are not overwritten by a second run, and the evidence roll-up and the hooks
-      match their current names.
+      The whole id, `${CLAUDE_SESSION_ID}`, because the user wrote "sessionid" and the plugin
+      audit's own folder carries it whole. A name is then about 52 characters before `<name>`.
+  - question: |
+      Do a blog draft, `<YYYY-MM-DD>-<slug>`, and the model-audit folder, `audits/<date>/`,
+      take the new form too?
+    assumption: |
+      No, for the reasons under Scope. Either joins Phase 2 if the user says so.
 record:
   - date: 2026-11-12
     event: Planned
@@ -489,3 +544,17 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#258 https://github.com/cheneeheng/ceh-claude-code-library/pull/258"
+  - date: 2026-11-12
+    event: Design changed
+    details: |
+      was "when the task tools are available, track every subtask with them", now "When the
+      todo list tool (`TodoWrite`) is available, track every subtask with it", because the user
+      said the latest Claude Code models use the todo list tool, not the task tools.
+  - date: 2026-11-12
+    event: Design changed
+    details: |
+      was "The form is `<YYYYMMDD-HHMM>-<session-id-prefix>`" for eight date-only reports, now
+      "`<YYYYMMDD-HHMMSS>-<session-id>-<name>`" for every dated name a skill saves, because the
+      user asked for that one form repo-wide, with existing file names left as they are. This
+      takes the retros and repeat-mistake names out of Scope out and closes the open question
+      on security audits and QA reports.
