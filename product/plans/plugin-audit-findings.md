@@ -532,5 +532,6 @@ turn on a decision block with no denied call first.
 - 2026-11-12 Built Phase 2: c2bafa0, `python tools/validate-plugins/validate.py` printed
   `OK: all plugin checks passed`. The labelled new-form fixture passed before and after
   the edit, because the old pattern already left it alone.
+- 2026-11-12 PR: #266 https://github.com/cheneeheng/ceh-claude-code-library/pull/266
 
 <!-- prettier-ignore-end -->
