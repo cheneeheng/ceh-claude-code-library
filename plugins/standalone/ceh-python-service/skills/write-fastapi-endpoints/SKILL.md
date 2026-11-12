@@ -3,7 +3,7 @@ name: write-fastapi-endpoints
 description: >-
   Load this skill when writing FastAPI endpoints, services, or middleware: paths, status codes,
   error shapes, dependency injection, layer boundaries, logs, metrics, /health, CORS, rate limits.
-  Auto-load when a route handler, domain exception, or log call is written.
+  Trigger on writing a route handler, domain exception, or log call.
 disable-model-invocation: false
 user-invocable: false
 compatibility: >-
@@ -95,13 +95,6 @@ header with the removal date (RFC 8594), so clients find out from the API, not f
 they never read. Removing a field, renaming one, or making an optional request field required are
 breaking changes. Adding an optional field or a new endpoint is not.
 
-#### Headers
-
-| Header                           | Direction          | Purpose                        |
-| -------------------------------- | ------------------ | ------------------------------ |
-| `X-Correlation-ID`               | Request + Response | Request tracing                |
-| `Content-Type: application/json` | Both               | Required on all JSON endpoints |
-
 ### Layer boundaries
 
 Each layer has one job. Route handlers are thin: validate input, call a service, return output.
@@ -167,7 +160,8 @@ Declare `response_model=SomePydanticModel` on every route and return model insta
 
 ### Middleware order
 
-Register in this order (FastAPI processes in reverse registration order):
+The order a request passes through them. Add them in reverse of this list, so correlation ID is
+added last and runs outermost:
 
 1. Correlation ID middleware (outermost)
 2. CORS middleware
@@ -280,13 +274,6 @@ log.info("request_completed", endpoint="/resources", status=200, duration_ms=42)
 log.warning("upstream_timeout", service="payment-api", attempt=2)
 log.error("database_connection_failed", host=settings.db_host, error=str(e))
 ```
-
-| Level     | Use for                                       |
-| --------- | --------------------------------------------- |
-| `DEBUG`   | Detailed diagnostics (disabled in production) |
-| `INFO`    | Normal operations                             |
-| `WARNING` | Unexpected but recoverable                    |
-| `ERROR`   | Failures requiring attention                  |
 
 Do not log at `INFO` on every request — use `DEBUG` for high-frequency events. Per-request counts
 and latency already live in the metrics below, so an `INFO` line per request only adds volume.

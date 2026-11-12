@@ -27,8 +27,6 @@ return the paths, counts, and untested regions to the parent session.
 
 **You do NOT test:**
 
-- HTTP endpoints → hand off to `vitest-integration-tester`
-- Database queries against a real DB → hand off to `vitest-integration-tester`
 - Full user flows or deployed services → hand off to `playwright-system-tester`
 
 If a request crosses that boundary, say so and stop.
@@ -63,10 +61,9 @@ first, and cover them all in one report.
 
 5. **Run and verify.** Execute `bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-unit-tests.sh" <test_file>` and iterate
    until green. A run that failed to start does not count as a run. If the only thing missing is the
-   project's declared dependencies, install them with the project's own package manager and
-   lockfile (`npm ci`, `pnpm install --frozen-lockfile`, `yarn install --frozen-lockfile`), never
+   project's declared dependencies, install them with `bun install`, never
    with sudo or a global install, then run the tests again. Then run
-   `bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-coverage.sh" <source_file>` to find the lines and
+   `bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-coverage.sh" <source_file> <test_file>` to find the lines and
    branches of the target file that are still untested. The percentage is not a goal: never add a
    test only to raise it.
 

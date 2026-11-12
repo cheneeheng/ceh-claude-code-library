@@ -2,8 +2,8 @@
 name: write-pytest-service-tests
 description: >-
   Load this skill when writing pytest tests for a Python service: unit and integration tests,
-  fixtures, and what to mock versus run against a real dependency. Auto-load when a test file is
-  created or modified.
+  fixtures, and what to mock versus run against a real dependency. Trigger on a test file created
+  or modified.
 disable-model-invocation: false
 user-invocable: false
 paths:

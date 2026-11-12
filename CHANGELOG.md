@@ -11,6 +11,17 @@ before this repo live in
 
 ## 2026-11-12
 
+The stack plugins' examples and runner scripts work as written, phase 4 of
+`product/plans/plugin-audit-findings.yaml`. Four claims were run in a scratch project first:
+Starlette runs the middleware added last outermost, pytest warns on `asyncio_mode` without
+`pytest-asyncio`, Vitest's text reporter prints a nested file by its base name, and the flat
+ESLint config lints a TypeScript file. That last run found that typescript-eslint 8 refuses
+TypeScript 7, so the example pins `typescript@6`. In `ceh-python-service`, migrations are written
+by hand, the system test runner alone owns the Docker stack, and the integration fixture shares
+one transaction with the request. In `ceh-python-library`, publishing stops before `uv publish`
+unless a human authorized it. In `ceh-web-frontend`, every runner script uses `bun` and `bunx`,
+and `run-e2e.sh` runs the full suite against a local target only.
+
 The guards stop getting in the way of the work they send out, phase 3 of
 `product/plans/plugin-audit-findings.yaml`. The bulk-read guard lets the `bulk-reader` agent read
 whole files, the coding contract and the less-code reminder no longer load into the read-only
@@ -178,12 +189,14 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 | `ceh-every-session`            | 2.9.11  |
 | `ceh-git-workflow`             | 1.5.10  |
 | `ceh-product-direction`        | 2.0.3   |
-| `ceh-python-service`           | 1.1.6   |
+| `ceh-python-library`           | 1.0.5   |
+| `ceh-python-service`           | 1.1.7   |
 | `ceh-security-audit`           | 1.1.7   |
 | `ceh-session-learning`         | 2.0.1   |
 | `ceh-testing`                  | 1.6.15  |
 | `ceh-ui-design`                | 1.0.11  |
 | `ceh-usability-audit`          | 1.2.8   |
+| `ceh-web-frontend`             | 1.3.5   |
 | `ceh-workflow-builder`         | 1.4.7   |
 | `ceh-workflow-runner`          | 1.1.6   |
 
@@ -285,6 +298,35 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 ### Fixed
 
+- Write Alembic migrations by hand in `write-postgresql-code`: the stack has no ORM models to
+  autogenerate from.
+- Say to add middleware in reverse of the listed order in `write-fastapi-endpoints`, and drop its
+  log-level and header tables.
+- Register the `integration`, `system` and `e2e` markers and list `pytest-timeout` in
+  `configure-python-service-env`, and drop its naming table and import example.
+- Let `run-system-tests.sh` alone start and tear down the Docker stack, with `up -d --wait` and
+  the cleanup trap set first. `pytest-system-tester` no longer teaches a fixture that does it.
+- Share one transaction between the request and the assertion in `pytest-integration-tester`'s
+  `async_client` example, through `app.dependency_overrides`.
+- Print the host and database name only in `run-integration-tests.sh`, not the URL with its
+  password.
+- Set `model: inherit` on `python-service-reviewer` and `web-frontend-reviewer`, and cap the
+  service reviewer's written findings at fifteen.
+- Stop before `uv publish` in `publish-python-library` unless a human authorized it, and add its
+  `## Output`.
+- Add `pytest-asyncio` and `asyncio_mode` only for async code in `configure-python-library-env`
+  and `write-pytest-library-tests`.
+- Use the `typescript-eslint` package and `tseslint.configs.recommendedTypeChecked` in
+  `configure-bun-vite-env`'s flat config, with `parserOptions.projectService`.
+- Use `bun` and `bunx` in every `ceh-web-frontend` runner script, and `bun install` in its agents.
+- Allow the full E2E suite only against `localhost`, `127.0.0.1` or a compose stack in
+  `run-e2e.sh`. **Any other host now needs `smoke`**, where only a URL containing "prod" was
+  refused. An empty argument list no longer fails under `set -u`.
+- Take the test file as a second argument in `check-coverage.sh`, limit coverage to the source
+  file, match on its base name, check for a coverage provider, and write to a temporary file.
+- Drop the backend leftovers from `vitest-unit-tester`, `detect-test-framework.sh` and
+  `run-integration-tests.sh`, whose default target is now `src/routes`.
+- Say "Trigger on" where seven stack skills said "Auto-load when".
 - Let the `bulk-reader` agent through `bulk-read-guard.py`, which denied the agent it sends work to.
 - Skip `newcomer-simulator`, `competitor-analyst`, `transcript-analyst` and every `-reviewer` agent
   in `ceh-coding-conduct`'s `SubagentStart` hooks, as `Explore`, `Plan` and `bulk-reader` already

@@ -16,8 +16,8 @@ if [[ ! -f "$PKG" ]]; then
 fi
 
 # Collect dependency names from dependencies + devDependencies.
-# Uses node for robust JSON parsing — every TS project has node available.
-DEPS=$(node -e '
+# Uses bun for robust JSON parsing: it is this stack's runtime.
+DEPS=$(bun -e '
   const p = require("'"$PKG"'");
   const all = { ...(p.dependencies||{}), ...(p.devDependencies||{}) };
   console.log(Object.keys(all).join("\n"));
@@ -54,19 +54,9 @@ if has mocha; then
 fi
 
 # Integration-relevant
-has supertest && echo "integration_helper: supertest"
 has testcontainers && echo "integration_helper: testcontainers"
-has "@nestjs/testing" && echo "integration_helper: @nestjs/testing"
 has msw && echo "integration_helper: msw"
 has nock && echo "integration_helper: nock"
-
-# DB drivers (integration boundary signal)
-has prisma && echo "db: prisma"
-has typeorm && echo "db: typeorm"
-has drizzle-orm && echo "db: drizzle"
-has pg && echo "db: pg"
-has mysql2 && echo "db: mysql2"
-has better-sqlite3 && echo "db: better-sqlite3"
 
 # E2E runners
 if has "@playwright/test" || has playwright; then

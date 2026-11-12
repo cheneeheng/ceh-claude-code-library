@@ -28,7 +28,7 @@ the process. You speak to it over its real protocols — HTTP, WebSocket, browse
 **You do NOT test:**
 
 - Single modules or pure functions → `vitest-unit-tester`
-- In-process multi-module tests with a real DB but no real network → `vitest-integration-tester`
+- Components tested together with the network mocked → `vitest-integration-tester`
 
 ## Process
 
@@ -40,10 +40,9 @@ the process. You speak to it over its real protocols — HTTP, WebSocket, browse
    a `.env.test`, or a compose file. Tests must read the target URL from env, never hardcoded.
    Default to `http://localhost:3000` only as a fallback.
 
-3. **Bring up the stack (if needed).** If the project uses `docker-compose.test.yml`, use
-   `bash "${CLAUDE_PLUGIN_ROOT}/scripts/run-e2e.sh" up` before the suite and `... down` after. If the stack
-   is expected to be running already (staging smoke test), skip this and document the
-   assumption in the test file header.
+3. **Leave the stack to the runner.** `run-e2e.sh` brings a `docker-compose.test.yml` stack up
+   before the suite and tears it down after. If the stack is expected to be running already
+   (staging smoke test), document the assumption in the test file header.
 
 4. **Write the tests.**
    - Structure by user journey, not by page: `describe('checkout flow', ...)`,
@@ -64,7 +63,7 @@ the process. You speak to it over its real protocols — HTTP, WebSocket, browse
    the second run mean state leak. A run counts only when the stack came up and the browser
    launched. A suite that failed to start, or a type-check of the spec files alone, is not a
    pass. If all that is missing is a declared dependency or the browser binary, install it with
-   the project's own package manager and lockfile (for example `bunx playwright install chromium`),
+   `bun install` or `bunx playwright install chromium`,
    never via sudo or the system package manager. If no real run can happen here, report the
    suite as not run and give the reason.
 

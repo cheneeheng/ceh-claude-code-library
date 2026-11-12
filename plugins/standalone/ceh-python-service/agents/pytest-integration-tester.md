@@ -58,11 +58,15 @@ async def db_conn(db_pool):
 
 ```python
 @pytest.fixture
-async def async_client(app):
+async def async_client(app, db_conn):
+    # get_db_conn: the app's own connection dependency. Overriding it puts the request and the
+    # test's assertions in one transaction, so the test sees what the request wrote.
+    app.dependency_overrides[get_db_conn] = lambda: db_conn
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as c:
         yield c
+    app.dependency_overrides.clear()
 ```
 
 Mock third-party services with `mocker.patch` at the point of use, not definition.
