@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: retired-names-check-and-archives.yaml
 generated_note: "Do not edit. artifact.py renders this file from retired-names-check-and-archives.yaml: edit the YAML, then run artifact.py render."
 title: A validator check for retired plugin names, then two plugins archived
-status: building
+status: built
 created: 2026-11-12
 ---
 
@@ -138,7 +138,10 @@ skill body elsewhere still names it, and `validate.py` fails with the file and l
 - **Check:** `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`, with the
   folder at `archive/ceh-orchestration-lab/` and absent from `plugins/standalone/`.
   `claude plugin validate plugins/standalone/ceh-every-session` passes. CI is green on the PR.
-- **Status:** todo
+- **Status:** done, Commit 6fd6701. `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed` with the folder at `archive/ceh-orchestration-lab/`.
+  `claude plugin validate plugins/standalone/ceh-every-session` printed `Validation passed`.
+  CI run 43195604334 on PR #261 succeeded.
 
 ### Phase 3: Archive ceh-git-datastore
 
@@ -147,7 +150,9 @@ skill body elsewhere still names it, and `validate.py` fails with the file and l
 - **Check:** `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`, with the
   folder at `archive/ceh-git-datastore/` and absent from `plugins/standalone/`, and
   `ls plugins/standalone` lists 25 plugins. CI is green on the PR.
-- **Status:** todo
+- **Status:** done, Commit 6fd6701. `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed` with the folder at `archive/ceh-git-datastore/`, and
+  `ls plugins/standalone | wc -l` printed 25. CI run 43195604334 on PR #261 succeeded.
 
 ## Open
 
@@ -166,5 +171,12 @@ skill body elsewhere still names it, and `validate.py` fails with the file and l
   run on an archive PR then shows the check finding nothing left, which a single PR for all
   three could not show." became one PR for the check and one for both archives, because the
   user asked in the session for phases 2 and 3 in a single PR.
+- 2026-11-12 Built Phase 2: `ceh-orchestration-lab` moved to `archive/` and removed from the marketplace, the tables and
+  indexes, `whats-next`, and the vision's stage table and experiment paragraph.
+- 2026-11-12 Built Phase 3: `ceh-git-datastore` moved to `archive/` whole and removed from the marketplace, the tables
+  and indexes, and the allowed-bundle lists. 25 plugins remain.
+- 2026-11-12 PR: #261 https://github.com/cheneeheng/ceh-claude-code-library/pull/261
+- 2026-11-12 Checked: 20 items: 20 Built, no Gap, Deviation, Extra, Failing or Cannot verify. The three phase
+  Checks were rerun, with the probe also naming `ceh-git-datastore:build-git-datastore`.
 
 <!-- prettier-ignore-end -->
