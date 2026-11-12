@@ -66,6 +66,12 @@ principle, goal or scope test changes. Phases 2 and 3 of
 `product/plans/retired-names-check-and-archives.yaml`, in one PR at the user's request, which
 builds that plan.
 
+Plugin validation runs independent check groups in up to four worker processes while preserving
+report order. Hook fixtures also run in up to four isolated thread batches, preserving related
+fixture sequences and failure order while overlapping subprocess waits. Shell checks explicitly select Git Bash from the Git installation on Windows,
+so WSL no longer drops hook-fixture environment variables and causes false disable-switch failures.
+No plugin version changes.
+
 `validate.py` gains a `retired-names` check. Until now a `ceh-<plugin>:<skill>` name was resolved
 only while its plugin existed, and a plugin named on its own was never checked, so an archived or
 renamed plugin left stale names behind that no check saw. The check fails, with file and line, on

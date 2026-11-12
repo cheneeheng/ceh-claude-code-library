@@ -11,9 +11,10 @@ import subprocess
 import sys
 import tempfile
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from common import REPO, fail, main, plugin_dirs, rel
+from common import REPO, check_bash, fail, main, plugin_dirs, rel
 
 HOOK_SCRIPT_PAT = re.compile(r"/scripts/([\w.-]+)")
 
@@ -946,7 +947,13 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     ]  # fmt: skip
 
 
-def check() -> None:
+def run_batch(batch: int, batches: int, bash: str | None) -> list[tuple[int, str, str]]:
+    problems = []
+    i = -1
+
+    def fail(where: str, message: str) -> None:
+        problems.append((i, where, message))
+
     # Keyed by <plugin>/<script>, and by the bare name while only one plugin ships it (else None).
     scripts: dict[str, Path | None] = {}
     for d in plugin_dirs():
@@ -957,9 +964,6 @@ def check() -> None:
                 scripts[f"{d.name}/{name}"] = path
                 scripts[name] = path if scripts.get(name, path) == path else None
 
-    # The full path, not "bash": Windows CreateProcess searches System32 first and finds WSL's
-    # bash.exe, which does not pass the fixture's environment variables through.
-    bash = shutil.which("bash")
     # The developer's own CEH_* and BULK_READER_* settings must not change a fixture's result.
     base_env = {
         k: v
@@ -974,21 +978,30 @@ def check() -> None:
         state.mkdir()
         base_env.update({"TMP": str(state), "TEMP": str(state), "TMPDIR": str(state)})
         fixtures = hook_fixtures(tmp)
+        groups = {
+            name: n % batches
+            for n, name in enumerate(
+                dict.fromkeys(f["script"].split("/", 1)[0] for f in fixtures)
+            )
+        }
 
         # CI installs uv, so a skip there would hide the artifact fixtures: fail instead.
-        if os.environ.get("CI") and not shutil.which("uv"):
+        if batch == 0 and os.environ.get("CI") and not shutil.which("uv"):
             fail(
                 ".github/workflows/validate.yml",
                 "uv is not installed, the artifact fixtures did not run",
             )
-        covered = {scripts.get(f["script"]) for f in fixtures}
-        for path in sorted({p for p in scripts.values() if p} - covered):
-            fail(
-                rel(path),
-                "hook script has no fixture in checks/hooks.py hook_fixtures()",
-            )
+        if batch == 0:
+            covered = {scripts.get(f["script"]) for f in fixtures}
+            for path in sorted({p for p in scripts.values() if p} - covered):
+                fail(
+                    rel(path),
+                    "hook script has no fixture in checks/hooks.py hook_fixtures()",
+                )
 
         for i, f in enumerate(fixtures):
+            if groups[f["script"].split("/", 1)[0]] != batch:
+                continue
             script = scripts.get(f["script"])
             where = f"hook fixture {i} ({f['script']})"
             if script is None:
@@ -1036,6 +1049,22 @@ def check() -> None:
                     json.loads(r.stdout)
                 except ValueError:
                     fail(where, f"stdout is not valid JSON: {r.stdout.strip()[:200]}")
+    return problems
+
+
+def check() -> None:
+    bash = check_bash()
+    batches = min(4, os.cpu_count() or 1)
+    # less-code: rebuild private fixture trees; share setup only if its cost becomes dominant.
+    with ThreadPoolExecutor(max_workers=batches) as pool:
+        results = list(
+            pool.map(lambda batch: run_batch(batch, batches, bash), range(batches))
+        )
+    for _, where, message in sorted(
+        (problem for batch in results for problem in batch),
+        key=lambda problem: problem[0],
+    ):
+        fail(where, message)
 
 
 if __name__ == "__main__":

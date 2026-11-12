@@ -9,6 +9,19 @@ python tools/validate-plugins/validate.py
 
 Exits non-zero and prints a grouped list of problems if any check fails.
 
+Check groups run in separate processes, using up to four workers, bounded by CPU count.
+The report keeps the order in `CHECKS`. Hook fixtures use up to four isolated thread batches,
+each with private temporary files and repositories. Fixtures from the same plugin or bare script
+stay together and run in their original order, including repeats and callbacks. Failures retain
+their original fixture numbering and report order.
+
+On Windows, shell checks use Git Bash from the Git installation found through `git` on `PATH`.
+They never fall back to WSL Bash. On macOS/Linux, they use `bash` on `PATH`. Both shell-check
+groups print the selected executable. Missing Bash skips shell checks locally and fails in CI.
+
+Run the runner's focused regression tests with
+`python -m unittest discover -s tools/validate-plugins/tests -v`.
+
 `validate.py` only runs the checks. Each group below is one module in `checks/`, listed in order in
 `validate.py` (`CHECKS`, where `skill_refs` is the `skill-refs` group), and runs alone too:
 
@@ -44,7 +57,7 @@ in `CHECKS`, and a row below.
 | `artifact-models` | Each YAML format's `references/<name>-model.py` has `<name>-schema.md` beside it and `../assets/<name>.template.yaml`, and its plugin ships `scripts/artifact.py` and both artifact hooks. With `uv`, `model_vs_template.py` also checks that each template's keys, nested lists included, are exactly its model's, and each `product/plans/*.yaml` passes `artifact.py check`, so its generated Markdown is not stale.                                                                                                                                                                                                                                        |
 | `copies`          | Every whole-file copy `docs/CROSS_REFERENCES.md` registers (Section `whole file`, Diverges `none`, one full path per row) is byte-identical to the canonical file of the same name on its entry's Canonical line. It fails drift, a registered path that does not exist, a row it cannot pair, and two identical files at the same path in different skill folders that no registered pair links; same-name files that differ pass. It also fails a plugin root holding `assets/` or `references/`, a skill or agent citing `${CLAUDE_PLUGIN_ROOT}/assets/` or `/references/`, and a skill's reference file naming `${CLAUDE_PLUGIN_ROOT}` or `<plugin root>`. |
 
-`shellcheck` and `bash` are used when present and skipped otherwise, so a missing tool never
-causes a false failure — CI runs them because GitHub-hosted Ubuntu runners ship both. `uv` is
+`shellcheck` is used when present and skipped otherwise. Bash checks skip locally when Bash is
+missing and fail in CI, where GitHub-hosted Ubuntu runners ship both tools. `uv` is
 treated the same way locally, for the artifact hook fixtures and the template comparison, but CI
 installs it, and `hooks` and `artifact-models` fail there when it is missing.
