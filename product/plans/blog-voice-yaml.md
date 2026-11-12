@@ -167,5 +167,6 @@ while repeat runs preserve the author's voice without re-deriving or inventing e
   the glossary review), and the README's sourcing claim. Cannot verify: lossless conversion
   and the capture gate are agent behaviour. Report:
   .agents_workspace/product/build-checks/blog-voice-yaml-20261112-0108-ff98dab3.md.
+- 2026-11-12 PR: #259 https://github.com/cheneeheng/ceh-claude-code-library/pull/259
 
 <!-- prettier-ignore-end -->

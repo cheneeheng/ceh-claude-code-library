@@ -187,3 +187,6 @@ record:
     details: |
       Format and interface, was "entries may be empty when every proposed term is still open.",
       now adds "but entries and open are never both empty", matching glossary-model.py.
+  - date: 2026-11-12
+    event: PR
+    details: "#259 https://github.com/cheneeheng/ceh-claude-code-library/pull/259"

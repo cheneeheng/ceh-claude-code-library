@@ -188,3 +188,6 @@ record:
       the glossary review), and the README's sourcing claim. Cannot verify: lossless conversion
       and the capture gate are agent behaviour. Report:
       .agents_workspace/product/build-checks/blog-voice-yaml-20261112-0108-ff98dab3.md.
+  - date: 2026-11-12
+    event: PR
+    details: "#259 https://github.com/cheneeheng/ceh-claude-code-library/pull/259"

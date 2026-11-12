@@ -163,5 +163,6 @@ or notes when an existing glossary is amended.
   only by a live run. Report: .agents_workspace/product/build-checks/glossary-yaml-20261112-0108-ff98dab3.md.
 - 2026-11-12 Design changed: Format and interface, was "entries may be empty when every proposed term is still open.",
   now adds "but entries and open are never both empty", matching glossary-model.py.
+- 2026-11-12 PR: #259 https://github.com/cheneeheng/ceh-claude-code-library/pull/259
 
 <!-- prettier-ignore-end -->

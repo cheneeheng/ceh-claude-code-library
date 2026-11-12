@@ -215,3 +215,6 @@ record:
       also fixed the v1 conversion, which the render hook would overwrite before comparing,
       which this reviewer missed and the glossary review found. Report:
       .agents_workspace/product/build-checks/repeat-mistake-yaml-20261112-0108-ff98dab3.md.
+  - date: 2026-11-12
+    event: PR
+    details: "#259 https://github.com/cheneeheng/ceh-claude-code-library/pull/259"
