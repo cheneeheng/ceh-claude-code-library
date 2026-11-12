@@ -106,6 +106,15 @@ def main():
     if os.path.normcase(os.path.normpath(common)) != session_repo:
         return
 
+    # A git-ignored file is never committed, so no branch is needed for it.
+    if (
+        subprocess.run(
+            ["git", "-C", cwd, "check-ignore", "-q", path], capture_output=True
+        ).returncode
+        == 0
+    ):
+        return
+
     n = denial_number(payload)
     if n <= 3:
         reason = (

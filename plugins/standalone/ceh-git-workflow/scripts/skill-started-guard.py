@@ -22,7 +22,7 @@ from pathlib import Path
 RULES = [
     (
         {"Bash"},
-        ("command", re.compile(r"(?:^|[;&|(])\s*git(?:\s+-[cC]\s+\S+)*\s+commit\b")),
+        ("command", re.compile(r"(?:^|[;&|(\n])\s*git(?:\s+-[cC]\s+\S+)*\s+commit\b")),
         ["ceh-git-workflow:commit"],
     ),
     (
@@ -82,7 +82,7 @@ def main() -> None:
             f"This {tool} call is owned by {' or '.join(skills)}, which has not been started "
             "in this session; a skill named inside another skill's steps still has to be "
             f'loaded. Invoke the Skill tool with skill="{skills[0]}" first, then retry. '
-            "CEH_SKILL_STARTED_GUARD=off turns this guard off."
+            "The user can turn this guard off with `CEH_SKILL_STARTED_GUARD=off`."
         )
         print(
             json.dumps(

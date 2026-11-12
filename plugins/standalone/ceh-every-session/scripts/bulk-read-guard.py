@@ -53,7 +53,7 @@ def allowlist():
     patterns = list(ALWAYS_ALLOW)
     extra = os.environ.get("BULK_READER_ALLOW", "").strip()
     if extra:
-        patterns.extend(p for p in extra.split(":") if p)
+        patterns.extend(p for p in extra.split(os.pathsep) if p)
     return patterns
 
 
@@ -124,6 +124,10 @@ def main():
         sys.exit(0)
 
     if payload.get("tool_name") != "Read":
+        sys.exit(0)
+
+    # The agent this guard sends work to has to read whole files.
+    if (payload.get("agent_type") or "").endswith("bulk-reader"):
         sys.exit(0)
 
     tool_input = payload.get("tool_input") or {}

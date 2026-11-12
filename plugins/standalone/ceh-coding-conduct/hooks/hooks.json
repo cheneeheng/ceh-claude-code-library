@@ -37,7 +37,7 @@
     ],
     "SubagentStart": [
       {
-        "matcher": "^(?!(Explore|Plan|.*bulk-reader)$)",
+        "matcher": "^(?!(Explore|Plan|.*(bulk-reader|newcomer-simulator|competitor-analyst|transcript-analyst|-reviewer))$)",
         "hooks": [
           {
             "type": "command",

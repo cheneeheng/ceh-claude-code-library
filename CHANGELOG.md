@@ -11,6 +11,16 @@ before this repo live in
 
 ## 2026-11-12
 
+The guards stop getting in the way of the work they send out, phase 3 of
+`product/plans/plugin-audit-findings.yaml`. The bulk-read guard lets the `bulk-reader` agent read
+whole files, the coding contract and the less-code reminder no longer load into the read-only
+agents, and the branch guard allows an edit to a git-ignored file. The usage-limit guard warns
+again in the window after a reset, the commit rule catches a commit on a later line of a
+multi-line command, and every guard's denial says "The user can turn this guard off with". Each
+change has a fixture in `tools/validate-plugins/checks/hooks.py`, seen failing first. Not built:
+the pass-through for the six tester agents in `ceh-testing`'s skill-started guard, which waits for
+one paid dispatch to show whether the guard denies them at all.
+
 Every file or folder a skill saves with a date or time in its name now takes one form,
 `<YYYYMMDD-HHMMSS>-<session-id>-<name>`, phase 2 of `product/plans/plugin-audit-findings.yaml` and
 the rule in `.claude/rules/decision-saved-file-names.md`. The time comes from one
@@ -158,24 +168,24 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-ag-ui`                    | 1.1.5   |
-| `ceh-blog-and-seo`             | 2.0.2   |
-| `ceh-build-plan`               | 2.0.2   |
-| `ceh-check-build-against-plan` | 1.1.12  |
-| `ceh-codebase-explanation`     | 1.3.6   |
-| `ceh-coding-conduct`           | 2.5.7   |
-| `ceh-competitor-analysis`      | 1.2.6   |
+| `ceh-blog-and-seo`             | 2.0.3   |
+| `ceh-build-plan`               | 2.0.3   |
+| `ceh-check-build-against-plan` | 1.1.13  |
+| `ceh-codebase-explanation`     | 1.3.7   |
+| `ceh-coding-conduct`           | 2.5.8   |
+| `ceh-competitor-analysis`      | 1.2.7   |
 | `ceh-documentation`            | 1.0.9   |
-| `ceh-every-session`            | 2.9.10  |
-| `ceh-git-workflow`             | 1.5.9   |
-| `ceh-product-direction`        | 2.0.2   |
+| `ceh-every-session`            | 2.9.11  |
+| `ceh-git-workflow`             | 1.5.10  |
+| `ceh-product-direction`        | 2.0.3   |
 | `ceh-python-service`           | 1.1.6   |
-| `ceh-security-audit`           | 1.1.6   |
+| `ceh-security-audit`           | 1.1.7   |
 | `ceh-session-learning`         | 2.0.1   |
-| `ceh-testing`                  | 1.6.14  |
+| `ceh-testing`                  | 1.6.15  |
 | `ceh-ui-design`                | 1.0.11  |
-| `ceh-usability-audit`          | 1.2.7   |
-| `ceh-workflow-builder`         | 1.4.6   |
-| `ceh-workflow-runner`          | 1.1.5   |
+| `ceh-usability-audit`          | 1.2.8   |
+| `ceh-workflow-builder`         | 1.4.7   |
+| `ceh-workflow-runner`          | 1.1.6   |
 
 ### Added
 
@@ -275,6 +285,20 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 ### Fixed
 
+- Let the `bulk-reader` agent through `bulk-read-guard.py`, which denied the agent it sends work to.
+- Skip `newcomer-simulator`, `competitor-analyst`, `transcript-analyst` and every `-reviewer` agent
+  in `ceh-coding-conduct`'s `SubagentStart` hooks, as `Explore`, `Plan` and `bulk-reader` already
+  were.
+- Warn again after a usage window resets, in `usage-limit-watch.py`: a reading under the threshold
+  clears the last warning. Its message now gives the whole session id for the handoff name.
+- Deny a `git commit` on a later line of a multi-line command, in `ceh-git-workflow`'s
+  `skill-started-guard.py`.
+- Allow an edit to a git-ignored file on the default branch, in `branch-guard.py`.
+- Say "the hook failed" once per session, not once per machine, in every `artifact-render-hook.py`.
+- Split `BULK_READER_ALLOW` on the OS path separator, so a Windows pattern with a drive letter
+  stays whole. **On Windows the separator is now `;`**.
+- Say "The user can turn this guard off with `CEH_...=off`" in the denials of
+  `generated-md-guard.py`, `build-record-guard.py` and both `skill-started-guard.py` files.
 - Converting a `v1` glossary, voice profile or repeat-mistake report first copies the `v1` file
   out of the repository, because the render hook overwrites it when the YAML is saved, and
   restores it when the comparison finds a loss.

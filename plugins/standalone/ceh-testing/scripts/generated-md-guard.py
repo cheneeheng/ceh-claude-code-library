@@ -39,7 +39,7 @@ def main() -> None:
     reason = (
         f"{file.name} is generated from {yaml.name}, so an edit here is lost at the next render. "
         f"Edit {yaml} instead: the artifact check renders this file from it. "
-        "CEH_ARTIFACT_CHECK=off turns this guard off."
+        "The user can turn this guard off with `CEH_ARTIFACT_CHECK=off`."
     )
     out = {
         "hookSpecificOutput": {

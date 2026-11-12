@@ -56,7 +56,8 @@ contract load, so the full skill now loads at session start instead.
 **When a subagent starts** — a `SubagentStart` hook runs the same two scripts, because neither
 `SessionStart` nor `UserPromptSubmit` fires inside a subagent. An agent with a restricted tool list
 has no Skill tool, so the directive points it at both skills' `SKILL.md` files to read instead. The
-read-only agents `Explore`, `Plan`, and `bulk-reader` are skipped.
+read-only agents are skipped: `Explore`, `Plan`, `bulk-reader`, `newcomer-simulator`,
+`competitor-analyst`, `transcript-analyst`, and every agent whose name ends in `-reviewer`.
 
 ### Why each hook exists
 

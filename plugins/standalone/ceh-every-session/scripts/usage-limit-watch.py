@@ -154,13 +154,15 @@ def main() -> None:
     name, window, pct = worst
 
     threshold = int(os.environ.get("CEH_USAGE_LIMIT_THRESHOLD", "90"))
+    state = state_dir / f"ceh-usage-limit-{session_id}"
     if pct < threshold:
+        # The window reset: forget the last warning, so the next window warns again.
+        state.unlink(missing_ok=True)
         return
 
     # Fire once per 5-point band above the threshold, not on every tool call.
     # Keyed on session_id, which subagents share with the parent, so the whole
     # session escalates together instead of each subagent warning separately.
-    state = state_dir / f"ceh-usage-limit-{session_id}"
     last_fired = -999
     if state.is_file():
         try:
@@ -191,7 +193,7 @@ def main() -> None:
             "Do not start new subtasks, tool-call chains, or subagents. Finish only the current "
             "atomic step, then load and follow the ceh-every-session:usage-limit-handoff "
             "skill: write the handoff artifact, then end the turn. "
-            f"Session id prefix for the handoff filename: {session_id[:8]}."
+            f"Session id for the handoff filename: {session_id}."
         )
 
     resets_at = window.get("resets_at")

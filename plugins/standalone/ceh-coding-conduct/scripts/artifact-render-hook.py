@@ -30,6 +30,8 @@ REPEAT = re.compile(
     r"^(\d{4}-\d{2}-\d{2}|\d{8}-\d{6}-[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12})"
     r"-repeat-mistake\.yaml$"
 )
+# The session id, kept for the handler below, which runs after main() has failed.
+SESSION = [""]
 UV_HELP = "Install uv (https://docs.astral.sh/uv/) so the check can run."
 # Spine file stems and their formats, matched in a `product` or `business` folder or beside a
 # `.md` of the same stem, so an unrelated STRATEGY.yaml elsewhere is left alone.
@@ -97,6 +99,7 @@ def main() -> None:
         return
 
     payload = json.load(sys.stdin)
+    SESSION[0] = str(payload.get("session_id", ""))
     path = payload.get("tool_input", {}).get("file_path", "")
     # A relative path is the session's, not this process's: resolve it against the payload cwd.
     root = Path(payload.get("cwd") or os.getcwd()).resolve()
@@ -109,7 +112,7 @@ def main() -> None:
     if not (m and m.group(1) in names) and place_format(file, root) not in names:
         return
 
-    session = str(payload.get("session_id", ""))
+    session = SESSION[0]
     uv = shutil.which("uv")
     if not uv:
         warn_once(session, path, f"uv is not installed. {UV_HELP}")
@@ -139,5 +142,7 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as e:  # a broken hook says so, never passes silently
-        warn_once("", "the artifact", f"the hook failed: {type(e).__name__}: {e}")
+        warn_once(
+            SESSION[0], "the artifact", f"the hook failed: {type(e).__name__}: {e}"
+        )
     sys.exit(0)
