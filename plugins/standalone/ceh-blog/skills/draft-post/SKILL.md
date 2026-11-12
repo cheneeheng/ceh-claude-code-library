@@ -53,10 +53,10 @@ Read the previous posts, especially the latest episode in the same series. Then:
   for word with the post it came from. After the last edit, run
   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which checks it
   and writes `blog-voice.md` beside it. On exit 1, fix each error it lists and render again. On
-  exit 2 or 3, or without uv, say in the reply that the profile went unchecked and unrendered. On
+  exit 2 or 3, without uv, or when the command is denied, say in the reply that the profile went unchecked and unrendered. On
   later runs read the profile instead of re-deriving it, the YAML when there is one: first run the
   same command with `check`. On exit 1, use no profile and report its errors, unless the only
-  error is a stale `.md`, which `render` repairs. On exit 2 or 3, or without uv, say it went
+  error is a stale `.md`, which `render` repairs. On exit 2 or 3, without uv, or when the command is denied, say it went
   unchecked and read it anyway. A `blog-voice.md` with no YAML is a `v1` profile, read as it is,
   and converted as the schema says only before an amendment the author asked for. Offer once to
   move the profile into `CLAUDE.md` so it outlives the workspace, and move it only with the

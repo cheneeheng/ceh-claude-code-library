@@ -81,7 +81,7 @@ installed.
      `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` (formats in
      `${CLAUDE_SKILL_DIR}/references/plan-schema.md`, `architecture-schema.md` and
      `glossary-schema.md`). On exit 1, leave that file out and report its errors, unless the only
-     error is a stale `.md`. On exit 2 or 3, or without uv, say in the report that the file went
+     error is a stale `.md`. On exit 2 or 3, without uv, or when the command is denied, say in the report that the file went
      unchecked, and go on. The decisions are a plan's `design`, the architecture's
      `key_decisions`, and the glossary's `entries[].term`, `entries[].definition`,
      `entries[].avoid` and `entries[].not_confused_with`. A term under the glossary's `open` is

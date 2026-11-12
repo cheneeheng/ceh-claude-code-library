@@ -2,9 +2,9 @@
 
 The file `prevent-repeat-mistake` saves: `product/retros/<YYYY-MM-DD>-repeat-mistake.md` for fixes
 that land in the current repository, `.agents_workspace/product/retros/<YYYY-MM-DD>-repeat-mistake.md` for
-fixes only the user acts on. A new file is a copy of `../assets/repeat-mistake.template.md`,
-relative to this file. The `schema: repeat-mistake/v1` line stays as written. Appending to an
-existing file adds rows and drafts, and leaves its frontmatter as it is.
+fixes only the user acts on. A new report is a `repeat-mistake/v2` YAML (see the last section),
+and its `.md` is rendered in the `v1` layout of `../assets/repeat-mistake.template.md`, relative
+to this file, described below. A `v1` file's `schema: repeat-mistake/v1` line stays as written.
 
 ## Frontmatter
 
@@ -68,18 +68,24 @@ count of pending fixes is stored: it is read from `status`.
 one, compare its mistake and evidence with the fixes already there, so a retry updates the same
 `id` instead of adding a second. Applying or rejecting a draft changes that fix's `status` only,
 keeping its draft and evidence. When both files exist, each `other_file` names the other: check
-both links after both saves, since the first save cannot name a file not yet written.
+both links after both saves, since the first save cannot name a file not yet written. Only one
+agent updates a dated report at a time: when parallel agents each find a mistake, they hand their
+fixes back to one writer instead of each editing the file, since there is no lock.
 
-**Converting a `v1` report.** Before amending a `v1` report, carry every row into `fixes` with
+**Converting a `v1` report.** Before amending a `v1` report, first copy it outside the
+repository, to the session's scratch or temp directory: the render hook writes the new Markdown
+over it as soon as the YAML is saved. Then carry every row into `fixes` with
 `id`s in row order, each `### ` draft, pending or not, into its fix's `draft`, the rung reasons
 into each fix's `why_rung` (a reason shared by several fixes goes into each), and every other
 section into `notes`. Match a draft to its row by the mistake and files it names, not by an
 identical heading. A `v1` status that is or begins with `applied`, `awaiting approval` or
 `rejected` maps to that value, and a `v1` proof that is or begins with `yes` or `not provable`, or
 says `fails on the real mistake: yes`, maps to that value. When either carried more text, keep the
-full text in `notes` under the fix's `id`. Stop and report, leaving the `v1` file untouched, when a
-status or proof matches none of these, when a draft's row is ambiguous, or when a pending row has
-no full draft. Never infer a status or a proof from whether a draft exists.
+full text in `notes` under the fix's `id`. Stop and report, writing no YAML, when a status or
+proof matches none of these, when a draft's row is ambiguous, or when a pending row has no full
+draft. Never infer a status or a proof from whether a draft exists. Once the YAML is saved,
+compare the rendered Markdown with the copy. When any row, reason, draft or paragraph of the copy
+is missing, restore the copy, delete the YAML, and report what was lost.
 
 **Quoting:** single-quote any one-line value that starts with `*`, `{`, `[` or `` ` ``, contains
 `: ` or ` #`, or holds a backslash. Write evidence, fixes, reasons and drafts as `|` blocks, which

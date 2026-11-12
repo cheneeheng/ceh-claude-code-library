@@ -38,7 +38,7 @@ the code or text that still uses a rejected alias is reported.
    file" says, and when an entry or paragraph would be lost, stop and report why. After the last
    edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render GLOSSARY.yaml`, with
    the YAML's path, which checks the YAML and writes `GLOSSARY.md` beside it. On exit 1, fix each
-   error it lists and render again. On exit 2 or 3, or without uv, say in the report that the
+   error it lists and render again. On exit 2 or 3, without uv, or when the command is denied, say in the report that the
    glossary went unchecked and its Markdown was not rendered.
 5. **Report the stragglers**: each file still using a rejected alias, as `path:line`. Rename
    nothing yourself. Renaming identifiers or rewriting prose is a separate change the user decides

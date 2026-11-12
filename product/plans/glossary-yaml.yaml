@@ -41,7 +41,8 @@ design:
       Nearby concepts need not have their own entry: v1 does not require that. Chosen terms are
       unique after casefold and whitespace stripping. An alias cannot equal its own term under
       that comparison, and duplicate aliases within an entry are rejected. entries may be empty
-      when every proposed term is still open. open may be empty or name a settled term whose
+      when every proposed term is still open, but entries and open are never both empty. open
+      may be empty or name a settled term whose
       definition is disputed. Optional notes is nonempty Markdown for extra legacy paragraphs.
   - topic: Rendering and quoting
     decision: |
@@ -171,3 +172,21 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#255 https://github.com/cheneeheng/ceh-claude-code-library/pull/255"
+  - date: 2026-11-12
+    event: Checked
+    details: |
+      Fresh-context reviewer: 25 Built, 2 Deviation, 0 Gap, 0 Extra, 0 Failing, 1 Cannot verify.
+      Deviation 1, the model rejects a glossary with no entries and no open terms, which Design
+      did not state: kept, Design now states it. Deviation 2, the v1 conversion said "render,
+      then compare", but the render hook overwrites the v1 GLOSSARY.md as soon as the YAML is
+      written: the schema now copies the v1 file out of the repo first and restores it on loss.
+      Cannot verify: lossless conversion and single-term amendments are agent behaviour, settled
+      only by a live run. Report: .agents_workspace/product/build-checks/glossary-yaml-20261112-0108-ff98dab3.md.
+  - date: 2026-11-12
+    event: Design changed
+    details: |
+      Format and interface, was "entries may be empty when every proposed term is still open.",
+      now adds "but entries and open are never both empty", matching glossary-model.py.
+  - date: 2026-11-12
+    event: PR
+    details: "#259 https://github.com/cheneeheng/ceh-claude-code-library/pull/259"

@@ -31,7 +31,7 @@ waiting for the user's approval.
    `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml`. On exit 1, use
    nothing from that report, report its errors, and say the intake is incomplete, never that no
    fix is pending, unless the only error is a stale `.md`, which the same command with `render`
-   repairs. On exit 2 or 3, or without uv, say the report went unchecked, and read it anyway. List
+   repairs. On exit 2 or 3, without uv, or when the command is denied, say the report went unchecked, and read it anyway. List
    every fix still awaiting approval, `fixes[].status: awaiting approval` in a YAML, with its
    `fixes[].id`, `fixes[].mistake`, `fixes[].fix` and full `fixes[].draft`, before taking a new
    mistake, so a draft from an earlier session is not lost. A `v1` `.md` is read as it is.
@@ -93,5 +93,5 @@ Each file fills `assets/repeat-mistake.template.yaml`, per the `repeat-mistake/v
 avoids a duplicate, and how a `v1` `.md` is converted before it is amended. After the last edit,
 run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which checks it
 and writes the `.md` beside it in the layout of `assets/repeat-mistake.template.md`. On exit 1,
-fix each error it lists and render again. On exit 2 or 3, or without uv, say in the reply that the
+fix each error it lists and render again. On exit 2 or 3, without uv, or when the command is denied, say in the reply that the
 report went unchecked and its Markdown was not rendered. Never edit the generated `.md`.
