@@ -68,6 +68,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         return {"tool_name": "Bash", "tool_input": {"command": cmd}}
 
     bulk = {"BULK_READER_MIN_LINES": "350"}
+    main_repo = Path(repos["main"]).parent
+    (main_repo / ".gitignore").write_text("ignored.txt\n", encoding="utf-8")
+    ignored_p = (main_repo / "ignored.txt").as_posix()
     any_tool = {"tool_name": "Read", "tool_input": {}, "transcript_path": "t.jsonl"}
 
     # build-record-guard: a plan file, and transcripts with and without implement-from-plan started.
@@ -810,6 +813,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": rh_es, "stdin": write_rel(rm / "none", f"{day}.yaml"), "env": no_uv, "out": ""},
         {"script": rh_es, "stdin": write_at(rm / "none" / "product" / "retros" / f"{day}.yaml"), "env": no_uv, "out": ""},
         {"script": f"{es}/generated-md-guard.py", "stdin": edit(rm_generated.as_posix()), "out": f"{day}.yaml"},
+        {"script": f"{es}/generated-md-guard.py", "stdin": edit(rm_generated.as_posix()), "out": "The user can turn this guard off with"},
+        # A hook that fails says so once per session, so a second session hears it too.
+        {"script": rh_es, "stdin": {"session_id": "broken-1", "tool_input": "not a dict"}, "out": "the hook failed"},
+        {"script": rh_es, "stdin": {"session_id": "broken-2", "tool_input": "not a dict"}, "out": "the hook failed"},
     ]  # fmt: skip
     evidence_fixtures = [
         *glossary_fixtures,
@@ -883,6 +890,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "branch-guard.py", "stdin": edit(repos["main"]), "env": {"CEH_BRANCH_GUARD": "off"}, "out": ""},
         {"script": "branch-guard.py", "stdin": edit(repos["main"]), "env": {"CEH_DISABLED_HOOKS": "x, branch-guard"}, "out": ""},
         {"script": "branch-guard.py", "stdin": edit(repos["main"]), "repeat": 4, "out": "denial 4"},
+        # A git-ignored file is nobody's commit, so it is allowed on the default branch.
+        {"script": "branch-guard.py", "stdin": edit(ignored_p), "out": ""},
         # bulk-read-guard: whole reads of a large file only, and only when opted in.
         {"script": "bulk-read-guard.py", "stdin": read(big_p), "env": bulk, "out": "Blocked:"},
         {"script": "bulk-read-guard.py", "stdin": read(big_p, limit=20), "env": bulk, "out": ""},
@@ -890,23 +899,32 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "bulk-read-guard.py", "stdin": read(big_p), "out": ""},
         {"script": "bulk-read-guard.py", "stdin": read(big_p), "env": {**bulk, "CEH_DISABLED_HOOKS": "bulk-read-guard"}, "out": ""},
         {"script": "bulk-read-guard.py", "stdin": read(big_p), "env": bulk, "repeat": 4, "out": "denial 4"},
+        # The agent the guard sends work to reads whole files, and a pattern with a drive letter stays whole.
+        {"script": "bulk-read-guard.py", "stdin": {**read(big_p), "agent_type": "ceh-every-session:bulk-reader"}, "env": bulk, "out": ""},
+        {"script": "bulk-read-guard.py", "stdin": read(big_p), "env": {**bulk, "BULK_READER_ALLOW": os.pathsep.join(["*.nope", big_p])}, "out": ""},
         # bulk-read-bash-guard: dumps are denied, narrowed commands pass.
         {"script": "bulk-read-bash-guard.py", "stdin": bash(f"cat {big_p}"), "env": bulk, "out": "Blocked:"},
         {"script": "bulk-read-bash-guard.py", "stdin": bash(f"cat {big_p} | grep x"), "env": bulk, "out": ""},
         {"script": "bulk-read-bash-guard.py", "stdin": bash(f"head -n 5 {big_p}"), "env": bulk, "out": ""},
         {"script": "bulk-read-bash-guard.py", "stdin": bash(f"tail -n +2 {big_p}"), "env": bulk, "out": "Blocked:"},
         {"script": "bulk-read-bash-guard.py", "stdin": bash(f"cat {big_p}"), "env": bulk, "repeat": 4, "out": "denial 4"},
+        {"script": "bulk-read-bash-guard.py", "stdin": bash(f"cat {big_p}"), "env": {**bulk, "BULK_READER_ALLOW": os.pathsep.join(["*.nope", big_p])}, "out": ""},
         # usage-limit-watch: warn with no sensor, block over the threshold, quiet under it.
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-empty"), "code": 1, "err": "INACTIVE"},
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-95"), "code": 2, "err": "usage-limit-handoff"},
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-50"), "out": ""},
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": {**home("home-empty"), "CEH_DISABLED_HOOKS": "usage-limit-watch"}, "out": ""},
+        # One session over the threshold, under it after a reset, then over it again: it warns twice.
+        {"script": "usage-limit-watch.py", "stdin": {**any_tool, "session_id": "reset"}, "env": home("home-95"), "code": 2, "err": "usage-limit-handoff"},
+        {"script": "usage-limit-watch.py", "stdin": {**any_tool, "session_id": "reset"}, "env": home("home-50"), "out": ""},
+        {"script": "usage-limit-watch.py", "stdin": {**any_tool, "session_id": "reset"}, "env": home("home-95"), "code": 2, "err": "usage-limit-handoff"},
         # ask-user-question-guard: deny the dialog, pass other tools and when switched off.
         {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "out": "decision block"},
         {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "out": "no user is present"},
         {"script": "ask-user-question-guard.py", "stdin": read(small_p), "out": ""},
         # build-record-guard: a new Built Phase line needs implement-from-plan started this session.
         {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "out": "implement-from-plan"},
+        {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "out": "The user can turn this guard off with"},
         {"script": "build-record-guard.py", "stdin": record("Edit", add_built, "skill"), "out": ""},
         {"script": "build-record-guard.py", "stdin": record("Edit", add_built, "slash"), "out": ""},
         {"script": "build-record-guard.py", "stdin": record("Edit", {"old_string": "a", "new_string": "- 2026-10-26 PR: #1 x"}), "out": ""},
@@ -921,6 +939,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**guard(gw, "Bash", commit, started("ceh-git-workflow:commit")), "out": ""},
         {**guard(gw, "Bash", commit, started("ceh-git-workflow:commit", "slash")), "out": ""},
         {**guard(gw, "Bash", {"command": "cd x && git -C y commit -m z"}), "out": "ceh-git-workflow:commit"},
+        {**guard(gw, "Bash", {"command": "git add -A\ngit commit -m z"}), "out": "ceh-git-workflow:commit"},
+        {**guard(gw, "Bash", commit), "out": "The user can turn this guard off with"},
         {**guard(gw, "Bash", {"command": "git status"}), "out": ""},
         {**guard(gw, "Bash", {"command": 'grep "git commit" f'}), "out": ""},
         {**guard(gw, "Edit", changelog), "out": "ceh-git-workflow:update-changelog"},
@@ -933,6 +953,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**guard(gw, "Bash", commit), "env": {"CEH_DISABLED_HOOKS": "skill-started-guard"}, "out": ""},
         # skill-started-guard (ceh-testing): a test file needs a testing skill started.
         {**guard(tst, "Write", test_file), "out": "ceh-testing:write-test-first"},
+        {**guard(tst, "Write", test_file), "out": "The user can turn this guard off with"},
         {**guard(tst, "Edit", {**test_file, "file_path": f"{guarded}/web/a.spec.ts"}), "out": "ceh-testing:write-test-first"},
         *[{**guard(tst, "Write", test_file, started(s)), "out": ""} for s in (
             "ceh-testing:write-test-first", "ceh-testing:test-a-bug-fix", "ceh-testing:verify-behavior-preserved",

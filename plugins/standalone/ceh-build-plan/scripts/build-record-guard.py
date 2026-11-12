@@ -29,7 +29,7 @@ REASON = (
     "A Built Phase line or record entry records a phase built by ceh-build-plan:implement-from-plan, which "
     "has not run in this session. Invoke the Skill tool with "
     'skill="ceh-build-plan:implement-from-plan" and build the phase through it. '
-    "CEH_BUILD_RECORD_GUARD=off turns this guard off."
+    "The user can turn this guard off with `CEH_BUILD_RECORD_GUARD=off`."
 )
 
 

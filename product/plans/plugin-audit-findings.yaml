@@ -506,10 +506,19 @@ phases:
       a drive-letter pattern kept whole, and each denial's off-switch sentence. Each fixture
       failed before its script edit. `python tools/validate-plugins/validate.py` prints
       `OK: all plugin checks passed`.
-    status: todo
+    status: done
+    evidence: |
+      Commit 26d8f67. Before the script edits `python tools/validate-plugins/checks/hooks.py`
+      failed twelve new fixtures: 58, 178, 193 and 205 (the off-switch sentence), 60 (a second
+      session not told "the hook failed"), 152 (an ignored path denied), 159 (a `bulk-reader`
+      payload denied), 160 and 166 (a drive-letter pattern split), 173 (no second warning
+      after a reset) and 192 (a commit on a second line allowed). After them it printed
+      `OK: hooks check passed`, and `python tools/validate-plugins/validate.py` printed
+      `OK: all plugin checks passed`.
     note: |
-      The tester agents' case is built only after the dispatch under Open. Without it, the
-      phase is done with that case reported as not built.
+      The tester agents' case is not built: the dispatch under Open has not run. The
+      `SubagentStart` matcher has no fixture, since it is a pattern in `hooks.json`. It was
+      checked once by hand against seven agent names.
   - name: Stack plugins
     builds: |
       "Phase 4: what is run before an edit" first, then "Phase 4: ceh-python-service", "Phase
@@ -624,3 +633,14 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#266 https://github.com/cheneeheng/ceh-claude-code-library/pull/266"
+  - date: 2026-11-12
+    event: Built Phase
+    phase: 3
+    details: |
+      26d8f67, `python tools/validate-plugins/checks/hooks.py` printed
+      `OK: hooks check passed`. `bulk-read-guard.py` also splits `BULK_READER_ALLOW` on
+      `os.pathsep`, since both guards read the variable, and the usage watch's message gives
+      the whole session id for the handoff name, after Phase 2.
+  - date: 2026-11-12
+    event: PR
+    details: "#267 https://github.com/cheneeheng/ceh-claude-code-library/pull/267"

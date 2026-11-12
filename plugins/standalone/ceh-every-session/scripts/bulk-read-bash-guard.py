@@ -76,7 +76,7 @@ def is_allowed(path):
     patterns = list(ALWAYS_ALLOW)
     extra = os.environ.get("BULK_READER_ALLOW", "").strip()
     if extra:
-        patterns.extend(p for p in extra.split(":") if p)
+        patterns.extend(p for p in extra.split(os.pathsep) if p)
     base = os.path.basename(path)
     return any(
         fnmatch.fnmatch(path, pat) or fnmatch.fnmatch(base, pat) for pat in patterns

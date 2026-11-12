@@ -180,9 +180,9 @@ Set it in `~/.claude/settings.json` to switch enforcement on:
 { "env": { "BULK_READER_MIN_LINES": "350" } }
 ```
 
-`350` is a reasonable starting value; below roughly 200 the delegation round-trip costs more than
-it saves. `BULK_READER_ALLOW` takes colon-separated globs that are never blocked
-(`*.lock:*/migrations/*`) on top of the built-in exclusions for lockfiles, minified assets, images
+The `bulk-reader` agent itself is let through, since the guard sends work to it. `350` is a reasonable starting value; below roughly 200 the delegation round-trip costs more than
+it saves. `BULK_READER_ALLOW` takes globs that are never blocked, separated by the OS path separator
+(`*.lock:*/migrations/*`, or with `;` on Windows, so a pattern with a drive letter stays whole), on top of the built-in exclusions for lockfiles, minified assets, images
 and archives. `BULK_READER_MIN_LINES=999999` suspends enforcement for a session without
 unregistering the hooks — useful when doing the very things the skill warns against.
 
