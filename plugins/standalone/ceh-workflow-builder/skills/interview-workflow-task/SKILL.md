@@ -94,7 +94,7 @@ that every artifact read under 4 names the step that produces it.
 
 - Write each answer into the spec as you get it, not at the end. An interview that dies halfway
   should leave eight answers on disk, not zero.
-- Batch enumerable choices through `AskUserQuestion`; ask the open-ended ones plainly.
+- Ask enumerable choices as one batch, with the options listed. Ask the open-ended ones plainly.
 - **Never answer for the user, least of all when the answer looks obvious.** This applies to each of
   the nine separately, not just the two that read as risky. An unanswered question is recorded as
   unanswered: not as "none", not as what the procedure plainly implies, and not as an assumption of

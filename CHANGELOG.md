@@ -11,6 +11,18 @@ before this repo live in
 
 ## 2026-11-12
 
+The 2026-11-11 plugin audit's findings start landing, phase 1 of
+`product/plans/plugin-audit-findings.yaml`: one wording across plugins. The plan itself changed
+first, at the user's request: the coding contract names the todo list tool where it named the task
+tools, and Phase 2 now gives every dated name a skill saves one form,
+`<YYYYMMDD-HHMMSS>-<session-id>-<name>`. In this phase no skill tells an agent to call
+`AskUserQuestion`, which the core plugin denies: each says to ask the user, and
+`run-agentic-workflow` says what an interactive ask does when it cannot be answered in the turn.
+Reviewers are dispatched on the session's own model, the skills name a YAML handoff file by its
+`.yaml` name where the YAML is the source, and Meridian is the default theme in `ceh-ag-ui` and
+`ceh-competitor-analysis`, as it already is in `design-ui`. Tidewater stays a theme the user can
+choose.
+
 Four pairs of plugins merge, the second step of the 2026-11-11 plugin audit, which takes the
 library from 25 plugins to 21. Each merge only moves and renames: no skill, agent or hook changes
 what it does, and every skill and agent keeps its name under the new plugin prefix. The old plugins
@@ -134,23 +146,25 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog-and-seo`             | 2.0.0   |
-| `ceh-build-plan`               | 2.0.0   |
-| `ceh-check-build-against-plan` | 1.1.10  |
+| `ceh-ag-ui`                    | 1.1.5   |
+| `ceh-blog-and-seo`             | 2.0.1   |
+| `ceh-build-plan`               | 2.0.1   |
+| `ceh-check-build-against-plan` | 1.1.11  |
 | `ceh-codebase-explanation`     | 1.3.5   |
-| `ceh-coding-conduct`           | 2.5.5   |
-| `ceh-competitor-analysis`      | 1.2.4   |
+| `ceh-coding-conduct`           | 2.5.6   |
+| `ceh-competitor-analysis`      | 1.2.5   |
 | `ceh-documentation`            | 1.0.9   |
-| `ceh-every-session`            | 2.9.8   |
-| `ceh-git-workflow`             | 1.5.7   |
-| `ceh-product-direction`        | 2.0.0   |
+| `ceh-every-session`            | 2.9.9   |
+| `ceh-git-workflow`             | 1.5.8   |
+| `ceh-product-direction`        | 2.0.1   |
 | `ceh-python-service`           | 1.1.6   |
 | `ceh-security-audit`           | 1.1.5   |
 | `ceh-session-learning`         | 2.0.0   |
-| `ceh-testing`                  | 1.6.12  |
+| `ceh-testing`                  | 1.6.13  |
+| `ceh-ui-design`                | 1.0.11  |
 | `ceh-usability-audit`          | 1.2.6   |
-| `ceh-workflow-builder`         | 1.4.4   |
-| `ceh-workflow-runner`          | 1.1.3   |
+| `ceh-workflow-builder`         | 1.4.5   |
+| `ceh-workflow-runner`          | 1.1.4   |
 
 ### Added
 
@@ -170,6 +184,20 @@ carries the hook gets a PATCH bump. The glossary slice of Phase 6 of
 
 ### Changed
 
+- Say "ask the user" where a skill named `AskUserQuestion`, in `agent-coding-contract`,
+  `record-project-decisions`, `stress-test-plan`, `whats-next`, `design-ui`,
+  `interview-workflow-task` and `run-agentic-workflow`, whose interactive ask that cannot be
+  answered now takes the headless path and no longer ends as `failed <id> no-user-to-ask`.
+- Track subtasks with the todo list tool (`TodoWrite`), when it is available, in
+  `agent-coding-contract`, in place of `TaskCreate` and `TaskUpdate`.
+- Dispatch reviewers on the session's own model in `review-build-plan`,
+  `check-build-against-plan` and `code-review`, in place of "the most capable model".
+- Name `BUSINESS_PLAN.yaml`, `EVIDENCE.yaml`, `VISION.yaml`, `STRATEGY.yaml` and
+  `ARCHITECTURE.yaml` where the YAML is the source, in `docs/STRATEGY.md`, `draft-post`,
+  `write-project-listing-text`, `write-evidence-report`, `whats-next` and the five business plan
+  specialists.
+- Make Meridian the default theme in `build-ag-ui`, its canvas template, `analyze-competitor` and
+  `compare-competitors`.
 - Merge `ceh-session-diagnosis` (last version 1.0.8) and `ceh-session-to-skill` (last version
   1.0.2) into `ceh-session-learning` 2.0.0. Uninstall both and install `ceh-session-learning`:
   `diagnose-session`, `turn-session-into-skill` and the `transcript-analyst` agent keep their

@@ -47,7 +47,7 @@ not restate them.
    failure at stage 4 of a cheap flow is a smaller loss than one at stage 4 after an irreversible
    stage 3.
 2. **Resolve inputs.** Fill each input from the arguments, then its `default`. A missing required
-   input is asked for with `AskUserQuestion` in interactive mode and ends the run as
+   input is asked for in interactive mode: ask the user. It ends the run as
    `FLOW STATUS: failed - missing input <name>` in headless mode.
 3. **Preflight capabilities.** For each `workflow` stage, check the Workflow tool is in your tool list
    (search deferred tools for `Workflow` if it is not listed). For each `skill` stage naming a
@@ -145,8 +145,13 @@ source. Otherwise:
 
 | Mode        | Behaviour                                                                                                                                                                                                                                                                                                                          |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| interactive | Ask with `AskUserQuestion`, showing what `show` names: the exact data, the whole batch once. If it cannot be answered, end as `failed <id> no-user-to-ask`. Approve proceeds. Decline ends as `failed <id> declined` with the stage `pending`, so a resumed run asks again.                                                        |
+| interactive | Ask the user, showing what `show` names: the exact data, the whole batch once. Approve proceeds. Decline ends as `failed <id> declined` with the stage `pending`, so a resumed run asks again.                                                                                                                                     |
 | headless    | Follow `approval.headless`: `stop` writes `{run}/approval-<id>.md` with the `show` content, marks the stage `awaiting-approval`, prints that content above the status line and ends as `awaiting-approval <id>`. `preapproved-only` does the same unless the id was in `approve=`. `fail` ends as `failed <id> approval-required`. |
+
+An interactive ask that cannot be answered in the turn (a missing input, an approval, resume or
+new) takes the headless path: mark the stage `awaiting-approval`, end the turn as
+`FLOW STATUS: awaiting-approval <stage-id>`, and accept `APPROVED <stage-id>` on resume. A missing
+input ends as headless mode ends it, and resume or new starts new.
 
 A stage named in another stage's `covers` shares that approval and does not ask again. Record each
 approval in `run-state.yaml` with its source and time. Never proceed on silence.

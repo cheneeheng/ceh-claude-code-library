@@ -15,7 +15,7 @@ license: Apache-2.0
 
 Replace a plan's list of strengths with a strategy: a small set of choices that fit together, that
 a rival cannot copy cheaply, and that visibly give something up. Done is a §04 Strategy block in
-`BUSINESS_PLAN.md` that passes the nine tests below or carries a named test for each one it fails.
+`BUSINESS_PLAN.yaml` that passes the nine tests below or carries a named test for each one it fails.
 
 ## Procedure
 

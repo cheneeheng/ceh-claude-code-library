@@ -14,7 +14,7 @@ license: Apache-2.0
 # Plan go-to-market
 
 Turn "we will market it" into a named list of first customers, one channel, and a test with a
-number that decides whether to continue. Done is a §09 in `BUSINESS_PLAN.md` with every part of
+number that decides whether to continue. Done is a §09 in `BUSINESS_PLAN.yaml` with every part of
 the Output block filled, and the channel test scheduled in §13 with its dates and pass number.
 
 ## Procedure

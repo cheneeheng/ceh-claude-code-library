@@ -15,7 +15,7 @@ license: Apache-2.0
 
 Prove or disprove that one unit of this business makes money and that cash lasts until enough units
 are sold. Done is a unit model, a cash timeline, and a sensitivity table in §08 and §11 of
-`BUSINESS_PLAN.md`, with the single input that kills the business named in §12.
+`BUSINESS_PLAN.yaml`, with the single input that kills the business named in §12.
 
 ## Procedure
 

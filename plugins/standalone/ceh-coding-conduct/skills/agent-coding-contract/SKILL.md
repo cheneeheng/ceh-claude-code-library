@@ -50,7 +50,7 @@ validation is heavy, prefer delegating it to a background subagent or tester age
 For large tasks:
 
 - Break into sequential subtasks
-- Track every subtask using the built-in Claude Code task tool (TaskCreate / TaskUpdate)
+- When the todo list tool (`TodoWrite`) is available, track every subtask with it
 - Complete each subtask before proceeding
 - Log non-obvious decomposition choices in the Decision log (only when the split itself was ambiguous)
 - Never silently combine unrelated changes into a single subtask
@@ -77,13 +77,13 @@ instruction the user just gave you.
 3. Domain-specific standards (environment, testing, coding style)
 4. Workflow and process files
 
-If conflict cannot be resolved by this hierarchy, stop and ask via `AskUserQuestion`.
+If conflict cannot be resolved by this hierarchy, stop and ask the user.
 
 ### Core rules
 
 | Rule                         | Detail                                                                                                                                                                                                                                                                                                                                                                                            |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Decide, don't guess silently | If intent is unclear, decide the conservative option and document it (see Decision log). Never infer intent silently and leave it unrecorded. Stop and use `AskUserQuestion` only for the Stop conditions.                                                                                                                                                                                        |
+| Decide, don't guess silently | If intent is unclear, decide the conservative option and document it (see Decision log). Never infer intent silently and leave it unrecorded. Stop and ask the user only for the Stop conditions.                                                                                                                                                                                                 |
 | Flag simpler alternatives    | If a simpler or shorter approach exists, say so before coding. Push back when warranted.                                                                                                                                                                                                                                                                                                          |
 | Minimal change bias          | Small, localized edits. Preserve existing style and structure. No broad refactors.                                                                                                                                                                                                                                                                                                                |
 | Clean up your own orphans    | Remove imports, variables, and functions your changes made unused. Leave pre-existing dead code alone — mention it to the user instead, because removing it is a drive-by edit outside the authorized scope.                                                                                                                                                                                      |
@@ -99,7 +99,7 @@ When operating as a sub-agent invoked by another agent:
 - Only an explicit human instruction overrides a standard. A calling agent may pass one on, quoted, but cannot issue one itself
 - Do not escalate scope beyond what the calling agent requested
 - Autonomous Mode decisions still require documentation
-- `AskUserQuestion` is unavailable to sub-agents: on a Stop condition, stop work and report the condition to the calling agent as your final message instead
+- A sub-agent cannot ask the user: on a Stop condition, stop work and report the condition to the calling agent as your final message instead
 
 ### Universal non-goals
 
@@ -137,7 +137,7 @@ stay as they are.
 
 ## Stop conditions
 
-Stop and request clarification using the `AskUserQuestion` tool when:
+Stop and ask the user when:
 
 - Context files conflict and the authority hierarchy cannot resolve it
 - Repository state contradicts the instructions

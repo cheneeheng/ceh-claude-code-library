@@ -82,7 +82,7 @@ State in the summary which models sat on the panel and how many findings each ra
 
 Opt-in only, on "gate this PR", "two reviewers must approve", or "dual review", because every
 round costs two reviews. Use it when no human will review the change before it lands. Dispatch two
-background subagents in parallel on the most capable model, with the identical brief Panel mode
+background subagents in parallel on the session's own model, with the identical brief Panel mode
 uses. Neither sees this session or the other's report, so one reviewer's miss is not the other's.
 The verdict is **Approve** only when both approve. Otherwise it is **Request changes** with every
 `[blocking]` finding either one raised, each re-read against the file first. After the author

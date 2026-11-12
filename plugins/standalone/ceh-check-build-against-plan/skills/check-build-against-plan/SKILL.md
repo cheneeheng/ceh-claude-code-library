@@ -58,7 +58,7 @@ feature that was never built. Done means every plan item has a status and the re
    rerun the affected Checks, and leave the rest reported.
 5. **Gate the fix with two reviewers, when asked** ("gate it", "two reviewers", "don't trust one
    pass"). It costs two extra checks per round, so it runs only on request. After the fixes,
-   dispatch two background subagents in parallel on the most capable model, each with the same
+   dispatch two background subagents in parallel on the session's own model, each with the same
    brief: the plan path, `${CLAUDE_SKILL_DIR}/SKILL.md`, and "run steps 1 to 3, report only".
    Neither sees this session or the other's report, so neither inherits the fixer's belief that
    the fix worked. The build passes only when both report no Gap, Deviation, or Failing on an item

@@ -6,8 +6,8 @@ sent to the agent as a frontend tool; when the agent calls one, the canvas valid
 against the entry's zod schema and renders it. Styling comes only from the theme, never the agent.
 
 ```bash
-# once — install the theme (Tidewater by default; Meridian swaps in with no markup changes)
-cp <ceh-ui-design design-ui>/references/tidewater/brand.css web/src/brand.css
+# once — install the theme (Meridian by default; Tidewater swaps in with no markup changes)
+cp <ceh-ui-design design-ui>/references/meridian/brand.css web/src/brand.css
 
 # terminal 1 — mock agent on :8000 (swap for your real AG-UI endpoint)
 cd agent && uv run uvicorn main:app --port 8000

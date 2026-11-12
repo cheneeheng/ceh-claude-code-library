@@ -75,14 +75,14 @@ before asking anything.
 - **Pasted content**: read it directly.
 
 **Product handoff files.** When the repo has them, read them before inferring anything, because
-they hold what earlier stages settled. `.agents_workspace/product/business/BUSINESS_PLAN.md` gives who the product is for,
-the problem, and the differentiator: take them from it rather than asking. `product/EVIDENCE.md`
+they hold what earlier stages settled. `.agents_workspace/product/business/BUSINESS_PLAN.yaml` gives who the product is for,
+the problem, and the differentiator: take them from it rather than asking. `product/EVIDENCE.yaml`
 bounds every claim about what the product does or how well it does it (tested, fast, secure,
 usable). Read only its newest section, the first one, because earlier sections describe older
 commits. State only what that section's Claims list, and nothing about an area it marks `stale`,
 `not run`, or `open issues`. When either file is missing, carry on from the repo and say which
-claims rest on nothing proven. When `BUSINESS_PLAN.yaml` or `EVIDENCE.yaml` sits beside its
-`.md`, read the YAML instead: first run
+claims rest on nothing proven. Where only the `.md` of a file
+exists, read that. Before reading a YAML, run
 `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` (formats in
 `${CLAUDE_SKILL_DIR}/references/business-plan-schema.md` and `evidence-schema.md`). On exit 1,
 stop and report its errors, unless the only error is a stale `.md`. On exit 2 or 3, or without

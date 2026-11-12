@@ -134,7 +134,7 @@ flowchart TD
     next -->|yes| reads{"reads files exist?"}
     reads -->|missing| failed(["FLOW STATUS:<br/>failed &lt;stage&gt; &lt;reason&gt;"])
     reads -->|yes| appr{"Approval still needed?<br/>not in approve=, covered or recorded"}
-    appr -->|interactive| ask["AskUserQuestion,<br/>showing the whole batch"]
+    appr -->|interactive| ask["Ask the user,<br/>showing the whole batch"]
     ask -->|declined| failed
     appr -->|headless| hl{"approval.headless"}
     hl -->|fail| failed
@@ -170,7 +170,7 @@ confirmation.
 | Concern                           | Interactive                            | Headless (`claude -p`)                                                                              |
 | --------------------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | Start                             | the moment, or `/<name>-flow`          | `claude -p '/<name>-flow mode=headless ...'` — skill slash commands work (F11)                      |
-| Approval before a stage           | `AskUserQuestion`                      | `headless: stop` writes `approval-<stage>.md` and ends at `awaiting-approval`; resumed later        |
+| Approval before a stage           | the runner asks the user               | `headless: stop` writes `approval-<stage>.md` and ends at `awaiting-approval`; resumed later        |
 | Resume a stopped run              | asks: resume or new                    | `resume=latest` or `new` (default `new`)                                                            |
 | Workflow tool                     | Pro: `/config` → Dynamic workflows     | `--settings '{"enableWorkflows": true, "disableWorkflows": false}'` (F5, F8)                        |
 | Launching a saved workflow        | runner calls the Workflow tool by name | same; `/<workflow-name>` does **not** work in `-p` (F9)                                             |

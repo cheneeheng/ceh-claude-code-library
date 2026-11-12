@@ -93,7 +93,7 @@ All output goes to `.agents_workspace/competitor-analysis/`: `<competitor>.yaml`
 (`competitor-report/v2`, checked by a model, with every partial or gap component required in "What
 we take") with `<competitor>.md` rendered beside it and `<competitor>.html` per competitor,
 `comparison.md` and `comparison.html` for the comparison, and the shared theme stylesheet under
-`themes/` (Tidewater by default). The YAML is the source of each report, and `comparison.md` the
+`themes/` (Meridian by default). The YAML is the source of each report, and `comparison.md` the
 source of the comparison; the HTML pages carry the same content, built from each skill's
 `references/report-page.html`, with detail folded into expandable cards. Reports written before
 `v2` stay as `<competitor>.md`, which the comparison still reads. Each report states its snapshot date. Each one also says how

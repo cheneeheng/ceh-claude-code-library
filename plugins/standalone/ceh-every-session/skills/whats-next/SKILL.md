@@ -23,9 +23,9 @@ has one to three suggestions, each with the exact way to start it, and the choic
 1. Take the goal from the request or the argument. When there is none, read the situation, using
    read-only commands only:
    - in a git repo: `git status`, the current branch, and `git log --oneline -10`
-   - the lifecycle handoff files, each of which marks a stage reached: `.agents_workspace/product/business/BUSINESS_PLAN.md`
-     (Shape done), `product/plans/*.md` (a plan not `built` is in flight), `product/ARCHITECTURE.md`
-     (built), `product/EVIDENCE.md` (proven). When a plan's `<slug>.yaml` sits beside its `.md`,
+   - the lifecycle handoff files, each of which marks a stage reached: `.agents_workspace/product/business/BUSINESS_PLAN.yaml`
+     (Shape done), `product/plans/*.yaml` (a plan not `built` is in flight), `product/ARCHITECTURE.yaml`
+     (built), `product/EVIDENCE.yaml` (proven), or the `.md` of each where no YAML exists. When a plan's `<slug>.yaml` sits beside its `.md`,
      read its `status` from the YAML: first run
      `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <slug>.yaml` (format in
      `${CLAUDE_SKILL_DIR}/references/plan-schema.md`). On exit 1, report its errors as the reason
@@ -37,7 +37,7 @@ has one to three suggestions, each with the exact way to start it, and the choic
      `open.0` by key. A `.md` with no `.yaml` beside it is a `handoff/v1` file, read as before
 2. Collect the candidates: every skill and agent in this session's listings, any plugin's, plus
    each user-only skill in the table below whose plugin `claude plugin list` shows as enabled.
-3. If the request and the repo still leave the goal open, ask one round with `AskUserQuestion`: at
+3. If the request and the repo still leave the goal open, ask the user one round: at
    most four questions, each with a recommended answer. With no human present, skip the question,
    assume the most likely goal, and say so in the answer.
 4. If no installed candidate fits, run `claude plugin list --available --json`. Its `available`

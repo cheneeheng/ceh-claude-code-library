@@ -368,7 +368,7 @@ bundled style over a generic component library (shadcn/ui, MUI, Mantine) for one
 | **Meridian**  | Restrained mainstream SaaS; soft elevation, calm neutrals | Inter · JetBrains Mono                     | Cool-gray, blue primary, amber accent |
 | **Tidewater** | Editorial / boutique; flat, border-led depth              | Fraunces · Hanken Grotesk · JetBrains Mono | Cool mint ground, terracotta + teal   |
 
-- **Choose:** let the user pick via `AskUserQuestion` (single-select) unless they already named one.
+- **Choose:** ask the user to pick one unless they already named one.
   With no human to answer, take Meridian, the neutral default, and say so. Both templates ship
   the same token names and component classes except Meridian's `--shadow-lg` and `--weight-heavy`,
   so the choice is look-and-feel — swap later by replacing one CSS file, and keep markup off those
