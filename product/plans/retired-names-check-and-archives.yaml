@@ -1,6 +1,6 @@
 schema: plan/v2
 title: A validator check for retired plugin names, then two plugins archived
-status: ready
+status: building
 created: 2026-11-12
 goal: |
   The plugin audit of 2026-11-11 ended with 27 plugins becoming 21: two archived and four merges.
@@ -142,7 +142,11 @@ phases:
       negative probe: write `docs/_probe.md` holding the line `see ceh-advisor`, run
       `python tools/validate-plugins/checks/retired_names.py`, and it exits 1 naming
       `docs/_probe.md:1` and `ceh-advisor`. Delete the file, run it again, and it exits 0.
-    status: todo
+    status: done
+    evidence: |
+      `python tools/validate-plugins/validate.py` printed `OK: all plugin checks passed`. With the
+      probe, `retired_names.py` exited 1 with
+      `docs/_probe.md:1: retired plugin name 'ceh-advisor' (archived)`, and 0 once it was deleted.
   - name: Archive ceh-orchestration-lab
     builds: |
       "How a plugin is archived" applied to `ceh-orchestration-lab`, with "The vision's stage
@@ -175,3 +179,12 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#258 https://github.com/cheneeheng/ceh-claude-code-library/pull/258"
+  - date: 2026-11-12
+    event: Built Phase
+    phase: 1
+    details: |
+      `checks/retired_names.py`, its line in `CHECKS`, and its README row. The negative probe
+      failed on `ceh-advisor` and passed once deleted.
+  - date: 2026-11-12
+    event: PR
+    details: "#260 https://github.com/cheneeheng/ceh-claude-code-library/pull/260"
