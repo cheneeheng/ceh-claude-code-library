@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-11-13
 
+Two build plans are added and nothing is built yet, so no plugin version changes.
+`product/plans/plugin-audit-open-topics.yaml` plans the three changes the user decided for the
+last open topics of the 2026-11-11 plugin audit: the usage-limit guard says nothing without the
+statusline export unless the user set one of its variables, `docs/GETTING_STARTED.md` gains a
+section on raising the skill listing budget, and the user's own rule on the remote branch after
+a merge is reworded to agree with `pull-request`. `product/plans/setup-script.yaml` is an open
+plan, kept `draft` on purpose: it collects what a machine needs set up for these plugins,
+starting with the listing budget, until the user closes the list.
+
 `product/plans/handoff-leftovers.yaml` records the check of its build against PRs #275 to #280:
 24 items built, one extra (PR #280 also describes the tester-agent pass in
 `docs/CROSS_REFERENCES.md` and the `ceh-testing` README), and one that could not be verified (the

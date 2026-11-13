@@ -1,0 +1,113 @@
+---
+schema: plan/v2
+generated_from: setup-script.yaml
+generated_note: "Do not edit. artifact.py renders this file from setup-script.yaml: edit the YAML, then run artifact.py render."
+title: A setup script for a machine that uses these plugins
+status: draft
+created: 2026-11-13
+---
+
+<!-- prettier-ignore-start -->
+
+## Goal
+
+Some of what makes these plugins work is a setting on the user's machine, not a file in a
+plugin, and a plugin cannot change it. The first known case is the skill listing budget: with
+many plugins installed, Claude Code drops the descriptions of the least-used skills, and a
+skill without its description is not matched to a request. This plan collects every such
+setup need and ends in one script a person runs once per machine. It is an open plan: the
+user adds needs to it as they turn up, and it stays `draft` until the user says the list is
+complete enough to build. The flow that matters most: a person who has just installed the
+plugins runs the script once and their machine has every setting on the list.
+
+## Scope
+
+**In:**
+
+- A person who runs the setup script has `skillListingBudgetFraction` set to at least the
+  value the script chooses, so more installed skills keep their descriptions in the
+  listing.
+
+**Out:**
+
+- Shortening skill descriptions below the 300-character limit.: Decided on 2026-11-11: a description may hold up to 1,536 characters in Claude Code,
+  what overflows is the listing's total budget, and the repo cannot know how many skills
+  a user has installed. So the budget is raised and the limit stays.
+- A per-plugin description total printed by `validate.py`.: Withdrawn with the 200-character target on 2026-11-11.
+- A promise that every installed skill keeps its description.: The user's other plugins share the same budget and the repo cannot count them. The
+  script sets a value, and `/doctor` shows the person whether it is enough.
+
+## Design
+
+- **How this plan is kept** A new setup need is added as a Scope In item with the date and where it came from, and
+  whatever is unsettled about it as an Open item. Nothing is built from this plan while it
+  is `draft`. When the user closes the list, `write-build-plan` completes the plan in
+  place: it settles the Open items, writes the Design, and replaces the `unplanned` phase.
+- **The setup script rejected on 2026-10-10** `CHANGELOG.md`, in the fourth PR of its 2026-10-10 section, records: "A setup script was
+  considered and rejected: a session needs nothing installed first, and a script would
+  need four copies to keep in sync." That script installed plugins, which the prompt at
+  the top of `docs/GETTING_STARTED.md` now does. This one installs nothing. It changes
+  settings on the machine, which the guide tells an agent running the setup not to do.
+  The "four copies" reason still binds its form, which is why the form is an Open item.
+- **What is settled about the listing budget** The setting is `skillListingBudgetFraction` in Claude Code's settings, a fraction of the
+  model's context window, 1% by default. The `SLASH_COMMAND_TOOL_CHAR_BUDGET` environment
+  variable sets a fixed character count instead. Both are described under "Skill
+  descriptions are cut short" on https://code.claude.com/docs/en/skills, read on
+  2026-11-13. Until the script exists, `docs/GETTING_STARTED.md` tells a person how to set
+  it by hand, in the section "If a skill stops triggering, raise the listing budget",
+  which Phase 2 of `product/plans/plugin-audit-open-topics.yaml` writes. This plan is
+  built after that phase. The script's PR adds the script to that section and keeps the
+  by-hand JSON block, for a person who cannot run the script.
+
+## Phases
+
+### Phase 1: The setup script
+
+- **Builds:** Not planned yet. Planned once the Open items are settled and the user closes the list
+  of setup needs.
+- **Check:** Not planned yet.
+- **Status:** unplanned
+
+## Open
+
+- What else does the script set up, beyond the listing budget?: Nothing yet. Candidates seen so far, none decided: checking for `python3`, `bash` and
+  `uv`, which the hooks need, and the statusline export the usage-limit guard reads.
+- Is a script still built if the list stays at the listing budget alone?: No. For one setting, the guide's JSON block is the cheaper answer, and vision principle
+  9 asks what would be lost without the script. A second decided need is the test for
+  closing the list. The user asked for this plan, so the call is the user's.
+- Does the script install plugins?: No. `decision-no-bundles.md` makes `docs/GETTING_STARTED.md` the install entry point,
+  one plugin per stage reached, and a script that installs a set would be a bundle.
+- What form does the script take, and where does it live?: One stdlib Python script under `tools/`, with its own README, because the hooks already
+  need `python3` and one file then serves Windows, macOS and Linux with no copies to keep
+  in sync. A person without `python3` has a working install, since the guards do nothing
+  without it, and uses the by-hand block in the guide. The other form in the repo is
+  `tools/skills-sync`, which ships `py`, `sh` and `ps1` side by side.
+- How does the script reach a person who never cloned the repo?: The guide gives one command that fetches the single file from its raw GitHub URL and
+  runs it with `python3`, which is one more reason it stays one stdlib file. A marketplace
+  install puts only a plugin's own folder on the machine, so `tools/` is not there.
+  Rejected: cloning the repo, which the guide tells Claude not to do, and shipping the
+  script inside a plugin's `scripts/`, which ties a machine setting to one plugin.
+- Which value does it set for the budget, and in which settings file?: A fixed `0.02` in `~/.claude/settings.json`, the value the Claude Code docs give as
+  their example, at user scope because the listing is per machine, not per project. Fixed
+  and not derived from the installed skills, because the repo cannot know what else the
+  user installs. The script names `/doctor` as the way to see whether it is enough. Not
+  checked: whether a set `SLASH_COMMAND_TOOL_CHAR_BUDGET` overrides the fraction, and
+  where the settings file is when `CLAUDE_CONFIG_DIR` moves the config folder.
+- What does it do to a settings file that already holds values, or to a broken one?: It changes only its own keys and keeps every other key. It leaves a budget the user
+  already set higher, so a second run changes nothing. A missing file is created with only
+  the script's keys. A file that cannot be read or is not valid JSON stops the script with
+  nothing written and a message naming the file. The write goes to a temporary file that
+  then replaces the original, so a failed write leaves the old file whole. It says what it
+  changed.
+- How does a person start it, and may an agent run it?: The person starts it by hand, from a command in `docs/GETTING_STARTED.md`. The "Let
+  Claude set you up" route does not run it, as Phase 2 of
+  `product/plans/plugin-audit-open-topics.yaml` already assumes: a change to the user's
+  settings is the person's explicit act.
+
+## Record
+
+- 2026-11-13 Planned: status draft
+- 2026-11-13 Reviewed: Revise first, 1 blocking (no Open item on how the script reaches a person who never
+  cloned the repo). All eight findings fixed in the plan the same day.
+
+<!-- prettier-ignore-end -->
