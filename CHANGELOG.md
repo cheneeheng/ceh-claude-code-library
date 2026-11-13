@@ -77,6 +77,9 @@ The glossary model rejects a blank line in either, and the schema says so, becau
 puts each on one line where a second paragraph rendered loosely. The format stays `glossary/v2`:
 a saved glossary with a blank line in a definition now fails its check, which names the field.
 
+Phase 5 of `handoff-leftovers`: four `ceh-web-frontend` descriptions say "Trigger on" where they
+said "Auto-load when", matching `configure-bun-vite-env` and the repo's description rule.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -95,6 +98,7 @@ a saved glossary with a blank line in a definition now fails its check, which na
 | `ceh-testing`                  | 1.6.18  |
 | `ceh-ui-design`                | 1.0.12  |
 | `ceh-usability-audit`          | 1.2.11  |
+| `ceh-web-frontend`             | 1.3.6   |
 | `ceh-workflow-builder`         | 1.4.9   |
 | `ceh-workflow-runner`          | 1.1.8   |
 
@@ -116,6 +120,8 @@ a saved glossary with a blank line in a definition now fails its check, which na
 
 ### Changed
 
+- Say "Trigger on" in the descriptions of `make-ui-accessible`, `write-react-vite-code`,
+  `write-sveltekit-code` and `write-vitest-playwright-tests`, which said "Auto-load when".
 - Drop "or a blog interview" from the interview exception in `docs/VISION.md`.
 - Apply `draft-post`'s series steps only when the blog runs as a series, with the README and the
   plugin description to match.

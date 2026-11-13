@@ -224,7 +224,11 @@ phases:
     check: |
       `grep -rn "Auto-load when" plugins/standalone/ceh-web-frontend` prints nothing, and
       `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`.
-    status: todo
+    status: done
+    evidence: |
+      `grep -rn "Auto-load when" plugins/standalone/ceh-web-frontend` printed nothing (exit 1),
+      and `python tools/validate-plugins/validate.py` printed "OK: all plugin checks passed".
+      Neither `docs/CATALOG.md` nor the plugin README quoted the old wording.
   - name: Tester agents may write their own test files
     builds: |
       The control and dispatch run under Design. If denied: two fixtures in `checks/hooks.py`,
