@@ -59,8 +59,7 @@ How it asks:
 - **With no human present** (a headless run), the agent takes the conservative option for a fact,
   records it, and leaves an irreversible action undone and reported instead of doing it.
 - **Interviews are the exception.** A skill whose job is drawing knowledge out of a person, such as
-  a product-market-fit loop or a blog interview, asks adaptively: each answer picks the next
-  question. It still asks only what it cannot infer, and it still has a path for a run with no
+  a product-market-fit loop, asks adaptively: each answer picks the next question. It still asks only what it cannot infer, and it still has a path for a run with no
   human: draft from what exists, mark every gap, and end with the questions a person must answer.
 
 ## Who overrides
