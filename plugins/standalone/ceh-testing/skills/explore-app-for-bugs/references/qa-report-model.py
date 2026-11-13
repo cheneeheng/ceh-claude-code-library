@@ -114,7 +114,7 @@ def _bullet(text: str) -> str:
 
 
 def _cell(text: str) -> str:
-    return text.replace("|", "\\|")
+    return text.replace("\\|", "&#92;|").replace("|", "\\|")
 
 
 def render(doc: QaReport, source: str) -> str:

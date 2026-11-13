@@ -527,7 +527,24 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     )
     cc = "ceh-coding-conduct"
     no_confirmed = good_fix.replace("result: confirmed", "result: standing")
-    fix_record_fixtures = [
+    # A source backslash before a pipe must survive into the rendered cell.
+    fix_pipe = tmp / "report-fix-pipe" / "count-drops-last-word.yaml"
+    fix_pipe.parent.mkdir(parents=True)
+    fix_pipe.write_text(
+        good_fix.replace(
+            "hypothesis: The split drops a trailing token", "hypothesis: 'a \\| b'"
+        ),
+        encoding="utf-8",
+    )
+
+    def fix_pipe_kept() -> str | None:
+        md = fix_pipe.with_suffix(".md")
+        ok = md.is_file() and "a &#92;\\| b" in md.read_text(encoding="utf-8")
+        return None if ok else f"{md.name} lost the backslash before a pipe"
+
+    fix_record_fixtures = ([
+        {"script": f"{cc}/artifact-render-hook.py", "stdin": write_at(fix_pipe), "out": "", "after": fix_pipe_kept},
+    ] if have_uv else []) + [
         *report_fixtures(cc, "count-drops-last-word", good_fix, no_confirmed, "diagnosis.rows", "# Count drops the last word", "fix-cc"),
         *report_fixtures("ceh-testing", "count-drops-last-word", good_fix, no_confirmed, "diagnosis.rows", "# Count drops the last word", "fix-testing"),
         {"script": f"{cc}/artifact-render-hook.py", "stdin": write_at(tmp / "report-fix-cc" / "bad" / "count-drops-last-word.yaml"), "env": no_uv, "out": "uv is not installed"},

@@ -195,8 +195,9 @@ def _key(key: str, value: object) -> str:
 
 
 def _cell(text: str) -> str:
-    """A table cell: a bare `|` would split the row, so it is escaped once."""
-    return re.sub(r"(?<!\\)\|", r"\\|", text)
+    """A table cell: a bare `|` would split the row, so every `|` is escaped, and a backslash
+    written before one is kept as `&#92;`."""
+    return text.replace("\\|", "&#92;|").replace("|", "\\|")
 
 
 def _table(head: list[str], rows: list[list[str]]) -> list[str]:
