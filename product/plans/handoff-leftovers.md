@@ -255,5 +255,10 @@ None
 - 2026-11-13 PR: #279 https://github.com/cheneeheng/ceh-claude-code-library/pull/279
 - 2026-11-13 Built Phase 6: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-13 PR: #280 https://github.com/cheneeheng/ceh-claude-code-library/pull/280
+- 2026-11-13 Checked: PRs #275 to #280 against the plan: 24 Built, 1 Extra, 1 Cannot verify. Extra: PR #280 also
+  edits `docs/CROSS_REFERENCES.md` and the `ceh-testing` README to describe the tester-agent
+  pass, which the phase does not name. Cannot verify: the Phase 6 transcript of session
+  f6300c28 was not reread, and the "fails before the change" half of each Check is history.
+- 2026-11-13 PR: #281 https://github.com/cheneeheng/ceh-claude-code-library/pull/281
 
 <!-- prettier-ignore-end -->

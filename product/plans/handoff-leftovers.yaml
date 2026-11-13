@@ -326,3 +326,13 @@ record:
   - date: 2026-11-13
     event: PR
     details: "#280 https://github.com/cheneeheng/ceh-claude-code-library/pull/280"
+  - date: 2026-11-13
+    event: Checked
+    details: |
+      PRs #275 to #280 against the plan: 24 Built, 1 Extra, 1 Cannot verify. Extra: PR #280 also
+      edits `docs/CROSS_REFERENCES.md` and the `ceh-testing` README to describe the tester-agent
+      pass, which the phase does not name. Cannot verify: the Phase 6 transcript of session
+      f6300c28 was not reread, and the "fails before the change" half of each Check is history.
+  - date: 2026-11-13
+    event: PR
+    details: "#281 https://github.com/cheneeheng/ceh-claude-code-library/pull/281"

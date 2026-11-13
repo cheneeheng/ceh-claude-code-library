@@ -11,6 +11,11 @@ before this repo live in
 
 ## 2026-11-13
 
+`product/plans/handoff-leftovers.yaml` records the check of its build against PRs #275 to #280:
+24 items built, one extra (PR #280 also describes the tester-agent pass in
+`docs/CROSS_REFERENCES.md` and the `ceh-testing` README), and one that could not be verified (the
+Phase 6 transcript was not reread). No skill changes, so no plugin version changes.
+
 The last two phases of `product/plans/plugin-audit-findings.yaml` land together, at the user's
 request: the decided skill changes (phase 5) and the per-plugin polish (phase 6). Four skills
 change what they do. `implement-from-plan` sets a phase `done` when the user reports having run
