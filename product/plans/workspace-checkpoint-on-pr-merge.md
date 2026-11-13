@@ -260,5 +260,6 @@ the turn, in the checkout that ran the merge, and only once GitHub reports the P
   assignments are now dropped first, with two recording fixtures. The deviation is fixed in
   the code: `main()` tests the command for `gh pr merge` before any git process, proven by
   a unit test that fails when git is called for `ls`.
+- 2026-11-13 PR: #284 https://github.com/cheneeheng/ceh-claude-code-library/pull/284
 
 <!-- prettier-ignore-end -->

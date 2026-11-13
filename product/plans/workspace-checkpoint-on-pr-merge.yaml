@@ -330,3 +330,6 @@ record:
       assignments are now dropped first, with two recording fixtures. The deviation is fixed in
       the code: `main()` tests the command for `gh pr merge` before any git process, proven by
       a unit test that fails when git is called for `ls`.
+  - date: 2026-11-13
+    event: PR
+    details: "#284 https://github.com/cheneeheng/ceh-claude-code-library/pull/284"
