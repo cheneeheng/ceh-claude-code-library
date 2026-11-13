@@ -283,5 +283,6 @@ coming back.
 
 - 2026-11-13 Planned: status draft
 - 2026-11-13 Reviewed: Revise first, 6 blocking (pull-request and test-a-bug-fix find artifacts through source git, fix-record model path patterns, CLAUDE.md escape missing for fixes, retros and evidence, repeat-mistake other_file in one folder, phase 3 check hits phase 4 files, vision principle 2)
+- 2026-11-13 PR: #270 https://github.com/cheneeheng/ceh-claude-code-library/pull/270
 
 <!-- prettier-ignore-end -->
