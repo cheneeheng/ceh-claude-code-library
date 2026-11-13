@@ -178,7 +178,9 @@ not only `repeat-mistake`.
   `grep -rnF --include='*-model.py' -e 'replace("|"' -e '(?<!' plugins | grep -v '&#92;'`
   prints nothing (it prints 23 lines on `main` on 2026-11-13: the 22 files and
   `repeat-mistake`).
-- **Status:** todo
+- **Status:** done, Before the change, `python tools/validate-plugins/validate.py` failed on the new fixture
+  ("count-drops-last-word.md lost the backslash before a pipe"). After it, the same command
+  printed "OK: all plugin checks passed", and the `grep` printed nothing.
 
 ### Phase 4: Glossary definitions and questions are one paragraph
 

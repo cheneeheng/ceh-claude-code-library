@@ -121,7 +121,11 @@ def _item(prefix: str, text: str) -> str:
 
 
 def _row(cells: list[str]) -> str:
-    return "| " + " | ".join(c.replace("|", "\\|") for c in cells) + " |"
+    return (
+        "| "
+        + " | ".join(c.replace("\\|", "&#92;|").replace("|", "\\|") for c in cells)
+        + " |"
+    )
 
 
 def render(doc: Strategy, source: str) -> str:

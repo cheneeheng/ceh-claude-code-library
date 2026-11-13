@@ -66,24 +66,30 @@ before a pipe. The renderer writes that backslash as `&#92;` and then escapes ev
 source `\|` displays as `\|` instead of `|`. The format stays `repeat-mistake/v2`, since the YAML
 it accepts is unchanged.
 
+Phase 3 of `handoff-leftovers`: the ten other models with a table-cell escaper take the same
+escaper as `repeat-mistake`, in 22 files across eight plugins. These are the evidence report, fix
+record, competitor report, security audit, QA report, performance file, the three usability
+audits, and the strategy. Each canonical copy changed first and was copied over the others. No
+format version changes, since the YAML each accepts is unchanged.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog-and-seo`             | 2.0.6   |
-| `ceh-build-plan`               | 2.0.5   |
+| `ceh-blog-and-seo`             | 2.0.7   |
+| `ceh-build-plan`               | 2.0.6   |
 | `ceh-check-build-against-plan` | 1.1.14  |
 | `ceh-codebase-explanation`     | 1.3.9   |
-| `ceh-coding-conduct`           | 2.5.9   |
-| `ceh-competitor-analysis`      | 1.2.9   |
+| `ceh-coding-conduct`           | 2.5.10  |
+| `ceh-competitor-analysis`      | 1.2.10  |
 | `ceh-every-session`            | 2.9.14  |
 | `ceh-git-workflow`             | 1.5.11  |
-| `ceh-product-direction`        | 2.0.5   |
-| `ceh-security-audit`           | 1.1.8   |
+| `ceh-product-direction`        | 2.0.6   |
+| `ceh-security-audit`           | 1.1.9   |
 | `ceh-session-learning`         | 2.0.2   |
-| `ceh-testing`                  | 1.6.17  |
+| `ceh-testing`                  | 1.6.18  |
 | `ceh-ui-design`                | 1.0.12  |
-| `ceh-usability-audit`          | 1.2.10  |
+| `ceh-usability-audit`          | 1.2.11  |
 | `ceh-workflow-builder`         | 1.4.9   |
 | `ceh-workflow-runner`          | 1.1.8   |
 
@@ -147,6 +153,8 @@ it accepts is unchanged.
   resolved the path against the hook's own cwd and let the edit through.
 - Keep a backslash written before a pipe in a rendered repeat-mistake table cell, which the
   renderer dropped.
+- Keep a backslash written before a pipe in the table cells of the ten other table-cell models,
+  which dropped it or, in the competitor report, kept it as the pipe's escape.
 - Stop `explain-codebase` untracking a committed output file: it reports the file as tracked and
   leaves the untracking to the user.
 - Stop `edit-post` overwriting a draft git does not track: the revision is saved beside it as

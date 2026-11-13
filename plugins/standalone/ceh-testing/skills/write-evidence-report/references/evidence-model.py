@@ -135,7 +135,7 @@ def _bullet(text: str) -> str:
 
 
 def _cell(text: Optional[str]) -> str:
-    return (text or "").replace("|", "\\|")
+    return (text or "").replace("\\|", "&#92;|").replace("|", "\\|")
 
 
 def render(doc: Evidence, source: str) -> str:

@@ -143,7 +143,7 @@ def _key(key: str, value: object) -> str:
 
 
 def _cell(text: str) -> str:
-    return text.replace("|", "\\|")
+    return text.replace("\\|", "&#92;|").replace("|", "\\|")
 
 
 def _run(command: Optional[str], result: str) -> str:
