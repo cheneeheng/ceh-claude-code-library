@@ -10,8 +10,8 @@ Tier: **cross-cutting**. No plugin dependencies.
 ## Prerequisites
 
 Each skill declares what it needs in its `compatibility` frontmatter. In short: the `git` CLI for
-every skill, the GitHub CLI (`gh`, authenticated via `gh auth login`) for `pull-request` and
-`release`, and `python3` on PATH (stdlib only) for the `update-changelog` validator and the
+every skill, the GitHub CLI (`gh`, authenticated via `gh auth login`) for `pull-request`,
+`release` and workspace PR checkpoints, and `python3` on PATH (stdlib only) for the `update-changelog` validator and the
 branch guard, skill-started guard and workspace sync hooks. The workspace sync hook also needs git 2.27 or later.
 
 ## Skills
@@ -42,11 +42,11 @@ out into one per step.
 
 The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled.
 
-| Hook                                        | Event                                                                 | Script                     | Default |
-| ------------------------------------------- | --------------------------------------------------------------------- | -------------------------- | ------- |
-| [Branch guard](#branch-guard)               | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`)           | `branch-guard.py`          | on      |
-| [Workspace sync](#workspace-sync)           | `SessionStart`, `PostToolUse` (`EnterWorktree`), `Stop`, `SessionEnd` | `sync-agents-workspace.py` | on      |
-| [Skill-started guard](#skill-started-guard) | `PreToolUse` (`Bash`, `Edit`, `Write`, `MultiEdit`)                   | `skill-started-guard.py`   | on      |
+| Hook                                        | Event                                                                                        | Script                     | Default |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------- | ------- |
+| [Branch guard](#branch-guard)               | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`)                                  | `branch-guard.py`          | on      |
+| [Workspace sync](#workspace-sync)           | `SessionStart`, `PreToolUse` (`Bash`), `PostToolUse` (`EnterWorktree`), `Stop`, `SessionEnd` | `sync-agents-workspace.py` | on      |
+| [Skill-started guard](#skill-started-guard) | `PreToolUse` (`Bash`, `Edit`, `Write`, `MultiEdit`)                                          | `skill-started-guard.py`   | on      |
 
 ### Branch guard
 
@@ -83,7 +83,8 @@ link to a folder outside the worktree.
   the main workspace has checked out. A branch left by an earlier worktree of the same name is
   reused.
 - **After every turn:** commits the worktree's workspace changes to that branch, so removing the
-  worktree loses only what changed since the last turn.
+  worktree loses only what changed since the last turn. The commit's subject is
+  `chore(workspace): sync worktree <worktree folder>`.
 - **Session end:** starts a background process and returns at once, because `SessionEnd` hooks get
   1.5 s that a plugin cannot raise. In a worktree, the process commits once more and merges the
   branch into `<X>`, autostashing uncommitted changes in the main workspace. When Claude Code
@@ -93,8 +94,24 @@ link to a folder outside the worktree.
   when a session crashed or its background merge was killed, deletes merged branches no worktree
   holds, and tells the agent which branch failed to merge and how to merge it by hand.
 
-It never pushes, never aborts a merge it did not start, and fails silently, because a sync hook
-must never stop a session. It does nothing without a `.agents_workspace` git repo in the main
+Before a `gh pr merge` command, the hook records its PR number, URL or branch as pending,
+without calling GitHub. At Stop it checks pending entries for that checkout. Once GitHub confirms
+a recent merge, it commits all workspace changes with a subject such as
+`chore(workspace): checkpoint source pr #123` and a body containing the PR URL and merge commit.
+A clean workspace gets an empty checkpoint. Several confirmed PRs share one checkpoint commit.
+Repeated merge events are cleared when Git history already holds that PR and merge commit.
+The commit stays local and includes every workspace change, including another session's work.
+
+Pending entries live in the main workspace's `.git/ceh-checkpoint-pending/`. An open PR stays
+pending even if its merge command was denied or failed. A queued auto-merge is checked at a later
+Stop in the same checkout, so its checkpoint contains the workspace at that later time. Closed
+PRs, older merges and entries older than 14 days are cleared without a checkpoint. Merges made
+only in a browser are not recorded. Commands targeting another repo with `-R` or `--repo` are
+ignored. Lookup or commit failures keep the entry and show a message once per session and reason,
+naming the pending folder. Ordinary sync failures remain silent.
+
+It never pushes or aborts a merge it did not start, and a sync hook must never stop a session.
+It does nothing without a `.agents_workspace` git repo in the main
 checkout, when that repo is on a detached `HEAD`, or in a bare repo. It does not cover subagent
 worktrees (`isolation: "worktree"`), which fire none of its events. On Windows, a job object that
 kills its children and forbids breakaway would kill the background merge; the next session start
@@ -119,12 +136,12 @@ transcript, so it starts the skill itself. It fails open. `CEH_SKILL_STARTED_GUA
 
 ## Scripts
 
-| Script                                            | Purpose                                                                                                                                                                                    |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `scripts/branch-guard.py`                         | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                                                               |
-| `scripts/sync-agents-workspace.py`                | `SessionStart`, `PostToolUse` (`EnterWorktree`), `Stop` and `SessionEnd` hook: a git worktree of `.agents_workspace` in each worktree, merged back (see [Workspace sync](#workspace-sync)) |
-| `scripts/skill-started-guard.py`                  | `PreToolUse` hook: deny a commit, changelog or README edit until its skill was started (see [Skill-started guard](#skill-started-guard))                                                   |
-| `skills/update-changelog/scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                                                        |
+| Script                                            | Purpose                                                                                                                                                                          |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/branch-guard.py`                         | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                                                     |
+| `scripts/sync-agents-workspace.py`                | Workspace sync and PR checkpoint hook on `SessionStart`, `PreToolUse` (`Bash`), `PostToolUse` (`EnterWorktree`), `Stop` and `SessionEnd` (see [Workspace sync](#workspace-sync)) |
+| `scripts/skill-started-guard.py`                  | `PreToolUse` hook: deny a commit, changelog or README edit until its skill was started (see [Skill-started guard](#skill-started-guard))                                         |
+| `skills/update-changelog/scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                                              |
 
 ```bash
 python3 skills/update-changelog/scripts/check-semver.py CHANGELOG.md

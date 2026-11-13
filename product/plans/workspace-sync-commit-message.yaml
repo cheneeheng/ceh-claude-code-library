@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Workspace sync commits follow the commit skill's message rules
-status: ready
+status: built
 created: 2026-11-13
 goal: |
   `sync-agents-workspace.py` commits a linked worktree's workspace with the subject
@@ -86,7 +86,11 @@ phases:
       prints nothing. `grep -c "chore(workspace): sync worktree"` prints 1 for the plugin's
       `README.md` and at least 1 for `CHANGELOG.md`, and
       `grep -n "ceh-git-workflow" docs/PLUGIN_VERSIONS.md` shows the new version.
-    status: todo
+    status: done
+    evidence: |
+      The new fixture first failed with "no workspace sync commit". After the script, README
+      and version updates, tools/validate-plugins/validate.py printed
+      "OK: all plugin checks passed" on Windows using the cached Python 3.12 runtime.
 open: []
 record:
   - date: 2026-11-13
@@ -98,3 +102,15 @@ record:
   - date: 2026-11-13
     event: PR
     details: "#270 https://github.com/cheneeheng/ceh-claude-code-library/pull/270"
+  - date: 2026-11-13
+    event: Built Phase
+    phase: 1
+    details: |
+      tools/validate-plugins/validate.py: OK: all plugin checks passed. The fixture failed
+      first with no workspace sync commit, then passed after the subject change.
+  - date: 2026-11-13
+    event: Checked
+    details: |
+      17 Built, 1 Extra: the implementation skill's closure step also records lasting
+      workspace decisions in product/ARCHITECTURE.yaml with generated Markdown.
+      The final repository validator passed after the subsequent checkpoint implementation.

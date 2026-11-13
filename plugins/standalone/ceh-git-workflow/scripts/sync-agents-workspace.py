@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SessionStart, PostToolUse (EnterWorktree), Stop and SessionEnd hook: give a linked git
+"""SessionStart, PreToolUse (Bash), PostToolUse (EnterWorktree), Stop and SessionEnd hook: give a linked git
 worktree its own worktree of the main checkout's .agents_workspace repo, and merge it back.
 
 Claude Code's worktree isolation refuses Edit and Write through a link to the main checkout, so
@@ -11,6 +11,8 @@ Arguments, one per event:
   start   in a linked worktree, create its workspace; in a main checkout, catch up: merge every
           ceh-ws/<X>/ branch not yet merged, and report each merge that failed.
   commit  commit the worktree's workspace changes, so a removed worktree loses nothing committed.
+          Check pending source PR merges and commit their workspace checkpoints first.
+  merge   record a gh pr merge command as pending, without calling gh or changing the command.
   end     start end-worker detached and return, because the SessionEnd budget (1.5 s, which a
           plugin cannot raise) can kill a merge in progress.
   end-worker <cwd>
@@ -18,14 +20,21 @@ Arguments, one per event:
           catch up, since Claude Code may report the main checkout as cwd when a session ends.
 
 Reads cwd from the hook payload (end-worker: from argv), never os.getcwd(), and does nothing
-without it. Fails open:
-anything unexpected exits 0 silently, because a convenience hook must never stop a session.
+without it. Fails open: anything unexpected exits 0. Checkpoint lookup and commit failures print
+one systemMessage per session and reason, because a convenience hook must never stop a session.
 """
 
+import datetime as dt
+import hashlib
 import json
 import os
+import re
+import shlex
+import shutil
 import subprocess
 import sys
+import tempfile
+import time
 from pathlib import Path
 
 WORKSPACE = ".agents_workspace"
@@ -84,6 +93,275 @@ def current_branch(repo):
     return "" if code else out
 
 
+def pending_name(reference):
+    if reference.isdigit():
+        return f"pr-{reference}"
+    return "branch-" + hashlib.sha256(reference.encode()).hexdigest()
+
+
+def record_merge(top, main_ws, command):
+    if not re.search(r"\bgh\s+pr\s+merge\b", command):
+        return
+    # less-code: simple shell segments; use a shell parser if nested shell syntax is required.
+    parts = re.split(r"""('[^']*'|"(?:\\.|[^"\\])*"|\\.|[;&|()\n]+)""", command)
+    segment = ""
+    for part in [*parts, ";"]:
+        if re.fullmatch(r"[;&|()\n]+", part):
+            tokens = shlex.split(segment, comments=True)
+            segment = ""
+            if tokens[:3] == ["gh", "pr", "merge"]:
+                tokens = tokens[3:]
+                break
+        else:
+            segment += part
+    else:
+        return
+    if any(
+        t == "-R" or t.startswith("-R") or t == "--repo" or t.startswith("--repo=")
+        for t in tokens
+    ):
+        return
+    values = {
+        "-b",
+        "--body",
+        "-F",
+        "--body-file",
+        "-t",
+        "--subject",
+        "-A",
+        "--author-email",
+        "--match-head-commit",
+    }
+    reference = ""
+    skip = False
+    for token in tokens:
+        if skip:
+            skip = False
+        elif token in values:
+            skip = True
+        elif not token.startswith("-"):
+            reference = token
+            break
+    reference = reference or current_branch(top)
+    url = re.fullmatch(r"https?://[^/]+/[^/]+/[^/]+/pull/(\d+)/?", reference)
+    if url:
+        reference = url[1]
+    if not reference or "\n" in reference or "\r" in reference:
+        return
+    folder = main_ws / ".git" / "ceh-checkpoint-pending"
+    folder.mkdir(exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        mode="w", encoding="utf-8", dir=folder, prefix=".pending-", delete=False
+    ) as stream:
+        stream.write(f"{top.as_posix()}\n{reference}\n")
+        temporary = Path(stream.name)
+    try:
+        os.replace(temporary, folder / pending_name(reference))
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def checkpoint_warning(session, reference, reason, folder):
+    key = hashlib.sha1(f"{session}\n{reason}".encode()).hexdigest()[:16]
+    marker = Path(tempfile.gettempdir()) / f"ceh-checkpoint-warning-{key}"
+    try:
+        marker.touch(exist_ok=False)
+    except FileExistsError:
+        return
+    print(
+        json.dumps(
+            {
+                "systemMessage": f"Workspace checkpoint for {reference} is pending: {reason}. Pending folder: {folder}"
+            }
+        )
+    )
+
+
+def checkpoints(top, main_ws, x, folder, session, linked):
+    repo = workspace_repo(top) if linked else main_ws
+    if not repo or (linked and current_branch(repo) != f"{PREFIX}{x}/{top.name}"):
+        return
+    code, directory = git(repo, "rev-parse", "--absolute-git-dir")
+    if code or any(
+        (Path(directory) / name).exists()
+        for name in ("MERGE_HEAD", "MERGE_AUTOSTASH", "index.lock")
+    ):
+        return
+    deadline = time.monotonic() + 12
+    gh = shutil.which("gh")
+    claims = []
+    merged = {}
+    merged_claims = []
+    try:
+        for entry in sorted(folder.iterdir()):
+            if not entry.name.startswith(("pr-", "branch-")):
+                continue
+            try:
+                stamp = entry.stat().st_mtime
+                if time.time() - stamp > 14 * 86400:
+                    entry.unlink(missing_ok=True)
+                    continue
+                owner, reference = entry.read_text(encoding="utf-8").splitlines()
+                if entry.name != pending_name(reference):
+                    continue  # A live claim belongs to another Stop. Crashed claims expire above.
+                if not same(owner, top):
+                    if linked or Path(owner).exists():
+                        continue
+                    code, unmerged = git(
+                        main_ws,
+                        "for-each-ref",
+                        "--no-merged=HEAD",
+                        f"refs/heads/{PREFIX}{x}/{Path(owner).name}",
+                    )
+                    if code or unmerged:
+                        continue
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    break
+                claim = entry.with_name(
+                    f"{entry.name}.{re.sub(r'[^A-Za-z0-9_-]', '_', session)}"
+                )
+                os.replace(entry, claim)
+            except FileNotFoundError:
+                continue  # Another Stop claimed or removed this entry first.
+            claims.append((entry, claim))
+            try:
+                if not gh:
+                    raise ValueError("gh is not available")
+                result = subprocess.run(
+                    [
+                        gh,
+                        "pr",
+                        "view",
+                        reference,
+                        "--json",
+                        "state,number,url,mergeCommit,mergedAt",
+                    ],
+                    cwd=top,
+                    capture_output=True,
+                    text=True,
+                    timeout=remaining,
+                )
+                if result.returncode:
+                    raise ValueError("gh pr view failed")
+                data = json.loads(result.stdout)
+                if not isinstance(data, dict):
+                    raise ValueError("gh returned no PR object")
+                state = data["state"]
+                if state == "CLOSED":
+                    claim.unlink()
+                elif state == "MERGED":
+                    timestamp = data["mergedAt"]
+                    if not isinstance(timestamp, str):
+                        raise ValueError("gh returned no merge time")
+                    when = dt.datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+                    if when.tzinfo is None:
+                        raise ValueError("gh returned a merge time without a timezone")
+                    if when.timestamp() < stamp - 60:
+                        claim.unlink()
+                        continue
+                    number, url, oid = (
+                        data["number"],
+                        data["url"],
+                        data["mergeCommit"]["oid"],
+                    )
+                    if (
+                        type(number) is not int
+                        or number < 1
+                        or not isinstance(url, str)
+                        or not url
+                        or not isinstance(oid, str)
+                        or not oid
+                    ):
+                        raise ValueError("gh returned incomplete merge details")
+                    body = f"{url} merged as {oid}"
+                    code, existing = git(
+                        repo,
+                        "log",
+                        "--all",
+                        "-1",
+                        "--format=%H",
+                        "--fixed-strings",
+                        f"--grep={body}",
+                    )
+                    if code:
+                        checkpoint_warning(
+                            session,
+                            reference,
+                            "git checkpoint history lookup failed",
+                            folder,
+                        )
+                        continue
+                    if existing:
+                        claim.unlink()
+                        continue
+                    merged[number] = body
+                    merged_claims.append(claim)
+                elif state != "OPEN":
+                    raise ValueError("gh returned an unknown PR state")
+            except (
+                OSError,
+                subprocess.TimeoutExpired,
+                ValueError,
+                KeyError,
+                TypeError,
+            ):
+                checkpoint_warning(
+                    session,
+                    reference,
+                    "gh is not available"
+                    if not gh
+                    else "gh pr view failed or returned invalid merge details",
+                    folder,
+                )
+        if merged:
+            numbers = sorted(merged)
+            subject = (
+                f"chore(workspace): checkpoint source pr #{numbers[0]}"
+                if len(numbers) == 1
+                else "chore(workspace): checkpoint source prs "
+                + ", ".join(f"#{n}" for n in numbers)
+            )
+            if len(subject) > 72:
+                subject = f"chore(workspace): checkpoint {len(numbers)} source prs"
+            try:
+                failed = (
+                    git(repo, "add", "-A")[0]
+                    or git(
+                        repo,
+                        "commit",
+                        "-q",
+                        "--allow-empty",
+                        "-m",
+                        subject,
+                        "-m",
+                        "\n".join(merged[n] for n in numbers),
+                    )[0]
+                )
+            except (OSError, subprocess.TimeoutExpired):
+                failed = True
+            if failed:
+                checkpoint_warning(
+                    session,
+                    ", ".join(f"#{n}" for n in numbers),
+                    "git checkpoint commit failed",
+                    folder,
+                )
+            else:
+                for claim in merged_claims:
+                    claim.unlink()
+    finally:
+        for entry, claim in claims:
+            if claim.exists():
+                try:
+                    os.link(
+                        claim, entry
+                    )  # Preserve a newer merge event at entry, if one arrived.
+                except FileExistsError:
+                    pass
+                claim.unlink()
+
+
 def create(top, main_ws, branch):
     """Add <top>/.agents_workspace as a worktree of the main workspace repo."""
     path = top / WORKSPACE
@@ -107,7 +385,7 @@ def commit(top, branch):
     if code or not lines or lines[0][3:].split("...")[0] != branch or len(lines) == 1:
         return
     git(path, "add", "-A")
-    git(path, "commit", "-q", "-m", f"ceh-ws: {top.name}")
+    git(path, "commit", "-q", "-m", f"chore(workspace): sync worktree {top.name}"[:72])
 
 
 def merging(repo):
@@ -188,8 +466,10 @@ def main():
     event = sys.argv[1] if len(sys.argv) > 1 else ""
     if event == "end-worker":
         cwd = sys.argv[2] if len(sys.argv) > 2 else ""
+        payload = {}
     else:
-        cwd = (json.load(sys.stdin) or {}).get("cwd")
+        payload = json.load(sys.stdin) or {}
+        cwd = payload.get("cwd")
     if not cwd or not os.path.isdir(cwd):
         return
     found = checkouts(cwd)
@@ -199,17 +479,33 @@ def main():
     if event == "end":
         detach(cwd, main_checkout or top)
         return
+    pending = (main_checkout or top) / WORKSPACE / ".git" / "ceh-checkpoint-pending"
     if (
-        not main_checkout and event == "commit"
-    ):  # Stop fires every turn: one git spawn here
-        return
+        not main_checkout
+        and event == "commit"
+        and (not pending.is_dir() or not any(pending.iterdir()))
+    ):
+        return  # Stop in a main checkout normally needs only one git spawn.
     main_ws = workspace_repo(main_checkout or top)
     x = current_branch(main_ws) if main_ws else ""
     if not x:  # no workspace repo, or detached: no branch to merge back into
         return
 
+    if event == "merge":
+        record_merge(top, main_ws, payload.get("tool_input", {}).get("command", ""))
+        return
+
     if not main_checkout:
-        if event == "end-worker":
+        if event == "commit":
+            checkpoints(
+                top,
+                main_ws,
+                x,
+                pending,
+                str(payload.get("session_id") or os.getpid()),
+                False,
+            )
+        elif event == "end-worker":
             catch_up(
                 main_ws, x
             )  # SessionEnd output is discarded: the next start reports failures
@@ -236,6 +532,15 @@ def main():
     if event == "start":
         create(top, main_ws, branch)
     elif event in ("commit", "end-worker"):
+        if event == "commit" and pending.is_dir():
+            checkpoints(
+                top,
+                main_ws,
+                x,
+                pending,
+                str(payload.get("session_id") or os.getpid()),
+                True,
+            )
         commit(top, branch)
         if event == "end-worker":
             merge(main_ws, branch)

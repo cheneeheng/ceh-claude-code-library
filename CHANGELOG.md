@@ -11,6 +11,17 @@ before this repo live in
 
 ## 2026-11-13
 
+Workspace sync commits now use `chore(workspace): sync worktree <worktree folder>`,
+limited to 72 characters, so scripted commits follow the commit skill's message rules.
+
+Workspace sync also records session `gh pr merge` commands and, at Stop, creates a local
+workspace checkpoint once GitHub confirms a recent merge. The commit names each PR and records
+its URL and merge commit, even when the workspace is clean. Open PRs and failed lookups stay
+pending, closed or stale entries are cleared, and lookup or commit failures show one message
+per session and reason. Cross-repository merge commands are ignored.
+The pre-commit review also fixes quoted command parsing, branch-name collisions on Windows and
+long names, and repeated checkpoint commits for an already recorded merge.
+
 `product/plans/plugin-audit-open-topics.yaml` changes how its third phase is done, at the user's
 request: the commit that rewords the user's branch rule also appends a dated note to the answer
 the rule was learned from, so the two are read together, and the builder pushes that commit. The
@@ -118,7 +129,7 @@ names. Any other agent is still denied. The plan is now built.
 | `ceh-coding-conduct`           | 2.5.10  |
 | `ceh-competitor-analysis`      | 1.2.10  |
 | `ceh-every-session`            | 2.9.15  |
-| `ceh-git-workflow`             | 1.5.11  |
+| `ceh-git-workflow`             | 1.5.13  |
 | `ceh-product-direction`        | 2.0.6   |
 | `ceh-security-audit`           | 1.1.9   |
 | `ceh-session-learning`         | 2.0.2   |
