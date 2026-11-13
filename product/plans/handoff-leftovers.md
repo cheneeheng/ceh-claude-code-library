@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: handoff-leftovers.yaml
 generated_note: "Do not edit. artifact.py renders this file from handoff-leftovers.yaml: edit the YAML, then run artifact.py render."
 title: Close the leftovers the 2026-11-12 handoffs left open
-status: ready
+status: building
 created: 2026-11-13
 ---
 
@@ -152,7 +152,9 @@ not only `repeat-mistake`.
   After it, the same command prints `OK: all plugin checks passed`, and
   `md5sum $(find plugins -name generated-md-guard.py) | awk '{print $1}' | sort -u | wc -l`
   prints 1.
-- **Status:** todo
+- **Status:** done, Before the change, `python tools/validate-plugins/validate.py` failed on the new fixture in
+  each plugin's `artifact_fixtures` group ("stdout lacks 'gen.yaml'"). After it, the same
+  command printed "OK: all plugin checks passed", and the md5 count printed 1.
 
 ### Phase 2: Repeat-mistake table cells keep a backslash before a pipe
 
@@ -223,5 +225,7 @@ None
   models (new Phase 3), and the paid dispatch runs when the build reaches it (now Phase 6).
   The vision and `draft-post` wording go to their own PRs, under Out.
 - 2026-11-13 PR: #273 https://github.com/cheneeheng/ceh-claude-code-library/pull/273
+- 2026-11-13 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-13 PR: #275 https://github.com/cheneeheng/ceh-claude-code-library/pull/275
 
 <!-- prettier-ignore-end -->

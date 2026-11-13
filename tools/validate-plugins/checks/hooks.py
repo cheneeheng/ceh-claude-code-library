@@ -390,6 +390,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ] if have_uv else []) + [
             {"script": rh, "stdin": write_at(at["bad"]), "env": no_uv, "out": "uv is not installed"},
             {"script": f"{plugin}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+            # A relative file_path resolves against the payload cwd, not the hook's own cwd.
+            {"script": f"{plugin}/generated-md-guard.py", "stdin": edit("gen.md", cwd=str(plans)), "out": "gen.yaml"},
         ]  # fmt: skip
 
     good_arch = (

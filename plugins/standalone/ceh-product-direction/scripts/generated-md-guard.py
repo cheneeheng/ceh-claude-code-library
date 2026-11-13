@@ -28,7 +28,9 @@ def main() -> None:
         return
 
     payload = json.load(sys.stdin)
-    file = Path(payload.get("tool_input", {}).get("file_path", ""))
+    path = payload.get("tool_input", {}).get("file_path", "")
+    root = Path(payload.get("cwd") or os.getcwd()).resolve()
+    file = (root / path).resolve() if path else Path()
     if file.suffix != ".md" or not file.is_file():
         return
     fm = FRONTMATTER.match(file.read_text(encoding="utf-8").replace("\r\n", "\n"))
