@@ -26,6 +26,16 @@ Procedure in `document-architecture`, `find-product-market-fit` in the template'
 examples that hold outside Python. Phase 6 lands as one commit, not one per plugin, because both
 phases edit the same files in three plugins.
 
+Three build plans are added and nothing is built yet, so no plugin version changes.
+`product/plans/consolidate-product-artifacts.yaml` moves every product artifact a skill saves to
+`.agents_workspace/product/` and makes references name the YAML source, because two `product/`
+folders confuse a person reviewing them and artifacts in one cite artifacts in the other. It
+waits for an amendment of vision principle 2 in its own PR.
+`product/plans/workspace-sync-commit-message.yaml` gives the workspace sync commit a subject the
+`commit` skill accepts, and `product/plans/workspace-checkpoint-on-pr-merge.yaml` has a merged
+pull request leave a checkpoint commit in the workspace repo. Each plan was reviewed from a fresh
+context and revised. The last revisions of the first and the third were not reviewed again.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -46,6 +56,8 @@ phases edit the same files in three plugins.
 
 ### Added
 
+- Add the build plans `consolidate-product-artifacts`, `workspace-sync-commit-message` and
+  `workspace-checkpoint-on-pr-merge` to `product/plans/`.
 - Add `CEH_USER_RULES_DIR`, read by `record-project-decisions`, with its row in
   `docs/ENVIRONMENT_VARIABLES.md`.
 - Add `references/interview.md` to `draft-post`, holding the interview step moved out of the
