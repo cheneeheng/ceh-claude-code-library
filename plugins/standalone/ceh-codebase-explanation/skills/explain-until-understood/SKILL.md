@@ -1,9 +1,9 @@
 ---
 name: explain-until-understood
 description: >-
-  Explain a subsystem, design, diff, or unfamiliar tool to someone in the session until they can
-  answer questions about it unaided, assuming they know nothing, and close on a self-test. Writes no
-  files. Not for a repo-wide orientation file (use ceh-codebase-explanation:explain-codebase).
+  Load this skill when someone in the session must understand a subsystem, design, diff, or tool:
+  explain from zero until they can answer unaided. Trigger on "explain this to me", "I don't
+  understand this diff". Not for a repo-wide file (use ceh-codebase-explanation:explain-codebase).
 argument-hint: "[what to explain]"
 disable-model-invocation: false
 user-invocable: true
@@ -105,11 +105,11 @@ asked for an explanation. Pasted output is evidence, not narration.
 3. **Verify by running.** Run the tool, the command, the throwaway script, and paste the real
    output. "semgrep found 2 hits, lines 22 and 23–27" beats "semgrep would flag the network call."
 
-   - **Read-only runs only.** A command that changes state is not an illustration, and the contract
-     requires it be requested first.
+   - **Read-only runs only.** A command that changes state is not an illustration, and it needs a
+     request first.
    - **Cheap runs only.** A throwaway snippet or one targeted command needs no permission. A full
-     test suite, a build, or a repo-wide lint stays contract-gated even though it changes nothing —
-     ask for it, or cite output that already exists.
+     test suite, a build, or a repo-wide lint needs a request first too, even though it changes
+     nothing — ask for it, or cite output that already exists.
    - **Where you cannot or may not run it,** say so in the same breath as the claim.
 
 4. **Draw structure and time; write everything else.** Prose is bad at nesting, ordering,
@@ -237,7 +237,8 @@ material is technical. Steer it deliberately.
 
 ### Honesty
 
-The output style's honesty rules apply unchanged. One addition specific to explaining:
+Say what you checked and what you did not, and never present a guess as fact. One addition
+specific to explaining:
 
 **"Not documented" and "I did not check" are different answers.** "Not documented" is a claim, and
 only a grep earns it; with no grep the honest answer is "I did not check". Report which of the two

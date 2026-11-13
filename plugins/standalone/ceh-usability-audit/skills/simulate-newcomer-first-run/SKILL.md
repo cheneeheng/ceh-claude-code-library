@@ -153,8 +153,9 @@ reproducible:
 
 A run that ends because the walker exhausted its turns is **not a result**. It is an instrument
 failure, and it is never a Blocker — only a stall the walker actually reported is a finding.
-Re-dispatch it over a **narrower goal** (one milestone per walker, chained), since the agent's turn
-ceiling is fixed in its frontmatter and a caller cannot raise it for one dispatch.
+Resume the stopped walker first, so it carries on from where it stopped. When it cannot be
+resumed, re-dispatch over a **narrower goal** (one milestone per walker, chained), since the
+agent's turn ceiling is fixed in its frontmatter and a caller cannot raise it for one dispatch.
 
 #### The budget — how long "too long" is
 

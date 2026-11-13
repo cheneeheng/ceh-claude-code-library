@@ -120,6 +120,7 @@ earlier point, do not read the diff hoping to spot the cause — let git find th
 ```bash
 git bisect start HEAD <last-known-good-tag-or-sha>
 git bisect run pytest tests/unit/test_parse_duration.py::test_parse_duration_rejects_bare_number
+# TypeScript: git bisect run vitest run src/parse-duration.test.ts -t "rejects bare number"
 git bisect reset
 ```
 

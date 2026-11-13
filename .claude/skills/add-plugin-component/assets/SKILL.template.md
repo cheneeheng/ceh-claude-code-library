@@ -57,6 +57,11 @@ Plugin README
 
 <One or two sentences: what this skill makes Claude do and what "done" looks like.>
 
+## What waits for a request
+
+<Optional. Which checks run unasked, and which slow or paid runs wait for the user to ask. Delete
+this section when the skill runs nothing slow or paid.>
+
 ## Procedure
 
 1. <One action per step, imperative.>

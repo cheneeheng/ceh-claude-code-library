@@ -127,8 +127,9 @@ A rewrite table, shown before any string is changed in place:
 | ---------------------- | ------------------------- | -------------------------------- | ------------- |
 | `SettingsPanel.tsx:42` | `Configure sync interval` | `How often to check for updates` | floor, jargon |
 
-**Leave your edits in the working tree.** Make no branch, commit, push, or pull request unless the
-request asks for one, because the user reviews the diff before anything lands.
+**Leave your edits in the working tree.** Make no commit, push, or pull request unless the request
+asks for one, because the user reviews the diff before anything lands. If the environment requires
+a branch before editing, create one; still do not commit.
 
 **Report other defects, do not fix them.** A security hole or a logic bug found on the way is
 reported as a finding, even on a line you are already rewriting, because the user expects the
@@ -140,8 +141,8 @@ diff to hold only this skill's edits.
   Simplifying to a general-audience word makes it _less_ clear for the actual audience → establish
   who the reader is before running the floor.
 - **The string is a public contract** — a CLI flag name, an API field, a documented setting key.
-  Renaming it is a breaking change, not a copy edit → flag it and route to
-  `ceh-python-library:publish-python-library`.
+  Renaming it is a breaking change, not a copy edit → flag it for whoever owns the release, for
+  example `ceh-python-library:publish-python-library` for a Python library.
 - **The copy is fine and the interface is the problem.** Better words for a step that should not
   exist is the wrong fix → route to `audit-interface`.
 

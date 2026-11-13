@@ -4,7 +4,7 @@ description: >-
   Load this skill when repeated work runs from its `flow.yaml`: stages in order, approvals, gates,
   run state on disk, interactive or headless. Trigger on "run the flow.yaml", or when a generated
   `<name>-flow` skill hands over its config.
-argument-hint: "config=<path> [mode=interactive|headless] [resume=latest|new] [approve=<stage-id>,...] [<input>=<value> ...]"
+argument-hint: "config=<path> [mode=...] [resume=...]"
 disable-model-invocation: false
 user-invocable: true
 compatibility: >-

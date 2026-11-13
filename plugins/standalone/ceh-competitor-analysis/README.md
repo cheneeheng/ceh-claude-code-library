@@ -95,7 +95,7 @@ we take") with `<competitor>.md` rendered beside it and `<competitor>.html` per 
 `comparison.md` and `comparison.html` for the comparison, and the shared theme stylesheet under
 `themes/` (Meridian by default). The YAML is the source of each report, and `comparison.md` the
 source of the comparison; the HTML pages carry the same content, built from each skill's
-`references/report-page.html`, with detail folded into expandable cards. Reports written before
+`assets/report-page.html`, with detail folded into expandable cards. Reports written before
 `v2` stay as `<competitor>.md`, which the comparison still reads. Each report states its snapshot date. Each one also says how
 every count was measured and whether each claim was read in the source or only claimed by the
 competitor. Nothing is marked verified, because the target is never run.

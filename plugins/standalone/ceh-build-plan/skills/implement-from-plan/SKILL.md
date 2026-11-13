@@ -81,13 +81,16 @@ reason recorded.
   Status, and append a Design changed line to the plan's `## Record` quoting the old line, so the
   plan stays true to the code and the original decision survives.
 - A phase is `done` only on a passing Check run after its last edit. A check you could not run
-  leaves the phase `todo`, with the reason in its Status, even when the user says it passed: their
-  report is not a run.
+  leaves the phase `todo`, with the reason in its Status. The one exception is a check the user
+  reports having run: it sets the phase `done` with
+  `evidence: reported by the user, not run by the agent`, and its Built Phase line carries the
+  same words.
 
 ## Output
 
 After the run, report per phase: done or stopped, the Check command and its result, assumptions
-taken, and anything not verified with the command the user should run. List the decisions copied
+taken, and anything not verified with the command the user should run. List the phases set `done`
+on the user's report apart from the ones whose Check you ran. List the decisions copied
 to `product/ARCHITECTURE.yaml`.
 
 ## Stop conditions

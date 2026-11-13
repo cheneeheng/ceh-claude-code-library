@@ -3,7 +3,7 @@ name: stress-test-plan
 description: >-
   Load this skill when a plan, design, or strategy should be questioned before anyone acts on it:
   every open question in rounds, each with a recommended answer. Trigger on "grill me on this plan",
-  "stress-test this", "poke holes in this", "what am I missing".
+  "poke holes in this". Not for reviewing a build plan (use ceh-build-plan:review-build-plan).
 argument-hint: "[plan-file]"
 disable-model-invocation: false
 user-invocable: true

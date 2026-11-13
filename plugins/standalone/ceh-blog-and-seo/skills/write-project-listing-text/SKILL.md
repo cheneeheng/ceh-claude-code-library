@@ -13,7 +13,7 @@ compatibility: >-
 license: Apache-2.0
 ---
 
-# Text discoverability
+# Write project listing text
 
 Every internet-exposed text surface (GitHub, PyPI, npm, a marketplace, a search result) shows an
 excerpt, and the excerpt decides whether anyone clicks. Search engines and AI engines index the
@@ -80,3 +80,9 @@ and zero external dependencies.`
 - Use the one canonical one-liner from step 3 on every surface.
 - Post-change accuracy of the README belongs to `ceh-git-workflow:update-readme`. Head tags,
   sitemaps, and structured data on HTML pages belong to `ceh-blog-and-seo:make-page-crawlable`.
+
+## Output
+
+The one-liner, and the edits to each surface the task touched: repo description and topics, README
+first screen, manifest `description` and `keywords`. Report each surface changed, and that a grep
+for the one-liner finds the same sentence on every one.

@@ -10,6 +10,7 @@ license: Apache-2.0
 compatibility: >-
   Checking the workflow spec needs uv (https://docs.astral.sh/uv/), which runs
   scripts/artifact.py with pydantic. Without it the spec is read unchecked and the reply says so.
+  The bundled /workflow-authoring skill it recommends needs Claude Code v2.1.248+.
 ---
 
 # Build an agentic workflow
@@ -213,8 +214,8 @@ to the target repo's `.gitattributes`. Then check:
 - at most 4,096 items in any one `parallel()` or `pipeline()`
 - `null` results are filtered before use
 
-Recommend the bundled `/workflow-authoring` skill (Claude Code v2.1.248+) for the body. This plugin
-repo's `validate.py` does not know these checks, so they run here.
+Recommend the bundled `/workflow-authoring` skill for the body, where the Claude Code version has
+it (see `compatibility`). This plugin repo's `validate.py` does not know these checks, so they run here.
 
 Then check:
 
@@ -228,7 +229,8 @@ Then check:
 
 **The thin trigger skill.** Its body is only the moment and a hand-over to the runner. Its
 `compatibility` names the `ceh-workflow-runner` plugin and, when a stage is a saved workflow,
-Claude Code v2.1.269+ with the Workflow tool on. If the runner cannot be called, it stops and says
+the minimum Claude Code version with the Workflow tool on, as the template in
+`references/emitted-templates.md` gives it. If the runner cannot be called, it stops and says
 the plugin must be installed, and never runs the stages by hand.
 
 **The invocation guide** gives the interactive and headless commands, derived from the config:
@@ -288,7 +290,7 @@ The emitted artifact relies on Claude Code's built-in tools and does not list th
 **The Workflow tool is not assumed.** It is off by default (Dynamic workflows in `/config`;
 headless, the undocumented `enableWorkflows` setting). Without it, a session imitates a workflow by
 hand and the run looks successful on disk. A `workflow` stage therefore declares a `fallback`, and
-the flow's `compatibility` names Claude Code v2.1.269+ and the setting.
+the flow's `compatibility` names that minimum Claude Code version and the setting.
 
 ### Directories
 
@@ -303,7 +305,8 @@ second build overwrites the first one's.
 
 **One directory per run.** Each run writes to `<run-dir>/<name>/<run-id>/`, the `{run}` of
 `flow.yaml`. A fixed per-flow directory would let last week's artifacts pass this week's
-exists-checks, and a finished `run-state.md` would make the new run skip every step. State that
+exists-checks, and a finished run state (`run-state.yaml` under the runner, `run-state.md` in a
+single skill) would make the new run skip every step. State that
 outlives a run, such as a watermark, sits one level up and is written only after every step it
 summarises succeeded. For a workflow, the runner creates the directory. A single skill has no
 runner, so it names `$CEH_WORKFLOW_RUN_DIR` and its default in its own body, because the agent that
@@ -321,11 +324,13 @@ Run artifacts are never committed. When there is a run directory, check that the
   the stage/gate table write `<condition> — retry up to N, then stop`.
 - **Run state only when spec question 7 says the run can stop partway.** Then set
   `resumable: true` and the runner keeps it. Git alone cannot show where a run stopped, because
-  uncommitted work leaves no trace. A single skill keeps its own `<run>/run-state.md` and opens by
+  uncommitted work leaves no trace. A single skill keeps its own `<run>/run-state.md`, the
+  `run-state/v1` Markdown file with no YAML, and opens by
   offering to resume the newest run. A long step, such as a fact-check over twenty claims, appends
   each unit to its output file as it completes, because context that dies mid-step takes unwritten
   results with it.
-- **Re-running is not resuming.** `run-state.md` shows where a run stopped only if it survived the
+- **Re-running is not resuming.** The run state, in either file, shows where a run stopped only if
+  it survived the
   failure, so a step from spec question 8 checks the world, not the ledger: does the schema exist,
   is the row inserted? In `flow.yaml` that is `unsafe_to_rerun` with a `world_check`. In a single
   skill it is the step's first instruction.

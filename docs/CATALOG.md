@@ -252,9 +252,9 @@ Agents run autonomously for a defined task and hand results back to the parent s
 
 ### [Usability Audit (`ceh-usability-audit`)](../plugins/standalone/ceh-usability-audit/)
 
-| Agent                                                                                        | Invoke                                              | When                                                                                                                                               |
-| -------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Newcomer Simulator](../plugins/standalone/ceh-usability-audit/agents/newcomer-simulator.md) | `@"ceh-usability-audit:newcomer-simulator (agent)"` | Walk a target cold under one persona toward one goal and report where it stalled, without using what it knows about such tools (Sonnet, read-only) |
+| Agent                                                                                        | Invoke                                              | When                                                                                                                                                            |
+| -------------------------------------------------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Newcomer Simulator](../plugins/standalone/ceh-usability-audit/agents/newcomer-simulator.md) | `@"ceh-usability-audit:newcomer-simulator (agent)"` | Walk a target cold under one persona toward one goal and report where it stalled, without using what it knows about such tools (Sonnet, never edits the target) |
 
 ### [Competitor Analysis (`ceh-competitor-analysis`)](../plugins/standalone/ceh-competitor-analysis/)
 

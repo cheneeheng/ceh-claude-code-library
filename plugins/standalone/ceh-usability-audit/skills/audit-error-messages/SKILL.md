@@ -82,8 +82,9 @@ which rows you changed and which you left. A row left alone with a stated reason
 wording is deliberate — auth") is a result; a row that silently vanished between the table and the
 diff is not.
 
-**Leave your edits in the working tree.** Make no branch, commit, push, or pull request unless the
-request asks for one, because the user reviews the diff before anything lands.
+**Leave your edits in the working tree.** Make no commit, push, or pull request unless the request
+asks for one, because the user reviews the diff before anything lands. If the environment requires
+a branch before editing, create one; still do not commit.
 
 **Report other defects, do not fix them.** A security hole or a logic bug found on the way is
 reported as a finding, even on a line you are already rewriting, because the user expects the
@@ -195,8 +196,8 @@ anything**. The second number is the one that moves when a codebase gets better.
 - **The fix requires exposing information you should not** — internal IDs, why an auth attempt
   failed, another tenant's data → keep the message vague on purpose and say so in the report.
 - **A wording change is a public contract change** — a library's exception message or a CLI's stderr
-  that callers parse → flag it as breaking and route to
-  `ceh-python-library:publish-python-library`.
+  that callers parse → flag it as a breaking change for whoever owns the release, for example
+  `ceh-python-library:publish-python-library` for a Python library.
 
 ## Hands off to
 
@@ -205,5 +206,5 @@ anything**. The second number is the one that moves when a codebase gets better.
   `ceh-usability-audit:write-plain-language`.
 - The message is right but nobody reaches it during setup: `ceh-usability-audit:simulate-newcomer-first-run`.
 - This is log/metric plumbing, not user-facing text: `ceh-python-service:write-fastapi-endpoints`.
-- The rewrite breaks a documented exception or exit code:
-  `ceh-python-library:publish-python-library`.
+- The rewrite breaks a documented exception or exit code: whoever owns the release, for example
+  `ceh-python-library:publish-python-library` for a Python library.

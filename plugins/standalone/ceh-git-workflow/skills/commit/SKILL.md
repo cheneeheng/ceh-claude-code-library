@@ -54,19 +54,8 @@ Every commit is one logical change with a Conventional Commits message:
 
 ### Types
 
-| Type       | When to use                                              |
-| ---------- | -------------------------------------------------------- |
-| `feat`     | New feature or behavior                                  |
-| `fix`      | Bug fix                                                  |
-| `refactor` | Code change with no behavior change                      |
-| `perf`     | Performance improvement                                  |
-| `test`     | Adding or changing tests                                 |
-| `docs`     | Documentation only                                       |
-| `style`    | Formatting only — whitespace, semicolons; no code change |
-| `build`    | Build system, packaging, or external dependencies        |
-| `ci`       | CI/CD configuration and pipelines                        |
-| `chore`    | Maintenance, tooling; anything not covered above         |
-| `revert`   | Reverts a previous commit (body: `Reverts <sha>`)        |
+`feat`, `fix`, `refactor` (no behavior change), `perf`, `test`, `docs`, `style` (formatting only),
+`build`, `ci`, `chore` (anything not covered above), `revert` (body: `Reverts <sha>`).
 
 ### Scope
 
@@ -92,23 +81,7 @@ lowercase and consistent with scopes already used in the log (`git log --oneline
 
 ## Output
 
-Subject, bad vs. good:
-
 ```
 bad:  fixed bug                          # not imperative, no type/scope, vague
-bad:  fix(orders): Fixed the bug where.. # capitalized, past tense, trailing detail
 good: fix(orders): reject cancel on shipped orders
-```
-
-Full example (subject + body + footers):
-
-```
-feat(orders): add bulk cancel endpoint
-
-Supports cancelling up to 100 orders per request. Single-cancel
-endpoint remains unchanged; no migration needed.
-
-Closes #342
-Co-authored-by: Jane Doe <jane@example.com>
-<attribution line, see Attribution>
 ```

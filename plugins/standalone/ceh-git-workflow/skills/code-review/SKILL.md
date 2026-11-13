@@ -2,8 +2,8 @@
 name: code-review
 description: >-
   Load this skill when reviewing a pull request or someone else's diff: what to review first,
-  blocking versus advisory comments, and how to structure the feedback. Trigger on "review this
-  PR", "code review", "is this ready to approve".
+  blocking versus advisory comments, and the verdict. Trigger on "review this PR", "is this ready
+  to approve". Not for finding defects (use the built-in /code-review).
 disable-model-invocation: false
 user-invocable: true
 disallowed-tools: Edit Write

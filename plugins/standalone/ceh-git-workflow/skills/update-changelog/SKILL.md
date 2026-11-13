@@ -110,7 +110,7 @@ Add comparison links at the bottom (infer repo URL from `git remote get-url orig
 
 ### 5. Validate
 
-Run the bundled validator. `${CLAUDE_PLUGIN_ROOT}` is substituted with the plugin's directory, so
+Run the bundled validator. `${CLAUDE_SKILL_DIR}` is substituted with the skill's directory, so
 the path resolves wherever the plugin is installed:
 
 ```bash

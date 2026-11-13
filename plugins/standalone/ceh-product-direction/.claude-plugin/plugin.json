@@ -1,6 +1,6 @@
 {
   "name": "ceh-product-direction",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "CEH product direction: decide what to build and whether it is worth it. Write a repo's VISION.md and STRATEGY.md, so agents and people can settle later decisions from them, drafted from what the repo shows and confirmed with its owner. And turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop: draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes. Then harden it: a report-only board review, and specialist passes on strategy, unit economics, go-to-market, premortem, the 90-day operating plan, and investor materials.",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },
   "repository": "https://github.com/cheneeheng/ceh-claude-code-library",

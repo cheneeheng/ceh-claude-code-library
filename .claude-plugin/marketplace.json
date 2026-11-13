@@ -11,7 +11,7 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.9.11",
+      "version": "2.9.12",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, context economy via delegated bulk reads, and replies folded to their summary."
     },
     {
@@ -23,19 +23,19 @@
     {
       "name": "ceh-codebase-explanation",
       "source": "./plugins/standalone/ceh-codebase-explanation",
-      "version": "1.3.7",
+      "version": "1.3.8",
       "description": "CEH codebase explanation: leave a codebase understood — a whole-repo walkthrough file, explaining a subsystem, design, or diff until it lands, the living architecture document, and why code is the way it is, traced through git history."
     },
     {
       "name": "ceh-git-workflow",
       "source": "./plugins/standalone/ceh-git-workflow",
-      "version": "1.5.10",
+      "version": "1.5.11",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, code review, and addressing review comments. Stack-agnostic."
     },
     {
       "name": "ceh-testing",
       "source": "./plugins/standalone/ceh-testing",
-      "version": "1.6.15",
+      "version": "1.6.16",
       "description": "CEH testing techniques: stack-agnostic test design and verification moments — write the failing test before new code, reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, explore the running app for bugs, and close the risk gaps functional tests structurally miss."
     },
     {
@@ -59,19 +59,19 @@
     {
       "name": "ceh-ui-design",
       "source": "./plugins/standalone/ceh-ui-design",
-      "version": "1.0.11",
+      "version": "1.0.12",
       "description": "CEH UI design: framework-agnostic visual design for any UI or HTML page — layout archetypes, hierarchy, navigation placement (including in-page contents), empty/loading/error states, density, a variants board, finishing recipes, and two bundled token-driven themes (Meridian, Tidewater)."
     },
     {
       "name": "ceh-blog-and-seo",
       "source": "./plugins/standalone/ceh-blog-and-seo",
-      "version": "2.0.3",
+      "version": "2.0.4",
       "description": "CEH blog and SEO: tell people about what you built. Blog posts in a personal, series-first voice, drafted from an idea via structured interview or from notes, edited, and repurposed for Twitter/X, LinkedIn, TL;DR, and newsletters. And discoverability for anything exposed to the internet: technical SEO/GEO for public web pages (meta tags, structured data, sitemap, rendering strategy), the llms.txt agent index, and findability of public-facing text (README first screen, package descriptions and keywords, repo topics, landing copy)."
     },
     {
       "name": "ceh-build-plan",
       "source": "./plugins/standalone/ceh-build-plan",
-      "version": "2.0.3",
+      "version": "2.0.4",
       "description": "CEH build plan: plan a change and build it from the plan. Decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check, and review the plan before anyone builds from it. Then build it phase by phase, test first, implementing only what each phase names and proving it with the phase's own check, with the evidence recorded in the plan."
     },
     {
@@ -95,25 +95,25 @@
     {
       "name": "ceh-usability-audit",
       "source": "./plugins/standalone/ceh-usability-audit",
-      "version": "1.2.8",
+      "version": "1.2.9",
       "description": "CEH usability audit: measure whether a non-expert can actually use what you built — cold zero-context walkthroughs by persona-constrained subagents that report where they stalled and how many steps each milestone cost against a budget set before the walk, a five-question interface audit across web UI/CLI/library/app surfaces, a three-part rewrite pass over every user-reachable error message, and a plain-language pass over labels and copy. Findings are ranked by observed outcome, not by how bad they look."
     },
     {
       "name": "ceh-product-direction",
       "source": "./plugins/standalone/ceh-product-direction",
-      "version": "2.0.3",
+      "version": "2.0.4",
       "description": "CEH product direction: decide what to build and whether it is worth it. Write a repo's VISION.md and STRATEGY.md, so agents and people can settle later decisions from them, drafted from what the repo shows and confirmed with its owner. And turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop: draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes. Then harden it: a report-only board review, and specialist passes on strategy, unit economics, go-to-market, premortem, the 90-day operating plan, and investor materials."
     },
     {
       "name": "ceh-workflow-builder",
       "source": "./plugins/standalone/ceh-workflow-builder",
-      "version": "1.4.7",
+      "version": "1.4.8",
       "description": "CEH workflow builder: turn product work that repeats in the same shape (a weekly SEO pass, a pre-release check) into a runnable artifact — one skill when it is simple, or a flow.yaml config with gates and approvals plus a thin trigger skill — emitted into the target repo's .claude/skills/. Running a flow needs ceh-workflow-runner."
     },
     {
       "name": "ceh-session-learning",
       "source": "./plugins/standalone/ceh-session-learning",
-      "version": "2.0.1",
+      "version": "2.0.2",
       "description": "CEH session learning: turn one Claude Code session's transcript into something durable. When the session went wrong, parallel analysts find why, every finding citing a transcript line and each root cause routed to a fix, with a scrubbed copy for sharing. When it went right, the steps that worked become a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments."
     },
     {
@@ -125,13 +125,13 @@
     {
       "name": "ceh-workflow-runner",
       "source": "./plugins/standalone/ceh-workflow-runner",
-      "version": "1.1.6",
+      "version": "1.1.7",
       "description": "CEH workflow runner: run a built flow.yaml for repeated product work, interactively or headless — stages on Claude Code's native tools, plus only what native lacks: approvals between stages, re-run checks, resume state and a FLOW STATUS line. Install it wherever a flow runs; building one needs ceh-workflow-builder instead."
     },
     {
       "name": "ceh-competitor-analysis",
       "source": "./plugins/standalone/ceh-competitor-analysis",
-      "version": "1.2.7",
+      "version": "1.2.8",
       "description": "CEH competitor analysis: study a competitor's repo or product and learn from it — one evidence-anchored report per competitor (breakdown, full inventory, the \"oh wow\" mechanisms worth learning from, what to incorporate and where it lands in our work), then a side-by-side comparison with our own work, each as Markdown plus a styled HTML page. Repos are shallow-cloned and read as untrusted data, never run."
     }
   ]

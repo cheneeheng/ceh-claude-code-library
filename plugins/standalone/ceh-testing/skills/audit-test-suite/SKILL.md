@@ -161,6 +161,7 @@ failure gets ignored.
 
 ```bash
 pytest --durations=10
+vitest run --reporter=verbose     # prints each test's duration
 ```
 
 A "unit" test taking hundreds of milliseconds is doing I/O — it is an integration test in the wrong

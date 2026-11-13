@@ -1,7 +1,7 @@
 ---
 name: document-architecture
 description: >-
-  Load this skill when creating or updating ARCHITECTURE.md (Mermaid diagrams plus a Key Decisions
+  Load this skill when creating or updating ARCHITECTURE.yaml (Mermaid diagrams plus a Key Decisions
   log), or when a change to the system's shape must be brought back into it. Trigger on "write the
   architecture doc", "diagram the system", "record this decision", "high-level overview".
 disable-model-invocation: false
@@ -14,15 +14,28 @@ license: Apache-2.0
 
 # Document architecture
 
-Maintain one living, committed `product/ARCHITECTURE.md` — the always-current picture of the system.
-It opens with a 3-second **Overview**, then is **mainly Mermaid diagrams**, then a
-**Key Decisions** log that holds the durable, cross-version "why".
+Maintain one living, committed `product/ARCHITECTURE.yaml`, the always-current picture of the
+system, with `ARCHITECTURE.md` rendered beside it. It opens with a 3-second **Overview**, then is
+**mainly Mermaid diagrams**, then a **Key Decisions** log that holds the durable, cross-version
+"why". Done when the YAML passes its check, every Mermaid block was rendered and looked at, and
+the Markdown is rendered from the last edit.
 
-This is the durable counterpart to a plan's §02 architecture diagram. The plan visualizes one
-version's _change_; `ARCHITECTURE.md` shows the _whole current system_ and the decision trail behind
-it. It absorbs what used to be standalone ADRs — there is no separate `docs/adr/` tree. When a
-plan is built, its lasting Design decisions are copied here as Key Decisions entries, so a reader
-gets the reasoning without opening every plan in `product/plans/`.
+This is the durable counterpart to the architecture diagram in a plan's `design`. The plan
+visualizes one version's _change_; `ARCHITECTURE.yaml` shows the _whole current system_ and the
+decision trail behind it. When a plan is built, its lasting Design decisions are copied here as
+Key Decisions entries, so a reader gets the reasoning without opening every plan in
+`product/plans/`.
+
+## Procedure
+
+1. **Check the YAML.** Run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <dir>/ARCHITECTURE.yaml` and stop
+   on exit 1 with its errors. With no file yet, start one as Storage says.
+2. **Edit the YAML:** the Overview first when it is missing, then each diagram the change touches,
+   then any new Key Decisions entry.
+3. **Render the Mermaid blocks** and look at the images, with the Mermaid CLI command under Rules.
+4. **Render the Markdown:** run `artifact.py` with `render`, and fix the YAML for each error it
+   lists.
 
 ## Rules
 
@@ -103,13 +116,13 @@ Include the diagrams that apply; omit ones the system doesn't have. Order them o
 **System context earns a separate diagram only when the externals are too many to sit legibly on
 Components.** Otherwise draw them on Components, outside the boundary, as the example below does.
 
-| Diagram        | Mermaid type      | Shows                                                                                                           |
-| -------------- | ----------------- | --------------------------------------------------------------------------------------------------------------- |
-| System context | `flowchart`       | External actors and systems around the boundary — who/what talks to it                                          |
-| Components     | `flowchart`       | **The expanded Overview** — every internal piece and what crosses each connection (rules below)                 |
-| Key flows      | `sequenceDiagram` | 1–3 critical request/lifecycle paths end to end                                                                 |
-| Data model     | `erDiagram`       | Core entities and relationships (mirrors the `ceh-python-service:write-postgresql-code` entities)               |
-| State machines | `stateDiagram-v2` | Legal status transitions for key entities (mirrors the `ceh-python-service:write-postgresql-code` status rules) |
+| Diagram        | Mermaid type      | Shows                                                                                           |
+| -------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
+| System context | `flowchart`       | External actors and systems around the boundary — who/what talks to it                          |
+| Components     | `flowchart`       | **The expanded Overview** — every internal piece and what crosses each connection (rules below) |
+| Key flows      | `sequenceDiagram` | 1–3 critical request/lifecycle paths end to end                                                 |
+| Data model     | `erDiagram`       | Core entities and relationships (mirrors the project's own entity rules)                        |
+| State machines | `stateDiagram-v2` | Legal status transitions for key entities (mirrors the project's own status rules)              |
 
 **Components is the Overview with the detail put back** — same system, no longer a line. The
 Overview is a spine _by rule_; Components branches, fans out, and loops back wherever the real
@@ -146,8 +159,9 @@ flowchart LR
     worker -->|book label| carrier([Carrier API])
 ```
 
-State-machine diagrams must match the `ceh-python-service:write-postgresql-code` rule that not all
-transitions are legal — draw only the legal edges:
+State-machine diagrams must match the project's own entity and status rules, for example the
+`ceh-python-service:write-postgresql-code` rule that not all transitions are legal — draw only the
+legal edges:
 
 ```mermaid
 stateDiagram-v2

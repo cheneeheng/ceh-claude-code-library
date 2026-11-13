@@ -56,6 +56,7 @@ Rungs 1 and 2 are claims, not proof. Steps 1 to 4 below are how you reach rung 4
 
 ```bash
 pytest --cov=app.pricing --cov-report=term-missing     # the region you are about to change
+vitest run --coverage --coverage.include='src/pricing/**'   # TypeScript
 ```
 
 **If coverage of that region is at or near zero, writing tests is the first task**, not the
@@ -111,14 +112,15 @@ Run the old and new implementations over the same inputs and compare. No expecta
 oracle to invent.
 
 ```bash
-git worktree add /tmp/before HEAD              # pristine pre-change copy
+export BEFORE="$(mktemp -d)/before"            # a temporary directory outside the repo
+git worktree add "$BEFORE" HEAD                # pristine pre-change copy
 # ... do the refactor in the working tree ...
 
 python - <<'PY'
-import json, subprocess
+import json, os, subprocess
 cases = [json.loads(l) for l in open("tests/fixtures/replay.jsonl")]
 for c in cases:
-    before = subprocess.run(["python","-m","app.cli"], cwd="/tmp/before",
+    before = subprocess.run(["python","-m","app.cli"], cwd=os.environ["BEFORE"],
                             input=json.dumps(c), capture_output=True, text=True).stdout
     after  = subprocess.run(["python","-m","app.cli"],
                             input=json.dumps(c), capture_output=True, text=True).stdout
@@ -126,7 +128,7 @@ for c in cases:
         print("DIVERGED:", c); print(" before:", before); print(" after:", after)
 PY
 
-git worktree remove /tmp/before
+git worktree remove "$BEFORE"
 ```
 
 For an in-process version, import both implementations and compare directly — keep the old one under

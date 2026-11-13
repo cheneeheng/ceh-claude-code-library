@@ -161,8 +161,9 @@ personas that stalled on it**. Repeat until the gate reads 5/5: the gate is the 
 user who is present may still stop the loop early or accept a lower score; record that in the
 report.
 
-**Leave your edits in the working tree.** Make no branch, commit, push, or pull request unless the
-request asks for one, because the user reviews the diff before anything lands.
+**Leave your edits in the working tree.** Make no commit, push, or pull request unless the request
+asks for one, because the user reviews the diff before anything lands. If the environment requires
+a branch before editing, create one; still do not commit.
 
 **Report other defects, do not fix them.** A security hole or a logic bug found on the way is
 reported as a finding, even on a line you are already rewriting, because the user expects the

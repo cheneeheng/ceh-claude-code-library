@@ -69,10 +69,15 @@ The [Full release](#full-release) with these differences:
 3. Review is fast-tracked to 1 approval, but CI must pass. A broken hotfix is worse than a delayed
    one.
 4. The PR body links the incident and names the symptom, so the merge commit explains itself.
-5. After publishing, deploy staging then production (both, however abbreviated), because a rushed
-   fix that skips staging can ship a second failure straight to production. Confirm the
-   symptom is gone and error rates are back to baseline before declaring the incident resolved,
-   and be ready to roll back. A P1/P2 gets a post-mortem within 48 hours.
+
+The hotfix path ends at publishing. Deploying is a person's step, so report what is left for them
+to do:
+
+- Deploy to staging first, then production (both, however abbreviated), because a rushed fix that
+  skips staging can ship a second failure straight to production.
+- Confirm the symptom is gone and error rates are back to baseline before declaring the incident
+  resolved, and be ready to roll back.
+- Hold a post-mortem within 48 hours for a P1/P2.
 
 ## Rules
 
@@ -135,6 +140,7 @@ chore: release vX.Y.Z
 - CI red or approvals missing at step 7 → surface it and wait. Never tag around it.
 - No human present and no standing authorization to publish → prepare everything up to the tag,
   then stop and report. Tagging and publishing are outward-facing and cannot be taken back.
+  Deploying is the same: never deploy without a human's authorization for that deploy.
 
 ## Hands off to
 

@@ -27,25 +27,21 @@ cheap test attached. This skill is that loop, made disciplined.
 The core stance: **draft proactively, then interrogate**. Infer a v0 from what already exists and
 interview against it. A concrete draft gives the user something to react to, and correction is faster and sharper than composition.
 
----
-
-## The Loop
+## Procedure
 
 ```
-Phase 0  Intake      → find/read app plans or provided material
-Phase 1  Draft v0    → write BUSINESS_PLAN.yaml from what's known; score the PMF gate
-Phase 2  Interview   → attack the lowest-scoring, highest-leverage gate criterion (one question)
-Phase 3  Revise      → fold the answer in; re-tag confidence; re-score the gate
-         ↑___________ repeat Phase 2–3 until gate = 8/8 AND user confirms
-Phase 4  Validate    → flip status to validated; hand off next steps
+Step 1  Intake      → find/read app plans or provided material
+Step 2  Draft v0    → write BUSINESS_PLAN.yaml from what's known; score the PMF gate
+Step 3  Interview   → attack the lowest-scoring, highest-leverage gate criterion (one question)
+Step 4  Revise      → fold the answer in; re-tag confidence; re-score the gate
+        ↑___________ repeat steps 3–4 until gate = 8/8 AND user confirms
+Step 5  Validate    → flip status to validated; hand off next steps
 ```
 
 Each loop closes one gap. The gate score **chooses the next question**, so the interview is never
 a fixed questionnaire.
 
----
-
-## Phase 0 — Intake (read before asking)
+### 1. Intake (read before asking)
 
 Before any question, gather everything that already constrains the plan.
 
@@ -76,9 +72,7 @@ says, when no router has already moved it.
 a single grounding question — _"In one or two sentences: what's the product, and who is it for?"_
 — then draft v0 from that answer. Still draft before interrogating.
 
----
-
-## Phase 1 — Draft v0 proactively
+### 2. Draft v0 proactively
 
 Write a complete `.agents_workspace/product/business/BUSINESS_PLAN.yaml` from
 `${CLAUDE_SKILL_DIR}/assets/business-plan.template.yaml`
@@ -100,15 +94,13 @@ the PMF gate as `pmf_gate: N` and identify the **lowest-scoring, highest-leverag
 Show the user the draft (or, for a long plan, the executive summary + the gate scorecard with
 which criteria are open). Then begin the interview. Do not wait for permission to draft.
 
----
-
-## Phase 2 — The PMF Interview
+### 3. The PMF interview
 
 Rigorous means **adversarial toward assumptions, not toward the user**. You are hunting the claim
 most likely to be wrong and most expensive if it is. The gate scorecard picks the target; you ask
 the one question that would most move it.
 
-### Rules
+#### Interview rules
 
 1. **One question per turn.** Never dump a list. Ask the single highest-leverage thing you don't
    yet know. Wait for the answer.
@@ -133,7 +125,7 @@ the one question that would most move it.
 8. **Know when to stop asking on a point.** Once a criterion is evidenced or has a named test,
    move on — don't gold-plate a passing criterion while others sit at zero.
 
-### The criteria as an agenda (see the 8-point gate in the schema)
+#### The criteria as an agenda (see the 8-point gate in the schema)
 
 | Gate criterion                   | The question it demands an answer to                                                  |
 | -------------------------------- | ------------------------------------------------------------------------------------- |
@@ -146,9 +138,7 @@ the one question that would most move it.
 | 7 First channel credible         | One channel where they already are, with a first-10 plan?                             |
 | 8 Riskiest assumption has a test | What single wrong assumption kills this — and the cheapest test for it?               |
 
----
-
-## Phase 3 — Revise
+### 4. Revise
 
 After each answer (or a small batch), fold it into `BUSINESS_PLAN.yaml`, then render it:
 
@@ -163,10 +153,10 @@ After each answer (or a small batch), fold it into `BUSINESS_PLAN.yaml`, then re
   evidence — you have two LOIs at $49. Lowest now is criterion 5: the market math is still
   top-down. Next question is about that."_).
 
-Then return to Phase 2 on the new lowest-scoring criterion. **This is the loop the goal demands:
+Then return to step 3 on the new lowest-scoring criterion. **This is the loop the goal demands:
 draft → interview → revise, repeated until satisfiable.**
 
-### When a criterion can't be evidenced yet
+#### When a criterion can't be evidenced yet
 
 At idea stage, most criteria will not have evidence — that is expected. Do not stall the loop
 waiting for data that requires building or selling first. Instead, convert the bare `[assumption]`
@@ -174,9 +164,7 @@ into a `[hypothesis-to-test]`: name the cheapest experiment that would settle it
 smoke test, 5 customer interviews, a concierge MVP, a pre-sale) and schedule it in §13. A
 criterion with a real, cheap, scheduled test **passes the gate**. Hand-waving does not.
 
----
-
-## Phase 4 — Validate & Hand Off
+### 5. Validate and hand off
 
 When all 8 criteria are met (evidenced or test-attached) **and** the user confirms they are
 satisfied:
@@ -195,19 +183,7 @@ satisfied:
 passes, leave `status: draft`, record the open criteria honestly, and say plainly which
 assumptions remain untested — an honest draft beats a plan that claims a fit it hasn't found.
 
----
-
-## Stop Conditions
-
-- **The idea fails a gate criterion with no path to a test** — e.g. the problem isn't real, or no
-  reachable customer exists. Say so directly. A plan's most valuable output can be "don't build
-  this, here's why." Don't manufacture a fit.
-- **The product is fundamentally different from the app plan it derives from** — flag the
-  mismatch; the business plan may be pointing at a pivot the app plan hasn't caught up to.
-
----
-
-## Edge Cases
+## Rules
 
 **Dormant plan** (`status: dormant`): write each test and kill criterion with its number and no
 date, and add no line to §13, because a date in a plan nobody is selling becomes a deadline nobody
@@ -215,8 +191,8 @@ set. On a `draft` plan that still holds your undated tests or kill criteria, dat
 dormant plan is never set to `validated`, since its tests are not scheduled. When the router's
 brief says "dormant", a new plan gets `status: dormant`.
 
-**App plans exist but are sparse** (skeleton only): draft from the §01 Concept and treat §02–§13
-as mostly `[assumption]` — the interview has more to do, which is fine.
+**App plans exist but are sparse** (skeleton only): draft from the plan's Goal. Treat the business
+plan's own §02–§13 as mostly `[assumption]` — the interview has more to do, which is fine.
 
 **User has real traction already** (launched/revenue): start the gate from evidence, not guesses.
 Many criteria may pass on intake; the loop focuses on the few still soft (often §07 channel
@@ -236,3 +212,11 @@ product. Interview for an acute problem the user has standing or insight to atta
 above. Draft v0, score the gate, leave `status: draft`, and end with the open criteria as the
 questions a person must answer, in gate order, each with the assumption the draft used. When nothing
 exists to draft from, stop and report that the plan needs a product and a customer from a person.
+
+## Stop conditions
+
+- **The idea fails a gate criterion with no path to a test** — e.g. the problem isn't real, or no
+  reachable customer exists. Say so directly. A plan's most valuable output can be "don't build
+  this, here's why." Don't manufacture a fit.
+- **The product is fundamentally different from the app plan it derives from** — flag the
+  mismatch; the business plan may be pointing at a pivot the app plan hasn't caught up to.
