@@ -179,7 +179,11 @@ phases:
     check: |
       `python tools/validate-plugins/validate.py` fails on the fixture before the change and
       prints `OK: all plugin checks passed` after it.
-    status: todo
+    status: done
+    evidence: |
+      Before the change, `python tools/validate-plugins/validate.py` failed on the new fixture
+      ("2026-11-12-repeat-mistake.md lost the backslash before a pipe"). After it, the same
+      command printed "OK: all plugin checks passed".
   - name: The other ten table-cell models keep a backslash before a pipe
     builds: |
       A fixture in the `have_uv` group rendering a fix record YAML (`good_fix` at
@@ -258,3 +262,11 @@ record:
   - date: 2026-11-13
     event: PR
     details: "#275 https://github.com/cheneeheng/ceh-claude-code-library/pull/275"
+  - date: 2026-11-13
+    event: Built Phase
+    phase: 2
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+  - date: 2026-11-13
+    event: PR
+    details: "#276 https://github.com/cheneeheng/ceh-claude-code-library/pull/276"

@@ -163,7 +163,9 @@ not only `repeat-mistake`.
   and the `ceh-every-session` PATCH bump.
 - **Check:** `python tools/validate-plugins/validate.py` fails on the fixture before the change and
   prints `OK: all plugin checks passed` after it.
-- **Status:** todo
+- **Status:** done, Before the change, `python tools/validate-plugins/validate.py` failed on the new fixture
+  ("2026-11-12-repeat-mistake.md lost the backslash before a pipe"). After it, the same
+  command printed "OK: all plugin checks passed".
 
 ### Phase 3: The other ten table-cell models keep a backslash before a pipe
 
@@ -227,5 +229,7 @@ None
 - 2026-11-13 PR: #273 https://github.com/cheneeheng/ceh-claude-code-library/pull/273
 - 2026-11-13 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-13 PR: #275 https://github.com/cheneeheng/ceh-claude-code-library/pull/275
+- 2026-11-13 Built Phase 2: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-13 PR: #276 https://github.com/cheneeheng/ceh-claude-code-library/pull/276
 
 <!-- prettier-ignore-end -->

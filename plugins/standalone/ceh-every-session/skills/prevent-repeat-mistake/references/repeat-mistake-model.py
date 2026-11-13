@@ -96,7 +96,7 @@ def _key(key: str, value: object) -> str:
 
 def _cell(text: str) -> str:
     """A table cell: a bare `|` would split the row and a line break would end it."""
-    text = re.sub(r"(?<!\\)\|", r"\\|", text.strip())
+    text = text.strip().replace("\\|", "&#92;|").replace("|", "\\|")
     return re.sub(r"\s*\n\s*", "<br>", text)
 
 
