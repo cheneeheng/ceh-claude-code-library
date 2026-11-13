@@ -780,6 +780,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "none/product/retros/notes.yaml": "key: value\n",
         "none/product/retros/2026-11-12-cockpit-repeat-mistake.yaml": "key: value\n",
         f"none/{day}.yaml": "key: value\n",
+        # A source backslash before a pipe must survive into the rendered cell.
+        f"pipe/product/retros/{day}.yaml": good_rm.replace(
+            "mistake: Dates written as 10/09/2026", "mistake: 'a \\| b'"
+        ),
     }
     for name, text in rm_files.items():
         (rm / name).parent.mkdir(parents=True, exist_ok=True)
@@ -797,12 +801,22 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ok = "### 1: Dates written as 10/09/2026\n\n```python\ndeny()\n```" in text
         return None if ok else f"{day}.md was not rendered"
 
+    def rm_pipe_kept() -> str | None:
+        md = rm / "pipe" / "product" / "retros" / f"{day}.md"
+        text = md.read_text(encoding="utf-8") if md.is_file() else ""
+        return (
+            None
+            if "a &#92;\\| b" in text
+            else f"{day}.md lost the backslash before a pipe"
+        )
+
     rh_es = f"{es}/artifact-render-hook.py"
     local = (
         rm / "none" / ".agents_workspace" / "product" / "retros" / f"{day}.yaml"
     ).as_posix()
     repeat_mistake_fixtures = ([
         {"script": rh_es, "stdin": write_rel(rm / "ok", f"product/retros/{day}.yaml"), "out": "", "after": rm_rendered},
+        {"script": rh_es, "stdin": write_rel(rm / "pipe", f"product/retros/{day}.yaml"), "out": "", "after": rm_pipe_kept},
         {"script": rh_es, "stdin": write_at(rm / "bad" / "product" / "retros" / f"{day}.yaml"), "out": "fixes.0.status"},
         {"script": rh_es, "stdin": write_rel(rm / "none", f"product/retros/{day}.yaml"), "out": "no 'schema:"},
         {"script": rh_es, "stdin": write_rel(rm / "none", local), "out": "no 'schema:"},

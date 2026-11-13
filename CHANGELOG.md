@@ -61,6 +61,11 @@ the payload `cwd`, as `artifact-render-hook.py` already does, so a hand edit to 
 Markdown named by a relative path is denied too. All 13 copies change, and each carrier gets a
 PATCH bump.
 
+Phase 2 of `handoff-leftovers`: a repeat-mistake table cell keeps a backslash the source wrote
+before a pipe. The renderer writes that backslash as `&#92;` and then escapes every pipe, so a
+source `\|` displays as `\|` instead of `|`. The format stays `repeat-mistake/v2`, since the YAML
+it accepts is unchanged.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -71,7 +76,7 @@ PATCH bump.
 | `ceh-codebase-explanation`     | 1.3.9   |
 | `ceh-coding-conduct`           | 2.5.9   |
 | `ceh-competitor-analysis`      | 1.2.9   |
-| `ceh-every-session`            | 2.9.13  |
+| `ceh-every-session`            | 2.9.14  |
 | `ceh-git-workflow`             | 1.5.11  |
 | `ceh-product-direction`        | 2.0.5   |
 | `ceh-security-audit`           | 1.1.8   |
@@ -140,6 +145,8 @@ PATCH bump.
 
 - Deny an edit to generated Markdown named by a relative path in `generated-md-guard.py`, which
   resolved the path against the hook's own cwd and let the edit through.
+- Keep a backslash written before a pipe in a rendered repeat-mistake table cell, which the
+  renderer dropped.
 - Stop `explain-codebase` untracking a committed output file: it reports the file as tracked and
   leaves the untracking to the user.
 - Stop `edit-post` overwriting a draft git does not track: the revision is saved beside it as
