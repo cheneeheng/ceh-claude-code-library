@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: workspace-sync-commit-message.yaml
 generated_note: "Do not edit. artifact.py renders this file from workspace-sync-commit-message.yaml: edit the YAML, then run artifact.py render."
 title: Workspace sync commits follow the commit skill's message rules
-status: ready
+status: built
 created: 2026-11-13
 ---
 
@@ -77,7 +77,9 @@ writes a subject the skill would accept: `chore(workspace): sync worktree <workt
   prints nothing. `grep -c "chore(workspace): sync worktree"` prints 1 for the plugin's
   `README.md` and at least 1 for `CHANGELOG.md`, and
   `grep -n "ceh-git-workflow" docs/PLUGIN_VERSIONS.md` shows the new version.
-- **Status:** todo
+- **Status:** done, The new fixture first failed with "no workspace sync commit". After the script, README
+  and version updates, tools/validate-plugins/validate.py printed
+  "OK: all plugin checks passed" on Windows using the cached Python 3.12 runtime.
 
 ## Open
 
@@ -88,5 +90,14 @@ None
 - 2026-11-13 Planned: status ready
 - 2026-11-13 Reviewed: Ready to build, 0 blocking
 - 2026-11-13 PR: #270 https://github.com/cheneeheng/ceh-claude-code-library/pull/270
+- 2026-11-13 Built Phase 1: tools/validate-plugins/validate.py: OK: all plugin checks passed. The fixture failed
+  first with no workspace sync commit, then passed after the subject change.
+- 2026-11-13 Checked: 17 Built, 1 Extra: the implementation skill's closure step also records lasting
+  workspace decisions in product/ARCHITECTURE.yaml with generated Markdown.
+  The final repository validator passed after the subsequent checkpoint implementation.
+- 2026-11-13 Checked: 17 Built, 1 Extra: `product/ARCHITECTURE.yaml`, new on the branch, with its generated
+  Markdown. The version is 1.5.13, not 1.5.12, because the checkpoint plan's PATCH bump
+  rides in the same commit. The validator passes and every grep in the phase check holds.
+- 2026-11-13 PR: #284 https://github.com/cheneeheng/ceh-claude-code-library/pull/284
 
 <!-- prettier-ignore-end -->

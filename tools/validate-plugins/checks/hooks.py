@@ -4,6 +4,8 @@ into the script and checks its exit code and output. No model call."""
 from __future__ import annotations
 
 import json
+import datetime as dt
+import hashlib
 import os
 import re
 import shutil
@@ -183,9 +185,208 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             else f"wt/.agents_workspace: expected ceh-ws/ws/wt, got {got!r}"
         )
 
+    pending = ws / ".git" / "ceh-checkpoint-pending"
+
+    def clear_pending() -> None:
+        if pending.exists():
+            for entry in pending.iterdir():
+                entry.unlink()
+
+    def recorded(reference: str | None) -> str | None:
+        entries = list(pending.iterdir()) if pending.exists() else []
+        if reference is None:
+            return "unexpected checkpoint entry" if entries else None
+        if len(entries) != 1:
+            return f"expected one checkpoint entry for {reference}, got {len(entries)}"
+        expected = f"{wt.as_posix()}\n{reference}\n"
+        if entries[0].read_text(encoding="utf-8").replace("\\", "/") != expected:
+            return "checkpoint entry lost its checkout or reference"
+        valid = (
+            entries[0].name == f"pr-{reference}"
+            if reference.isdigit()
+            else re.fullmatch(r"branch-[0-9a-f]{64}", entries[0].name)
+        )
+        return None if valid else "wrong checkpoint entry name"
+
+    def recording(command: str, reference: str | None, **extra) -> dict:
+        return {
+            **sync("merge", wt),
+            "stdin": {"cwd": str(wt), "tool_input": {"command": command}},
+            "before": clear_pending,
+            "after": lambda: recorded(reference),
+            "out": "",
+            **extra,
+        }
+
     def append(repo: Path, line: str) -> None:
         with open(repo / "DECISION_LOG.md", "a", encoding="utf-8") as f:
             f.write(line + "\n")
+
+    gh_stub = tmp / "gh-stub"
+    gh_stub.mkdir()
+    (gh_stub / "gh").write_text(
+        '#!/bin/sh\ndir=${0%/*}\necho called >> "$dir/calls"\ncat "$dir/$3.json"\nexit "$(cat "$dir/code")"\n',
+        encoding="utf-8",
+        newline="\n",
+    )
+    (gh_stub / "gh").chmod(0o755)
+    (gh_stub / "gh.cmd").write_text(
+        '@echo off\necho called >> "%~dp0calls"\ntype "%~dp0%~3.json"\nset /p stub_code=<"%~dp0code"\nexit /b %stub_code%\n',
+        encoding="utf-8",
+    )
+    checkpoint_env = {
+        **who,
+        "PATH": str(gh_stub) + os.pathsep + os.environ.get("PATH", ""),
+    }
+    checkpoint_before = {}
+
+    def checkpoint_setup(
+        refs, checkout, owner, state, dirty, age, merged_age, busy, code
+    ):
+        clear_pending()
+        pending.mkdir(exist_ok=True)
+        checkpoint_before["sequence"] = checkpoint_before.get("sequence", 0) + 1
+        if not owner.exists():
+            oid = g(
+                ws, "commit-tree", "HEAD^{tree}", "-p", "HEAD", "-m", "orphan workspace"
+            )
+            g(ws, "update-ref", f"refs/heads/ceh-ws/ws/{owner.name}", oid)
+        checkpoint_before["head"] = g(
+            checkout / ".agents_workspace", "rev-parse", "HEAD"
+        )
+        (gh_stub / "calls").unlink(missing_ok=True)
+        (gh_stub / "code").write_text(str(code), encoding="utf-8")
+        for n in refs:
+            entry = pending / f"pr-{n}"
+            entry.write_text(f"{owner.as_posix()}\n{n}\n", encoding="utf-8")
+            stamp = time.time() - age * 86400
+            os.utime(entry, (stamp, stamp))
+            result = {
+                "state": state,
+                "number": n,
+                "url": f"https://github.com/example/project/pull/{n}",
+                "mergeCommit": {"oid": f"merge-{n}-{checkpoint_before['sequence']}"},
+                "mergedAt": (
+                    dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=merged_age)
+                ).isoformat(),
+            }
+            (gh_stub / f"{n}.json").write_text(json.dumps(result), encoding="utf-8")
+        if dirty:
+            append(checkout / ".agents_workspace", "checkpoint content")
+        if busy:
+            (ws / ".git" / busy).touch()
+
+    def checkpoint_result(refs, checkout, committed, kept, no_call, busy):
+        if busy:
+            (ws / ".git" / busy).unlink()
+        head = g(checkout / ".agents_workspace", "rev-parse", "HEAD")
+        if (head != checkpoint_before["head"]) != committed:
+            return f"checkpoint commit expected={committed}, HEAD changed={head != checkpoint_before['head']}"
+        entries = list(pending.iterdir()) if pending.exists() else []
+        if len(entries) != (len(refs) if kept else 0):
+            return "checkpoint pending entries were not kept or cleared correctly"
+        if committed:
+            repo = checkout / ".agents_workspace"
+            if (
+                g(repo, "rev-list", "--count", f"{checkpoint_before['head']}..HEAD")
+                != "1"
+            ):
+                return "expected exactly one checkpoint commit"
+            subject = (
+                f"chore(workspace): checkpoint source pr #{refs[0]}"
+                if len(refs) == 1
+                else "chore(workspace): checkpoint source prs "
+                + ", ".join(f"#{n}" for n in refs)
+            )
+            if len(subject) > 72:
+                subject = f"chore(workspace): checkpoint {len(refs)} source prs"
+            if g(repo, "log", "-1", "--format=%s") != subject:
+                return "wrong checkpoint subject"
+            body = g(repo, "log", "-1", "--format=%b")
+            for n in refs:
+                if (
+                    f"https://github.com/example/project/pull/{n} merged as merge-{n}-{checkpoint_before['sequence']}"
+                    not in body
+                ):
+                    return "checkpoint body lost the PR URL or merge commit"
+            if g(repo, "status", "--porcelain"):
+                return "checkpoint did not commit all workspace changes"
+        if no_call and (gh_stub / "calls").exists():
+            return "gh should not have been called"
+        return None
+
+    def checkpoint(
+        refs=(12,),
+        checkout=proj,
+        owner=None,
+        state="MERGED",
+        dirty=False,
+        age=0,
+        merged_age=0,
+        busy=None,
+        code=0,
+        committed=True,
+        kept=False,
+        no_call=False,
+        out="",
+        **extra,
+    ):
+        return {
+            **sync("commit", checkout),
+            "env": checkpoint_env,
+            "out": out,
+            "before": lambda: checkpoint_setup(
+                refs,
+                checkout,
+                owner or checkout,
+                state,
+                dirty,
+                age,
+                merged_age,
+                busy,
+                code,
+            ),
+            "after": lambda: checkpoint_result(
+                refs, checkout, committed, kept, no_call, busy
+            ),
+            **extra,
+        }
+
+    def branch_checkpoint():
+        checkpoint_setup((12,), proj, proj, "MERGED", False, 0, 0, None, 0)
+        (pending / "pr-12").unlink()
+        (
+            pending / ("branch-" + hashlib.sha256(b"feature-checkpoint").hexdigest())
+        ).write_text(f"{proj.as_posix()}\nfeature-checkpoint\n", encoding="utf-8")
+        shutil.copyfile(gh_stub / "12.json", gh_stub / "feature-checkpoint.json")
+
+    def refused_commit():
+        checkpoint_setup((12,), proj, proj, "MERGED", False, 0, 0, None, 0)
+        hooks_dir = tmp / "refuse-commit"
+        hooks_dir.mkdir(exist_ok=True)
+        hook = hooks_dir / "pre-commit"
+        hook.write_text("#!/bin/sh\nexit 1\n", encoding="utf-8", newline="\n")
+        hook.chmod(0o755)
+        g(ws, "config", "core.hooksPath", hooks_dir.as_posix())
+
+    def replay_checkpoint():
+        checkpoint_setup((12,), proj, proj, "MERGED", False, 0, 0, None, 0)
+        body = f"https://github.com/example/project/pull/12 merged as merge-12-{checkpoint_before['sequence']}"
+        g(
+            ws,
+            "commit",
+            "-q",
+            "--allow-empty",
+            "-m",
+            "chore(workspace): checkpoint source pr #12",
+            "-m",
+            body,
+        )
+        checkpoint_before["head"] = g(ws, "rev-parse", "HEAD")
+
+    def kept_after_refusal():
+        g(ws, "config", "--unset", "core.hooksPath")
+        return checkpoint_result((12,), proj, False, True, False, None)
 
     def main_appends() -> None:
         # The main checkout commits m1 and leaves m2 uncommitted, as a live session would.
@@ -1010,7 +1211,52 @@ def hook_fixtures(tmp: Path) -> list[dict]:
          "after": lambda: "created despite the kill switch" if os.path.lexists(wt_ws) else None},
         {**sync("start", wt), "out": "", "after": on_ws_branch},
         {**sync("commit", wt), "out": "", "before": lambda: append(wt_ws, "w1"),
-         "after": lambda: None if g(wt_ws, "log", "-1", "--format=%s") == "ceh-ws: wt" else "no ceh-ws commit"},
+         "after": lambda: None if g(wt_ws, "log", "-1", "--format=%s") == "chore(workspace): sync worktree wt" else "no workspace sync commit"},
+        recording("gh pr merge 12 --merge", "12"),
+        recording("gh pr merge --subject 'fix; ship' 12 --merge", "12"),
+        recording("gh pr merge --subject 'fix | ship' 12 --merge", "12"),
+        recording("printf '%s' '; gh pr merge 12 ;'", None),
+        recording("gh pr merge feat/a", "feat/a"),
+        recording("gh pr merge feat_a", None, before=lambda: None,
+                  after=lambda: None if len(list(pending.iterdir())) == 2 else "branch references overwrote each other"),
+        recording("gh pr merge feat/A", None, before=lambda: None,
+                  after=lambda: None if len(list(pending.iterdir())) == 3 else "case-only branch reference was overwritten"),
+        recording("gh pr merge " + "a" * 130 + "/" + "b" * 130, "a" * 130 + "/" + "b" * 130),
+        recording("gh pr merge https://github.com/example/project/pull/12 --merge", "12"),
+        recording("gh pr merge feat/checkpoint --merge", "feat/checkpoint"),
+        recording("gh pr merge --merge", "feat"),
+        recording("sleep 30 && gh pr merge --merge", "feat"),
+        recording("if true; then gh pr merge 12 --merge; fi", "12"),
+        recording("GH_PAGER= gh pr merge 12 --merge", "12"),
+        recording("gh pr merge 12 --merge", "12", repeat=2),
+        recording("gh pr merge 12 --repo example/other", None),
+        recording("gh pr merge 12 --repo=example/other", None),
+        recording("gh pr merge 12 -Rexample/other", None),
+        recording("git status", None),
+        recording('gh pr create --body "run gh pr merge 12"', None),
+        recording("gh pr merge 12", None, env={**who, "CEH_DISABLED_HOOKS": "sync-agents-workspace"}),
+        recording("gh pr merge 12", None, stdin={"cwd": str(repos["main"]), "tool_input": {"command": "gh pr merge 12"}}),
+        # Reset before the detached worker starts: these recording cases do not confirm a merge.
+        {**sync("merge", wt), "stdin": {"cwd": str(wt), "tool_input": {"command": "git status"}}, "before": clear_pending, "out": ""},
+        checkpoint(dirty=True),
+        checkpoint(checkout=wt, dirty=True),
+        checkpoint(repeat=2),  # A clean workspace gets exactly one empty checkpoint commit.
+        checkpoint(before=branch_checkpoint),
+        checkpoint(before=replay_checkpoint, committed=False),
+        checkpoint(refs=(12, 13)),
+        checkpoint(refs=tuple(range(100, 112))),
+        checkpoint(state="OPEN", committed=False, kept=True),
+        checkpoint(state="CLOSED", committed=False),
+        checkpoint(merged_age=1, committed=False),
+        checkpoint(age=15, committed=False, no_call=True),
+        checkpoint(owner=wt, committed=False, kept=True, no_call=True),
+        checkpoint(owner=tmp / "gone", committed=False, kept=True, no_call=True),
+        checkpoint(busy="MERGE_AUTOSTASH", committed=False, kept=True, no_call=True),
+        checkpoint(code=1, committed=False, kept=True, out="systemMessage", stdin={"cwd": str(proj), "session_id": "checkpoint-failure"}),
+        {**sync("commit", proj), "env": checkpoint_env, "stdin": {"cwd": str(proj), "session_id": "checkpoint-failure"}, "out": "",
+         "after": lambda: checkpoint_result((12,), proj, False, True, False, None)},
+        checkpoint(before=refused_commit, after=kept_after_refusal, out="git checkpoint commit failed"),
+        {**sync("merge", wt), "stdin": {"cwd": str(wt), "tool_input": {"command": "git status"}}, "before": clear_pending, "out": ""},
         {**sync("end", wt), "out": "", "before": main_appends, "after": merged_with_dirty_log},
         {**sync("start", proj), "out": "ceh-ws/ws/wt", "before": both_edit_notes, "after": conflict_aborted},
         {**sync("start", wt), "out": "", "before": lambda: shutil.rmtree(wt_ws), "after": on_ws_branch},
