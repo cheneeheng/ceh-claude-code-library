@@ -116,3 +116,4 @@ No change to `docs/VISION.md` is needed.
 - 2026-11-13 Manual Phase 2 checks: both passed, reported by the user, not run by the agent.
   The live `AskUserQuestion` call was denied and redirected to a decision block without a dialog;
   the ordinary user-only question also produced a decision block without a dialog. Status built.
+- 2026-11-13 PR: #272 https://github.com/cheneeheng/ceh-claude-code-library/pull/272
