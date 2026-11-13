@@ -63,6 +63,8 @@ less accurately and asks questions the transcript already answers.
   runs only when a person invokes it.
 - **Decide, do not interview.** Every answer this skill needs is in the session. Ask the user only
   for the skill's scope (repo or personal) when the session gives no sign, and default to the repo.
+- **The target repo's conventions win.** Where its skills carry other frontmatter keys or headings
+  than the shape under Output, such as a `license` key, follow them.
 
 ## Output
 

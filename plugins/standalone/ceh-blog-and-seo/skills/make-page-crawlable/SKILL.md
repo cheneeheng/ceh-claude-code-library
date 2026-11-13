@@ -9,7 +9,7 @@ user-invocable: true
 license: Apache-2.0
 ---
 
-# Web discoverability
+# Make page crawlable
 
 A public page is not done until its discoverability surface is complete. Search engines and
 generative engines both work from the same raw material: the initial HTML response, the head
@@ -77,3 +77,9 @@ not as a later "SEO pass".
   React helmet-equivalent block is a few lines.
 - Never trade accessibility for SEO. Semantic headings, landmarks, and alt text serve both;
   when they appear to conflict, accessibility wins.
+
+## Output
+
+The head tags, `sitemap.xml`, `robots.txt` and JSON-LD the page lacked, written into the site's own
+files. Report each file changed, and that the page's initial HTML response (`curl -s <url>`)
+carries the title, description, canonical link and JSON-LD.

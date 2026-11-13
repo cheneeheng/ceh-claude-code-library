@@ -49,6 +49,12 @@ before reading it, and `record-project-decisions` a `GLOSSARY.yaml` too, which n
 [uv](https://docs.astral.sh/uv/), installing pydantic and PyYAML on first use. Without uv the file
 is read unchecked, and a repo with none of these files needs no uv.
 
+`record-project-decisions` writes a decision that binds all of the user's projects to the folder
+`CEH_USER_RULES_DIR` names (optional, default `~/.claude/rules/`), for a user who keeps those rules
+in a git-tracked folder. Claude Code loads only the default folder by itself, so for any other
+folder the skill adds one `@<folder>/decision-<topic>.md` import line per rule to
+`~/.claude/CLAUDE.md`.
+
 ## Agents
 
 | Agent         | When to use                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |

@@ -9,6 +9,97 @@ before this repo live in
 
 ---
 
+## 2026-11-13
+
+The last two phases of `product/plans/plugin-audit-findings.yaml` land together, at the user's
+request: the decided skill changes (phase 5) and the per-plugin polish (phase 6). Four skills
+change what they do. `implement-from-plan` sets a phase `done` when the user reports having run
+its check, with `evidence: reported by the user, not run by the agent`, and reports those phases
+apart. `record-project-decisions` writes a decision that binds all projects to
+`$CEH_USER_RULES_DIR`, default `~/.claude/rules/`, and adds the `@` import line a rule outside
+the default folder needs, since the Claude Code memory docs name no other folder that loads by
+itself. `release`'s hotfix path ends at publishing and reports deploying, staging first, and the
+post-mortem as a person's steps. The three usability skills that edit files create a branch when
+the environment requires one, and still do not commit. The polish is wording and shape: titles
+that match names, `## Output` and `## Rules` sections where they were missing, a numbered
+Procedure in `document-architecture`, `find-product-market-fit` in the template's shape, and
+examples that hold outside Python. Phase 6 lands as one commit, not one per plugin, because both
+phases edit the same files in three plugins.
+
+### Plugin versions
+
+| Plugin                     | Version |
+| -------------------------- | ------- |
+| `ceh-blog-and-seo`         | 2.0.4   |
+| `ceh-build-plan`           | 2.0.4   |
+| `ceh-codebase-explanation` | 1.3.8   |
+| `ceh-competitor-analysis`  | 1.2.8   |
+| `ceh-every-session`        | 2.9.12  |
+| `ceh-git-workflow`         | 1.5.11  |
+| `ceh-product-direction`    | 2.0.4   |
+| `ceh-session-learning`     | 2.0.2   |
+| `ceh-testing`              | 1.6.16  |
+| `ceh-ui-design`            | 1.0.12  |
+| `ceh-usability-audit`      | 1.2.9   |
+| `ceh-workflow-builder`     | 1.4.8   |
+| `ceh-workflow-runner`      | 1.1.7   |
+
+### Added
+
+- Add `CEH_USER_RULES_DIR`, read by `record-project-decisions`, with its row in
+  `docs/ENVIRONMENT_VARIABLES.md`.
+- Add `references/interview.md` to `draft-post`, holding the interview step moved out of the
+  skill body.
+- Add `## Output` to `make-page-crawlable`, `write-project-listing-text`, `write-llms-txt` and
+  `design-ui`, `## Rules` to `close-test-risk-gaps`, and a numbered `## Procedure` with a done
+  condition to `document-architecture`.
+- Add the optional "What waits for a request" section to the repo's `SKILL.template.md`.
+- Add `docs/known-weak-points.md` to `ceh-usability-audit`, moved out of its README.
+- Add the "Dormant plan" rule to `docs/CROSS_REFERENCES.md`.
+
+### Changed
+
+- Set a phase `done` in `implement-from-plan` on a check the user reports having run, and rewrite
+  the eval case `user-says-passed` to grade that. The case was not run.
+- End `release`'s hotfix path at publishing, and never deploy without a human's authorization.
+- Create a branch when the environment requires one in `audit-error-messages`,
+  `audit-interface` and `write-plain-language`.
+- Say what `code-review` is not for in its description, cut `commit`'s type table and examples to
+  a few lines, and read the whole branch in `update-readme` with `git diff <base>...HEAD`.
+- Point `stress-test-plan` to `review-build-plan` for a build plan, and write `bulk-reader` for
+  any file, not only code.
+- Lead `document-architecture` with `ARCHITECTURE.yaml`, and name the project's own entity and
+  status rules where it named one Python skill.
+- Open `explain-until-understood`'s description with its moment and two trigger phrases, and state
+  the two rules it borrowed from other plugins in its own words.
+- Reshape `find-product-market-fit` to Procedure, Rules and Stop conditions, with its content
+  unchanged.
+- Title `draft-post`, `make-page-crawlable` and `write-project-listing-text` after their names.
+- Name `python3` first and `jq` "if installed" in `transcript-analyst`, and let the target repo's
+  conventions win in `turn-session-into-skill`.
+- Flag a wording change that breaks a public contract "for whoever owns the release" in
+  `audit-error-messages` and `write-plain-language`, with the Python skill as an example.
+- Describe `newcomer-simulator` as never editing the target and running setup commands only when
+  told it may, and resume a walker that ran out of turns before re-dispatching it.
+- Cut the `ceh-usability-audit` README to what the plugin is, its tables, and what a user must
+  do before a skill works.
+- Add the TypeScript form beside three short Python examples in `ceh-testing`.
+- Move `report-page.html` from `references/` to `assets/` in both `ceh-competitor-analysis`
+  skills.
+- Keep minimum Claude Code versions in `compatibility` only in `build-agentic-workflow`, and say
+  which run-state file each of its three mentions means.
+- Shorten `run-agentic-workflow`'s `argument-hint` to `config=<path> [mode=...] [resume=...]`.
+
+### Fixed
+
+- Stop `explain-codebase` untracking a committed output file: it reports the file as tracked and
+  leaves the untracking to the user.
+- Stop `edit-post` overwriting a draft git does not track: the revision is saved beside it as
+  `<name>-edited.md`.
+- Use a temporary directory outside the repo where `verify-behavior-preserved` used `/tmp/before`.
+- Name `${CLAUDE_SKILL_DIR}` in `update-changelog`'s prose, as its command already does.
+- Correct the paths of the "Explanation honesty rules" entry in `docs/CROSS_REFERENCES.md`.
+
 ## 2026-11-12
 
 The stack plugins' examples and runner scripts work as written, phase 4 of

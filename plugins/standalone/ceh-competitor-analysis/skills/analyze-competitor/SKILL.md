@@ -74,7 +74,7 @@ a glance, and the HTML page carries the same content as the YAML.
 9. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" for the
    theme and its review pass. Use the Meridian theme unless the user names another, copied once to
    `.agents_workspace/competitor-analysis/themes/<theme>.css` and linked from every page. Build
-   `<slug>.html` from the YAML by filling `${CLAUDE_SKILL_DIR}/references/report-page.html`,
+   `<slug>.html` from the YAML by filling `${CLAUDE_SKILL_DIR}/assets/report-page.html`,
    keeping its COMPETITOR-ONLY blocks: the hero from `summary`, `verdict`, and up to three headline
    counts, the Adopt now / Build / Skip board from `take`, the step strip from `how_it_works`, one
    expandable card per mechanism from `oh_wow`, the inventory bars from `inventory`, and one

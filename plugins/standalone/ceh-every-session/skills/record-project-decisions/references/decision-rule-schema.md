@@ -1,8 +1,8 @@
 # Decision rule schema
 
 One file per decision that `record-project-decisions` writes, `decision-<topic>.md`, in
-`.claude/rules/` for a project decision or `~/.claude/rules/` for a user decision. A new file is a
-copy of `../assets/decision-rule.template.md`, relative to this file. The
+`.claude/rules/` for a project decision or the user rules folder (`$CEH_USER_RULES_DIR`, default
+`~/.claude/rules/`) for a user decision. A new file is a copy of `../assets/decision-rule.template.md`, relative to this file. The
 `schema: decision-rule/v2` line stays as written.
 
 ## Frontmatter

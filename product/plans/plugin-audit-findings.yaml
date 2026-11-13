@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Fix the findings of the 2026-11-11 plugin audit
-status: building
+status: built
 created: 2026-11-12
 goal: |
   The plugin audit of 2026-11-11 read all 98 skills, 13 agents and 25 scripts and left findings in
@@ -555,7 +555,18 @@ phases:
       prints nothing. `python tools/validate-plugins/validate.py` prints
       `OK: all plugin checks passed`, and `claude plugin validate` passes on each of the four
       plugins.
-    status: todo
+    status: done
+    evidence: |
+      Commit efb9f0c. The "report is not a run", "Make no branch" and "deploy staging then
+      production" greps printed nothing. The `CEH_USER_RULES_DIR` grep showed the row in
+      `docs/ENVIRONMENT_VARIABLES.md`, the README line, the skill and its schema.
+      `python tools/validate-plugins/validate.py` printed `OK: all plugin checks passed`, and
+      `claude plugin validate` printed `Validation passed` on `ceh-build-plan`,
+      `ceh-every-session`, `ceh-git-workflow` and `ceh-usability-audit`.
+    note: |
+      The rewritten eval case `evals/user-says-passed/` was not run, as the Design says. Per the
+      Claude Code memory docs, read 2026-11-13, only `~/.claude/rules/` loads by itself, so the
+      skill adds one `@` import line per rule to `~/.claude/CLAUDE.md` for any other folder.
   - name: Per-plugin polish
     builds: |
       "Phase 6: per-plugin polish", one commit per plugin, with "What every phase carries".
@@ -566,7 +577,18 @@ phases:
       touched. `git grep -n "HEAD~1 HEAD" -- plugins/standalone/ceh-git-workflow`,
       `git grep -n "/tmp/before" -- plugins/standalone/ceh-testing` and
       `git grep -n "§02" -- plugins/standalone/ceh-codebase-explanation` each print nothing.
-    status: todo
+    status: done
+    evidence: |
+      Commit efb9f0c. `python tools/validate-plugins/validate.py` printed
+      `OK: all plugin checks passed`, `claude plugin validate` printed `Validation passed` on
+      each of the thirteen plugins touched, and the `HEAD~1 HEAD`, `/tmp/before` and `§02` greps
+      printed nothing.
+    note: |
+      Of the `docs/CROSS_REFERENCES.md` blocks the Design lists, only the "Dormant plan" rule
+      had no entry. The others were already registered. The TypeScript form went beside three
+      examples, and not beside the polluter bisect in `audit-test-suite`, where no Vitest
+      equivalent was confirmed. The README text cut from `ceh-usability-audit` under "Known
+      weak points" moved to the plugin's `docs/known-weak-points.md`.
 open:
   - question: |
       Does `ceh-testing`'s `skill-started-guard.py` deny the six tester agents their own test
@@ -678,3 +700,26 @@ record:
   - date: 2026-11-12
     event: PR
     details: "#268 https://github.com/cheneeheng/ceh-claude-code-library/pull/268"
+  - date: 2026-11-13
+    event: Design changed
+    details: |
+      was "One PR per phase" and, for Phase 6, "one commit per plugin", now Phases 5 and 6 in
+      one PR and one commit, because the user asked for both phases in a single PR and both
+      edit the same files in `ceh-git-workflow`, `ceh-every-session` and `ceh-usability-audit`.
+  - date: 2026-11-13
+    event: Built Phase
+    phase: 5
+    details: |
+      efb9f0c, `python tools/validate-plugins/validate.py` printed
+      `OK: all plugin checks passed`. The eval case `user-says-passed` was rewritten and not
+      run.
+  - date: 2026-11-13
+    event: Built Phase
+    phase: 6
+    details: |
+      efb9f0c, `python tools/validate-plugins/validate.py` printed
+      `OK: all plugin checks passed`. Three edited descriptions were trimmed to keep the
+      description total under its ratchet.
+  - date: 2026-11-13
+    event: PR
+    details: "#269 https://github.com/cheneeheng/ceh-claude-code-library/pull/269"

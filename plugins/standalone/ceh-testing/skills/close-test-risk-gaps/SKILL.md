@@ -214,7 +214,14 @@ Three rules the tests encode:
 If the migration is not reversible (a dropped column, a lossy type change), say so explicitly and
 name the recovery path — restore from backup is an answer, but only if someone has confirmed it.
 
----
+## Rules
+
+- **No trigger, no tests.** A class whose trigger did not fire is skipped, with the reason.
+- **Every class gets a verdict.** All five appear in the output, the skips included.
+- **A class that fires is tested without being asked.** Only the slow or paid runs under "What
+  waits for a request" wait.
+- **Flag what this change cannot close.** A breaking contract change or an irreversible migration
+  is reported with what it needs, never fixed silently or left unmentioned.
 
 ## Output
 

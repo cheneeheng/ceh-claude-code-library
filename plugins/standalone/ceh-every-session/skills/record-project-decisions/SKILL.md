@@ -25,8 +25,11 @@ Claude Code loads each `.md` file in `.claude/rules/` with the same priority as
 when it has. A decision written there outranks plugin standards, with no skill needing to know
 about it. The files sit directly in `.claude/rules/`, never in a subfolder,
 and the `decision-` prefix marks the ones this skill owns. A decision that binds all of the user's
-projects goes to `~/.claude/rules/` instead, which Claude Code loads in every project on this
-machine, but not in cloud sessions or on other machines.
+projects goes to the user rules folder instead: `$CEH_USER_RULES_DIR` when it is set, otherwise
+`~/.claude/rules/`, which Claude Code loads in every project on this machine, but not in cloud
+sessions or on other machines. Claude Code loads no other folder by itself, so a rule file in a
+folder `CEH_USER_RULES_DIR` names loads only through an `@<path>` import line in
+`~/.claude/CLAUDE.md`, one line per file.
 
 Two modes. **Record** (the default) writes one decision from the conversation, or promotes an
 entry of the agent's decision log that turns out to bind the project. **Seed** writes a
@@ -41,13 +44,13 @@ installed.
    SvelteKit, never React", not "prefer modern frameworks". A statement that changes nothing an
    agent would do is not a decision: leave it in the conversation or its source document.
 2. **Decide its scope.** Would it hold in a project that is not this one? Yes, and it names
-   nothing of this project (its folders, tools, plugins, or product): user scope, in
-   `~/.claude/rules/`. It names this project or its product: project scope, in `.claude/rules/`.
+   nothing of this project (its folders, tools, plugins, or product): user scope, in the user
+   rules folder. It names this project or its product: project scope, in `.claude/rules/`.
    It holds only for the task at hand: not a decision. A decision whose user-wide part stands
    alone splits into a user rule and a project rule that keeps the project's specifics. Unclear:
    ask, recommending project scope. No human: write it at project scope and report the scope as
    open, because a committed file is visible and easy to move later.
-3. **Read what exists:** every file in `.claude/rules/` and `~/.claude/rules/decision-*.md`, the
+3. **Read what exists:** every file in `.claude/rules/`, each `decision-*.md` in the user rules folder, the
    project's `CLAUDE.md`, and `~/.claude/CLAUDE.md` when it exists. Already stated in a rule file
    in the same terms: stop and say so. Already stated in a `CLAUDE.md` of its scope: stop and
    report it as a candidate to move into its own `decision-` file. Same topic in a `decision-`
@@ -55,8 +58,11 @@ installed.
    for this project is allowed: name both files in the report. Contradicts a decision: see Stop
    conditions. Edit only `decision-` files: a `CLAUDE.md` and other rule files are not this
    skill's to change.
-4. **Write the file** in the shape under Output, and report its path, saying a user-scope file is
-   machine-local.
+4. **Write the file** in the shape under Output. For a user-scope file in a folder
+   `CEH_USER_RULES_DIR` names, add its import line, `@<folder>/decision-<topic>.md`, to
+   `~/.claude/CLAUDE.md` when the line is not there yet. That line is the one edit this skill
+   makes to a `CLAUDE.md`, because without it the rule never loads. Report the file's path and
+   the line added, saying a user-scope file binds only on a machine that has it.
 
 ### Seed
 
@@ -111,10 +117,9 @@ installed.
   when `CLAUDE.md` covers its area. `CLAUDE.md` keeps what the project is, its layout, its
   commands, and its procedures, and a procedure step that depends on a decision names its file
   rather than restating it, so each decision lives in one place with one history.
-- **A project decision is committed, a user decision never is.** The project's `decision-` files
-  are the record people read and review, not agent scratch, so they are never added to
-  `.gitignore`. A user decision lives outside every repository. The agent's decision log stays
-  separate.
+- **A project decision is committed.** The project's `decision-` files are the record people
+  read and review, not agent scratch, so they are never added to `.gitignore`. A user decision
+  lives in the user rules folder, never in the project. The agent's decision log stays separate.
 - **Current decisions only.** A replaced decision is edited in place or its file deleted, never
   marked "previously". Git keeps what came before, and every line loads in every session.
 - **A rule, not its history.** Comparisons and long reasoning stay in their source document. The
@@ -135,7 +140,7 @@ installed.
 ## Output
 
 One file per decision, `decision-<topic>.md`, directly in `.claude/rules/` for project scope or
-`~/.claude/rules/` for user scope. Name it for the topic, not the answer
+the user rules folder for user scope. Name it for the topic, not the answer
 (`decision-ui-framework.md`, `decision-target-market.md`), so changing the decision edits the same
 file. Each file fills `assets/decision-rule.template.md`, per `references/decision-rule-schema.md`.
 An existing file below `decision-rule/v2` is migrated to v2 when it is next edited.

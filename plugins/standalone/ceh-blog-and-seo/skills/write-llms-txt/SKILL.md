@@ -95,3 +95,8 @@ and the links are ordered by what a newcomer needs first.
   `llms-full.txt` is for.
 - **Do not treat it as a substitute for the HTML head surface.** `llms.txt` has no bearing on
   search indexing or link previews — those still need `ceh-blog-and-seo:make-page-crawlable`.
+
+## Output
+
+`llms.txt` at the path root it covers, and `llms-full.txt` only when a build step generates it.
+Report the file written, and that every link in it resolves and every H2 section holds only links.

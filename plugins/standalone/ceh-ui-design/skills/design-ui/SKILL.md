@@ -429,3 +429,9 @@ template. Keep semantic HTML (`<button>`, `<nav>`, `<main>`) — see `ceh-web-fr
 To restyle the whole app later: replace the project's `brand.css` with the other template's — the
 shared token + class contract means markup does not change, provided it avoids Meridian's
 `--shadow-lg` and `--weight-heavy`.
+
+## Output
+
+The built UI in the project's own files, with the chosen theme's `brand.css` installed whole. Done
+when every item of the review pass holds. Report the five design-pass answers, one line each, and
+any review-pass item that does not hold, with the reason.

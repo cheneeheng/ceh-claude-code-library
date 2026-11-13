@@ -59,7 +59,7 @@ Other lens: <lens> — <file>:<line> — <one sentence>, one entry per finding, 
 - Mask any secret, token, password, or key as `<secret>` everywhere in your final message: quotes,
   the one-sentence summaries, and the Other lens line. Transcripts hold whatever passed through
   the session.
-- Use Bash only to read: `python3`, `jq`, `wc`, `head`. Never write, move, or delete a file: the
+- Use Bash only to read: `python3` first, `jq` if installed, `wc`, `head`. Never write, move, or delete a file: the
   other lens analysts read the same transcripts in parallel, and the parent re-reads your cited
   lines afterwards, so a changed file breaks both.
 - Stay in your lens. A finding for another lens goes in one closing line, "Other lens:", with its

@@ -152,8 +152,8 @@ utilities and who imports them. Write what the reader cannot guess.
   `.git/info/exclude` is the right home — it ignores the file without modifying a tracked
   `.gitignore`, so no teammate inherits the rule and no repo file changes. Use the repo `.gitignore`
   instead only when the user asks for a shared rule. If a previous run left the file tracked
-  (`git ls-files --error-unmatch <path>` succeeds), untrack it with `git rm --cached <path>` before
-  writing, and say so.
+  (`git ls-files --error-unmatch <path>` succeeds), report that it is tracked, with
+  `git rm --cached <path>` as the command that untracks it, and leave the untracking to the user.
 
 - **Overwrite** an existing one — it is generated, never hand-maintained.
 - **The output file is the only write.** This skill reads the repo; it changes nothing else in it.

@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: plugin-audit-findings.yaml
 generated_note: "Do not edit. artifact.py renders this file from plugin-audit-findings.yaml: edit the YAML, then run artifact.py render."
 title: Fix the findings of the 2026-11-11 plugin audit
-status: building
+status: built
 created: 2026-11-12
 ---
 
@@ -493,7 +493,14 @@ turn on a decision block with no denied call first.
   prints nothing. `python tools/validate-plugins/validate.py` prints
   `OK: all plugin checks passed`, and `claude plugin validate` passes on each of the four
   plugins.
-- **Status:** todo
+- **Status:** done, Commit efb9f0c. The "report is not a run", "Make no branch" and "deploy staging then
+  production" greps printed nothing. The `CEH_USER_RULES_DIR` grep showed the row in
+  `docs/ENVIRONMENT_VARIABLES.md`, the README line, the skill and its schema.
+  `python tools/validate-plugins/validate.py` printed `OK: all plugin checks passed`, and
+  `claude plugin validate` printed `Validation passed` on `ceh-build-plan`,
+  `ceh-every-session`, `ceh-git-workflow` and `ceh-usability-audit`. The rewritten eval case `evals/user-says-passed/` was not run, as the Design says. Per the
+  Claude Code memory docs, read 2026-11-13, only `~/.claude/rules/` loads by itself, so the
+  skill adds one `@` import line per rule to `~/.claude/CLAUDE.md` for any other folder.
 
 ### Phase 6: Per-plugin polish
 
@@ -504,7 +511,14 @@ turn on a decision block with no denied call first.
   touched. `git grep -n "HEAD~1 HEAD" -- plugins/standalone/ceh-git-workflow`,
   `git grep -n "/tmp/before" -- plugins/standalone/ceh-testing` and
   `git grep -n "§02" -- plugins/standalone/ceh-codebase-explanation` each print nothing.
-- **Status:** todo
+- **Status:** done, Commit efb9f0c. `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`, `claude plugin validate` printed `Validation passed` on
+  each of the thirteen plugins touched, and the `HEAD~1 HEAD`, `/tmp/before` and `§02` greps
+  printed nothing. Of the `docs/CROSS_REFERENCES.md` blocks the Design lists, only the "Dormant plan" rule
+  had no entry. The others were already registered. The TypeScript form went beside three
+  examples, and not beside the polluter bisect in `audit-test-suite`, where no Vitest
+  equivalent was confirmed. The README text cut from `ceh-usability-audit` under "Known
+  weak points" moved to the plugin's `docs/known-weak-points.md`.
 
 ## Open
 
@@ -565,5 +579,15 @@ turn on a decision block with no denied call first.
   three plugins names a trigger that is not a file, or the skill has `paths` already.
   The Docker and database paths of the service scripts were syntax-checked, not run.
 - 2026-11-12 PR: #268 https://github.com/cheneeheng/ceh-claude-code-library/pull/268
+- 2026-11-13 Design changed: was "One PR per phase" and, for Phase 6, "one commit per plugin", now Phases 5 and 6 in
+  one PR and one commit, because the user asked for both phases in a single PR and both
+  edit the same files in `ceh-git-workflow`, `ceh-every-session` and `ceh-usability-audit`.
+- 2026-11-13 Built Phase 5: efb9f0c, `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`. The eval case `user-says-passed` was rewritten and not
+  run.
+- 2026-11-13 Built Phase 6: efb9f0c, `python tools/validate-plugins/validate.py` printed
+  `OK: all plugin checks passed`. Three edited descriptions were trimmed to keep the
+  description total under its ratchet.
+- 2026-11-13 PR: #269 https://github.com/cheneeheng/ceh-claude-code-library/pull/269
 
 <!-- prettier-ignore-end -->

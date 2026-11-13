@@ -17,7 +17,8 @@ bottom of this file.
 | none yet in this repo — see note below |         |          |
 
 **Shared:** the hotfix process: branch `fix/critical-<description>` from `main`, minimal scope,
-1-approval review, CI must pass, merge commit to `main`, bump PATCH + tag, staging → production.
+1-approval review, CI must pass, merge commit to `main`, bump PATCH + tag, then staging →
+production reported as a person's step.
 In agent-skills `ceh-ops:incidents` carries the same steps without commands. Add it here as a copy
 if `ceh-ops` is ever migrated.
 
@@ -74,11 +75,11 @@ without coverage, pin behavior with `ceh-testing:verify-behavior-preserved`, `re
 
 ## Explanation honesty rules
 
-**Canonical:** `plugins/standalone/ceh-coding-conduct/skills/explain-codebase/SKILL.md` — § Rules
+**Canonical:** `plugins/standalone/ceh-codebase-explanation/skills/explain-codebase/SKILL.md` — § Rules
 
-| Copy                                                                             | Section | Diverges                                                                                 |
-| -------------------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-coding-conduct/skills/explain-until-understood/SKILL.md` | § Rules | carries only the three rules that hold for a spoken explanation, not the file-bound ones |
+| Copy                                                                                   | Section | Diverges                                                                                 |
+| -------------------------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-codebase-explanation/skills/explain-until-understood/SKILL.md` | § Rules | carries only the three rules that hold for a spoken explanation, not the file-bound ones |
 
 **Shared:** three bullets word for word — "Evidence over inference", "Don't paste code" (with the
 verbatim-literal exception), and "Describe what exists today".
@@ -694,17 +695,31 @@ canonical file.
 
 **Canonical:** `plugins/standalone/ceh-product-direction/skills/develop-business-plan/SKILL.md` — § Rules, "No human to answer"
 
-| Copy                                                                                  | Section                            | Diverges                                                   |
-| ------------------------------------------------------------------------------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `plugins/standalone/ceh-product-direction/skills/sharpen-strategy/SKILL.md`           | § Stop conditions, last bullet     | adds: remove nothing in step 8, list the conflicts instead |
-| `plugins/standalone/ceh-product-direction/skills/stress-test-unit-economics/SKILL.md` | § Stop conditions, last bullet     | none                                                       |
-| `plugins/standalone/ceh-product-direction/skills/plan-go-to-market/SKILL.md`          | § Stop conditions, last bullet     | none                                                       |
-| `plugins/standalone/ceh-product-direction/skills/run-premortem/SKILL.md`              | § Stop conditions, last bullet     | none                                                       |
-| `plugins/standalone/ceh-product-direction/skills/set-operating-plan/SKILL.md`         | § Stop conditions, last bullet     | none                                                       |
-| `plugins/standalone/ceh-product-direction/skills/find-product-market-fit/SKILL.md`    | § Edge Cases, "No human to answer" | takes its own "no questions" path and scores the PMF gate  |
+| Copy                                                                                  | Section                        | Diverges                                                   |
+| ------------------------------------------------------------------------------------- | ------------------------------ | ---------------------------------------------------------- |
+| `plugins/standalone/ceh-product-direction/skills/sharpen-strategy/SKILL.md`           | § Stop conditions, last bullet | adds: remove nothing in step 8, list the conflicts instead |
+| `plugins/standalone/ceh-product-direction/skills/stress-test-unit-economics/SKILL.md` | § Stop conditions, last bullet | none                                                       |
+| `plugins/standalone/ceh-product-direction/skills/plan-go-to-market/SKILL.md`          | § Stop conditions, last bullet | none                                                       |
+| `plugins/standalone/ceh-product-direction/skills/run-premortem/SKILL.md`              | § Stop conditions, last bullet | none                                                       |
+| `plugins/standalone/ceh-product-direction/skills/set-operating-plan/SKILL.md`         | § Stop conditions, last bullet | none                                                       |
+| `plugins/standalone/ceh-product-direction/skills/find-product-market-fit/SKILL.md`    | § Rules, "No human to answer"  | takes its own "no questions" path and scores the PMF gate  |
 
 **Shared:** with no human to answer, the skill asks nothing, drafts from what the plan holds, and
 ends with the questions it would have asked, in order, each with the assumption it used instead.
+
+## Business-plan "Dormant plan" rule
+
+**Canonical:** `plugins/standalone/ceh-product-direction/skills/plan-go-to-market/SKILL.md` — § Rules, "Dormant plan"
+
+| Copy                                                                               | Section                 | Diverges                                                                                         |
+| ---------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-product-direction/skills/sharpen-strategy/SKILL.md`        | § Rules, "Dormant plan" | none                                                                                             |
+| `plugins/standalone/ceh-product-direction/skills/run-premortem/SKILL.md`           | § Rules, "Dormant plan" | adds: the kill criterion's number is still set in advance, only its date waits                   |
+| `plugins/standalone/ceh-product-direction/skills/find-product-market-fit/SKILL.md` | § Rules, "Dormant plan" | a paragraph, not a bullet; adds: never set to `validated`, and a new plan gets `status: dormant` |
+
+**Shared:** on a `status: dormant` plan, each test and kill criterion is written with its number
+and no date, no line is added to §13, and a `draft` plan that still holds undated tests or kill
+criteria has them dated first.
 
 ## Usability persona set and severity scale
 
@@ -988,11 +1003,11 @@ check `BUSINESS_PLAN.yaml` before reading it.
 
 ## Competitor report page
 
-**Canonical:** `plugins/standalone/ceh-competitor-analysis/skills/analyze-competitor/references/report-page.html` — whole file
+**Canonical:** `plugins/standalone/ceh-competitor-analysis/skills/analyze-competitor/assets/report-page.html` — whole file
 
-| Copy                                                                                                | Section    | Diverges |
-| --------------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-competitor-analysis/skills/compare-competitors/references/report-page.html` | whole file | none     |
+| Copy                                                                                            | Section    | Diverges |
+| ----------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-competitor-analysis/skills/compare-competitors/assets/report-page.html` | whole file | none     |
 
 **Shared:** the HTML page shell both reports fill, including its COMPARISON-ONLY blocks.
 
@@ -1017,8 +1032,8 @@ check `BUSINESS_PLAN.yaml` before reading it.
 | `plugins/standalone/ceh-usability-audit/skills/audit-interface/SKILL.md`      | § 7. Report and loop, last two paragraphs | none     |
 | `plugins/standalone/ceh-usability-audit/skills/write-plain-language/SKILL.md` | § Output, last two paragraphs             | none     |
 
-**Shared:** the two paragraphs "Leave your edits in the working tree" (no branch, commit, push, or
-pull request unless asked) and "Report other defects, do not fix them", word for word, in each
+**Shared:** the two paragraphs "Leave your edits in the working tree" (no commit, push, or pull
+request unless asked, and a branch only when the environment requires one before editing) and "Report other defects, do not fix them", word for word, in each
 skill that edits the target.
 
 ## Update protocol
