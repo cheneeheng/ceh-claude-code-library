@@ -36,6 +36,9 @@ waits for an amendment of vision principle 2 in its own PR.
 pull request leave a checkpoint commit in the workspace repo. Each plan was reviewed from a fresh
 context and revised. The last revisions of the first and the third were not reviewed again.
 
+The `ceh-every-session` README now says why `record-project-decisions` uses `$CEH_USER_RULES_DIR`
+and an `@` import, and why a symlink was not built. No skill changes, so no plugin version changes.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -71,6 +74,8 @@ context and revised. The last revisions of the first and the third were not revi
 
 ### Changed
 
+- Explain in the `ceh-every-session` README why user rules use a variable and an import line, and
+  why a symlink was left out.
 - Set a phase `done` in `implement-from-plan` on a check the user reports having run, and rewrite
   the eval case `user-says-passed` to grade that. The case was not run.
 - End `release`'s hotfix path at publishing, and never deploy without a human's authorization.

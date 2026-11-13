@@ -55,6 +55,19 @@ in a git-tracked folder. Claude Code loads only the default folder by itself, so
 folder the skill adds one `@<folder>/decision-<topic>.md` import line per rule to
 `~/.claude/CLAUDE.md`.
 
+Why a variable and an import:
+
+- **A tracked home.** `~/.claude/rules/` sits in no repository, so a rule written there has no
+  history and does not reach another machine. The variable lets those rules live in a repo.
+- **The default stays.** A user who does not set the variable sees no change.
+- **The import is the only way in.** The Claude Code memory docs, read 2026-11-13, name no setting
+  that loads user rules from another folder, and an `@path` line in `~/.claude/CLAUDE.md` is the
+  documented way to load a file from elsewhere.
+- **Not built: a symlink.** Making `~/.claude/rules/` a symlink into a tracked repo would need no
+  import, since rules folders support symlinks. It was left out because creating a symlink on
+  Windows needs Developer Mode or administrator rights.
+- **Not checked:** whether a `paths` field in an imported rule still narrows when it loads.
+
 ## Agents
 
 | Agent         | When to use                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
