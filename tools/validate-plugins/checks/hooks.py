@@ -1226,6 +1226,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         recording("gh pr merge feat/checkpoint --merge", "feat/checkpoint"),
         recording("gh pr merge --merge", "feat"),
         recording("sleep 30 && gh pr merge --merge", "feat"),
+        recording("if true; then gh pr merge 12 --merge; fi", "12"),
+        recording("GH_PAGER= gh pr merge 12 --merge", "12"),
         recording("gh pr merge 12 --merge", "12", repeat=2),
         recording("gh pr merge 12 --repo example/other", None),
         recording("gh pr merge 12 --repo=example/other", None),

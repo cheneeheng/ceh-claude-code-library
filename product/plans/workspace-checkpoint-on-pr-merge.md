@@ -70,9 +70,12 @@ the turn, in the checkout that ran the merge, and only once GitHub reports the P
   have. It prints nothing and exits 0, so the command runs unchanged. It records before the
   command runs, because afterwards the branch may be deleted and `gh pr merge` prints
   nothing when its output is not a terminal. The script returns at once without a
-  `gh pr merge` mention. Otherwise it splits simple shell command segments at separators
-  outside quoted or escaped text, then tokenizes each segment with `shlex.split`.
-  Only a segment beginning with the three tokens `gh`, `pr`, `merge` is considered, so
+  `gh pr merge` mention, before it starts any git process. Otherwise it splits simple shell
+  command segments at separators outside quoted or escaped text, then tokenizes each
+  segment with `shlex.split`. It drops leading shell words (`if`, `then`, `elif`, `else`,
+  `do`, `while`, `until`, `!`, `{`, `time`) and leading `NAME=value` assignments, so
+  `then gh pr merge 12` and `GH_PAGER= gh pr merge 12` count. Only a segment that then
+  begins with the three tokens `gh`, `pr`, `merge` is considered, so
   quoted command mentions are ignored and quoted subjects may contain separators.
   It returns for `-R`, `--repo` and their attached forms. The PR
   reference is the first token that is not a flag and does not follow one of the flags that
@@ -146,7 +149,8 @@ the turn, in the checkout that ran the merge, and only once GitHub reports the P
 
   Recording fixtures for `merge`, each expecting one entry: a number, a `/pull/<n>` URL, a
   branch name, no reference (the current branch), `sleep 30 && gh pr merge --merge` (the
-  current branch), and the same PR twice (one file). Fixtures expecting no entry: `--repo`,
+  current branch), `if true; then gh pr merge 12 --merge; fi`,
+  `GH_PAGER= gh pr merge 12 --merge`, and the same PR twice (one file). Fixtures expecting no entry: `--repo`,
   a Bash command with no merge, `gh pr create --body "run gh pr merge 12"`, the kill switch,
   and no workspace repo.
 
@@ -241,5 +245,20 @@ the turn, in the checkout that ran the merge, and only once GitHub reports the P
   and repeated checkpoints. Five focused checkpoint regressions and the hook-batch runner
   regression pass. tools/validate-plugins/validate.py prints OK: all plugin checks passed,
   including the new integration fixtures. The live installed-hook check remains unverified.
+- 2026-11-13 Checked: 22 Built, 1 Deviation, 2 Extra, 1 Cannot verify. Deviation: the `merge` event does not
+  return at once without a `gh pr merge` mention, because `main()` runs `checkouts()`,
+  `workspace_repo()` and `current_branch()` (three git processes) before `record_merge`
+  tests the command, about 135 ms per Bash call against 24 ms for a bare Python start.
+  Extra: `tools/validate-plugins/tests/test_workspace_checkpoints.py` and
+  `product/fixes/workspace-checkpoint-recording-and-replay.yaml`. Cannot verify: Phase 2's
+  live check with a real merge, a deleted branch and the displayed failure message.
+  The validator and the five unit tests pass. A probe also showed that
+  `if true; then gh pr merge 12 --merge; fi` and `GH_PAGER= gh pr merge 12` record nothing,
+  which matches the design's "segment beginning with the three tokens" as written.
+- 2026-11-13 Design changed: The user chose both fixes after the check. Was "Only a segment beginning with the three
+  tokens `gh`, `pr`, `merge` is considered"; leading shell words and `NAME=value`
+  assignments are now dropped first, with two recording fixtures. The deviation is fixed in
+  the code: `main()` tests the command for `gh pr merge` before any git process, proven by
+  a unit test that fails when git is called for `ls`.
 
 <!-- prettier-ignore-end -->

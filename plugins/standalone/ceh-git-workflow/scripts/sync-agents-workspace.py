@@ -41,6 +41,8 @@ WORKSPACE = ".agents_workspace"
 PREFIX = "ceh-ws/"
 # DECISION_LOG.md merge=union: two sessions appending to the log keep both sides' lines.
 UNION = Path(__file__).resolve().parent / "union.attributes"
+# Words that may stand before a command in its segment without changing which command runs.
+SHELL_WORDS = {"if", "then", "elif", "else", "do", "while", "until", "!", "{", "time"}
 
 
 def git(cwd, *args):
@@ -100,8 +102,6 @@ def pending_name(reference):
 
 
 def record_merge(top, main_ws, command):
-    if not re.search(r"\bgh\s+pr\s+merge\b", command):
-        return
     # less-code: simple shell segments; use a shell parser if nested shell syntax is required.
     parts = re.split(r"""('[^']*'|"(?:\\.|[^"\\])*"|\\.|[;&|()\n]+)""", command)
     segment = ""
@@ -109,6 +109,12 @@ def record_merge(top, main_ws, command):
         if re.fullmatch(r"[;&|()\n]+", part):
             tokens = shlex.split(segment, comments=True)
             segment = ""
+            # `then gh pr merge` and `GH_PAGER= gh pr merge` still run the merge.
+            while tokens and (
+                tokens[0] in SHELL_WORDS
+                or re.fullmatch(r"[A-Za-z_]\w*=.*", tokens[0], re.S)
+            ):
+                del tokens[0]
             if tokens[:3] == ["gh", "pr", "merge"]:
                 tokens = tokens[3:]
                 break
@@ -470,6 +476,9 @@ def main():
     else:
         payload = json.load(sys.stdin) or {}
         cwd = payload.get("cwd")
+    command = payload.get("tool_input", {}).get("command", "")
+    if event == "merge" and not re.search(r"\bgh\s+pr\s+merge\b", command):
+        return  # Runs before every Bash call: no git process without a merge.
     if not cwd or not os.path.isdir(cwd):
         return
     found = checkouts(cwd)
@@ -492,7 +501,7 @@ def main():
         return
 
     if event == "merge":
-        record_merge(top, main_ws, payload.get("tool_input", {}).get("command", ""))
+        record_merge(top, main_ws, command)
         return
 
     if not main_checkout:

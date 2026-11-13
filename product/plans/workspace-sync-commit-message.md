@@ -95,5 +95,8 @@ None
 - 2026-11-13 Checked: 17 Built, 1 Extra: the implementation skill's closure step also records lasting
   workspace decisions in product/ARCHITECTURE.yaml with generated Markdown.
   The final repository validator passed after the subsequent checkpoint implementation.
+- 2026-11-13 Checked: 17 Built, 1 Extra: `product/ARCHITECTURE.yaml`, new on the branch, with its generated
+  Markdown. The version is 1.5.13, not 1.5.12, because the checkpoint plan's PATCH bump
+  rides in the same commit. The validator passes and every grep in the phase check holds.
 
 <!-- prettier-ignore-end -->

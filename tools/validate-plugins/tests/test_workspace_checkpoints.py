@@ -1,5 +1,6 @@
 import datetime as dt
 import importlib.util
+import io
 import json
 from pathlib import Path
 import subprocess
@@ -36,6 +37,28 @@ class WorkspaceCheckpointTests(unittest.TestCase):
                     f"gh pr merge --subject 'fix{separator} ship' 12 --merge",
                 )
                 self.assertTrue((self.pending / "pr-12").exists())
+
+    def test_command_without_a_merge_starts_no_git_process(self):
+        payload = io.StringIO(
+            json.dumps({"cwd": str(self.top), "tool_input": {"command": "ls"}})
+        )
+        with (
+            patch.object(sync, "git") as commands,
+            patch.object(sync.sys, "argv", ["sync", "merge"]),
+            patch.object(sync.sys, "stdin", payload),
+        ):
+            sync.main()
+        commands.assert_not_called()
+
+    def test_shell_keyword_or_assignment_before_merge_is_recorded(self):
+        for command in (
+            "if true; then gh pr merge 12 --merge; fi",
+            "GH_PAGER= gh pr merge 13 --merge",
+        ):
+            sync.record_merge(self.top, self.workspace, command)
+        self.assertEqual(
+            sorted(entry.name for entry in self.pending.iterdir()), ["pr-12", "pr-13"]
+        )
 
     def test_quoted_merge_mention_is_not_a_command(self):
         sync.record_merge(self.top, self.workspace, "printf '%s' '; gh pr merge 12 ;'")
