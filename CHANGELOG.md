@@ -39,6 +39,10 @@ context and revised. The last revisions of the first and the third were not revi
 The `ceh-every-session` README now says why `record-project-decisions` uses `$CEH_USER_RULES_DIR`
 and an `@` import, and why a symlink was not built. No skill changes, so no plugin version changes.
 
+The `decision-blocks-only` plan is now built: the user reported that both the live question-guard
+check and the ordinary user-only question check passed, closing Phase 2's pending manual check.
+The agent did not run these interactive checks. No plugin version changes.
+
 ### Plugin versions
 
 | Plugin                     | Version |
