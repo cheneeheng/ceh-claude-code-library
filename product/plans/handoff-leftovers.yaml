@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Close the leftovers the 2026-11-12 handoffs left open
-status: ready
+status: building
 created: 2026-11-13
 goal: |
   The handoffs of sessions ff98dab3 and 10f213e1 left four items open after their plans were
@@ -166,7 +166,11 @@ phases:
       After it, the same command prints `OK: all plugin checks passed`, and
       `md5sum $(find plugins -name generated-md-guard.py) | awk '{print $1}' | sort -u | wc -l`
       prints 1.
-    status: todo
+    status: done
+    evidence: |
+      Before the change, `python tools/validate-plugins/validate.py` failed on the new fixture in
+      each plugin's `artifact_fixtures` group ("stdout lacks 'gen.yaml'"). After it, the same
+      command printed "OK: all plugin checks passed", and the md5 count printed 1.
   - name: Repeat-mistake table cells keep a backslash before a pipe
     builds: |
       A fixture rendering a repeat-mistake YAML whose `mistake` holds `a \| b`, with an `after`

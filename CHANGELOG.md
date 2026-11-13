@@ -56,23 +56,31 @@ the interview exception, because `draft-post` asks its questions in one batch on
 `draft-post` no longer assumes every blog is a series: the series steps of "Read the blog first"
 apply when the blog runs as one, because the old wording described one author's blog.
 
+Phase 1 of `handoff-leftovers`: `generated-md-guard.py` resolves a relative `file_path` against
+the payload `cwd`, as `artifact-render-hook.py` already does, so a hand edit to generated
+Markdown named by a relative path is denied too. All 13 copies change, and each carrier gets a
+PATCH bump.
+
 ### Plugin versions
 
-| Plugin                     | Version |
-| -------------------------- | ------- |
-| `ceh-blog-and-seo`         | 2.0.5   |
-| `ceh-build-plan`           | 2.0.4   |
-| `ceh-codebase-explanation` | 1.3.8   |
-| `ceh-competitor-analysis`  | 1.2.8   |
-| `ceh-every-session`        | 2.9.12  |
-| `ceh-git-workflow`         | 1.5.11  |
-| `ceh-product-direction`    | 2.0.4   |
-| `ceh-session-learning`     | 2.0.2   |
-| `ceh-testing`              | 1.6.16  |
-| `ceh-ui-design`            | 1.0.12  |
-| `ceh-usability-audit`      | 1.2.9   |
-| `ceh-workflow-builder`     | 1.4.8   |
-| `ceh-workflow-runner`      | 1.1.7   |
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-blog-and-seo`             | 2.0.6   |
+| `ceh-build-plan`               | 2.0.5   |
+| `ceh-check-build-against-plan` | 1.1.14  |
+| `ceh-codebase-explanation`     | 1.3.9   |
+| `ceh-coding-conduct`           | 2.5.9   |
+| `ceh-competitor-analysis`      | 1.2.9   |
+| `ceh-every-session`            | 2.9.13  |
+| `ceh-git-workflow`             | 1.5.11  |
+| `ceh-product-direction`        | 2.0.5   |
+| `ceh-security-audit`           | 1.1.8   |
+| `ceh-session-learning`         | 2.0.2   |
+| `ceh-testing`                  | 1.6.17  |
+| `ceh-ui-design`                | 1.0.12  |
+| `ceh-usability-audit`          | 1.2.10  |
+| `ceh-workflow-builder`         | 1.4.9   |
+| `ceh-workflow-runner`          | 1.1.8   |
 
 ### Added
 
@@ -130,6 +138,8 @@ apply when the blog runs as one, because the old wording described one author's 
 
 ### Fixed
 
+- Deny an edit to generated Markdown named by a relative path in `generated-md-guard.py`, which
+  resolved the path against the hook's own cwd and let the edit through.
 - Stop `explain-codebase` untracking a committed output file: it reports the file as tracked and
   leaves the untracking to the user.
 - Stop `edit-post` overwriting a draft git does not track: the revision is saved beside it as
