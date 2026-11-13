@@ -222,5 +222,6 @@ None
 - 2026-11-13 Design changed: The user answered both Open questions: the escaper fix covers the ten other table-cell
   models (new Phase 3), and the paid dispatch runs when the build reaches it (now Phase 6).
   The vision and `draft-post` wording go to their own PRs, under Out.
+- 2026-11-13 PR: #273 https://github.com/cheneeheng/ceh-claude-code-library/pull/273
 
 <!-- prettier-ignore-end -->
