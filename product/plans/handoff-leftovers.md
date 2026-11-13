@@ -259,5 +259,6 @@ None
   edits `docs/CROSS_REFERENCES.md` and the `ceh-testing` README to describe the tester-agent
   pass, which the phase does not name. Cannot verify: the Phase 6 transcript of session
   f6300c28 was not reread, and the "fails before the change" half of each Check is history.
+- 2026-11-13 PR: #281 https://github.com/cheneeheng/ceh-claude-code-library/pull/281
 
 <!-- prettier-ignore-end -->
