@@ -16,8 +16,9 @@ leave this session acting on a stale number.
 
 Prerequisite (documented in the plugin README): a statusline script that
 exports its stdin JSON to that path - e.g. ~/.claude/statusline-hook.ps1 with
-C4_STATUSLINE_EXPORT=1. Without it the hook warns once per session rather than
-failing silently, since a silent no-op looks identical to being protected.
+C4_STATUSLINE_EXPORT=1. Without it the hook does nothing and says nothing unless
+CEH_USAGE_LIMIT_THRESHOLD or CEH_USAGE_STALE_MINUTES is set, or the export folder
+exists. Then it warns once per session that the guard is inactive.
 
 Config (env or defaults):
   CEH_USAGE_LIMIT_THRESHOLD  used_percentage that triggers handoff (default 90)
@@ -129,11 +130,18 @@ def main() -> None:
 
     reading = latest_reading()
     if reading is None:
-        warn_once(
-            state_dir / f"ceh-usage-nosensor-{session_id}",
-            "ceh usage-limit guard: no statusline quota export found - the usage-limit guard "
-            "is INACTIVE this session. See the ceh-every-session README to enable it.",
-        )
+        # A guard variable or export folder means the user expects protection; a missing or
+        # broken export must not look protected. A user with neither never asked for the guard.
+        if (
+            "CEH_USAGE_LIMIT_THRESHOLD" in os.environ
+            or "CEH_USAGE_STALE_MINUTES" in os.environ
+            or (Path.home() / ".claude" / "statusline").is_dir()
+        ):
+            warn_once(
+                state_dir / f"ceh-usage-nosensor-{session_id}",
+                "ceh usage-limit guard: no statusline quota export found - the usage-limit guard "
+                "is INACTIVE this session. See the ceh-every-session README to enable it.",
+            )
         return
 
     ts, limits = reading

@@ -76,11 +76,11 @@ the install.
 User scope installs a plugin for you in every folder you open Claude Code in. A hook is a script Claude Code
 runs at fixed points, such as before each file edit, so a plugin with hooks acts on every session.
 
-| Plugin               | Install when               | What you get                                                                                                                                                                                                                                  |
-| -------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ceh-every-session`  | always, whatever you do    | the response style every other plugin is written for, session handoff, research notes, questionnaires, plan stress-tests, a usage-limit guard, and `/ceh-every-session:whats-next` when you forget which skill fits. Always on, through hooks |
-| `ceh-git-workflow`   | you work in git repos      | branches, commits, pull requests from open to merge, changelog, code review, and a hook that blocks edits on `main`                                                                                                                           |
-| `ceh-coding-conduct` | you write code with Claude | the coding contract, write-less-code, root-cause debugging. Always on, through hooks                                                                                                                                                          |
+| Plugin               | Install when               | What you get                                                                                                                                                                                                                                                                    |
+| -------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ceh-every-session`  | always, whatever you do    | the response style every other plugin is written for, session handoff, research notes, questionnaires, plan stress-tests, a usage-limit guard once a statusline export feeds it, and `/ceh-every-session:whats-next` when you forget which skill fits. Always on, through hooks |
+| `ceh-git-workflow`   | you work in git repos      | branches, commits, pull requests from open to merge, changelog, code review, and a hook that blocks edits on `main`                                                                                                                                                             |
+| `ceh-coding-conduct` | you write code with Claude | the coding contract, write-less-code, root-cause debugging. Always on, through hooks                                                                                                                                                                                            |
 
 Install `ceh-every-session` first, every time. It is not a dependency of any other plugin, so
 nothing installs it for you. Then install only the other rows whose "Install when" fits you. If
@@ -230,3 +230,24 @@ To drop a plugin you no longer need, `claude plugin uninstall <name>@ceh-claude-
 the `--scope` it was installed at, such as `--scope project`. Removing the marketplace removes every plugin
 installed from it. Prerequisites (Python for hooks, `uv`, Bun, the GitHub CLI) are in the root
 [`README.md`](../README.md#prerequisites).
+
+## If a skill stops triggering, raise the listing budget
+
+Claude Code lists every skill's name and description so it can match your request to a skill.
+The listing has a budget of 1% of the model's context window. When it exceeds that budget,
+Claude Code keeps every name and drops descriptions, starting with the skills invoked least.
+Without a description, a skill loses the keywords Claude needs to match your request.
+
+Run `/doctor` to estimate the listing's context cost. `/skill-doctor` (Claude Code v2.1.252 or
+later) shows what each skill costs and how often it is used.
+
+To raise the budget to 2%, merge this setting into `~/.claude/settings.json`:
+
+```json
+{
+  "skillListingBudgetFraction": 0.02
+}
+```
+
+Another way to free budget is to set a rarely used skill to `"name-only"` in `skillOverrides`.
+See [Skill descriptions are cut short](https://code.claude.com/docs/en/skills#skill-descriptions-are-cut-short).

@@ -127,12 +127,12 @@ Each hook script is stdlib-only Python, needs `python3` on PATH, and fails open:
 work on its own bugs would cost more than it saves. The handoff render hook runs `artifact.py`
 through `uv` for the check itself. One subsection per guard below.
 
-| Guard                                                 | Event                                         | Script(s)                                          | Default |
-| ----------------------------------------------------- | --------------------------------------------- | -------------------------------------------------- | ------- |
-| [Usage-limit guard](#usage-limit-guard)               | `PostToolUse` (every tool)                    | `usage-limit-watch.py`                             | on      |
-| [Bulk-read guards](#bulk-read-guards)                 | `PreToolUse` (`Read`, `Bash`)                 | `bulk-read-guard.py`, `bulk-read-bash-guard.py`    | opt-in  |
-| [Question guard](#question-guard)                     | `PreToolUse` (`AskUserQuestion`)              | `ask-user-question-guard.py`                       | on      |
-| [Handoff render and guard](#handoff-render-and-guard) | `PostToolUse`, `PreToolUse` (`Edit`, `Write`) | `artifact-render-hook.py`, `generated-md-guard.py` | on      |
+| Guard                                                 | Event                                         | Script(s)                                          | Default                                |
+| ----------------------------------------------------- | --------------------------------------------- | -------------------------------------------------- | -------------------------------------- |
+| [Usage-limit guard](#usage-limit-guard)               | `PostToolUse` (every tool)                    | `usage-limit-watch.py`                             | acts once a statusline export feeds it |
+| [Bulk-read guards](#bulk-read-guards)                 | `PreToolUse` (`Read`, `Bash`)                 | `bulk-read-guard.py`, `bulk-read-bash-guard.py`    | opt-in                                 |
+| [Question guard](#question-guard)                     | `PreToolUse` (`AskUserQuestion`)              | `ask-user-question-guard.py`                       | on                                     |
+| [Handoff render and guard](#handoff-render-and-guard) | `PostToolUse`, `PreToolUse` (`Edit`, `Write`) | `artifact-render-hook.py`, `generated-md-guard.py` | on                                     |
 
 To switch one hook off without uninstalling the plugin, list its script name in
 `CEH_DISABLED_HOOKS` (comma-separated, no extension): `usage-limit-watch`, `bulk-read-guard`,
@@ -174,9 +174,10 @@ subagent sees only its own slice of the work.
 > that appends its stdin JSON there (each line `{"session_id", "ts", "data": <payload>}`, with
 > `:` and path separators in the project dir name replaced by `-`). Claude Code itself provides
 > `rate_limits` only to the statusline, not to hooks, hence the relay. Without the export the guard
-> warns once per session that it is inactive, rather than failing silently — everything else in the
-> plugin works unchanged. Readings older than `CEH_USAGE_STALE_MINUTES` (default 15) are treated as
-> unknown for the same reason: a stale low number reads as safety that is not there. A window whose
+> does nothing and says nothing, unless `CEH_USAGE_LIMIT_THRESHOLD` or `CEH_USAGE_STALE_MINUTES` is
+> set or the export folder exists, in which case it warns once per session that it is inactive.
+> Everything else in the plugin works unchanged. Readings older than `CEH_USAGE_STALE_MINUTES`
+> (default 15) are treated as unknown: a stale low number reads as safety that is not there. A window whose
 > `resets_at` has already passed is skipped regardless of the record's age — the reading predates
 > the reset, so a high number there describes a window that no longer exists.
 >
