@@ -39,6 +39,16 @@ RULES = [
     ),
 ]
 
+# Each tester agent preloads a testing skill RULES names, so its own test files keep the rule's intent.
+TESTER_AGENTS = {
+    "pytest-unit-tester",
+    "pytest-integration-tester",
+    "pytest-system-tester",
+    "vitest-unit-tester",
+    "vitest-integration-tester",
+    "playwright-system-tester",
+}
+
 
 def started(skill: str, transcript: str) -> bool:
     name = re.escape(skill)
@@ -68,6 +78,8 @@ def main() -> None:
         return
 
     payload = json.load(sys.stdin)
+    if (payload.get("agent_type") or "").rsplit(":", 1)[-1] in TESTER_AGENTS:
+        return
     tool = payload.get("tool_name", "")
     ti = payload.get("tool_input", {})
     transcript = None

@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: handoff-leftovers.yaml
 generated_note: "Do not edit. artifact.py renders this file from handoff-leftovers.yaml: edit the YAML, then run artifact.py render."
 title: Close the leftovers the 2026-11-12 handoffs left open
-status: building
+status: built
 created: 2026-11-13
 ---
 
@@ -217,7 +217,16 @@ not only `repeat-mistake`.
   dispatch's Write result. If code changed,
   `python tools/validate-plugins/validate.py` fails on the first fixture before the change and
   prints `OK: all plugin checks passed` after it.
-- **Status:** todo. Holds the plan's one paid run, approved by the user on 2026-11-13, so it is built last.
+- **Status:** done, One `claude -p` run, session f6300c28, from a scratch project with `ceh-testing` and
+  `ceh-python-service` loaded by `--plugin-dir`. Its transcript holds the control Write of
+  `tests/test_x.py` denied with "PreToolUse:Write hook error: This Write call is owned by
+  ceh-testing:write-test-first", and the subagent transcript of
+  `ceh-python-service:pytest-unit-tester` holds the same denial for `tests/test_scratch.py`.
+  Neither transcript holds a `"skill":` entry, and no `tests/` folder was created. So the
+  guard denied the dispatch, and the early return was built. Before it,
+  `python tools/validate-plugins/validate.py` failed on the tester fixture ("expected no
+  output"). After it, the same command printed "OK: all plugin checks passed", with the
+  `general-purpose` fixture still denied. Holds the plan's one paid run, approved by the user on 2026-11-13, so it is built last.
 
 ## Open
 
@@ -244,5 +253,7 @@ None
 - 2026-11-13 PR: #278 https://github.com/cheneeheng/ceh-claude-code-library/pull/278
 - 2026-11-13 Built Phase 5: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
 - 2026-11-13 PR: #279 https://github.com/cheneeheng/ceh-claude-code-library/pull/279
+- 2026-11-13 Built Phase 6: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-13 PR: #280 https://github.com/cheneeheng/ceh-claude-code-library/pull/280
 
 <!-- prettier-ignore-end -->

@@ -926,14 +926,15 @@ stay in `design-ui` alone, because a Markdown file has no page to configure.
 
 **Canonical:** `plugins/standalone/ceh-git-workflow/scripts/skill-started-guard.py` — the whole script
 
-| Copy                                                            | Section          | Diverges                             |
-| --------------------------------------------------------------- | ---------------- | ------------------------------------ |
-| `plugins/standalone/ceh-testing/scripts/skill-started-guard.py` | the whole script | `RULES` holds only the test-file row |
+| Copy                                                            | Section          | Diverges                                                                                                                       |
+| --------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-testing/scripts/skill-started-guard.py` | the whole script | `RULES` holds only the test-file row, and `TESTER_AGENTS` with its early return in `main()` lets the six tester agents through |
 
-**Shared:** everything outside `RULES`: `started()`, `subject()`, the
-kill switches, the deny message, and the fail-open exit. Each copy keeps only its own plugin's rows
-in `RULES`, so each plugin works installed alone. Check with
-`diff <(sed '/^RULES = \[/,/^\]/d' <a>) <(sed '/^RULES = \[/,/^\]/d' <b>)`.
+**Shared:** everything outside `RULES` and the `ceh-testing` tester-agent pass: `started()`,
+`subject()`, the kill switches, the deny message, and the fail-open exit. Each copy keeps only its
+own plugin's rows in `RULES`, so each plugin works installed alone. Check with
+`diff <(sed '/^RULES = \[/,/^\]/d' <a>) <(sed '/^RULES = \[/,/^\]/d' <b>)`, where only the
+tester-agent lines differ.
 
 ## Blog bundled files
 

@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Close the leftovers the 2026-11-12 handoffs left open
-status: building
+status: built
 created: 2026-11-13
 goal: |
   The handoffs of sessions ff98dab3 and 10f213e1 left four items open after their plans were
@@ -241,7 +241,18 @@ phases:
       dispatch's Write result. If code changed,
       `python tools/validate-plugins/validate.py` fails on the first fixture before the change and
       prints `OK: all plugin checks passed` after it.
-    status: todo
+    status: done
+    evidence: |
+      One `claude -p` run, session f6300c28, from a scratch project with `ceh-testing` and
+      `ceh-python-service` loaded by `--plugin-dir`. Its transcript holds the control Write of
+      `tests/test_x.py` denied with "PreToolUse:Write hook error: This Write call is owned by
+      ceh-testing:write-test-first", and the subagent transcript of
+      `ceh-python-service:pytest-unit-tester` holds the same denial for `tests/test_scratch.py`.
+      Neither transcript holds a `"skill":` entry, and no `tests/` folder was created. So the
+      guard denied the dispatch, and the early return was built. Before it,
+      `python tools/validate-plugins/validate.py` failed on the tester fixture ("expected no
+      output"). After it, the same command printed "OK: all plugin checks passed", with the
+      `general-purpose` fixture still denied.
     note: |
       Holds the plan's one paid run, approved by the user on 2026-11-13, so it is built last.
 open: []
@@ -307,3 +318,11 @@ record:
   - date: 2026-11-13
     event: PR
     details: "#279 https://github.com/cheneeheng/ceh-claude-code-library/pull/279"
+  - date: 2026-11-13
+    event: Built Phase
+    phase: 6
+    details: |
+      `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+  - date: 2026-11-13
+    event: PR
+    details: "#280 https://github.com/cheneeheng/ceh-claude-code-library/pull/280"

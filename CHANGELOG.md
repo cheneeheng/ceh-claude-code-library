@@ -80,6 +80,13 @@ a saved glossary with a blank line in a definition now fails its check, which na
 Phase 5 of `handoff-leftovers`: four `ceh-web-frontend` descriptions say "Trigger on" where they
 said "Auto-load when", matching `configure-bun-vite-env` and the repo's description rule.
 
+Phase 6 of `handoff-leftovers`, the last: the six tester agents may write their own test files.
+One paid `claude -p` run from a scratch project showed `skill-started-guard.py` deny a
+main-session test-file Write, the control, and then deny the same Write from
+`ceh-python-service:pytest-unit-tester`, though the agent preloads a testing skill the rule
+names. The guard now returns early when the payload's `agent_type` ends in one of the six tester
+names. Any other agent is still denied. The plan is now built.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -95,7 +102,7 @@ said "Auto-load when", matching `configure-bun-vite-env` and the repo's descript
 | `ceh-product-direction`        | 2.0.6   |
 | `ceh-security-audit`           | 1.1.9   |
 | `ceh-session-learning`         | 2.0.2   |
-| `ceh-testing`                  | 1.6.18  |
+| `ceh-testing`                  | 1.6.19  |
 | `ceh-ui-design`                | 1.0.12  |
 | `ceh-usability-audit`          | 1.2.11  |
 | `ceh-web-frontend`             | 1.3.6   |
@@ -160,6 +167,8 @@ said "Auto-load when", matching `configure-bun-vite-env` and the repo's descript
 
 ### Fixed
 
+- Let the six tester agents write their own test files past `skill-started-guard.py`, which
+  denied them because a preloaded skill leaves no `Skill` call in the transcript.
 - Deny an edit to generated Markdown named by a relative path in `generated-md-guard.py`, which
   resolved the path against the hook's own cwd and let the edit through.
 - Keep a backslash written before a pipe in a rendered repeat-mistake table cell, which the

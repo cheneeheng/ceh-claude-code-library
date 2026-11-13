@@ -29,7 +29,7 @@ a removed plugin loses its row.
 | `ceh-python-service`           | 1.1.7   | `2026-11-12` |
 | `ceh-security-audit`           | 1.1.9   | `2026-11-13` |
 | `ceh-session-learning`         | 2.0.2   | `2026-11-13` |
-| `ceh-testing`                  | 1.6.18  | `2026-11-13` |
+| `ceh-testing`                  | 1.6.19  | `2026-11-13` |
 | `ceh-ui-design`                | 1.0.12  | `2026-11-13` |
 | `ceh-usability-audit`          | 1.2.11  | `2026-11-13` |
 | `ceh-web-frontend`             | 1.3.6   | `2026-11-13` |
