@@ -122,3 +122,6 @@ record:
     details: |
       Revise first, 1 blocking (no Open item on how the script reaches a person who never
       cloned the repo). All eight findings fixed in the plan the same day.
+  - date: 2026-11-13
+    event: PR
+    details: "#282 https://github.com/cheneeheng/ceh-claude-code-library/pull/282"

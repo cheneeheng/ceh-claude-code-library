@@ -203,5 +203,6 @@ a whole session without one line about a guard they did not ask for.
 - 2026-11-13 Reviewed: Ready to build, 0 blocking. All eight advisory findings fixed in the plan the same day,
   among them a warning kept for an export folder that holds no quota record, and the
   guide section's heading left unnumbered.
+- 2026-11-13 PR: #282 https://github.com/cheneeheng/ceh-claude-code-library/pull/282
 
 <!-- prettier-ignore-end -->

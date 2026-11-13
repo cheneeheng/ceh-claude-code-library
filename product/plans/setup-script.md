@@ -109,5 +109,6 @@ plugins runs the script once and their machine has every setting on the list.
 - 2026-11-13 Planned: status draft
 - 2026-11-13 Reviewed: Revise first, 1 blocking (no Open item on how the script reaches a person who never
   cloned the repo). All eight findings fixed in the plan the same day.
+- 2026-11-13 PR: #282 https://github.com/cheneeheng/ceh-claude-code-library/pull/282
 
 <!-- prettier-ignore-end -->
