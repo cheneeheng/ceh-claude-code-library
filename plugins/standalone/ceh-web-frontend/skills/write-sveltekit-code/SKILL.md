@@ -2,9 +2,8 @@
 name: write-sveltekit-code
 description: >-
   Load this skill when adding or modifying SvelteKit routes, writing load functions, managing shared
-  state with Svelte 5 runes, or building components. Auto-load whenever a +page.svelte,
-  +page.server.ts, +page.ts, shared-state .svelte.ts module, or component file is created or
-  modified.
+  state with Svelte 5 runes, or building components. Trigger on a +page.svelte, +page.server.ts,
+  +page.ts, shared-state .svelte.ts module, or component file created or modified.
 disable-model-invocation: false
 user-invocable: false
 paths:

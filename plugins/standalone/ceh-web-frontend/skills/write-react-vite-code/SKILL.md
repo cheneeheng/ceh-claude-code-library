@@ -2,7 +2,7 @@
 name: write-react-vite-code
 description: >-
   Load this skill when writing React code in a Vite project: components, hooks, React Router, state,
-  data fetching, Vite env vars. Auto-load when a .tsx file or vite.config.ts is created or modified.
+  data fetching, Vite env vars. Trigger on a .tsx file or vite.config.ts created or modified.
 disable-model-invocation: false
 user-invocable: false
 paths:

@@ -2,8 +2,8 @@
 name: make-ui-accessible
 description: >-
   Load this skill when writing or reviewing component markup with interactive elements, images,
-  forms, or navigation in any web frontend. Auto-load when a .svelte or .tsx file's HTML structure
-  is written.
+  forms, or navigation in any web frontend. Trigger on the HTML structure of a .svelte or .tsx file
+  being written.
 disable-model-invocation: false
 user-invocable: false
 paths:

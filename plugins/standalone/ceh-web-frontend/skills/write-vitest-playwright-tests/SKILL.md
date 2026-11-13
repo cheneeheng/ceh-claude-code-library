@@ -2,7 +2,7 @@
 name: write-vitest-playwright-tests
 description: >-
   Load this skill when writing Vitest, Testing Library, MSW, or Playwright tests for a web
-  frontend. Auto-load when a .test.ts, .test.tsx, or .spec.ts file is created or modified.
+  frontend. Trigger on a .test.ts, .test.tsx, or .spec.ts file created or modified.
 disable-model-invocation: false
 user-invocable: false
 paths:
