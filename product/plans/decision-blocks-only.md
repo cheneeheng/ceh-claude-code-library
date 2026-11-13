@@ -1,6 +1,6 @@
 ---
 title: Every user-only question closes the reply as a decision block, never AskUserQuestion
-status: building
+status: built
 created: 2026-10-14
 ---
 
@@ -82,7 +82,11 @@ No change to `docs/VISION.md` is needed.
   `CEH_DISABLED_HOOKS=ask-user-question-guard` set. `validate.py` passes. Manual check after a
   reload (the user): a prompt that triggers a stop condition gets a decision block, not a dialog,
   because no command can drive the interactive tool.
-- **Status:** done for the commands, manual check pending. The guard printed the deny JSON for
+- **Status:** done, including the manual check reported by the user on 2026-11-13, not run by
+  the agent. The explicit `AskUserQuestion` attempt was denied with the redirect reason, no dialog
+  opened, and the reply ended with a decision block. The ordinary user-only question also ended
+  with a decision block and no dialog. Claude Code and plugin versions were not supplied.
+  The guard printed the deny JSON for
   `AskUserQuestion` and nothing when switched off, for another tool, or for bad JSON.
   `validate.py` first failed with "hook script has no fixture in validate.py hook_fixtures()", so
   three fixtures were added there (deny, other tool, switched off), and it then printed
@@ -99,8 +103,8 @@ No change to `docs/VISION.md` is needed.
 
 ## Open
 
-- Unverified: whether a plugin `PreToolUse` hook can deny `AskUserQuestion`. If the manual check in
-  Phase 2 shows the deny does not take, Phase 2 is dropped and the plan ships Phase 1 alone.
+- None. The user reported on 2026-11-13 that both the live hook-denial check and the ordinary
+  user-only question check passed. Phase 2 is retained.
 
 ## Record
 
@@ -109,3 +113,6 @@ No change to `docs/VISION.md` is needed.
 - 2026-10-14 Built Phase 2: `python tools/validate-plugins/validate.py`, OK: all plugin checks passed
 - 2026-10-14 Built Phase 3: `python tools/validate-plugins/validate.py`, OK: all plugin checks passed
 - 2026-10-14 PR: #105 https://github.com/cheneeheng/ceh-claude-code-library/pull/105
+- 2026-11-13 Manual Phase 2 checks: both passed, reported by the user, not run by the agent.
+  The live `AskUserQuestion` call was denied and redirected to a decision block without a dialog;
+  the ordinary user-only question also produced a decision block without a dialog. Status built.
