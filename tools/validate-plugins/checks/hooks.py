@@ -1002,6 +1002,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**guard(tst, "Write", {**test_file, "file_path": (tmp / "elsewhere" / "test_x.py").as_posix()}), "out": ""},
         {**guard(tst, "Write", test_file), "env": {"CEH_SKILL_STARTED_GUARD": "off"}, "out": ""},
         {**guard(tst, "Write", test_file), "env": {"CEH_DISABLED_HOOKS": "skill-started-guard"}, "out": ""},
+        # A tester agent preloads a testing skill, so its own test file passes. Any other agent does not.
+        {**guard(tst, "Write", test_file), "stdin": {**guard(tst, "Write", test_file)["stdin"], "agent_type": "ceh-python-service:pytest-unit-tester"}, "out": ""},
+        {**guard(tst, "Write", test_file), "stdin": {**guard(tst, "Write", test_file)["stdin"], "agent_type": "general-purpose"}, "out": "ceh-testing:write-test-first"},
         # sync-agents-workspace: one sequence on the tmp project above, in this order.
         {**sync("start", wt), "env": {**who, "CEH_DISABLED_HOOKS": "sync-agents-workspace"}, "out": "",
          "after": lambda: "created despite the kill switch" if os.path.lexists(wt_ws) else None},

@@ -41,7 +41,8 @@ Denies an edit or write of a test file (`test_*.py`, `*_test.py`, `*.test.*` or 
 TS) until a skill that owns writing tests has been started in the session, by a `Skill` tool call or
 a slash command: `write-test-first`, `test-a-bug-fix`, `verify-behavior-preserved`, or a stack
 testing skill named above. A skill that another skill's steps only name ("`write-test-first` sets
-out how") still has to be started. Files outside the session's project pass. It needs `python3` on
+out how") still has to be started. Files outside the session's project pass, and so do the six
+tester agents' writes, since each preloads a testing skill. It needs `python3` on
 PATH (stdlib only) and fails open without it. `CEH_SKILL_STARTED_GUARD=off`, or
 `CEH_DISABLED_HOOKS` with `skill-started-guard`, switches it off, in every plugin that ships it.
 
