@@ -23,7 +23,7 @@ thread, saved or shown where the Output section says.
 
 ## Procedure
 
-### 1. Read the blog first (series awareness)
+### 1. Read the blog first
 
 Read the blog, not just the repo, before the first question or the first word of the draft. Every
 question this skill has goes into the one batch of step 3, per
@@ -33,17 +33,19 @@ posts directory (`content/`, `posts/`, `_posts/`, `src/content/`, `blog/`); if n
 up, add a question to the batch on where the blog lives. "No existing blog" is a valid answer and
 skips this step.
 
-Read the previous posts, especially the latest episode in the same series. Then:
+Read the previous posts, especially the latest one on the same project. When the blog runs as a
+series, each post an episode the reader follows in order, also do the steps marked (series).
+Then:
 
-- **Pick up the thread**: if the last post ended on a live thread, open with it ("Last time I
+- **Pick up the thread** (series): if the last post ended on a live thread, open with it ("Last time I
   said…") and cross-link it. When interviewing, add a question to the batch: _"the last post
   ended on X, is this the post that answers it?"_
 - **Pin chronology**: if the material does not say when this happened relative to the last post,
   add one timestamp question to the batch. It prevents continuity bugs (wrong versions, events out
   of order).
-- **Check continuity facts** against earlier episodes: versions, dates, what the reader already
+- **Check continuity facts** (series) against earlier episodes: versions, dates, what the reader already
   knows. Don't re-tell a story a previous episode owns — call back in a sentence and link.
-- **Leave a thread**: plan what this episode leaves open. Closure instead if the series is
+- **Leave a thread** (series): plan what this episode leaves open. Closure instead if the series is
   finished.
 - **Capture the voice once**: if the blog has three or more posts, the target repo's `CLAUDE.md`
   defines no blog voice, and neither `.agents_workspace/product/blog-voice.yaml` nor

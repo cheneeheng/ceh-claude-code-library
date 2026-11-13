@@ -50,11 +50,17 @@ model keeps a backslash written before a pipe, a glossary definition is one para
 `skill-started-guard.py` if one paid dispatch shows the guard stops them. It was reviewed from a
 fresh context and revised. Nothing is built yet, so no plugin version changes.
 
+Two leftovers of the 2026-11-11 plugin audit land together, at the user's request, in one PR,
+though the vision asks for a PR of its own. `docs/VISION.md` drops "or a blog interview" from
+the interview exception, because `draft-post` asks its questions in one batch on purpose. And
+`draft-post` no longer assumes every blog is a series: the series steps of "Read the blog first"
+apply when the blog runs as one, because the old wording described one author's blog.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
-| `ceh-blog-and-seo`         | 2.0.4   |
+| `ceh-blog-and-seo`         | 2.0.5   |
 | `ceh-build-plan`           | 2.0.4   |
 | `ceh-codebase-explanation` | 1.3.8   |
 | `ceh-competitor-analysis`  | 1.2.8   |
@@ -86,6 +92,9 @@ fresh context and revised. Nothing is built yet, so no plugin version changes.
 
 ### Changed
 
+- Drop "or a blog interview" from the interview exception in `docs/VISION.md`.
+- Apply `draft-post`'s series steps only when the blog runs as a series, with the README and the
+  plugin description to match.
 - Explain in the `ceh-every-session` README why user rules use a variable and an import line, and
   why a symlink was left out.
 - Set a phase `done` in `implement-from-plan` on a check the user reports having run, and rewrite

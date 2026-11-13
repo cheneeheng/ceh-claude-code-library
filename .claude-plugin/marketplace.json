@@ -65,8 +65,8 @@
     {
       "name": "ceh-blog-and-seo",
       "source": "./plugins/standalone/ceh-blog-and-seo",
-      "version": "2.0.4",
-      "description": "CEH blog and SEO: tell people about what you built. Blog posts in a personal, series-first voice, drafted from an idea via structured interview or from notes, edited, and repurposed for Twitter/X, LinkedIn, TL;DR, and newsletters. And discoverability for anything exposed to the internet: technical SEO/GEO for public web pages (meta tags, structured data, sitemap, rendering strategy), the llms.txt agent index, and findability of public-facing text (README first screen, package descriptions and keywords, repo topics, landing copy)."
+      "version": "2.0.5",
+      "description": "CEH blog and SEO: tell people about what you built. Blog posts in a personal voice, run as a series when the blog is one, drafted from an idea via structured interview or from notes, edited, and repurposed for Twitter/X, LinkedIn, TL;DR, and newsletters. And discoverability for anything exposed to the internet: technical SEO/GEO for public web pages (meta tags, structured data, sitemap, rendering strategy), the llms.txt agent index, and findability of public-facing text (README first screen, package descriptions and keywords, repo topics, landing copy)."
     },
     {
       "name": "ceh-build-plan",
