@@ -222,5 +222,6 @@ a whole session without one line about a guard they did not ask for.
   for the note beside the answer the rule was learned from, and approved the push. The
   user also confirmed that the guard warns when the export folder exists and holds no
   quota record, which Phase 1 already says. Both answered questions leave Open.
+- 2026-11-13 PR: #283 https://github.com/cheneeheng/ceh-claude-code-library/pull/283
 
 <!-- prettier-ignore-end -->
