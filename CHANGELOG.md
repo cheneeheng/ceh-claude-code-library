@@ -11,6 +11,12 @@ before this repo live in
 
 ## 2026-11-13
 
+`product/plans/plugin-audit-open-topics.yaml` changes how its third phase is done, at the user's
+request: the commit that rewords the user's branch rule also appends a dated note to the answer
+the rule was learned from, so the two are read together, and the builder pushes that commit. The
+two questions this answers leave the plan's Open list. Nothing is built, so no plugin version
+changes.
+
 Two build plans are added and nothing is built yet, so no plugin version changes.
 `product/plans/plugin-audit-open-topics.yaml` plans the three changes the user decided for the
 last open topics of the 2026-11-11 plugin audit: the usage-limit guard says nothing without the

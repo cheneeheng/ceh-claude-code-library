@@ -35,7 +35,8 @@ a whole session without one line about a guard they did not ask for.
   `skillListingBudgetFraction`.
 - The user's rule on branches after a merge, in `~/claude-meta/SOUL.md`, says to delete the
   local branch and any leftover worktree, and to delete the branch on origin only where
-  GitHub did not already.
+  GitHub did not already. The answer the rule was learned from, in
+  `~/claude-meta/decisions/answered/issue-16.md`, carries a dated note of the change.
 
 **Out:**
 
@@ -141,9 +142,21 @@ a whole session without one line about a guard they did not ask for.
   own command after the merge, which the permission classifier does not block as it blocks
   `--delete-branch` on the merge command.
 
-  The edit is one commit in that repository with the subject prefix `soul:`, as its history
-  has for an earlier hand edit, and nothing in this repository changes but this plan's
-  record.
+  That repository also keeps the answer the rule was learned from, in
+  `decisions/answered/issue-16.md`, and a weekly lessons job there rewrites parts of
+  `SOUL.md`. So the same commit appends a note to that file, under a new heading
+  `### Amended <date>` after its last section: the rule in `SOUL.md` was reworded on that
+  date, what it says now, and why, naming `ceh-git-workflow:pull-request` and the GitHub
+  setting. The file's existing lines stay as they are. The note goes into the local file
+  only, never as a comment on the GitHub issue, which the rule file forbids. The user chose
+  this on 2026-11-13, so the answer and the rule are read together and a later reader, or
+  the weekly job, sees that the rule was changed on purpose. The builder does not need to
+  read the weekly job first.
+
+  The two edits are one commit in that repository with the subject prefix `soul:`, as its
+  history has for an earlier hand edit, and the builder pushes it to that repository's
+  remote, which the user approved on 2026-11-13. Nothing in this repository changes but
+  this plan's record.
 - **Versions and landing** Phase 1 is one PR: a PATCH bump of `ceh-every-session` in `plugin.json`,
   `marketplace.json` and `docs/PLUGIN_VERSIONS.md`, from whatever `main` holds when it is
   built (2.9.15 on 2026-11-13), with its `CHANGELOG.md` entry under the PR's dated section.
@@ -183,19 +196,18 @@ a whole session without one line about a guard they did not ask for.
 - **Builds:** "Phase 3: the reworded rule".
 - **Check:** `grep -c "When a PR has merged" ~/claude-meta/SOUL.md` prints 1, and that line holds
   "only where GitHub did not already" and no longer holds "both locally and on origin".
-  `git -C ~/claude-meta log -1 --format=%s -- SOUL.md` shows the `soul:` commit. No command
-  in this repository proves it, because the file lives outside it.
+  `grep -c "^### Amended" ~/claude-meta/decisions/answered/issue-16.md` prints 1.
+  `git -C ~/claude-meta log -1 --format=%s -- SOUL.md` shows the `soul:` commit, and
+  `git -C ~/claude-meta status -sb` shows the branch not ahead of its remote. No command
+  in this repository proves it, because the files live outside it.
 - **Status:** todo
 
 ## Open
 
-- Does the weekly lessons job in `~/claude-meta`, which rewrites parts of `SOUL.md`, put
-  the old wording back from the answer it was learned from?: Unknown. The builder reads how that job builds `SOUL.md` before editing. If the job
-  would restore the old rule, the builder reports it and the user decides where the
-  correction is recorded, since that tool is the user's own.
-- May the builder push the `soul:` commit to the remote of `~/claude-meta`?: Yes, because the user decided the rewording on 2026-11-13 and the repository's other
-  commits are pushed. If the session cannot run git there, it makes the edit and reports
-  the commit as the user's to make.
+- Does the weekly lessons job in `~/claude-meta` read the note in
+  `decisions/answered/issue-16.md`, or could it still put the old wording back?: Not checked. The user chose the note as the record on 2026-11-13. If a later weekly run
+  restores the old rule, the note shows the change was made on purpose, and the fix is
+  then in that job, which is the user's own tool.
 
 ## Record
 
@@ -204,5 +216,12 @@ a whole session without one line about a guard they did not ask for.
   among them a warning kept for an export folder that holds no quota record, and the
   guide section's heading left unnumbered.
 - 2026-11-13 PR: #282 https://github.com/cheneeheng/ceh-claude-code-library/pull/282
+- 2026-11-13 Design changed: was "The edit is one commit in that repository with the subject prefix `soul:`", now
+  the same commit also appends an `### Amended <date>` note to
+  `decisions/answered/issue-16.md` and is pushed, because the user asked on 2026-11-13
+  for the note beside the answer the rule was learned from, and approved the push. The
+  user also confirmed that the guard warns when the export folder exists and holds no
+  quota record, which Phase 1 already says. Both answered questions leave Open.
+- 2026-11-13 PR: #283 https://github.com/cheneeheng/ceh-claude-code-library/pull/283
 
 <!-- prettier-ignore-end -->
