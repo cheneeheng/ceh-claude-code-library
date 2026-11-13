@@ -191,7 +191,10 @@ not only `repeat-mistake`.
   of `ceh-codebase-explanation` and `ceh-every-session`.
 - **Check:** `python tools/validate-plugins/validate.py` fails on the fixture before the change and
   prints `OK: all plugin checks passed` after it, with the `copies` check included.
-- **Status:** todo
+- **Status:** done, Before the change, `python tools/validate-plugins/validate.py` failed on the new fixture
+  ("stdout lacks 'entries.0.definition: Value error, one paragraph'"). After it, the same
+  command printed "OK: all plugin checks passed". The repo holds no committed GLOSSARY.yaml
+  the stricter check could break.
 
 ### Phase 5: Four web-frontend descriptions say "Trigger on"
 

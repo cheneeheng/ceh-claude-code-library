@@ -19,11 +19,11 @@ a removed plugin loses its row.
 | `ceh-build-plan`               | 2.0.6   | `2026-11-13` |
 | `ceh-product-direction`        | 2.0.6   | `2026-11-13` |
 | `ceh-check-build-against-plan` | 1.1.14  | `2026-11-13` |
-| `ceh-codebase-explanation`     | 1.3.9   | `2026-11-13` |
+| `ceh-codebase-explanation`     | 1.3.10  | `2026-11-13` |
 | `ceh-coding-conduct`           | 2.5.10  | `2026-11-13` |
 | `ceh-competitor-analysis`      | 1.2.10  | `2026-11-13` |
 | `ceh-documentation`            | 1.0.9   | `2026-11-12` |
-| `ceh-every-session`            | 2.9.14  | `2026-11-13` |
+| `ceh-every-session`            | 2.9.15  | `2026-11-13` |
 | `ceh-git-workflow`             | 1.5.11  | `2026-11-13` |
 | `ceh-python-library`           | 1.0.5   | `2026-11-12` |
 | `ceh-python-service`           | 1.1.7   | `2026-11-12` |

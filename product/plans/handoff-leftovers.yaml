@@ -211,7 +211,12 @@ phases:
     check: |
       `python tools/validate-plugins/validate.py` fails on the fixture before the change and
       prints `OK: all plugin checks passed` after it, with the `copies` check included.
-    status: todo
+    status: done
+    evidence: |
+      Before the change, `python tools/validate-plugins/validate.py` failed on the new fixture
+      ("stdout lacks 'entries.0.definition: Value error, one paragraph'"). After it, the same
+      command printed "OK: all plugin checks passed". The repo holds no committed GLOSSARY.yaml
+      the stricter check could break.
   - name: Four web-frontend descriptions say "Trigger on"
     builds: |
       The four description edits, the `ceh-web-frontend` PATCH bump, and its `docs/CATALOG.md`

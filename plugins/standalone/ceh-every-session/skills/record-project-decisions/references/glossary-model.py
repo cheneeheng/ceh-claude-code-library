@@ -12,7 +12,14 @@ import re
 from typing import Annotated, Literal, Optional
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
+from pydantic import (
+    AfterValidator,
+    BaseModel,
+    ConfigDict,
+    Field,
+    StringConstraints,
+    model_validator,
+)
 
 NAME = "glossary"
 VERSION = 2
@@ -21,6 +28,15 @@ Line = Annotated[
     str, StringConstraints(strip_whitespace=True, min_length=1, pattern=r"^[^\n]*$")
 ]
 Block = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+
+
+def _one_paragraph(text: str) -> str:
+    if re.search(r"\n[ \t]*\n", text):
+        raise ValueError("one paragraph: remove the blank line")
+    return text
+
+
+Paragraph = Annotated[Block, AfterValidator(_one_paragraph)]
 
 
 def _fold(text: str) -> str:
@@ -34,7 +50,7 @@ class _Strict(BaseModel):
 
 class Entry(_Strict):
     term: Line
-    definition: Block
+    definition: Paragraph
     avoid: list[Line]
     not_confused_with: list[Line]
 
@@ -51,7 +67,7 @@ class Entry(_Strict):
 
 class OpenTerm(_Strict):
     term: Line
-    question: Block
+    question: Paragraph
 
 
 class Glossary(_Strict):
