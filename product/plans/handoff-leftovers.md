@@ -225,5 +225,7 @@ None
   models (new Phase 3), and the paid dispatch runs when the build reaches it (now Phase 6).
   The vision and `draft-post` wording go to their own PRs, under Out.
 - 2026-11-13 PR: #273 https://github.com/cheneeheng/ceh-claude-code-library/pull/273
+- 2026-11-13 Built Phase 1: `python tools/validate-plugins/validate.py`, "OK: all plugin checks passed"
+- 2026-11-13 PR: #275 https://github.com/cheneeheng/ceh-claude-code-library/pull/275
 
 <!-- prettier-ignore-end -->
