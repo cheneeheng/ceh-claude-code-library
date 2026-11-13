@@ -35,9 +35,9 @@ failure, and `3` means no model for that version.
 
 - `schema`: `glossary/v2`.
 - `entries`: a list, each `term` (one line, the chosen word), `definition` (a `|` block, Markdown,
-  in domain words), `avoid` (a list of one-line aliases, `[]` when none) and `not_confused_with`
+  in domain words, one paragraph, no blank line), `avoid` (a list of one-line aliases, `[]` when none) and `not_confused_with`
   (a list of one-line nearby terms, `[]` when none). A nearby term need not have its own entry.
-- `open`: a list of terms not yet settled, each `term` and `question` (a `|` block), `[]` when
+- `open`: a list of terms not yet settled, each `term` and `question` (a `|` block, one paragraph, no blank line), `[]` when
   none. It may name a settled term whose definition is disputed. Rendered as `## Open terms`.
 - `notes` (optional): a `|` block of Markdown, rendered as `## Notes`, for paragraphs a `v1` file
   held outside its entries.

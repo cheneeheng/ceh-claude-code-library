@@ -653,6 +653,11 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     gl_files = {
         "ok/GLOSSARY": good_gl,
         "bad/GLOSSARY": good_gl.replace("avoid: [step]", "avoid: [stage]"),
+        # A definition is one paragraph: a blank line inside it fails the check.
+        "para/GLOSSARY": good_gl.replace(
+            "definition: One step of a workflow.",
+            'definition: "One step.\\n\\nOf a workflow."',
+        ),
         "root/GLOSSARY": "key: value\n",
         "root/docs/GLOSSARY": "key: value\n",
         "root/sub/GLOSSARY": "key: value\n",
@@ -695,6 +700,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     glossary_fixtures = ([
         {"script": rh_ce, "stdin": write_rel(gl / "ok", "GLOSSARY.yaml"), "out": "", "after": gl_rendered("ok")},
         {"script": rh_ce, "stdin": write_at(gl / "bad" / "GLOSSARY.yaml"), "out": "entries.0"},
+        {"script": rh_ce, "stdin": write_at(gl / "para" / "GLOSSARY.yaml"), "out": "entries.0.definition: Value error, one paragraph"},
         {"script": rh_ce, "stdin": write_rel(gl / "root", "GLOSSARY.yaml"), "out": "no 'schema:"},
         {"script": rh_ce, "stdin": write_rel(gl / "root", "docs/GLOSSARY.yaml"), "out": "no 'schema:"},
         # record-project-decisions carries the model, so ceh-every-session's hook checks it too.

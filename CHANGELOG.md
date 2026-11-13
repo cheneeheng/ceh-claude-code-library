@@ -72,6 +72,11 @@ record, competitor report, security audit, QA report, performance file, the thre
 audits, and the strategy. Each canonical copy changed first and was copied over the others. No
 format version changes, since the YAML each accepts is unchanged.
 
+Phase 4 of `handoff-leftovers`: a glossary `definition` or open-term `question` is one paragraph.
+The glossary model rejects a blank line in either, and the schema says so, because the renderer
+puts each on one line where a second paragraph rendered loosely. The format stays `glossary/v2`:
+a saved glossary with a blank line in a definition now fails its check, which names the field.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -79,10 +84,10 @@ format version changes, since the YAML each accepts is unchanged.
 | `ceh-blog-and-seo`             | 2.0.7   |
 | `ceh-build-plan`               | 2.0.6   |
 | `ceh-check-build-against-plan` | 1.1.14  |
-| `ceh-codebase-explanation`     | 1.3.9   |
+| `ceh-codebase-explanation`     | 1.3.10  |
 | `ceh-coding-conduct`           | 2.5.10  |
 | `ceh-competitor-analysis`      | 1.2.10  |
-| `ceh-every-session`            | 2.9.14  |
+| `ceh-every-session`            | 2.9.15  |
 | `ceh-git-workflow`             | 1.5.11  |
 | `ceh-product-direction`        | 2.0.6   |
 | `ceh-security-audit`           | 1.1.9   |
@@ -155,6 +160,8 @@ format version changes, since the YAML each accepts is unchanged.
   renderer dropped.
 - Keep a backslash written before a pipe in the table cells of the ten other table-cell models,
   which dropped it or, in the competitor report, kept it as the pipe's escape.
+- Reject a blank line in a glossary `definition` or `question`, which rendered as a loose second
+  paragraph.
 - Stop `explain-codebase` untracking a committed output file: it reports the file as tracked and
   leaves the untracking to the user.
 - Stop `edit-post` overwriting a draft git does not track: the revision is saved beside it as
