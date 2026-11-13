@@ -43,6 +43,13 @@ The `decision-blocks-only` plan is now built: the user reported that both the li
 check and the ordinary user-only question check passed, closing Phase 2's pending manual check.
 The agent did not run these interactive checks. No plugin version changes.
 
+`product/plans/handoff-leftovers.yaml` plans what the 2026-11-12 handoffs left open, in six
+phases with one PR each: `generated-md-guard.py` resolves a relative path, every table-cell
+model keeps a backslash written before a pipe, a glossary definition is one paragraph, four
+`ceh-web-frontend` descriptions say "Trigger on", and the tester agents get past
+`skill-started-guard.py` if one paid dispatch shows the guard stops them. It was reviewed from a
+fresh context and revised. Nothing is built yet, so no plugin version changes.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -65,6 +72,7 @@ The agent did not run these interactive checks. No plugin version changes.
 
 - Add the build plans `consolidate-product-artifacts`, `workspace-sync-commit-message` and
   `workspace-checkpoint-on-pr-merge` to `product/plans/`.
+- Add the build plan `handoff-leftovers` to `product/plans/`.
 - Add `CEH_USER_RULES_DIR`, read by `record-project-decisions`, with its row in
   `docs/ENVIRONMENT_VARIABLES.md`.
 - Add `references/interview.md` to `draft-post`, holding the interview step moved out of the
