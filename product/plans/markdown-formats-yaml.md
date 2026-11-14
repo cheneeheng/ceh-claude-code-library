@@ -223,6 +223,7 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 ## Record
 
 - 2026-11-14 Planned: status ready. The user reviews it, so no review-build-plan run.
+- 2026-11-14 PR: #294 https://github.com/cheneeheng/ceh-claude-code-library/pull/294
 - 2026-11-14 Reviewed: Revise first, 2 blocking (blog files saved beside a post on disk have no decided format; the
   shareable retro copy keeps `generated_from`, so the guard denies its scrub fixes)
 

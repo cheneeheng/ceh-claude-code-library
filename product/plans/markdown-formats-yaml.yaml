@@ -249,6 +249,9 @@ record:
     event: Planned
     details: status ready. The user reviews it, so no review-build-plan run.
   - date: 2026-11-14
+    event: PR
+    details: "#294 https://github.com/cheneeheng/ceh-claude-code-library/pull/294"
+  - date: 2026-11-14
     event: Reviewed
     details: |
       Revise first, 2 blocking (blog files saved beside a post on disk have no decided format; the
