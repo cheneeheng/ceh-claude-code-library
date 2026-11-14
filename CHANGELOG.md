@@ -11,6 +11,13 @@ before this repo live in
 
 ## 2026-11-14
 
+`product/plans/markdown-formats-yaml.yaml` plans YAML formats for the thirteen formats that
+`product/plans/consolidate-product-artifacts.yaml` left Markdown-only, as the user decided on
+2026-11-13: plan review, code review, refactor report, stress test, test audit, business plan
+review, period and session retro, investor deck and outreach, blog draft, repurposed post and
+learning record. It is built before this repo's own `product/` folder moves. Nothing is built
+yet, so no plugin version changes.
+
 The usage-limit guard stays quiet when no statusline export exists and the user has not set
 either guard variable. Users who set a guard variable or have an export folder still receive
 the once-per-session inactive warning when no quota reading is available.
