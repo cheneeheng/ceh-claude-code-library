@@ -33,8 +33,9 @@ REPEAT = re.compile(
 # The session id, kept for the handler below, which runs after main() has failed.
 SESSION = [""]
 UV_HELP = "Install uv (https://docs.astral.sh/uv/) so the check can run."
-# Spine file stems and their formats, matched in a `product` or `business` folder or beside a
-# `.md` of the same stem, so an unrelated STRATEGY.yaml elsewhere is left alone.
+# Spine file stems and their formats, matched in a `product` or `business` folder (in
+# .agents_workspace/product/, or the product/ a repo's CLAUDE.md names) or beside a `.md` of the
+# same stem, so an unrelated STRATEGY.yaml elsewhere is left alone.
 SPINE = {
     "EVIDENCE": "evidence",
     "ARCHITECTURE": "architecture",
@@ -50,6 +51,7 @@ def model_names() -> set[str]:
 
 def place_format(file: Path, root: Path) -> str | None:
     """The format a file's place says it holds, or None. `root` is the session's cwd."""
+    # A plan in .agents_workspace/product/plans/, or in the product/plans/ a repo's CLAUDE.md names.
     if file.parent.name == "plans" and file.parent.parent.name == "product":
         return "plan"
     # Only at the root or in docs/, and only beside its GLOSSARY.md, so a project's unrelated
@@ -59,8 +61,9 @@ def place_format(file: Path, root: Path) -> str | None:
         return "glossary" if home and file.with_suffix(".md").exists() else None
     if file == root / ".agents_workspace" / "product" / "blog-voice.yaml":
         return "blog-voice"
-    # The dated name only, older or newer form, in either retros folder: a name with a label
-    # before `repeat-mistake` is not one.
+    # The dated name only, older or newer form, in .agents_workspace/product/retros/ or the
+    # product/retros/ a repo's CLAUDE.md names: a name with a label before `repeat-mistake` is
+    # not one.
     retros = (
         root / "product" / "retros",
         root / ".agents_workspace" / "product" / "retros",

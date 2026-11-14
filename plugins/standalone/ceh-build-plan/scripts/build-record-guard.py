@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """PreToolUse hook: deny a plan's new "Built Phase" Record line unless implement-from-plan ran.
 
-Matches Edit|Write|MultiEdit. A Built Phase line in product/plans/*.md, or an `event: Built Phase`
-record entry in a plan/v2 product/plans/*.yaml, is the evidence that a phase was built the way
+Matches Edit|Write|MultiEdit. A Built Phase line in .agents_workspace/product/plans/*.md, or an
+`event: Built Phase` record entry in a plan/v2 .agents_workspace/product/plans/*.yaml, is the
+evidence that a phase was built the way
 implement-from-plan builds it, so writing one by hand, without that skill started in this session,
 records a build its procedure never ran. CEH_BUILD_RECORD_GUARD=off disables it.
 
@@ -56,6 +57,7 @@ def main() -> None:
     ti = payload.get("tool_input", {})
     path = ti.get("file_path", "")
     built = BUILT.get(Path(path).suffix)
+    # Matches .agents_workspace/product/plans/ and the product/plans/ a repo's CLAUDE.md names.
     if "/product/plans/" not in path.replace("\\", "/") or not built:
         return
     new = ti.get("new_string") or ti.get("content") or ""

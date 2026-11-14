@@ -33,11 +33,31 @@ Two product folders confused a reviewer and broke references from one folder to 
 plugins follow in the plan's later phases, and this repo keeps its own `product/` until a plan
 moves it. No plugin changes.
 
+The artifact hooks are proven on the one path: fixtures show a plan, an evidence report and a
+repeat-mistake report under `.agents_workspace/product/` each render, and a hand-written Built
+Phase entry there is denied. A new worktree's workspace now receives a plan left uncommitted in
+the main workspace, because the workspace sync commits the main workspace before it adds the
+worktree, except while the user's own merge is in progress. Phase 2 of
+`product/plans/consolidate-product-artifacts.yaml`.
+
 ### Plugin versions
 
-| Plugin              | Version |
-| ------------------- | ------- |
-| `ceh-every-session` | 2.9.16  |
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-blog-and-seo`             | 2.0.8   |
+| `ceh-build-plan`               | 2.0.7   |
+| `ceh-check-build-against-plan` | 1.1.15  |
+| `ceh-codebase-explanation`     | 1.3.11  |
+| `ceh-coding-conduct`           | 2.5.11  |
+| `ceh-competitor-analysis`      | 1.2.11  |
+| `ceh-every-session`            | 2.9.17  |
+| `ceh-git-workflow`             | 1.5.14  |
+| `ceh-product-direction`        | 2.0.7   |
+| `ceh-security-audit`           | 1.1.10  |
+| `ceh-testing`                  | 1.6.20  |
+| `ceh-usability-audit`          | 1.2.12  |
+| `ceh-workflow-builder`         | 1.4.10  |
+| `ceh-workflow-runner`          | 1.1.9   |
 
 ### Added
 
@@ -59,6 +79,11 @@ moves it. No plugin changes.
   sections of `docs/STRATEGY.md` to one `.agents_workspace/product/` path, change "committed
   beside" to "saved beside" in `decision-output-templates.md` and `docs/STRATEGY.md`, and name
   `product/` in the root `CLAUDE.md` as this repo's location until it migrates.
+- Name `.agents_workspace/product/` in the docstrings and comments of `build-record-guard.py`
+  and all 13 copies of `artifact-render-hook.py`, and add their fixtures to `checks/hooks.py`.
+- Commit the main workspace's pending changes in `sync-agents-workspace.py` before adding a
+  worktree's workspace, with the subject `chore(workspace): sync main before worktree <folder>`,
+  and merge the main branch into a `ceh-ws/` branch that already existed.
 
 ## 2026-11-13
 

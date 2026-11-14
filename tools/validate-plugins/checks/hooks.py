@@ -460,6 +460,60 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             else "m2 lost"
         )
 
+    # sync-agents-workspace create(): a plan left uncommitted in the main workspace reaches a new
+    # worktree's workspace, on its own project so the sequence above is untouched.
+    proj2 = tmp / "proj2"
+    ws2 = proj2 / ".agents_workspace"
+    for d, branch in ((proj2, "main"), (ws2, "ws")):
+        d.mkdir(parents=True)
+        (d / "README.md").write_text("x\n", encoding="utf-8")
+        g(d, "init", "-q", "-b", branch)
+        g(d, "add", ".")
+        g(d, "commit", "-q", "-m", "x")
+    plan_rel = Path("product") / "plans"
+    sync_subject = "chore(workspace): sync main before worktree {}"
+
+    def pending_plan(name: str, branch_first: bool = False, merge_head: bool = False):
+        def before() -> None:
+            if branch_first:  # the ceh-ws/ branch exists from an earlier session
+                g(ws2, "branch", f"ceh-ws/ws/{name}")
+            if merge_head:  # the user's own merge in progress
+                (ws2 / ".git" / "MERGE_HEAD").write_text(
+                    g(ws2, "rev-parse", "HEAD") + "\n", encoding="utf-8"
+                )
+            (ws2 / plan_rel).mkdir(parents=True, exist_ok=True)
+            (ws2 / plan_rel / f"{name}.yaml").write_text("x\n", encoding="utf-8")
+            g(proj2, "worktree", "add", "-q", "-b", name, str(tmp / name))
+
+        return before
+
+    def plan_reached(name: str) -> str | None:
+        if not (tmp / name / ".agents_workspace" / plan_rel / f"{name}.yaml").is_file():
+            return (
+                f"{name}: the uncommitted plan did not reach the worktree's workspace"
+            )
+        got = g(ws2, "log", "-1", "--format=%s")
+        return (
+            None
+            if got == sync_subject.format(name)
+            else f"{name}: main workspace commit {got!r}"
+        )
+
+    def no_commit_in_merge() -> str | None:
+        got = g(ws2, "log", "-1", "--format=%s")
+        (ws2 / ".git" / "MERGE_HEAD").unlink()
+        return (
+            f"committed during the user's merge: {got!r}"
+            if got == sync_subject.format("wt5")
+            else None
+        )
+
+    create_fixtures = [
+        {**sync("start", tmp / "wt3"), "out": "", "before": pending_plan("wt3"), "after": lambda: plan_reached("wt3")},
+        {**sync("start", tmp / "wt4"), "out": "", "before": pending_plan("wt4", branch_first=True), "after": lambda: plan_reached("wt4")},
+        {**sync("start", tmp / "wt5"), "out": "", "before": pending_plan("wt5", merge_head=True), "after": no_commit_in_merge},
+    ]  # fmt: skip
+
     # artifact-render-hook and generated-md-guard: plan/v2 YAML in tmp/product/plans.
     good_plan = (
         "schema: plan/v2\ntitle: Count words\nstatus: ready\ncreated: 2026-11-06\n"
@@ -1097,15 +1151,49 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},
     ]  # fmt: skip
 
+    # The one product path: a plan, a spine file and a repeat-mistake report under
+    # .agents_workspace/product/ each render, as they do under a repo's own product/.
+    awp = tmp / "awp" / ".agents_workspace" / "product"
+    aw_files = {
+        awp / "plans" / "ok.yaml": (good_plan, "generated_from: ok.yaml"),
+        awp / "EVIDENCE.yaml": (good_ev, "generated_from: EVIDENCE.yaml"),
+        awp / "retros" / f"{day}.yaml": (good_rm, "### 1: Dates written as 10/09/2026"),
+    }
+    for p, (text, _) in aw_files.items():
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(text, encoding="utf-8")
+
+    def aw_rendered(p: Path):
+        marker = aw_files[p][1]
+
+        def after() -> str | None:
+            md = p.with_suffix(".md")
+            ok = md.is_file() and marker in md.read_text(encoding="utf-8")
+            return None if ok else f"{rel_aw(md)} was not rendered"
+
+        return after
+
+    def rel_aw(p: Path) -> str:
+        return p.relative_to(tmp / "awp").as_posix()
+
+    workspace_path_fixtures = [
+        {"script": script, "stdin": write_rel(tmp / "awp", rel_aw(p)), "out": "", "after": aw_rendered(p)}
+        for script, p in (
+            ("ceh-build-plan/artifact-render-hook.py", awp / "plans" / "ok.yaml"),
+            ("ceh-testing/artifact-render-hook.py", awp / "EVIDENCE.yaml"),
+            (rh_es, awp / "retros" / f"{day}.yaml"),
+        )
+    ] if have_uv else []  # fmt: skip
+
     # build-record-guard on a plan/v2 YAML: a new `event: Built Phase` entry needs the skill.
     built_entry = (
         "  - date: 2026-10-26\n    event: Built Phase\n    phase: 1\n    details: x\n"
     )
     yaml_plan = (plans / "ok.yaml").as_posix()
 
-    def record_yaml(t: str = "none") -> dict:
+    def record_yaml(t: str = "none", path: str = yaml_plan) -> dict:
         ti = {
-            "file_path": yaml_plan,
+            "file_path": path,
             "old_string": "record:\n",
             "new_string": "record:\n" + built_entry,
         }
@@ -1122,6 +1210,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *evidence_fixtures,
         {"script": "build-record-guard.py", "stdin": record_yaml(), "out": "implement-from-plan"},
         {"script": "build-record-guard.py", "stdin": record_yaml("skill"), "out": ""},
+        # The one product path: a hand-written Built Phase entry in a workspace plan is denied too.
+        {"script": "build-record-guard.py", "stdin": record_yaml(path=(awp / "plans" / "x.yaml").as_posix()), "out": "implement-from-plan"},
+        *workspace_path_fixtures,
         # branch-guard: deny on the session repo's default branch, allow elsewhere, in another
         # repo, or when switched off.
         {"script": "branch-guard.py", "stdin": edit(repos["main"]), "out": "On the default branch"},
@@ -1270,6 +1361,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         # A session that ends in the main checkout catches up: wt2 merges, wt's conflict aborts.
         {**sync("end", proj), "out": "", "before": commit_v1, "after": caught_up_at_end},
         {**sync("start", None), "out": ""},
+        *create_fixtures,
         # Context injectors: valid JSON naming their skill, silent when switched off.
         {"script": "load-contract.sh", "stdin": {}, "out": "ceh-coding-conduct:agent-coding-contract"},
         {"script": "load-contract.sh", "stdin": {}, "args": ["SubagentStart"], "out": '"hookEventName": "SubagentStart"'},
