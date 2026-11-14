@@ -309,5 +309,14 @@ coming back.
   changed back to product/plans/<slug>.md it exited 1 naming that file and line, and exited 0
   once the line was restored.
 - 2026-11-14 PR: #292 https://github.com/cheneeheng/ceh-claude-code-library/pull/292
+- 2026-11-14 Checked: 35 items: 33 Built, 1 Deviation, 1 Cannot verify. Deviation: Design "Lookups that used
+  source git" says pull-request step 3 "makes no source commit", and
+  pull-request/SKILL.md:55 still commits the plan "When the plans folder is tracked in the
+  source repo". Fixed on the user's decision the same day: the sentence is removed and the
+  step makes no source commit wherever the plans folder is, with validate.py passing after
+  it. Cannot verify: the Phase 5 check's second half (a skill line changed back
+  exits 1), because a report-only check edits no skill. The two patterns were run on that
+  line instead and both matched, with no allowlist entry covering it.
+- 2026-11-14 PR: #293 https://github.com/cheneeheng/ceh-claude-code-library/pull/293
 
 <!-- prettier-ignore-end -->
