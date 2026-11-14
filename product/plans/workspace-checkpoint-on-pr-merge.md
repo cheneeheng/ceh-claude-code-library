@@ -269,5 +269,6 @@ the turn, in the checkout that ran the merge, and only once GitHub reports the P
   merge commit, after its branch was deleted. A planted failing entry showed the warning
   once per session in place of renaming `gh`, which reaches the same call. The warning's
   display was reported by the user, the rest checked by the agent.
+- 2026-11-14 PR: #286 https://github.com/cheneeheng/ceh-claude-code-library/pull/286
 
 <!-- prettier-ignore-end -->
