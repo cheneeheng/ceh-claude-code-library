@@ -304,5 +304,6 @@ coming back.
 - 2026-11-14 Built Phase 4: tools/validate-plugins/validate.py: OK: all plugin checks passed. The fixes/retros grep
   printed only the old form inside the two fix-record-model.py patterns. The new path
   fixture failed against the ceh-testing model before the canonical model was copied to it.
+- 2026-11-14 PR: #291 https://github.com/cheneeheng/ceh-claude-code-library/pull/291
 
 <!-- prettier-ignore-end -->
