@@ -84,4 +84,57 @@ Record the amendment beside the original answer in the user's separate rule repo
 mechanism. The amendment records intent for later readers and the weekly lessons job,
 whose handling of that note has not been checked.
 
+### 2026-11-14 — One product folder in the workspace
+
+**Status:** Accepted
+**Context:** A target project had two product folders, root product/ for committed handoff files and
+.agents_workspace/product/ for local output, and artifacts in one cited artifacts in the
+other. Vision principle 2 was amended first to accept the versioned workspace.
+**Decision:** Every plugin skill, hook and script saves and reads product artifacts in
+.agents_workspace/product/ only, unless the repo's CLAUDE.md names another location. A file
+found only at the old root product/ is reported with its move, never read or written
+beside. No skill assumes the workspace is a git repo, and no reading of the old path is
+kept as a fallback.
+**Consequences:** A project with a root product/ moves its files or names its location in CLAUDE.md. A linked
+worktree gets a workspace only when the workspace is a git repo, and a subagent started
+with isolation worktree gets none, so its caller passes it the artifact. This repo keeps
+its own product/ until a plan moves it.
+
+### 2026-11-14 — References name the YAML, checked by artifact-paths
+
+**Status:** Accepted
+**Context:** Skills, schemas, templates and READMEs named the generated .md of formats whose source is
+YAML, and nothing stopped a root product/ path from coming back.
+**Decision:** A path to a format with a YAML source ends in .yaml. The artifact-paths check in validate.py
+fails on a root product/ path or such a .md path under plugins/standalone/, outside an
+allowlist of legacy plan/v1 plans, old-path notes and generated Markdown a script reads,
+one reason per entry.
+**Consequences:** Markdown-only formats stay Markdown until each gets its own YAML plan, which removes its
+allowlist entry. A new exception needs an allowlist entry with its reason.
+
+### 2026-11-14 — Fix records link to their fix by a commit footer
+
+**Status:** Accepted
+**Context:** A fix record in the workspace cannot ride in the source repo's fix commit, which was how
+git log found the fix.
+**Decision:** The fix's commit message carries the footer Refs: fixes/<slug>, so git log --grep finds it.
+fix-record/v2 keeps every key, and its PlanPath and FixPath accept both the workspace path
+and the old root form, so a record saved earlier still checks.
+**Consequences:** The link lives in the commit message, so a fix committed without the footer has no link
+back to its record.
+
+### 2026-11-14 — One retro file, and a worktree sync commit before a new worktree
+
+**Status:** Accepted
+**Context:** The in-repo and local retro files would share one name in one folder, and a worktree's
+workspace holds only committed files, so a plan left uncommitted in the main workspace was
+missing there.
+**Decision:** review-recent-work, diagnose-session and prevent-repeat-mistake each save one file holding
+every issue, as period-retro/v2 and session-retro/v2, and repeat-mistake/v2 with other_file
+always null. sync-agents-workspace.py commits the main workspace before adding a worktree,
+except during the user's own merge, and merges the main branch into a ceh-ws/ branch that
+already existed.
+**Consequences:** Older retro pairs are still read. A worktree start commits pending workspace files the user
+may have meant to leave uncommitted.
+
 <!-- prettier-ignore-end -->
