@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: workspace-checkpoint-on-pr-merge.yaml
 generated_note: "Do not edit. artifact.py renders this file from workspace-checkpoint-on-pr-merge.yaml: edit the YAML, then run artifact.py render."
 title: A merged pull request leaves a checkpoint commit in the agents workspace
-status: building
+status: built
 created: 2026-11-13
 ---
 
@@ -193,12 +193,16 @@ the turn, in the checkout that ran the merge, and only once GitHub reports the P
   `git -C .agents_workspace log -1 --format=%B` shows the checkpoint subject, the PR's URL
   and its merge commit. With `gh` renamed for one turn and an entry pending, the failure
   message appears in the session once.
-- **Status:** todo. tools/validate-plugins/validate.py printed "OK: all plugin checks passed" after the
-  last code and formatting edits. The completion fixtures failed on nine expected
-  behaviors first. Additional regressions pass for branch-reference cleanup,
-  repeat Stop idempotence and a refused git commit. The live check after reinstalling the
-  plugin, merging a real PR with its branch deleted and observing the failure message in
-  Claude Code has not run. This phase stays todo until that required check is completed.
+- **Status:** done, tools/validate-plugins/validate.py printed "OK: all plugin checks passed" after the
+  last code and formatting edits, and the completion fixtures failed on nine expected
+  behaviors first. Live, with ceh-git-workflow 1.5.13 installed: PR #285 merged at
+  2026-11-14 13:34:03 with its branch deleted locally and on origin, and the workspace got
+  commit faf7e89 `chore(workspace): checkpoint source pr #285` at 13:34:18, body
+  `https://github.com/cheneeheng/ceh-claude-code-library/pull/285 merged as 4a1f2b35...`,
+  and an empty pending folder. Failure path: instead of renaming `gh`, a planted entry
+  `pr-999999` made `gh pr view` fail, which reaches the same warning call. The user saw
+  the warning once at the end of the first turn, and the second turn's Stop printed
+  nothing and kept the entry, which was then deleted by hand.
 
 ## Open
 
@@ -210,12 +214,12 @@ the turn, in the checkout that ran the merge, and only once GitHub reports the P
   said to skip a checkpoint when nothing changed.: Yes, one empty commit per PR, as the review recommends, because a linked worktree is
   usually clean at that moment and would otherwise never get one.
 - Does `gh pr view <branch>` still find a merged PR once its branch is deleted, and does
-  `shutil.which` return a `gh.cmd` stub that runs without a shell on Windows?: Yes to both, untested. Phase 2's manual check lands a PR with its branch deleted, and its
-  fixtures run on Windows before the PR opens. If the first fails, the `merge` event resolves
-  the branch to a number with one `gh pr view` call when the PR already exists.
+  `shutil.which` return a `gh.cmd` stub that runs without a shell on Windows?: Yes to both. PR #285 was recorded by branch, its branch was deleted, and the Stop still
+  found it merged on 2026-11-14. The `gh.cmd` stub fixtures pass on Windows.
 - Is a Stop hook's `systemMessage` shown to the user, and which `cwd` does PreToolUse carry
-  for a Bash call inside a subagent's worktree?: It is shown, from the hooks reference, which does not confirm it in so many words, and
-  Phase 2's manual check covers it. A subagent's merge recorded under another `cwd` is
+  for a Bash call inside a subagent's worktree?: It is shown: the user saw it on 2026-11-14. A second session in the same checkout also
+  got the planted entry's warning once, since every Stop in a checkout handles its entries.
+  The subagent `cwd` stays untested: a subagent's merge recorded under another `cwd` is
   picked up by that checkout's Stop or expires.
 
 ## Record
@@ -261,5 +265,10 @@ the turn, in the checkout that ran the merge, and only once GitHub reports the P
   the code: `main()` tests the command for `gh pr merge` before any git process, proven by
   a unit test that fails when git is called for `ls`.
 - 2026-11-13 PR: #284 https://github.com/cheneeheng/ceh-claude-code-library/pull/284
+- 2026-11-14 Built Phase 2: Live check passed: PR #285's merge left workspace checkpoint faf7e89 with its URL and
+  merge commit, after its branch was deleted. A planted failing entry showed the warning
+  once per session in place of renaming `gh`, which reaches the same call. The warning's
+  display was reported by the user, the rest checked by the agent.
+- 2026-11-14 PR: #286 https://github.com/cheneeheng/ceh-claude-code-library/pull/286
 
 <!-- prettier-ignore-end -->
