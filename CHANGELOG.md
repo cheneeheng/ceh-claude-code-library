@@ -27,6 +27,12 @@ prerequisite of `product/plans/consolidate-product-artifacts.yaml`, whose first 
 only after this change has merged. Its other prerequisite, the plan
 `workspace-sync-commit-message`, is already built. No plugin changes.
 
+Every product artifact now has one home, `.agents_workspace/product/`, in the artifact-location
+rule and `docs/STRATEGY.md`, the first phase of `product/plans/consolidate-product-artifacts.yaml`.
+Two product folders confused a reviewer and broke references from one folder to the other. The
+plugins follow in the plan's later phases, and this repo keeps its own `product/` until a plan
+moves it. No plugin changes.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -49,6 +55,10 @@ only after this change has merged. Its other prerequisite, the plan
 - Mark `product/plans/workspace-checkpoint-on-pr-merge.yaml` built, with Phase 2's live
   evidence and its two settled open questions.
 - Amend principle 2 in `docs/VISION.md` to read "a committed file or the versioned workspace".
+- Rewrite `.claude/rules/decision-artifact-locations.md` and the spine and "Where files live"
+  sections of `docs/STRATEGY.md` to one `.agents_workspace/product/` path, change "committed
+  beside" to "saved beside" in `decision-output-templates.md` and `docs/STRATEGY.md`, and name
+  `product/` in the root `CLAUDE.md` as this repo's location until it migrates.
 
 ## 2026-11-13
 

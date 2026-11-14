@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Every product artifact a skill saves goes to .agents_workspace/product/
-status: ready
+status: building
 created: 2026-11-13
 goal: |
   Today a target project has two `product/` folders: root `product/` for committed handoff files
@@ -240,7 +240,8 @@ phases:
     check: |
       `python tools/validate-plugins/validate.py` exits 0, and
       `grep -n "Committed in the target repo" docs/STRATEGY.md` prints nothing.
-    status: todo
+    status: done
+    evidence: "python tools/validate-plugins/validate.py: OK: all plugin checks passed; the STRATEGY.md grep printed nothing"
   - name: Hooks and fixtures prove the path
     builds: |
       Docstrings and comments in `build-record-guard.py` and `artifact-render-hook.py` (canonical,
@@ -327,3 +328,7 @@ record:
   - date: 2026-11-13
     event: PR
     details: "#270 https://github.com/cheneeheng/ceh-claude-code-library/pull/270"
+  - date: 2026-11-14
+    event: Built Phase
+    phase: 1
+    details: "tools/validate-plugins/validate.py: OK: all plugin checks passed. The STRATEGY.md grep printed nothing."

@@ -49,19 +49,21 @@ become a plan's goals (`decision-business-plan-readers.md`).
 
 ## The spine: handoff files
 
-| Stage | Reads                                                                                                                                | Writes                                                                                                                                    |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Shape | an idea, a conversation, the repo                                                                                                    | `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, `product/VISION.yaml` and `product/STRATEGY.yaml`, each with its generated `.md` |
-| Build | `product/VISION.yaml` and `product/STRATEGY.yaml` when present, each checked first (the `.md` when no YAML exists), the repo         | `product/plans/<slug>.yaml` and its generated `<slug>.md`, the code, `product/ARCHITECTURE.yaml` and its generated `.md`                  |
-| Prove | the plan, the code                                                                                                                   | `product/EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                                      |
-| Tell  | `.agents_workspace/product/business/BUSINESS_PLAN.yaml`, `product/EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists) | posts, listings, SEO pages                                                                                                                |
+Every path below is under `.agents_workspace/product/` in the target repo.
 
-Shape to Build: `ceh-product-direction` writes `product/VISION.yaml` and `product/STRATEGY.yaml`, and
+| Stage | Reads                                                                                                        | Writes                                                                                                   |
+| ----- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| Shape | an idea, a conversation, the repo                                                                            | `business/BUSINESS_PLAN.yaml`, `VISION.yaml` and `STRATEGY.yaml`, each with its generated `.md`          |
+| Build | `VISION.yaml` and `STRATEGY.yaml` when present, each checked first (the `.md` when no YAML exists), the repo | `plans/<slug>.yaml` and its generated `<slug>.md`, the code, `ARCHITECTURE.yaml` and its generated `.md` |
+| Prove | the plan, the code                                                                                           | `EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance             |
+| Tell  | `business/BUSINESS_PLAN.yaml`, `EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists)           | posts, listings, SEO pages                                                                               |
+
+Shape to Build: `ceh-product-direction` writes `VISION.yaml` and `STRATEGY.yaml`, and
 `ceh-build-plan` reads them, putting what a plan would contradict under Open, and writes the
 plan that it builds from and `ceh-check-build-against-plan` reads. `ceh-product-direction` also writes
-`.agents_workspace/product/business/BUSINESS_PLAN.yaml`, which no Build skill reads. Prove to
-Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `product/EVIDENCE.yaml`, and
-`ceh-blog-and-seo:draft-post` and `ceh-blog-and-seo:write-project-listing-text` read it with `.agents_workspace/product/business/BUSINESS_PLAN.yaml`. Each YAML has its
+`business/BUSINESS_PLAN.yaml`, which no Build skill reads. Prove to
+Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `EVIDENCE.yaml`, and
+`ceh-blog-and-seo:draft-post` and `ceh-blog-and-seo:write-project-listing-text` read it with `business/BUSINESS_PLAN.yaml`. Each YAML has its
 Markdown rendered beside it, and a reader takes the `.md` only where no YAML exists.
 
 Three rules hold for every handoff file:
@@ -81,69 +83,71 @@ Three rules hold for every handoff file:
    cited by its plugin, and matches its copies in other plugins. The reference run may still revise
    a format, through a version bump. A format can instead be YAML checked by a model: a
    `<schema>.template.yaml`, a `<schema>-model.py` beside the schema whose pydantic model checks
-   every field and whose renderer writes the Markdown, and that Markdown committed beside the YAML
+   every field and whose renderer writes the Markdown, and that Markdown saved beside the YAML
    with `generated_from:` in its frontmatter. The build plan, `plan/v2`, is the trial.
 
-## Where files live: commit what the next stage reads
+## Where files live: one product folder
 
-The test is who reads the file.
+Every file a lifecycle stage saves goes in `.agents_workspace/product/` in the target repo, under
+the same name and sub-path wherever it is read. One folder means a person reviewing the artifacts
+sees them all in one place, and a reference from one artifact to another never crosses folders. A
+repo whose `CLAUDE.md` names another location keeps it.
 
-- **Committed in the target repo:** every handoff file, because another stage or another session
-  reads it as input. It has to survive a fresh clone, and a person can review it in a pull request.
-  This follows vision principle 2: a decision that shapes the repo for others belongs in a
-  committed file.
-- **Local in `.agents_workspace/`:** what only one session or its author reads. A skill whose
-  output would be lost with the chat saves it here, in one of three places:
-  - `.agents_workspace/product/` for the lifecycle stages' local output: reviews and audits whose
-    author acts on them (plan, code, test-suite, security, and usability reviews, QA and
-    performance reports), blog drafts outside a blog repo, retros whose fix lands elsewhere, the
-    business material below, and scratch work such as design variants and learning notes.
-  - `.agents_workspace/workflow/` for `ceh-workflow-builder` specs and drafts and the run state of
-    the workflows it generates, the default of `$CEH_WORKFLOW_BUILD_DIR` and `$CEH_WORKFLOW_RUN_DIR`.
-  - `.agents_workspace/` itself for the session tools: the decision log, session handoffs, research
-    notes, questionnaires, the codebase explanation, competitor analyses, and orchestration-lab runs.
-- **Business material stays local, even as a handoff file.** The business plan, the investor deck,
-  and the outreach notes go in `.agents_workspace/product/business/`, because they hold pricing, unit
-  economics, kill criteria, and investor contacts that do not belong in a repo others can read.
-  Only Tell reads the business plan, for audience and positioning, and works without it (rule 1
-  above), so a fresh clone loses context, not function. No skill that writes a committed product
-  document reads it, because its tests, stages and dates would become that document's goals.
-  Git-ignoring a `product/` file per repo was rejected: nothing makes anyone
-  remember it, and it breaks silently when a file name changes.
+- **`.agents_workspace/product/`** holds every lifecycle artifact: the vision and strategy, plans,
+  the architecture document, the evidence report, fix records, retros, the reviews and audits
+  (plan, code, test-suite, security, and usability reviews, QA and performance reports), blog
+  drafts outside a blog repo, scratch work such as design variants and learning notes, and the
+  business material in `business/`.
+- **`.agents_workspace/workflow/`** holds `ceh-workflow-builder` specs and drafts and the run state
+  of the workflows it generates, the default of `$CEH_WORKFLOW_BUILD_DIR` and
+  `$CEH_WORKFLOW_RUN_DIR`.
+- **`.agents_workspace/` itself** holds the session tools: the decision log, session handoffs,
+  research notes, questionnaires, the codebase explanation, competitor analyses, and
+  orchestration-lab runs.
 
-**`product/` for the builders, `docs/` for users.** Committed handoff files go in `product/` in the
-target repo. `docs/` holds only what users of the product read, so a docs site built from it never
-publishes a plan.
+A reference to a format with a YAML source names the `.yaml`, never its generated `.md`. No skill
+assumes `.agents_workspace/` is a git repo. Where it is one, a nested repo pushed to a private
+remote, its history versions the artifacts, which vision principle 2 accepts as the versioned
+workspace. Where it is a plain folder, the project decides whether to commit or ignore it.
+Git-ignoring single product files per repo was rejected: nothing makes anyone remember it, and it
+breaks silently when a file name changes.
 
-Committing every file a stage writes would bloat the repo, so committed handoff files have a
-lifecycle:
+**Business material stays out of committed product documents.** The business plan, the investor
+deck, and the outreach notes hold pricing, unit economics, kill criteria, and investor contacts.
+Only Tell reads the business plan, for audience and positioning, and works without it (rule 1
+above). No skill that writes a product document the builders read (vision, strategy, build plan,
+architecture) reads it, because its tests, stages and dates would become that document's goals.
 
-- **Vision and strategy are revised in place.** One of each per repo, committed and kept, because
-  every later stage reads them.
-- **Plans are kept.** A built plan stays in `product/plans/` with `status: built` and an append-only
+**`.agents_workspace/product/` for the builders, `docs/` for users.** `docs/` holds only what users
+of the product read, so a docs site built from it never publishes a plan.
+
+Keeping every file a stage writes would bloat the folder, so the artifacts have a lifecycle:
+
+- **Vision and strategy are revised in place.** One of each per repo, kept, because every later
+  stage reads them.
+- **Plans are kept.** A built plan stays in `plans/` with `status: built` and an append-only
   Record of how it was planned, reviewed, built, checked, proven, and merged, so the plan is the
   audit trail of its change. Its lasting decisions are also copied to the Key Decisions log in
-  `product/ARCHITECTURE.md`. Planning stays cheap because `ceh-build-plan:write-build-plan` reads
+  `ARCHITECTURE.yaml`. Planning stays cheap because `ceh-build-plan:write-build-plan` reads
   only the frontmatter of built plans.
 - **Fix records are kept.** A bug fix does not go through a build plan, because the bug already
-  says what to build. What it needs is the reason, so every fix commits
-  `product/fixes/<slug>.yaml` (`fix-record/v2`, its `.md` rendered beside it) with its symptom,
+  says what to build. What it needs is the reason, so every fix saves
+  `fixes/<slug>.yaml` (`fix-record/v2`, its `.md` rendered beside it) with its symptom,
   diagnosis, cause, and regression tests, written by
   `ceh-coding-conduct:find-root-cause` and `ceh-testing:test-a-bug-fix`. A fix that changes a
   contract or the design is a feature, and goes through `ceh-build-plan:write-build-plan`.
-- **Retro reports are kept when their fixes land here.** A retro looks back over one session
+- **Retro reports are kept.** A retro looks back over one session
   (`ceh-session-learning:diagnose-session`) or a period (`ceh-git-workflow:review-recent-work`)
   and routes each issue to the skill that fixes it: a bug to `find-root-cause`, a design change to
   `write-build-plan`, an agent mistake to `prevent-repeat-mistake`, a working rule to
   `record-project-decisions`. The agent acts on every route in the repo in the same session, and
-  commits those issues to `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`, scrubbed when they quote a transcript,
-  because the routed work reads them. Issues whose fix lands outside the repo, in user settings,
-  an installed plugin, or Claude Code, stay local in `.agents_workspace/product/retros/` for the user.
-  `prevent-repeat-mistake` saves its own report the same way, split by where each fix lands.
-- **The evidence report is append-only.** `product/EVIDENCE.md` is one file per product, and each run
+  saves one report to `retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md` holding both the issues
+  fixed in the repo and those whose fix lands outside it, in user settings, an installed plugin,
+  or Claude Code, scrubbed when it quotes a transcript. `prevent-repeat-mistake` saves its own
+  report the same way.
+- **The evidence report is append-only.** `EVIDENCE.yaml` is one file per product, and each run
   adds a dated section at the top, so the section a plan's Record cites never changes. The separate
-  QA, performance, security, and usability reports stay local: only the roll-up is read by another
-  stage.
+  QA, performance, security, and usability reports are read only by the roll-up.
 
 ## How work is chosen
 
@@ -206,7 +210,10 @@ it installed be disabled. A document carries the route at no install cost. The b
 
 This list shrinks as the gaps close. Remove a line in the PR that closes it.
 
-No known gaps as of 2026-11-02.
+- The plugins still save and read plans, vision, strategy, architecture, evidence, fix records and
+  retros in root `product/`. They move to `.agents_workspace/product/` in the later phases of
+  `product/plans/consolidate-product-artifacts.yaml`. This repo's own `product/` stays until a plan
+  of its own moves it.
 
 ## Open questions
 

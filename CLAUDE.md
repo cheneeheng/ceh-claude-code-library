@@ -40,6 +40,7 @@ archive/                      # Retired plugins or plugin contents — unpublish
 audits/<date>/                # Model-audit reports, one <plugin>.md each plus SUMMARY.md — written by the model-audit skill
 .github/workflows/            # validate.yml — runs validate.py on push and PR; model-audit.yml — weekly audit draft PR
 docs/                         # GETTING_STARTED.md (user-facing install guide), CATALOG.md (every skill and agent), and maintainer docs — VISION.md, STRATEGY.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, RETRO_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
+product/                      # This repo's product artifacts (plans, ARCHITECTURE, fixes, retros) — its location until a plan moves it to .agents_workspace/product/, per decision-artifact-locations.md
 examples/                     # Worked usage examples, a ceh-<plugin>/README.md where one exists (only ceh-ag-ui today) — not validated
 plugins/                      # All plugins — one directory per plugin, no tier subfolders
 └── standalone/
