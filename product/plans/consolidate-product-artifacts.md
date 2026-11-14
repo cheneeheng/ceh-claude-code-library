@@ -218,7 +218,7 @@ coming back.
   in progress gets no commit. PATCH bumps for the 13 hook plugins and `ceh-git-workflow`.
 - **Check:** `python tools/validate-plugins/validate.py` exits 0 with the new fixtures listed in its
   hooks output, and each new fixture was seen failing once with its assertion inverted.
-- **Status:** todo
+- **Status:** done, python tools/validate-plugins/validate.py: OK: all plugin checks passed; the 7 new fixtures failed inverted (wt3 and wt4 against the old create(), the other 5 with their assertion flipped)
 
 ### Phase 3: Plans, vision, strategy, architecture and evidence move
 
@@ -274,8 +274,10 @@ coming back.
 ## Open
 
 - Does a subagent started with `isolation: "worktree"` get a workspace? The sync hooks fire on
-  SessionStart and on `EnterWorktree` only.: Unknown and untested. If it gets none, such a subagent is given the plan's content by its
-  caller, and Phase 2 tests it before the skills move.
+  SessionStart and on `EnterWorktree` only.: It gets none. Tested on 2026-11-14 in Phase 2: a subagent started with
+  `isolation: "worktree"` in this repo, whose `.agents_workspace` is a nested git repo, found
+  no `.agents_workspace` in its worktree. So such a subagent is given the plan's content, or
+  the artifact it needs, by its caller.
 - Should fix records gain a key for the source commit or PR?: No. The `Refs: fixes/<slug>` commit footer links the two and keeps `fix-record/v2`
   unchanged.
 
@@ -286,5 +288,8 @@ coming back.
 - 2026-11-13 PR: #270 https://github.com/cheneeheng/ceh-claude-code-library/pull/270
 - 2026-11-14 Built Phase 1: tools/validate-plugins/validate.py: OK: all plugin checks passed. The STRATEGY.md grep printed nothing.
 - 2026-11-14 PR: #288 https://github.com/cheneeheng/ceh-claude-code-library/pull/288
+- 2026-11-14 Built Phase 2: tools/validate-plugins/validate.py: OK: all plugin checks passed. The fixtures wt3 and wt4
+  failed against the old create(), and wt5, the build-record-guard workspace fixture and the
+  three workspace render fixtures failed with their assertions inverted.
 
 <!-- prettier-ignore-end -->

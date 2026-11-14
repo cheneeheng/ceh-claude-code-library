@@ -8,7 +8,8 @@ the worktree gets a real git worktree of the workspace repo instead, at
 branch the main workspace has checked out.
 
 Arguments, one per event:
-  start   in a linked worktree, create its workspace; in a main checkout, catch up: merge every
+  start   in a linked worktree, commit the main workspace's pending changes, then create its
+          workspace, so an uncommitted plan reaches it; in a main checkout, catch up: merge every
           ceh-ws/<X>/ branch not yet merged, and report each merge that failed.
   commit  commit the worktree's workspace changes, so a removed worktree loses nothing committed.
           Check pending source PR merges and commit their workspace checkpoints first.
@@ -368,15 +369,27 @@ def checkpoints(top, main_ws, x, folder, session, linked):
                 claim.unlink()
 
 
-def create(top, main_ws, branch):
-    """Add <top>/.agents_workspace as a worktree of the main workspace repo."""
+def create(top, main_ws, x, branch):
+    """Add <top>/.agents_workspace as a worktree of the main workspace repo. The main workspace's
+    pending changes are committed first, because a worktree holds only committed files and a plan
+    written in the main checkout must reach it."""
     path = top / WORKSPACE
     if os.path.lexists(path):
         return
+    if not merging(main_ws):  # the user's own merge: never conclude it
+        git(main_ws, "add", "-A")
+        subject = f"chore(workspace): sync main before worktree {top.name}"[:72]
+        git(main_ws, "commit", "-q", "-m", subject)  # exits 1 when nothing is pending
     git(main_ws, "worktree", "prune")
     code, _ = git(main_ws, "rev-parse", "--verify", "--quiet", f"refs/heads/{branch}")
     if code == 0:
         git(main_ws, "worktree", "add", "-q", str(path), branch)
+        # The branch predates the commit above, so it takes <x> in to see it.
+        code, _ = git(
+            path, "-c", f"core.attributesFile={UNION}", "merge", "--no-edit", "-q", x
+        )
+        if code and merging(path):
+            git(path, "merge", "--abort")
     else:
         git(main_ws, "worktree", "add", "-q", "-b", branch, str(path))
 
@@ -539,7 +552,7 @@ def main():
 
     branch = f"{PREFIX}{x}/{top.name}"
     if event == "start":
-        create(top, main_ws, branch)
+        create(top, main_ws, x, branch)
     elif event in ("commit", "end-worker"):
         if event == "commit" and pending.is_dir():
             checkpoints(
