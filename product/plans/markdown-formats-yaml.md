@@ -43,7 +43,7 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 - Per format: a `checks/artifact_paths.py` pattern for its `.md` path, render-hook fixtures in
   `checks/hooks.py`, its name in the lists of `decision-artifact-validation.md` and
   `decision-output-templates.md`, `docs/CROSS_REFERENCES.md` entries for each copied file,
-  `docs/CATALOG.md` and plugin README wording, a PATCH bump, a changelog entry and
+  `docs/CATALOG.md`, `docs/ENVIRONMENT_VARIABLES.md` and plugin README wording, a PATCH bump, a changelog entry and
   `docs/PLUGIN_VERSIONS.md` rows.
 
 **Out:**
@@ -52,9 +52,9 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   to move. The consolidate plan's allowlist list names them, and they leave it unchanged.
 - The session retro's `<report>-shareable.md`: It is a scrubbed copy of the rendered Markdown, made only when a report leaves the machine,
   and is the file handed to a person. It stays a Markdown copy of the rendered `.md`, now
-  `<report>-shareable.md` beside the YAML's Markdown, and is not a format of its own.
-- A post written into a blog repo: `blog-draft-schema.md` already says such a post follows that repo's own front matter. It is
-  what the user ships, out of `decision-output-templates.md` by its own scope.
+  `<report>-shareable.md` beside the YAML's Markdown, and is not a format of its own. It
+  drops the `generated_from` and `generated_note` keys, because `generated-md-guard.py` denies
+  an edit to a `.md` that holds `generated_from`, and the scrub fixes edit the copy.
 - Converting files already saved in the Markdown formats: They are records. Every reader keeps reading a v1 file (v2 for the two retros) when no YAML
   sits beside it, as the earlier conversions did, and nothing rewrites past files.
 - The other report-only formats (research note, codebase explained, competitor comparison, decision log, questionnaire): The user's decision covers the list in the consolidate plan's Design, and these are not on
@@ -99,24 +99,44 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   `business/INVESTOR_DECK.yaml` and `business/INVESTOR_OUTREACH.yaml`, `blog/` and
   `learning/<subject>.yaml`. File names follow `decision-saved-file-names.md` unchanged,
   including the blog draft's exempt `<YYYY-MM-DD>-<slug>`.
+- **Blog files saved outside the workspace:** The user decided on 2026-11-14 that the skills always create YAML, which then renders to
+  Markdown, wherever the file is saved. So `edit-post` saves `<name>-edited.yaml` beside an
+  untracked draft, and `repurpose-post` saves `<slug>-<format>.yaml` next to a post on disk,
+  each with its rendered `.md`. For a git-tracked post, `edit-post` saves `<name>.yaml` beside
+  it and renders over `<name>.md`, replacing the post's front matter with the format's. A post
+  `draft-post` writes into a blog repo is YAML with its rendered `.md` too, so
+  `blog-draft-schema.md` drops its sentence that such a post follows that repo's own front
+  matter. A draft whose `.md` has a YAML beside it is revised through its YAML, never through
+  the `.md`, which the guard denies.
+- **Living files saved before this plan:** A learning record, an investor deck or an investor outreach file saved as `.md` with no YAML
+  beside it is still edited in place when its skill next updates it, as `plan-schema.md` says
+  for a `plan/v1` plan. Nothing converts it.
 - **How the hook finds each file:** By its `schema:` key alone, which every template writes as its first line. No `place_format`
-  entry is added: these files have no fixed name to match, and the writing skill runs the render
-  itself, so a file missing its key fails that run in the same turn.
+  entry is added: the writing skill runs the render itself, so a file missing its key fails
+  that run in the same turn.
 - **Hooks in the two plugins that have none:** `ceh-git-workflow` and `ceh-session-learning` get `scripts/artifact.py`,
   `scripts/artifact-render-hook.py` and `scripts/generated-md-guard.py`, copied from
   `ceh-build-plan`, and `PreToolUse` and `PostToolUse` entries on `Edit|Write|MultiEdit` as the
   other plugins wire them. `ceh-git-workflow` adds them next to its existing sync hooks in the
-  same `hooks/hooks.json`. Neither joins `READERS`, because both write their formats.
-- **Readers:** Each phase starts with `grep -rn "<schema>\|<folder>/" plugins/standalone` for its formats. A
-  reader that only names the path, such as `review-recent-work` taking the date from a period
-  retro's file name, changes the path to the `.yaml`. A reader that reads the content carries
-  the model and `artifact.py` and runs `artifact.py check` first, falling back to the `.md` when
-  no YAML exists.
+  same `hooks/hooks.json`. Neither joins `READERS`, because both write their formats. Each
+  README says the check needs uv, and `docs/ENVIRONMENT_VARIABLES.md` adds both plugins to its
+  `CEH_ARTIFACT_CHECK` row and `ceh-session-learning` to its `CEH_DISABLED_HOOKS` row.
+- **Readers:** A grep of `plugins/standalone` on 2026-11-14 found no skill in another plugin that names any
+  of these formats, so no plugin joins a phase as a reader. Inside a plugin,
+  `review-recent-work` takes the date from a period retro's file name and changes the path to
+  the `.yaml`, and `edit-post` and `repurpose-post` read a draft's content, so each carries the
+  blog-draft model and `artifact.py` and runs `artifact.py check` first, falling back to the
+  `.md` when no YAML exists. Each phase reruns
+  `grep -rn "<schema>\|<folder>/" plugins/standalone` for its formats to confirm, and a reader
+  it finds follows the same two rules.
 - **The validator:** Each phase adds its formats' `.md` paths to `YAML_FORMAT_MD` in `checks/artifact_paths.py`, so
   a stale `.md` path fails in the same PR that adds the YAML. The phase that adds the last one
   rewrites the module docstring, which today points at the consolidate plan's exceptions.
 - **Rule text:** Each phase appends its formats to the lists in `decision-artifact-validation.md` and
-  `decision-output-templates.md`, citing this plan, as each earlier format plan did.
+  `decision-output-templates.md`, citing this plan, as each earlier format plan did. In
+  `decision-artifact-validation.md` the text names the user's decision of 2026-11-13 as the
+  basis, because these formats are not handoff files another stage reads, which is what that
+  rule's opening and its Why cover.
 
 ## Phases
 
@@ -127,8 +147,8 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   YAML template, schema update, `artifact.py` copy and skill-body steps. Their readers, found by
   the Readers grep. Hook fixtures in `checks/hooks.py` for each format: a good file renders, a
   bad key is reported. The four `.md` patterns in `checks/artifact_paths.py`. Rule lists,
-  `docs/CROSS_REFERENCES.md`, `docs/CATALOG.md`, READMEs, changelog, PATCH bumps of
-  `ceh-build-plan` and `ceh-product-direction` and every reader plugin.
+  `docs/CROSS_REFERENCES.md`, `docs/CATALOG.md`, `docs/ENVIRONMENT_VARIABLES.md`, READMEs, changelog, PATCH bumps of
+  `ceh-build-plan` and `ceh-product-direction`.
 - **Check:** `python tools/validate-plugins/validate.py` exits 0 with the new fixtures in its hooks output,
   and each new fixture failed once with its assertion inverted. With one skill line changed to
   `.agents_workspace/product/plan-reviews/<slug>.md` it exits 1 naming that line.
@@ -139,10 +159,11 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 - **Builds:** refactor-report/v2 in `refactor-repo`, test-audit/v2 in `audit-test-suite`, stress-test/v2 in
   `stress-test-plan`, each with model, YAML template, schema update, `artifact.py` copy and
   skill-body steps. Their readers. Hook fixtures, `.md` patterns, rule lists,
-  `docs/CROSS_REFERENCES.md`, `docs/CATALOG.md`, READMEs, changelog, PATCH bumps of
-  `ceh-coding-conduct`, `ceh-testing`, `ceh-every-session` and every reader plugin.
+  `docs/CROSS_REFERENCES.md`, `docs/CATALOG.md`, `docs/ENVIRONMENT_VARIABLES.md`, READMEs, changelog, PATCH bumps of
+  `ceh-coding-conduct`, `ceh-testing`, `ceh-every-session`.
 - **Check:** `python tools/validate-plugins/validate.py` exits 0 with the new fixtures in its hooks output,
-  and each new fixture failed once with its assertion inverted.
+  and each new fixture failed once with its assertion inverted. With one
+  skill line changed to a `.md` path in one of this phase's folders it exits 1 naming that line.
 - **Status:** todo
 
 ### Phase 3: Learning record, blog draft and repurposed post
@@ -150,10 +171,11 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 - **Builds:** learning/v2 in `explain-until-understood`, blog-draft/v2 in `draft-post` and `edit-post` (the
   model copied into both, as `blog-voice-model.py` is), repurposed-post/v2 in `repurpose-post`.
   Their readers. Hook fixtures, `.md` patterns, rule lists, `docs/CROSS_REFERENCES.md`,
-  `docs/CATALOG.md`, READMEs, changelog, PATCH bumps of `ceh-codebase-explanation`,
-  `ceh-blog-and-seo` and every reader plugin.
+  `docs/CATALOG.md`, `docs/ENVIRONMENT_VARIABLES.md`, READMEs, changelog, PATCH bumps of `ceh-codebase-explanation`,
+  `ceh-blog-and-seo`.
 - **Check:** `python tools/validate-plugins/validate.py` exits 0 with the new fixtures in its hooks output,
-  and each new fixture failed once with its assertion inverted.
+  and each new fixture failed once with its assertion inverted. With one
+  skill line changed to a `.md` path in one of this phase's folders it exits 1 naming that line.
 - **Status:** todo
 
 ### Phase 4: Code review and period retro, with hooks in ceh-git-workflow
@@ -163,11 +185,12 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   update, `artifact.py` copy and skill-body steps. Their readers, among them
   `review-recent-work` itself and `docs/RETRO_WORKFLOW.md`. Hook fixtures for both formats and
   for the guard denying an edit to a rendered `.md` in this plugin. `.md` patterns, rule lists,
-  `docs/CROSS_REFERENCES.md`, `docs/CATALOG.md`, README, changelog, PATCH bump of
-  `ceh-git-workflow` and every reader plugin.
+  `docs/CROSS_REFERENCES.md`, `docs/CATALOG.md`, `docs/ENVIRONMENT_VARIABLES.md`, README, changelog, PATCH bump of
+  `ceh-git-workflow`.
 - **Check:** `python tools/validate-plugins/validate.py` exits 0 with the new fixtures in its hooks output,
   the existing workspace sync fixtures still pass, and each new fixture failed once with its
-  assertion inverted.
+  assertion inverted. With one
+  skill line changed to a `.md` path in one of this phase's folders it exits 1 naming that line.
 - **Status:** todo
 
 ### Phase 5: Session retro, with hooks in ceh-session-learning
@@ -175,12 +198,15 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 - **Builds:** The three scripts in `ceh-session-learning/scripts/` and a new `hooks/hooks.json`.
   session-retro/v3 in `diagnose-session`, with model, YAML template, schema update, `artifact.py`
   copy and skill-body steps, and the Sharing step scrubbing the rendered `.md` into
-  `<report>-shareable.md`. Its readers and `docs/RETRO_WORKFLOW.md`. Hook fixtures, the `.md`
+  `<report>-shareable.md` without the `generated_from` and `generated_note` keys. Its readers
+  and `docs/RETRO_WORKFLOW.md`. Hook fixtures, among them the guard allowing an edit to that
+  copy, the `.md`
   pattern, the rewritten `checks/artifact_paths.py` docstring, rule lists,
-  `docs/CROSS_REFERENCES.md`, `docs/CATALOG.md`, README, changelog, PATCH bump of
-  `ceh-session-learning` and every reader plugin.
+  `docs/CROSS_REFERENCES.md`, `docs/CATALOG.md`, `docs/ENVIRONMENT_VARIABLES.md`, README, changelog, PATCH bump of
+  `ceh-session-learning`.
 - **Check:** `python tools/validate-plugins/validate.py` exits 0 with the new fixtures in its hooks output,
-  each new fixture failed once with its assertion inverted, and
+  each new fixture failed once with its assertion inverted, with one skill line changed to
+  `.agents_workspace/product/retros/<name>-session.md` it exits 1 naming that line, and
   `grep -rnE "schema: (plan-review|code-review|refactor-report|stress-test|test-audit|business-plan-review|investor-deck|investor-outreach|blog-draft|repurposed-post|learning)/v1|schema: (period|session)-retro/v2" plugins/standalone --include=*.template.md`
   prints nothing.
 - **Status:** todo
@@ -189,14 +215,15 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 
 - A blog draft's and an investor email's rendered Markdown carry `generated_from`, a
   `generated_note` and a prettier-ignore range, which a person copying the text out must leave
-  behind. Is that acceptable for text meant to be pasted elsewhere?: Yes. The body sits between the markers unchanged, and `blog-draft-schema.md` already sends a
-  post meant for a blog repo to that repo's front matter. If pasting proves awkward, the
-  renderer can emit the body alone, in a later plan.
-- Does any reader skill read one of these formats' content, not only its path?: Unknown until each phase's Readers grep. The design covers both cases, so the answer changes
-  the files a phase copies, not the plan.
+  behind. Is that acceptable for text meant to be pasted elsewhere?: Yes. The body sits between the markers unchanged, and the user decided on 2026-11-14 that a
+  post in a blog repo is rendered this way too, its front matter replaced by the format's. If
+  pasting or a blog's site build proves awkward, the renderer can emit the body alone, in a
+  later plan.
 
 ## Record
 
 - 2026-11-14 Planned: status ready. The user reviews it, so no review-build-plan run.
+- 2026-11-14 Reviewed: Revise first, 2 blocking (blog files saved beside a post on disk have no decided format; the
+  shareable retro copy keeps `generated_from`, so the guard denies its scrub fixes)
 
 <!-- prettier-ignore-end -->
