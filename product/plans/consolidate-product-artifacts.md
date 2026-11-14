@@ -317,5 +317,6 @@ coming back.
   it. Cannot verify: the Phase 5 check's second half (a skill line changed back
   exits 1), because a report-only check edits no skill. The two patterns were run on that
   line instead and both matched, with no allowlist entry covering it.
+- 2026-11-14 PR: #293 https://github.com/cheneeheng/ceh-claude-code-library/pull/293
 
 <!-- prettier-ignore-end -->
