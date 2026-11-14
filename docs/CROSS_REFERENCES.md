@@ -866,19 +866,19 @@ delete".
 
 **Canonical:** `plugins/standalone/ceh-git-workflow/skills/review-recent-work/SKILL.md` — § Procedure step 6 + § Output, first paragraph
 
-| Copy                                                                          | Section                                        | Diverges                                                                                                                                                                                                                                  |
-| ----------------------------------------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-session-learning/skills/diagnose-session/SKILL.md`    | § Procedure step 6 + § Output, first paragraph | routes root causes, not issues; a Claude Code cause is always out of scope; the committed file is scrubbed; file kind `session-<id-prefix>`                                                                                               |
-| `plugins/standalone/ceh-every-session/skills/prevent-repeat-mistake/SKILL.md` | § Output, first paragraph                      | split save only, no route table; splits by where the fix lands; the committed file masks secrets; file kind `repeat-mistake`, saved as `.yaml` (`repeat-mistake/v2`) with the `.md` rendered beside it; `other_file` names the other YAML |
+| Copy                                                                          | Section                                        | Diverges                                                                                                                                                                               |
+| ----------------------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-session-learning/skills/diagnose-session/SKILL.md`    | § Procedure step 6 + § Output, first paragraph | routes root causes, not issues; a Claude Code cause is always out of scope; the root causes are scrubbed before saving; file kind `session-<id-prefix>`                                |
+| `plugins/standalone/ceh-every-session/skills/prevent-repeat-mistake/SKILL.md` | § Output, first paragraph                      | one-file save only, no route table; masks secrets; file kind `repeat-mistake`, saved as `.yaml` (`repeat-mistake/v2`) with the `.md` rendered beside it; `other_file` is always `null` |
 
 **Shared:** the route table word for word (bug to `find-root-cause`, feature or design to
 `write-build-plan`, agent mistake to `prevent-repeat-mistake`, working rule to
 `record-project-decisions`, anything else in the repo fixed directly, outside the repo left for the
 user), acting on every in-scope route in the same session, an uninstalled route left open, and the
-split save: in-scope issues committed to `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`, out-of-scope ones
-local in `.agents_workspace/product/retros/`, each file linking the other through its `other_file`
-frontmatter field. Each skill keeps its own report template (`period-retro`, `session-retro`,
-`repeat-mistake`), because the three reports differ.
+one-file save: every issue, in the repo or outside it, in
+`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`. Each skill keeps its own
+report template (`period-retro/v2`, `session-retro/v2`, `repeat-mistake/v2`), because the three
+reports differ.
 
 ## Eval case strictness levels
 

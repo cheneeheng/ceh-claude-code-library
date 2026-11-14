@@ -28,7 +28,7 @@ predict one observation you have not made yet that then comes true.
    `ceh-testing:test-a-bug-fix` "When it will not reproduce deterministically".
 2. **Read the whole failure.** The first error, not the last: later errors are often fallout. In
    a stack trace, find the deepest frame in this repo's code, and read that code before going
-   further. Then grep `product/fixes/` for that file or function, or with no stack trace, for the
+   further. Then grep `.agents_workspace/product/fixes/` for that file or function, or with no stack trace, for the
    one the step 1 command calls. An earlier fix record's Cause becomes one of the hypotheses in
    step 3, because a bug that came back often came back the same way.
 3. **Write 3 to 5 hypotheses, each with what would refute it.** "The cache returns a stale row"
@@ -46,22 +46,22 @@ predict one observation you have not made yet that then comes true.
    also fail, or one that must pass. Run it. A cause that predicts nothing new is still a guess.
 7. **Remove the instrumentation** you added, then hand over with the Output below.
 8. **Write the fix record** when the cause is in this repo's code or config. Save the hand-over to
-   `product/fixes/<slug>.yaml` with `status: diagnosed`, a copy of
+   `.agents_workspace/product/fixes/<slug>.yaml` with `status: diagnosed`, a copy of
    `assets/fix-record.template.yaml` in the `fix-record/v2` format in
    `references/fix-record-schema.md`, setting `plan:` and `previous:` as it says. Then run
-   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render product/fixes/<slug>.yaml`,
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render .agents_workspace/product/fixes/<slug>.yaml`,
    which writes the `.md` beside it, and fix the YAML for each error it lists. Never edit the
    generated `.md`. On exit 2 or 3, or without uv, say in the reply that the record went unchecked
    and unrendered. The chat ends with the session, and the record is how a later reader learns why
-   the fix exists. The fix commit carries both files. No fix will land here when the cause is
-   outside this repo or the user declined the fix: then the record is committed alone and stays
-   `diagnosed`. A fix that waits on a user decision is open work, and nothing reports the bug as
+   the fix exists. The fix's commit message carries the footer `Refs: fixes/<slug>`. No fix will
+   land here when the cause is outside this repo or the user declined the fix: then the record is
+   saved alone and stays `diagnosed`. A fix that waits on a user decision is open work, and nothing reports the bug as
    done.
 9. **Hand over the fix.** When the fix lands in this session, load `ceh-testing:test-a-bug-fix`
    before writing it: it turns the step 1 command into a regression test and drives the fix.
    Without `ceh-testing` installed, write the failing test before the fix yourself, then in the
    record's YAML set `fix`, one `tests` item per test and `status: fixed`, render it again, and
-   commit the record with the fix and the test.
+   commit the fix and the test with the footer `Refs: fixes/<slug>`.
 
 ## Rules
 
@@ -76,7 +76,7 @@ predict one observation you have not made yet that then comes true.
   confirms it, and the report labels it inferred.
 - **A cause in a dependency is reported, not patched.** Name the package, version, and upstream
   issue if one exists, and propose the workaround in this repo's code. When no workaround lands,
-  the fix record names the package in its Cause and is committed alone.
+  the fix record names the package in its Cause and is saved alone.
 
 ## Output
 
@@ -97,7 +97,7 @@ predict one observation you have not made yet that then comes true.
 ## Stop conditions
 
 - The symptom does not reproduce after a loop and forced timing → report what was tried and
-  what each attempt showed, and save it as a fix record with `status: unreproduced`, committed
+  what each attempt showed, and save it as a fix record with `status: unreproduced`, saved
   alone. Do not ship a speculative fix.
 - Confirming the cause needs a production system, real customer data, or a paid service → stop
   and name the exact check the user should run.

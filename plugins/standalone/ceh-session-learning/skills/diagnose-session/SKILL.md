@@ -84,14 +84,12 @@ Only when the report will leave this machine (an issue, a bug report, a message 
 
 ## Output
 
-Save by where each fix lands, creating the directory if needed. In-scope root causes go to
-`product/retros/<YYYYMMDD-HHMMSS>-<session-id>-session-<diagnosed-id>.md`, committed with the first fix it
-routes, because the routed work reads it. Scrub and audit that file first, per Sharing steps 1
-and 2: a committed file leaves the machine on the next push. Out-of-scope root causes, other
-findings, and hypotheses go to `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-session-<diagnosed-id>.md`,
-local, because only the user acts on them. When both files exist, each links the other through
-`other_file`. Each file fills `assets/session-retro.template.md`, per
-`references/session-retro-schema.md`. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+Save one file, creating the directory if needed:
+`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-session-<diagnosed-id>.md`,
+holding every root cause, those fixed in this repo and those left for the user, the other findings
+and the hypotheses, because the routed work reads it. Scrub and audit its root causes first, per
+Sharing steps 1 and 2, because the workspace may be pushed to a remote. It fills
+`assets/session-retro.template.md`, per `references/session-retro-schema.md`. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
 `<diagnosed-id>` is the first 8 characters of the id of the session diagnosed.
 
-Reply with the root causes one line each, their routes and status, and the report paths.
+Reply with the root causes one line each, their routes and status, and the report path.

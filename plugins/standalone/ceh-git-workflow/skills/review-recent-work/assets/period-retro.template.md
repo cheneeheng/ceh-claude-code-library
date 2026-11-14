@@ -1,8 +1,7 @@
 ---
-schema: period-retro/v1
+schema: period-retro/v2
 since: YYYY-MM-DD
 until: YYYY-MM-DD
-other_file: <path, or none>
 ---
 
 # Retro <since> to <until>

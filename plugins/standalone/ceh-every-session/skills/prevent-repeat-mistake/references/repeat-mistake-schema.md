@@ -1,10 +1,14 @@
 # Repeat mistake schema
 
-The file `prevent-repeat-mistake` saves: `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.md` for fixes
-that land in the current repository, `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.md` for
-fixes only the user acts on. A new report is a `repeat-mistake/v2` YAML (see the last section),
-and its `.md` is rendered in the `v1` layout of `../assets/repeat-mistake.template.md`, relative
-to this file, described below. A `v1` file's `schema: repeat-mistake/v1` line stays as written.
+The file `prevent-repeat-mistake` saves:
+`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, unless the
+repo's `CLAUDE.md` names another location. One report holds both kinds of fix, those that land in
+the current repository and those only the user acts on, because two files would share one name in
+one folder. A reference to it names the `.yaml`. A new report is a `repeat-mistake/v2` YAML (see
+the last section), and its `.md` is rendered in the `v1` layout of
+`../assets/repeat-mistake.template.md`, relative to this file, described below. A `v1` file's
+`schema: repeat-mistake/v1` line stays as written. An older pair, one file per kind of fix linked
+through `other_file`, is still read as two reports.
 
 ## Frontmatter
 
@@ -24,9 +28,9 @@ to this file, described below. A `v1` file's `schema: repeat-mistake/v1` line st
 
 ## repeat-mistake/v2: YAML with generated Markdown
 
-A `repeat-mistake/v2` report is `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml` for fixes that
-land in the current repository, or `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`
-for fixes only the user acts on, a copy of `../assets/repeat-mistake.template.yaml`. The `.md` of
+A `repeat-mistake/v2` report is
+`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, holding
+both kinds of fix, a copy of `../assets/repeat-mistake.template.yaml`. The `.md` of
 the same stem is generated from it in the `v1` layout above, beside it. A file saved under the
 older name, `<YYYY-MM-DD>-repeat-mistake`, is still a report. A name with a label before
 `repeat-mistake`, such as `<YYYY-MM-DD>-<label>-repeat-mistake.md`, is not, and stays as it is. The YAML is the source: agents read and edit it, and nobody edits the Markdown, which opens
@@ -46,8 +50,9 @@ failure, and `3` means no model for that version.
 **Keys**, each required unless marked optional, and no other key allowed:
 
 - `schema`: `repeat-mistake/v2`. `date`: the date the file was created, `YYYY-MM-DD`, which the
-  title renders from. `other_file`: the repo-relative path of the matching YAML in the other
-  folder, or `null`. It renders as that file's `.md`, and `none` for `null`.
+  title renders from. `other_file`: always `null` in a new report, which holds both kinds of fix.
+  An older pair holds the repo-relative path of the matching YAML in the other folder. It renders
+  as that file's `.md`, and `none` for `null`.
 - `fixes`: at least one, each `id` (a positive integer, unique in the file, shown in the `#`
   column), `mistake` (one line), `evidence` (a `path:line` or a quoted tool call), `rung` (1 to
   5), `fix` (what was added or drafted), `proof` (`"yes"`, quoted so YAML keeps it text, when the
@@ -67,8 +72,8 @@ count of pending fixes is stored: it is read from `status`.
 **Appending and updating.** A new fix takes the largest `id` in the file plus one. Before adding
 one, compare its mistake and evidence with the fixes already there, so a retry updates the same
 `id` instead of adding a second. Applying or rejecting a draft changes that fix's `status` only,
-keeping its draft and evidence. When both files exist, each `other_file` names the other: check
-both links after both saves, since the first save cannot name a file not yet written. Only one
+keeping its draft and evidence. A fix in an older pair is updated in the file it was saved in.
+Only one
 agent updates a dated report at a time: when parallel agents each find a mistake, they hand their
 fixes back to one writer instead of each editing the file, since there is no lock.
 
@@ -89,5 +94,5 @@ is missing, restore the copy, delete the YAML, and report what was lost.
 
 **Quoting:** single-quote any one-line value that starts with `*`, `{`, `[` or `` ` ``, contains
 `: ` or ` #`, or holds a backslash. Write evidence, fixes, reasons and drafts as `|` blocks, which
-keep backticks, quotes and code fences as they are. Mask every secret as `<secret>` in a committed
-report: the check cannot see secrets.
+keep backticks, quotes and code fences as they are. Mask every secret as `<secret>` in every
+report, because the workspace may be pushed to a remote: the check cannot see secrets.

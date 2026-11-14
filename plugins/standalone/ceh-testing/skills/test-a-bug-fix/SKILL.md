@@ -3,7 +3,7 @@ name: test-a-bug-fix
 description: >-
   Load this skill when a bug, crash, or regression is being fixed, before writing the fix: the
   smallest failing test first, proven red without the fix. Trigger on "fix this bug", fixing a
-  product/fixes/ record, a stack trace, a bug-fix PR with no test, or a first test for a
+  fix record, a stack trace, a bug-fix PR with no test, or a first test for a
   reported bug.
 disable-model-invocation: false
 user-invocable: true
@@ -93,20 +93,20 @@ In the hand-over, give the reproducer and each sibling a value line: `<test> —
 <behavior>; fails_when: <the defect returns>; why_new: <why no existing test caught it>`. The
 reproducer's `why_new` is the gap that let the bug ship.
 
-The same commit carries the fix record, in the format in `references/fix-record-schema.md`, when
-the cause is in this repo's code or config. Look for an uncommitted record with
-`status: diagnosed` (`git status --porcelain product/fixes/`), which
-`ceh-coding-conduct:find-root-cause` leaves:
+The commit carries the footer `Refs: fixes/<slug>`, naming the fix record, in the format in
+`references/fix-record-schema.md`, when the cause is in this repo's code or config. Look for a
+record with `status: diagnosed` in `.agents_workspace/product/fixes/*.yaml`, or a `*.md` with no
+YAML beside it, which `ceh-coding-conduct:find-root-cause` leaves:
 
 - **A `<slug>.yaml`** (`fix-record/v2`): run
-  `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check product/fixes/<slug>.yaml` first,
+  `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check .agents_workspace/product/fixes/<slug>.yaml` first,
   and stop on exit 1 with its errors. Set `fix` and one `tests` item per value line, set
   `status: fixed`, then run the same command with `render`, which writes the `.md`, and fix the
   YAML for each error it lists. Never edit the generated `.md`.
 - **A `<slug>.md` with no `.yaml` beside it** (`fix-record/v1`): fill its Fix section with the
   value lines and set `status: fixed`, in the `v1` form.
 
-With none, create `product/fixes/<slug>.yaml` from `assets/fix-record.template.yaml` with
+With none, create `.agents_workspace/product/fixes/<slug>.yaml` from `assets/fix-record.template.yaml` with
 `status: fixed`, the reproducer as the `symptom`, `diagnosis.known_from_report` naming where the
 report gives the cause, and `plan:` set from the fixed `file:line` as the format says, then render
 it. On exit 2 or 3, or without uv, say in the reply that the record went unchecked and unrendered. The

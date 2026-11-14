@@ -48,23 +48,32 @@ find a plan, vision or strategy report the old file with its move instead of rea
 `pull-request` now finds a plan in the workspace and commits it only when the plans folder is
 tracked in the source repo. Phase 3 of the plan.
 
+**Breaking:** fix records and retros now live in `.agents_workspace/product/fixes/` and
+`.agents_workspace/product/retros/`. A fix record no longer rides in the fix's commit: the commit
+carries the footer `Refs: fixes/<slug>`, so `git log --grep "fixes/<slug>"` finds the fix. Each
+retro is one file instead of an in-repo file and a local one, because the two would share a name
+in one folder, so the period and session retros become `period-retro/v2` and `session-retro/v2`,
+and a new repeat-mistake report always has `other_file: null`. Older pairs are still read, and a
+fix record saved with the old root paths still checks. Phase 4 of the plan.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-blog-and-seo`             | 2.0.9   |
-| `ceh-build-plan`               | 2.0.8   |
+| `ceh-build-plan`               | 2.0.9   |
 | `ceh-check-build-against-plan` | 1.1.16  |
 | `ceh-codebase-explanation`     | 1.3.12  |
-| `ceh-coding-conduct`           | 2.5.12  |
+| `ceh-coding-conduct`           | 2.5.13  |
 | `ceh-competitor-analysis`      | 1.2.12  |
 | `ceh-documentation`            | 1.0.10  |
-| `ceh-every-session`            | 2.9.18  |
-| `ceh-git-workflow`             | 1.5.15  |
+| `ceh-every-session`            | 2.9.19  |
+| `ceh-git-workflow`             | 1.5.16  |
 | `ceh-product-direction`        | 2.0.8   |
 | `ceh-python-service`           | 1.1.8   |
 | `ceh-security-audit`           | 1.1.11  |
-| `ceh-testing`                  | 1.6.21  |
+| `ceh-session-learning`         | 2.0.3   |
+| `ceh-testing`                  | 1.6.22  |
 | `ceh-usability-audit`          | 1.2.13  |
 | `ceh-workflow-builder`         | 1.4.11  |
 | `ceh-workflow-runner`          | 1.1.10  |
@@ -104,6 +113,13 @@ tracked in the source repo. Phase 3 of the plan.
 - Drop "in one commit" from `implement-from-plan` step 5, and give the reasons once tied to a
   commit their own: build skills read the vision and strategy, so neither carries pricing, and
   the architecture document lives in no folder other than `.agents_workspace/product/`.
+- Move fix records to `.agents_workspace/product/fixes/` in `find-root-cause` and
+  `test-a-bug-fix`, their schema, templates and model, replace the "Same commit" rule with the
+  `Refs: fixes/<slug>` footer, find a diagnosed record by `status: diagnosed` instead of
+  `git status`, and accept both path forms in `PlanPath` and `FixPath`, with a fixture per form.
+- Save one retro file in `.agents_workspace/product/retros/` from `review-recent-work`,
+  `diagnose-session` and `prevent-repeat-mistake`, with `docs/RETRO_WORKFLOW.md`, the retro block
+  of `docs/CROSS_REFERENCES.md` and the plugin READMEs to match.
 
 ## 2026-11-13
 

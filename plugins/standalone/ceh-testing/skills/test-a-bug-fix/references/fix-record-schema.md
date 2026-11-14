@@ -1,7 +1,9 @@
 # Fix record schema
 
-Every bug fix leaves one committed record, `product/fixes/<slug>.md` in the target repo, or for
-`fix-record/v2` (below) `product/fixes/<slug>.yaml` with that `.md` generated beside it. The commit
+Every bug fix leaves one record, `.agents_workspace/product/fixes/<slug>.yaml` in the target repo
+(`fix-record/v2`, below) with its `.md` generated beside it, unless the repo's `CLAUDE.md` names
+another location. A reference to it names the `.yaml`. A `fix-record/v1` record is a `<slug>.md`
+with no YAML beside it. The commit
 message is written for reviewers of one change and the diagnosis in the chat ends with the session,
 so the record is the only place a later session or person finds why the fix exists. `<slug>` is
 kebab-case and names the behavior that was wrong, as the regression test does
@@ -9,7 +11,8 @@ kebab-case and names the behavior that was wrong, as the regression test does
 
 **Write one only when the cause is in this repo's code or config**, because that is what a later
 reader of the repo can act on. A cause on one machine, or a question nobody means to fix in code
-("why is CI slow"), writes nothing, so `product/` does not fill with debugging chats.
+("why is CI slow"), writes nothing, so `.agents_workspace/product/` does not fill with debugging
+chats.
 
 ## Format
 
@@ -31,11 +34,11 @@ written.
 - **Tests:** one bullet per test: `protects` names the behavior, `fails_when` the defect
   returning, `why_new` why no existing test caught it.
 - **Unverified:** what stayed unrun and why, or `none`.
-- **`plan:`** Grep the `status: built` plans in `product/plans/` for the file at the Cause's
+- **`plan:`** Grep the `status: built` plans in `.agents_workspace/product/plans/` for the file at the Cause's
   `file:line`, or at the fixed `file:line` when the record is created at fix time. With several
   matches, take the newest by `created:`. No match, or a tie on that date, leaves the field out:
   never guessed.
-- **`previous:`** The earlier record in `product/fixes/` whose Cause matches the confirmed one, so a
+- **`previous:`** The earlier record in `.agents_workspace/product/fixes/` whose Cause matches the confirmed one, so a
   bug that came back shows its history. Omit the key when no earlier record covers this behavior.
 
 ## Sections by status
@@ -53,26 +56,27 @@ written.
 - **`status` moves forward only.** `diagnosed` to `fixed`. `unreproduced` is final, and so is a
   `diagnosed` record whose fix never lands here. A later fix to the same behavior gets a new record
   whose `previous:` names the old one, so the old record stays as it was.
-- **Same commit.** The record, the fix, and the regression test land in one commit, so
-  `git log -- product/fixes/<slug>.md` finds the fix. The record carries no commit SHA, because the
-  commit cannot name its own. A record with no fix (`unreproduced`, or `diagnosed` with the fix
-  elsewhere) is committed alone, so the investigation is not lost.
+- **`Refs:` footer.** The record does not ride in the fix's commit. The fix's commit message
+  carries the footer `Refs: fixes/<slug>`, so `git log --grep "fixes/<slug>"` in the source repo
+  finds the fix. The record carries no commit SHA, because it is written before the commit exists.
+  A record with no fix (`unreproduced`, or `diagnosed` with the fix elsewhere) is saved alone, so
+  the investigation is not lost.
 - **Only what ran.** Each Result and the Prediction quote output that a command produced. A
   conclusion from reading code is labelled inferred.
 
 ## fix-record/v2: YAML with generated Markdown
 
-A `fix-record/v2` record is `product/fixes/<slug>.yaml`, a copy of
-`../assets/fix-record.template.yaml`, and `product/fixes/<slug>.md` is generated from it in the
-`v1` layout above, beside it. The YAML is the source: agents read and edit it, and nobody edits the
+A `fix-record/v2` record is `.agents_workspace/product/fixes/<slug>.yaml`, a copy of
+`../assets/fix-record.template.yaml`, and its `<slug>.md` is generated from it in the `v1` layout
+above, beside it. The YAML is the source: agents read and edit it, and nobody edits the
 Markdown, which opens with `generated_from: <slug>.yaml` and a do-not-edit `generated_note`. The
 Fields, Sections by status and Rules above still hold. A `v1` record with no `.yaml` beside it
 stays Markdown and is completed in the `v1` form. The format in code is `fix-record-model.py`
 beside this file, and `scripts/artifact.py` in the skill checks and renders it through uv:
 
 ```bash
-uv run --script scripts/artifact.py check product/fixes/<slug>.yaml   # errors, or a stale .md
-uv run --script scripts/artifact.py render product/fixes/<slug>.yaml  # check, then write the .md
+uv run --script scripts/artifact.py check .agents_workspace/product/fixes/<slug>.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render .agents_workspace/product/fixes/<slug>.yaml  # check, then write the .md
 ```
 
 Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other
@@ -83,8 +87,9 @@ is the first hypothesis.
 
 - `schema`: `fix-record/v2`. `status`: `diagnosed`, `fixed` or `unreproduced`. `date`: an
   unquoted date. `issue` (optional): as in `v1`. `plan` (optional): a path starting
-  `product/plans/`. `previous` (optional): the earlier record's `.md` path under `product/fixes/`,
-  which exists for a `v1` and a `v2` record alike.
+  `.agents_workspace/product/plans/`. `previous` (optional): the earlier record's path under
+  `.agents_workspace/product/fixes/`, its `.yaml` for a `v2` record and its `.md` for a `v1`
+  record. A record saved before 2026-11-14, whose paths start at the old root, still checks.
 - `title`: the behavior that was wrong.
 - `symptom`: `command` (optional) and `output`, the failing output line. With no command, as in an
   `unreproduced` record, `output` is the reported failure.

@@ -1,6 +1,6 @@
 schema: repeat-mistake/v2
 date: YYYY-MM-DD
-other_file: <path | null>
+other_file: null
 fixes:
   - id: <N>
     mistake: <mistake>

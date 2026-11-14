@@ -27,7 +27,7 @@ fix, because the routed skill finds the cause and designs the fix.
 | "the agent kept doing X", with a session to read                           | `diagnose-session`                                             |
 | "you did X again", "make sure this never happens again"                    | `prevent-repeat-mistake`                                       |
 
-`review-recent-work` starts the day after the newest `product/retros/*-period.md` when no dates are
+`review-recent-work` starts the day after the newest `.agents_workspace/product/retros/*-period.md` when no dates are
 given, otherwise the last 14 days. `diagnose-session` reads `~/.claude/projects/<project>/`: "this
 session" is the current one, "the last session" the newest other transcript.
 
@@ -56,22 +56,23 @@ sessions behave (`CLAUDE.md`, memory, a skill, a hook) for the user to approve.
 
 ## Where reports are saved
 
-Every retro splits its report by where each fix lands:
+Every retro saves one report, holding the issues whose fix lands in this repo and those left for
+the user:
 
-| Fix lands         | File                                                                        | Committed |
-| ----------------- | --------------------------------------------------------------------------- | --------- |
-| In this repo      | `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`                   | Yes       |
-| Outside this repo | `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md` | No        |
+| Report                                  | File                                                                          |
+| --------------------------------------- | ----------------------------------------------------------------------------- |
+| `period`, `session-<id-prefix>`         | `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`   |
+| `repeat-mistake`, with its `.md` beside | `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.yaml` |
 
-The committed file lands with the first fix it routes, because the routed work and the next retro
-read it. The local file is for the user alone. When both exist, each names the other in its
-`other_file` frontmatter field. Each skill fills its own template, `period-retro`, `session-retro`,
-or `repeat-mistake`, because the three reports differ.
+The routed work and the next retro read it. A repo whose `CLAUDE.md` names another location saves
+there. Each skill fills its own template, `period-retro/v2`, `session-retro/v2`, or
+`repeat-mistake/v2`, because the three reports differ. A report saved before 2026-11-14 as a pair,
+one file per side linked through `other_file`, is still read.
 
-A committed report leaves the machine on the next push, so it is cleaned before commit:
-`diagnose-session` scrubs and audits its file (secrets, home paths, hostnames, personal data), and
-`prevent-repeat-mistake` masks secrets as `<secret>`. The `hygiene` check in
-`tools/validate-plugins/validate.py` rejects a home path anywhere in `product/`.
+The workspace may be pushed to a remote, so a report is cleaned before it is saved:
+`diagnose-session` scrubs and audits its root causes (secrets, home paths, hostnames, personal
+data), and `prevent-repeat-mistake` masks secrets as `<secret>`. The `hygiene` check in
+`tools/validate-plugins/validate.py` rejects a home path anywhere in this repo's own `product/`.
 
 ## Scenario A: a period retro
 
@@ -79,7 +80,7 @@ A committed report leaves the machine on the next push, so it is cleaned before 
    what shipped, reads the flow, and names at most three issues, each with the PRs that show it.
 2. Each in-repo issue goes to its route in the same session: a fix-of-a-fix to `find-root-cause`, a
    churn hotspot to `write-build-plan`, slow or unreviewed merges to `record-project-decisions`.
-3. The retro is saved to `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.md` and committed with the first fix.
+3. The retro is saved to `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.md`.
 
 ## Scenario B: a session that went wrong
 
@@ -88,10 +89,10 @@ A committed report leaves the machine on the next push, so it is cleaned before 
 2. Each root cause is classed (request, guidance, environment, model, Claude Code) and routed. A
    guidance or model cause usually goes to `prevent-repeat-mistake`.
 3. `prevent-repeat-mistake` picks the rung, builds or drafts the fix, and saves
-   `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, with the `.md` rendered beside it. Its next run
+   `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, with the `.md` rendered beside it. Its next run
    checks each report and lists every draft still
    `awaiting approval` before taking a new mistake, so a draft is not lost between sessions.
 
-`product/retros/2026-10-22-session-de93dc4b.md` and `product/retros/2026-10-22-repeat-mistake.md`
-are a real pair from this repo: the session diagnosis found a skill description that did not fire,
+`2026-10-22-session-de93dc4b.md` and `2026-10-22-repeat-mistake.md`, in this repo's own retros
+folder, are a real pair: the session diagnosis found a skill description that did not fire,
 and the repeat-mistake report rewrote it at rung 5.
