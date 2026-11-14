@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: consolidate-product-artifacts.yaml
 generated_note: "Do not edit. artifact.py renders this file from consolidate-product-artifacts.yaml: edit the YAML, then run artifact.py render."
 title: Every product artifact a skill saves goes to .agents_workspace/product/
-status: ready
+status: building
 created: 2026-11-13
 ---
 
@@ -204,7 +204,7 @@ coming back.
   naming `product/` as this repo's location until it migrates. Changelog entry.
 - **Check:** `python tools/validate-plugins/validate.py` exits 0, and
   `grep -n "Committed in the target repo" docs/STRATEGY.md` prints nothing.
-- **Status:** todo
+- **Status:** done, python tools/validate-plugins/validate.py: OK: all plugin checks passed; the STRATEGY.md grep printed nothing
 
 ### Phase 2: Hooks and fixtures prove the path
 
@@ -284,5 +284,7 @@ coming back.
 - 2026-11-13 Planned: status draft
 - 2026-11-13 Reviewed: Revise first, 6 blocking (pull-request and test-a-bug-fix find artifacts through source git, fix-record model path patterns, CLAUDE.md escape missing for fixes, retros and evidence, repeat-mistake other_file in one folder, phase 3 check hits phase 4 files, vision principle 2)
 - 2026-11-13 PR: #270 https://github.com/cheneeheng/ceh-claude-code-library/pull/270
+- 2026-11-14 Built Phase 1: tools/validate-plugins/validate.py: OK: all plugin checks passed. The STRATEGY.md grep printed nothing.
+- 2026-11-14 PR: #288 https://github.com/cheneeheng/ceh-claude-code-library/pull/288
 
 <!-- prettier-ignore-end -->

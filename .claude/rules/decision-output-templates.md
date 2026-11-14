@@ -21,7 +21,7 @@ scope: what the user ships, `flow.yaml`, and a file a script generates from a te
 
 A format may instead be YAML validated end to end: `<schema>.template.yaml`, whose first key is
 `schema: <schema>/v<N>`, with `<schema>-model.py` beside the schema file holding its pydantic model
-and Markdown renderer. The skill saves the YAML, and the Markdown generated from it is committed
+and Markdown renderer. The skill saves the YAML, and the Markdown generated from it is saved
 beside it with `generated_from: <file>.yaml` and a do-not-edit `generated_note` in its
 frontmatter, its body inside a prettier-ignore range, and never edited by hand: the skill that
 edits the YAML re-renders it. The YAML formats so far are the build plan (`plan/v2`), the
