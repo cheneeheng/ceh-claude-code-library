@@ -158,3 +158,7 @@ test) and you confirm:
 - Validation that surfaces product changes flows into a new `ceh-build-plan` plan, stated as
   product changes. The §13 milestones, experiments and kill criteria stay in the business plan.
 - Docs for users of the product: use `ceh-documentation`.
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.

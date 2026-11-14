@@ -56,25 +56,32 @@ in one folder, so the period and session retros become `period-retro/v2` and `se
 and a new repeat-mistake report always has `other_file: null`. Older pairs are still read, and a
 fix record saved with the old root paths still checks. Phase 4 of the plan.
 
+Every reference to a format with a YAML source now names the `.yaml`, including the business plan,
+the QA, performance, security and usability reports, and the handoff, and a new `artifact-paths`
+check in `validate.py` fails on a root `product/` path or such a `.md` path anywhere under
+`plugins/standalone/`, outside an allowlist with one reason per entry. Each affected plugin README
+says where its files live and how a project with a root `product/` moves them. Phase 5 closes
+`product/plans/consolidate-product-artifacts.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog-and-seo`             | 2.0.9   |
-| `ceh-build-plan`               | 2.0.9   |
-| `ceh-check-build-against-plan` | 1.1.16  |
-| `ceh-codebase-explanation`     | 1.3.12  |
-| `ceh-coding-conduct`           | 2.5.13  |
+| `ceh-blog-and-seo`             | 2.0.10  |
+| `ceh-build-plan`               | 2.0.10  |
+| `ceh-check-build-against-plan` | 1.1.17  |
+| `ceh-codebase-explanation`     | 1.3.13  |
+| `ceh-coding-conduct`           | 2.5.14  |
 | `ceh-competitor-analysis`      | 1.2.12  |
-| `ceh-documentation`            | 1.0.10  |
-| `ceh-every-session`            | 2.9.19  |
-| `ceh-git-workflow`             | 1.5.16  |
-| `ceh-product-direction`        | 2.0.8   |
-| `ceh-python-service`           | 1.1.8   |
-| `ceh-security-audit`           | 1.1.11  |
-| `ceh-session-learning`         | 2.0.3   |
-| `ceh-testing`                  | 1.6.22  |
-| `ceh-usability-audit`          | 1.2.13  |
+| `ceh-documentation`            | 1.0.11  |
+| `ceh-every-session`            | 2.9.20  |
+| `ceh-git-workflow`             | 1.5.17  |
+| `ceh-product-direction`        | 2.0.9   |
+| `ceh-python-service`           | 1.1.9   |
+| `ceh-security-audit`           | 1.1.12  |
+| `ceh-session-learning`         | 2.0.4   |
+| `ceh-testing`                  | 1.6.23  |
+| `ceh-usability-audit`          | 1.2.14  |
 | `ceh-workflow-builder`         | 1.4.11  |
 | `ceh-workflow-runner`          | 1.1.10  |
 
@@ -84,6 +91,11 @@ fix record saved with the old root paths still checks. Phase 4 of the plan.
   `docs/GETTING_STARTED.md`.
 - Add three Key Decisions to `product/ARCHITECTURE.yaml`, one per phase of
   `product/plans/plugin-audit-open-topics.yaml`.
+- Add `tools/validate-plugins/checks/artifact_paths.py`, wired into `validate.py`, its README and
+  `plugins/CLAUDE.md`.
+- Add a "Where its files live" note to the README of each plugin whose files moved.
+- Add four Key Decisions to `product/ARCHITECTURE.yaml` from
+  `product/plans/consolidate-product-artifacts.yaml`, now marked built.
 
 ### Changed
 
@@ -120,6 +132,11 @@ fix record saved with the old root paths still checks. Phase 4 of the plan.
 - Save one retro file in `.agents_workspace/product/retros/` from `review-recent-work`,
   `diagnose-session` and `prevent-repeat-mistake`, with `docs/RETRO_WORKFLOW.md`, the retro block
   of `docs/CROSS_REFERENCES.md` and the plugin READMEs to match.
+- Name the `.yaml` in the "where it is saved" line of the business plan, QA, performance,
+  security audit, first-run, interface, error-messages and handoff schemas, canonical files and
+  every copy, and in `docs/CATALOG.md`, `docs/GETTING_STARTED.md`, `docs/IDEAS.md` and the
+  registry descriptions in `docs/CROSS_REFERENCES.md`.
+- Reduce the "does not match yet" line in `docs/STRATEGY.md` to this repo's own `product/`.
 
 ## 2026-11-13
 

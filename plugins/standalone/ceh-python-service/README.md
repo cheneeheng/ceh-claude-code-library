@@ -51,3 +51,7 @@ When `write-fastapi-endpoints` records an API version's timeline in `ARCHITECTUR
 the file against its model and renders `ARCHITECTURE.md` through
 [uv](https://docs.astral.sh/uv/), which installs pydantic and PyYAML on first use. Without uv the
 file is saved unchecked and unrendered.
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.

@@ -213,7 +213,7 @@ editing both.
 | `plugins/standalone/ceh-blog-and-seo/skills/write-project-listing-text/SKILL.md` | § Procedure, 1. Read the product handoff files | a numbered step, not a paragraph; same sentences |
 
 **Shared:** what Tell takes from `.agents_workspace/product/business/BUSINESS_PLAN.yaml` (user, problem, differentiator), that
-`product/EVIDENCE.yaml` bounds every product claim to the Claims of its newest section with nothing said about a
+`.agents_workspace/product/EVIDENCE.yaml` bounds every product claim to the Claims of its newest section with nothing said about a
 `stale`, `not run`, or `open issues` area, and the missing-file fallback. The file names and
 statuses must match `ceh-testing:write-evidence-report` and `docs/STRATEGY.md`.
 
@@ -426,7 +426,7 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-python-service/skills/write-fastapi-endpoints/scripts/artifact.py`                                        | whole file                                                  | none                                                                             |
 | `ceh-build-plan:review-build-plan`, `ceh-build-plan:implement-from-plan`, `ceh-check-build-against-plan:check-build-against-plan` | the "A `plan/v2` plan is checked first" paragraph in step 1 | `implement-from-plan` adds where a Status note and a Record entry go in the YAML |
 
-**Shared:** the whole plan format, byte for byte: the `product/plans/<slug>.md` location, the
+**Shared:** the whole plan format, byte for byte: the `.agents_workspace/product/plans/<slug>.yaml` location, the
 frontmatter and its four statuses, the Goal, Scope, Design, Phases, and Open sections, the phase
 rules (a runnable Check, `todo` / `unplanned` / `done` with evidence), and the rules for changing
 a plan, and the `plan/v2` YAML template `plan.template.yaml` with its keys and rules. Every skill
@@ -464,7 +464,7 @@ Design sections.
 | `plugins/standalone/ceh-python-service/skills/write-fastapi-endpoints/assets/architecture.template.md`      | whole file | none     |
 | `plugins/standalone/ceh-python-service/skills/write-fastapi-endpoints/assets/architecture.template.yaml`    | whole file | none     |
 
-**Shared:** the `product/ARCHITECTURE.md` layout: its `schema:` line, the Overview, the diagram
+**Shared:** the `.agents_workspace/product/ARCHITECTURE.yaml` location and layout: its `schema:` line, the Overview, the diagram
 sections, and the Key Decisions entry shape. `document-architecture` owns the file and
 `implement-from-plan` appends Key Decisions entries to it, so each plugin carries a copy to work
 installed alone. `find-product-market-fit` only reads the file, and carries a copy to check
@@ -487,7 +487,7 @@ canonical file.
 | `plugins/standalone/ceh-blog-and-seo/skills/write-project-listing-text/assets/evidence.template.yaml` | whole file | none     |
 
 **Shared:** the `evidence/v2` format with its template. `write-evidence-report` owns
-`product/EVIDENCE.yaml`, and `draft-post` and `write-project-listing-text` read its newest run's
+`.agents_workspace/product/EVIDENCE.yaml`, and `draft-post` and `write-project-listing-text` read its newest run's
 claims and area statuses, so each carries a copy to check the file before reading it.
 `validate.py` fails when a copy differs from the canonical file.
 
@@ -606,10 +606,10 @@ them, so each carries a copy to check `VISION.yaml` and `STRATEGY.yaml` before r
 
 **Shared:** the whole fix record format, `fix-record/v1` and the `fix-record/v2` YAML with its
 model, which renders the `v1` layout of `fix-record.template.md`, and the templates (canonical in
-`find-root-cause/assets/`, beside the canonical schema's `references/`), byte for byte: the `product/fixes/<slug>.md` location and
+`find-root-cause/assets/`, beside the canonical schema's `references/`), byte for byte: the `.agents_workspace/product/fixes/<slug>.yaml` location and
 slug rule, the write-only-for-repo-causes rule, the frontmatter with its three statuses and the
-`plan:` and `previous:` rules, the sections each status keeps, and the same-commit and
-committed-alone rules. `find-root-cause` writes the record and `test-a-bug-fix` completes or creates
+`plan:` and `previous:` rules, the sections each status keeps, and the `Refs:` footer and
+saved-alone rules. `find-root-cause` writes the record and `test-a-bug-fix` completes or creates
 it, and each plugin carries a copy so it works installed alone. `validate.py` fails when a copy
 differs from the canonical file.
 

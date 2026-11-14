@@ -80,3 +80,7 @@ run the skill.
 - Checking finished code against the plan: `ceh-check-build-against-plan`.
 - How to write the code itself: the stack plugins (`ceh-python-service`, `ceh-web-frontend`, and
   the rest) load at their own moments while `implement-from-plan` runs.
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`. A linked worktree gets a workspace only when `.agents_workspace/` is a git repo, so building in a worktree without one needs the plan's path passed by hand.

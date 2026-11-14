@@ -1,7 +1,8 @@
 # QA report schema
 
-The report `explore-app-for-bugs` writes to `.agents_workspace/product/qa/<YYYYMMDD-HHMMSS>-<session-id>/QA_REPORT.md`,
-with screenshots and logs beside it. Its layout is `../assets/qa-report.template.md`, relative to
+The report `explore-app-for-bugs` writes to
+`.agents_workspace/product/qa/<YYYYMMDD-HHMMSS>-<session-id>/QA_REPORT.yaml`, with its `.md`
+rendered beside it, and screenshots and logs beside both. A reference to it names the `.yaml`. Its layout is `../assets/qa-report.template.md`, relative to
 this file. A new report is written as `qa-report/v2` YAML, per the section at the end, and an
 older `qa-report/v1` report stays as written, its `schema:` line included.
 

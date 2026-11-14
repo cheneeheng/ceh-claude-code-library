@@ -1,7 +1,8 @@
 # Security audit schema
 
 The report `audit-codebase-security` saves to
-`.agents_workspace/product/security-audit/<YYYYMMDD-HHMMSS>-<session-id>-security-audit.md`, never a committed path. Its
+`.agents_workspace/product/security-audit/<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml`, with
+its `.md` rendered beside it, never a committed path. A reference to it names the `.yaml`. Its
 layout is `../assets/security-audit.template.md`, relative to this file. A new report is written
 as `security-audit/v2` YAML, per the section at the end, and an older `security-audit/v1` report
 stays as written, its `schema:` line included.

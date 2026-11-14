@@ -111,3 +111,7 @@ A complete, publication-ready blog post with:
 | Project / Launch   | "I shipped X", "we launched"                  |
 | Thought Leadership | "my view on [trend/industry]"                 |
 | Personal Story     | "something happened to me", "my journey"      |
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.

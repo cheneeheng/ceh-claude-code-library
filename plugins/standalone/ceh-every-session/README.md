@@ -246,3 +246,7 @@ reproduced here — the eval suite left behind in
 [agent-skills](https://github.com/cheneeheng/agent-skills/tree/main/plugins/ceh-coding-conduct/skills/delegate-bulk-reads/tests) measures this implementation against its own
 corpus and finds roughly 78% saved on enumerative questions, where recall is perfect, and 62% on
 reasoning ones, where about three facts in ten go missing.
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.

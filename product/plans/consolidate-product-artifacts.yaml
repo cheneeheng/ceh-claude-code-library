@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Every product artifact a skill saves goes to .agents_workspace/product/
-status: building
+status: built
 created: 2026-11-13
 goal: |
   Today a target project has two `product/` folders: root `product/` for committed handoff files
@@ -314,7 +314,8 @@ phases:
       `python tools/validate-plugins/validate.py` exits 0. With one skill line changed back to
       `product/plans/<slug>.md` it exits 1 naming that file and line, and exits 0 again once the
       line is restored.
-    status: todo
+    status: done
+    evidence: "python tools/validate-plugins/validate.py: OK: all plugin checks passed; with whats-next SKILL.md:66 changed to product/plans/<slug>.md it exited 1 naming that file and line, and 0 once restored"
 open:
   - question: |
       Does a subagent started with `isolation: "worktree"` get a workspace? The sync hooks fire on
@@ -380,3 +381,13 @@ record:
   - date: 2026-11-14
     event: PR
     details: "#291 https://github.com/cheneeheng/ceh-claude-code-library/pull/291"
+  - date: 2026-11-14
+    event: Built Phase
+    phase: 5
+    details: |
+      tools/validate-plugins/validate.py: OK: all plugin checks passed. With whats-next SKILL.md:66
+      changed back to product/plans/<slug>.md it exited 1 naming that file and line, and exited 0
+      once the line was restored.
+  - date: 2026-11-14
+    event: PR
+    details: "#292 https://github.com/cheneeheng/ceh-claude-code-library/pull/292"

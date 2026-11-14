@@ -11,8 +11,10 @@ and `decision-invocation-flags.md`. This file explains how they are checked and 
 
 `validate.py` (the `templates` check) rejects a template without its schema line or its schema
 file, a template that carries explanation, a template or schema no file in its plugin cites, and a
-skill whose `## Output` names a saved `.agents_workspace/` or `product/` file but cites no
-template. The `copies` check rejects a whole-file copy registered in `docs/CROSS_REFERENCES.md` that
+skill whose `## Output` names a saved `.agents_workspace/` file but cites no template. The
+`artifact-paths` check rejects a root `product/` path, and a `.md` path of a format with a YAML
+source, anywhere under `plugins/standalone/` outside its allowlist, because every product artifact
+lives in `.agents_workspace/product/` and is named by its `.yaml`. The `copies` check rejects a whole-file copy registered in `docs/CROSS_REFERENCES.md` that
 differs from its canonical file, an identical copy left unregistered, a plugin root holding
 `assets/` or `references/`, and a citation of either through `${CLAUDE_PLUGIN_ROOT}`.
 
