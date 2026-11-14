@@ -5,5 +5,5 @@ flags: m
 match: not_contains
 target:
   source: file
-  path: product/plans/slug.md
+  path: .agents_workspace/product/plans/slug.md
 ---

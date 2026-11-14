@@ -5,4 +5,4 @@ timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, Write, Edit]
 ---
 
-is product/plans/notes-api.md ready to build?
+is .agents_workspace/product/plans/notes-api.md ready to build?

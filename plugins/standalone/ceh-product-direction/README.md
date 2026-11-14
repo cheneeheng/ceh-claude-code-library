@@ -3,7 +3,7 @@
 Decide what to build and whether it is worth it. The plugin has two entry points:
 
 - `write-vision-and-strategy` writes down a repo's direction so later decisions can be settled
-  from it: `VISION.md`, why the repo exists and which principles decide, and `STRATEGY.md`, how it
+  from it: `VISION.yaml`, why the repo exists and which principles decide, and `STRATEGY.yaml`, how it
   gets there and how work is chosen. The repo can hold code or only documents.
 - `develop-business-plan` turns a product idea — or an existing app plan — into a **validated
   business plan** with a clear product-market fit. It drafts proactively from whatever already
@@ -21,11 +21,11 @@ those tests into committed files later sessions treat as binding.
 
 `write-vision-and-strategy` drafts both docs from what the repo shows, interviews the owner only on
 what it cannot show, tests that the docs settle real decisions, and points `CLAUDE.md` at them once
-confirmed. It writes `product/VISION.yaml` and `product/STRATEGY.yaml`, or wherever the repo
-already keeps the docs, with `VISION.md` and `STRATEGY.md` rendered beside them. The skill writes
-the files, and you commit them. Only an `adopted` doc gets a pointer from `CLAUDE.md`, so an
-assumption never binds a later session. The business plan's material stays private, and these docs
-are committed, so they carry no pricing or unit economics.
+confirmed. It writes `.agents_workspace/product/VISION.yaml` and
+`.agents_workspace/product/STRATEGY.yaml`, or wherever the repo already keeps the docs, with
+`VISION.md` and `STRATEGY.md` rendered beside them. Only an `adopted` doc gets a pointer from
+`CLAUDE.md`, so an assumption never binds a later session. Build skills read these docs and must
+not read business material, so they carry no pricing or unit economics.
 
 ## How the business plan works
 
@@ -37,7 +37,7 @@ until you say the project is a business. Then it calls `find-product-market-fit`
 not a one-shot generator:
 
 ```
-Intake   → read build plans (product/plans/*.md) or any PRD/spec/pitch you provide
+Intake   → read build plans (.agents_workspace/product/plans/*.yaml) or any PRD/spec/pitch you provide
 Draft v0 → write BUSINESS_PLAN.yaml from what's known; score the PMF gate
 Interview→ attack the lowest-scoring gate criterion — one sharp question at a time
 Revise   → fold the answer in, re-tag confidence, re-score the gate
@@ -55,18 +55,18 @@ is to convert each into evidence or a cheap, scheduled test.
 
 ## Skills
 
-| Skill                        | Description                                                                                                                                                                                                                        |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `write-vision-and-strategy`  | An entry point: draft `VISION.md` and `STRATEGY.md` from what the repo shows, then confirm them with its owner. It's working if the first run writes both files with `status: draft` and `[assumed]` marks before it asks anything |
-| `develop-business-plan`      | The entry point for a business plan: find the plan, work out the moment, and route to the specialist that owns it                                                                                                                  |
-| `find-product-market-fit`    | Draft a business plan proactively, then loop interview→revise until the PMF readiness gate passes                                                                                                                                  |
-| `review-business-plan`       | Report-only board review: score the plan on seven lenses and name the one finding that most changes it                                                                                                                             |
-| `sharpen-strategy`           | Where to play, how to win, what to refuse, checked against nine tests of a defensible edge                                                                                                                                         |
-| `stress-test-unit-economics` | Per-unit model with arithmetic shown, cash low point, and the one input that kills the business                                                                                                                                    |
-| `plan-go-to-market`          | The first ten customers by name, one channel, its arithmetic, and a pass-or-fail channel test                                                                                                                                      |
-| `run-premortem`              | Assume the business failed, write how, and attach a warning signal, kill criterion, and loss cap                                                                                                                                   |
-| `set-operating-plan`         | A 90-day plan: at most three objectives, owned key results, weekly inputs, a stop-doing list                                                                                                                                       |
-| `write-investor-materials`   | A deck outline and outreach notes from a validated plan, every claim citing its plan section. It's working if each slide ends in a `Source: §NN` line and the ask names the milestones it buys                                     |
+| Skill                        | Description                                                                                                                                                                                                                            |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `write-vision-and-strategy`  | An entry point: draft `VISION.yaml` and `STRATEGY.yaml` from what the repo shows, then confirm them with its owner. It's working if the first run writes both files with `status: draft` and `[assumed]` marks before it asks anything |
+| `develop-business-plan`      | The entry point for a business plan: find the plan, work out the moment, and route to the specialist that owns it                                                                                                                      |
+| `find-product-market-fit`    | Draft a business plan proactively, then loop interview→revise until the PMF readiness gate passes                                                                                                                                      |
+| `review-business-plan`       | Report-only board review: score the plan on seven lenses and name the one finding that most changes it                                                                                                                                 |
+| `sharpen-strategy`           | Where to play, how to win, what to refuse, checked against nine tests of a defensible edge                                                                                                                                             |
+| `stress-test-unit-economics` | Per-unit model with arithmetic shown, cash low point, and the one input that kills the business                                                                                                                                        |
+| `plan-go-to-market`          | The first ten customers by name, one channel, its arithmetic, and a pass-or-fail channel test                                                                                                                                          |
+| `run-premortem`              | Assume the business failed, write how, and attach a warning signal, kill criterion, and loss cap                                                                                                                                       |
+| `set-operating-plan`         | A 90-day plan: at most three objectives, owned key results, weekly inputs, a stop-doing list                                                                                                                                           |
+| `write-investor-materials`   | A deck outline and outreach notes from a validated plan, every claim citing its plan section. It's working if each slide ends in a `Source: §NN` line and the ask names the milestones it buys                                         |
 
 `write-vision-and-strategy` and `develop-business-plan` are the two skills you invoke. The other
 eight are business plan specialists and model-only, with no
@@ -127,7 +127,7 @@ After every write to `BUSINESS_PLAN.yaml`, `VISION.yaml` or `STRATEGY.yaml`,
 `artifact-render-hook.py` (`PostToolUse`) checks it against its model through `uv` and renders its
 Markdown, or reports each error back to the agent and leaves the Markdown as it was. An adopted
 vision or strategy that still holds `[assumed]` is one such error. `find-product-market-fit` also carries the architecture
-model, to check `product/ARCHITECTURE.yaml` before reading it, so the hook acts on a write to that
+model, to check `.agents_workspace/product/ARCHITECTURE.yaml` before reading it, so the hook acts on a write to that
 file too. `generated-md-guard.py` (`PreToolUse`) denies a direct
 edit to a generated Markdown file and names its YAML. Both need `uv`: without it the agent is told
 once per session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS`

@@ -2,7 +2,7 @@
 name: write-evidence-report
 description: >-
   Load before a product is launched or written about: roll the latest test, QA,
-  performance, security, and usability results into product/EVIDENCE.md. Trigger on "are we ready
+  performance, security, and usability results into one evidence report. Trigger on "are we ready
   to launch", "what have we proven", or before a blog post or listing about the product.
 argument-hint: "[product or path]"
 disable-model-invocation: false
@@ -17,13 +17,14 @@ license: Apache-2.0
 
 # Write the evidence report
 
-Roll every Prove result into one committed file, `product/EVIDENCE.yaml`, that a later stage
-reads instead of the scattered reports, with `product/EVIDENCE.md` rendered from it. Done means a dated section for the current commit sits at the top
-of the file, every area has a status, and every claim under Claims cites the result behind it.
+Roll every Prove result into one file, `.agents_workspace/product/EVIDENCE.yaml`, that a later
+stage reads instead of the scattered reports, with its `EVIDENCE.md` rendered beside it. Done
+means a dated run for the current commit sits at the top of the file, every area has a status, and
+every claim under Claims cites the result behind it.
 
-The checks leave their reports in the git-ignored `.agents_workspace/`, dated, one folder each. A
-blog post or a listing that needs "is it tested, fast, safe, usable?" cannot use them: they vanish
-on a fresh clone and none answers for the product as a whole. This file is the one answer.
+The checks leave their reports in `.agents_workspace/product/`, dated, one folder each. A blog
+post or a listing that needs "is it tested, fast, safe, usable?" cannot use them: none answers for
+the product as a whole. This file is the one answer.
 
 ## Procedure
 
@@ -42,7 +43,7 @@ on a fresh clone and none answers for the product as a whole. This file is the o
    | Performance | `.agents_workspace/product/perf/<metric>.yaml`, else its `.md`                                                                                                                                                                                      |
    | Security    | `.agents_workspace/product/security-audit/<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml`, else its `.md`. A `*-security-audit` name is newer than every older `SECURITY_AUDIT-*` name, and within one form the last by file name is the newest |
    | Usability   | `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.yaml` and `ERROR_MESSAGES.yaml`, else their `.md`                                                                                                                                  |
-   | Plan        | each plan in `product/plans/` with status `building`, plus each `built` plan whose `## Record` has no Evidence line yet: phases `done` with evidence, and any check-against-plan findings                                                           |
+   | Plan        | each plan in `.agents_workspace/product/plans/` with status `building`, plus each `built` plan whose `## Record` has no Evidence line yet: phases `done` with evidence, and any check-against-plan findings                                         |
 
    With no such plan, the Plan area reads `none in flight`, not `not run`: nothing was skipped.
    Any other area with no source is
@@ -80,30 +81,30 @@ on a fresh clone and none answers for the product as a whole. This file is the o
    with the area and figure behind it: "All 212 tests pass at a1b2c3d", "p95 search latency 38 ms
    on <machine>". A `stale`, `not run`, or `open issues` area yields no positive claim about the
    thing it checks.
-6. **Add the run at the top of `product/EVIDENCE.yaml`**, as the first item of `runs`, in the
+6. **Add the run at the top of `.agents_workspace/product/EVIDENCE.yaml`**, as the first item of `runs`, in the
    Output format. Never edit an earlier run: each one is what was proven at its commit, and a
    plan's Record cites it by date. With no file, copy the template. With only an `EVIDENCE.md`,
    move it first, as the schema's `evidence/v2` section says (a file in the older single-run
    layout becomes one run dated from its **Written** line). Before the edit, run
-   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check product/EVIDENCE.yaml` and stop on
-   exit 1 with its errors. After the last edit, run it with `render`, which writes
-   `product/EVIDENCE.md`, and fix the YAML for each error it lists. Never edit the generated `.md`.
-   On exit 2 or 3, or without uv, say in the reply that the file went unchecked and unrendered.
-   Commit both files with the change they describe or on their own.
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check .agents_workspace/product/EVIDENCE.yaml`
+   and stop on exit 1 with its errors. After the last edit, run it with `render`, which writes the
+   `EVIDENCE.md` beside it, and fix the YAML for each error it lists. Never edit the generated
+   `.md`. On exit 2 or 3, or without uv, say in the reply that the file went unchecked and
+   unrendered.
 7. **Record the evidence in each plan.** Append an Evidence line to the `## Record` of each plan in
-   the Plan area: the section date, the short SHA, and every area that is not `passed`. A plan
+   the Plan area: the run date, the short SHA, and every area that is not `passed`. A plan
    with a `<slug>.yaml` beside its `.md` is a `plan/v2` plan: read its status and Record from the
    YAML, not the `.md`, which can lag behind it, and append to the YAML's `record` list instead,
-   as `date`, `event: Evidence`, and a quoted `details`, never editing the generated `.md`. Commit
-   both files. When the `.md` did not change, because the hook that renders it
+   as `date`, `event: Evidence`, and a quoted `details`, never editing the generated `.md`. When
+   the `.md` did not change, because the hook that renders it
    (`ceh-build-plan`) is not installed, say so in the reply.
 
 ## Rules
 
 - Every figure is copied from a report or this session's test run, never estimated, reworded, or
   softened. A critical security finding stays critical.
-- The file stands alone. Copy the numbers in: a link into `.agents_workspace/` breaks on any clone
-  but the author's. Name the source path only as a pointer for the author.
+- The file stands alone. Copy the numbers in, because a later run replaces the source reports.
+  Name the source path only as a pointer for the author.
 - Never run the other checks from here. They are their own skills, and some need a running app or
   a person. Report them `not run` and name the skill.
 - Open issues are listed, not judged: critical and high security findings, confirmed QA bugs not
@@ -111,9 +112,10 @@ on a fresh clone and none answers for the product as a whole. This file is the o
 
 ## Output
 
-`product/EVIDENCE.yaml` follows `assets/evidence.template.yaml`, per the `evidence/v2` section of
-`references/evidence-schema.md`: a new file is a copy of it, and each run adds one item at the top
-of `runs`. `product/EVIDENCE.md` is rendered from it in the layout of `assets/evidence.template.md`.
+`.agents_workspace/product/EVIDENCE.yaml` follows `assets/evidence.template.yaml`, per the
+`evidence/v2` section of `references/evidence-schema.md`: a new file is a copy of it, and each run
+adds one item at the top of `runs`. Its `EVIDENCE.md` is rendered from it in the layout of
+`assets/evidence.template.md`.
 
 ## Stop conditions
 

@@ -14,7 +14,7 @@ license: Apache-2.0
 
 # Document architecture
 
-Maintain one living, committed `product/ARCHITECTURE.yaml`, the always-current picture of the
+Maintain one living `.agents_workspace/product/ARCHITECTURE.yaml`, the always-current picture of the
 system, with `ARCHITECTURE.md` rendered beside it. It opens with a 3-second **Overview**, then is
 **mainly Mermaid diagrams**, then a **Key Decisions** log that holds the durable, cross-version
 "why". Done when the YAML passes its check, every Mermaid block was rendered and looked at, and
@@ -24,7 +24,7 @@ This is the durable counterpart to the architecture diagram in a plan's `design`
 visualizes one version's _change_; `ARCHITECTURE.yaml` shows the _whole current system_ and the
 decision trail behind it. When a plan is built, its lasting Design decisions are copied here as
 Key Decisions entries, so a reader gets the reasoning without opening every plan in
-`product/plans/`.
+`.agents_workspace/product/plans/`.
 
 ## Procedure
 
@@ -191,12 +191,14 @@ Markdown shows them as the numbered Key Decisions section at the bottom.
 
 ## Storage
 
-`product/ARCHITECTURE.yaml` and the `ARCHITECTURE.md` rendered beside it, in the target repo,
-committed both, unless the repo's `CLAUDE.md` names another path. A new file starts as a copy of
+`.agents_workspace/product/ARCHITECTURE.yaml` and the `ARCHITECTURE.md` rendered beside it, in the
+target repo, unless the repo's `CLAUDE.md` names another path. A new file starts as a copy of
 `assets/architecture.template.yaml`, and an older Markdown file is moved to the YAML on the next
-update. Later planning reads it and a fresh clone must keep the decision trail, so it never lives
-in a git-ignored folder. `product/` holds the files the people and agents building the product
-read, and `docs/` is left to users of the product. When a `.agents_workspace/ARCHITECTURE.md` from
-an earlier version exists and `product/ARCHITECTURE.md` does not, move it there first and say so.
+update. Later planning reads it, so it never lives in any folder other than
+`.agents_workspace/product/`. `.agents_workspace/product/` holds the files the people and agents
+building the product read, and `docs/` is left to users of the product. When a
+`.agents_workspace/ARCHITECTURE.md` from an earlier version, or an `ARCHITECTURE.md` at the old
+root `product/` in a repo whose `CLAUDE.md` names no location, exists and
+`.agents_workspace/product/ARCHITECTURE.yaml` does not, move it there first and say so.
 The whole document stays in the one YAML, so the spine, the diagrams and the decision trail are
 readable and greppable in one place.

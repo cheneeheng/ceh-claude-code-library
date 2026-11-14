@@ -3,7 +3,7 @@ name: implement-from-plan
 description: >-
   Load this skill when building from a written plan: phase by phase, failing test first, only what
   the phase names, with each phase's check run and its evidence recorded. Trigger on "implement the
-  plan", "build phase 2", "start building product/plans/mvp.md".
+  plan", "build phase 2", "start building the mvp plan".
 argument-hint: "[plan-file] [phase]"
 compatibility: >-
   Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
@@ -27,7 +27,10 @@ reason recorded.
    created and say which. With no plan at all, write a minimal one from the request as `plan/v2`,
    a filled copy of `${CLAUDE_SKILL_DIR}/assets/plan.template.yaml`: Goal, Scope, and phases with
    checks, every assumption under Open. Say that you did, because the user may have expected a
-   plan to exist.
+   plan to exist. A plan found only at the old root `product/plans/`, in a repo whose `CLAUDE.md`
+   names no plans folder, is reported with its move (each file under root `product/` to the same
+   sub-path under `.agents_workspace/product/`) and the run stops, never reading it or writing
+   beside it, because two folders split the artifacts again.
 
    **A `plan/v2` plan is checked first.** When `<slug>.yaml` sits beside the plan's `.md`, the
    YAML is the plan: read and edit it, never the `.md`. Before acting on it, run
@@ -64,8 +67,8 @@ reason recorded.
 5. **Copy the lasting decisions.** The built plan stays in the plans folder as the record of this
    change: later planning runs read only its frontmatter. When `ceh-check-build-against-plan` is
    installed, run `ceh-check-build-against-plan:check-build-against-plan` first, because it adds
-   its Checked line to the plan. Then, in one commit: append each Design decision a later reader
-   still needs to `key_decisions` in `product/ARCHITECTURE.yaml`, in the shape of
+   its Checked line to the plan. Then append each Design decision a later reader still needs to
+   `key_decisions` in `.agents_workspace/product/ARCHITECTURE.yaml`, in the shape of
    `assets/architecture.template.yaml`, per the `architecture/v3` section of
    `references/architecture-schema.md` (a missing file starts as a copy of the template, and an
    `ARCHITECTURE.md` with no YAML is moved first, as that section says). Check the YAML with
@@ -91,7 +94,7 @@ reason recorded.
 After the run, report per phase: done or stopped, the Check command and its result, assumptions
 taken, and anything not verified with the command the user should run. List the phases set `done`
 on the user's report apart from the ones whose Check you ran. List the decisions copied
-to `product/ARCHITECTURE.yaml`.
+to `.agents_workspace/product/ARCHITECTURE.yaml`.
 
 ## Stop conditions
 

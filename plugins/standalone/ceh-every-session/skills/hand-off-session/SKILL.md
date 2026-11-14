@@ -40,7 +40,7 @@ spare handoff file costs nothing and a missing one loses the state.
    still reads the rendered Markdown at the path it named. Before writing it, delete the old
    Markdown at that path, so a save that cannot render leaves no stale file to resume from.
    - **Caller fields:** a caller may name extra fields and their values in its request, for example
-     "save --file jobs/J/state.md with fields Plan: product/plans/x.yaml, PR: none yet". Write each
+     "save --file jobs/J/state.md with fields Plan: .agents_workspace/product/plans/x.yaml, PR: none yet". Write each
      as a `fields` item, in the order named. They render as `**<Field>:** <value>` lines after
      `**Session:**`.
    - **A place for decisions:** when the caller names one (a file or a skill), set `forks_go_to`

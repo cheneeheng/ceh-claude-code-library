@@ -51,7 +51,7 @@ def model_names() -> set[str]:
 
 def place_format(file: Path, root: Path) -> str | None:
     """The format a file's place says it holds, or None. `root` is the session's cwd."""
-    # A plan in .agents_workspace/product/plans/, or in the product/plans/ a repo's CLAUDE.md names.
+    # A plan in .agents_workspace/product/plans/, or in the plans folder a repo's CLAUDE.md names.
     if file.parent.name == "plans" and file.parent.parent.name == "product":
         return "plan"
     # Only at the root or in docs/, and only beside its GLOSSARY.md, so a project's unrelated
@@ -62,8 +62,8 @@ def place_format(file: Path, root: Path) -> str | None:
     if file == root / ".agents_workspace" / "product" / "blog-voice.yaml":
         return "blog-voice"
     # The dated name only, older or newer form, in .agents_workspace/product/retros/ or the
-    # product/retros/ a repo's CLAUDE.md names: a name with a label before `repeat-mistake` is
-    # not one.
+    # retros folder a repo's CLAUDE.md names: a name with a label before `repeat-mistake` is not
+    # one.
     retros = (
         root / "product" / "retros",
         root / ".agents_workspace" / "product" / "retros",

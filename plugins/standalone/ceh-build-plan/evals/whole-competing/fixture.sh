@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-mkdir -p product/plans
-cat >product/plans/slug.md <<'EOF'
+mkdir -p .agents_workspace/product/plans
+cat >.agents_workspace/product/plans/slug.md <<'EOF'
 ---
 schema: plan/v1
 title: Slug helper

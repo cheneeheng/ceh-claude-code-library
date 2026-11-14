@@ -4,4 +4,4 @@ max_turns: 12
 allowed_tools: [Read, Glob, Grep, Skill]
 ---
 
-review product/plans/slug.md before we build it. is it ready?
+review .agents_workspace/product/plans/slug.md before we build it. is it ready?

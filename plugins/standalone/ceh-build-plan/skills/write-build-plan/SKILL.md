@@ -43,9 +43,13 @@ draft: say so and write a new plan as usual.
    The label may move up mid-session, never down: a spike that turns into a keeper gets a plan, and
    architectural work keeps its plan when it shrinks.
 
-2. **Read what exists before asking.** When a `VISION.md` and `STRATEGY.md` exist (in `product/`,
-   `docs/`, the root, or where the repo's `CLAUDE.md` says), read them, and put anything the plan
-   would contradict under Open. Read the format file, the repo, every plan in the plans
+2. **Read what exists before asking.** When a `VISION.yaml` and `STRATEGY.yaml` exist (in
+   `.agents_workspace/product/`, or the `VISION.md` and `STRATEGY.md` in `docs/`, the root, or
+   where the repo's `CLAUDE.md` says), read them, and put anything the plan would contradict
+   under Open. A plan, vision or strategy found only at the old root `product/`, in a repo whose
+   `CLAUDE.md` names no location, is reported with its move (each file under root `product/` to
+   the same sub-path under `.agents_workspace/product/`), never read, and never written beside,
+   because two folders split the artifacts again. Read the format file, the repo, every plan in the plans
    folder that is not `built`, and only the frontmatter of each `built` one (read its full text
    only when the new work touches what it built), the README, and any issue or spec the user
    named. Read no business plan: take the goal and target user from the request, the vision and

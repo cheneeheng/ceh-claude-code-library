@@ -167,8 +167,9 @@ coming back.
     `write-build-plan` and `implement-from-plan` accept.
   - Sentences about the generated file itself: "never edit the generated `.md`", the render
     command's output, and the layout templates `*.template.md` that the renderer follows.
-  - Notes on an older location that tell a skill to move a file: `product/BUSINESS_PLAN.md`
-    and `.agents_workspace/ARCHITECTURE.md`.
+  - Notes on an older location that tell a skill to move a file: `product/BUSINESS_PLAN.md`,
+    `.agents_workspace/ARCHITECTURE.md`, and the old root `product/plans/` in the sentence
+    "An artifact left at the old path" adds.
 - **The validator check:** `tools/validate-plugins/checks/artifact_paths.py`, called from `validate.py`, scans
   `plugins/standalone/**` except `evals/results/` and `archive/`. It fails on `product/`
   followed by a path when `.agents_workspace/` does not precede it, and on a path ending in
@@ -237,7 +238,9 @@ coming back.
   `grep -rnE "(^|[^/a-z_])product/(plans|VISION|STRATEGY|ARCHITECTURE|EVIDENCE|architecture)" plugins/standalone --exclude-dir=results --exclude="fix-record*"`
   prints only lines the Design lists under "References that stay Markdown". The fix record
   files are Phase 4's.
-- **Status:** todo
+- **Status:** done, python tools/validate-plugins/validate.py: OK: all plugin checks passed; the grep printed one line, the old-path move note in implement-from-plan step 1 The three descriptions that would have named a path (implement-from-plan,
+  write-evidence-report, write-vision-and-strategy) name none, because the paths took
+  write-vision-and-strategy over 300 characters and the total over its ratchet.
 
 ### Phase 4: Fix records and retros move
 
@@ -292,5 +295,11 @@ coming back.
   failed against the old create(), and wt5, the build-record-guard workspace fixture and the
   three workspace render fixtures failed with their assertions inverted.
 - 2026-11-14 PR: #289 https://github.com/cheneeheng/ceh-claude-code-library/pull/289
+- 2026-11-14 Design changed: was "Notes on an older location that tell a skill to move a file: `product/BUSINESS_PLAN.md`
+  and `.agents_workspace/ARCHITECTURE.md`.", now also names the old root `product/plans/` in
+  the old-path sentence, because that sentence must name the old folder to report it.
+- 2026-11-14 Built Phase 3: tools/validate-plugins/validate.py: OK: all plugin checks passed. The Phase 3 grep printed
+  only the old-path move note in implement-from-plan step 1.
+- 2026-11-14 PR: #290 https://github.com/cheneeheng/ceh-claude-code-library/pull/290
 
 <!-- prettier-ignore-end -->

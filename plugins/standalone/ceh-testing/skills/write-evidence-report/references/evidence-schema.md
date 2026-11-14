@@ -1,6 +1,8 @@
 # Evidence schema
 
-The committed `product/EVIDENCE.md` that `write-evidence-report` keeps. A new file is a copy of
+The `.agents_workspace/product/EVIDENCE.yaml` that `write-evidence-report` keeps, with its Markdown
+rendered beside it, unless the repo's `CLAUDE.md` names another location. A reference to it names
+the `.yaml`. The `v1` layout below is what the Markdown keeps. A `v1` file is a copy of
 `../assets/evidence.template.md`, relative to this file. The `schema: evidence/v1` line stays as
 written. A file without it gets the template's frontmatter on the next run, and its sections stay
 as they are.
@@ -32,16 +34,17 @@ by date.
 
 ## evidence/v2: YAML with generated Markdown
 
-An `evidence/v2` report is `product/EVIDENCE.yaml`, a copy of `../assets/evidence.template.yaml`,
-and `product/EVIDENCE.md` is generated from it in the `v1` layout above and committed beside it.
+An `evidence/v2` report is `.agents_workspace/product/EVIDENCE.yaml`, a copy of
+`../assets/evidence.template.yaml`, and its Markdown is generated from it in the `v1` layout above
+and saved beside it.
 The YAML is the source: agents read and edit it, and nobody edits the Markdown, which opens with
 `generated_from: EVIDENCE.yaml` and a do-not-edit `generated_note`. The format in code is
 `evidence-model.py` beside this file, and `scripts/artifact.py` in the skill checks and renders it
 through uv:
 
 ```bash
-uv run --script scripts/artifact.py check product/EVIDENCE.yaml   # errors, or a stale .md
-uv run --script scripts/artifact.py render product/EVIDENCE.yaml  # check, then write the .md
+uv run --script scripts/artifact.py check .agents_workspace/product/EVIDENCE.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render .agents_workspace/product/EVIDENCE.yaml  # check, then write the .md
 ```
 
 Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other
@@ -66,6 +69,6 @@ newest run.
 strict, so quote a value such as `1.10` that must stay text.
 
 A `v1` `EVIDENCE.md` with no YAML beside it is moved on the next run: write `EVIDENCE.yaml` from
-it, every earlier section as a run, render, and check `git diff --word-diff product/EVIDENCE.md`
-before adding the new run. Text the YAML cannot hold goes in the nearest free-text field, and the
+it, every earlier section as a run, render, and check `git diff --no-index --word-diff` between a
+copy of the old Markdown and the rendered one before adding the new run. Text the YAML cannot hold goes in the nearest free-text field, and the
 reply names the move and any line the diff shows changed.

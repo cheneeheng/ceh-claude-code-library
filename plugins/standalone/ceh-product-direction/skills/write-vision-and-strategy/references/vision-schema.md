@@ -1,10 +1,12 @@
 # Vision schema
 
-The `VISION.md` that `write-vision-and-strategy` writes: why the repo exists and the principles that
-settle a decision. It goes in `product/VISION.md`, committed, because later sessions and other stages
-read it, and users of the product do not. An existing file at `VISION.md`, `docs/VISION.md`, or a path
-the repo's `CLAUDE.md` names stays there. A new file is a copy of `../assets/vision.template.md`,
-relative to this file. The `schema: vision/v1` line stays as written.
+The vision that `write-vision-and-strategy` writes: why the repo exists and the principles that
+settle a decision. It goes in `.agents_workspace/product/VISION.yaml`, with its Markdown rendered
+beside it, because later sessions and other stages read it, and users of the product do not. A
+reference to it names the `.yaml`. An existing file at `VISION.md`, `docs/VISION.md`, or a path the
+repo's `CLAUDE.md` names stays there. The `v1` layout below is what the Markdown keeps. A `v1` file
+is a copy of `../assets/vision.template.md`, relative to this file, and its `schema: vision/v1`
+line stays as written.
 
 ## Frontmatter
 
@@ -38,7 +40,7 @@ and it never appears in an adopted file.
 ## vision/v2: YAML with generated Markdown
 
 A `vision/v2` file is `VISION.yaml` beside the `VISION.md` it renders, a copy of
-`../assets/vision.template.yaml`. The Markdown is generated in the `v1` layout above and committed
+`../assets/vision.template.yaml`. The Markdown is generated in the `v1` layout above and saved
 beside it: nobody edits it, and it opens with `generated_from: VISION.yaml` and a do-not-edit
 `generated_note`. The format in code is `vision-model.py` beside this file, and
 `scripts/artifact.py` in the skill checks and renders it through uv (`check <file>`, then
@@ -59,5 +61,6 @@ without one. An empty `gaps` renders "No known gaps as of <updated>.", and an em
 before Changing this file, so its old position is not kept.
 
 A `v1` `VISION.md`, or one with no `schema:` line, is moved on its next update: write `VISION.yaml`
-from it, render, and check `git diff --word-diff` on the Markdown before the update itself. The
+from it, render, and check `git diff --no-index --word-diff` between a copy of the old Markdown and
+the rendered one before the update itself. The
 reply names the move and any line the diff shows changed.

@@ -40,24 +40,34 @@ the main workspace, because the workspace sync commits the main workspace before
 worktree, except while the user's own merge is in progress. Phase 2 of
 `product/plans/consolidate-product-artifacts.yaml`.
 
+**Breaking:** plans, the vision, the strategy, the architecture document and the evidence report
+now live in `.agents_workspace/product/`, not root `product/`, and every reference to them names
+the `.yaml`. A project with a root `product/` moves each file to the same sub-path under
+`.agents_workspace/product/`, or names its location in `CLAUDE.md`. Until then the skills that
+find a plan, vision or strategy report the old file with its move instead of reading it.
+`pull-request` now finds a plan in the workspace and commits it only when the plans folder is
+tracked in the source repo. Phase 3 of the plan.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog-and-seo`             | 2.0.8   |
-| `ceh-build-plan`               | 2.0.7   |
-| `ceh-check-build-against-plan` | 1.1.15  |
-| `ceh-codebase-explanation`     | 1.3.11  |
-| `ceh-coding-conduct`           | 2.5.11  |
-| `ceh-competitor-analysis`      | 1.2.11  |
-| `ceh-every-session`            | 2.9.17  |
-| `ceh-git-workflow`             | 1.5.14  |
-| `ceh-product-direction`        | 2.0.7   |
-| `ceh-security-audit`           | 1.1.10  |
-| `ceh-testing`                  | 1.6.20  |
-| `ceh-usability-audit`          | 1.2.12  |
-| `ceh-workflow-builder`         | 1.4.10  |
-| `ceh-workflow-runner`          | 1.1.9   |
+| `ceh-blog-and-seo`             | 2.0.9   |
+| `ceh-build-plan`               | 2.0.8   |
+| `ceh-check-build-against-plan` | 1.1.16  |
+| `ceh-codebase-explanation`     | 1.3.12  |
+| `ceh-coding-conduct`           | 2.5.12  |
+| `ceh-competitor-analysis`      | 1.2.12  |
+| `ceh-documentation`            | 1.0.10  |
+| `ceh-every-session`            | 2.9.18  |
+| `ceh-git-workflow`             | 1.5.15  |
+| `ceh-product-direction`        | 2.0.8   |
+| `ceh-python-service`           | 1.1.8   |
+| `ceh-security-audit`           | 1.1.11  |
+| `ceh-testing`                  | 1.6.21  |
+| `ceh-usability-audit`          | 1.2.13  |
+| `ceh-workflow-builder`         | 1.4.11  |
+| `ceh-workflow-runner`          | 1.1.10  |
 
 ### Added
 
@@ -84,6 +94,16 @@ worktree, except while the user's own merge is in progress. Phase 2 of
 - Commit the main workspace's pending changes in `sync-agents-workspace.py` before adding a
   worktree's workspace, with the subject `chore(workspace): sync main before worktree <folder>`,
   and merge the main branch into a `ceh-ws/` branch that already existed.
+- Move the plan, vision, strategy, architecture and evidence paths to `.agents_workspace/product/`
+  in their schemas (canonical files and every copy), the skills that write and read them, the
+  plan-review template, the plugin READMEs, the `ceh-product-direction` description, and the
+  `ceh-build-plan` eval cases. The legacy-file moves use `git diff --no-index --word-diff`, so
+  they work outside a git repo.
+- Find the plan in `pull-request` step 3 in the plans folder, by name or by a Built Phase entry
+  with no PR entry after it, instead of from the branch's git diff.
+- Drop "in one commit" from `implement-from-plan` step 5, and give the reasons once tied to a
+  commit their own: build skills read the vision and strategy, so neither carries pricing, and
+  the architecture document lives in no folder other than `.agents_workspace/product/`.
 
 ## 2026-11-13
 
