@@ -291,5 +291,6 @@ coming back.
 - 2026-11-14 Built Phase 2: tools/validate-plugins/validate.py: OK: all plugin checks passed. The fixtures wt3 and wt4
   failed against the old create(), and wt5, the build-record-guard workspace fixture and the
   three workspace render fixtures failed with their assertions inverted.
+- 2026-11-14 PR: #289 https://github.com/cheneeheng/ceh-claude-code-library/pull/289
 
 <!-- prettier-ignore-end -->
