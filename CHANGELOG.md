@@ -18,6 +18,9 @@ the once-per-session inactive warning when no quota reading is available.
 The install guide explains how to inspect the skill listing's context cost and raise its budget
 with `skillListingBudgetFraction` when descriptions disappear and skills stop triggering.
 
+The workspace checkpoint on PR merge passed its live check: the merge of #285 left a checkpoint
+commit after its branch was deleted, and a failing lookup showed its warning once per session.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -37,6 +40,8 @@ with `skillListingBudgetFraction` when descriptions disappear and skills stop tr
   `CEH_USAGE_LIMIT_THRESHOLD` or `CEH_USAGE_STALE_MINUTES` is set or `~/.claude/statusline/`
   exists, with the plugin README, `docs/ENVIRONMENT_VARIABLES.md` and `docs/GETTING_STARTED.md`
   to match.
+- Mark `product/plans/workspace-checkpoint-on-pr-merge.yaml` built, with Phase 2's live
+  evidence and its two settled open questions.
 
 ## 2026-11-13
 
