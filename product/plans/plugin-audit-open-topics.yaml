@@ -320,3 +320,6 @@ record:
       said on 2026-11-14 to keep the three architecture entries, "then open the pr and merge".
       The `CHANGELOG.md` entry moved to a `## 2026-11-14` section, the day the PR opens, with
       its version row and Added and Changed lines, which settles the Cannot verify item.
+  - date: 2026-11-14
+    event: PR
+    details: "#285 https://github.com/cheneeheng/ceh-claude-code-library/pull/285"

@@ -263,5 +263,6 @@ a whole session without one line about a guard they did not ask for.
   said on 2026-11-14 to keep the three architecture entries, "then open the pr and merge".
   The `CHANGELOG.md` entry moved to a `## 2026-11-14` section, the day the PR opens, with
   its version row and Added and Changed lines, which settles the Cannot verify item.
+- 2026-11-14 PR: #285 https://github.com/cheneeheng/ceh-claude-code-library/pull/285
 
 <!-- prettier-ignore-end -->
