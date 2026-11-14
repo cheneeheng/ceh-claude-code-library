@@ -16,7 +16,7 @@ spec you name, so it works installed alone.
 
 **Manual trigger:** `/ceh-check-build-against-plan:check-build-against-plan [plan-file]`, or say
 `"does the code match the plan"` / `"did we build what we planned"`. Each check appends a Checked
-line to the plan's append-only `## Record` in `product/plans/`.
+line to the plan's append-only `## Record` in `.agents_workspace/product/plans/`.
 
 ## Hooks
 
@@ -30,7 +30,7 @@ with this plugin installed alone.
 | Artifact check       | `PostToolUse` (`Edit`, `Write`, `MultiEdit`) | `artifact-render-hook.py` | on      |
 | Generated-file guard | `PreToolUse` (`Edit`, `Write`, `MultiEdit`)  | `generated-md-guard.py`   | on      |
 
-The artifact check runs `scripts/artifact.py render` on each write to a `product/plans/*.yaml`.
+The artifact check runs `scripts/artifact.py render` on each write to a `.agents_workspace/product/plans/*.yaml`.
 Errors go back to the agent to fix, and the Markdown beside the YAML is rendered only once the
 YAML is valid. It needs [uv](https://docs.astral.sh/uv/), which installs pydantic and PyYAML on
 first use. Without uv, the check says once per session that the file was not checked. The guard

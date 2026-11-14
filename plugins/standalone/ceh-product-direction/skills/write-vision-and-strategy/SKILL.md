@@ -2,7 +2,7 @@
 name: write-vision-and-strategy
 description: >-
   Load this skill when a repo's direction must be written down to settle later decisions:
-  VISION.md and STRATEGY.md, drafted from the repo, then confirmed with its owner. Trigger on "write
+  a vision and a strategy, drafted from the repo, then confirmed with its owner. Trigger on "write
   the vision", "create a strategy doc". Not for a business plan (use
   ceh-product-direction:develop-business-plan).
 disable-model-invocation: false
@@ -15,16 +15,21 @@ license: Apache-2.0
 
 # Write the vision and strategy
 
-Write the two files that let a later session settle a decision without asking: `VISION.md`, why the
-repo exists and which principles decide, and `STRATEGY.md`, how it gets there and how work is chosen.
+Write the two files that let a later session settle a decision without asking: `VISION.yaml`, why
+the repo exists and which principles decide, and `STRATEGY.yaml`, how it gets there and how work is
+chosen.
 Done means both pass the tests below, and each is `adopted` with a pointer from `CLAUDE.md`, or
 `draft` with its open questions listed. The repo may hold code or only documents. Read it the same
 way.
 
 ## Procedure
 
-1. **Find what exists.** Look for each doc in `product/`, `docs/`, the root, and any path the repo's
-   `CLAUDE.md` names. An existing doc stays where it is and is revised: change only what the request
+1. **Find what exists.** Look for each doc in `.agents_workspace/product/`, `docs/`, the root, and
+   any path the repo's `CLAUDE.md` names. A doc found only at the old root `product/`, in a repo
+   whose `CLAUDE.md` names no location, is reported with its move (each file under root `product/`
+   to the same sub-path under `.agents_workspace/product/`) and the run stops, never reading it or
+   writing beside it, because two folders split the artifacts again. An existing doc stays where
+   it is and is revised: change only what the request
    or a finding needs, and keep the owner's wording. A request for one doc when the other is missing
    drafts both, because the two hold up against each other. An existing Markdown doc is moved to
    its YAML first, per Output: one with no `schema:` line gets `status: adopted` when the repo's
@@ -72,9 +77,9 @@ way.
 
 - Draft first, ask second. A concrete sentence the owner can correct gets a sharper answer than "what
   is your vision?".
-- Both docs are committed, so neither carries pricing, unit economics, kill criteria, contacts, a
-  home path, or any test, stage, date or validation experiment from a business plan, and neither
-  quotes `.agents_workspace/`.
+- Build skills read both docs and must not read business material, so neither carries pricing,
+  unit economics, kill criteria, contacts, a home path, or any test, stage, date or validation
+  experiment from a business plan, and neither quotes `.agents_workspace/product/business/`.
 - Write files only. The caller commits them.
 
 ## Output
@@ -83,7 +88,7 @@ way.
 `references/vision-schema.md`, and `STRATEGY.yaml` follows `assets/strategy.template.yaml`, per the
 `strategy/v2` section of `references/strategy-schema.md`. `VISION.md` and `STRATEGY.md` are
 rendered from them in the layouts of `assets/vision.template.md` and `assets/strategy.template.md`,
-and never edited by hand. Both go in `product/` unless step 1 found them elsewhere, and each YAML
+and never edited by hand. Both go in `.agents_workspace/product/` unless step 1 found them elsewhere, and each YAML
 sits beside its Markdown. An existing Markdown file with no YAML beside it is moved first, as the
 schema says.
 

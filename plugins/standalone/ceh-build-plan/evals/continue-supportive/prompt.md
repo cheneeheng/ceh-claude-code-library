@@ -5,4 +5,4 @@ timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, Bash, Edit, Write]
 ---
 
-Continue the work with product/plans/slug.md
+Continue the work with .agents_workspace/product/plans/slug.md

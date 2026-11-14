@@ -5,4 +5,4 @@ timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, Write, Edit]
 ---
 
-Start building product/plans/notes-api.md, phase 1.
+Start building .agents_workspace/product/plans/notes-api.md, phase 1.

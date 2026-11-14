@@ -57,7 +57,7 @@ def main() -> None:
     ti = payload.get("tool_input", {})
     path = ti.get("file_path", "")
     built = BUILT.get(Path(path).suffix)
-    # Matches .agents_workspace/product/plans/ and the product/plans/ a repo's CLAUDE.md names.
+    # Matches .agents_workspace/product/plans/ and a repo's own product plans folder.
     if "/product/plans/" not in path.replace("\\", "/") or not built:
         return
     new = ti.get("new_string") or ti.get("content") or ""

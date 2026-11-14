@@ -8,14 +8,16 @@ its own.
 
 ## Location
 
-`product/plans/<slug>.md` in the target repo, committed, unless the repo's `CLAUDE.md` names another
-plans folder. A plan shapes the repo for whoever builds next, so it lives where a fresh clone and a
-reviewer can read it. `<slug>` is kebab-case from the goal: `mvp`, `checkout-flow`. Plans are never
-deleted: a built plan stays where it is, with `status: built`, as the record of how that change was
-planned, built, and proven, and every path that cites it stays valid. A skill that looks for work in
-the folder reads only the frontmatter of a `built` plan, and its full text only when the new work
-touches what it built, so finished plans stay cheap to keep. `product/` holds the files the people
-and agents building the product read. `docs/` is left to what users of the product read.
+`.agents_workspace/product/plans/<slug>.yaml` in the target repo, unless the repo's `CLAUDE.md`
+names another plans folder. A plan shapes the repo for whoever builds next, so it lives with the
+project's other product artifacts. `<slug>` is kebab-case from the goal: `mvp`, `checkout-flow`.
+Plans are never deleted: a built plan stays where it is, with `status: built`, as the record of how
+that change was planned, built, and proven, and every path that cites it stays valid. A skill that
+looks for work in the folder reads only the frontmatter of a `built` plan, and its full text only
+when the new work touches what it built, so finished plans stay cheap to keep.
+`.agents_workspace/product/` holds the files the people and agents building the product read.
+`docs/` is left to what users of the product read. A reference to a plan names its `.yaml`, and a
+`plan/v1` plan with no YAML is its `<slug>.md`.
 
 ## Template
 
@@ -51,8 +53,8 @@ version of the format a plan follows.
 
 ## plan/v2: YAML with generated Markdown
 
-A `plan/v2` plan is `product/plans/<slug>.yaml`, a copy of `../assets/plan.template.yaml`, and its
-Markdown, `product/plans/<slug>.md`, is generated from it and committed beside it. The YAML is the
+A `plan/v2` plan is `.agents_workspace/product/plans/<slug>.yaml`, a copy of
+`../assets/plan.template.yaml`, and its Markdown is generated from it and saved beside it. The YAML is the
 source: agents read and edit it, and nobody edits the Markdown, which opens with
 `generated_from: <slug>.yaml` and a `generated_note` saying not to edit it. The skill that edits the
 YAML re-renders the Markdown. The body sits between `prettier-ignore-start` and
@@ -65,8 +67,8 @@ and rule below, and its renderer writes the Markdown. `scripts/artifact.py` in t
 file's `references/`, runs both through uv, and the plugin's render hook runs its own copy:
 
 ```bash
-uv run --script scripts/artifact.py check product/plans/<slug>.yaml   # errors, or a stale .md
-uv run --script scripts/artifact.py render product/plans/<slug>.yaml  # check, then write the .md
+uv run --script scripts/artifact.py check .agents_workspace/product/plans/<slug>.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render .agents_workspace/product/plans/<slug>.yaml  # check, then write the .md
 ```
 
 Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other
@@ -113,15 +115,15 @@ bool and `1.10` a number, so quote a value that must stay text.
 Each skill that acts on the plan appends its own line. A line is never edited or removed, and lines
 are appended in any status, including after `built`.
 
-| Event          | Appended by                | Line                                                                                     |
-| -------------- | -------------------------- | ---------------------------------------------------------------------------------------- |
-| Planned        | `write-build-plan`         | `- YYYY-MM-DD Planned: status <ready or draft>`                                          |
-| Reviewed       | `review-build-plan`        | `- YYYY-MM-DD Reviewed: <verdict>, <n> blocking (<the blocking findings, short>)`        |
-| Built Phase    | `implement-from-plan`      | `- YYYY-MM-DD Built Phase <n>: <commit or check command>, <one line of passing output>`  |
-| Design changed | `implement-from-plan`      | `- YYYY-MM-DD Design changed: was "<old line>", now "<new line>", because <reason>`      |
-| Checked        | `check-build-against-plan` | `- YYYY-MM-DD Checked: <count per status>, <each item not Built>`                        |
-| Evidence       | `write-evidence-report`    | `- YYYY-MM-DD Evidence: product/EVIDENCE.md section <date> at <sha>, <areas not passed>` |
-| PR             | `pull-request`             | `- YYYY-MM-DD PR: #<n> <url>`                                                            |
+| Event          | Appended by                | Line                                                                                    |
+| -------------- | -------------------------- | --------------------------------------------------------------------------------------- |
+| Planned        | `write-build-plan`         | `- YYYY-MM-DD Planned: status <ready or draft>`                                         |
+| Reviewed       | `review-build-plan`        | `- YYYY-MM-DD Reviewed: <verdict>, <n> blocking (<the blocking findings, short>)`       |
+| Built Phase    | `implement-from-plan`      | `- YYYY-MM-DD Built Phase <n>: <commit or check command>, <one line of passing output>` |
+| Design changed | `implement-from-plan`      | `- YYYY-MM-DD Design changed: was "<old line>", now "<new line>", because <reason>`     |
+| Checked        | `check-build-against-plan` | `- YYYY-MM-DD Checked: <count per status>, <each item not Built>`                       |
+| Evidence       | `write-evidence-report`    | `- YYYY-MM-DD Evidence: EVIDENCE.yaml run <date> at <sha>, <areas not passed>`          |
+| PR             | `pull-request`             | `- YYYY-MM-DD PR: #<n> <url>`                                                           |
 
 - Phase **Status** holds the current state of a phase. Record holds the history, so a phase built
   twice shows both runs.
@@ -135,6 +137,6 @@ are appended in any status, including after `built`.
   Status, and appends a Design changed line to Record quoting the old line, so the plan stays true
   to the code and the original decision survives in the file.
 - A `built` plan is kept. Once every phase is done, each Design decision a later reader still
-  needs is copied to the Key Decisions log in `product/ARCHITECTURE.md`, after the check of the
+  needs is copied to the Key Decisions log in `.agents_workspace/product/ARCHITECTURE.yaml`, after the check of the
   build against the plan when that check is installed, and the change gets a changelog entry when
   the repo keeps one. New work gets a new plan file.

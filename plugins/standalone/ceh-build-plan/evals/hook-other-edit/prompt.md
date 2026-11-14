@@ -5,4 +5,4 @@ timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Bash, Edit, Write]
 ---
 
-add an Open item to product/plans/slug.md: should slugify keep digits? assume yes
+add an Open item to .agents_workspace/product/plans/slug.md: should slugify keep digits? assume yes

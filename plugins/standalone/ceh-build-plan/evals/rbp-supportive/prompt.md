@@ -5,4 +5,4 @@ timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, Write, Edit]
 ---
 
-Review the plan in product/plans/notes-api.md before anyone builds from it.
+Review the plan in .agents_workspace/product/plans/notes-api.md before anyone builds from it.

@@ -45,14 +45,16 @@ a fixed questionnaire.
 
 Before any question, gather everything that already constrains the plan.
 
-1. **Build plans in the repo** — the `ceh-build-plan` plans in `product/plans/*.md` (or the
+1. **Build plans in the repo** — the `ceh-build-plan` plans in
+   `.agents_workspace/product/plans/*.yaml`, or the `.md` of each where no YAML exists (or the
    plans folder the repo's `CLAUDE.md` names). If found, read them. Their Goal (what it does,
    who it's for, the key flow), Scope, and Design carry your product, target-user hint, and
    solution detail. A plan whose Goal points to a `BUSINESS_PLAN.md` was written from this plan:
    read it for its Scope and Design only. Record their paths in `derived_from`. Built plans stay in
-   the folder with `status: built`: read them too, and `product/ARCHITECTURE.md` Overview and Key
-   Decisions when it exists. When `product/ARCHITECTURE.yaml` sits beside it, run
-   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check product/ARCHITECTURE.yaml`
+   the folder with `status: built`: read them too, and the Overview and Key Decisions of
+   `.agents_workspace/product/ARCHITECTURE.yaml` when it exists, or of its `.md` where no YAML
+   exists. Run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check .agents_workspace/product/ARCHITECTURE.yaml`
    first (format in `references/architecture-schema.md`). On exit 1, stop and report its errors.
    On a stale `.md` alone, read the YAML instead. On exit 2 or 3, or without uv, say in the reply
    that it went unchecked, and go on.

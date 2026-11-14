@@ -45,8 +45,9 @@ quotes the plan, and the verdict is delivered.
 3. **Read what the plan rests on**: every file, route, model, and dependency it names in the
    repo. Read no business plan, even when an older plan links to one: the review judges
    the plan against the code, the vision and the strategy only. A plan claim the code contradicts
-   is a finding. A plan claim that contradicts the repo's `VISION.md` or `STRATEGY.md`, in
-   `product/`, `docs/`, the root, or where the repo's `CLAUDE.md` says, is a finding too. When a
+   is a finding. A plan claim that contradicts the repo's `VISION.yaml` or `STRATEGY.yaml` in
+   `.agents_workspace/product/`, or its `VISION.md` or `STRATEGY.md` in `docs/`, the root, or
+   where the repo's `CLAUDE.md` says, is a finding too. When a
    `VISION.yaml` or `STRATEGY.yaml` sits beside its `.md`, run
    `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` before reading it
    (formats in `references/vision-schema.md` and `strategy-schema.md`). On exit 1, stop and report its errors, because a review against a

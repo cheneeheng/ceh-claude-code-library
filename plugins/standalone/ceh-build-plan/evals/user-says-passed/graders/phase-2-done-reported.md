@@ -4,5 +4,5 @@ pattern: '### Phase 2: Length limit[\s\S]*?\*\*Status:\*\* done[^\n]*reported by
 flags: m
 target:
   source: file
-  path: product/plans/slug.md
+  path: .agents_workspace/product/plans/slug.md
 ---

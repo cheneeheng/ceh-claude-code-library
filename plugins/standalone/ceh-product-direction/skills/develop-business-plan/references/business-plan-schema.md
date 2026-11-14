@@ -30,8 +30,9 @@ stays as written. Two older forms move up on the next revision:
 - `created`, `updated`: the date the plan was first saved and last revised.
 - `product`: the product name, one line.
 - `stage`: `idea`, `prototype`, `launched`, or `revenue`.
-- `derived_from`: the build plans this was built on, for example `[product/plans/mvp.md]`, or
-  `[]` when none. It names `ceh-build-plan` plans by their repo-relative path. Built plans are
+- `derived_from`: the build plans this was built on, for example
+  `[.agents_workspace/product/plans/mvp.yaml]`, or `[]` when none. It names `ceh-build-plan` plans
+  by their repo-relative path. Built plans are
   kept, so the path stays valid.
 - `pmf_gate`: criteria met out of 8, per the PMF Readiness Gate below.
 
@@ -246,7 +247,7 @@ created: 2026-03-02
 updated: 2026-03-09
 product: Ledgerline
 stage: idea
-derived_from: [product/plans/mvp.md]
+derived_from: [.agents_workspace/product/plans/mvp.yaml]
 pmf_gate: 5/8
 ---
 
@@ -287,7 +288,7 @@ The month-end match done in ten minutes instead of a day [hypothesis-to-test]
 
 ## §05 Solution / Product
 
-Upload the statement, get the mismatches. Technical detail: see `product/plans/mvp.md`.
+Upload the statement, get the mismatches. Technical detail: see `.agents_workspace/product/plans/mvp.yaml`.
 
 ## §06 Alternatives & Competition
 

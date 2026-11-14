@@ -5,4 +5,4 @@ timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, Bash, Edit, Write]
 ---
 
-Read product/plans/slug.md. It is the plan for the slug helper. Implement all the phases.
+Read .agents_workspace/product/plans/slug.md. It is the plan for the slug helper. Implement all the phases.

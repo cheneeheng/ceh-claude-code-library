@@ -78,7 +78,7 @@ before asking anything.
 
 **Product handoff files.** When the repo has them, read them before inferring anything, because
 they hold what earlier stages settled. `.agents_workspace/product/business/BUSINESS_PLAN.yaml` gives who the product is for,
-the problem, and the differentiator: take them from it rather than asking. `product/EVIDENCE.yaml`
+the problem, and the differentiator: take them from it rather than asking. `.agents_workspace/product/EVIDENCE.yaml`
 bounds every claim about what the product does or how well it does it (tested, fast, secure,
 usable). Read only its newest section, the first one, because earlier sections describe older
 commits. State only what that section's Claims list, and nothing about an area it marks `stale`,

@@ -44,15 +44,18 @@ Pick the path from the request, then run only that path:
    gh api repos/{owner}/{repo} --jq .delete_branch_on_merge   # false: the branch survives
    ```
 
-3. **Record the PR in its build plan.** When the branch changes a plan in `product/plans/`
-   (`git diff --name-only origin/main...HEAD -- product/plans/`), append
-   `- YYYY-MM-DD PR: #<n> <url>` to the `## Record` section at the end of that plan, then commit and
-   push it to the same branch. The plan then traces its change to the review that landed it. With
-   no plan in the diff, skip this step. A plan with a `<slug>.yaml` beside its `.md` is a
-   `plan/v2` plan: append to the YAML's `record` list instead, as `date: YYYY-MM-DD`,
-   `event: PR`, and `details: "#<n> <url>"`, quoted because a bare `#` starts a YAML comment, and
-   never edit its generated `.md`. Commit both files. When the `.md` did not change, because the
-   hook that renders it (`ceh-build-plan`) is not installed, say so in the reply.
+3. **Record the PR in its build plan.** The plans folder is `.agents_workspace/product/plans/`,
+   unless the repo's `CLAUDE.md` names another plans folder. The plan is the one the user names,
+   or else the one in that folder whose `record` has a Built Phase entry with no PR entry after
+   it. Append `- YYYY-MM-DD PR: #<n> <url>` to the `## Record` section at the end of that plan.
+   The plan then traces its change to the review that landed it. With no such plan, skip this
+   step. A plan with a `<slug>.yaml` beside its `.md` is a `plan/v2` plan: append to the YAML's
+   `record` list instead, as `date: YYYY-MM-DD`, `event: PR`, and `details: "#<n> <url>"`,
+   quoted because a bare `#` starts a YAML comment, and never edit its generated `.md`. Make no
+   source commit for a plan in the workspace. When the plans folder is tracked in the source repo
+   (`git ls-files <folder>` lists it), commit the plan, both files for a `plan/v2`, and push it to
+   the same branch. When the `.md` did not change, because the hook that renders it
+   (`ceh-build-plan`) is not installed, say so in the reply.
 4. Open as a **draft** while CI runs or the work is still settling, and mark it ready only once the
    self-review passes. A draft is safe to queue: auto-merge waits until the PR is marked ready.
    Request the reviewers the [approval rules](#approvals-and-merge-strategy) require.

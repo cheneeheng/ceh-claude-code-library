@@ -1,7 +1,8 @@
 # Architecture schema
 
-`product/ARCHITECTURE.md` in the target repo, committed, unless the repo's `CLAUDE.md` names another
-path. `ceh-codebase-explanation:document-architecture` writes it, and
+`.agents_workspace/product/ARCHITECTURE.yaml` in the target repo, with its Markdown rendered beside
+it, unless the repo's `CLAUDE.md` names another path. A reference to it names the `.yaml`.
+`ceh-codebase-explanation:document-architecture` writes it, and
 `ceh-build-plan:implement-from-plan` appends Key Decisions to it. This file is copied word for
 word into both plugins. A new file is a copy of `../assets/architecture.template.md`, relative to
 this file. The `schema: architecture/v2` line stays as written. A `v1` file gets its sections
@@ -43,14 +44,14 @@ numbered, a Contents list, and the `v2` line on its next update.
 
 An `architecture/v3` document is `ARCHITECTURE.yaml` beside the `ARCHITECTURE.md` it renders, a
 copy of `../assets/architecture.template.yaml`. The Markdown is generated in the `v2` layout above
-and committed beside it: nobody edits it, and it opens with `generated_from: ARCHITECTURE.yaml` and
+and saved beside it: nobody edits it, and it opens with `generated_from: ARCHITECTURE.yaml` and
 a do-not-edit `generated_note`. The renderer writes the section numbers, the Contents list and
 every anchor, so the YAML holds none of them. The format in code is `architecture-model.py` beside
 this file, and `scripts/artifact.py` in the skill checks and renders it through uv:
 
 ```bash
-uv run --script scripts/artifact.py check product/ARCHITECTURE.yaml   # errors, or a stale .md
-uv run --script scripts/artifact.py render product/ARCHITECTURE.yaml  # check, then write the .md
+uv run --script scripts/artifact.py check .agents_workspace/product/ARCHITECTURE.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render .agents_workspace/product/ARCHITECTURE.yaml  # check, then write the .md
 ```
 
 Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other
@@ -72,7 +73,8 @@ No title or name holds an em dash, which would leave a double hyphen in its anch
 in `|` blocks or quotes, because ` #` starts a YAML comment and a `: ` in a plain value breaks it.
 
 A `v1` or `v2` `ARCHITECTURE.md` with no YAML beside it is moved on its next update: write
-`ARCHITECTURE.yaml` from it, render, and check `git diff --word-diff` on the Markdown before the
-update itself. Text the YAML cannot hold goes in the nearest free-text field, and the reply names
-the move and any line the diff shows changed. A diagram set split into `product/architecture/`
-files moves back into the one YAML.
+`ARCHITECTURE.yaml` from it, render, and check `git diff --no-index --word-diff` between a copy of
+the old Markdown and the rendered one before the update itself, which works whether or not the
+folder is a git repo. Text the YAML cannot hold goes in the nearest free-text field, and the reply
+names the move and any line the diff shows changed. A diagram set split into files in an
+`architecture/` folder beside it moves back into the one YAML.

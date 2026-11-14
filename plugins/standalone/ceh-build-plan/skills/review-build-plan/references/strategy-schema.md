@@ -1,11 +1,13 @@
 # Strategy schema
 
-The `STRATEGY.md` that `write-vision-and-strategy` writes: how the repo gets to its vision, and how
-the next piece of work is chosen. It goes in `product/STRATEGY.md`, committed, because later sessions
-and other stages read it, and users of the product do not. An existing file at `STRATEGY.md`,
-`docs/STRATEGY.md`, or a path the repo's `CLAUDE.md` names stays there. A new file is a copy of
-`../assets/strategy.template.md`, relative to this file. The `schema: strategy/v1` line stays as
-written. Where this file and `VISION.md` disagree, the vision wins until it is changed on purpose.
+The strategy that `write-vision-and-strategy` writes: how the repo gets to its vision, and how the
+next piece of work is chosen. It goes in `.agents_workspace/product/STRATEGY.yaml`, with its
+Markdown rendered beside it, because later sessions and other stages read it, and users of the
+product do not. A reference to it names the `.yaml`. An existing file at `STRATEGY.md`,
+`docs/STRATEGY.md`, or a path the repo's `CLAUDE.md` names stays there. The `v1` layout below is
+what the Markdown keeps. A `v1` file is a copy of `../assets/strategy.template.md`, relative to
+this file, and its `schema: strategy/v1` line stays as written. Where this file and the vision
+disagree, the vision wins until it is changed on purpose.
 
 ## Frontmatter
 
@@ -40,7 +42,7 @@ and it never appears in an adopted file.
 
 A `strategy/v2` file is `STRATEGY.yaml` beside the `STRATEGY.md` it renders, a copy of
 `../assets/strategy.template.yaml`. The Markdown is generated in the `v1` layout above and
-committed beside it: nobody edits it, and it opens with `generated_from: STRATEGY.yaml` and a
+saved beside it: nobody edits it, and it opens with `generated_from: STRATEGY.yaml` and a
 do-not-edit `generated_note`. The format in code is `strategy-model.py` beside this file, and
 `scripts/artifact.py` in the skill checks and renders it through uv (`check <file>`, then
 `render <file>`). Exit `0` is valid, `1` lists each error with its field path, `2` is any other
@@ -59,4 +61,5 @@ list is `[]`. `status: adopted` with `[assumed]` anywhere in the file is an erro
 before Changing this file, so its old position is not kept.
 
 A `v1` `STRATEGY.md`, or one with no `schema:` line, is moved on its next update, as for the
-vision: write the YAML from it, render, and check `git diff --word-diff` on the Markdown first.
+vision: write the YAML from it, render, and check `git diff --no-index --word-diff` between a copy
+of the old Markdown and the rendered one first.
