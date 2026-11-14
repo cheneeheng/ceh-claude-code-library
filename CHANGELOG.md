@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-11-14
 
+`product/plans/subagent-workspace.yaml` plans how a subagent started in its own worktree gets
+the workspace: `ceh-git-workflow` runs its workspace sync on `SubagentStart` and `SubagentStop`,
+so the subagent can read plans and write records, and a PR it merges gets its checkpoint when it
+stops instead of waiting for its worktree to be deleted. A live run settles three unknowns
+before any code. Nothing is built yet. A review of the plan found that no session has yet lost a
+record or waited on a checkpoint because of the gap, so the user parked the plan as a draft
+until one does. In the meantime `agent-coding-contract` tells the caller of such a subagent to
+paste in what it must read from the workspace and to write its records itself.
+
 `product/plans/markdown-formats-yaml.yaml` plans YAML formats for the thirteen formats that
 `product/plans/consolidate-product-artifacts.yaml` left Markdown-only, as the user decided on
 2026-11-13: plan review, code review, refactor report, stress test, test audit, business plan
@@ -84,7 +93,7 @@ still tracks its plans commits the PR entry itself.
 | `ceh-build-plan`               | 2.0.10  |
 | `ceh-check-build-against-plan` | 1.1.17  |
 | `ceh-codebase-explanation`     | 1.3.13  |
-| `ceh-coding-conduct`           | 2.5.14  |
+| `ceh-coding-conduct`           | 2.5.15  |
 | `ceh-competitor-analysis`      | 1.2.12  |
 | `ceh-documentation`            | 1.0.11  |
 | `ceh-every-session`            | 2.9.20  |
@@ -112,6 +121,9 @@ still tracks its plans commits the PR entry itself.
 
 ### Changed
 
+- Say in the worktree-isolation rule of `ceh-coding-conduct:agent-coding-contract` that a
+  subagent's worktree has no `.agents_workspace`, and set
+  `product/plans/subagent-workspace.yaml` to `draft` with its review recorded.
 - Remove the tracked-folder commit from step 3 of `ceh-git-workflow:pull-request`, and record the
   build check in `product/plans/consolidate-product-artifacts.yaml`.
 - Keep `usage-limit-watch.py` silent when no statusline export exists, unless
