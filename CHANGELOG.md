@@ -11,6 +11,12 @@ before this repo live in
 
 ## 2026-11-14
 
+`product/plans/subagent-workspace.yaml` plans how a subagent started in its own worktree gets
+the workspace: `ceh-git-workflow` runs its workspace sync on `SubagentStart` and `SubagentStop`,
+so the subagent can read plans and write records, and a PR it merges gets its checkpoint when it
+stops instead of waiting for its worktree to be deleted. A live run settles three unknowns
+before any code. Nothing is built yet, so no plugin version changes.
+
 `product/plans/markdown-formats-yaml.yaml` plans YAML formats for the thirteen formats that
 `product/plans/consolidate-product-artifacts.yaml` left Markdown-only, as the user decided on
 2026-11-13: plan review, code review, refactor report, stress test, test audit, business plan
