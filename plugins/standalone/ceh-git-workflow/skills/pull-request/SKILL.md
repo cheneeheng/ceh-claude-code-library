@@ -52,9 +52,7 @@ Pick the path from the request, then run only that path:
    step. A plan with a `<slug>.yaml` beside its `.md` is a `plan/v2` plan: append to the YAML's
    `record` list instead, as `date: YYYY-MM-DD`, `event: PR`, and `details: "#<n> <url>"`,
    quoted because a bare `#` starts a YAML comment, and never edit its generated `.md`. Make no
-   source commit for a plan in the workspace. When the plans folder is tracked in the source repo
-   (`git ls-files <folder>` lists it), commit the plan, both files for a `plan/v2`, and push it to
-   the same branch. When the `.md` did not change, because the hook that renders it
+   source commit for the plan, wherever its folder is. When the `.md` did not change, because the hook that renders it
    (`ceh-build-plan`) is not installed, say so in the reply.
 4. Open as a **draft** while CI runs or the work is still settling, and mark it ready only once the
    self-review passes. A draft is safe to queue: auto-merge waits until the PR is marked ready.

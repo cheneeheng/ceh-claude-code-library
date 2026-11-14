@@ -63,6 +63,12 @@ check in `validate.py` fails on a root `product/` path or such a `.md` path anyw
 says where its files live and how a project with a root `product/` moves them. Phase 5 closes
 `product/plans/consolidate-product-artifacts.yaml`.
 
+`pull-request` no longer commits a build plan after it records the PR in it, wherever the plans
+folder is. A check of the build against `product/plans/consolidate-product-artifacts.yaml` found
+that the skill still committed the plan when the source repo tracked the plans folder, where the
+plan's design says the step makes no source commit. The user chose the plan's form. A repo that
+still tracks its plans commits the PR entry itself.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -75,7 +81,7 @@ says where its files live and how a project with a root `product/` moves them. P
 | `ceh-competitor-analysis`      | 1.2.12  |
 | `ceh-documentation`            | 1.0.11  |
 | `ceh-every-session`            | 2.9.20  |
-| `ceh-git-workflow`             | 1.5.17  |
+| `ceh-git-workflow`             | 1.5.18  |
 | `ceh-product-direction`        | 2.0.9   |
 | `ceh-python-service`           | 1.1.9   |
 | `ceh-security-audit`           | 1.1.12  |
@@ -99,6 +105,8 @@ says where its files live and how a project with a root `product/` moves them. P
 
 ### Changed
 
+- Remove the tracked-folder commit from step 3 of `ceh-git-workflow:pull-request`, and record the
+  build check in `product/plans/consolidate-product-artifacts.yaml`.
 - Keep `usage-limit-watch.py` silent when no statusline export exists, unless
   `CEH_USAGE_LIMIT_THRESHOLD` or `CEH_USAGE_STALE_MINUTES` is set or `~/.claude/statusline/`
   exists, with the plugin README, `docs/ENVIRONMENT_VARIABLES.md` and `docs/GETTING_STARTED.md`
