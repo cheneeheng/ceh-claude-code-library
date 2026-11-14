@@ -157,5 +157,6 @@ worktree already does.
 - 2026-11-14 Planned: status ready. The user reviews it, so no review-build-plan run.
 - 2026-11-14 Reviewed: Rethink, 2 blocking (no observed need, so park the plan; parallel subagents' detached
   merges into the main workspace can lose the index lock with no retry in the session)
+- 2026-11-14 PR: #295 https://github.com/cheneeheng/ceh-claude-code-library/pull/295
 
 <!-- prettier-ignore-end -->

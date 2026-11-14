@@ -177,3 +177,6 @@ record:
     details: |
       Rethink, 2 blocking (no observed need, so park the plan; parallel subagents' detached
       merges into the main workspace can lose the index lock with no retry in the session)
+  - date: 2026-11-14
+    event: PR
+    details: "#295 https://github.com/cheneeheng/ceh-claude-code-library/pull/295"
