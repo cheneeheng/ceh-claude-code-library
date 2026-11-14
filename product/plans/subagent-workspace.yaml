@@ -1,6 +1,6 @@
 schema: plan/v2
 title: A subagent in its own worktree gets the workspace and merges it back
-status: ready
+status: draft
 created: 2026-11-14
 goal: |
   A subagent started with `isolation: "worktree"` runs in `<project>/.claude/worktrees/agent-<id>/`,
@@ -145,6 +145,12 @@ phases:
       because it is a real model call. It needs the user's go before it runs.
     status: todo
 open:
+  - question: Has a session lost a record, or waited on a checkpoint, because a subagent ran in its own worktree?
+    assumption: |
+      No. The user parked this plan on 2026-11-14 until one does, so nothing here is built. Until
+      then the caller passes a worktree subagent what it must read and writes the records itself.
+      Before building, the two engineering findings of the 2026-11-14 review are fixed in Design:
+      `.agents_workspace/product/plan-reviews/20261114-185908-6f0d566f-9e02-4dd6-9b24-a22e9220cb81-subagent-workspace.md`.
   - question: What `cwd` does `SubagentStop` carry for a subagent in its own worktree?
     assumption: |
       The worktree root, as `SubagentStart` did on 2026-11-14. Phase 1 confirms it.
@@ -166,3 +172,8 @@ record:
   - date: 2026-11-14
     event: Planned
     details: status ready. The user reviews it, so no review-build-plan run.
+  - date: 2026-11-14
+    event: Reviewed
+    details: |
+      Rethink, 2 blocking (no observed need, so park the plan; parallel subagents' detached
+      merges into the main workspace can lose the index lock with no retry in the session)

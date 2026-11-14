@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: subagent-workspace.yaml
 generated_note: "Do not edit. artifact.py renders this file from subagent-workspace.yaml: edit the YAML, then run artifact.py render."
 title: A subagent in its own worktree gets the workspace and merges it back
-status: ready
+status: draft
 created: 2026-11-14
 ---
 
@@ -138,6 +138,10 @@ worktree already does.
 
 ## Open
 
+- Has a session lost a record, or waited on a checkpoint, because a subagent ran in its own worktree?: No. The user parked this plan on 2026-11-14 until one does, so nothing here is built. Until
+  then the caller passes a worktree subagent what it must read and writes the records itself.
+  Before building, the two engineering findings of the 2026-11-14 review are fixed in Design:
+  `.agents_workspace/product/plan-reviews/20261114-185908-6f0d566f-9e02-4dd6-9b24-a22e9220cb81-subagent-workspace.md`.
 - What `cwd` does `SubagentStop` carry for a subagent in its own worktree?: The worktree root, as `SubagentStart` did on 2026-11-14. Phase 1 confirms it.
 - Does Claude Code run `SubagentStop` before it removes an unchanged worktree?: Yes, since the hook reports the subagent's end and the removal is cleanup after it. Phase 1
   confirms it. If not, Design "If Phase 1 shows the worktree is removed before SubagentStop"
@@ -151,5 +155,7 @@ worktree already does.
 ## Record
 
 - 2026-11-14 Planned: status ready. The user reviews it, so no review-build-plan run.
+- 2026-11-14 Reviewed: Rethink, 2 blocking (no observed need, so park the plan; parallel subagents' detached
+  merges into the main workspace can lose the index lock with no retry in the session)
 
 <!-- prettier-ignore-end -->
