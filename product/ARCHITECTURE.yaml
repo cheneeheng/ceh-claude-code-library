@@ -36,3 +36,44 @@ key_decisions:
     consequences: |
       A queued auto-merge is checkpointed at a later Stop. Browser-only merges are not recorded.
       The installed-hook check against a real merged PR remains pending.
+  - date: 2026-11-13
+    title: Usage-limit warnings require evidence of setup
+    status: Accepted
+    context: |
+      Installing ceh-every-session does not configure a statusline quota export. An inactive
+      warning on every unconfigured session distracts users who never requested the guard.
+    decision: |
+      With no quota reading, warn once per session only when CEH_USAGE_LIMIT_THRESHOLD or
+      CEH_USAGE_STALE_MINUTES is present in the environment, or ~/.claude/statusline/ exists.
+      Otherwise return silently. Setting a variable to its default or an empty value still
+      counts as setup. Keep stale-reading warnings and the existing threshold behavior.
+    consequences: |
+      An unconfigured installation stays quiet. A configured guard with a missing or broken
+      export still reports that protection is inactive. No export script or new variable ships.
+  - date: 2026-11-13
+    title: Document the skill listing budget without changing user settings
+    status: Accepted
+    context: |
+      Skill descriptions can disappear when the listing exceeds its context budget, leaving
+      fewer keywords for Claude to match requests. Machine setup has its own draft plan.
+    decision: |
+      Keep an unnumbered troubleshooting section after the five install steps. Explain the
+      default 1% budget, /doctor and /skill-doctor, skillListingBudgetFraction at 0.02 for 2%,
+      and name-only skillOverrides as another way to free budget. Link the official skills docs.
+    consequences: |
+      Readers can diagnose missing descriptions and choose their setting. The install route
+      does not edit user settings or promise an unshipped setup script.
+  - date: 2026-11-13
+    title: Keep branch cleanup rules consistent with pull-request
+    status: Accepted
+    context: |
+      The user's branch cleanup rule requested deletion on origin even when GitHub already
+      deleted the head branch, while pull-request leaves remote cleanup to the repository setting.
+    decision: |
+      Keep pull-request unchanged. The user's rule deletes the local branch and leftover
+      worktree, and deletes the branch on origin only where GitHub did not already delete it.
+      Record the amendment beside the original answer in the user's separate rule repository.
+    consequences: |
+      GitHub's Automatically delete head branches setting remains the primary remote cleanup
+      mechanism. The amendment records intent for later readers and the weekly lessons job,
+      whose handling of that note has not been checked.

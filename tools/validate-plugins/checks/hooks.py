@@ -53,6 +53,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         }
         (sl / "s.jsonl").write_text(json.dumps(record) + "\n", encoding="utf-8")
     (tmp / "home-empty").mkdir()
+    (tmp / "home-export-empty" / ".claude" / "statusline").mkdir(parents=True)
 
     def home(name: str) -> dict:
         h = str(tmp / name)
@@ -1149,8 +1150,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "bulk-read-bash-guard.py", "stdin": bash(f"tail -n +2 {big_p}"), "env": bulk, "out": "Blocked:"},
         {"script": "bulk-read-bash-guard.py", "stdin": bash(f"cat {big_p}"), "env": bulk, "repeat": 4, "out": "denial 4"},
         {"script": "bulk-read-bash-guard.py", "stdin": bash(f"cat {big_p}"), "env": {**bulk, "BULK_READER_ALLOW": os.pathsep.join(["*.nope", big_p])}, "out": ""},
-        # usage-limit-watch: warn with no sensor, block over the threshold, quiet under it.
-        {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-empty"), "code": 1, "err": "INACTIVE"},
+        # usage-limit-watch: quiet unless configured, warn with no sensor, block over threshold.
+        {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-empty"), "out": ""},
+        {"script": "usage-limit-watch.py", "stdin": any_tool, "env": {**home("home-empty"), "CEH_USAGE_LIMIT_THRESHOLD": "90"}, "code": 1, "err": "INACTIVE"},
+        {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-export-empty"), "code": 1, "err": "INACTIVE"},
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-95"), "code": 2, "err": "usage-limit-handoff"},
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": home("home-50"), "out": ""},
         {"script": "usage-limit-watch.py", "stdin": any_tool, "env": {**home("home-empty"), "CEH_DISABLED_HOOKS": "usage-limit-watch"}, "out": ""},

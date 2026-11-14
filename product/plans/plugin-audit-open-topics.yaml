@@ -1,6 +1,6 @@
 schema: plan/v2
 title: Close the plugin audit topics the user decided on 2026-11-13
-status: ready
+status: built
 created: 2026-11-13
 goal: |
   After `plugin-audit-findings` and `handoff-leftovers` were built, four topics of the 2026-11-11
@@ -170,11 +170,14 @@ design:
       this plan's record.
   - topic: Versions and landing
     decision: |
-      Phase 1 is one PR: a PATCH bump of `ceh-every-session` in `plugin.json`,
+      All library changes are prepared together on one branch for one future PR: a PATCH bump
+      of `ceh-every-session` in `plugin.json`,
       `marketplace.json` and `docs/PLUGIN_VERSIONS.md`, from whatever `main` holds when it is
       built (2.9.15 on 2026-11-13), with its `CHANGELOG.md` entry under the PR's dated section.
-      Phase 2 is one PR with a `CHANGELOG.md` entry and no version change. Phase 3 has no PR
-      here.
+      Phase 2 shares that branch and `CHANGELOG.md` entry with no additional version change.
+      Phase 3 remains a separate commit and push in `~/claude-meta`, with its evidence recorded
+      here. Commit and push the implementation, but do not open or merge a PR yet, as the user
+      instructed on 2026-11-13.
 phases:
   - name: The usage-limit guard is quiet without the export
     builds: |
@@ -191,7 +194,12 @@ phases:
       `git grep -c "once-per-session warning" -- docs/ENVIRONMENT_VARIABLES.md` prints a count
       of 2, and
       `git grep -c "once a statusline export feeds it" -- docs/GETTING_STARTED.md` a count of 1.
-    status: todo
+    status: done
+    evidence: |
+      `python tools/validate-plugins/validate.py`: OK: all plugin checks passed, after the
+      2.9.16 bump. Before implementation the quiet fixture failed: exit 1, expected 0,
+      INACTIVE. Both obsolete-warning greps returned no matches. Environment variable
+      documentation grep counted 2 and the getting-started prerequisite grep counted 1.
   - name: The install guide says how to raise the listing budget
     builds: |
       "Phase 2: the guide section", with its `CHANGELOG.md` entry.
@@ -201,7 +209,14 @@ phases:
       `git grep -n "^## If a skill stops triggering" -- docs/GETTING_STARTED.md` shows the new
       heading, `git grep -n "^## 6" -- docs/GETTING_STARTED.md` prints nothing, and
       `python tools/validate-plugins/validate.py` prints `OK: all plugin checks passed`.
-    status: todo
+    status: done
+    evidence: |
+      `python tools/validate-plugins/validate.py`: OK: all plugin checks passed.
+      `git grep -c "skillListingBudgetFraction" -- docs/GETTING_STARTED.md`: 1.
+      The unnumbered heading grep found line 234 and the `^## 6` grep found nothing.
+      Checked the wording against https://code.claude.com/docs/en/skills on 2026-11-13.
+    note: |
+      Test-first skipped because this phase changes documentation only.
   - name: The user's branch rule agrees with pull-request
     builds: |
       "Phase 3: the reworded rule".
@@ -212,7 +227,15 @@ phases:
       `git -C ~/claude-meta log -1 --format=%s -- SOUL.md` shows the `soul:` commit, and
       `git -C ~/claude-meta status -sb` shows the branch not ahead of its remote. No command
       in this repository proves it, because the files live outside it.
-    status: todo
+    status: done
+    evidence: |
+      `git -C ~/claude-meta log -1 --format=%s -- SOUL.md`: soul: align merged branch cleanup
+      with pull-request (b3e0efe), pushed to origin/main. `git -C ~/claude-meta status -sb`:
+      main...origin/main, clean and not ahead. PowerShell Select-String equivalents of the
+      two grep counts each printed 1. The rule contains "only where GitHub did not already"
+      and no longer contains "both locally and on origin".
+    note: |
+      Test-first skipped because this phase changes a prose rule and its recorded answer.
 open:
   - question: |
       Does the weekly lessons job in `~/claude-meta` read the note in
@@ -246,3 +269,57 @@ record:
   - date: 2026-11-13
     event: PR
     details: "#283 https://github.com/cheneeheng/ceh-claude-code-library/pull/283"
+  - date: 2026-11-13
+    event: Design changed
+    details: |
+      Was "Phase 1 is one PR" and "Phase 2 is one PR", now all library phases share one branch
+      for one future PR, because the user requested all phases in one PR. The user then
+      instructed "dont open the pr yet, just commit and push the implementation". Phase 3
+      still needs its separate repository commit and push, with evidence in this plan.
+  - date: 2026-11-13
+    event: Built Phase
+    phase: 1
+    details: |
+      `python tools/validate-plugins/validate.py`: OK: all plugin checks passed. Quiet fixture
+      seen failing before implementation. Documentation greps returned the planned counts.
+  - date: 2026-11-13
+    event: Built Phase
+    phase: 2
+    details: |
+      `python tools/validate-plugins/validate.py`: OK: all plugin checks passed. The guide
+      grep checks passed. No user settings changed and no additional version bump.
+  - date: 2026-11-13
+    event: Built Phase
+    phase: 3
+    details: |
+      claude-meta commit b3e0efe, soul: align merged branch cleanup with pull-request, pushed
+      to origin/main. One matching branch rule, one dated amendment, clean synchronized branch.
+  - date: 2026-11-13
+    event: Checked
+    details: |
+      20 Built: 4 Scope In items, 6 Scope Out exclusions, 7 Design decisions and 3 phase
+      Checks. No Gap, Deviation, Extra or Failing items. Library checks passed and claude-meta
+      b3e0efe is clean and synchronized with origin/main. The weekly lessons job remains
+      unverified as explicitly assumed under Open. No PR opened, per the user's instruction.
+  - date: 2026-11-14
+    event: Checked
+    details: |
+      19 Built, 1 Cannot verify, 1 Extra, no Gap, Deviation or Failing, on branch commit
+      a5ed9ca. Cannot verify: "Versions and landing", the `CHANGELOG.md` entry sits under
+      `## 2026-11-13` and no PR is open yet, so whether that is the PR's dated section is
+      settled only when the PR opens. The entry is prose and the version table, with no line
+      under `### Changed` or `### Fixed`. Extra: three Key Decisions added to
+      `product/ARCHITECTURE.yaml` and its `.md`, which the plan does not list, the third for
+      Phase 3, where the plan says nothing in this repository changes but this plan's record.
+      All three phase Checks rerun and passing. The script on `main` exits 1 with INACTIVE on
+      an empty home and the branch's exits 0.
+  - date: 2026-11-14
+    event: Design changed
+    details: |
+      Was "do not open or merge a PR yet", now the PR is opened and merged, because the user
+      said on 2026-11-14 to keep the three architecture entries, "then open the pr and merge".
+      The `CHANGELOG.md` entry moved to a `## 2026-11-14` section, the day the PR opens, with
+      its version row and Added and Changed lines, which settles the Cannot verify item.
+  - date: 2026-11-14
+    event: PR
+    details: "#285 https://github.com/cheneeheng/ceh-claude-code-library/pull/285"
