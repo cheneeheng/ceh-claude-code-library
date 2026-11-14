@@ -798,8 +798,35 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ok = md.is_file() and "a &#92;\\| b" in md.read_text(encoding="utf-8")
         return None if ok else f"{md.name} lost the backslash before a pipe"
 
+    # plan and previous: the workspace path, the old root form a record saved earlier holds, and a
+    # path outside both, which the model rejects.
+    fix_paths = {
+        "new": (
+            ".agents_workspace/product/plans/wordy.yaml",
+            ".agents_workspace/product/fixes/old.yaml",
+        ),
+        "old": ("product/plans/wordy.md", "product/fixes/old.md"),
+        "bad": ("product/plans/wordy.yaml", "docs/fixes/old.md"),
+    }
+    for form, (plan_path, previous) in fix_paths.items():
+        p = tmp / "report-fix-paths" / form / "count-drops-last-word.yaml"
+        p.parent.mkdir(parents=True)
+        p.write_text(
+            good_fix + f"plan: {plan_path}\nprevious: {previous}\n", encoding="utf-8"
+        )
+
+    def fix_path(form: str, plugin: str, out: str) -> dict:
+        p = tmp / "report-fix-paths" / form / "count-drops-last-word.yaml"
+        return {
+            "script": f"{plugin}/artifact-render-hook.py",
+            "stdin": write_at(p),
+            "out": out,
+        }
+
     fix_record_fixtures = ([
         {"script": f"{cc}/artifact-render-hook.py", "stdin": write_at(fix_pipe), "out": "", "after": fix_pipe_kept},
+        *[fix_path(form, plugin, "previous" if form == "bad" else "")
+          for plugin in (cc, "ceh-testing") for form in fix_paths],
     ] if have_uv else []) + [
         *report_fixtures(cc, "count-drops-last-word", good_fix, no_confirmed, "diagnosis.rows", "# Count drops the last word", "fix-cc"),
         *report_fixtures("ceh-testing", "count-drops-last-word", good_fix, no_confirmed, "diagnosis.rows", "# Count drops the last word", "fix-testing"),

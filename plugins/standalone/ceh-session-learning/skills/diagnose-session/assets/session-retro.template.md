@@ -1,8 +1,7 @@
 ---
-schema: session-retro/v1
+schema: session-retro/v2
 session: <session-id>
 date: YYYY-MM-DD
-other_file: <path, or none>
 ---
 
 # Session diagnosis: <session-id>, YYYY-MM-DD

@@ -24,10 +24,11 @@ waiting for the user's approval.
 
 ## Procedure
 
-1. **Pick up pending drafts.** In `product/retros/` and `.agents_workspace/product/retros/`, find
+1. **Pick up pending drafts.** In `.agents_workspace/product/retros/`, or the retros folder the
+   repo's `CLAUDE.md` names, find
    every report named `<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake` or, in the older form,
-   `<YYYY-MM-DD>-repeat-mistake`, `.yaml` or `.md`, and read each
-   once per folder, the YAML when there is one. A labelled name such as
+   `<YYYY-MM-DD>-repeat-mistake`, `.yaml` or `.md`, and read each once, the YAML when there is
+   one. A labelled name such as
    `<YYYY-MM-DD>-<label>-repeat-mistake.md`, with a label before `repeat-mistake`, is not a report. Before reading a YAML, run
    `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml`. On exit 1, use
    nothing from that report, report its errors, and say the intake is incomplete, never that no
@@ -76,20 +77,16 @@ waiting for the user's approval.
 
 ## Output
 
-Save by where each fix lands, adding to today's file when it exists and creating the directory if
-needed. Fixes that land in the current repository go to
-`product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, committed with the first fix applied, because a
-later session working in the repo reads it. Mask secrets in every text value as `<secret>`: a
-committed file leaves the machine on the next push. Fixes outside it (user settings, the global
-`CLAUDE.md`, memory, an installed plugin) go to
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, local, because only the user
-acts on them, and saving one there authorizes no commit of it or its drafts. When both files exist,
-each links the other through `other_file`: check both links once both are saved, and report a pair
-left half-updated. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`. Reply with the same table. Each fix awaiting approval carries its full draft, so
+Save one report, adding to today's file when it exists and creating the directory if needed:
+`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, with
+`other_file: null`. It holds both the fixes that land in the current repository and those outside
+it (user settings, the global `CLAUDE.md`, memory, an installed plugin), because a later session
+working in the repo reads it, and saving it authorizes no commit of a draft. Mask secrets in every
+text value as `<secret>`, because the workspace may be pushed to a remote. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`. Reply with the same table. Each fix awaiting approval carries its full draft, so
 a later session can apply it from the file alone. When a draft is applied or rejected, change that
 fix's `status` in the file it was saved in, keeping its draft and evidence.
 
-Each file fills `assets/repeat-mistake.template.yaml`, per the `repeat-mistake/v2` section of
+The report fills `assets/repeat-mistake.template.yaml`, per the `repeat-mistake/v2` section of
 `references/repeat-mistake-schema.md`, which also says how a new fix takes its `id`, how a retry
 avoids a duplicate, and how a `v1` `.md` is converted before it is amended. After the last edit,
 run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which checks it

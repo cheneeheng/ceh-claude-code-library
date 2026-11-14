@@ -256,7 +256,7 @@ coming back.
   `grep -rnE "(^|[^/a-z_])product/(fixes|retros)" plugins/standalone docs/RETRO_WORKFLOW.md`
   prints only the old form inside the two `fix-record-model.py` patterns, and Phase 3's grep
   run without its `--exclude` prints only the lines under "References that stay Markdown".
-- **Status:** todo
+- **Status:** done, python tools/validate-plugins/validate.py: OK: all plugin checks passed; the fixes/retros grep printed only the two fix-record-model.py patterns, and Phase 3's grep without --exclude added only the PlanPath patterns of the same two files
 
 ### Phase 5: Remaining YAML references, the validator check and the docs
 
@@ -301,5 +301,8 @@ coming back.
 - 2026-11-14 Built Phase 3: tools/validate-plugins/validate.py: OK: all plugin checks passed. The Phase 3 grep printed
   only the old-path move note in implement-from-plan step 1.
 - 2026-11-14 PR: #290 https://github.com/cheneeheng/ceh-claude-code-library/pull/290
+- 2026-11-14 Built Phase 4: tools/validate-plugins/validate.py: OK: all plugin checks passed. The fixes/retros grep
+  printed only the old form inside the two fix-record-model.py patterns. The new path
+  fixture failed against the ceh-testing model before the canonical model was copied to it.
 
 <!-- prettier-ignore-end -->

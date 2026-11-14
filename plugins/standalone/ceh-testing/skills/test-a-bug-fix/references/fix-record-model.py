@@ -1,7 +1,7 @@
 """fix-record/v2: the fix record's model and its Markdown renderer.
 
 The format in code, per fix-record-schema.md beside this file: `artifact.py` validates a
-`product/fixes/<slug>.yaml` with `MODEL` and writes `render(doc, source)` beside it, in the
+`.agents_workspace/product/fixes/<slug>.yaml` with `MODEL` and writes `render(doc, source)` beside it, in the
 `fix-record/v1` layout. Copied word for word into every skill that holds fix-record-schema.md.
 """
 
@@ -21,9 +21,15 @@ Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 Line = Annotated[
     str, StringConstraints(strip_whitespace=True, min_length=1, pattern=r"^[^\n]*$")
 ]
-PlanPath = Annotated[str, StringConstraints(pattern=r"^product/plans/\S+$")]
-# The earlier record's .md, which exists for a v1 and a v2 record alike.
-FixPath = Annotated[str, StringConstraints(pattern=r"^product/fixes/\S+\.md$")]
+# The workspace path, or the old root form a record saved before 2026-11-14 holds.
+PlanPath = Annotated[
+    str, StringConstraints(pattern=r"^(\.agents_workspace/)?product/plans/\S+$")
+]
+# The earlier record's .yaml (v2) or .md (v1).
+FixPath = Annotated[
+    str,
+    StringConstraints(pattern=r"^(\.agents_workspace/)?product/fixes/\S+\.(yaml|md)$"),
+]
 
 
 class _Strict(BaseModel):

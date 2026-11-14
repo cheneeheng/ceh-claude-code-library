@@ -51,8 +51,8 @@ The build record guard denies an edit that adds a `- YYYY-MM-DD Built Phase` lin
 `.agents_workspace/product/plans/`, unless `implement-from-plan` was started in the session, by the Skill tool or
 its slash command. A Built Phase line is the plan's evidence that a phase was built test first and
 proven by its own check, so a line written by hand records a build that procedure never ran. It
-happened once: a session hand-wrote three Built lines, recorded in
-`product/retros/2026-10-26-repeat-mistake.md` in this library's repo. Built lines already in the
+happened once: a session hand-wrote three Built lines, recorded in the repeat-mistake report of
+2026-10-26 in this library's repo. Built lines already in the
 file do not count, so rewriting a plan that has them passes. The guard fails open: unparseable
 input or a missing transcript allows the edit. In a `plan/v2` YAML plan, it guards a new
 `event: Built Phase` record entry the same way.

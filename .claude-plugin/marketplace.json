@@ -11,13 +11,13 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.9.18",
+      "version": "2.9.19",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, context economy via delegated bulk reads, and replies folded to their summary."
     },
     {
       "name": "ceh-coding-conduct",
       "source": "./plugins/standalone/ceh-coding-conduct",
-      "version": "2.5.12",
+      "version": "2.5.13",
       "description": "CEH coding conduct: how an agent behaves while it codes — the behavior contract and five-step workflow, write-less-code minimalism, finding a bug's root cause before fixing it, and retroactive refactoring of a branch or a whole repo."
     },
     {
@@ -29,13 +29,13 @@
     {
       "name": "ceh-git-workflow",
       "source": "./plugins/standalone/ceh-git-workflow",
-      "version": "1.5.15",
+      "version": "1.5.16",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, code review, and addressing review comments. Stack-agnostic."
     },
     {
       "name": "ceh-testing",
       "source": "./plugins/standalone/ceh-testing",
-      "version": "1.6.21",
+      "version": "1.6.22",
       "description": "CEH testing techniques: stack-agnostic test design and verification moments — write the failing test before new code, reproduce a bug before fixing it, choose test inputs systematically, audit whether a green suite is trustworthy, prove a refactor preserved behavior, explore the running app for bugs, and close the risk gaps functional tests structurally miss."
     },
     {
@@ -71,7 +71,7 @@
     {
       "name": "ceh-build-plan",
       "source": "./plugins/standalone/ceh-build-plan",
-      "version": "2.0.8",
+      "version": "2.0.9",
       "description": "CEH build plan: plan a change and build it from the plan. Decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check, and review the plan before anyone builds from it. Then build it phase by phase, test first, implementing only what each phase names and proving it with the phase's own check, with the evidence recorded in the plan."
     },
     {
@@ -113,7 +113,7 @@
     {
       "name": "ceh-session-learning",
       "source": "./plugins/standalone/ceh-session-learning",
-      "version": "2.0.2",
+      "version": "2.0.3",
       "description": "CEH session learning: turn one Claude Code session's transcript into something durable. When the session went wrong, parallel analysts find why, every finding citing a transcript line and each root cause routed to a fix, with a scrubbed copy for sharing. When it went right, the steps that worked become a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments."
     },
     {

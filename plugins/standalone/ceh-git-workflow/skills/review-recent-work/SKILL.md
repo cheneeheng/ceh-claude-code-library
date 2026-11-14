@@ -22,7 +22,7 @@ repo's scope has been handed to its route, and the path, headline numbers, and r
 ## Procedure
 
 1. **Fix the period.** From `$ARGUMENTS`, otherwise from the day after the newest
-   `product/retros/*-period.md`, its date read from the start of the name in either form
+   `.agents_workspace/product/retros/*-period.md`, its date read from the start of the name in either form
    (`<YYYYMMDD-HHMMSS>` or the older `<YYYY-MM-DD>`), otherwise the last 14 days. State both dates in the retro.
 2. **Collect the history.** Every number comes from a command, and the retro names the command:
 
@@ -80,9 +80,8 @@ repo's scope has been handed to its route, and the path, headline numbers, and r
 
 ## Output
 
-Save by where each fix lands, creating the directory if needed. The retro and its in-scope issues
-go to `product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.md`, committed with the first fix it routes, because the
-next retro and the routed work read it. Out-of-scope issues go to
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.md`, local, because only the user acts on them. When
-both files exist, each links the other through `other_file`. Each file fills
-`assets/period-retro.template.md`, per `references/period-retro-schema.md`. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+Save one file, creating the directory if needed:
+`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.md`, holding the retro and
+every issue, those fixed in this repo and those left for the user, because the next retro and the
+routed work read it. It fills `assets/period-retro.template.md`, per
+`references/period-retro-schema.md`. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
