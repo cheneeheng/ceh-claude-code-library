@@ -146,3 +146,7 @@ transcript, so it starts the skill itself. It fails open. `CEH_SKILL_STARTED_GUA
 ```bash
 python3 skills/update-changelog/scripts/check-semver.py CHANGELOG.md
 ```
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.

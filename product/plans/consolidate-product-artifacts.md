@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: consolidate-product-artifacts.yaml
 generated_note: "Do not edit. artifact.py renders this file from consolidate-product-artifacts.yaml: edit the YAML, then run artifact.py render."
 title: Every product artifact a skill saves goes to .agents_workspace/product/
-status: building
+status: built
 created: 2026-11-13
 ---
 
@@ -272,7 +272,7 @@ coming back.
 - **Check:** `python tools/validate-plugins/validate.py` exits 0. With one skill line changed back to
   `product/plans/<slug>.md` it exits 1 naming that file and line, and exits 0 again once the
   line is restored.
-- **Status:** todo
+- **Status:** done, python tools/validate-plugins/validate.py: OK: all plugin checks passed; with whats-next SKILL.md:66 changed to product/plans/<slug>.md it exited 1 naming that file and line, and 0 once restored
 
 ## Open
 
@@ -305,5 +305,8 @@ coming back.
   printed only the old form inside the two fix-record-model.py patterns. The new path
   fixture failed against the ceh-testing model before the canonical model was copied to it.
 - 2026-11-14 PR: #291 https://github.com/cheneeheng/ceh-claude-code-library/pull/291
+- 2026-11-14 Built Phase 5: tools/validate-plugins/validate.py: OK: all plugin checks passed. With whats-next SKILL.md:66
+  changed back to product/plans/<slug>.md it exited 1 naming that file and line, and exited 0
+  once the line was restored.
 
 <!-- prettier-ignore-end -->

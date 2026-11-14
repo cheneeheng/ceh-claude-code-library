@@ -50,3 +50,7 @@ Both load only when you ask, so other sessions pay nothing for them.
   recovered steps need that shape and the builder is installed, `turn-session-into-skill` hands
   them over.
 - Adding a skill to the ceh plugin repo itself.
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.

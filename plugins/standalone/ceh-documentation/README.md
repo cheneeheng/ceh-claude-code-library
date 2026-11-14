@@ -88,3 +88,7 @@ metadata are expressed in frontmatter or nav config, never by renaming a file ou
   git, so it fires on a git moment, not a documentation one.
 - A maintainer architecture document belongs to `ceh-codebase-explanation:document-architecture`, and a
   per-module codebase walkthrough to `ceh-codebase-explanation:explain-codebase`.
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.

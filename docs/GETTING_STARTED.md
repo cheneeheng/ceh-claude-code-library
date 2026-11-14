@@ -132,23 +132,25 @@ of `<plugin>`:
 /plugin install <plugin>@ceh-claude-code-library --scope project
 ```
 
-Each moment names the plugin, the command that starts it, and the file it writes.
+Each moment names the plugin, the command that starts it, and the file it writes. Every product
+file goes in `.agents_workspace/product/`. A project that kept them in a root `product/` moves each
+file to the same sub-path under `.agents_workspace/product/`, or names its location in `CLAUDE.md`.
 
 **Shape**
 
 - Test whether an idea is worth building: install `ceh-product-direction`, start with
   `/ceh-product-direction:develop-business-plan`. Writes
-  `.agents_workspace/product/business/BUSINESS_PLAN.md`.
+  `.agents_workspace/product/business/BUSINESS_PLAN.yaml`.
 - Learn from a competitor's repo or product: install `ceh-competitor-analysis`, start with
   `/ceh-competitor-analysis:analyze-competitor`. Writes reports in `.agents_workspace/`.
 - Write down the repo's direction: the same plugin, start with
-  `/ceh-product-direction:write-vision-and-strategy`. Writes `product/VISION.md` and
-  `product/STRATEGY.md`.
+  `/ceh-product-direction:write-vision-and-strategy`. Writes
+  `.agents_workspace/product/VISION.yaml` and `.agents_workspace/product/STRATEGY.yaml`.
 
 **Build**
 
 - Plan a new app or one feature: install `ceh-build-plan`, start with
-  `/ceh-build-plan:write-build-plan`. Writes `product/plans/<slug>.yaml` and the
+  `/ceh-build-plan:write-build-plan`. Writes `.agents_workspace/product/plans/<slug>.yaml` and the
   `<slug>.md` generated from it, and deleting both discards the plan. It needs `uv` to check and
   render the plan, and saves it unchecked without.
 - Build from that plan: the same plugin and your stack plugin (below), start with
@@ -162,7 +164,7 @@ Each moment names the plugin, the command that starts it, and the file it writes
   `/ceh-check-build-against-plan:check-build-against-plan`. Reports in the session.
 - Test it and roll up the evidence: `ceh-testing` (a stack plugin already brings it), start with
   `/ceh-testing:explore-app-for-bugs`, then `/ceh-testing:write-evidence-report`. Writes
-  `product/EVIDENCE.yaml` and the `EVIDENCE.md` generated from it. It needs `uv` to check and
+  `.agents_workspace/product/EVIDENCE.yaml` and the `EVIDENCE.md` generated from it. It needs `uv` to check and
   render the report, and saves it unchecked without.
 - Check a stranger can use it: install `ceh-usability-audit`, start with
   `/ceh-usability-audit:simulate-newcomer-first-run`. Writes a report in `.agents_workspace/product/`.
@@ -200,7 +202,7 @@ Then, when you build from the plan:
 
 Run `/reload-plugins` after each install, so the new skills load.
 
-The Tell stage reads `.agents_workspace/product/business/BUSINESS_PLAN.md` and `product/EVIDENCE.md` when they exist. Without them it
+The Tell stage reads `.agents_workspace/product/business/BUSINESS_PLAN.yaml` and `.agents_workspace/product/EVIDENCE.yaml` when they exist. Without them it
 still runs, and says which claims rest on nothing proven.
 
 ## 4. Add these only when the moment arrives

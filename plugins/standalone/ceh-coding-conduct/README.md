@@ -120,3 +120,7 @@ The `agent-coding-contract` skill is the single source of truth. In short, it re
 
 Refer to the skill for the authoritative wording — this section is a summary and is not the contract
 itself.
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.

@@ -1,8 +1,9 @@
 # First-run audit schema
 
 The report `simulate-newcomer-first-run` writes to
-`.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.md`, with a zero-padded run index so a
-re-run never overwrites a prior run's evidence, and the raw walker transcripts beside it. Its
+`.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.yaml`, with its `.md` rendered
+beside it, a zero-padded run index so a re-run never overwrites a prior run's evidence, and the raw
+walker transcripts beside it. A reference to it names the `.yaml`. Its
 layout is `../assets/first-run-audit.template.md`, relative to this file. A new report is written
 as `first-run-audit/v2` YAML, per the section at the end, and an older `first-run-audit/v1` report
 stays as written, its `schema:` line included.

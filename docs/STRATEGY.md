@@ -210,10 +210,8 @@ it installed be disabled. A document carries the route at no install cost. The b
 
 This list shrinks as the gaps close. Remove a line in the PR that closes it.
 
-- The plugins still save and read plans, vision, strategy, architecture, evidence, fix records and
-  retros in root `product/`. They move to `.agents_workspace/product/` in the later phases of
-  `product/plans/consolidate-product-artifacts.yaml`. This repo's own `product/` stays until a plan
-  of its own moves it.
+- This repo keeps its own product artifacts in a root `product/`, named in its `CLAUDE.md`, until a
+  plan of its own moves them to `.agents_workspace/product/`.
 
 ## Open questions
 

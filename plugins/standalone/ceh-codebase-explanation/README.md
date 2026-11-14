@@ -41,3 +41,7 @@ project's unrelated `GLOSSARY.yaml` is left alone. The guard denies a direct edi
 Markdown file and names its YAML. Both need `uv`: without it the agent is told once per session
 that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS` with
 `artifact-render-hook` or `generated-md-guard`, switches them off.
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.

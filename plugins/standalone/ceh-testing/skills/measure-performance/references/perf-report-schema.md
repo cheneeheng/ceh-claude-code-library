@@ -1,7 +1,7 @@
 # Perf report schema
 
-The file `measure-performance` keeps at `.agents_workspace/product/perf/<metric>.md`, one per
-metric. Its layout is `../assets/perf-report.template.md`, relative to this file. The file is
+The file `measure-performance` keeps at `.agents_workspace/product/perf/<metric>.yaml`, one per
+metric, with its `.md` rendered beside it. A reference to it names the `.yaml`. Its layout is `../assets/perf-report.template.md`, relative to this file. The file is
 written as `perf-report/v2` YAML, per the section at the end, and a `perf-report/v1` file is moved
 to it on its next attempt.
 

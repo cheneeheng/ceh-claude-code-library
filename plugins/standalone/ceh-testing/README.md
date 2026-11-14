@@ -91,3 +91,7 @@ coding session triggers them. Listed so a gap reads as a decision rather than an
 | MC/DC, condition and def-use path coverage                         | Cost far exceeds diff-scoped mutation testing outside regulated domains. Noted in `audit-test-suite` rather than taught.                                                                      |
 | Model-based testing, usability, localization, cross-browser/device | Either manual practice or a tooling investment; no in-session trigger moment. Exploratory, charter-based testing is in, as `explore-app-for-bugs`, since "QA this" is a moment.               |
 | Runner, fixtures, mocking library, coverage thresholds, CI wiring  | The stack testing skills own these by design.                                                                                                                                                 |
+
+## Where its files live
+
+Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.
