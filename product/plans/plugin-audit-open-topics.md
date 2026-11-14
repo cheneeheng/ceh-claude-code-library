@@ -250,5 +250,18 @@ a whole session without one line about a guard they did not ask for.
   Checks. No Gap, Deviation, Extra or Failing items. Library checks passed and claude-meta
   b3e0efe is clean and synchronized with origin/main. The weekly lessons job remains
   unverified as explicitly assumed under Open. No PR opened, per the user's instruction.
+- 2026-11-14 Checked: 19 Built, 1 Cannot verify, 1 Extra, no Gap, Deviation or Failing, on branch commit
+  a5ed9ca. Cannot verify: "Versions and landing", the `CHANGELOG.md` entry sits under
+  `## 2026-11-13` and no PR is open yet, so whether that is the PR's dated section is
+  settled only when the PR opens. The entry is prose and the version table, with no line
+  under `### Changed` or `### Fixed`. Extra: three Key Decisions added to
+  `product/ARCHITECTURE.yaml` and its `.md`, which the plan does not list, the third for
+  Phase 3, where the plan says nothing in this repository changes but this plan's record.
+  All three phase Checks rerun and passing. The script on `main` exits 1 with INACTIVE on
+  an empty home and the branch's exits 0.
+- 2026-11-14 Design changed: Was "do not open or merge a PR yet", now the PR is opened and merged, because the user
+  said on 2026-11-14 to keep the three architecture entries, "then open the pr and merge".
+  The `CHANGELOG.md` entry moved to a `## 2026-11-14` section, the day the PR opens, with
+  its version row and Added and Changed lines, which settles the Cannot verify item.
 
 <!-- prettier-ignore-end -->

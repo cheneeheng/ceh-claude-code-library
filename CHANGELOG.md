@@ -9,7 +9,7 @@ before this repo live in
 
 ---
 
-## 2026-11-13
+## 2026-11-14
 
 The usage-limit guard stays quiet when no statusline export exists and the user has not set
 either guard variable. Users who set a guard variable or have an export folder still receive
@@ -17,6 +17,28 @@ the once-per-session inactive warning when no quota reading is available.
 
 The install guide explains how to inspect the skill listing's context cost and raise its budget
 with `skillListingBudgetFraction` when descriptions disappear and skills stop triggering.
+
+### Plugin versions
+
+| Plugin              | Version |
+| ------------------- | ------- |
+| `ceh-every-session` | 2.9.16  |
+
+### Added
+
+- Add the section "If a skill stops triggering, raise the listing budget" to
+  `docs/GETTING_STARTED.md`.
+- Add three Key Decisions to `product/ARCHITECTURE.yaml`, one per phase of
+  `product/plans/plugin-audit-open-topics.yaml`.
+
+### Changed
+
+- Keep `usage-limit-watch.py` silent when no statusline export exists, unless
+  `CEH_USAGE_LIMIT_THRESHOLD` or `CEH_USAGE_STALE_MINUTES` is set or `~/.claude/statusline/`
+  exists, with the plugin README, `docs/ENVIRONMENT_VARIABLES.md` and `docs/GETTING_STARTED.md`
+  to match.
+
+## 2026-11-13
 
 Workspace sync commits now use `chore(workspace): sync worktree <worktree folder>`,
 limited to 72 characters, so scripted commits follow the commit skill's message rules.
@@ -135,7 +157,7 @@ names. Any other agent is still denied. The plan is now built.
 | `ceh-codebase-explanation`     | 1.3.10  |
 | `ceh-coding-conduct`           | 2.5.10  |
 | `ceh-competitor-analysis`      | 1.2.10  |
-| `ceh-every-session`            | 2.9.16  |
+| `ceh-every-session`            | 2.9.15  |
 | `ceh-git-workflow`             | 1.5.13  |
 | `ceh-product-direction`        | 2.0.6   |
 | `ceh-security-audit`           | 1.1.9   |
