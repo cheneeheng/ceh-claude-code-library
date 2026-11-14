@@ -300,5 +300,6 @@ coming back.
   the old-path sentence, because that sentence must name the old folder to report it.
 - 2026-11-14 Built Phase 3: tools/validate-plugins/validate.py: OK: all plugin checks passed. The Phase 3 grep printed
   only the old-path move note in implement-from-plan step 1.
+- 2026-11-14 PR: #290 https://github.com/cheneeheng/ceh-claude-code-library/pull/290
 
 <!-- prettier-ignore-end -->
