@@ -21,6 +21,12 @@ with `skillListingBudgetFraction` when descriptions disappear and skills stop tr
 The workspace checkpoint on PR merge passed its live check: the merge of #285 left a checkpoint
 commit after its branch was deleted, and a failing lookup showed its warning once per session.
 
+Vision principle 2 now accepts the versioned workspace beside a committed file as the home of a
+decision that shapes the repo for others. The user decided this on 2026-11-13 as the
+prerequisite of `product/plans/consolidate-product-artifacts.yaml`, whose first phase starts
+only after this change has merged. Its other prerequisite, the plan
+`workspace-sync-commit-message`, is already built. No plugin changes.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -42,6 +48,7 @@ commit after its branch was deleted, and a failing lookup showed its warning onc
   to match.
 - Mark `product/plans/workspace-checkpoint-on-pr-merge.yaml` built, with Phase 2's live
   evidence and its two settled open questions.
+- Amend principle 2 in `docs/VISION.md` to read "a committed file or the versioned workspace".
 
 ## 2026-11-13
 

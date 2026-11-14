@@ -156,8 +156,8 @@ person reading the same text should still be able to follow it.
 
 On ambiguity the agent picks the conservative option, records it, and keeps going. It asks only
 under Autonomy and its limits, all at once, with a recommended answer for each question. A decision
-that shapes the repo for others belongs in a committed file, not only in the git-ignored decision
-log.
+that shapes the repo for others belongs in a committed file or the versioned workspace, not only in
+the git-ignored decision log.
 **Ask:** does this make the agent stop for something it could have decided or found out?
 
 ### 3. Proof over permission
