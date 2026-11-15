@@ -1,5 +1,5 @@
 ---
-schema: refactor-report/v1
+schema: refactor-report/v2
 date: YYYY-MM-DD
 commit: <sha>
 ---

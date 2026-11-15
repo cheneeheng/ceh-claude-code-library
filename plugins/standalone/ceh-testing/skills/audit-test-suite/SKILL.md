@@ -215,10 +215,15 @@ MEDIUM    tests/integration/test_orders.py  fails under --random-order (shared s
 LOW       tests/unit/test_parse.py:12   1.4s in tests/unit — real filesystem I/O
 ```
 
-Save the report to `.agents_workspace/product/test-audits/<YYYYMMDD-HHMMSS>-<session-id>-test-audit.md`, filling
-`assets/test-audit.template.md` per `references/test-audit-schema.md`, so the findings that need a
-decision outlive the session, and name the path in the reply. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`. A subagent in report-only mode
-returns the report instead, and its caller saves it.
+Save the report to `.agents_workspace/product/test-audits/<YYYYMMDD-HHMMSS>-<session-id>-test-audit.yaml`, filling
+`assets/test-audit.template.yaml` per the `test-audit/v2` section of
+`references/test-audit-schema.md`, so the findings that need a decision outlive the session, and
+name the path in the reply. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+After the last edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`,
+which writes the `.md` beside it in the layout of `assets/test-audit.template.md`, and fix the
+YAML for each error it lists. Never edit the generated `.md`. On exit 2 or 3, or without uv, say
+in the reply that the report went unchecked and unrendered. A subagent in report-only mode
+returns the YAML instead, and its caller saves and renders it.
 
 ### Report-only mode
 

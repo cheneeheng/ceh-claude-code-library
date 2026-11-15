@@ -953,8 +953,28 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "fit: {stage: pre-seed, cheque: 50k, sector: tools, thesis: writers}\ninvestors: []\n"
         "email: {subject: Wordy, body: Wordy counts words.}\nfollow_up: 60 users now.\n"
     )
+    good_rr = (
+        "schema: refactor-report/v2\ndate: 2026-11-15\ncommit: abc1234\nclusters:\n"
+        "  - name: Parsers\n    applied: [{candidate: merge parsers, before: '+40 -12', after: '+10 -30'}]\n"
+        "    skipped: [{candidate: inline helper, reason: coverage, note: untested}]\n    bugs: []\n"
+    )
+    good_ta = (
+        "schema: test-audit/v2\ndate: 2026-11-15\ncommit: abc1234\nmode: report-only\nfindings:\n"
+        "  - {severity: HIGH, location: src/discount.py, finding: 3 surviving mutants}\n"
+        "  - {severity: LOW, location: 'tests/test_parse.py:12', finding: 1.4s of real I/O}\n"
+        "fixed: null\nneeds_decision: []\nunverified: []\ncommands: [{command: pytest, verdict: passed}]\n"
+    )
+    good_st = (
+        "schema: stress-test/v2\ndate: 2026-11-15\ntopic: cache-layer\nplan: |\n  Add a cache.\n"
+        "decisions:\n  - {question: Which store, answer: Redis, reason: already deployed}\n"
+        "open:\n  - {question: Which TTL, state: blocked, detail: the store answer}\n"
+    )
     pd = "ceh-product-direction"
     markdown_format_fixtures = [
+        *report_fixtures("ceh-coding-conduct", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-refactor", good_rr, good_rr.replace("reason: coverage", "reason: taste"), "clusters.0.skipped.0.reason", "| inline helper | coverage: untested |", "refactor-report"),
+        *report_fixtures("ceh-testing", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-test-audit", good_ta, good_ta.replace("severity: HIGH", "severity: XHIGH"), "findings.0.severity", "HIGH      src/discount.py", "test-audit"),
+        *report_fixtures("ceh-testing", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-test-audit", good_ta, good_ta.replace("severity: HIGH", "severity: TMP").replace("severity: LOW", "severity: HIGH").replace("severity: TMP", "severity: LOW"), "worst first", "HIGH      src/discount.py", "test-audit-order"),
+        *report_fixtures("ceh-every-session", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-cache-layer", good_st, good_st.replace("state: blocked", "state: pending"), "open.0.state", "- Which TTL — blocked on the store answer", "stress-test"),
         *report_fixtures("ceh-build-plan", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-wordy", good_pr, good_pr.replace("Revise first", "Ready to build"), "allows no blocking finding", "| 1 | Engineering | blocking | Phase 2 Check: \"it runs\" |", "plan-review"),
         *report_fixtures(pd, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-business-plan-review", good_bpr, good_bpr.replace("score: 11", "score: 12"), "not the lens total", "**Run next:** stress-test-unit-economics for Money, plan-go-to-market for Reach", "business-plan-review"),
         *report_fixtures(pd, "INVESTOR_DECK", good_deck, good_deck.replace("pmf_gate: 8", "pmf_gate: 6"), "needs draft: true", "Source: §02", "investor-deck"),

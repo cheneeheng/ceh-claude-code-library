@@ -48,7 +48,9 @@ The formats left Markdown-only follow by the user's decision of 2026-11-13, not 
 stage reads them, per `product/plans/markdown-formats-yaml.yaml`: the plan review
 (`plan-review/v2`), with the hooks already in `ceh-build-plan`, and the business plan review
 (`business-plan-review/v2`) and the investor deck and outreach notes (`investor-deck/v2`,
-`investor-outreach/v2`), with the hooks already in `ceh-product-direction`.
+`investor-outreach/v2`), with the hooks already in `ceh-product-direction`. The refactor report
+(`refactor-report/v2`), the test audit (`test-audit/v2`) and the stress test (`stress-test/v2`)
+follow, with the hooks already in `ceh-coding-conduct`, `ceh-testing` and `ceh-every-session`.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

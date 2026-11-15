@@ -1,0 +1,19 @@
+schema: test-audit/v2
+date: YYYY-MM-DD
+commit: <short sha>
+mode: <fix | report-only>
+findings:
+  - severity: <CRITICAL | HIGH | MEDIUM | LOW>
+    location: <path:line>
+    finding: <finding>
+fixed:
+  - fix: <fix>
+    closes: <finding>
+needs_decision:
+  - finding: <finding>
+    options: <options>
+unverified:
+  - <finding>
+commands:
+  - command: <command>
+    verdict: <verdict>

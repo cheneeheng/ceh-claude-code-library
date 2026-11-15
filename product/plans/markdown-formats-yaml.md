@@ -171,7 +171,14 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 - **Check:** `python tools/validate-plugins/validate.py` exits 0 with the new fixtures in its hooks output,
   and each new fixture failed once with its assertion inverted. With one
   skill line changed to a `.md` path in one of this phase's folders it exits 1 naming that line.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py`: "OK: all plugin checks passed". With good and
+  bad swapped, all eight render and block pairs failed, among them 154-155, 157-158, 160-161
+  and 163-164 for this phase. With `.agents_workspace/product/stress-tests/<topic>.md`
+  appended to `stress-test-plan/SKILL.md` it failed once: "SKILL.md:71: the .md path of a
+  YAML format". The Readers grep found no reader of the three formats. `test-audit/v2` keeps the findings
+  worst first and `fixed` present only in fix mode, both checked. `stress-test/v2` splits
+  each open question into `state` (`assumed` or `blocked`) and `detail`. `docs/CATALOG.md` and
+  the READMEs name no path of these formats, so they needed no change.
 
 ### Phase 3: Learning record, blog draft and repurposed post
 
@@ -235,5 +242,7 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   shareable retro copy keeps `generated_from`, so the guard denies its scrub fixes)
 - 2026-11-15 Built Phase 1: plan-review/v2, business-plan-review/v2, investor-deck/v2 and investor-outreach/v2, with
   their `.md` patterns and hook fixtures. validate.py passes.
+- 2026-11-15 Built Phase 2: refactor-report/v2, test-audit/v2 and stress-test/v2, with `artifact.py` copied into each
+  skill, their `.md` patterns and hook fixtures. validate.py passes.
 
 <!-- prettier-ignore-end -->

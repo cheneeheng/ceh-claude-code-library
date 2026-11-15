@@ -199,7 +199,18 @@ phases:
       `python tools/validate-plugins/validate.py` exits 0 with the new fixtures in its hooks output,
       and each new fixture failed once with its assertion inverted. With one
       skill line changed to a `.md` path in one of this phase's folders it exits 1 naming that line.
-    status: todo
+    status: done
+    evidence: |
+      `python tools/validate-plugins/validate.py`: "OK: all plugin checks passed". With good and
+      bad swapped, all eight render and block pairs failed, among them 154-155, 157-158, 160-161
+      and 163-164 for this phase. With `.agents_workspace/product/stress-tests/<topic>.md`
+      appended to `stress-test-plan/SKILL.md` it failed once: "SKILL.md:71: the .md path of a
+      YAML format".
+    note: |
+      The Readers grep found no reader of the three formats. `test-audit/v2` keeps the findings
+      worst first and `fixed` present only in fix mode, both checked. `stress-test/v2` splits
+      each open question into `state` (`assumed` or `blocked`) and `detail`. `docs/CATALOG.md` and
+      the READMEs name no path of these formats, so they needed no change.
   - name: Learning record, blog draft and repurposed post
     builds: |
       learning/v2 in `explain-until-understood`, blog-draft/v2 in `draft-post` and `edit-post` (the
@@ -273,3 +284,9 @@ record:
     details: |
       plan-review/v2, business-plan-review/v2, investor-deck/v2 and investor-outreach/v2, with
       their `.md` patterns and hook fixtures. validate.py passes.
+  - date: 2026-11-15
+    event: Built Phase
+    phase: 2
+    details: |
+      refactor-report/v2, test-audit/v2 and stress-test/v2, with `artifact.py` copied into each
+      skill, their `.md` patterns and hook fixtures. validate.py passes.

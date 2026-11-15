@@ -37,9 +37,14 @@ the user ends the session, and the plan records the outcome.
    unlocks, and ask the next round. Stop when no question is ready, or when the user says enough.
 6. **Write the outcome back.** Add or update a `## Decisions` section in the plan file: each
    settled question with its answer and one-line reason, then `## Open` for what is left. With no
-   plan file, save the same two sections to `.agents_workspace/product/stress-tests/<YYYYMMDD-HHMMSS>-<session-id>-<topic>.md`,
-   filling `assets/stress-test.template.md` per `references/stress-test-schema.md`, and put them in your reply too, so the settled answers
+   plan file, save the same two sections to `.agents_workspace/product/stress-tests/<YYYYMMDD-HHMMSS>-<session-id>-<topic>.yaml`,
+   filling `assets/stress-test.template.yaml` per the `stress-test/v2` section of
+   `references/stress-test-schema.md`, and put them in your reply too, so the settled answers
    outlive the session. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+   Then run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which
+   writes the `.md` beside it in the layout of `assets/stress-test.template.md`, and fix the YAML
+   for each error it lists. Never edit the generated `.md`. On exit 2 or 3, or without uv, say in
+   the reply that the file went unchecked and unrendered.
 
 ## Rules
 

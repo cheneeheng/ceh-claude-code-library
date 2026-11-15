@@ -16,14 +16,17 @@ YAML source with a pydantic model, as the user decided on 2026-11-13. Each skill
 now saves checked YAML and renders its Markdown beside it, each plugin's render hook checks every
 write, and the guard denies hand edits to the Markdown. A file already saved as Markdown stays as
 written and is still read. The plan review, business plan review, and investor deck and outreach
-notes come first.
+notes come first, then the refactor report, test audit and stress test.
 
 ### Plugin versions
 
 | Plugin                  | Version |
 | ----------------------- | ------- |
 | `ceh-build-plan`        | 2.0.11  |
+| `ceh-coding-conduct`    | 2.5.16  |
+| `ceh-every-session`     | 2.9.21  |
 | `ceh-product-direction` | 2.0.10  |
+| `ceh-testing`           | 1.6.24  |
 
 ### Added
 
@@ -34,7 +37,13 @@ notes come first.
 - `investor-deck/v2` and `investor-outreach/v2`: `write-investor-materials` saves
   `INVESTOR_DECK.yaml` and `INVESTOR_OUTREACH.yaml`, with a gate below 8 requiring the draft line
   and the email body held to 120 words.
-- `validate.py` rejects the `.md` path of each of the four, and its hook fixtures cover them.
+- `refactor-report/v2`: `refactor-repo` saves its report as YAML, one entry per cluster, with each
+  skipped candidate's reason held to `coverage`, `size` or `risk`.
+- `test-audit/v2`: `audit-test-suite` saves its audit as YAML, with the findings checked to run
+  worst first and the Fixed list present exactly in fix mode.
+- `stress-test/v2`: `stress-test-plan` saves its outcome as YAML when there is no plan file to
+  write back to, each open question either assumed or blocked.
+- `validate.py` rejects the `.md` path of each new format, and its hook fixtures cover them.
 
 ---
 
