@@ -349,3 +349,22 @@ record:
   - date: 2026-11-15
     event: PR
     details: "#296 https://github.com/cheneeheng/ceh-claude-code-library/pull/296"
+  - date: 2026-11-15
+    event: Checked
+    details: |
+      27 Built, 1 Gap, 1 Deviation, 1 Cannot verify, 2 Extra. Gap: the hook sections of the
+      `ceh-coding-conduct`, `ceh-testing`, `ceh-every-session`, `ceh-product-direction` and
+      `ceh-codebase-explanation` READMEs did not name their new formats. Deviation:
+      `explain-until-understood` read its saved learning record without `artifact.py check`.
+      Cannot verify: Out "Running eval cases", which the code cannot show. Extra: the Key Decision
+      "Every format a skill saves has a YAML source" in `product/ARCHITECTURE.yaml`, and
+      `status: published` in `blog-draft/v2`. The Gap and the Deviation are fixed on the branch
+      `docs/markdown-formats-yaml-check-fixes`, on the user's request.
+  - date: 2026-11-15
+    event: Checked
+    details: |
+      29 Built, 1 Cannot verify, 2 Extra, on `docs/markdown-formats-yaml-check-fixes`. The five
+      READMEs now name their new formats, and `explain-until-understood` runs `artifact.py check`
+      before reading a saved record. Cannot verify: Out "Running eval cases". Extra, unchanged:
+      the Key Decision "Every format a skill saves has a YAML source" in
+      `product/ARCHITECTURE.yaml`, and `status: published` in `blog-draft/v2`.

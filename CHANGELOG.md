@@ -25,13 +25,13 @@ and now ship both. With every format a skill saves now YAML-backed, `validate.py
 | -------------------------- | ------- |
 | `ceh-blog-and-seo`         | 2.0.11  |
 | `ceh-build-plan`           | 2.0.11  |
-| `ceh-codebase-explanation` | 1.3.14  |
-| `ceh-coding-conduct`       | 2.5.16  |
-| `ceh-every-session`        | 2.9.21  |
+| `ceh-codebase-explanation` | 1.3.15  |
+| `ceh-coding-conduct`       | 2.5.17  |
+| `ceh-every-session`        | 2.9.22  |
 | `ceh-git-workflow`         | 1.5.19  |
-| `ceh-product-direction`    | 2.0.10  |
+| `ceh-product-direction`    | 2.0.11  |
 | `ceh-session-learning`     | 2.0.5   |
-| `ceh-testing`              | 1.6.24  |
+| `ceh-testing`              | 1.6.25  |
 
 ### Added
 
@@ -68,6 +68,11 @@ and now ship both. With every format a skill saves now YAML-backed, `validate.py
 
 - `docs/CROSS_REFERENCES.md` "Retro routing and report location" names the `.yaml` report and the
   current template versions.
+- The check of the build against `product/plans/markdown-formats-yaml.yaml` found two misses, both
+  fixed. The hook sections of the `ceh-coding-conduct`, `ceh-testing`, `ceh-every-session`,
+  `ceh-product-direction` and `ceh-codebase-explanation` READMEs now name the new formats their
+  hooks check, and `explain-until-understood` runs `artifact.py check` on a saved learning record
+  before reading it.
 
 ---
 

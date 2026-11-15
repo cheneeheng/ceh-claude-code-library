@@ -92,7 +92,9 @@ A `fix-record/v2` record is `.agents_workspace/product/fixes/<slug>.yaml`, with 
 every Edit or Write to one, a `PostToolUse` hook (`scripts/artifact-render-hook.py`) checks the YAML
 against its model through `uv` and renders the Markdown, or reports each error back to the agent
 and leaves the Markdown as it was. A `PreToolUse` guard (`scripts/generated-md-guard.py`) denies a
-direct edit to a generated Markdown file and names its YAML. Both run `python3` on every Edit or
+direct edit to a generated Markdown file and names its YAML. `refactor-repo` saves its report as a
+`.yaml` in `.agents_workspace/product/refactor/` (`refactor-report/v2`), which the same hook checks
+and renders. Both run `python3` on every Edit or
 Write and return at once for any other file, about 85 ms per edit for the two together, measured
 once on Windows. The check needs `uv`: without it the agent is told once per session that the file
 went unchecked. Without `python3`, both do nothing. With `ceh-testing` installed too, its hooks

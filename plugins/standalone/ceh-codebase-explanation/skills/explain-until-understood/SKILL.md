@@ -286,6 +286,11 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
 Opt-in only. Keep one file per subject at `.agents_workspace/product/learning/<subject>.yaml`, so a later
 session starts from what the reader already knows instead of from zero. A new file is a copy of
 `assets/learning.template.yaml`, per the `learning/v2` section of `references/learning-schema.md`.
+Before reading a saved `<subject>.yaml`, run
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <subject>.yaml`. On exit 1, stop and
+report its errors, unless the only error is a stale `.md`, which the same command with `render`
+repairs. On exit 2 or 3, without uv, or when the command is denied, say that the record went
+unchecked, and read it anyway.
 After each edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <subject>.yaml`,
 which writes the `.md` beside it in the layout of `assets/learning.template.md`, and fix the YAML
 for each error it lists. Never edit the generated `.md`. A `<subject>.md` with no YAML beside it
