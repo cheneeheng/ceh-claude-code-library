@@ -145,5 +145,6 @@ plan, a fix record or a retro through the skills' default path, with no exceptio
 
 - 2026-11-15 Planned: status ready
 - 2026-11-15 Reviewed: Revise first, 1 blocking (artifact_paths.py and hooks.py comments cite this repo's plan but are exempted under Out and by the Phase 2 grep)
+- 2026-11-15 PR: #299 https://github.com/cheneeheng/ceh-claude-code-library/pull/299
 
 <!-- prettier-ignore-end -->

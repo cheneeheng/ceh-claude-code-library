@@ -155,3 +155,6 @@ record:
   - date: 2026-11-15
     event: Reviewed
     details: "Revise first, 1 blocking (artifact_paths.py and hooks.py comments cite this repo's plan but are exempted under Out and by the Phase 2 grep)"
+  - date: 2026-11-15
+    event: PR
+    details: "#299 https://github.com/cheneeheng/ceh-claude-code-library/pull/299"
