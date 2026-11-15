@@ -368,3 +368,6 @@ record:
       before reading a saved record. Cannot verify: Out "Running eval cases". Extra, unchanged:
       the Key Decision "Every format a skill saves has a YAML source" in
       `product/ARCHITECTURE.yaml`, and `status: published` in `blog-draft/v2`.
+  - date: 2026-11-15
+    event: PR
+    details: "#297 https://github.com/cheneeheng/ceh-claude-code-library/pull/297"
