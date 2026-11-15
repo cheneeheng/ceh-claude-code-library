@@ -1,5 +1,5 @@
 ---
-schema: plan-review/v1
+schema: plan-review/v2
 plan: .agents_workspace/product/plans/<slug>.yaml
 date: YYYY-MM-DD
 verdict: <Ready to build | Revise first | Rethink>

@@ -44,6 +44,11 @@ hooks in `ceh-blog-and-seo`, which is not in `READERS` because `draft-post` writ
 The repeat-mistake report (`repeat-mistake/v2`) follows, per
 `product/plans/repeat-mistake-yaml.yaml`, with the hooks already in `ceh-every-session`, whose
 `prevent-repeat-mistake` both writes it and reads it in a later session.
+The formats left Markdown-only follow by the user's decision of 2026-11-13, not because another
+stage reads them, per `product/plans/markdown-formats-yaml.yaml`: the plan review
+(`plan-review/v2`), with the hooks already in `ceh-build-plan`, and the business plan review
+(`business-plan-review/v2`) and the investor deck and outreach notes (`investor-deck/v2`,
+`investor-outreach/v2`), with the hooks already in `ceh-product-direction`.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

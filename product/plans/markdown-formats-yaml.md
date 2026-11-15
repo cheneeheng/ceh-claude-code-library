@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: markdown-formats-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from markdown-formats-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The Markdown-only formats become YAML formats
-status: ready
+status: building
 created: 2026-11-14
 ---
 
@@ -152,7 +152,14 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 - **Check:** `python tools/validate-plugins/validate.py` exits 0 with the new fixtures in its hooks output,
   and each new fixture failed once with its assertion inverted. With one skill line changed to
   `.agents_workspace/product/plan-reviews/<slug>.md` it exits 1 naming that line.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py`: "OK: all plugin checks passed". With good and
+  bad swapped, fixtures 154-155, 157-158, 160-161 and 163-164 each failed. With
+  `.agents_workspace/product/plan-reviews/<slug>.md` appended to `review-build-plan/SKILL.md`
+  it failed once: "SKILL.md:118: the .md path of a YAML format". Keys taken from body lines the frontmatter does not hold: `product` and `verdict_reason` in
+  business-plan-review/v2, and `draft` in both investor formats (with `pmf_gate` in the
+  outreach notes too) for the `Draft: gate <N>/8` line. A plan review's `findings` may be `[]`,
+  since a clean plan has none, and render as `No findings.`. The eval grader
+  `rbp-outcome-flawed-plan/graders/review-saved.md` now matches the `.yaml`.
 
 ### Phase 2: Refactor report, test audit and stress test
 
@@ -226,5 +233,7 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 - 2026-11-14 PR: #294 https://github.com/cheneeheng/ceh-claude-code-library/pull/294
 - 2026-11-14 Reviewed: Revise first, 2 blocking (blog files saved beside a post on disk have no decided format; the
   shareable retro copy keeps `generated_from`, so the guard denies its scrub fixes)
+- 2026-11-15 Built Phase 1: plan-review/v2, business-plan-review/v2, investor-deck/v2 and investor-outreach/v2, with
+  their `.md` patterns and hook fixtures. validate.py passes.
 
 <!-- prettier-ignore-end -->

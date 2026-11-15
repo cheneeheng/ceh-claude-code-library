@@ -92,7 +92,12 @@ quotes the plan, and the verdict is delivered.
 
 ## Output
 
-The review fills `assets/plan-review.template.md`, per `references/plan-review-schema.md`.
+The review fills `assets/plan-review.template.yaml`, per the `plan-review/v2` section of
+`references/plan-review-schema.md`. After the last edit, run
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which writes the
+`.md` beside it in the layout of `assets/plan-review.template.md`, and fix the YAML for each error
+it lists. Never edit the generated `.md`. On exit 2 or 3, or without uv, say in the reply that the
+review went unchecked and unrendered.
 
 | Verdict            | When                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------- |
@@ -100,7 +105,7 @@ The review fills `assets/plan-review.template.md`, per `references/plan-review-s
 | **Revise first**   | Blocking findings, each fixable by editing the plan.                               |
 | **Rethink**        | A Scope finding changes what to build, or shows the Goal is out of reach as drawn. |
 
-Save the whole review to `.agents_workspace/product/plan-reviews/<YYYYMMDD-HHMMSS>-<session-id>-<slug>.md`, because the
+Save the whole review to `.agents_workspace/product/plan-reviews/<YYYYMMDD-HHMMSS>-<session-id>-<slug>.yaml`, because the
 Record line keeps only the verdict and counts, and the author fixing the plan in a later session
 needs the findings. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
 When a subagent runs the review, build the path in this session and pass it in the subagent's

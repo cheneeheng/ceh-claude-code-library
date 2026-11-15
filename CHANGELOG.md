@@ -9,6 +9,35 @@ before this repo live in
 
 ---
 
+## 2026-11-15
+
+`product/plans/markdown-formats-yaml.yaml` gives the thirteen formats that were Markdown-only a
+YAML source with a pydantic model, as the user decided on 2026-11-13. Each skill that writes one
+now saves checked YAML and renders its Markdown beside it, each plugin's render hook checks every
+write, and the guard denies hand edits to the Markdown. A file already saved as Markdown stays as
+written and is still read. The plan review, business plan review, and investor deck and outreach
+notes come first.
+
+### Plugin versions
+
+| Plugin                  | Version |
+| ----------------------- | ------- |
+| `ceh-build-plan`        | 2.0.11  |
+| `ceh-product-direction` | 2.0.10  |
+
+### Added
+
+- `plan-review/v2`: `review-build-plan` saves its review as YAML and checks the verdict against
+  the findings, so `Ready to build` allows no blocking finding.
+- `business-plan-review/v2`: `review-business-plan` saves its review as YAML, with the total, the
+  verdict and the Run next list checked against the seven lens scores.
+- `investor-deck/v2` and `investor-outreach/v2`: `write-investor-materials` saves
+  `INVESTOR_DECK.yaml` and `INVESTOR_OUTREACH.yaml`, with a gate below 8 requiring the draft line
+  and the email body held to 120 words.
+- `validate.py` rejects the `.md` path of each of the four, and its hook fixtures cover them.
+
+---
+
 ## 2026-11-14
 
 `product/plans/subagent-workspace.yaml` plans how a subagent started in its own worktree gets

@@ -1,5 +1,5 @@
 ---
-schema: investor-outreach/v1
+schema: investor-outreach/v2
 plan: <plan path>
 ---
 

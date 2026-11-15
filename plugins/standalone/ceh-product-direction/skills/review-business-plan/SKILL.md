@@ -70,10 +70,14 @@ test.
 
 ## Output
 
-The review fills `assets/business-plan-review.template.md`, per
-`references/business-plan-review-schema.md`. Save the review to `.agents_workspace/product/business-plan-reviews/<YYYYMMDD-HHMMSS>-<session-id>-business-plan-review.md`, never into the plan,
+The review fills `assets/business-plan-review.template.yaml`, per the `business-plan-review/v2`
+section of `references/business-plan-review-schema.md`. Save the review to `.agents_workspace/product/business-plan-reviews/<YYYYMMDD-HHMMSS>-<session-id>-business-plan-review.yaml`, never into the plan,
 which this skill only reads, so the scores survive into the session that runs the next skill. Name
 the path in the reply. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+After the last edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`,
+which writes the `.md` beside it in the layout of `assets/business-plan-review.template.md`, and
+fix the YAML for each error it lists. Never edit the generated `.md`. On exit 2 or 3, or without
+uv, say in the reply that the review went unchecked and unrendered.
 
 ## Stop conditions
 

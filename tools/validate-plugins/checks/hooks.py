@@ -922,6 +922,44 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{ca}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{ca}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
+    # The formats that were Markdown-only (product/plans/markdown-formats-yaml.yaml): each is found
+    # by its schema key alone, so a file without one is skipped.
+    good_pr = (
+        "schema: plan-review/v2\nplan: .agents_workspace/product/plans/wordy.yaml\ndate: 2026-11-15\n"
+        "verdict: Revise first\nlenses: [Scope, Engineering]\n"
+        "skipped: [{lens: Design, reason: no UI}]\nfindings:\n"
+        "  - {lens: Engineering, severity: blocking, plan_line: 'Phase 2 Check: \"it runs\"',"
+        " finding: Proves nothing, fix: Run the tests}\n"
+        "questions: []\nunverified: []\nfixes_made: null\n"
+    )
+    good_bpr = (
+        "schema: business-plan-review/v2\nplan: BUSINESS_PLAN.yaml\nproduct: Wordy\ndate: 2026-11-15\n"
+        "verdict: fix first\nverdict_reason: No channel.\nscore: 11\nheadline_finding: No channel.\nlenses:\n"
+        # Money scores 1 and Reach 0, so the total is 11 and the verdict is fix first.
+        + "".join(
+            f"  - {{lens: {lens}, score: {dict(Money=1, Reach=0).get(lens, 2)}, evidence: nothing found, gap: none}}\n"
+            for lens in ("Customer", "Edge", "Focus", "Money", "Reach", "Survival", "Execution")
+        )
+        + "fresh_owner: {stop: features, start: calls}\nstrongest_part: {quote: '\"x\"', why: real.}\n"
+        "run_next:\n  - {skill: stress-test-unit-economics, lens: Money}\n  - {skill: plan-go-to-market, lens: Reach}\n"
+    )  # fmt: skip
+    good_deck = (
+        "schema: investor-deck/v2\nplan: BUSINESS_PLAN.yaml\npmf_gate: 8\nplan_updated: 2026-11-10\n"
+        "draft: false\ncompany: Wordy\none_liner: counts words\nslides:\n"
+        "  - headline: Writers lose an hour\n    lines: [{text: Ana counts by hand, tag: evidence}]\n    source: 2\n"
+    )
+    good_out = (
+        "schema: investor-outreach/v2\nplan: BUSINESS_PLAN.yaml\npmf_gate: 8\ndraft: false\n"
+        "fit: {stage: pre-seed, cheque: 50k, sector: tools, thesis: writers}\ninvestors: []\n"
+        "email: {subject: Wordy, body: Wordy counts words.}\nfollow_up: 60 users now.\n"
+    )
+    pd = "ceh-product-direction"
+    markdown_format_fixtures = [
+        *report_fixtures("ceh-build-plan", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-wordy", good_pr, good_pr.replace("Revise first", "Ready to build"), "allows no blocking finding", "| 1 | Engineering | blocking | Phase 2 Check: \"it runs\" |", "plan-review"),
+        *report_fixtures(pd, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-business-plan-review", good_bpr, good_bpr.replace("score: 11", "score: 12"), "not the lens total", "**Run next:** stress-test-unit-economics for Money, plan-go-to-market for Reach", "business-plan-review"),
+        *report_fixtures(pd, "INVESTOR_DECK", good_deck, good_deck.replace("pmf_gate: 8", "pmf_gate: 6"), "needs draft: true", "Source: §02", "investor-deck"),
+        *report_fixtures(pd, "INVESTOR_OUTREACH", good_out, good_out.replace("investors: []", "investors: ['']"), "investors.0", "**Investors:** none supplied", "investor-outreach"),
+    ]  # fmt: skip
     # The glossary: maintain-glossary writes it, record-project-decisions reads it. It is found by
     # its schema key, or at the session root or docs/ beside its GLOSSARY.md, so a schema-less one
     # there is reported and any other GLOSSARY.yaml is left alone. Paths are given relative to the
@@ -1173,6 +1211,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *workflow_spec_fixtures,
         *run_state_fixtures,
         *competitor_report_fixtures,
+        *markdown_format_fixtures,
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},

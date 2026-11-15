@@ -1,5 +1,5 @@
 ---
-schema: business-plan-review/v1
+schema: business-plan-review/v2
 plan: <plan path>
 date: YYYY-MM-DD
 verdict: <build | fix first | do not build>

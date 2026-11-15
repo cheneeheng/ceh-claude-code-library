@@ -1,0 +1,16 @@
+schema: investor-outreach/v2
+plan: <plan path>
+pmf_gate: <N>
+draft: <true | false>
+fit:
+  stage: <stage>
+  cheque: <cheque size>
+  sector: <sector>
+  thesis: <thesis>
+investors:
+  - <name>
+email:
+  subject: <one-liner>
+  body: |
+    <body>
+follow_up: <follow-up>

@@ -32,6 +32,10 @@ YAML_FORMAT_MD = re.compile(
             rf"product/security-audit/{P}security-audit\.md\b",
             rf"product/ux-audits/{P}(?:UX_AUDIT|ERROR_MESSAGES)\.md\b",
             rf"handoff/{P}handoff\.md\b",
+            # The Markdown-only formats, per product/plans/markdown-formats-yaml.yaml.
+            rf"product/plan-reviews/{P}\.md\b",
+            rf"product/business-plan-reviews/{P}\.md\b",
+            r"product/business/INVESTOR_(?:DECK|OUTREACH)\.md\b",
         )
     )
 )
