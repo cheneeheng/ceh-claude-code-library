@@ -1,7 +1,7 @@
 ---
 schema: decision-rule/v2
 decided: 2026-11-11
-source: "conversation, `product/retros/2026-11-11-39c94071-business-plan-leak.md`"
+source: "conversation, `.agents_workspace/product/retros/2026-11-11-39c94071-business-plan-leak.md`"
 ---
 
 # Business plan readers

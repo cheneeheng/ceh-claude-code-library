@@ -1,7 +1,7 @@
 ---
 schema: decision-rule/v2
 decided: 2026-10-16
-source: "conversation, retro `product/retros/2026-10-16-period.md`"
+source: "conversation, retro `.agents_workspace/product/retros/2026-10-16-period.md`"
 ---
 
 # PR review

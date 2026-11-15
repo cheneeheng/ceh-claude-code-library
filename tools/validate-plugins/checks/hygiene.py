@@ -20,7 +20,6 @@ HYGIENE_ROOTS = (
     "tools",
     ".claude",
     ".github",
-    "product",
     "audits",
     "examples",
 )
