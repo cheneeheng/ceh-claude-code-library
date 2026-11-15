@@ -2,8 +2,9 @@
 
 A product artifact lives in `.agents_workspace/product/` (`decision-artifact-locations.md`), so a
 root `product/` path is a stale location, and a format with a YAML source is referred to by its
-`.yaml`, so a `.md` path of one is a stale reference. Lines the allowlist names are the exceptions
-listed in `product/plans/consolidate-product-artifacts.yaml` under "References that stay Markdown".
+`.yaml`, so a `.md` path of one is a stale reference. Since
+`product/plans/markdown-formats-yaml.yaml` every format a skill saves there has a YAML source, so
+the allowlist holds only lines that name an old path or a v1 file on purpose, each with its reason.
 """
 
 from __future__ import annotations
@@ -32,6 +33,13 @@ YAML_FORMAT_MD = re.compile(
             rf"product/security-audit/{P}security-audit\.md\b",
             rf"product/ux-audits/{P}(?:UX_AUDIT|ERROR_MESSAGES)\.md\b",
             rf"handoff/{P}handoff\.md\b",
+            # The Markdown-only formats, per product/plans/markdown-formats-yaml.yaml.
+            rf"product/plan-reviews/{P}\.md\b",
+            rf"product/business-plan-reviews/{P}\.md\b",
+            r"product/business/INVESTOR_(?:DECK|OUTREACH)\.md\b",
+            rf"product/(?:refactor|test-audits|stress-tests|learning|blog|code-reviews)/{P}\.md\b",
+            # The session retro's -shareable.md copy is Markdown on purpose, not a format.
+            rf"product/retros/{P}-(?:period|session(?:-{P})?)(?<!-shareable)\.md\b",
         )
     )
 )

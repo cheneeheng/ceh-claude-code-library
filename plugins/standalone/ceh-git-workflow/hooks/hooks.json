@@ -22,6 +22,16 @@
             "timeout": 30
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/artifact-render-hook.py\"",
+            "timeout": 120
+          }
+        ]
       }
     ],
     "Stop": [
@@ -73,6 +83,16 @@
           {
             "type": "command",
             "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/skill-started-guard.py\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/generated-md-guard.py\"",
             "timeout": 10
           }
         ]

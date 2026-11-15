@@ -1,0 +1,13 @@
+schema: stress-test/v2
+date: YYYY-MM-DD
+topic: <topic>
+plan: |
+  <plan>
+decisions:
+  - question: <question>
+    answer: <answer>
+    reason: <reason>
+open:
+  - question: <question>
+    state: <assumed | blocked>
+    detail: <recommendation | prerequisite>

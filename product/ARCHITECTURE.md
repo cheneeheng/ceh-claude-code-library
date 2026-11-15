@@ -137,4 +137,30 @@ already existed.
 **Consequences:** Older retro pairs are still read. A worktree start commits pending workspace files the user
 may have meant to leave uncommitted.
 
+### 2026-11-15 — Every format a skill saves has a YAML source
+
+**Status:** Accepted
+**Context:** Thirteen formats were left Markdown-only because no other stage reads them, so nothing
+checked them, and validate.py kept an allowlist for their .md paths.
+**Decision:** Each gets a pydantic model, a YAML template and a renderer in the skill that writes it,
+mirroring its Markdown template field for field, with its version raised one. The plugin's
+render hook finds the file by its schema key alone. ceh-git-workflow and ceh-session-learning
+gained the hooks for it. A reader checks the YAML first and reads a plain .md as before.
+**Consequences:** validate.py rejects the .md path of every saved format. Files saved earlier stay as written,
+and living ones (learning record, investor deck and outreach) are edited in place until a
+later rewrite. Saving any report now needs uv to be checked and rendered.
+
+### 2026-11-15 — Blog posts are YAML wherever they are saved
+
+**Status:** Accepted
+**Context:** A post written into a blog repo used that repo's front matter, so it had no checked format.
+**Decision:** draft-post, edit-post and repurpose-post save blog-draft/v2 or repurposed-post/v2 YAML
+everywhere, a blog repo included, where the rendered .md is the post and its front matter
+the format's keys. A tracked post with no YAML gets one beside it, rendered over the post.
+The session retro's -shareable.md copy stays Markdown with the generated keys removed, so its
+scrub edits pass the guard.
+**Consequences:** A blog repo holds a .yaml beside each post and front matter with generated_from and a
+prettier-ignore range. If a site build or copy-paste trips on that, the renderer can emit the
+body alone in a later plan.
+
 <!-- prettier-ignore-end -->

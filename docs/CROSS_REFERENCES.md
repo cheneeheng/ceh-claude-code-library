@@ -424,6 +424,20 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-blog-and-seo/skills/write-project-listing-text/scripts/artifact.py`                                       | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-documentation/skills/write-concept-docs/scripts/artifact.py`                                              | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-python-service/skills/write-fastapi-endpoints/scripts/artifact.py`                                        | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-coding-conduct/skills/refactor-repo/scripts/artifact.py`                                                  | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-testing/skills/audit-test-suite/scripts/artifact.py`                                                      | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/stress-test-plan/scripts/artifact.py`                                                | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-codebase-explanation/skills/explain-until-understood/scripts/artifact.py`                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-git-workflow/skills/code-review/scripts/artifact.py`                                                      | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-git-workflow/skills/review-recent-work/scripts/artifact.py`                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-git-workflow/scripts/artifact.py`                                                                         | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-git-workflow/scripts/artifact-render-hook.py`                                                             | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-git-workflow/scripts/generated-md-guard.py`                                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-session-learning/skills/diagnose-session/scripts/artifact.py`                                             | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-session-learning/scripts/artifact.py`                                                                     | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-session-learning/scripts/artifact-render-hook.py`                                                         | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-session-learning/scripts/generated-md-guard.py`                                                           | whole file                                                  | none                                                                             |
 | `ceh-build-plan:review-build-plan`, `ceh-build-plan:implement-from-plan`, `ceh-check-build-against-plan:check-build-against-plan` | the "A `plan/v2` plan is checked first" paragraph in step 1 | `implement-from-plan` adds where a Status note and a Record entry go in the YAML |
 
 **Shared:** the whole plan format, byte for byte: the `.agents_workspace/product/plans/<slug>.yaml` location, the
@@ -876,9 +890,9 @@ delete".
 `record-project-decisions`, anything else in the repo fixed directly, outside the repo left for the
 user), acting on every in-scope route in the same session, an uninstalled route left open, and the
 one-file save: every issue, in the repo or outside it, in
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`. Each skill keeps its own
-report template (`period-retro/v2`, `session-retro/v2`, `repeat-mistake/v2`), because the three
-reports differ.
+`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.yaml`, with its `.md`
+rendered beside it. Each skill keeps its own report template (`period-retro/v3`,
+`session-retro/v3`, `repeat-mistake/v2`), because the three reports differ.
 
 ## Eval case strictness levels
 
@@ -938,17 +952,25 @@ tester-agent lines differ.
 
 ## Blog bundled files
 
-**Canonical:** whole files, `plugins/standalone/ceh-blog-and-seo/skills/draft-post/references/ask-the-author.md`, `plugins/standalone/ceh-blog-and-seo/skills/draft-post/references/blog-draft-schema.md`, `plugins/standalone/ceh-blog-and-seo/skills/draft-post/assets/blog-draft.template.md`
+**Canonical:** whole files, `plugins/standalone/ceh-blog-and-seo/skills/draft-post/references/ask-the-author.md`, `plugins/standalone/ceh-blog-and-seo/skills/draft-post/references/blog-draft-schema.md`, `plugins/standalone/ceh-blog-and-seo/skills/draft-post/references/blog-draft-model.py`, `plugins/standalone/ceh-blog-and-seo/skills/draft-post/assets/blog-draft.template.md`, `plugins/standalone/ceh-blog-and-seo/skills/draft-post/assets/blog-draft.template.yaml`
 
-| Copy                                                                                     | Section    | Diverges |
-| ---------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-blog-and-seo/skills/edit-post/references/ask-the-author.md`      | whole file | none     |
-| `plugins/standalone/ceh-blog-and-seo/skills/edit-post/references/blog-draft-schema.md`   | whole file | none     |
-| `plugins/standalone/ceh-blog-and-seo/skills/edit-post/assets/blog-draft.template.md`     | whole file | none     |
-| `plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/references/ask-the-author.md` | whole file | none     |
+| Copy                                                                                        | Section    | Diverges |
+| ------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-blog-and-seo/skills/edit-post/references/ask-the-author.md`         | whole file | none     |
+| `plugins/standalone/ceh-blog-and-seo/skills/edit-post/references/blog-draft-schema.md`      | whole file | none     |
+| `plugins/standalone/ceh-blog-and-seo/skills/edit-post/references/blog-draft-model.py`       | whole file | none     |
+| `plugins/standalone/ceh-blog-and-seo/skills/edit-post/assets/blog-draft.template.md`        | whole file | none     |
+| `plugins/standalone/ceh-blog-and-seo/skills/edit-post/assets/blog-draft.template.yaml`      | whole file | none     |
+| `plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/references/ask-the-author.md`    | whole file | none     |
+| `plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/references/blog-draft-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/references/blog-draft-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/assets/blog-draft.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/assets/blog-draft.template.yaml` | whole file | none     |
 
-**Shared:** the ask-the-author question format and the blog draft format with its template. Each
-skill that asks the author or writes a draft carries its own copy.
+**Shared:** the ask-the-author question format and the blog draft format with its template, the
+`blog-draft/v2` YAML and its model. Each skill that asks the author, or writes or reads a draft,
+carries its own copy: `draft-post` writes drafts, `edit-post` reads and revises them, and
+`repurpose-post` checks a post's YAML before reading it.
 
 ## Business plan format
 

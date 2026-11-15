@@ -1,5 +1,5 @@
 ---
-schema: stress-test/v1
+schema: stress-test/v2
 date: YYYY-MM-DD
 topic: <topic>
 ---

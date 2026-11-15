@@ -1,5 +1,5 @@
 ---
-schema: test-audit/v1
+schema: test-audit/v2
 date: YYYY-MM-DD
 commit: <short sha>
 mode: <fix | report-only>

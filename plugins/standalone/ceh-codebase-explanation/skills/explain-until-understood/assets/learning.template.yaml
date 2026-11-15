@@ -1,0 +1,15 @@
+schema: learning/v2
+subject: <subject>
+goal: <goal>
+next: <next>
+terms:
+  - term: <term>
+    definition: <definition>
+rules:
+  - <rule>
+self_test:
+  - question: <question>
+    last_answer: <unaided | missed | not asked>
+    date: <YYYY-MM-DD | null>
+open_questions:
+  - <question>

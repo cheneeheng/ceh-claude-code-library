@@ -1,0 +1,22 @@
+schema: business-plan-review/v2
+plan: <plan path>
+product: <product>
+date: YYYY-MM-DD
+verdict: <build | fix first | do not build>
+verdict_reason: <reason>
+score: <N>
+headline_finding: <finding>
+lenses:
+  - lens: Customer
+    score: <0-2>
+    evidence: <"quote" (§NN) | nothing found>
+    gap: <gap>
+fresh_owner:
+  stop: <X>
+  start: <Y>
+strongest_part:
+  quote: <"quote">
+  why: <why>
+run_next:
+  - skill: <skill>
+    lens: <lens>

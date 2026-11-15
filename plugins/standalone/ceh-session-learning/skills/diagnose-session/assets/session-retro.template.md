@@ -1,5 +1,5 @@
 ---
-schema: session-retro/v2
+schema: session-retro/v3
 session: <session-id>
 date: YYYY-MM-DD
 ---

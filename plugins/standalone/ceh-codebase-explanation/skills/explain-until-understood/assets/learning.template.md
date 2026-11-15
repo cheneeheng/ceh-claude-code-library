@@ -1,5 +1,5 @@
 ---
-schema: learning/v1
+schema: learning/v2
 subject: <subject>
 ---
 

@@ -54,6 +54,13 @@ it; one carried from an older profile that never named its post keeps its quote 
 Later drafts and `edit-post` read the profile instead of re-deriving it. A profile saved before
 `v2` stays as `blog-voice.md`, which both skills still read.
 
+Every post the blog skills save is YAML with its Markdown rendered beside it, wherever it goes: a
+draft or revision (`blog-draft/v2`) and each repurposed format (`repurposed-post/v2`). In a blog
+repo the rendered `.md` is the post, its front matter the format's keys. A post with its YAML is
+revised through the YAML, and one saved as plain Markdown before is still read as it is. The
+check and render need [uv](https://docs.astral.sh/uv/). Without it the YAML is saved and the agent
+says the Markdown was not rendered.
+
 ## Discoverability skills
 
 Discoverability is one activity applied to many surfaces. The skills split on surface mechanics,
@@ -84,8 +91,8 @@ first use. Without uv the file is read unchecked, and a repo with none of these 
 
 Two hooks on `Edit|Write|MultiEdit`, both Python scripts that need `python3` on `PATH`:
 
-- `artifact-render-hook.py` (PostToolUse) checks a written voice profile YAML against its model
-  and renders its Markdown. Because `draft-post` and `write-project-listing-text` also carry the evidence and business plan
+- `artifact-render-hook.py` (PostToolUse) checks a written voice profile, blog draft or
+  repurposed post YAML against its model and renders its Markdown. Because `draft-post` and `write-project-listing-text` also carry the evidence and business plan
   models, it checks and renders `EVIDENCE.yaml` and `BUSINESS_PLAN.yaml` writes too. The check
   needs `uv`; without it the agent is told once per session that the file went unchecked.
 - `generated-md-guard.py` (PreToolUse) denies a hand edit to the generated Markdown, which the

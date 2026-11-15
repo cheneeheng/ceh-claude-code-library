@@ -1,5 +1,5 @@
 ---
-schema: investor-deck/v1
+schema: investor-deck/v2
 plan: <plan path>
 pmf_gate: <N>/8
 plan_updated: YYYY-MM-DD

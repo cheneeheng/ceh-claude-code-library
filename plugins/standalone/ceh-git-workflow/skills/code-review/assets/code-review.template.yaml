@@ -1,0 +1,11 @@
+schema: code-review/v2
+branch: <branch>
+date: YYYY-MM-DD
+verdict: <Approve | Request changes | Comment | Cannot verify>
+verdict_detail: <what flips or settles it>
+summary: |
+  <summary>
+comments:
+  - location: <path:line>
+    label: <blocking | advisory | question>
+    comment: <comment>

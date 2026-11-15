@@ -26,6 +26,14 @@ that file before the first question.
 
 ### 1. Read the draft
 
+When the draft is a file with a `.yaml` of the same name beside it, the YAML is the draft: first
+run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` (format in
+`${CLAUDE_SKILL_DIR}/references/blog-draft-schema.md`), and read its `body`, `title` and
+`description`. On exit 1, stop and report its errors, unless the only error is a stale `.md`,
+which the same command with `render` repairs. On exit 2 or 3, without uv, or when the command is
+denied, say in the diagnosis that the draft went unchecked, and read it anyway. A `.md` with no
+YAML beside it is read as it is.
+
 Read the full draft before doing anything else, with no mid-read comments or questions. Note: post
 type (Lessons Learned, How-To, Opinion, Launch, Thought Leadership, Personal Story); apparent
 audience and register; the author's voice markers (rhythm, vocabulary, formality); the thesis, and
@@ -211,7 +219,7 @@ Wait for their answers, then address what they raise specifically.
 > **Meta:** [~150-character description — the post's specific angle, not just the broad topic; readable without the title]
 ```
 
-**Where it goes:** if the draft came from a file, show the diagnosis in chat and check that git tracks the file (`git ls-files --error-unmatch <file>`). A tracked file gets the revision written back to it, keeping its front matter and putting the meta description in the front matter's existing description field instead of the `> **Meta:**` line. An untracked file is left as it is, because overwriting it loses the author's original: save the revision beside it as `<name>-edited.md`. A draft pasted into chat gets its revision in chat, also saved to `.agents_workspace/product/blog/<YYYY-MM-DD>-<slug>-edited.md`, the slug from the title in kebab case, filling `${CLAUDE_SKILL_DIR}/assets/blog-draft.template.md`, per `${CLAUDE_SKILL_DIR}/references/blog-draft-schema.md`, so the revision outlives the session.
+**Where it goes:** the revision is always YAML with its Markdown rendered beside it, filling `${CLAUDE_SKILL_DIR}/assets/blog-draft.template.yaml`, per the `blog-draft/v2` section of `${CLAUDE_SKILL_DIR}/references/blog-draft-schema.md`, the meta description in its `description` instead of the `> **Meta:**` line. If the draft came from a file, show the diagnosis in chat and check that git tracks the file (`git ls-files --error-unmatch <file>`). A draft that already has its YAML gets the revision written into that YAML. A tracked `<name>.md` with no YAML gets `<name>.yaml` beside it, rendered over `<name>.md`: its front matter is replaced by the format's, with `title`, `date` and the `published` or `draft` status carried over from it. An untracked file is left as it is, because overwriting it loses the author's original: save the revision beside it as `<name>-edited.yaml`. A draft pasted into chat gets its revision in chat, also saved to `.agents_workspace/product/blog/<YYYY-MM-DD>-<slug>-edited.yaml`, the slug from the title in kebab case, so the revision outlives the session. Then run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which writes the `.md` in the layout of `${CLAUDE_SKILL_DIR}/assets/blog-draft.template.md`, and fix the YAML for each error it lists. Never edit the generated `.md`. On exit 2 or 3, or without uv, say in the reply that the revision went unchecked and unrendered.
 
 ## Stop conditions
 

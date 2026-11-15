@@ -1,0 +1,16 @@
+schema: refactor-report/v2
+date: YYYY-MM-DD
+commit: <sha>
+clusters:
+  - name: <cluster>
+    applied:
+      - candidate: <candidate>
+        before: <totals>
+        after: <totals>
+    skipped:
+      - candidate: <candidate>
+        reason: <coverage | size | risk>
+        note: <note>
+    bugs:
+      - location: <path:line>
+        bug: <bug>

@@ -9,6 +9,68 @@ before this repo live in
 
 ---
 
+## 2026-11-15
+
+`product/plans/markdown-formats-yaml.yaml` gives the thirteen formats that were Markdown-only a
+YAML source with a pydantic model, as the user decided on 2026-11-13. Each skill that writes one
+now saves checked YAML and renders its Markdown beside it, each plugin's render hook checks every
+write, and the guard denies hand edits to the Markdown. A file already saved as Markdown stays as
+written and is still read. `ceh-git-workflow` and `ceh-session-learning` had no artifact hooks
+and now ship both. With every format a skill saves now YAML-backed, `validate.py` rejects the
+`.md` path of each one.
+
+### Plugin versions
+
+| Plugin                     | Version |
+| -------------------------- | ------- |
+| `ceh-blog-and-seo`         | 2.0.11  |
+| `ceh-build-plan`           | 2.0.11  |
+| `ceh-codebase-explanation` | 1.3.14  |
+| `ceh-coding-conduct`       | 2.5.16  |
+| `ceh-every-session`        | 2.9.21  |
+| `ceh-git-workflow`         | 1.5.19  |
+| `ceh-product-direction`    | 2.0.10  |
+| `ceh-session-learning`     | 2.0.5   |
+| `ceh-testing`              | 1.6.24  |
+
+### Added
+
+- `plan-review/v2`: `review-build-plan` saves its review as YAML and checks the verdict against
+  the findings, so `Ready to build` allows no blocking finding.
+- `business-plan-review/v2`: `review-business-plan` saves its review as YAML, with the total, the
+  verdict and the Run next list checked against the seven lens scores.
+- `investor-deck/v2` and `investor-outreach/v2`: `write-investor-materials` saves
+  `INVESTOR_DECK.yaml` and `INVESTOR_OUTREACH.yaml`, with a gate below 8 requiring the draft line
+  and the email body held to 120 words.
+- `refactor-report/v2`: `refactor-repo` saves its report as YAML, one entry per cluster, with each
+  skipped candidate's reason held to `coverage`, `size` or `risk`.
+- `test-audit/v2`: `audit-test-suite` saves its audit as YAML, with the findings checked to run
+  worst first and the Fixed list present exactly in fix mode.
+- `stress-test/v2`: `stress-test-plan` saves its outcome as YAML when there is no plan file to
+  write back to, each open question either assumed or blocked.
+- `learning/v2`: `explain-until-understood` keeps its learning record as YAML, checked on load,
+  each self-test question's date null exactly while it is not yet asked.
+- `blog-draft/v2` and `repurposed-post/v2`: `draft-post`, `edit-post` and `repurpose-post` save
+  every post as YAML with its Markdown rendered beside it, wherever it goes, a blog repo
+  included, where the rendered `.md` is the post. `edit-post` and `repurpose-post` check a
+  post's YAML before reading it, and read a plain `.md` as before.
+- `code-review/v2` and `period-retro/v3`: `code-review` saves an unposted review as YAML, its
+  verdict checked against the blocking comments, and `review-recent-work` saves its retro as YAML,
+  finding the last retro by its `-period.yaml` or an older `-period.md`. `ceh-git-workflow` gains
+  the artifact render hook and the generated-Markdown guard, which need uv for the check.
+- `session-retro/v3`: `diagnose-session` saves its diagnosis as YAML, every citation checked as
+  `<transcript>:<line>`. `ceh-session-learning` gains the same two hooks in a new
+  `hooks/hooks.json`. The `-shareable.md` copy drops the generated keys, so its scrub edits pass
+  the guard.
+- `validate.py` rejects the `.md` path of each new format, and its hook fixtures cover them.
+
+### Fixed
+
+- `docs/CROSS_REFERENCES.md` "Retro routing and report location" names the `.yaml` report and the
+  current template versions.
+
+---
+
 ## 2026-11-14
 
 `product/plans/subagent-workspace.yaml` plans how a subagent started in its own worktree gets

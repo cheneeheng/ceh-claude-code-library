@@ -127,8 +127,12 @@ A refactor changes shape, never behavior:
 
 Per cluster: candidates applied with before/after `git diff --stat` totals, candidates skipped
 with reasons (coverage, size, risk), and any bug found while refactoring — reported, not fixed.
-Save the report to `.agents_workspace/product/refactor/<YYYYMMDD-HHMMSS>-<session-id>-refactor.md`, filling
-`assets/refactor-report.template.md` per `references/refactor-report-schema.md`, one section per
-cluster, and name the path in the reply,
-because the skipped candidates and the unfixed bugs have no other record.
+Save the report to `.agents_workspace/product/refactor/<YYYYMMDD-HHMMSS>-<session-id>-refactor.yaml`, filling
+`assets/refactor-report.template.yaml` per the `refactor-report/v2` section of
+`references/refactor-report-schema.md`, one cluster entry per cluster, and name the path in the
+reply, because the skipped candidates and the unfixed bugs have no other record.
 Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+After the last edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`,
+which writes the `.md` beside it in the layout of `assets/refactor-report.template.md`, and fix
+the YAML for each error it lists. Never edit the generated `.md`. On exit 2 or 3, or without uv,
+say in the reply that the report went unchecked and unrendered.

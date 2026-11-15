@@ -283,11 +283,17 @@ Explaining slides naturally into writing it down. Keep the boundary explicit:
 
 ### Learning workspace
 
-Opt-in only. Keep one file per subject at `.agents_workspace/product/learning/<subject>.md`, so a later
+Opt-in only. Keep one file per subject at `.agents_workspace/product/learning/<subject>.yaml`, so a later
 session starts from what the reader already knows instead of from zero. A new file is a copy of
-`assets/learning.template.md`, per `references/learning-schema.md`.
+`assets/learning.template.yaml`, per the `learning/v2` section of `references/learning-schema.md`.
+After each edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <subject>.yaml`,
+which writes the `.md` beside it in the layout of `assets/learning.template.md`, and fix the YAML
+for each error it lists. Never edit the generated `.md`. A `<subject>.md` with no YAML beside it
+is a `learning/v1` file, edited in place. On exit 2 or 3, or without uv, say in the reply that the
+file went unchecked and unrendered.
 
-- **On load**, read the file before explaining anything. Ask two Self-test questions first, the
+- **On load**, run the YAML with `check` and stop on exit 1 with its errors, then read the file
+  before explaining anything. Ask two Self-test questions first, the
   missed ones before the oldest, and record each answer. A term the reader cannot use unaided goes
   back into the next explanation as a foundation, not as review.
 - **After each explanation lands**, add its terms, its rule, and its self-test question, and

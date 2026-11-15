@@ -27,7 +27,7 @@ fix, because the routed skill finds the cause and designs the fix.
 | "the agent kept doing X", with a session to read                           | `diagnose-session`                                             |
 | "you did X again", "make sure this never happens again"                    | `prevent-repeat-mistake`                                       |
 
-`review-recent-work` starts the day after the newest `.agents_workspace/product/retros/*-period.md` when no dates are
+`review-recent-work` starts the day after the newest `.agents_workspace/product/retros/*-period.yaml`, or an older `*-period.md`, when no dates are
 given, otherwise the last 14 days. `diagnose-session` reads `~/.claude/projects/<project>/`: "this
 session" is the current one, "the last session" the newest other transcript.
 
@@ -59,15 +59,15 @@ sessions behave (`CLAUDE.md`, memory, a skill, a hook) for the user to approve.
 Every retro saves one report, holding the issues whose fix lands in this repo and those left for
 the user:
 
-| Report                                  | File                                                                          |
-| --------------------------------------- | ----------------------------------------------------------------------------- |
-| `period`, `session-<id-prefix>`         | `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`   |
-| `repeat-mistake`, with its `.md` beside | `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.yaml` |
+| Report                                                                   | File                                                                          |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| `period`, `session-<id-prefix>`, `repeat-mistake`, with its `.md` beside | `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.yaml` |
 
 The routed work and the next retro read it. A repo whose `CLAUDE.md` names another location saves
-there. Each skill fills its own template, `period-retro/v2`, `session-retro/v2`, or
+there. Each skill fills its own template, `period-retro/v3`, `session-retro/v3`, or
 `repeat-mistake/v2`, because the three reports differ. A report saved before 2026-11-14 as a pair,
-one file per side linked through `other_file`, is still read.
+one file per side linked through `other_file`, is still read, and so is a period or session
+report saved as a `.md` with no YAML beside it.
 
 The workspace may be pushed to a remote, so a report is cleaned before it is saved:
 `diagnose-session` scrubs and audits its root causes (secrets, home paths, hostnames, personal
@@ -80,7 +80,7 @@ data), and `prevent-repeat-mistake` masks secrets as `<secret>`. The `hygiene` c
    what shipped, reads the flow, and names at most three issues, each with the PRs that show it.
 2. Each in-repo issue goes to its route in the same session: a fix-of-a-fix to `find-root-cause`, a
    churn hotspot to `write-build-plan`, slow or unreviewed merges to `record-project-decisions`.
-3. The retro is saved to `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.md`.
+3. The retro is saved to `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.yaml`, with the `.md` rendered beside it.
 
 ## Scenario B: a session that went wrong
 

@@ -1,0 +1,13 @@
+schema: investor-deck/v2
+plan: <plan path>
+pmf_gate: <N>
+plan_updated: YYYY-MM-DD
+draft: <true | false>
+company: <Company>
+one_liner: <one-liner>
+slides:
+  - headline: <headline claim>
+    lines:
+      - text: <proof line>
+        tag: <evidence | assumption | hypothesis-to-test>
+    source: <NN>

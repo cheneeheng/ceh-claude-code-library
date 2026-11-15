@@ -1,0 +1,30 @@
+schema: period-retro/v3
+since: YYYY-MM-DD
+until: YYYY-MM-DD
+shipped:
+  - group: <type(scope)>
+    change: <change>
+    refs:
+      - "#<PR>"
+flow:
+  prs_merged:
+    value: <n>
+    source: <source>
+  median_time_to_merge:
+    value: <d>
+    source: <source>
+  reverts:
+    value: <n>
+    source: <source>
+hotspots:
+  - path: <path>
+    commits: <n>
+issues:
+  - kind: <Bug | Design | Project rule | Agent mistake>
+    issue: <issue>
+    evidence: <commits or PRs>
+    route: '<skill | user: <where>>'
+    status: <handed off | open>
+    status_detail: <artifact | why>
+questions:
+  - <question>

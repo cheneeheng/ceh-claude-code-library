@@ -922,6 +922,137 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{ca}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{ca}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
+    # The formats that were Markdown-only (product/plans/markdown-formats-yaml.yaml): each is found
+    # by its schema key alone, so a file without one is skipped.
+    good_pr = (
+        "schema: plan-review/v2\nplan: .agents_workspace/product/plans/wordy.yaml\ndate: 2026-11-15\n"
+        "verdict: Revise first\nlenses: [Scope, Engineering]\n"
+        "skipped: [{lens: Design, reason: no UI}]\nfindings:\n"
+        "  - {lens: Engineering, severity: blocking, plan_line: 'Phase 2 Check: \"it runs\"',"
+        " finding: Proves nothing, fix: Run the tests}\n"
+        "questions: []\nunverified: []\nfixes_made: null\n"
+    )
+    good_bpr = (
+        "schema: business-plan-review/v2\nplan: BUSINESS_PLAN.yaml\nproduct: Wordy\ndate: 2026-11-15\n"
+        "verdict: fix first\nverdict_reason: No channel.\nscore: 11\nheadline_finding: No channel.\nlenses:\n"
+        # Money scores 1 and Reach 0, so the total is 11 and the verdict is fix first.
+        + "".join(
+            f"  - {{lens: {lens}, score: {dict(Money=1, Reach=0).get(lens, 2)}, evidence: nothing found, gap: none}}\n"
+            for lens in ("Customer", "Edge", "Focus", "Money", "Reach", "Survival", "Execution")
+        )
+        + "fresh_owner: {stop: features, start: calls}\nstrongest_part: {quote: '\"x\"', why: real.}\n"
+        "run_next:\n  - {skill: stress-test-unit-economics, lens: Money}\n  - {skill: plan-go-to-market, lens: Reach}\n"
+    )  # fmt: skip
+    good_deck = (
+        "schema: investor-deck/v2\nplan: BUSINESS_PLAN.yaml\npmf_gate: 8\nplan_updated: 2026-11-10\n"
+        "draft: false\ncompany: Wordy\none_liner: counts words\nslides:\n"
+        "  - headline: Writers lose an hour\n    lines: [{text: Ana counts by hand, tag: evidence}]\n    source: 2\n"
+    )
+    good_out = (
+        "schema: investor-outreach/v2\nplan: BUSINESS_PLAN.yaml\npmf_gate: 8\ndraft: false\n"
+        "fit: {stage: pre-seed, cheque: 50k, sector: tools, thesis: writers}\ninvestors: []\n"
+        "email: {subject: Wordy, body: Wordy counts words.}\nfollow_up: 60 users now.\n"
+    )
+    good_rr = (
+        "schema: refactor-report/v2\ndate: 2026-11-15\ncommit: abc1234\nclusters:\n"
+        "  - name: Parsers\n    applied: [{candidate: merge parsers, before: '+40 -12', after: '+10 -30'}]\n"
+        "    skipped: [{candidate: inline helper, reason: coverage, note: untested}]\n    bugs: []\n"
+    )
+    good_ta = (
+        "schema: test-audit/v2\ndate: 2026-11-15\ncommit: abc1234\nmode: report-only\nfindings:\n"
+        "  - {severity: HIGH, location: src/discount.py, finding: 3 surviving mutants}\n"
+        "  - {severity: LOW, location: 'tests/test_parse.py:12', finding: 1.4s of real I/O}\n"
+        "fixed: null\nneeds_decision: []\nunverified: []\ncommands: [{command: pytest, verdict: passed}]\n"
+    )
+    good_st = (
+        "schema: stress-test/v2\ndate: 2026-11-15\ntopic: cache-layer\nplan: |\n  Add a cache.\n"
+        "decisions:\n  - {question: Which store, answer: Redis, reason: already deployed}\n"
+        "open:\n  - {question: Which TTL, state: blocked, detail: the store answer}\n"
+    )
+    good_lr = (
+        "schema: learning/v2\nsubject: rust-lifetimes\ngoal: read borrow errors\nnext: structs\n"
+        "terms: [{term: borrow, definition: a tracked pointer}]\nrules: [A reference never outlives its owner.]\n"
+        "self_test:\n  - {question: Why not, last_answer: not asked, date: null}\nopen_questions: []\n"
+    )
+    good_bd = (
+        "schema: blog-draft/v2\ntitle: 'Part 3: the parser'\ndescription: A hand-written parser.\n"
+        "type: Lessons Learned\nstatus: draft\ndate: 2026-11-15\nbody: |\n  I wrote the parser by hand.\n"
+    )
+    good_rp = (
+        "schema: repurposed-post/v2\nsource: post.md\nformat: thread\ndate: 2026-11-15\n"
+        "text: |\n  1/ I wrote the parser by hand.\n"
+    )
+    good_cr2 = (
+        "schema: code-review/v2\nbranch: feat/export\ndate: 2026-11-15\nverdict: Request changes\n"
+        "verdict_detail: fix the swallowed error\nsummary: |\n  Adds CSV export.\n"
+        "comments:\n  - {location: 'app/export.py:42', label: blocking, comment: the except swallows it}\n"
+    )
+    good_pr3 = (
+        "schema: period-retro/v3\nsince: 2026-11-01\nuntil: 2026-11-14\n"
+        "shipped: [{group: feat(plugins), change: YAML formats, refs: ['#290']}]\nflow:\n"
+        "  prs_merged: {value: '6', source: gh pr list}\n"
+        "  median_time_to_merge: {value: 0.4 d, source: createdAt to mergedAt}\n"
+        "  reverts: {value: '0', source: git log}\nhotspots: [{path: hooks.py, commits: 9}]\n"
+        "issues: []\nquestions: []\n"
+    )
+    gw = "ceh-git-workflow"
+    # A rendered Markdown in a plugin that had no artifact hooks before: the guard denies its edit.
+    gw_md = (
+        tmp
+        / "report-period-retro-guard"
+        / "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-period.md"
+    )
+    gw_md.parent.mkdir(parents=True, exist_ok=True)
+    gw_md.write_text(
+        "---\nschema: period-retro/v3\ngenerated_from: 20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-period.yaml\n---\n",
+        encoding="utf-8",
+    )
+    good_sr = (
+        "schema: session-retro/v3\nsession: de93dc4b\ndate: 2026-11-15\ntranscript: de93dc4b.jsonl\n"
+        "subagent_transcripts: 0\nsymptom: wrote code before a plan\nroot_causes:\n"
+        "  - kind: Guidance\n    cause: the plan skill did not fire\n"
+        "    first_wrong_turn: {citation: 'de93dc4b.jsonl:41', quote: I will start with the parser}\n"
+        "    chain: ['de93dc4b.jsonl:41 edit', 'de93dc4b.jsonl:90 stopped']\n"
+        "    route: ceh-every-session:prevent-repeat-mistake\n    status: open\n    status_detail: not routed yet\n"
+        "other_findings: []\nhypotheses: []\n"
+    )
+    sl = "ceh-session-learning"
+    stem_sr = "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-session-de93dc4b"
+    sl_dir = tmp / "report-session-retro-guard"
+    sl_dir.mkdir(parents=True, exist_ok=True)
+    (sl_dir / f"{stem_sr}.md").write_text(
+        f"---\nschema: session-retro/v3\ngenerated_from: {stem_sr}.yaml\n---\n",
+        encoding="utf-8",
+    )
+    # The scrubbed copy for sharing drops generated_from, so the guard lets its scrub edits pass.
+    (sl_dir / f"{stem_sr}-shareable.md").write_text(
+        "---\nschema: session-retro/v3\nsession: de93dc4b\n---\n", encoding="utf-8"
+    )
+    pd = "ceh-product-direction"
+    markdown_format_fixtures = [
+        *report_fixtures(sl, stem_sr, good_sr, good_sr.replace("kind: Guidance", "kind: Luck"), "root_causes.0.kind", "- **Chain:** de93dc4b.jsonl:41 edit → de93dc4b.jsonl:90 stopped", "session-retro"),
+        {"script": f"{sl}/generated-md-guard.py", "stdin": edit((sl_dir / f"{stem_sr}.md").as_posix()), "out": f"{stem_sr}.yaml"},
+        {"script": f"{sl}/generated-md-guard.py", "stdin": edit((sl_dir / f"{stem_sr}-shareable.md").as_posix()), "out": ""},
+        {"script": f"{sl}/artifact-render-hook.py", "stdin": write_at(tmp / "report-session-retro" / "bad" / f"{stem_sr}.yaml"), "env": no_uv, "out": "uv is not installed"},
+        *report_fixtures(gw, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-feat-export", good_cr2, good_cr2.replace("Request changes", "Approve"), "allows no blocking comment", "- `app/export.py:42` [blocking] the except swallows it", "code-review"),
+        *report_fixtures(gw, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-period", good_pr3, good_pr3.replace("until: 2026-11-14", "until: 2026-10-14"), "is after until", "Churn hotspots: `hooks.py` (9 commits)", "period-retro"),
+        *report_fixtures("ceh-codebase-explanation", "rust-lifetimes", good_lr, good_lr.replace("date: null", "date: 2026-11-14"), "date is null exactly when", "| Why not | — | — |", "learning"),
+        *report_fixtures("ceh-blog-and-seo", "2026-11-15-part-3-the-parser", good_bd, good_bd.replace("type: Lessons Learned", "type: Rant"), "type", "I wrote the parser by hand.", "blog-draft"),
+        *report_fixtures("ceh-blog-and-seo", "part-3-the-parser-thread", good_rp, good_rp.replace("format: thread", "format: tiktok"), "format", "1/ I wrote the parser by hand.", "repurposed-post"),
+        *report_fixtures("ceh-coding-conduct", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-refactor", good_rr, good_rr.replace("reason: coverage", "reason: taste"), "clusters.0.skipped.0.reason", "| inline helper | coverage: untested |", "refactor-report"),
+        *report_fixtures("ceh-testing", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-test-audit", good_ta, good_ta.replace("severity: HIGH", "severity: XHIGH"), "findings.0.severity", "HIGH      src/discount.py", "test-audit"),
+        *report_fixtures("ceh-testing", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-test-audit", good_ta, good_ta.replace("severity: HIGH", "severity: TMP").replace("severity: LOW", "severity: HIGH").replace("severity: TMP", "severity: LOW"), "worst first", "HIGH      src/discount.py", "test-audit-order"),
+        *report_fixtures("ceh-every-session", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-cache-layer", good_st, good_st.replace("state: blocked", "state: pending"), "open.0.state", "- Which TTL — blocked on the store answer", "stress-test"),
+        *report_fixtures("ceh-build-plan", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-wordy", good_pr, good_pr.replace("Revise first", "Ready to build"), "allows no blocking finding", "| 1 | Engineering | blocking | Phase 2 Check: \"it runs\" |", "plan-review"),
+        *report_fixtures(pd, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-business-plan-review", good_bpr, good_bpr.replace("score: 11", "score: 12"), "not the lens total", "**Run next:** stress-test-unit-economics for Money, plan-go-to-market for Reach", "business-plan-review"),
+        *report_fixtures(pd, "INVESTOR_DECK", good_deck, good_deck.replace("pmf_gate: 8", "pmf_gate: 6"), "needs draft: true", "Source: §02", "investor-deck"),
+        *report_fixtures(pd, "INVESTOR_OUTREACH", good_out, good_out.replace("investors: []", "investors: ['']"), "investors.0", "**Investors:** none supplied", "investor-outreach"),
+        # ceh-git-workflow's new hooks: the guard denies an edit to a rendered retro, and the render
+        # hook warns once without uv.
+        {"script": f"{gw}/generated-md-guard.py", "stdin": edit(gw_md.as_posix()), "out": "-period.yaml"},
+        {"script": f"{gw}/generated-md-guard.py", "stdin": edit(gw_md.as_posix()), "env": {"CEH_DISABLED_HOOKS": "generated-md-guard"}, "out": ""},
+        {"script": f"{gw}/artifact-render-hook.py", "stdin": write_at(tmp / "report-period-retro" / "bad" / "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-period.yaml"), "env": no_uv, "out": "uv is not installed"},
+    ]  # fmt: skip
     # The glossary: maintain-glossary writes it, record-project-decisions reads it. It is found by
     # its schema key, or at the session root or docs/ beside its GLOSSARY.md, so a schema-less one
     # there is reported and any other GLOSSARY.yaml is left alone. Paths are given relative to the
@@ -1173,6 +1304,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *workflow_spec_fixtures,
         *run_state_fixtures,
         *competitor_report_fixtures,
+        *markdown_format_fixtures,
         # ceh-testing holds no plan model, so a plan YAML is not its to check.
         *([{"script": "ceh-testing/artifact-render-hook.py", "stdin": write("broken.yaml"), "out": ""}] if have_uv else []),
         {"script": "ceh-testing/artifact-render-hook.py", "stdin": write_at(stray), "env": no_uv, "out": ""},

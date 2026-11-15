@@ -14,8 +14,8 @@ license: Apache-2.0
 # Write investor materials
 
 Turn the plan into what an investor reads: a slide-by-slide deck outline and the outreach notes
-that get it opened. Done is `.agents_workspace/product/business/INVESTOR_DECK.md` and
-`.agents_workspace/product/business/INVESTOR_OUTREACH.md`, where every slide's claim cites the plan section it comes from with its confidence tag,
+that get it opened. Done is `.agents_workspace/product/business/INVESTOR_DECK.yaml` and
+`.agents_workspace/product/business/INVESTOR_OUTREACH.yaml`, each rendered to its `.md`, where every slide's claim cites the plan section it comes from with its confidence tag,
 and the ask states the amount, the months of runway it buys, and the milestones it reaches.
 
 ## Procedure
@@ -72,18 +72,27 @@ and the ask states the amount, the months of runway it buys, and the milestones 
 Both files stay local beside the plan, not committed, like all business material: the outreach
 notes may name investors and contacts.
 
-`.agents_workspace/product/business/INVESTOR_DECK.md` fills `assets/investor-deck.template.md`, per
-`references/investor-deck-schema.md`, one numbered `##` slide per headline claim.
+`.agents_workspace/product/business/INVESTOR_DECK.yaml` fills `assets/investor-deck.template.yaml`, per
+the `investor-deck/v2` section of `references/investor-deck-schema.md`, one slide per headline
+claim.
 
-`.agents_workspace/product/business/INVESTOR_OUTREACH.md`, beside it, fills `assets/investor-outreach.template.md`, per
-`references/investor-outreach-schema.md`.
+`.agents_workspace/product/business/INVESTOR_OUTREACH.yaml`, beside it, fills `assets/investor-outreach.template.yaml`, per
+the `investor-outreach/v2` section of `references/investor-outreach-schema.md`.
+
+After the last edit to each, run
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which writes the
+`.md` beside it in the layout of its `assets/<schema>.template.md`, and fix the YAML for each
+error it lists. Before editing a saved YAML, run it with `check` and stop on exit 1 with its
+errors. Never edit the generated `.md`. A deck or notes saved as `.md` with no YAML beside it is
+edited in place, as its schema says. On exit 2 or 3, or without uv, say in the reply that the file
+went unchecked and unrendered.
 
 ## Stop conditions
 
 - `status` is `draft` or `pmf_gate` is below `8` → stop, and name
   `ceh-product-direction:find-product-market-fit`. Materials built on an unvalidated plan sell its
-  assumptions as facts. If the user still wants them, write them with `Draft: gate <N>/8` at the
-  top of both files.
+  assumptions as facts. If the user still wants them, write them with `draft: true`, which
+  renders `Draft: gate <N>/8` at the top of both files.
 - §11 has no burn or runway → the ask cannot say what the money buys. Name
   `ceh-product-direction:stress-test-unit-economics`.
 - **No human to answer** (a headless run, or called by another agent): ask nothing. Draft from the
