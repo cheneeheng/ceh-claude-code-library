@@ -290,5 +290,6 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   before reading a saved record. Cannot verify: Out "Running eval cases". Extra, unchanged:
   the Key Decision "Every format a skill saves has a YAML source" in
   `product/ARCHITECTURE.yaml`, and `status: published` in `blog-draft/v2`.
+- 2026-11-15 PR: #297 https://github.com/cheneeheng/ceh-claude-code-library/pull/297
 
 <!-- prettier-ignore-end -->
