@@ -1,7 +1,7 @@
 ---
 schema: decision-rule/v2
 decided: 2026-11-07
-source: "product/plans/skill-local-files.yaml"
+source: ".agents_workspace/product/plans/skill-local-files.yaml"
 paths:
   - "plugins/**"
   - ".claude/skills/**"

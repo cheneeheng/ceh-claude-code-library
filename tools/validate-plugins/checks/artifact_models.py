@@ -1,7 +1,7 @@
 """artifact-models: each YAML format's `<name>-model.py` sits beside its `<name>-schema.md`, with
 `../assets/<name>.template.yaml`, and a plugin carrying a model ships `artifact.py` and the two
 artifact hooks (the `copies` check keeps their copies identical), unless it is one of `READERS`. With uv, each template's keys
-must also be exactly its model's, through `model_vs_template.py`, and each `product/plans/*.yaml`
+must also be exactly its model's, through `model_vs_template.py`, and each `.agents_workspace/product/plans/*.yaml`
 must pass `artifact.py check`, so its generated Markdown is not stale."""
 
 from __future__ import annotations
@@ -21,11 +21,11 @@ MODEL_SUFFIX = "-model.py"
 SHARED_SCRIPTS = ("artifact.py", "artifact-render-hook.py", "generated-md-guard.py")
 # Plugins whose skills only read a format (or, as write-fastapi-endpoints, render it themselves)
 # carry the models in their skills and no hooks, per Phase 6 of
-# product/plans/artifact-validation-formats.yaml. ceh-every-session left it when hand-off-session
-# began writing handoff/v2 (product/plans/handoff-yaml.yaml), so it now ships the hooks, and
-# the blog plugin when draft-post began writing blog-voice/v2 (product/plans/blog-voice-yaml.yaml).
+# .agents_workspace/product/plans/artifact-validation-formats.yaml. ceh-every-session left it when hand-off-session
+# began writing handoff/v2 (.agents_workspace/product/plans/handoff-yaml.yaml), so it now ships the hooks, and
+# the blog plugin when draft-post began writing blog-voice/v2 (.agents_workspace/product/plans/blog-voice-yaml.yaml).
 # The three SEO skills left it when they joined that plugin as ceh-blog-and-seo, which carries the
-# hooks (product/plans/merge-blog-and-seo.yaml).
+# hooks (.agents_workspace/product/plans/merge-blog-and-seo.yaml).
 READERS = {
     "ceh-documentation",
     "ceh-python-service",
@@ -35,7 +35,7 @@ CLI = REPO / "plugins" / "standalone" / "ceh-build-plan" / "scripts" / "artifact
 
 def _survives_refused_read() -> None:
     """On Windows, reading the Markdown while another render renames over it is refused
-    (product/fixes/render-reads-markdown-while-another-render-replaces-it.md): write_atomic
+    (.agents_workspace/product/fixes/render-reads-markdown-while-another-render-replaces-it.md): write_atomic
     must still write. artifact.py imports only the stdlib at the top, so this needs no uv."""
     spec = importlib.util.spec_from_file_location("artifact_cli", CLI)
     mod = importlib.util.module_from_spec(spec)
@@ -147,7 +147,10 @@ def check() -> None:
 
     # This repo's own plan/v2 plans: a hand edit to the YAML outside Claude Code leaves its
     # generated Markdown stale, which no hook sees.
-    for plan in sorted((REPO / "product" / "plans").glob("*.yaml")):
+    # The plans live in the git-ignored workspace, so CI finds none and skips this step.
+    for plan in sorted(
+        (REPO / ".agents_workspace" / "product" / "plans").glob("*.yaml")
+    ):
         r = subprocess.run(
             [uv, "run", "--quiet", "--script", str(CLI), "check", str(plan)],
             capture_output=True, text=True, encoding="utf-8", timeout=120,

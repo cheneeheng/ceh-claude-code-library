@@ -30,7 +30,7 @@ ALLOWED: dict[str, set[str]] = {
     "ceh-scaffolding": {"docs/CROSS_REFERENCES.md"},
     "ceh-plan-build-review": {"docs/IDEAS.md"},
 }
-# product/, audits/, archive/ and CHANGELOG.md are records of what was true when written.
+# audits/, archive/ and CHANGELOG.md are records of what was true when written.
 ROOTS = ("plugins", "docs", "tools", ".claude", ".github", "examples")
 MARKETPLACE = REPO / ".claude-plugin" / "marketplace.json"
 TOKEN_PAT = re.compile(r"\bceh-[a-z0-9]+(?:-[a-z0-9]+)*")

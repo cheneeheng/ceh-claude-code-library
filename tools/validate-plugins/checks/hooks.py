@@ -922,7 +922,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{ca}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{ca}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
-    # The formats that were Markdown-only (product/plans/markdown-formats-yaml.yaml): each is found
+    # The formats that were Markdown-only (.agents_workspace/product/plans/markdown-formats-yaml.yaml): each is found
     # by its schema key alone, so a file without one is skipped.
     good_pr = (
         "schema: plan-review/v2\nplan: .agents_workspace/product/plans/wordy.yaml\ndate: 2026-11-15\n"

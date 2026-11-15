@@ -1,7 +1,7 @@
 ---
 schema: decision-rule/v2
 decided: 2026-11-06
-source: "product/plans/artifact-validation.md"
+source: ".agents_workspace/product/plans/artifact-validation.md"
 paths:
   - "plugins/**"
   - "tools/validate-plugins/**"
@@ -18,34 +18,34 @@ carries its own copy of the model and `artifact.py`, and each plugin whose skill
 whose skills read a format or, as `write-fastapi-endpoints` does, render it themselves, carries no
 hooks. The user approved the build plan trial
 (`plan/v2`) on 2026-11-07, and the other spine formats follow it, per
-`product/plans/artifact-validation-formats.yaml`: the evidence report (`evidence/v2`), the
+`.agents_workspace/product/plans/artifact-validation-formats.yaml`: the evidence report (`evidence/v2`), the
 architecture document (`architecture/v3`), the vision and strategy (`vision/v2`,
 `strategy/v2`), and the business plan (`business-plan/v3`). The reports
-`write-evidence-report` reads follow them, per `product/plans/report-only-formats.yaml`: the QA
+`write-evidence-report` reads follow them, per `.agents_workspace/product/plans/report-only-formats.yaml`: the QA
 report (`qa-report/v2`), the performance file (`perf-report/v2`), the security audit
 (`security-audit/v2`), and the three usability audits (`first-run-audit/v2`, `interface-audit/v2`,
 `error-messages-audit/v2`). The fix record (`fix-record/v2`) follows, per
-`product/plans/fix-record-yaml.yaml`, with the hooks in core `ceh-coding-conduct` by the user's
+`.agents_workspace/product/plans/fix-record-yaml.yaml`, with the hooks in core `ceh-coding-conduct` by the user's
 choice, so a record is checked even without `ceh-testing`. The session handoff (`handoff/v2`)
-follows, per `product/plans/handoff-yaml.yaml`, with the hooks in `ceh-every-session`, which leaves
+follows, per `.agents_workspace/product/plans/handoff-yaml.yaml`, with the hooks in `ceh-every-session`, which leaves
 `READERS`, also by the user's choice. The workflow spec (`workflow-spec/v2`) follows, per
-`product/plans/workflow-spec-yaml.yaml`, with the hooks in `ceh-workflow-builder`, which holds both
+`.agents_workspace/product/plans/workflow-spec-yaml.yaml`, with the hooks in `ceh-workflow-builder`, which holds both
 its writer and its reader. The run state (`run-state/v2`) follows, per
-`product/plans/run-state-yaml.yaml`, with the hooks in `ceh-workflow-runner`, which writes and
+`.agents_workspace/product/plans/run-state-yaml.yaml`, with the hooks in `ceh-workflow-runner`, which writes and
 reads it, and its model copied beside the `flow.yaml` contract in `ceh-workflow-builder`. The
 competitor report (`competitor-report/v2`) follows, per
-`product/plans/competitor-report-yaml.yaml`, with the hooks in `ceh-competitor-analysis`, which
+`.agents_workspace/product/plans/competitor-report-yaml.yaml`, with the hooks in `ceh-competitor-analysis`, which
 holds both its writer and its reader. The glossary (`glossary/v2`) follows, per
-`product/plans/glossary-yaml.yaml`, with the hooks in `ceh-codebase-explanation`, which writes it,
+`.agents_workspace/product/plans/glossary-yaml.yaml`, with the hooks in `ceh-codebase-explanation`, which writes it,
 and its model copied into `record-project-decisions` in `ceh-every-session`, which reads it. The
-blog voice profile (`blog-voice/v2`) follows, per `product/plans/blog-voice-yaml.yaml`, with the
+blog voice profile (`blog-voice/v2`) follows, per `.agents_workspace/product/plans/blog-voice-yaml.yaml`, with the
 hooks in `ceh-blog-and-seo`, which is not in `READERS` because `draft-post` writes it and
 `edit-post` reads it.
 The repeat-mistake report (`repeat-mistake/v2`) follows, per
-`product/plans/repeat-mistake-yaml.yaml`, with the hooks already in `ceh-every-session`, whose
+`.agents_workspace/product/plans/repeat-mistake-yaml.yaml`, with the hooks already in `ceh-every-session`, whose
 `prevent-repeat-mistake` both writes it and reads it in a later session.
 The formats left Markdown-only follow by the user's decision of 2026-11-13, not because another
-stage reads them, per `product/plans/markdown-formats-yaml.yaml`: the plan review
+stage reads them, per `.agents_workspace/product/plans/markdown-formats-yaml.yaml`: the plan review
 (`plan-review/v2`), with the hooks already in `ceh-build-plan`, and the business plan review
 (`business-plan-review/v2`) and the investor deck and outreach notes (`investor-deck/v2`,
 `investor-outreach/v2`), with the hooks already in `ceh-product-direction`. The refactor report

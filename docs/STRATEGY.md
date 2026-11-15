@@ -210,8 +210,7 @@ it installed be disabled. A document carries the route at no install cost. The b
 
 This list shrinks as the gaps close. Remove a line in the PR that closes it.
 
-- This repo keeps its own product artifacts in a root `product/`, named in its `CLAUDE.md`, until a
-  plan of its own moves them to `.agents_workspace/product/`.
+None.
 
 ## Open questions
 

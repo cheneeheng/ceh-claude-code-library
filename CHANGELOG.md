@@ -11,6 +11,17 @@ before this repo live in
 
 ## 2026-11-15
 
+This repo's root `product/` (architecture, plans, fix records, retros) moved to
+`.agents_workspace/product/`, per `.agents_workspace/product/plans/move-product-to-workspace.yaml`,
+so the repo now follows `decision-artifact-locations.md` with no exception. `validate.py` checks
+the plans where the workspace exists and skips them in CI, the `hygiene` check no longer scans
+`product/`, and the rules, docs and validator comments name the new paths. No plugin changes.
+
+### Changed
+
+- Move `product/` to `.agents_workspace/product/` and drop the exception from root `CLAUDE.md`,
+  `decision-artifact-locations.md` and `docs/STRATEGY.md`.
+
 `product/plans/move-product-to-workspace.yaml` plans the move of this repo's own root `product/`
 (architecture, plans, fix records, retros) to `.agents_workspace/product/`, the location every
 skill already uses by default. `validate.py` then checks the plans only where the workspace

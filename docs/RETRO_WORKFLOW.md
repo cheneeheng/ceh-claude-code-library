@@ -71,8 +71,7 @@ report saved as a `.md` with no YAML beside it.
 
 The workspace may be pushed to a remote, so a report is cleaned before it is saved:
 `diagnose-session` scrubs and audits its root causes (secrets, home paths, hostnames, personal
-data), and `prevent-repeat-mistake` masks secrets as `<secret>`. The `hygiene` check in
-`tools/validate-plugins/validate.py` rejects a home path anywhere in this repo's own `product/`.
+data), and `prevent-repeat-mistake` masks secrets as `<secret>`.
 
 ## Scenario A: a period retro
 
