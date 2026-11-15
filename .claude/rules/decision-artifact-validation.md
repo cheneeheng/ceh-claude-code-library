@@ -51,6 +51,10 @@ stage reads them, per `product/plans/markdown-formats-yaml.yaml`: the plan revie
 `investor-outreach/v2`), with the hooks already in `ceh-product-direction`. The refactor report
 (`refactor-report/v2`), the test audit (`test-audit/v2`) and the stress test (`stress-test/v2`)
 follow, with the hooks already in `ceh-coding-conduct`, `ceh-testing` and `ceh-every-session`.
+The learning record (`learning/v2`) follows, with the hooks already in
+`ceh-codebase-explanation`, and the blog draft and repurposed post (`blog-draft/v2`,
+`repurposed-post/v2`), with the hooks already in `ceh-blog-and-seo`, where `edit-post` and
+`repurpose-post` carry the blog draft model to check a post before reading it.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

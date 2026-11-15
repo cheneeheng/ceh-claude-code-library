@@ -1,0 +1,10 @@
+---
+schema: blog-draft/v2
+title: <title>
+description: <meta description>
+type: <Lessons Learned | How-To | Opinion | Project / Launch | Thought Leadership | Personal Story>
+status: <draft | published>
+date: YYYY-MM-DD
+---
+
+<body>

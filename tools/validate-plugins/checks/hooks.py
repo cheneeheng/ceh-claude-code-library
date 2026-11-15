@@ -969,8 +969,24 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "decisions:\n  - {question: Which store, answer: Redis, reason: already deployed}\n"
         "open:\n  - {question: Which TTL, state: blocked, detail: the store answer}\n"
     )
+    good_lr = (
+        "schema: learning/v2\nsubject: rust-lifetimes\ngoal: read borrow errors\nnext: structs\n"
+        "terms: [{term: borrow, definition: a tracked pointer}]\nrules: [A reference never outlives its owner.]\n"
+        "self_test:\n  - {question: Why not, last_answer: not asked, date: null}\nopen_questions: []\n"
+    )
+    good_bd = (
+        "schema: blog-draft/v2\ntitle: 'Part 3: the parser'\ndescription: A hand-written parser.\n"
+        "type: Lessons Learned\nstatus: draft\ndate: 2026-11-15\nbody: |\n  I wrote the parser by hand.\n"
+    )
+    good_rp = (
+        "schema: repurposed-post/v2\nsource: post.md\nformat: thread\ndate: 2026-11-15\n"
+        "text: |\n  1/ I wrote the parser by hand.\n"
+    )
     pd = "ceh-product-direction"
     markdown_format_fixtures = [
+        *report_fixtures("ceh-codebase-explanation", "rust-lifetimes", good_lr, good_lr.replace("date: null", "date: 2026-11-14"), "date is null exactly when", "| Why not | — | — |", "learning"),
+        *report_fixtures("ceh-blog-and-seo", "2026-11-15-part-3-the-parser", good_bd, good_bd.replace("type: Lessons Learned", "type: Rant"), "type", "I wrote the parser by hand.", "blog-draft"),
+        *report_fixtures("ceh-blog-and-seo", "part-3-the-parser-thread", good_rp, good_rp.replace("format: thread", "format: tiktok"), "format", "1/ I wrote the parser by hand.", "repurposed-post"),
         *report_fixtures("ceh-coding-conduct", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-refactor", good_rr, good_rr.replace("reason: coverage", "reason: taste"), "clusters.0.skipped.0.reason", "| inline helper | coverage: untested |", "refactor-report"),
         *report_fixtures("ceh-testing", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-test-audit", good_ta, good_ta.replace("severity: HIGH", "severity: XHIGH"), "findings.0.severity", "HIGH      src/discount.py", "test-audit"),
         *report_fixtures("ceh-testing", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-test-audit", good_ta, good_ta.replace("severity: HIGH", "severity: TMP").replace("severity: LOW", "severity: HIGH").replace("severity: TMP", "severity: LOW"), "worst first", "HIGH      src/discount.py", "test-audit-order"),

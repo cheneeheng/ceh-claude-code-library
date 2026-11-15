@@ -20,6 +20,13 @@ produced, labelled, and ends on the post's open thread or a plain link to it.
 
 ### 1. Read the post
 
+When the post is a file with a `.yaml` of the same name beside it, the YAML is the post: first
+run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` (format in
+`${CLAUDE_SKILL_DIR}/references/blog-draft-schema.md`), and read its `title` and `body`. On exit
+1, stop and report its errors, unless the only error is a stale `.md`, which the same command with
+`render` repairs. On exit 2 or 3, without uv, or when the command is denied, say that the post
+went unchecked, and read it anyway. A `.md` with no YAML beside it is read as it is.
+
 Identify: **the thesis** (the single central claim); **the key takeaway**; **the audience**; **the tone**; **length** (enough content to thread, or short-form?).
 
 **Series awareness**: if the post is an episode in a series, the adaptation is the reader's entry point into the whole serial, so use that. The thread's closing link or the newsletter blurb can point at the series ("part 3 of the [X] build — start at part 1: [link]"), and the post's open thread (what's unresolved, what comes next) is natural enticement material: it promises a next episode without manufacturing a cliffhanger. Don't spoil an earlier episode's payoff in the adaptation.
@@ -129,9 +136,13 @@ overrides the format rules above.
 
 Single format: output directly with a format label. Multiple: `##` heading per format in the order above.
 
-Save each format to its own file, `<slug>-<format>.md` (`thread`, `linkedin`, `tldr`, `newsletter`): next to the post when it is on disk, otherwise in `.agents_workspace/product/blog/` with the slug from the post's title in kebab case. Each file fills
-`${CLAUDE_SKILL_DIR}/assets/repurposed-post.template.md`, per
-`${CLAUDE_SKILL_DIR}/references/repurposed-post-schema.md`. A re-run overwrites the format files, never the post. Say where they were saved.
+Save each format to its own file, `<slug>-<format>.yaml` (`thread`, `linkedin`, `tldr`, `newsletter`): next to the post when it is on disk, otherwise in `.agents_workspace/product/blog/` with the slug from the post's title in kebab case. Each file fills
+`${CLAUDE_SKILL_DIR}/assets/repurposed-post.template.yaml`, per the `repurposed-post/v2` section of
+`${CLAUDE_SKILL_DIR}/references/repurposed-post-schema.md`. Then run
+`uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml` for each, which writes
+the `.md` beside it in the layout of `${CLAUDE_SKILL_DIR}/assets/repurposed-post.template.md`, and
+fix the YAML for each error it lists. Never edit the generated `.md`. On exit 2 or 3, or without
+uv, say that the files went unchecked and unrendered. A re-run overwrites the format files, never the post. Say where they were saved.
 
 After delivering, ask for feedback as one batch in the same format, one atomic question per
 adjustment: tone, length, a specific tweet, the LinkedIn opener, each with options (keep, a concrete

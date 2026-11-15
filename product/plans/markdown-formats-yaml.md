@@ -190,7 +190,15 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 - **Check:** `python tools/validate-plugins/validate.py` exits 0 with the new fixtures in its hooks output,
   and each new fixture failed once with its assertion inverted. With one
   skill line changed to a `.md` path in one of this phase's folders it exits 1 naming that line.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py`: "OK: all plugin checks passed". With good and
+  bad swapped, all eleven render and block pairs failed (22 failures), the three new pairs
+  among them. With `.agents_workspace/product/blog/<slug>-thread.md` appended to
+  `repurpose-post/SKILL.md` it failed once: "SKILL.md:157: the .md path of a YAML format". `repurpose-post` also carries the blog-draft schema, model and both templates, since it
+  reads a post's content, per the Readers decision, and `explain-until-understood` checks its
+  record on load. `blog-draft/v2` allows `status: published` beside `draft`, because
+  `edit-post` now replaces a tracked live post's front matter with the format's. A learning
+  record's self-test `date` is null exactly while the question is `not asked`, rendered `—`.
+  `docs/CATALOG.md` names no path of these formats, so it needed no change.
 
 ### Phase 4: Code review and period retro, with hooks in ceh-git-workflow
 
@@ -244,5 +252,7 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   their `.md` patterns and hook fixtures. validate.py passes.
 - 2026-11-15 Built Phase 2: refactor-report/v2, test-audit/v2 and stress-test/v2, with `artifact.py` copied into each
   skill, their `.md` patterns and hook fixtures. validate.py passes.
+- 2026-11-15 Built Phase 3: learning/v2, blog-draft/v2 (in `draft-post`, `edit-post` and `repurpose-post`) and
+  repurposed-post/v2, with their `.md` patterns and hook fixtures. validate.py passes.
 
 <!-- prettier-ignore-end -->

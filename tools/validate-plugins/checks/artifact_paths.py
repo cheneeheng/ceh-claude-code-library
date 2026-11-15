@@ -36,7 +36,7 @@ YAML_FORMAT_MD = re.compile(
             rf"product/plan-reviews/{P}\.md\b",
             rf"product/business-plan-reviews/{P}\.md\b",
             r"product/business/INVESTOR_(?:DECK|OUTREACH)\.md\b",
-            rf"product/(?:refactor|test-audits|stress-tests)/{P}\.md\b",
+            rf"product/(?:refactor|test-audits|stress-tests|learning|blog)/{P}\.md\b",
         )
     )
 )

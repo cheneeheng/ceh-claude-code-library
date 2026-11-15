@@ -16,17 +16,20 @@ YAML source with a pydantic model, as the user decided on 2026-11-13. Each skill
 now saves checked YAML and renders its Markdown beside it, each plugin's render hook checks every
 write, and the guard denies hand edits to the Markdown. A file already saved as Markdown stays as
 written and is still read. The plan review, business plan review, and investor deck and outreach
-notes come first, then the refactor report, test audit and stress test.
+notes come first, then the refactor report, test audit and stress test, then the learning record, blog draft and
+repurposed post.
 
 ### Plugin versions
 
-| Plugin                  | Version |
-| ----------------------- | ------- |
-| `ceh-build-plan`        | 2.0.11  |
-| `ceh-coding-conduct`    | 2.5.16  |
-| `ceh-every-session`     | 2.9.21  |
-| `ceh-product-direction` | 2.0.10  |
-| `ceh-testing`           | 1.6.24  |
+| Plugin                     | Version |
+| -------------------------- | ------- |
+| `ceh-blog-and-seo`         | 2.0.11  |
+| `ceh-build-plan`           | 2.0.11  |
+| `ceh-codebase-explanation` | 1.3.14  |
+| `ceh-coding-conduct`       | 2.5.16  |
+| `ceh-every-session`        | 2.9.21  |
+| `ceh-product-direction`    | 2.0.10  |
+| `ceh-testing`              | 1.6.24  |
 
 ### Added
 
@@ -43,6 +46,12 @@ notes come first, then the refactor report, test audit and stress test.
   worst first and the Fixed list present exactly in fix mode.
 - `stress-test/v2`: `stress-test-plan` saves its outcome as YAML when there is no plan file to
   write back to, each open question either assumed or blocked.
+- `learning/v2`: `explain-until-understood` keeps its learning record as YAML, checked on load,
+  each self-test question's date null exactly while it is not yet asked.
+- `blog-draft/v2` and `repurposed-post/v2`: `draft-post`, `edit-post` and `repurpose-post` save
+  every post as YAML with its Markdown rendered beside it, wherever it goes, a blog repo
+  included, where the rendered `.md` is the post. `edit-post` and `repurpose-post` check a
+  post's YAML before reading it, and read a plain `.md` as before.
 - `validate.py` rejects the `.md` path of each new format, and its hook fixtures cover them.
 
 ---
