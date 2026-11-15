@@ -3,7 +3,7 @@ schema: plan/v2
 generated_from: markdown-formats-yaml.yaml
 generated_note: "Do not edit. artifact.py renders this file from markdown-formats-yaml.yaml: edit the YAML, then run artifact.py render."
 title: The Markdown-only formats become YAML formats
-status: building
+status: built
 created: 2026-11-14
 ---
 
@@ -240,7 +240,15 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   `.agents_workspace/product/retros/<name>-session.md` it exits 1 naming that line, and
   `grep -rnE "schema: (plan-review|code-review|refactor-report|stress-test|test-audit|business-plan-review|investor-deck|investor-outreach|blog-draft|repurposed-post|learning)/v1|schema: (period|session)-retro/v2" plugins/standalone --include=*.template.md`
   prints nothing.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py`: "OK: all plugin checks passed". With good and
+  bad swapped, the session-retro pair (154-155) failed, and the two guard fixtures (157-158,
+  rendered `.md` denied, `-shareable.md` allowed) failed with their expected text changed.
+  With `.agents_workspace/product/retros/<name>-session.md` appended to
+  `diagnose-session/SKILL.md` it failed once: "SKILL.md:102: the .md path of a YAML format".
+  The template grep printed nothing (exit 1). The `.md` pattern skips a path ending `-shareable.md`, since that copy is Markdown on
+  purpose. `session-retro/v3` names the root cause class `kind`, as `period-retro/v3` does,
+  and needs at least two chain steps. `docs/CROSS_REFERENCES.md` "Retro routing and report
+  location" still named `.md` and the v2 templates after Phase 4, and is fixed here.
 
 ## Open
 
@@ -265,5 +273,8 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   repurposed-post/v2, with their `.md` patterns and hook fixtures. validate.py passes.
 - 2026-11-15 Built Phase 4: The artifact hooks in `ceh-git-workflow`, code-review/v2 and period-retro/v3, with their
   `.md` patterns and hook fixtures. validate.py passes.
+- 2026-11-15 Built Phase 5: The artifact hooks in `ceh-session-learning`, session-retro/v3 and the shareable copy
+  without generated keys, with the `.md` pattern and hook fixtures. validate.py passes. Plan
+  built. The user checks the build against the plan, so no Checked line from this session.
 
 <!-- prettier-ignore-end -->

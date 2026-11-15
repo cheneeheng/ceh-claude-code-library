@@ -1007,8 +1007,33 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "---\nschema: period-retro/v3\ngenerated_from: 20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-period.yaml\n---\n",
         encoding="utf-8",
     )
+    good_sr = (
+        "schema: session-retro/v3\nsession: de93dc4b\ndate: 2026-11-15\ntranscript: de93dc4b.jsonl\n"
+        "subagent_transcripts: 0\nsymptom: wrote code before a plan\nroot_causes:\n"
+        "  - kind: Guidance\n    cause: the plan skill did not fire\n"
+        "    first_wrong_turn: {citation: 'de93dc4b.jsonl:41', quote: I will start with the parser}\n"
+        "    chain: ['de93dc4b.jsonl:41 edit', 'de93dc4b.jsonl:90 stopped']\n"
+        "    route: ceh-every-session:prevent-repeat-mistake\n    status: open\n    status_detail: not routed yet\n"
+        "other_findings: []\nhypotheses: []\n"
+    )
+    sl = "ceh-session-learning"
+    stem_sr = "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-session-de93dc4b"
+    sl_dir = tmp / "report-session-retro-guard"
+    sl_dir.mkdir(parents=True, exist_ok=True)
+    (sl_dir / f"{stem_sr}.md").write_text(
+        f"---\nschema: session-retro/v3\ngenerated_from: {stem_sr}.yaml\n---\n",
+        encoding="utf-8",
+    )
+    # The scrubbed copy for sharing drops generated_from, so the guard lets its scrub edits pass.
+    (sl_dir / f"{stem_sr}-shareable.md").write_text(
+        "---\nschema: session-retro/v3\nsession: de93dc4b\n---\n", encoding="utf-8"
+    )
     pd = "ceh-product-direction"
     markdown_format_fixtures = [
+        *report_fixtures(sl, stem_sr, good_sr, good_sr.replace("kind: Guidance", "kind: Luck"), "root_causes.0.kind", "- **Chain:** de93dc4b.jsonl:41 edit → de93dc4b.jsonl:90 stopped", "session-retro"),
+        {"script": f"{sl}/generated-md-guard.py", "stdin": edit((sl_dir / f"{stem_sr}.md").as_posix()), "out": f"{stem_sr}.yaml"},
+        {"script": f"{sl}/generated-md-guard.py", "stdin": edit((sl_dir / f"{stem_sr}-shareable.md").as_posix()), "out": ""},
+        {"script": f"{sl}/artifact-render-hook.py", "stdin": write_at(tmp / "report-session-retro" / "bad" / f"{stem_sr}.yaml"), "env": no_uv, "out": "uv is not installed"},
         *report_fixtures(gw, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-feat-export", good_cr2, good_cr2.replace("Request changes", "Approve"), "allows no blocking comment", "- `app/export.py:42` [blocking] the except swallows it", "code-review"),
         *report_fixtures(gw, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-period", good_pr3, good_pr3.replace("until: 2026-11-14", "until: 2026-10-14"), "is after until", "Churn hotspots: `hooks.py` (9 commits)", "period-retro"),
         *report_fixtures("ceh-codebase-explanation", "rust-lifetimes", good_lr, good_lr.replace("date: null", "date: 2026-11-14"), "date is null exactly when", "| Why not | — | — |", "learning"),

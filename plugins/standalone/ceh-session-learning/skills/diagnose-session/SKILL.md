@@ -63,7 +63,8 @@ route in this repo's scope has been acted on, and the report is saved.
 
 Only when the report will leave this machine (an issue, a bug report, a message to someone):
 
-1. **Scrub a copy** to `<report>-shareable.md`. Replace secrets, tokens, email addresses, home
+1. **Scrub a copy** to `<report>-shareable.md`: copy the rendered `.md`, drop its
+   `generated_from` and `generated_note` lines, so the copy is yours to edit, then edit it. Replace secrets, tokens, email addresses, home
    directory paths, hostnames, internal repo and customer names, and personal data with
    placeholders such as `<token>` and `<home>`. Cut quotes the diagnosis does not need.
 2. **Audit the scrub with a fresh reader.** Dispatch one background subagent, which never saw the
@@ -85,11 +86,16 @@ Only when the report will leave this machine (an issue, a bug report, a message 
 ## Output
 
 Save one file, creating the directory if needed:
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-session-<diagnosed-id>.md`,
+`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-session-<diagnosed-id>.yaml`,
 holding every root cause, those fixed in this repo and those left for the user, the other findings
 and the hypotheses, because the routed work reads it. Scrub and audit its root causes first, per
-Sharing steps 1 and 2, because the workspace may be pushed to a remote. It fills
-`assets/session-retro.template.md`, per `references/session-retro-schema.md`. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
-`<diagnosed-id>` is the first 8 characters of the id of the session diagnosed.
+the replacements and the audit of Sharing steps 1 and 2, applied to the YAML, because the
+workspace may be pushed to a remote. It fills `assets/session-retro.template.yaml`, per the
+`session-retro/v3` section of `references/session-retro-schema.md`. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+`<diagnosed-id>` is the first 8 characters of the id of the session diagnosed. After the last
+edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which
+writes the `.md` beside it in the layout of `assets/session-retro.template.md`, and fix the YAML
+for each error it lists. Never edit the generated `.md`. On exit 2 or 3, or without uv, say in
+the reply that the report went unchecked and unrendered.
 
 Reply with the root causes one line each, their routes and status, and the report path.

@@ -15,10 +15,9 @@ before this repo live in
 YAML source with a pydantic model, as the user decided on 2026-11-13. Each skill that writes one
 now saves checked YAML and renders its Markdown beside it, each plugin's render hook checks every
 write, and the guard denies hand edits to the Markdown. A file already saved as Markdown stays as
-written and is still read. The plan review, business plan review, and investor deck and outreach
-notes come first, then the refactor report, test audit and stress test, then the learning record, blog draft and
-repurposed post, then the code review and period retro, with the hooks added to
-`ceh-git-workflow`.
+written and is still read. `ceh-git-workflow` and `ceh-session-learning` had no artifact hooks
+and now ship both. With every format a skill saves now YAML-backed, `validate.py` rejects the
+`.md` path of each one.
 
 ### Plugin versions
 
@@ -31,6 +30,7 @@ repurposed post, then the code review and period retro, with the hooks added to
 | `ceh-every-session`        | 2.9.21  |
 | `ceh-git-workflow`         | 1.5.19  |
 | `ceh-product-direction`    | 2.0.10  |
+| `ceh-session-learning`     | 2.0.5   |
 | `ceh-testing`              | 1.6.24  |
 
 ### Added
@@ -58,7 +58,16 @@ repurposed post, then the code review and period retro, with the hooks added to
   verdict checked against the blocking comments, and `review-recent-work` saves its retro as YAML,
   finding the last retro by its `-period.yaml` or an older `-period.md`. `ceh-git-workflow` gains
   the artifact render hook and the generated-Markdown guard, which need uv for the check.
+- `session-retro/v3`: `diagnose-session` saves its diagnosis as YAML, every citation checked as
+  `<transcript>:<line>`. `ceh-session-learning` gains the same two hooks in a new
+  `hooks/hooks.json`. The `-shareable.md` copy drops the generated keys, so its scrub edits pass
+  the guard.
 - `validate.py` rejects the `.md` path of each new format, and its hook fixtures cover them.
+
+### Fixed
+
+- `docs/CROSS_REFERENCES.md` "Retro routing and report location" names the `.yaml` report and the
+  current template versions.
 
 ---
 

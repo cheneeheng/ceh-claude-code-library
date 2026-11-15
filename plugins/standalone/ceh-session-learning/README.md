@@ -39,7 +39,23 @@ Both load only when you ask, so other sessions pay nothing for them.
 - The transcripts under `~/.claude/projects/` on the machine that ran the session. A session from
   another machine needs its `.jsonl` copied over first.
 - `python3` lets the analysts print a condensed timeline of large transcripts. Without it they fall
-  back to Grep.
+  back to Grep. The hooks below need it too.
+- [uv](https://docs.astral.sh/uv/) checks the saved diagnosis (`session-retro/v3` YAML) and
+  renders its Markdown, installing pydantic and PyYAML on first use. Without it the YAML is saved
+  unchecked and the agent says the Markdown was not rendered.
+
+## Hooks
+
+Two hooks on `Edit|Write|MultiEdit`, both Python scripts:
+
+- `artifact-render-hook.py` (PostToolUse) checks a written session diagnosis YAML against its
+  model and renders its Markdown. Without `uv` the agent is told once per session that the file
+  went unchecked.
+- `generated-md-guard.py` (PreToolUse) denies a hand edit to the generated Markdown, which the
+  next render would overwrite. The `-shareable.md` copy carries no `generated_from` key, so its
+  scrub edits pass.
+
+`CEH_ARTIFACT_CHECK=off` turns both off, and `CEH_DISABLED_HOOKS` turns off either by name.
 
 ## Not this plugin
 

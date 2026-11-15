@@ -1,0 +1,26 @@
+schema: session-retro/v3
+session: <session-id>
+date: YYYY-MM-DD
+transcript: <path>
+subagent_transcripts: <n>
+symptom: <symptom>
+root_causes:
+  - kind: <Request | Guidance | Environment | Model | Claude Code>
+    cause: <root cause>
+    first_wrong_turn:
+      citation: <transcript:line>
+      quote: <quote>
+    chain:
+      - <first wrong turn>
+      - <step>
+      - <visible failure>
+    route: '<skill | user: <where>>'
+    status: <handed off | open>
+    status_detail: <artifact | why>
+other_findings:
+  - lens: <lens>
+    finding: <finding>
+    citation: <transcript:line>
+hypotheses:
+  - cause: <cause>
+    confirm: <what would confirm it>

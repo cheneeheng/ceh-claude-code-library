@@ -59,15 +59,15 @@ sessions behave (`CLAUDE.md`, memory, a skill, a hook) for the user to approve.
 Every retro saves one report, holding the issues whose fix lands in this repo and those left for
 the user:
 
-| Report                                            | File                                                                          |
-| ------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `session-<id-prefix>`                             | `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`   |
-| `period`, `repeat-mistake`, with its `.md` beside | `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.yaml` |
+| Report                                                                   | File                                                                          |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| `period`, `session-<id-prefix>`, `repeat-mistake`, with its `.md` beside | `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.yaml` |
 
 The routed work and the next retro read it. A repo whose `CLAUDE.md` names another location saves
-there. Each skill fills its own template, `period-retro/v3`, `session-retro/v2`, or
+there. Each skill fills its own template, `period-retro/v3`, `session-retro/v3`, or
 `repeat-mistake/v2`, because the three reports differ. A report saved before 2026-11-14 as a pair,
-one file per side linked through `other_file`, is still read.
+one file per side linked through `other_file`, is still read, and so is a period or session
+report saved as a `.md` with no YAML beside it.
 
 The workspace may be pushed to a remote, so a report is cleaned before it is saved:
 `diagnose-session` scrubs and audits its root causes (secrets, home paths, hostnames, personal

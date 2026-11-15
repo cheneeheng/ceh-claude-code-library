@@ -434,6 +434,10 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-git-workflow/scripts/artifact.py`                                                                         | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-git-workflow/scripts/artifact-render-hook.py`                                                             | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-git-workflow/scripts/generated-md-guard.py`                                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-session-learning/skills/diagnose-session/scripts/artifact.py`                                             | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-session-learning/scripts/artifact.py`                                                                     | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-session-learning/scripts/artifact-render-hook.py`                                                         | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-session-learning/scripts/generated-md-guard.py`                                                           | whole file                                                  | none                                                                             |
 | `ceh-build-plan:review-build-plan`, `ceh-build-plan:implement-from-plan`, `ceh-check-build-against-plan:check-build-against-plan` | the "A `plan/v2` plan is checked first" paragraph in step 1 | `implement-from-plan` adds where a Status note and a Record entry go in the YAML |
 
 **Shared:** the whole plan format, byte for byte: the `.agents_workspace/product/plans/<slug>.yaml` location, the
@@ -886,9 +890,9 @@ delete".
 `record-project-decisions`, anything else in the repo fixed directly, outside the repo left for the
 user), acting on every in-scope route in the same session, an uninstalled route left open, and the
 one-file save: every issue, in the repo or outside it, in
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.md`. Each skill keeps its own
-report template (`period-retro/v2`, `session-retro/v2`, `repeat-mistake/v2`), because the three
-reports differ.
+`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.yaml`, with its `.md`
+rendered beside it. Each skill keeps its own report template (`period-retro/v3`,
+`session-retro/v3`, `repeat-mistake/v2`), because the three reports differ.
 
 ## Eval case strictness levels
 

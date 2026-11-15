@@ -56,7 +56,10 @@ The learning record (`learning/v2`) follows, with the hooks already in
 `repurposed-post/v2`), with the hooks already in `ceh-blog-and-seo`, where `edit-post` and
 `repurpose-post` carry the blog draft model to check a post before reading it. The code review
 (`code-review/v2`) and the period retro (`period-retro/v3`) follow, with the hooks added to
-`ceh-git-workflow`, which had none of its own for an artifact.
+`ceh-git-workflow`, which had none of its own for an artifact. The session retro
+(`session-retro/v3`) follows, with the hooks added to `ceh-session-learning` in a new
+`hooks/hooks.json`. Its `-shareable.md` copy for sharing stays Markdown, with no
+`generated_from`, so the guard lets its scrub edits pass.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed
