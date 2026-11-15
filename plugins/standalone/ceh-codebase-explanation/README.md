@@ -35,7 +35,9 @@ rules for how an agent behaves while it codes.
 After every write to it, the render hook checks the YAML against its model through `uv` and renders
 the `ARCHITECTURE.md` beside it with its section numbers and Contents list, or reports each error back
 to the agent and leaves the Markdown as it was. `maintain-glossary` saves `GLOSSARY.yaml`
-(`glossary/v2`), and the same hook checks it and renders `GLOSSARY.md`. A `GLOSSARY.yaml` with no
+(`glossary/v2`), and the same hook checks it and renders `GLOSSARY.md`. `explain-until-understood`
+keeps its learning record at `.agents_workspace/product/learning/<subject>.yaml` (`learning/v2`),
+which the hook checks and renders too. A `GLOSSARY.yaml` with no
 schema key is reported only at the session's root or in `docs/` beside a `GLOSSARY.md`, so a
 project's unrelated `GLOSSARY.yaml` is left alone. The guard denies a direct edit to a generated
 Markdown file and names its YAML. Both need `uv`: without it the agent is told once per session

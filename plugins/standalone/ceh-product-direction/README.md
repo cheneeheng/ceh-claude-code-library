@@ -129,7 +129,9 @@ After every write to `BUSINESS_PLAN.yaml`, `VISION.yaml` or `STRATEGY.yaml`,
 Markdown, or reports each error back to the agent and leaves the Markdown as it was. An adopted
 vision or strategy that still holds `[assumed]` is one such error. `find-product-market-fit` also carries the architecture
 model, to check `.agents_workspace/product/ARCHITECTURE.yaml` before reading it, so the hook acts on a write to that
-file too. `generated-md-guard.py` (`PreToolUse`) denies a direct
+file too. It also checks and renders `review-business-plan`'s saved review
+(`business-plan-review/v2`) and `write-investor-materials`' `INVESTOR_DECK.yaml`
+(`investor-deck/v2`) and `INVESTOR_OUTREACH.yaml` (`investor-outreach/v2`). `generated-md-guard.py` (`PreToolUse`) denies a direct
 edit to a generated Markdown file and names its YAML. Both need `uv`: without it the agent is told
 once per session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS`
 with `artifact-render-hook` or `generated-md-guard`, switches them off.

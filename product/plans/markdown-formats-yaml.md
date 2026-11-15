@@ -277,5 +277,13 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   without generated keys, with the `.md` pattern and hook fixtures. validate.py passes. Plan
   built. The user checks the build against the plan, so no Checked line from this session.
 - 2026-11-15 PR: #296 https://github.com/cheneeheng/ceh-claude-code-library/pull/296
+- 2026-11-15 Checked: 27 Built, 1 Gap, 1 Deviation, 1 Cannot verify, 2 Extra. Gap: the hook sections of the
+  `ceh-coding-conduct`, `ceh-testing`, `ceh-every-session`, `ceh-product-direction` and
+  `ceh-codebase-explanation` READMEs did not name their new formats. Deviation:
+  `explain-until-understood` read its saved learning record without `artifact.py check`.
+  Cannot verify: Out "Running eval cases", which the code cannot show. Extra: the Key Decision
+  "Every format a skill saves has a YAML source" in `product/ARCHITECTURE.yaml`, and
+  `status: published` in `blog-draft/v2`. The Gap and the Deviation are fixed on the branch
+  `docs/markdown-formats-yaml-check-fixes`, on the user's request.
 
 <!-- prettier-ignore-end -->

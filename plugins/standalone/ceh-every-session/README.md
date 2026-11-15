@@ -151,7 +151,9 @@ plan and architecture models, and `record-project-decisions` the glossary model,
 checks and renders those files when they
 are written, as their own plugins already do. `prevent-repeat-mistake` saves its report as
 `repeat-mistake/v2`, which the same hook checks and renders, and a dated report missing its schema
-key in either retros folder is reported, not skipped. Without `uv` the agent is told once per session that
+key in either retros folder is reported, not skipped. `stress-test-plan` saves its outcome as
+`stress-test/v2` when there is no plan file to write back to, which the hook checks and renders
+too. Without `uv` the agent is told once per session that
 the file went unchecked. `CEH_ARTIFACT_CHECK=off` switches both off.
 
 ### Usage-limit guard
