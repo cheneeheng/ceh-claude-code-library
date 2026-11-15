@@ -17,7 +17,8 @@ now saves checked YAML and renders its Markdown beside it, each plugin's render 
 write, and the guard denies hand edits to the Markdown. A file already saved as Markdown stays as
 written and is still read. The plan review, business plan review, and investor deck and outreach
 notes come first, then the refactor report, test audit and stress test, then the learning record, blog draft and
-repurposed post.
+repurposed post, then the code review and period retro, with the hooks added to
+`ceh-git-workflow`.
 
 ### Plugin versions
 
@@ -28,6 +29,7 @@ repurposed post.
 | `ceh-codebase-explanation` | 1.3.14  |
 | `ceh-coding-conduct`       | 2.5.16  |
 | `ceh-every-session`        | 2.9.21  |
+| `ceh-git-workflow`         | 1.5.19  |
 | `ceh-product-direction`    | 2.0.10  |
 | `ceh-testing`              | 1.6.24  |
 
@@ -52,6 +54,10 @@ repurposed post.
   every post as YAML with its Markdown rendered beside it, wherever it goes, a blog repo
   included, where the rendered `.md` is the post. `edit-post` and `repurpose-post` check a
   post's YAML before reading it, and read a plain `.md` as before.
+- `code-review/v2` and `period-retro/v3`: `code-review` saves an unposted review as YAML, its
+  verdict checked against the blocking comments, and `review-recent-work` saves its retro as YAML,
+  finding the last retro by its `-period.yaml` or an older `-period.md`. `ceh-git-workflow` gains
+  the artifact render hook and the generated-Markdown guard, which need uv for the check.
 - `validate.py` rejects the `.md` path of each new format, and its hook fixtures cover them.
 
 ---

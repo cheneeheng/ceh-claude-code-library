@@ -213,7 +213,16 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   the existing workspace sync fixtures still pass, and each new fixture failed once with its
   assertion inverted. With one
   skill line changed to a `.md` path in one of this phase's folders it exits 1 naming that line.
-- **Status:** todo
+- **Status:** done, `python tools/validate-plugins/validate.py`: "OK: all plugin checks passed", the workspace
+  sync fixtures among the passing hooks fixtures (only `.sh` fixtures skip without Git Bash).
+  With good and bad swapped, the code-review and period-retro pairs (154-155, 157-158)
+  failed, and the guard fixture failed with its expected text changed. With
+  `.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.md` appended to
+  `review-recent-work/SKILL.md` it failed once: "SKILL.md:93: the .md path of a YAML format". `code-review/v2` keeps the summary, with its Against the spec and Dismissed lists, as one
+  Markdown block, and adds `verdict_detail` for the text after the verdict. `period-retro/v3`
+  stores `status` and `status_detail` apart, and caps `issues` at three. The README gains an
+  Artifact hooks section and the uv prerequisite, and `docs/RETRO_WORKFLOW.md` names the
+  `.yaml` for the period retro. `docs/CATALOG.md` names no path of these formats.
 
 ### Phase 5: Session retro, with hooks in ceh-session-learning
 
@@ -254,5 +263,7 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   skill, their `.md` patterns and hook fixtures. validate.py passes.
 - 2026-11-15 Built Phase 3: learning/v2, blog-draft/v2 (in `draft-post`, `edit-post` and `repurpose-post`) and
   repurposed-post/v2, with their `.md` patterns and hook fixtures. validate.py passes.
+- 2026-11-15 Built Phase 4: The artifact hooks in `ceh-git-workflow`, code-review/v2 and period-retro/v3, with their
+  `.md` patterns and hook fixtures. validate.py passes.
 
 <!-- prettier-ignore-end -->

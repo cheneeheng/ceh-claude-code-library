@@ -54,7 +54,9 @@ follow, with the hooks already in `ceh-coding-conduct`, `ceh-testing` and `ceh-e
 The learning record (`learning/v2`) follows, with the hooks already in
 `ceh-codebase-explanation`, and the blog draft and repurposed post (`blog-draft/v2`,
 `repurposed-post/v2`), with the hooks already in `ceh-blog-and-seo`, where `edit-post` and
-`repurpose-post` carry the blog draft model to check a post before reading it.
+`repurpose-post` carry the blog draft model to check a post before reading it. The code review
+(`code-review/v2`) and the period retro (`period-retro/v3`) follow, with the hooks added to
+`ceh-git-workflow`, which had none of its own for an artifact.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

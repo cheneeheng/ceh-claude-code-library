@@ -1,5 +1,5 @@
 ---
-schema: period-retro/v2
+schema: period-retro/v3
 since: YYYY-MM-DD
 until: YYYY-MM-DD
 ---

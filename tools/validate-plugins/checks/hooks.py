@@ -982,8 +982,35 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "schema: repurposed-post/v2\nsource: post.md\nformat: thread\ndate: 2026-11-15\n"
         "text: |\n  1/ I wrote the parser by hand.\n"
     )
+    good_cr2 = (
+        "schema: code-review/v2\nbranch: feat/export\ndate: 2026-11-15\nverdict: Request changes\n"
+        "verdict_detail: fix the swallowed error\nsummary: |\n  Adds CSV export.\n"
+        "comments:\n  - {location: 'app/export.py:42', label: blocking, comment: the except swallows it}\n"
+    )
+    good_pr3 = (
+        "schema: period-retro/v3\nsince: 2026-11-01\nuntil: 2026-11-14\n"
+        "shipped: [{group: feat(plugins), change: YAML formats, refs: ['#290']}]\nflow:\n"
+        "  prs_merged: {value: '6', source: gh pr list}\n"
+        "  median_time_to_merge: {value: 0.4 d, source: createdAt to mergedAt}\n"
+        "  reverts: {value: '0', source: git log}\nhotspots: [{path: hooks.py, commits: 9}]\n"
+        "issues: []\nquestions: []\n"
+    )
+    gw = "ceh-git-workflow"
+    # A rendered Markdown in a plugin that had no artifact hooks before: the guard denies its edit.
+    gw_md = (
+        tmp
+        / "report-period-retro-guard"
+        / "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-period.md"
+    )
+    gw_md.parent.mkdir(parents=True, exist_ok=True)
+    gw_md.write_text(
+        "---\nschema: period-retro/v3\ngenerated_from: 20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-period.yaml\n---\n",
+        encoding="utf-8",
+    )
     pd = "ceh-product-direction"
     markdown_format_fixtures = [
+        *report_fixtures(gw, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-feat-export", good_cr2, good_cr2.replace("Request changes", "Approve"), "allows no blocking comment", "- `app/export.py:42` [blocking] the except swallows it", "code-review"),
+        *report_fixtures(gw, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-period", good_pr3, good_pr3.replace("until: 2026-11-14", "until: 2026-10-14"), "is after until", "Churn hotspots: `hooks.py` (9 commits)", "period-retro"),
         *report_fixtures("ceh-codebase-explanation", "rust-lifetimes", good_lr, good_lr.replace("date: null", "date: 2026-11-14"), "date is null exactly when", "| Why not | — | — |", "learning"),
         *report_fixtures("ceh-blog-and-seo", "2026-11-15-part-3-the-parser", good_bd, good_bd.replace("type: Lessons Learned", "type: Rant"), "type", "I wrote the parser by hand.", "blog-draft"),
         *report_fixtures("ceh-blog-and-seo", "part-3-the-parser-thread", good_rp, good_rp.replace("format: thread", "format: tiktok"), "format", "1/ I wrote the parser by hand.", "repurposed-post"),
@@ -995,6 +1022,11 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *report_fixtures(pd, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-business-plan-review", good_bpr, good_bpr.replace("score: 11", "score: 12"), "not the lens total", "**Run next:** stress-test-unit-economics for Money, plan-go-to-market for Reach", "business-plan-review"),
         *report_fixtures(pd, "INVESTOR_DECK", good_deck, good_deck.replace("pmf_gate: 8", "pmf_gate: 6"), "needs draft: true", "Source: §02", "investor-deck"),
         *report_fixtures(pd, "INVESTOR_OUTREACH", good_out, good_out.replace("investors: []", "investors: ['']"), "investors.0", "**Investors:** none supplied", "investor-outreach"),
+        # ceh-git-workflow's new hooks: the guard denies an edit to a rendered retro, and the render
+        # hook warns once without uv.
+        {"script": f"{gw}/generated-md-guard.py", "stdin": edit(gw_md.as_posix()), "out": "-period.yaml"},
+        {"script": f"{gw}/generated-md-guard.py", "stdin": edit(gw_md.as_posix()), "env": {"CEH_DISABLED_HOOKS": "generated-md-guard"}, "out": ""},
+        {"script": f"{gw}/artifact-render-hook.py", "stdin": write_at(tmp / "report-period-retro" / "bad" / "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-period.yaml"), "env": no_uv, "out": "uv is not installed"},
     ]  # fmt: skip
     # The glossary: maintain-glossary writes it, record-project-decisions reads it. It is found by
     # its schema key, or at the session root or docs/ beside its GLOSSARY.md, so a schema-less one

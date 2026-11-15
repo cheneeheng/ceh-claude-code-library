@@ -13,6 +13,9 @@ Each skill declares what it needs in its `compatibility` frontmatter. In short: 
 every skill, the GitHub CLI (`gh`, authenticated via `gh auth login`) for `pull-request`,
 `release` and workspace PR checkpoints, and `python3` on PATH (stdlib only) for the `update-changelog` validator and the
 branch guard, skill-started guard and workspace sync hooks. The workspace sync hook also needs git 2.27 or later.
+`code-review` and `review-recent-work` save YAML and render its Markdown through
+[uv](https://docs.astral.sh/uv/), which installs pydantic and PyYAML on first use. Without uv the
+YAML is saved unchecked and the agent says the Markdown was not rendered.
 
 ## Skills
 
@@ -42,11 +45,12 @@ out into one per step.
 
 The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled.
 
-| Hook                                        | Event                                                                                        | Script                     | Default |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------- | ------- |
-| [Branch guard](#branch-guard)               | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`)                                  | `branch-guard.py`          | on      |
-| [Workspace sync](#workspace-sync)           | `SessionStart`, `PreToolUse` (`Bash`), `PostToolUse` (`EnterWorktree`), `Stop`, `SessionEnd` | `sync-agents-workspace.py` | on      |
-| [Skill-started guard](#skill-started-guard) | `PreToolUse` (`Bash`, `Edit`, `Write`, `MultiEdit`)                                          | `skill-started-guard.py`   | on      |
+| Hook                                        | Event                                                                                        | Script                                             | Default |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------- |
+| [Branch guard](#branch-guard)               | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`)                                  | `branch-guard.py`                                  | on      |
+| [Workspace sync](#workspace-sync)           | `SessionStart`, `PreToolUse` (`Bash`), `PostToolUse` (`EnterWorktree`), `Stop`, `SessionEnd` | `sync-agents-workspace.py`                         | on      |
+| [Skill-started guard](#skill-started-guard) | `PreToolUse` (`Bash`, `Edit`, `Write`, `MultiEdit`)                                          | `skill-started-guard.py`                           | on      |
+| [Artifact hooks](#artifact-hooks)           | `PostToolUse` and `PreToolUse` (`Edit`, `Write`, `MultiEdit`)                                | `artifact-render-hook.py`, `generated-md-guard.py` | on      |
 
 ### Branch guard
 
@@ -134,14 +138,25 @@ and so does `git commit` quoted inside another command, such as a `grep`. A suba
 transcript, so it starts the skill itself. It fails open. `CEH_SKILL_STARTED_GUARD=off`, or
 `CEH_DISABLED_HOOKS` with `skill-started-guard`, switches it off.
 
+### Artifact hooks
+
+`artifact-render-hook.py` (PostToolUse) checks a written code review (`code-review/v2`) or period
+retro (`period-retro/v3`) YAML against its model and renders its Markdown. The check needs `uv`;
+without it the agent is told once per session that the file went unchecked.
+`generated-md-guard.py` (PreToolUse) denies a hand edit to the generated Markdown, which the next
+render would overwrite. `CEH_ARTIFACT_CHECK=off` turns both off, and `CEH_DISABLED_HOOKS` turns
+off either by name.
+
 ## Scripts
 
-| Script                                            | Purpose                                                                                                                                                                          |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `scripts/branch-guard.py`                         | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                                                     |
-| `scripts/sync-agents-workspace.py`                | Workspace sync and PR checkpoint hook on `SessionStart`, `PreToolUse` (`Bash`), `PostToolUse` (`EnterWorktree`), `Stop` and `SessionEnd` (see [Workspace sync](#workspace-sync)) |
-| `scripts/skill-started-guard.py`                  | `PreToolUse` hook: deny a commit, changelog or README edit until its skill was started (see [Skill-started guard](#skill-started-guard))                                         |
-| `skills/update-changelog/scripts/check-semver.py` | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                                              |
+| Script                                                             | Purpose                                                                                                                                                                          |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/branch-guard.py`                                          | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                                                     |
+| `scripts/sync-agents-workspace.py`                                 | Workspace sync and PR checkpoint hook on `SessionStart`, `PreToolUse` (`Bash`), `PostToolUse` (`EnterWorktree`), `Stop` and `SessionEnd` (see [Workspace sync](#workspace-sync)) |
+| `scripts/skill-started-guard.py`                                   | `PreToolUse` hook: deny a commit, changelog or README edit until its skill was started (see [Skill-started guard](#skill-started-guard))                                         |
+| `scripts/artifact-render-hook.py`, `scripts/generated-md-guard.py` | The artifact hooks (see [Artifact hooks](#artifact-hooks))                                                                                                                       |
+| `scripts/artifact.py`, `skills/<skill>/scripts/artifact.py`        | Check a code review or period retro YAML against its model, or render its Markdown, through uv                                                                                   |
+| `skills/update-changelog/scripts/check-semver.py`                  | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                                              |
 
 ```bash
 python3 skills/update-changelog/scripts/check-semver.py CHANGELOG.md

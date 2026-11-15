@@ -144,6 +144,11 @@ threads.
 
 When the comments are posted on a PR, the PR is the record. Otherwise (a local diff, or comments
 not posted) save the summary, the line comments, and the verdict to
-`.agents_workspace/product/code-reviews/<YYYYMMDD-HHMMSS>-<session-id>-<branch>.md`, filling
-`assets/code-review.template.md` per `references/code-review-schema.md`, so the author can work through them in a
-later session, and name the path in the reply. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+`.agents_workspace/product/code-reviews/<YYYYMMDD-HHMMSS>-<session-id>-<branch>.yaml`, filling
+`assets/code-review.template.yaml` per the `code-review/v2` section of
+`references/code-review-schema.md`, so the author can work through them in a later session, and
+name the path in the reply. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+After the last edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`,
+which writes the `.md` beside it in the layout of `assets/code-review.template.md`, and fix the
+YAML for each error it lists. Never edit the generated `.md`. On exit 2 or 3, or without uv, say
+in the reply that the review went unchecked and unrendered.

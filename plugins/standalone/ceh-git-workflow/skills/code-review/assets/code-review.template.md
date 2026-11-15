@@ -1,5 +1,5 @@
 ---
-schema: code-review/v1
+schema: code-review/v2
 branch: <branch>
 date: YYYY-MM-DD
 verdict: <Approve | Request changes | Comment | Cannot verify>
