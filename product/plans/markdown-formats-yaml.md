@@ -285,5 +285,10 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
   "Every format a skill saves has a YAML source" in `product/ARCHITECTURE.yaml`, and
   `status: published` in `blog-draft/v2`. The Gap and the Deviation are fixed on the branch
   `docs/markdown-formats-yaml-check-fixes`, on the user's request.
+- 2026-11-15 Checked: 29 Built, 1 Cannot verify, 2 Extra, on `docs/markdown-formats-yaml-check-fixes`. The five
+  READMEs now name their new formats, and `explain-until-understood` runs `artifact.py check`
+  before reading a saved record. Cannot verify: Out "Running eval cases". Extra, unchanged:
+  the Key Decision "Every format a skill saves has a YAML source" in
+  `product/ARCHITECTURE.yaml`, and `status: published` in `blog-draft/v2`.
 
 <!-- prettier-ignore-end -->
