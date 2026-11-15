@@ -346,3 +346,6 @@ record:
       The artifact hooks in `ceh-session-learning`, session-retro/v3 and the shareable copy
       without generated keys, with the `.md` pattern and hook fixtures. validate.py passes. Plan
       built. The user checks the build against the plan, so no Checked line from this session.
+  - date: 2026-11-15
+    event: PR
+    details: "#296 https://github.com/cheneeheng/ceh-claude-code-library/pull/296"

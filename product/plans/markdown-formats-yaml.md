@@ -276,5 +276,6 @@ every write and a guard denies hand edits to the Markdown. `checks/artifact_path
 - 2026-11-15 Built Phase 5: The artifact hooks in `ceh-session-learning`, session-retro/v3 and the shareable copy
   without generated keys, with the `.md` pattern and hook fixtures. validate.py passes. Plan
   built. The user checks the build against the plan, so no Checked line from this session.
+- 2026-11-15 PR: #296 https://github.com/cheneeheng/ceh-claude-code-library/pull/296
 
 <!-- prettier-ignore-end -->
