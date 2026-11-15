@@ -11,6 +11,12 @@ before this repo live in
 
 ## 2026-11-15
 
+`product/plans/move-product-to-workspace.yaml` plans the move of this repo's own root `product/`
+(architecture, plans, fix records, retros) to `.agents_workspace/product/`, the location every
+skill already uses by default. `validate.py` then checks the plans only where the workspace
+exists, which leaves CI out, and the rules, docs and validator comments name the new paths.
+Nothing is built yet, so no plugin version changes.
+
 `product/plans/markdown-formats-yaml.yaml` gives the thirteen formats that were Markdown-only a
 YAML source with a pydantic model, as the user decided on 2026-11-13. Each skill that writes one
 now saves checked YAML and renders its Markdown beside it, each plugin's render hook checks every
