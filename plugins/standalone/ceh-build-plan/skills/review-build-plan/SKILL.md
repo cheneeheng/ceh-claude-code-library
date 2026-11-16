@@ -105,7 +105,7 @@ review went unchecked and unrendered.
 | **Revise first**   | Blocking findings, each fixable by editing the plan.                               |
 | **Rethink**        | A Scope finding changes what to build, or shows the Goal is out of reach as drawn. |
 
-Save the whole review to `.agents_workspace/product/plan-reviews/<YYYYMMDD-HHMMSS>-<session-id>-<slug>.yaml`, because the
+Save the whole review to `.agents_workspace/product/review/plan/<YYYYMMDD-HHMMSS>-<session-id>-<slug>.yaml`, because the
 Record line keeps only the verdict and counts, and the author fixing the plan in a later session
 needs the findings. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
 When a subagent runs the review, build the path in this session and pass it in the subagent's

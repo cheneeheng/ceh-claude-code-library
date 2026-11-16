@@ -144,7 +144,7 @@ threads.
 
 When the comments are posted on a PR, the PR is the record. Otherwise (a local diff, or comments
 not posted) save the summary, the line comments, and the verdict to
-`.agents_workspace/product/code-reviews/<YYYYMMDD-HHMMSS>-<session-id>-<branch>.yaml`, filling
+`.agents_workspace/product/review/code/<YYYYMMDD-HHMMSS>-<session-id>-<branch>.yaml`, filling
 `assets/code-review.template.yaml` per the `code-review/v2` section of
 `references/code-review-schema.md`, so the author can work through them in a later session, and
 name the path in the reply. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.

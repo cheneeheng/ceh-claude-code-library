@@ -101,9 +101,9 @@ repo whose `CLAUDE.md` names another location keeps it.
 - **`.agents_workspace/workflow/`** holds `ceh-workflow-builder` specs and drafts and the run state
   of the workflows it generates, the default of `$CEH_WORKFLOW_BUILD_DIR` and
   `$CEH_WORKFLOW_RUN_DIR`.
+- **`.agents_workspace/experiment/`** holds experiments, such as the orchestration-lab runs.
 - **`.agents_workspace/` itself** holds the session tools: the decision log, session handoffs,
-  research notes, questionnaires, the codebase explanation, competitor analyses, and
-  orchestration-lab runs.
+  research notes, questionnaires, the codebase explanation, and competitor analyses.
 
 A reference to a format with a YAML source names the `.yaml`, never its generated `.md`. No skill
 assumes `.agents_workspace/` is a git repo. Where it is one, a nested repo pushed to a private

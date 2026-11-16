@@ -1,5 +1,5 @@
 ---
 type: tool_used
 tool: Write
-input_match: 'plan-reviews[/\\][^"]*\.yaml'
+input_match: 'review[/\\]plan[/\\][^"]*\.yaml'
 ---

@@ -215,7 +215,7 @@ MEDIUM    tests/integration/test_orders.py  fails under --random-order (shared s
 LOW       tests/unit/test_parse.py:12   1.4s in tests/unit — real filesystem I/O
 ```
 
-Save the report to `.agents_workspace/product/test-audits/<YYYYMMDD-HHMMSS>-<session-id>-test-audit.yaml`, filling
+Save the report to `.agents_workspace/product/audit/test/<YYYYMMDD-HHMMSS>-<session-id>-test-audit.yaml`, filling
 `assets/test-audit.template.yaml` per the `test-audit/v2` section of
 `references/test-audit-schema.md`, so the findings that need a decision outlive the session, and
 name the path in the reply. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.

@@ -78,7 +78,7 @@ environment variables the plugin reads.
 
 ## Output
 
-`.agents_workspace/product/ux-audits/<target>/run-<NNN>/` — `UX_AUDIT.yaml` from the two walkthrough
+`.agents_workspace/product/audit/ux/<target>/run-<NNN>/` — `UX_AUDIT.yaml` from the two walkthrough
 skills, `ERROR_MESSAGES.yaml` from the error triage, each with its Markdown rendered beside it and
 the commit the audit ran against, and walker transcripts and any screenshots beside them. A
 zero-padded sequential run index means a re-run never overwrites prior evidence. A finding without

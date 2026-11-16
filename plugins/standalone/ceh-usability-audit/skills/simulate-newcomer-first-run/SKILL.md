@@ -240,8 +240,10 @@ passing.
 
 ## Output
 
-Write `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.yaml`, where `<NNN>` is a zero-padded
-sequential run index so a re-run never overwrites a prior run's evidence. Create missing parents.
+Write `.agents_workspace/product/audit/ux/<target>/run-<NNN>/UX_AUDIT.yaml`, where `<NNN>` is a zero-padded
+sequential run index so a re-run never overwrites a prior run's evidence. Count the runs in both
+that folder and the older `.agents_workspace/product/ux-audits/<target>/`, so the index keeps
+rising in a workspace not yet migrated. Create missing parents.
 Keep raw walker transcripts in that run folder — a finding without its transcript is an opinion.
 The report fills `assets/first-run-audit.template.yaml`, per the `first-run-audit/v2` section of
 `references/first-run-audit-schema.md`, with `commit` from `git rev-parse --short HEAD` in the

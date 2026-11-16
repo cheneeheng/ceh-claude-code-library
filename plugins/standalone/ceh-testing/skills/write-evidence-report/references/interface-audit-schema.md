@@ -1,7 +1,7 @@
 # Interface audit schema
 
 The report `audit-interface` writes to
-`.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.yaml`, with its `.md` rendered
+`.agents_workspace/product/audit/ux/<target>/run-<NNN>/UX_AUDIT.yaml`, with its `.md` rendered
 beside it, a zero-padded run index so a re-run never overwrites prior evidence, and the walker
 transcripts and screenshots beside it. A reference to it names the `.yaml`. Its layout is `../assets/interface-audit.template.md`, relative to this
 file. A new report is written as `interface-audit/v2` YAML, per the section at the end, and an

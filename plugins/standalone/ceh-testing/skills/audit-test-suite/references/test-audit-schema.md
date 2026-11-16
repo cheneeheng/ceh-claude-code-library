@@ -1,7 +1,7 @@
 # Test audit schema
 
 The report `audit-test-suite` saves to
-`.agents_workspace/product/test-audits/<YYYYMMDD-HHMMSS>-<session-id>-test-audit.yaml`, with its
+`.agents_workspace/product/audit/test/<YYYYMMDD-HHMMSS>-<session-id>-test-audit.yaml`, with its
 `.md` rendered beside it. A reference to it names the `.yaml`. A subagent in report-only mode
 returns the YAML instead, and its caller saves and renders it. Its layout is
 `../assets/test-audit.template.md`, relative to this file. A new report is written as

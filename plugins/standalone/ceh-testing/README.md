@@ -57,7 +57,7 @@ the Markdown as it was. It checks a `<YYYYMMDD-HHMMSS>-<session-id>-security-aud
 `ceh-security-audit` or `ceh-usability-audit` installed an error in one is reported by both
 plugins. `test-a-bug-fix` completes or creates a fix record, `.agents_workspace/product/fixes/<slug>.yaml`
 (`fix-record/v2`), which the hook checks through the skill's model too, as `ceh-coding-conduct`'s
-does. `audit-test-suite` saves its audit as a `.yaml` in `.agents_workspace/product/test-audits/`
+does. `audit-test-suite` saves its audit as a `.yaml` in `.agents_workspace/product/audit/test/`
 (`test-audit/v2`), which the hook checks and renders too. The guard denies a direct
 edit to a generated Markdown file and names its YAML. Both need `uv`: without it the agent is told
 once per session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS`
