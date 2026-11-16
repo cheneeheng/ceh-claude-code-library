@@ -39,6 +39,11 @@ layout keeps the `product/` root for the vision, strategy, architecture and evid
 `docs/VISION.md` found it long from repeats, not from scope: the same idea stated in full in the
 Identity "is not" list, the Goals, the Non-goals and a principle.
 
+The install guide now puts every plugin at `local` scope unless the person decides otherwise,
+replacing the recommended split of the core at user scope and the rest at project scope, because
+the owner installs at local scope by default. The setup prompt no longer asks for scopes, and
+`find-available-guide` suggests local scope for the plugins it finds.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -50,7 +55,7 @@ Identity "is not" list, the Goals, the Non-goals and a principle.
 | `ceh-codebase-explanation`     | 1.3.17  |
 | `ceh-coding-conduct`           | 2.5.19  |
 | `ceh-competitor-analysis`      | 1.2.14  |
-| `ceh-every-session`            | 2.9.25  |
+| `ceh-every-session`            | 2.9.26  |
 | `ceh-git-workflow`             | 1.5.22  |
 | `ceh-product-direction`        | 2.0.15  |
 | `ceh-security-audit`           | 1.1.15  |
@@ -62,6 +67,11 @@ Identity "is not" list, the Goals, the Non-goals and a principle.
 
 ### Changed
 
+- `docs/GETTING_STARTED.md`, the README, `docs/TESTING_WORKFLOW.md` and the docs site home page:
+  every install command uses `--scope local`, and "Pick the scopes" becomes "Install at local
+  scope", naming `user` and `project` as the exceptions.
+- `ceh-every-session:find-available-guide` recommends `--scope local` for a plugin install,
+  unless the user names another scope.
 - Save paths: plans to `product/plan/`, fix records to `product/fix/`, retros to
   `product/retro/`, with the older plural folders still read and still checked by the hooks.
 - The fix commit footer is `Refs: fix/<slug>`.

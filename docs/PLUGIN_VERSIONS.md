@@ -23,7 +23,7 @@ a removed plugin loses its row.
 | `ceh-coding-conduct`           | 2.5.19  | `2026-11-16` |
 | `ceh-competitor-analysis`      | 1.2.14  | `2026-11-16` |
 | `ceh-documentation`            | 1.0.11  | `2026-11-14` |
-| `ceh-every-session`            | 2.9.25  | `2026-11-16` |
+| `ceh-every-session`            | 2.9.26  | `2026-11-16` |
 | `ceh-git-workflow`             | 1.5.22  | `2026-11-16` |
 | `ceh-python-library`           | 1.0.5   | `2026-11-12` |
 | `ceh-python-service`           | 1.1.9   | `2026-11-14` |

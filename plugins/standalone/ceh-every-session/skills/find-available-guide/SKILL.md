@@ -43,7 +43,7 @@ Recommended scope, added to the install command as a flag, or as the directory f
 
 | Method       | Scope                                                                                                                                  |
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `plugin`     | `--scope project`, on the last command of a chain                                                                                      |
+| `plugin`     | `--scope local`, on the last command of a chain, unless the user names another scope                                                   |
 | `mcp-add`    | `--scope user` or `local` when the command carries a token, never `project`, because the token would land in the committed `.mcp.json` |
 | `skill-copy` | `.claude/skills/` for the project, `~/.claude/skills/` for the user                                                                    |
 
