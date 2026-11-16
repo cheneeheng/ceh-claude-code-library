@@ -46,8 +46,8 @@ a fixed questionnaire.
 Before any question, gather everything that already constrains the plan.
 
 1. **Build plans in the repo** — the `ceh-build-plan` plans in
-   `.agents_workspace/product/plans/*.yaml`, or the `.md` of each where no YAML exists (or the
-   plans folder the repo's `CLAUDE.md` names). If found, read them. Their Goal (what it does,
+   `.agents_workspace/product/plan/*.yaml` (or the older `plans/`), or the `.md` of each where no
+   YAML exists (or the plan folder the repo's `CLAUDE.md` names). If found, read them. Their Goal (what it does,
    who it's for, the key flow), Scope, and Design carry your product, target-user hint, and
    solution detail. A plan whose Goal points to a `BUSINESS_PLAN.md` was written from this plan:
    read it for its Scope and Design only. Record their paths in `derived_from`. Built plans stay in

@@ -1,7 +1,7 @@
 # Repeat mistake schema
 
 The file `prevent-repeat-mistake` saves:
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, unless the
+`.agents_workspace/product/retro/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, unless the
 repo's `CLAUDE.md` names another location. One report holds both kinds of fix, those that land in
 the current repository and those only the user acts on, because two files would share one name in
 one folder. A reference to it names the `.yaml`. A new report is a `repeat-mistake/v2` YAML (see
@@ -29,7 +29,7 @@ through `other_file`, is still read as two reports.
 ## repeat-mistake/v2: YAML with generated Markdown
 
 A `repeat-mistake/v2` report is
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, holding
+`.agents_workspace/product/retro/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, holding
 both kinds of fix, a copy of `../assets/repeat-mistake.template.yaml`. The `.md` of
 the same stem is generated from it in the `v1` layout above, beside it. A file saved under the
 older name, `<YYYY-MM-DD>-repeat-mistake`, is still a report. A name with a label before

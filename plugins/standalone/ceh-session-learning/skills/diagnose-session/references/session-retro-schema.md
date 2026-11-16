@@ -1,7 +1,7 @@
 # Session retro schema
 
 The report `diagnose-session` saves:
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-session-<diagnosed-id>.yaml`,
+`.agents_workspace/product/retro/<YYYYMMDD-HHMMSS>-<session-id>-session-<diagnosed-id>.yaml`,
 with its `.md` rendered beside it, unless the repo's `CLAUDE.md` names another location. A
 reference to it names the `.yaml`. One file holds every root cause, whether its fix lands in this
 repo or outside it, the other findings and the hypotheses, because the two files of `v1` would

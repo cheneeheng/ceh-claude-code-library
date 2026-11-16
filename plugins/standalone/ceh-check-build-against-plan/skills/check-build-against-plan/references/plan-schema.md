@@ -8,9 +8,11 @@ its own.
 
 ## Location
 
-`.agents_workspace/product/plans/<slug>.yaml` in the target repo, unless the repo's `CLAUDE.md`
-names another plans folder. A plan shapes the repo for whoever builds next, so it lives with the
-project's other product artifacts. `<slug>` is kebab-case from the goal: `mvp`, `checkout-flow`.
+`.agents_workspace/product/plan/<slug>.yaml` in the target repo, unless the repo's `CLAUDE.md`
+names another plan folder. A plan shapes the repo for whoever builds next, so it lives with the
+project's other product artifacts. A workspace not yet migrated keeps its plans in the older
+`.agents_workspace/product/plans/`: a skill that looks for a plan also looks there, and saves a
+new plan only to `plan/`. `<slug>` is kebab-case from the goal: `mvp`, `checkout-flow`.
 Plans are never deleted: a built plan stays where it is, with `status: built`, as the record of how
 that change was planned, built, and proven, and every path that cites it stays valid. A skill that
 looks for work in the folder reads only the frontmatter of a `built` plan, and its full text only
@@ -53,7 +55,7 @@ version of the format a plan follows.
 
 ## plan/v2: YAML with generated Markdown
 
-A `plan/v2` plan is `.agents_workspace/product/plans/<slug>.yaml`, a copy of
+A `plan/v2` plan is `.agents_workspace/product/plan/<slug>.yaml`, a copy of
 `../assets/plan.template.yaml`, and its Markdown is generated from it and saved beside it. The YAML is the
 source: agents read and edit it, and nobody edits the Markdown, which opens with
 `generated_from: <slug>.yaml` and a `generated_note` saying not to edit it. The skill that edits the
@@ -67,8 +69,8 @@ and rule below, and its renderer writes the Markdown. `scripts/artifact.py` in t
 file's `references/`, runs both through uv, and the plugin's render hook runs its own copy:
 
 ```bash
-uv run --script scripts/artifact.py check .agents_workspace/product/plans/<slug>.yaml   # errors, or a stale .md
-uv run --script scripts/artifact.py render .agents_workspace/product/plans/<slug>.yaml  # check, then write the .md
+uv run --script scripts/artifact.py check .agents_workspace/product/plan/<slug>.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render .agents_workspace/product/plan/<slug>.yaml  # check, then write the .md
 ```
 
 Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other

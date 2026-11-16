@@ -24,8 +24,8 @@ waiting for the user's approval.
 
 ## Procedure
 
-1. **Pick up pending drafts.** In `.agents_workspace/product/retros/`, or the retros folder the
-   repo's `CLAUDE.md` names, find
+1. **Pick up pending drafts.** In `.agents_workspace/product/retro/` and the older `retros/`
+   beside it, or the retro folder the repo's `CLAUDE.md` names, find
    every report named `<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake` or, in the older form,
    `<YYYY-MM-DD>-repeat-mistake`, `.yaml` or `.md`, and read each once, the YAML when there is
    one. A labelled name such as
@@ -78,7 +78,7 @@ waiting for the user's approval.
 ## Output
 
 Save one report, adding to today's file when it exists and creating the directory if needed:
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, with
+`.agents_workspace/product/retro/<YYYYMMDD-HHMMSS>-<session-id>-repeat-mistake.yaml`, with
 `other_file: null`. It holds both the fixes that land in the current repository and those outside
 it (user settings, the global `CLAUDE.md`, memory, an installed plugin), because a later session
 working in the repo reads it, and saving it authorizes no commit of a draft. Mask secrets in every

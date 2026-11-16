@@ -24,7 +24,7 @@ This is the durable counterpart to the architecture diagram in a plan's `design`
 visualizes one version's _change_; `ARCHITECTURE.yaml` shows the _whole current system_ and the
 decision trail behind it. When a plan is built, its lasting Design decisions are copied here as
 Key Decisions entries, so a reader gets the reasoning without opening every plan in
-`.agents_workspace/product/plans/`.
+`.agents_workspace/product/plan/`.
 
 ## Procedure
 

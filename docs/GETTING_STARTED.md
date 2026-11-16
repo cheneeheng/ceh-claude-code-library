@@ -150,7 +150,7 @@ file to the same sub-path under `.agents_workspace/product/`, or names its locat
 **Build**
 
 - Plan a new app or one feature: install `ceh-build-plan`, start with
-  `/ceh-build-plan:write-build-plan`. Writes `.agents_workspace/product/plans/<slug>.yaml` and the
+  `/ceh-build-plan:write-build-plan`. Writes `.agents_workspace/product/plan/<slug>.yaml` and the
   `<slug>.md` generated from it, and deleting both discards the plan. It needs `uv` to check and
   render the plan, and saves it unchecked without.
 - Build from that plan: the same plugin and your stack plugin (below), start with

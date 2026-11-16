@@ -440,7 +440,7 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-session-learning/scripts/generated-md-guard.py`                                                           | whole file                                                  | none                                                                             |
 | `ceh-build-plan:review-build-plan`, `ceh-build-plan:implement-from-plan`, `ceh-check-build-against-plan:check-build-against-plan` | the "A `plan/v2` plan is checked first" paragraph in step 1 | `implement-from-plan` adds where a Status note and a Record entry go in the YAML |
 
-**Shared:** the whole plan format, byte for byte: the `.agents_workspace/product/plans/<slug>.yaml` location, the
+**Shared:** the whole plan format, byte for byte: the `.agents_workspace/product/plan/<slug>.yaml` location, the
 frontmatter and its four statuses, the Goal, Scope, Design, Phases, and Open sections, the phase
 rules (a runnable Check, `todo` / `unplanned` / `done` with evidence), and the rules for changing
 a plan, and the `plan/v2` YAML template `plan.template.yaml` with its keys and rules. Every skill
@@ -448,7 +448,7 @@ that reads a plan carries the format, the model and `scripts/artifact.py` in its
 skill folder works on its own. Each plugin also keeps `scripts/artifact.py` and the two artifact
 hooks at its root, for its hooks. `validate.py` fails when a copy differs (the `copies` check). The
 read-time check paragraph is kept in step by hand. `ceh-product-direction:find-product-market-fit`
-reads plans too, but carries no copy: it reads only the plans folder and the Goal, Scope, and
+reads plans too, but carries no copy: it reads only the plan folder and the Goal, Scope, and
 Design sections.
 
 ## Architecture template and schema
@@ -620,7 +620,7 @@ them, so each carries a copy to check `VISION.yaml` and `STRATEGY.yaml` before r
 
 **Shared:** the whole fix record format, `fix-record/v1` and the `fix-record/v2` YAML with its
 model, which renders the `v1` layout of `fix-record.template.md`, and the templates (canonical in
-`find-root-cause/assets/`, beside the canonical schema's `references/`), byte for byte: the `.agents_workspace/product/fixes/<slug>.yaml` location and
+`find-root-cause/assets/`, beside the canonical schema's `references/`), byte for byte: the `.agents_workspace/product/fix/<slug>.yaml` location and
 slug rule, the write-only-for-repo-causes rule, the frontmatter with its three statuses and the
 `plan:` and `previous:` rules, the sections each status keeps, and the `Refs:` footer and
 saved-alone rules. `find-root-cause` writes the record and `test-a-bug-fix` completes or creates
@@ -890,7 +890,7 @@ delete".
 `record-project-decisions`, anything else in the repo fixed directly, outside the repo left for the
 user), acting on every in-scope route in the same session, an uninstalled route left open, and the
 one-file save: every issue, in the repo or outside it, in
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.yaml`, with its `.md`
+`.agents_workspace/product/retro/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.yaml`, with its `.md`
 rendered beside it. Each skill keeps its own report template (`period-retro/v3`,
 `session-retro/v3`, `repeat-mistake/v2`), because the three reports differ.
 

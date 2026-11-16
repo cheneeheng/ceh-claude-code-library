@@ -3,8 +3,8 @@ schema: fix-record/v1
 status: <diagnosed | fixed | unreproduced>
 date: YYYY-MM-DD
 issue: <link or ID>
-plan: .agents_workspace/product/plans/<slug>.yaml
-previous: .agents_workspace/product/fixes/<slug>.yaml
+plan: .agents_workspace/product/plan/<slug>.yaml
+previous: .agents_workspace/product/fix/<slug>.yaml
 ---
 
 # <behavior that was wrong>

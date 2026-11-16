@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-mkdir -p "$(dirname '.agents_workspace/product/plans/notes-api.md')"
-cat >'.agents_workspace/product/plans/notes-api.md' <<'EOF_FIXTURE'
+mkdir -p "$(dirname '.agents_workspace/product/plan/notes-api.md')"
+cat >'.agents_workspace/product/plan/notes-api.md' <<'EOF_FIXTURE'
 ---
 schema: plan/v1
 title: Notes API MVP

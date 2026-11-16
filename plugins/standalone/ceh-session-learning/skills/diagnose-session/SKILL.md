@@ -86,7 +86,7 @@ Only when the report will leave this machine (an issue, a bug report, a message 
 ## Output
 
 Save one file, creating the directory if needed:
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-session-<diagnosed-id>.yaml`,
+`.agents_workspace/product/retro/<YYYYMMDD-HHMMSS>-<session-id>-session-<diagnosed-id>.yaml`,
 holding every root cause, those fixed in this repo and those left for the user, the other findings
 and the hypotheses, because the routed work reads it. Scrub and audit its root causes first, per
 the replacements and the audit of Sharing steps 1 and 2, applied to the YAML, because the

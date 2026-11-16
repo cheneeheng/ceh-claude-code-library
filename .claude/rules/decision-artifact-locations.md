@@ -1,7 +1,7 @@
 ---
 schema: decision-rule/v2
 decided: 2026-11-14
-source: ".agents_workspace/product/plans/consolidate-product-artifacts.yaml"
+source: ".agents_workspace/product/plan/consolidate-product-artifacts.yaml"
 ---
 
 # Artifact locations

@@ -1,7 +1,7 @@
 # Period retro schema
 
 The retro `review-recent-work` saves:
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.yaml`, with its `.md`
+`.agents_workspace/product/retro/<YYYYMMDD-HHMMSS>-<session-id>-period.yaml`, with its `.md`
 rendered beside it, unless the repo's `CLAUDE.md` names another location. A reference to it names
 the `.yaml`. One file holds the retro and every issue, whether its fix lands in this repo or
 outside it, because the two files of `v1` would share one name in one folder. Its layout is

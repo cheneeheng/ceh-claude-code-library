@@ -78,7 +78,7 @@ installed.
      from `~/.claude/plugins/cache/`, which keeps every version ever installed and would surface
      choices that no longer exist. Project skills live in `.claude/skills/`.
    - **Decisions already written down:** the README, `.agents_workspace/product/ARCHITECTURE.yaml`
-     Key Decisions, plans under `.agents_workspace/product/plans/`, ADRs (`docs/adr/`, `docs/decisions/`), `GLOSSARY.md`, and
+     Key Decisions, plans under `.agents_workspace/product/plan/`, ADRs (`docs/adr/`, `docs/decisions/`), `GLOSSARY.md`, and
      manifests (`package.json`, `pyproject.toml`) as evidence of the stack. Read no business
      plan: a rule file is committed and binds later sessions, so a business plan's dated tests
      must not become one. Look for the glossary at the repo root and under `docs/`, and read each

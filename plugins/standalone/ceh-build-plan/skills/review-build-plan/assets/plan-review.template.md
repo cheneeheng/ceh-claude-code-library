@@ -1,11 +1,11 @@
 ---
 schema: plan-review/v2
-plan: .agents_workspace/product/plans/<slug>.yaml
+plan: .agents_workspace/product/plan/<slug>.yaml
 date: YYYY-MM-DD
 verdict: <Ready to build | Revise first | Rethink>
 ---
 
-## Plan review: .agents_workspace/product/plans/<slug>.yaml
+## Plan review: .agents_workspace/product/plan/<slug>.yaml
 
 **Verdict:** <Ready to build | Revise first | Rethink>
 **Lenses:** <lenses run>. Skipped <lens>: <reason>.
