@@ -13,7 +13,7 @@ before this repo live in
 
 Reviews, audits and evals now save one folder per kind, in the layout of the shared workspace
 `AGENTS.md`: `product/review/<kind>/`, `product/audit/<kind>/` and `product/eval/<kind>/`, per
-`.agents_workspace/product/plans/workspace-layout.yaml`. Readers and the usability run numbering
+`.agents_workspace/product/plan/workspace-layout.yaml`. Readers and the usability run numbering
 also look in the older folders, so a workspace not yet migrated keeps working. Orchestration-lab
 runs move to `.agents_workspace/experiment/`.
 
@@ -49,7 +49,6 @@ working. The fix commit footer is now `Refs: fix/<slug>`, and readers match the 
 - Save paths: plans to `product/plan/`, fix records to `product/fix/`, retros to
   `product/retro/`, with the older plural folders still read and still checked by the hooks.
 - The fix commit footer is `Refs: fix/<slug>`.
-
 - Save paths: plan reviews to `product/review/plan/`, code reviews to `product/review/code/`,
   business plan reviews to `product/review/business-plan/`, stress tests to
   `product/review/stress-test/`, usability audits to `product/audit/ux/`, security audits to
@@ -58,6 +57,10 @@ working. The fix commit footer is now `Refs: fix/<slug>`, and readers match the 
 - `write-evidence-report` and the three usability audit skills also read the older folders.
 - `decision-artifact-locations.md`, `decision-evaluation.md`, `docs/STRATEGY.md` and root
   `CLAUDE.md` name the new folders.
+
+### Fixed
+
+- This section names the plan at its moved path, `product/plan/workspace-layout.yaml`.
 
 ---
 
