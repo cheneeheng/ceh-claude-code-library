@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-mkdir -p "$(dirname '.agents_workspace/product/plans/habit-tracker.md')"
-cat >'.agents_workspace/product/plans/habit-tracker.md' <<'EOF_FIXTURE'
+mkdir -p "$(dirname '.agents_workspace/product/plan/habit-tracker.md')"
+cat >'.agents_workspace/product/plan/habit-tracker.md' <<'EOF_FIXTURE'
 ---
 schema: plan/v1
 title: Habit tracker MVP

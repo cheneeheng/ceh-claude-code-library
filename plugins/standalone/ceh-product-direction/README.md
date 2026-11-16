@@ -37,7 +37,7 @@ until you say the project is a business. Then it calls `find-product-market-fit`
 not a one-shot generator:
 
 ```
-Intake   → read build plans (.agents_workspace/product/plans/*.yaml) or any PRD/spec/pitch you provide
+Intake   → read build plans (.agents_workspace/product/plan/*.yaml) or any PRD/spec/pitch you provide
 Draft v0 → write BUSINESS_PLAN.yaml from what's known; score the PMF gate
 Interview→ attack the lowest-scoring gate criterion — one sharp question at a time
 Revise   → fold the answer in, re-tag confidence, re-score the gate

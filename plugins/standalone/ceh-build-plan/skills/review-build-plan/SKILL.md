@@ -24,7 +24,7 @@ quotes the plan, and the verdict is delivered.
 
 ## Procedure
 
-1. **Find the plan.** Take the path from the arguments, or the newest plan in the plans folder
+1. **Find the plan.** Take the path from the arguments, or the newest plan in the plan folder
    whose status is `draft` or `ready`, and say which. The format is in
    `${CLAUDE_SKILL_DIR}/references/plan-schema.md`. With no plan but a spec (an issue, a PRD, a
    spec file), review the spec with the Scope lens and the gap checks of step 5, and skip what

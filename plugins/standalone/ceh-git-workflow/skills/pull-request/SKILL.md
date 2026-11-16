@@ -44,8 +44,8 @@ Pick the path from the request, then run only that path:
    gh api repos/{owner}/{repo} --jq .delete_branch_on_merge   # false: the branch survives
    ```
 
-3. **Record the PR in its build plan.** The plans folder is `.agents_workspace/product/plans/`,
-   unless the repo's `CLAUDE.md` names another plans folder. The plan is the one the user names,
+3. **Record the PR in its build plan.** The plan folder is `.agents_workspace/product/plan/`
+   (also the older `plans/` beside it), unless the repo's `CLAUDE.md` names another plan folder. The plan is the one the user names,
    or else the one in that folder whose `record` has a Built Phase entry with no PR entry after
    it. Append `- YYYY-MM-DD PR: #<n> <url>` to the `## Record` section at the end of that plan.
    The plan then traces its change to the review that landed it. With no such plan, skip this

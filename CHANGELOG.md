@@ -17,19 +17,38 @@ Reviews, audits and evals now save one folder per kind, in the layout of the sha
 also look in the older folders, so a workspace not yet migrated keeps working. Orchestration-lab
 runs move to `.agents_workspace/experiment/`.
 
+Plans, fix records and retros now save to the singular folders the same layout names,
+`product/plan/`, `product/fix/` and `product/retro/`, per the same plan. The render hooks, the
+build-record guard and the fix record model accept the older plural folders too, and every skill
+that looks for a plan, a record or a retro also looks there, so a workspace not yet migrated keeps
+working. The fix commit footer is now `Refs: fix/<slug>`, and readers match the older
+`Refs: fixes/<slug>` as well.
+
 ### Plugin versions
 
-| Plugin                  | Version |
-| ----------------------- | ------- |
-| `ceh-build-plan`        | 2.0.12  |
-| `ceh-every-session`     | 2.9.23  |
-| `ceh-git-workflow`      | 1.5.20  |
-| `ceh-product-direction` | 2.0.12  |
-| `ceh-security-audit`    | 1.1.13  |
-| `ceh-testing`           | 1.6.26  |
-| `ceh-usability-audit`   | 1.2.15  |
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-blog-and-seo`             | 2.0.12  |
+| `ceh-build-plan`               | 2.0.13  |
+| `ceh-check-build-against-plan` | 1.1.18  |
+| `ceh-codebase-explanation`     | 1.3.16  |
+| `ceh-coding-conduct`           | 2.5.18  |
+| `ceh-competitor-analysis`      | 1.2.13  |
+| `ceh-every-session`            | 2.9.24  |
+| `ceh-git-workflow`             | 1.5.21  |
+| `ceh-product-direction`        | 2.0.13  |
+| `ceh-security-audit`           | 1.1.14  |
+| `ceh-session-learning`         | 2.0.6   |
+| `ceh-testing`                  | 1.6.27  |
+| `ceh-usability-audit`          | 1.2.16  |
+| `ceh-workflow-builder`         | 1.4.12  |
+| `ceh-workflow-runner`          | 1.1.11  |
 
 ### Changed
+
+- Save paths: plans to `product/plan/`, fix records to `product/fix/`, retros to
+  `product/retro/`, with the older plural folders still read and still checked by the hooks.
+- The fix commit footer is `Refs: fix/<slug>`.
 
 - Save paths: plan reviews to `product/review/plan/`, code reviews to `product/review/code/`,
   business plan reviews to `product/review/business-plan/`, stress tests to

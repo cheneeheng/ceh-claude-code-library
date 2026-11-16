@@ -22,7 +22,8 @@ repo's scope has been handed to its route, and the path, headline numbers, and r
 ## Procedure
 
 1. **Fix the period.** From `$ARGUMENTS`, otherwise from the day after the newest
-   `.agents_workspace/product/retros/*-period.yaml`, or `*-period.md` for a retro saved before
+   `.agents_workspace/product/retro/*-period.yaml` (or in the older `retros/` beside it), or
+   `*-period.md` for a retro saved before
    `v3` with no YAML beside it, its date read from the start of the name in either form
    (`<YYYYMMDD-HHMMSS>` or the older `<YYYY-MM-DD>`), otherwise the last 14 days. State both dates in the retro.
 2. **Collect the history.** Every number comes from a command, and the retro names the command:
@@ -82,7 +83,7 @@ repo's scope has been handed to its route, and the path, headline numbers, and r
 ## Output
 
 Save one file, creating the directory if needed:
-`.agents_workspace/product/retros/<YYYYMMDD-HHMMSS>-<session-id>-period.yaml`, holding the retro and
+`.agents_workspace/product/retro/<YYYYMMDD-HHMMSS>-<session-id>-period.yaml`, holding the retro and
 every issue, those fixed in this repo and those left for the user, because the next retro and the
 routed work read it. It fills `assets/period-retro.template.yaml`, per the `period-retro/v3`
 section of `references/period-retro-schema.md`. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.

@@ -107,7 +107,7 @@ draft: say so and write a new plan as usual.
    - No placeholder (`TODO`, `...`, "adjust as needed"), no reference to a file, route, type, or
      field the plan does not define, and no field named differently in two places.
 
-   Save the plan as `plan/v2`: `<slug>.yaml` in the plans folder, a filled copy of
+   Save the plan as `plan/v2`: `<slug>.yaml` in the plan folder, a filled copy of
    `${CLAUDE_SKILL_DIR}/assets/plan.template.yaml`, with `status: ready`, or `status: draft` when
    an Open question blocks building, and a Planned entry in its `record`. Then run
    `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <slug>.yaml` and fix the YAML

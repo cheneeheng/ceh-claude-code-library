@@ -24,8 +24,8 @@ has one to three suggestions, each with the exact way to start it, and the choic
    read-only commands only:
    - in a git repo: `git status`, the current branch, and `git log --oneline -10`
    - the lifecycle handoff files in `.agents_workspace/product/`, each of which marks a stage
-     reached: `business/BUSINESS_PLAN.yaml` (Shape done), `plans/*.yaml` (a plan not `built` is in
-     flight), `ARCHITECTURE.yaml` (built), `EVIDENCE.yaml` (proven), or the `.md` of each where no
+     reached: `business/BUSINESS_PLAN.yaml` (Shape done), `plan/*.yaml` or the older `plans/*.yaml` (a
+     plan not `built` is in flight), `ARCHITECTURE.yaml` (built), `EVIDENCE.yaml` (proven), or the `.md` of each where no
      YAML exists. Files only at the old root `product/`, in a repo whose `CLAUDE.md` names no
      location, are reported as needing the move to `.agents_workspace/product/`. When a plan's `<slug>.yaml` sits beside its `.md`,
      read its `status` from the YAML: first run
@@ -63,7 +63,7 @@ has one to three suggestions, each with the exact way to start it, and the choic
   https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md.
 - Rank by fit to the moment, not by breadth: the skill whose trigger matches what the user is about
   to do comes first.
-- Give the reason for each suggestion from what was read ("`.agents_workspace/product/plans/auth.yaml` exists and no code
+- Give the reason for each suggestion from what was read ("`.agents_workspace/product/plan/auth.yaml` exists and no code
   matches it yet"), never a generic one ("planning is useful").
 
 ## User-only skills

@@ -78,7 +78,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
 
     # build-record-guard: a plan file, and transcripts with and without implement-from-plan started.
     built = "- 2026-10-26 Built Phase 1: check, 1 passed\n"
-    plans = tmp / "product" / "plans"
+    plans = tmp / "product" / "plan"
     plans.mkdir(parents=True)
     plan = plans / "p.md"
     plan.write_text("## Record\n\n" + built, encoding="utf-8")
@@ -470,7 +470,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         g(d, "init", "-q", "-b", branch)
         g(d, "add", ".")
         g(d, "commit", "-q", "-m", "x")
-    plan_rel = Path("product") / "plans"
+    plan_rel = Path("product") / "plan"
     sync_subject = "chore(workspace): sync main before worktree {}"
 
     def pending_plan(name: str, branch_first: bool = False, merge_head: bool = False):
@@ -514,7 +514,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**sync("start", tmp / "wt5"), "out": "", "before": pending_plan("wt5", merge_head=True), "after": no_commit_in_merge},
     ]  # fmt: skip
 
-    # artifact-render-hook and generated-md-guard: plan/v2 YAML in tmp/product/plans.
+    # artifact-render-hook and generated-md-guard: plan/v2 YAML in tmp/product/plan.
     good_plan = (
         "schema: plan/v2\ntitle: Count words\nstatus: ready\ncreated: 2026-11-06\n"
         "goal: |\n  A CLI that counts words.\nscope:\n  in:\n    - Count the words in a file\n"
@@ -798,15 +798,19 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ok = md.is_file() and "a &#92;\\| b" in md.read_text(encoding="utf-8")
         return None if ok else f"{md.name} lost the backslash before a pipe"
 
-    # plan and previous: the workspace path, the old root form a record saved earlier holds, and a
-    # path outside both, which the model rejects.
+    # plan and previous: the workspace path, the plural folders and the old root form a record
+    # saved earlier holds, and a path outside both, which the model rejects.
     fix_paths = {
         "new": (
+            ".agents_workspace/product/plan/wordy.yaml",
+            ".agents_workspace/product/fix/old.yaml",
+        ),
+        "plural": (
             ".agents_workspace/product/plans/wordy.yaml",
             ".agents_workspace/product/fixes/old.yaml",
         ),
         "old": ("product/plans/wordy.md", "product/fixes/old.md"),
-        "bad": ("product/plans/wordy.yaml", "docs/fixes/old.md"),
+        "bad": ("product/plan/wordy.yaml", "docs/fixes/old.md"),
     }
     for form, (plan_path, previous) in fix_paths.items():
         p = tmp / "report-fix-paths" / form / "count-drops-last-word.yaml"
@@ -922,10 +926,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{ca}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{ca}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
-    # The formats that were Markdown-only (.agents_workspace/product/plans/markdown-formats-yaml.yaml): each is found
+    # The formats that were Markdown-only (.agents_workspace/product/plan/markdown-formats-yaml.yaml): each is found
     # by its schema key alone, so a file without one is skipped.
     good_pr = (
-        "schema: plan-review/v2\nplan: .agents_workspace/product/plans/wordy.yaml\ndate: 2026-11-15\n"
+        "schema: plan-review/v2\nplan: .agents_workspace/product/plan/wordy.yaml\ndate: 2026-11-15\n"
         "verdict: Revise first\nlenses: [Scope, Engineering]\n"
         "skipped: [{lens: Design, reason: no UI}]\nfindings:\n"
         "  - {lens: Engineering, severity: blocking, plan_line: 'Phase 2 Check: \"it runs\"',"
@@ -1190,7 +1194,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "ceh-blog-and-seo/generated-md-guard.py", "stdin": edit(bv_generated.as_posix()), "out": "blog-voice.yaml"},
     ]  # fmt: skip
     # The repeat-mistake report: prevent-repeat-mistake writes and reads it. It is found by its
-    # schema key, or by its dated name in product/retros/ or .agents_workspace/product/retros/
+    # schema key, or by its dated name in product/retro/ or .agents_workspace/product/retro/
     # under the payload cwd. A labelled name and the dated name anywhere else are left alone.
     good_rm = (
         "schema: repeat-mistake/v2\ndate: 2026-11-12\nother_file: null\nfixes:\n"
@@ -1206,19 +1210,19 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "20261112-103000-7c9e6679-7425-40de-944b-e07fc1f90ae7-cockpit-repeat-mistake"
     )
     rm_files = {
-        f"none/product/retros/{stamped}.yaml": "key: value\n",
-        f"none/product/retros/{stamped_label}.yaml": "key: value\n",
-        f"ok/product/retros/{day}.yaml": good_rm,
-        f"bad/product/retros/{day}.yaml": good_rm.replace(
+        f"none/product/retro/{stamped}.yaml": "key: value\n",
+        f"none/product/retro/{stamped_label}.yaml": "key: value\n",
+        f"ok/product/retro/{day}.yaml": good_rm,
+        f"bad/product/retro/{day}.yaml": good_rm.replace(
             "status: awaiting approval", "status: done"
         ),
-        f"none/product/retros/{day}.yaml": "key: value\n",
-        f"none/.agents_workspace/product/retros/{day}.yaml": "key: value\n",
-        "none/product/retros/notes.yaml": "key: value\n",
-        "none/product/retros/2026-11-12-cockpit-repeat-mistake.yaml": "key: value\n",
+        f"none/product/retro/{day}.yaml": "key: value\n",
+        f"none/.agents_workspace/product/retro/{day}.yaml": "key: value\n",
+        "none/product/retro/notes.yaml": "key: value\n",
+        "none/product/retro/2026-11-12-cockpit-repeat-mistake.yaml": "key: value\n",
         f"none/{day}.yaml": "key: value\n",
         # A source backslash before a pipe must survive into the rendered cell.
-        f"pipe/product/retros/{day}.yaml": good_rm.replace(
+        f"pipe/product/retro/{day}.yaml": good_rm.replace(
             "mistake: Dates written as 10/09/2026", "mistake: 'a \\| b'"
         ),
     }
@@ -1233,13 +1237,13 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     )
 
     def rm_rendered() -> str | None:
-        md = rm / "ok" / "product" / "retros" / f"{day}.md"
+        md = rm / "ok" / "product" / "retro" / f"{day}.md"
         text = md.read_text(encoding="utf-8") if md.is_file() else ""
         ok = "### 1: Dates written as 10/09/2026\n\n```python\ndeny()\n```" in text
         return None if ok else f"{day}.md was not rendered"
 
     def rm_pipe_kept() -> str | None:
-        md = rm / "pipe" / "product" / "retros" / f"{day}.md"
+        md = rm / "pipe" / "product" / "retro" / f"{day}.md"
         text = md.read_text(encoding="utf-8") if md.is_file() else ""
         return (
             None
@@ -1249,22 +1253,22 @@ def hook_fixtures(tmp: Path) -> list[dict]:
 
     rh_es = f"{es}/artifact-render-hook.py"
     local = (
-        rm / "none" / ".agents_workspace" / "product" / "retros" / f"{day}.yaml"
+        rm / "none" / ".agents_workspace" / "product" / "retro" / f"{day}.yaml"
     ).as_posix()
     repeat_mistake_fixtures = ([
-        {"script": rh_es, "stdin": write_rel(rm / "ok", f"product/retros/{day}.yaml"), "out": "", "after": rm_rendered},
-        {"script": rh_es, "stdin": write_rel(rm / "pipe", f"product/retros/{day}.yaml"), "out": "", "after": rm_pipe_kept},
-        {"script": rh_es, "stdin": write_at(rm / "bad" / "product" / "retros" / f"{day}.yaml"), "out": "fixes.0.status"},
-        {"script": rh_es, "stdin": write_rel(rm / "none", f"product/retros/{day}.yaml"), "out": "no 'schema:"},
+        {"script": rh_es, "stdin": write_rel(rm / "ok", f"product/retro/{day}.yaml"), "out": "", "after": rm_rendered},
+        {"script": rh_es, "stdin": write_rel(rm / "pipe", f"product/retro/{day}.yaml"), "out": "", "after": rm_pipe_kept},
+        {"script": rh_es, "stdin": write_at(rm / "bad" / "product" / "retro" / f"{day}.yaml"), "out": "fixes.0.status"},
+        {"script": rh_es, "stdin": write_rel(rm / "none", f"product/retro/{day}.yaml"), "out": "no 'schema:"},
         {"script": rh_es, "stdin": write_rel(rm / "none", local), "out": "no 'schema:"},
     ] if have_uv else []) + [
-        {"script": rh_es, "stdin": write_rel(rm / "none", f".agents_workspace/product/retros/{day}.yaml"), "env": no_uv, "out": "uv is not installed"},
-        {"script": rh_es, "stdin": write_rel(rm / "none", f"product/retros/{stamped}.yaml"), "env": no_uv, "out": "uv is not installed"},
-        {"script": rh_es, "stdin": write_rel(rm / "none", f"product/retros/{stamped_label}.yaml"), "env": no_uv, "out": ""},
-        {"script": rh_es, "stdin": write_rel(rm / "none", "product/retros/notes.yaml"), "env": no_uv, "out": ""},
-        {"script": rh_es, "stdin": write_rel(rm / "none", "product/retros/2026-11-12-cockpit-repeat-mistake.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_es, "stdin": write_rel(rm / "none", f".agents_workspace/product/retro/{day}.yaml"), "env": no_uv, "out": "uv is not installed"},
+        {"script": rh_es, "stdin": write_rel(rm / "none", f"product/retro/{stamped}.yaml"), "env": no_uv, "out": "uv is not installed"},
+        {"script": rh_es, "stdin": write_rel(rm / "none", f"product/retro/{stamped_label}.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_es, "stdin": write_rel(rm / "none", "product/retro/notes.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_es, "stdin": write_rel(rm / "none", "product/retro/2026-11-12-cockpit-repeat-mistake.yaml"), "env": no_uv, "out": ""},
         {"script": rh_es, "stdin": write_rel(rm / "none", f"{day}.yaml"), "env": no_uv, "out": ""},
-        {"script": rh_es, "stdin": write_at(rm / "none" / "product" / "retros" / f"{day}.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_es, "stdin": write_at(rm / "none" / "product" / "retro" / f"{day}.yaml"), "env": no_uv, "out": ""},
         {"script": f"{es}/generated-md-guard.py", "stdin": edit(rm_generated.as_posix()), "out": f"{day}.yaml"},
         {"script": f"{es}/generated-md-guard.py", "stdin": edit(rm_generated.as_posix()), "out": "The user can turn this guard off with"},
         # A hook that fails says so once per session, so a second session hears it too.
@@ -1311,7 +1315,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     ]  # fmt: skip
 
     # The one product path: a plan, a spine file and a repeat-mistake report under
-    # .agents_workspace/product/ each render, as they do under a repo's own product/.
+    # .agents_workspace/product/ each render, as they do under a repo's own product/. The plan
+    # and the report sit in the older plural folders, which the hooks still accept.
     awp = tmp / "awp" / ".agents_workspace" / "product"
     aw_files = {
         awp / "plans" / "ok.yaml": (good_plan, "generated_from: ok.yaml"),
@@ -1369,7 +1374,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *evidence_fixtures,
         {"script": "build-record-guard.py", "stdin": record_yaml(), "out": "implement-from-plan"},
         {"script": "build-record-guard.py", "stdin": record_yaml("skill"), "out": ""},
-        # The one product path: a hand-written Built Phase entry in a workspace plan is denied too.
+        # The one product path: a hand-written Built Phase entry in a workspace plan is denied too,
+        # in the older plans/ folder as well.
         {"script": "build-record-guard.py", "stdin": record_yaml(path=(awp / "plans" / "x.yaml").as_posix()), "out": "implement-from-plan"},
         *workspace_path_fixtures,
         # branch-guard: deny on the session repo's default branch, allow elsewhere, in another

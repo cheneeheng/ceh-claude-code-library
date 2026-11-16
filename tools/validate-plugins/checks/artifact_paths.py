@@ -3,7 +3,7 @@
 A product artifact lives in `.agents_workspace/product/` (`decision-artifact-locations.md`), so a
 root `product/` path is a stale location, and a format with a YAML source is referred to by its
 `.yaml`, so a `.md` path of one is a stale reference. Since
-`.agents_workspace/product/plans/markdown-formats-yaml.yaml` every format a skill saves there has a YAML source, so
+`.agents_workspace/product/plan/markdown-formats-yaml.yaml` every format a skill saves there has a YAML source, so
 the allowlist holds only lines that name an old path or a v1 file on purpose, each with its reason.
 """
 
@@ -24,22 +24,22 @@ P = r"[^\s`'\"()\[\]]*"
 YAML_FORMAT_MD = re.compile(
     "|".join(
         (
-            rf"product/plans/{P}\.md\b",
+            rf"product/plan/{P}\.md\b",
             r"product/(?:business/)?(?:VISION|STRATEGY|ARCHITECTURE|EVIDENCE|BUSINESS_PLAN)\.md\b",
-            rf"product/fixes/{P}\.md\b",
-            rf"product/retros/{P}repeat-mistake\.md\b",
+            rf"product/fix/{P}\.md\b",
+            rf"product/retro/{P}repeat-mistake\.md\b",
             rf"product/qa/{P}QA_REPORT\.md\b",
             rf"product/perf/{P}\.md\b",
             rf"product/audit/security/{P}security-audit\.md\b",
             rf"product/audit/ux/{P}(?:UX_AUDIT|ERROR_MESSAGES)\.md\b",
             rf"handoff/{P}handoff\.md\b",
-            # The Markdown-only formats, per .agents_workspace/product/plans/markdown-formats-yaml.yaml.
+            # The Markdown-only formats, per .agents_workspace/product/plan/markdown-formats-yaml.yaml.
             rf"product/review/plan/{P}\.md\b",
             rf"product/review/business-plan/{P}\.md\b",
             r"product/business/INVESTOR_(?:DECK|OUTREACH)\.md\b",
             rf"product/(?:refactor|test-audits|stress-tests|learning|blog|code-reviews)/{P}\.md\b",
             # The session retro's -shareable.md copy is Markdown on purpose, not a format.
-            rf"product/retros/{P}-(?:period|session(?:-{P})?)(?<!-shareable)\.md\b",
+            rf"product/retro/{P}-(?:period|session(?:-{P})?)(?<!-shareable)\.md\b",
         )
     )
 )
@@ -57,12 +57,12 @@ ALLOW = (
     ),
     (
         "ceh-build-plan/evals/*",
-        r"product/plans/[\w-]+\.md",
+        r"product/plan/[\w-]+\.md",
         "the eval fixtures build plan/v1 plans, which are Markdown with no YAML",
     ),
     (
         "ceh-build-plan/scripts/build-record-guard.py",
-        r"plans/\*\.md",
+        r"plans?/\*\.md",
         "a plan/v1 plan is Markdown, and the guard covers its Built Phase lines",
     ),
     (

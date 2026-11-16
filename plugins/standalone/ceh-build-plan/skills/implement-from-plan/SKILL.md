@@ -22,13 +22,13 @@ reason recorded.
 
 ## Procedure
 
-1. **Find the plan.** Take the path from the arguments. Otherwise look in the plans folder for a
+1. **Find the plan.** Take the path from the arguments. Otherwise look in the plan folder for a
    plan with `status: ready` or `building`, and when there are several, take the most recently
    created and say which. With no plan at all, write a minimal one from the request as `plan/v2`,
    a filled copy of `${CLAUDE_SKILL_DIR}/assets/plan.template.yaml`: Goal, Scope, and phases with
    checks, every assumption under Open. Say that you did, because the user may have expected a
    plan to exist. A plan found only at the old root `product/plans/`, in a repo whose `CLAUDE.md`
-   names no plans folder, is reported with its move (each file under root `product/` to the same
+   names no plan folder, is reported with its move (each file under root `product/` to the same
    sub-path under `.agents_workspace/product/`) and the run stops, never reading it or writing
    beside it, because two folders split the artifacts again.
 
@@ -64,7 +64,7 @@ reason recorded.
       one line of its passing output. Append a Built Phase line to the plan's `## Record`. When
       this is the plan's first `done` phase, set `status: building`.
 4. **Close the plan.** When every phase is `done`, set `status: built`.
-5. **Copy the lasting decisions.** The built plan stays in the plans folder as the record of this
+5. **Copy the lasting decisions.** The built plan stays in the plan folder as the record of this
    change: later planning runs read only its frontmatter. When `ceh-check-build-against-plan` is
    installed, run `ceh-check-build-against-plan:check-build-against-plan` first, because it adds
    its Checked line to the plan. Then append each Design decision a later reader still needs to
