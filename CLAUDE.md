@@ -37,10 +37,8 @@ Plugins fall into three tiers:
 .claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/), model-audit (scripts/, references/, assets/), evaluate-plugin (scripts/)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
-audits/<date>/                # Model-audit reports, one <plugin>.md each plus SUMMARY.md — written by the model-audit skill
 .github/workflows/            # validate.yml — runs validate.py on push and PR; model-audit.yml — weekly audit draft PR
 docs/                         # GETTING_STARTED.md (user-facing install guide), CATALOG.md (every skill and agent), and maintainer docs — VISION.md, STRATEGY.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, RETRO_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
-examples/                     # Worked usage examples, a ceh-<plugin>/README.md where one exists (only ceh-ag-ui today) — not validated
 plugins/                      # All plugins — one directory per plugin, no tier subfolders
 └── standalone/
     └── ceh-<plugin-name>/

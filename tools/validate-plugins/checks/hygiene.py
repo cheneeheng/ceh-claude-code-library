@@ -20,8 +20,6 @@ HYGIENE_ROOTS = (
     "tools",
     ".claude",
     ".github",
-    "audits",
-    "examples",
 )
 HYGIENE_SUFFIXES = {
     ".md",

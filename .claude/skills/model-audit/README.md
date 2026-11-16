@@ -13,16 +13,16 @@ workflow's is on `audit/<date>`). Nothing is merged and no eval runs without the
 
 Paths are relative to `.claude/skills/model-audit/`.
 
-| File                             | Purpose                                                                                                                  |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `scripts/detect.py`              | Stdlib-only, no LLM. Fetches the guide slugs, diffs them against `known-model-guides.json`, lists stale plugins as JSON. |
-| `scripts/audit.py`               | Runs the headless audits in parallel, writes `audits/<date>/`, updates each `tuning.json`, validates.                    |
-| `scripts/context_budget.py`      | Stdlib-only, no LLM. Per plugin: description characters plus what its context-injecting hooks print, per event.          |
-| `assets/config.json`             | `audit` model/effort for unpinned audits, `tuning` pair for pinned tuning and new generations, `parallel-plugins`.       |
-| `assets/known-model-guides.json` | Every guide slug seen so far. `detect.py --write` adds new ones.                                                         |
-| `assets/models-in-use.json`      | Optional. Slugs (`opus-5-5`) or family aliases (`opus` = newest opus guide). Other guides never trigger audits.          |
-| `references/filter.md`           | Filter-pass prompt for unpinned files: general-page fixes, defects, and changes that help one model and hurt none.       |
-| `references/tune.md`             | Tuning-pass prompt for a pinned agent or skill, from its last tuned guide up to its target.                              |
+| File                             | Purpose                                                                                                                              |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `scripts/detect.py`              | Stdlib-only, no LLM. Fetches the guide slugs, diffs them against `known-model-guides.json`, lists stale plugins as JSON.             |
+| `scripts/audit.py`               | Runs the headless audits in parallel, writes `.agents_workspace/product/audit/model/<date>/`, updates each `tuning.json`, validates. |
+| `scripts/context_budget.py`      | Stdlib-only, no LLM. Per plugin: description characters plus what its context-injecting hooks print, per event.                      |
+| `assets/config.json`             | `audit` model/effort for unpinned audits, `tuning` pair for pinned tuning and new generations, `parallel-plugins`.                   |
+| `assets/known-model-guides.json` | Every guide slug seen so far. `detect.py --write` adds new ones.                                                                     |
+| `assets/models-in-use.json`      | Optional. Slugs (`opus-5-5`) or family aliases (`opus` = newest opus guide). Other guides never trigger audits.                      |
+| `references/filter.md`           | Filter-pass prompt for unpinned files: general-page fixes, defects, and changes that help one model and hurt none.                   |
+| `references/tune.md`             | Tuning-pass prompt for a pinned agent or skill, from its last tuned guide up to its target.                                          |
 
 ```bash
 python .claude/skills/model-audit/scripts/detect.py [--write]
@@ -131,7 +131,7 @@ Sonnet. Otherwise change `config.json`.
 
 ## Reviewing the PR
 
-`audits/<date>/SUMMARY.md` is the PR body and carries the checklist: keep or drop edits, bump
+`.agents_workspace/product/audit/model/<date>/SUMMARY.md` is the PR body and carries the checklist: keep or drop edits, bump
 versions and write the changelog for kept edits, set `tuned-for` for accepted tuning, and optionally
 run `claude plugin eval`. Its Run cost table lists every headless run (`/doctor`, filter, tune)
 with its turns, input, output, cache read and cache write tokens, and cost, plus a total, so you can

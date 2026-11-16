@@ -66,16 +66,17 @@ jobs:
         run: |
           date="$(date -u +%F)"
           branch="audit/$date"
-          [ -f "audits/$date/SUMMARY.md" ] || { echo "No summary written"; exit 1; }
+          out=".agents_workspace/product/audit/model/$date"
+          [ -f "$out/SUMMARY.md" ] || { echo "No summary written"; exit 1; }
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add .claude/skills/model-audit/assets/known-model-guides.json audits plugins
+          git add .claude/skills/model-audit/assets/known-model-guides.json plugins
           git commit -m "chore(model-audit): audit reports for $date" \
             -m "Generated with Claude Code by CEH"
           git push -u origin "$branch"
           body="$RUNNER_TEMP/body.md"
-          cp "audits/$date/SUMMARY.md" "$body"
+          cp "$out/SUMMARY.md" "$body"
           printf '\nGenerated with Claude Code by CEH\n' >> "$body"
           gh pr create --draft --base main --head "$branch" \
             --title "chore(model-audit): audit $date" --body-file "$body"

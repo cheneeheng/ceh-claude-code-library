@@ -33,11 +33,11 @@ nothing else. The scripts, their arguments, and their state files are in
    plugins are stale and how many runs that makes: two per plugin with missing guides (`/doctor`
    plus the filter pass), plus one per pinned file with `"stale": true`.
 3. **Audit.** Run `python "${CLAUDE_SKILL_DIR}/scripts/audit.py" $ARGUMENTS` in the background and
-   wait for it to exit. Read only `audits/<date>/SUMMARY.md`. A non-zero exit means a plugin
+   wait for it to exit. Read only `.agents_workspace/product/audit/model/<date>/SUMMARY.md`. A non-zero exit means a plugin
    errored or failed validation: the summary says which. Carry on to the PR anyway, so the failure
    is reviewed with everything else.
-4. **Commit.** Stage `${CLAUDE_SKILL_DIR}/assets/known-model-guides.json`, `audits/`, and
-   `plugins/`. Commit with `chore(model-audit): audit reports for <date>` plus the attribution
+4. **Commit.** Stage `${CLAUDE_SKILL_DIR}/assets/known-model-guides.json` and `plugins/`. The
+   reports stay in the git-ignored workspace, and the summary rides in the PR body. Commit with `chore(model-audit): audit reports for <date>` plus the attribution
    line. If the pre-commit hook reformats files and aborts, stage them again and commit again.
 5. **Open the PR.** Chain with `&&`:
    `git push -u origin HEAD && gh pr create --draft --title "chore(model-audit): audit <date>" --body-file <body>`.

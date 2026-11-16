@@ -14,7 +14,7 @@ a removed plugin loses its row.
 
 | Plugin                         | Version | Changed in   |
 | ------------------------------ | ------- | ------------ |
-| `ceh-ag-ui`                    | 1.1.5   | `2026-11-12` |
+| `ceh-ag-ui`                    | 1.1.6   | `2026-11-16` |
 | `ceh-blog-and-seo`             | 2.0.12  | `2026-11-16` |
 | `ceh-build-plan`               | 2.0.13  | `2026-11-16` |
 | `ceh-product-direction`        | 2.0.13  | `2026-11-16` |
