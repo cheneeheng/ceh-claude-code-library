@@ -17,7 +17,7 @@ a removed plugin loses its row.
 | `ceh-ag-ui`                    | 1.1.6   | `2026-11-16` |
 | `ceh-blog-and-seo`             | 2.0.13  | `2026-11-16` |
 | `ceh-build-plan`               | 2.0.14  | `2026-11-16` |
-| `ceh-product-direction`        | 2.0.14  | `2026-11-16` |
+| `ceh-product-direction`        | 2.0.15  | `2026-11-16` |
 | `ceh-check-build-against-plan` | 1.1.19  | `2026-11-16` |
 | `ceh-codebase-explanation`     | 1.3.17  | `2026-11-16` |
 | `ceh-coding-conduct`           | 2.5.19  | `2026-11-16` |

@@ -35,6 +35,10 @@ layout keeps the `product/` root for the vision, strategy, architecture and evid
 `edit-post` and the render hook in every plugin that carries it also find a profile at the older
 `product/` root, and a profile found there is amended and converted where it is.
 
+`write-vision-and-strategy` gains a "Said once" test, because an evaluation of this repo's own
+`docs/VISION.md` found it long from repeats, not from scope: the same idea stated in full in the
+Identity "is not" list, the Goals, the Non-goals and a principle.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -48,7 +52,7 @@ layout keeps the `product/` root for the vision, strategy, architecture and evid
 | `ceh-competitor-analysis`      | 1.2.14  |
 | `ceh-every-session`            | 2.9.25  |
 | `ceh-git-workflow`             | 1.5.22  |
-| `ceh-product-direction`        | 2.0.14  |
+| `ceh-product-direction`        | 2.0.15  |
 | `ceh-security-audit`           | 1.1.15  |
 | `ceh-session-learning`         | 2.0.7   |
 | `ceh-testing`                  | 1.6.28  |
@@ -74,6 +78,8 @@ layout keeps the `product/` root for the vision, strategy, architecture and evid
 - `ceh-ag-ui`: the worked examples ship inside the plugin, at `examples/README.md`.
 - Save path: the blog voice profile to `product/blog/blog-voice.yaml`, with the older
   `product/blog-voice.yaml` still read and still checked by the render hook.
+- `write-vision-and-strategy`: a "Said once" row in The tests fails a doc whose "is not", goal or
+  non-goal repeats a principle or each other.
 
 ### Fixed
 
