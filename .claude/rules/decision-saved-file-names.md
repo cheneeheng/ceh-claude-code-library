@@ -6,7 +6,7 @@ session id (`${CLAUDE_SESSION_ID}` in a skill body, the placeholder `<session-id
 else), then what the file is. A folder with nothing else to say stops after the session id. A file
 already saved under an older form keeps its name, and every reader and hook accepts both forms.
 Two names are exempt: a blog draft, `<YYYY-MM-DD>-<slug>`, because the date is the post's, and the
-model-audit folder, `audits/<date>/`, because its script also runs in CI, where there is no
+model-audit folder, `.agents_workspace/product/audit/model/<date>/`, because its script also runs in CI, where there is no
 session. A date inside a file (`saved`, `date`, a Record line) keeps its own format.
 
 Why: one form sorts by time in any folder, a second run never overwrites the first, and the

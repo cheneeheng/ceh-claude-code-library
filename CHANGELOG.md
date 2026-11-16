@@ -24,10 +24,16 @@ that looks for a plan, a record or a retro also looks there, so a workspace not 
 working. The fix commit footer is now `Refs: fix/<slug>`, and readers match the older
 `Refs: fixes/<slug>` as well.
 
+The root `audits/` and `examples/` folders are gone. Model-audit reports now save to
+`.agents_workspace/product/audit/model/<date>/`, where the earlier reports moved, and the audit
+workflow's draft PR carries only the summary in its body. The AG-UI worked examples moved into the
+plugin, as `ceh-ag-ui/examples/README.md`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
+| `ceh-ag-ui`                    | 1.1.6   |
 | `ceh-blog-and-seo`             | 2.0.12  |
 | `ceh-build-plan`               | 2.0.13  |
 | `ceh-check-build-against-plan` | 1.1.18  |
@@ -57,6 +63,9 @@ working. The fix commit footer is now `Refs: fix/<slug>`, and readers match the 
 - `write-evidence-report` and the three usability audit skills also read the older folders.
 - `decision-artifact-locations.md`, `decision-evaluation.md`, `docs/STRATEGY.md` and root
   `CLAUDE.md` name the new folders.
+- `model-audit` writes its reports to `.agents_workspace/product/audit/model/<date>/`, and the
+  `hygiene` and `retired-names` checks no longer scan the removed `audits/` and `examples/`.
+- `ceh-ag-ui`: the worked examples ship inside the plugin, at `examples/README.md`.
 
 ### Fixed
 

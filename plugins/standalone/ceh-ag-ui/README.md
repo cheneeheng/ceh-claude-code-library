@@ -7,7 +7,7 @@ the component and fills in the content. It can never change how anything looks.
 
 All five skills are **build-time**: Claude Code loads one while writing your app, and none runs
 inside the running app. Worked examples, prompt by prompt:
-[examples/ceh-ag-ui](https://github.com/cheneeheng/ceh-claude-code-library/tree/main/examples/ceh-ag-ui).
+[examples/README.md](examples/README.md).
 
 ## Skills
 

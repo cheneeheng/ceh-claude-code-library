@@ -5,12 +5,13 @@ Run from anywhere:
   python .claude/skills/model-audit/scripts/audit.py [--plugins plugins/standalone/ceh-a ...] [--model M --effort E] [--apply]
 
 Per plugin, at most `parallel-plugins` plugins at a time because every run shares one rate limit:
-  1. `/doctor prompt-audit <plugin>`, saved raw to audits/<date>/<plugin>.doctor.md.
+  1. `/doctor prompt-audit <plugin>`, saved raw to <out>/<plugin>.doctor.md, where <out> is
+     .agents_workspace/product/audit/model/<date>/.
   2. A filter pass that keeps general-guide fixes, defects, and model-guide changes that help
      at least one in-use model without hurting the others.
   3. A tuning pass for each stale pinned agent or skill, with the tuning model.
-Then it writes audits/<date>/<plugin>.md, updates tuning.json (never `tuned-for`), runs
-`claude plugin validate <plugin> --strict`, and writes audits/<date>/SUMMARY.md.
+Then it writes <out>/<plugin>.md, updates tuning.json (never `tuned-for`), runs
+`claude plugin validate <plugin> --strict`, and writes <out>/SUMMARY.md.
 Plugin files are edited only with --apply.
 """
 
@@ -424,7 +425,12 @@ def main() -> int:
             args.tune_model or cfg["tuning"]["model"],
             args.tune_effort or cfg["tuning"]["effort"],
         ),
-        "out_dir": REPO / "audits" / datetime.date.today().isoformat(),
+        "out_dir": REPO
+        / ".agents_workspace"
+        / "product"
+        / "audit"
+        / "model"
+        / datetime.date.today().isoformat(),
     }
     run["out_dir"].mkdir(parents=True, exist_ok=True)
     with ThreadPoolExecutor(args.jobs or cfg.get("parallel-plugins", 3)) as pool:
