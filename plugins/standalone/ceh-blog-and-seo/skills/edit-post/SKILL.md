@@ -39,8 +39,9 @@ type (Lessons Learned, How-To, Opinion, Launch, Thought Leadership, Personal Sto
 audience and register; the author's voice markers (rhythm, vocabulary, formality); the thesis, and
 where it actually appears.
 
-If a voice profile exists in `.agents_workspace/product/` (`ceh-blog-and-seo:draft-post` writes it from
-published posts), read it and judge the draft's voice markers against it: a draft that drifts from
+If a voice profile exists in `.agents_workspace/product/blog/`, or else at the older
+`.agents_workspace/product/` root (`ceh-blog-and-seo:draft-post` writes it from published posts),
+read it and judge the draft's voice markers against it: a draft that drifts from
 the author's usual register is a finding, not a style to preserve. When `blog-voice.yaml` is there,
 read it, not `blog-voice.md`: first run
 `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` (format in

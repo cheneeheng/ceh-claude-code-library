@@ -60,7 +60,9 @@ def place_format(file: Path, root: Path) -> str | None:
     if file.name == "GLOSSARY.yaml":
         home = file.parent in (root, root / "docs")
         return "glossary" if home and file.with_suffix(".md").exists() else None
-    if file == root / ".agents_workspace" / "product" / "blog-voice.yaml":
+    # In .agents_workspace/product/blog/, or at the older product/ root.
+    product = root / ".agents_workspace" / "product"
+    if file in (product / "blog" / "blog-voice.yaml", product / "blog-voice.yaml"):
         return "blog-voice"
     # The dated name only, older or newer form, in .agents_workspace/product/retro/, the older
     # retros/, or the retro folder a repo's CLAUDE.md names: a name with a label before

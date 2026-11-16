@@ -48,8 +48,9 @@ which needs [uv](https://docs.astral.sh/uv/), installing pydantic and PyYAML on 
 uv the file is read unchecked, and a repo with none of these files needs no uv.
 
 On a blog with three or more posts, `draft-post` captures the author's voice once, into
-`.agents_workspace/product/blog-voice.yaml` (`blog-voice/v2`, checked by a model), with
-`blog-voice.md` rendered beside it. Every new observation quotes a post word for word and names
+`.agents_workspace/product/blog/blog-voice.yaml` (`blog-voice/v2`, checked by a model), with
+`blog-voice.md` rendered beside it. A profile saved at the older `.agents_workspace/product/`
+root is still read and amended there. Every new observation quotes a post word for word and names
 it; one carried from an older profile that never named its post keeps its quote with no source.
 Later drafts and `edit-post` read the profile instead of re-deriving it. A profile saved before
 `v2` stays as `blog-voice.md`, which both skills still read.
