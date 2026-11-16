@@ -111,8 +111,8 @@ Environment variables the plugins read are indexed in
 ### Step 2 — Install what you need now
 
 Do not install everything. Follow [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md): a small
-core once, then one plugin per stage as you reach it, at the scopes you pick (recommended: the core
-at user scope, the rest at project scope). The guide has
+core, then one plugin per stage as you reach it, every plugin at `local` scope unless you decide
+otherwise. The guide has
 the commands, and every plugin is listed in the [Plugins](#plugins) table above.
 
 Dependencies install automatically: each stack plugin brings [`ceh-testing`](plugins/standalone/ceh-testing/), and [`ceh-web-frontend`](plugins/standalone/ceh-web-frontend/),

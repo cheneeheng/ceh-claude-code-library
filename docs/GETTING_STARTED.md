@@ -23,17 +23,17 @@ what you are about to do, then installs the core and only the plugins that momen
 same route by hand, and the route Claude follows.
 
 > **For Claude Code, running this setup:** this file is all you need, so do not clone the
-> repository. Before you install anything, ask the user in one round what they are about to do and
-> which scopes to install at, with "core at user scope, the rest at project scope" as the
-> recommended answer and the other options from "Pick the scopes" below. With no user to ask, use
-> the recommended answer and say so. Always install `ceh-every-session` in step 2, whatever the
-> answer. Then follow steps 1 to 4 for that moment only, at the scopes chosen, running each install yourself with the `claude plugin` CLI,
+> repository. Before you install anything, ask the user in one round what they are about to do.
+> Install every plugin at `local` scope, unless the user names another scope. With no user to ask,
+> say which moment you assumed. Always install `ceh-every-session` in step 2, whatever the
+> answer. Then follow steps 1 to 4 for that moment only, running each install yourself with the `claude plugin` CLI,
 > not the `/plugin` slash command. Do not install every plugin. When you finish, tell the user to
 > run `/reload-plugins`.
 
-## Pick the scopes
+## Install at local scope
 
-The scope decides where a plugin is on. It is your choice, because it depends on how you work:
+Install every plugin at `local` scope, unless you decide otherwise or a step below says so. The
+scope decides where a plugin is on:
 
 | Scope     | The plugin is on                           | Recorded in                                      |
 | --------- | ------------------------------------------ | ------------------------------------------------ |
@@ -41,15 +41,14 @@ The scope decides where a plugin is on. It is your choice, because it depends on
 | `project` | in this folder, for everyone who clones it | `.claude/settings.json`, committed with the repo |
 | `local`   | in this folder, for you only               | `.claude/settings.local.json`, not committed     |
 
-Steps 2 and 3 use the recommended split: the core at `user`, the rest at `project`. The common
-alternatives:
+`local` keeps a plugin and its hooks to the folder you install it in, and off your teammates in a
+shared repo, so nothing loads where you did not ask for it. The cost is installing in each folder
+you work in, the core included. Pick another scope only for a reason like these:
 
-- **Everything at `user`:** you work alone across many folders and want the same plugins in each.
-- **Everything at `project`:** the whole team should get the same plugins from the repo.
-- **The rest at `local` instead of `project`:** a shared repo where you do not want to put plugins
-  and their hooks on teammates.
+- **`user`:** you work alone across many folders and want the same plugins in each.
+- **`project`:** the whole team should get the same plugins from the repo.
 
-Swap the `--scope` value in any command below for the one you picked.
+To use another scope, swap the `--scope` value in any command below.
 
 ## 1. Add the marketplace
 
@@ -71,10 +70,10 @@ Installing before this step fails with `Plugin "<name>" not found in marketplace
 message Claude Code gives for a marketplace it does not know. Run the command above, then repeat
 the install.
 
-## 2. Install the core once, recommended at user scope
+## 2. Install the core in each folder you work in
 
-User scope installs a plugin for you in every folder you open Claude Code in. A hook is a script Claude Code
-runs at fixed points, such as before each file edit, so a plugin with hooks acts on every session.
+At `local` scope the core is on only in the folder you install it in, so install it again in the
+next folder. A hook is a script Claude Code runs at fixed points, such as before each file edit, so a plugin with hooks acts on every session.
 
 | Plugin               | Install when               | What you get                                                                                                                                                                                                                                                                    |
 | -------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -102,22 +101,21 @@ Their hooks need `python3` on your `PATH` (`ceh-every-session`, `ceh-git-workflo
 installing a plugin never installs `python3` for you.
 
 ```
-/plugin install ceh-every-session@ceh-claude-code-library --scope user
+/plugin install ceh-every-session@ceh-claude-code-library --scope local
 ```
 
 If you write code in git repos, add:
 
 ```
-/plugin install ceh-git-workflow@ceh-claude-code-library --scope user
-/plugin install ceh-coding-conduct@ceh-claude-code-library --scope user
+/plugin install ceh-git-workflow@ceh-claude-code-library --scope local
+/plugin install ceh-coding-conduct@ceh-claude-code-library --scope local
 ```
 
-## 3. Add the plugin for what you are about to do, recommended at project scope
+## 3. Add the plugin for what you are about to do
 
-`--scope project` keeps a plugin to the folder that needs it, a git repo or any plain folder, so a
+`--scope local` keeps a plugin to the folder that needs it, a git repo or any plain folder, so a
 project that is only being planned does not load the build and launch plugins. It records the
-plugin in that folder's `.claude/settings.json`. In a git repo, commit that file and everyone who
-clones the repo gets the same plugins.
+plugin in that folder's `.claude/settings.local.json`, which is not committed.
 
 If you installed `ceh-git-workflow` and the repo is brand new, create a branch before the first
 skill writes anything: that plugin blocks file edits on the default branch.
@@ -129,7 +127,7 @@ Install each plugin below in a Claude Code session opened in that folder, puttin
 of `<plugin>`:
 
 ```
-/plugin install <plugin>@ceh-claude-code-library --scope project
+/plugin install <plugin>@ceh-claude-code-library --scope local
 ```
 
 Each moment names the plugin, the command that starts it, and the file it writes. Every product
@@ -191,13 +189,13 @@ For example, a new Python backend service starts with a plan and adds the build 
 plan is written. In a Claude Code session opened in that repo, install the plan plugin now:
 
 ```
-/plugin install ceh-build-plan@ceh-claude-code-library --scope project
+/plugin install ceh-build-plan@ceh-claude-code-library --scope local
 ```
 
 Then, when you build from the plan:
 
 ```
-/plugin install ceh-python-service@ceh-claude-code-library --scope project
+/plugin install ceh-python-service@ceh-claude-code-library --scope local
 ```
 
 Run `/reload-plugins` after each install, so the new skills load.
@@ -229,7 +227,7 @@ installed plugin with its version and scope. Running an install again is safe: i
 plugin is already installed, so after an interruption, check the list and carry on.
 
 To drop a plugin you no longer need, `claude plugin uninstall <name>@ceh-claude-code-library`, adding
-the `--scope` it was installed at, such as `--scope project`. Removing the marketplace removes every plugin
+the `--scope` it was installed at, such as `--scope local`. Removing the marketplace removes every plugin
 installed from it. Prerequisites (Python for hooks, `uv`, Bun, the GitHub CLI) are in the root
 [`README.md`](../README.md#prerequisites).
 
