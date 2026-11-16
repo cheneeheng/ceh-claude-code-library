@@ -69,6 +69,7 @@ way.
 | Rejected item  | Name one tempting thing the scope test refuses.                                                  | The test refuses nothing                                         |
 | Checkable goal | How would someone tell each goal is met or not, with a measure the owner gave or the repo shows? | Nobody could tell                                                |
 | Reason         | Could a reader apply each principle to a case the text does not cover?                           | The principle has no reason                                      |
+| Said once      | Is each idea stated in full in one section only, with the others naming that section?            | An "is not", goal or non-goal repeats a principle or each other  |
 | Strategy adds  | Which strategy lines say how, not what the vision already says?                                  | The strategy restates the vision                                 |
 | Chooses work   | Give the work rule two real candidates. Does it pick one?                                        | It accepts both or neither with no reason                        |
 | Fits the repo  | Does each major part of the repo appear in The parts?                                            | A part appears nowhere, or the doc names one that does not exist |
