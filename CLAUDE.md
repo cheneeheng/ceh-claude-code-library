@@ -32,7 +32,7 @@ Plugins fall into three tiers:
 ## Structure
 
 ```
-.agents_workspace/            # Session artifacts, git-ignored in full: DECISION_LOG.md, skill-evals/, and product/ (plans, ARCHITECTURE, fixes, retros), per decision-artifact-locations.md
+.agents_workspace/            # Session artifacts, git-ignored in full: DECISION_LOG.md, and product/ (plans, ARCHITECTURE, fixes, retros, review/, audit/, eval/), per decision-artifact-locations.md
 .claude/rules/                # Project decisions, one decision-<topic>.md each
 .claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/), model-audit (scripts/, references/, assets/), evaluate-plugin (scripts/)
 .claude-plugin/               # Marketplace manifest (marketplace.json)

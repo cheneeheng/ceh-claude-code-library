@@ -1,7 +1,7 @@
 # Plan review schema
 
 The review `review-build-plan` saves to
-`.agents_workspace/product/plan-reviews/<YYYYMMDD-HHMMSS>-<session-id>-<slug>.yaml`, with its
+`.agents_workspace/product/review/plan/<YYYYMMDD-HHMMSS>-<session-id>-<slug>.yaml`, with its
 `.md` rendered beside it. A reference to it names the `.yaml`. Its layout is
 `../assets/plan-review.template.md`, relative to this file. A new review is written as
 `plan-review/v2` YAML, per the section at the end, and an older `plan-review/v1` review, a `.md`

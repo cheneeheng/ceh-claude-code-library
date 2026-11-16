@@ -1,7 +1,7 @@
 # Error messages audit schema
 
 The report `audit-error-messages` writes to
-`.agents_workspace/product/ux-audits/<target>/run-<NNN>/ERROR_MESSAGES.yaml`, with its `.md`
+`.agents_workspace/product/audit/ux/<target>/run-<NNN>/ERROR_MESSAGES.yaml`, with its `.md`
 rendered beside it and a zero-padded run index so a re-run never overwrites the previous evidence.
 A reference to it names the `.yaml`. Its layout is
 `../assets/error-messages-audit.template.md`, relative to this file. A new report is written as

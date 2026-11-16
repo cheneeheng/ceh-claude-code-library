@@ -1,7 +1,7 @@
 # Business plan review schema
 
 The report `review-business-plan` saves to
-`.agents_workspace/product/business-plan-reviews/<YYYYMMDD-HHMMSS>-<session-id>-business-plan-review.yaml`,
+`.agents_workspace/product/review/business-plan/<YYYYMMDD-HHMMSS>-<session-id>-business-plan-review.yaml`,
 with its `.md` rendered beside it. A reference to it names the `.yaml`. Its layout is
 `../assets/business-plan-review.template.md`, relative to this file. A new report is written as
 `business-plan-review/v2` YAML, per the section at the end, and an older

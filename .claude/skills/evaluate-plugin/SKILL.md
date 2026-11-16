@@ -105,7 +105,7 @@ paid run, and a new yes before spending past that ceiling.
 
 When skill-creator is installed, turn the skill's `trigger` cases into its eval set,
 `[{"query": "<prompt>", "should_trigger": true|false}]`, saved under
-`.agents_workspace/skill-evals/<skill>/`. Then invoke the Skill tool with
+`.agents_workspace/product/eval/skill/<skill>/`. Then invoke the Skill tool with
 skill="skill-creator:skill-creator" and follow its Description Optimization section with that set.
 Confirm the new description with the plugin-eval `trigger` cases afterwards, because those run in
 fresh sessions with only the plugin loaded.
@@ -118,7 +118,7 @@ eval command:
 
 ```bash
 python "${CLAUDE_SKILL_DIR}/scripts/plugin_eval_round.py" --plugin <plugin-dir> \
-  --flow .agents_workspace/skill-evals/<plugin>/hillclimb --variant <baseline|vN> \
+  --flow .agents_workspace/product/eval/plugin/<plugin>/hillclimb --variant <baseline|vN> \
   --runs <R> -j 4 --max-cost-usd <usd> [-- --allow-tools <tools>]
 ```
 
@@ -146,7 +146,7 @@ Tell the guide three things:
 
 ## Output
 
-Save the report to `.agents_workspace/skill-evals/<plugin>/<YYYYMMDD-HHMMSS>-<session-id>-eval.md`,
+Save the report to `.agents_workspace/product/eval/plugin/<plugin>/<YYYYMMDD-HHMMSS>-<session-id>-eval.md`,
 written for someone who has never seen the plugin. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
 It holds:
 

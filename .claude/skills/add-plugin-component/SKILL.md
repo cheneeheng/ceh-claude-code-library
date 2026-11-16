@@ -312,7 +312,7 @@ Where it conflicts with this repo, this skill wins:
 | New plugin at `0.1.0`, marketplace entry optional                                            | `1.0.0`, marketplace entry in the same commit                                           |
 | `plugin-validator` / `skill-reviewer` agents, `validate-agent.sh`, `validate-hook-schema.sh` | `python tools/validate-plugins/validate.py` is the gate, then the live checks in step 6 |
 | Agent `<example>` blocks and `color`                                                         | Prose `description`, no `<example>` blocks; `color` optional                            |
-| Eval workspace next to the skill directory                                                   | `.agents_workspace/skill-evals/<skill>/`, git-ignored, never inside `plugins/`          |
+| Eval workspace next to the skill directory                                                   | `.agents_workspace/product/eval/skill/<skill>/`, git-ignored, never inside `plugins/`   |
 | Wait for user confirmation at each phase, ask where to create, `git init`                    | Autonomous mode, `plugins/standalone/`, existing repo                                   |
 
 Everything else in those skills applies — hook event payloads, prompt-based hooks, MCP server

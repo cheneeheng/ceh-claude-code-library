@@ -1,7 +1,7 @@
 # Stress test schema
 
 The file `stress-test-plan` saves to
-`.agents_workspace/product/stress-tests/<YYYYMMDD-HHMMSS>-<session-id>-<topic>.yaml`, with its
+`.agents_workspace/product/review/stress-test/<YYYYMMDD-HHMMSS>-<session-id>-<topic>.yaml`, with its
 `.md` rendered beside it, when there is no plan file to write the outcome back to. A reference to
 it names the `.yaml`. Its layout is `../assets/stress-test.template.md`, relative to this file. A
 new file is written as `stress-test/v2` YAML, per the section at the end, and an older

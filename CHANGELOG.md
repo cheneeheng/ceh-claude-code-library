@@ -9,6 +9,39 @@ before this repo live in
 
 ---
 
+## 2026-11-16
+
+Reviews, audits and evals now save one folder per kind, in the layout of the shared workspace
+`AGENTS.md`: `product/review/<kind>/`, `product/audit/<kind>/` and `product/eval/<kind>/`, per
+`.agents_workspace/product/plans/workspace-layout.yaml`. Readers and the usability run numbering
+also look in the older folders, so a workspace not yet migrated keeps working. Orchestration-lab
+runs move to `.agents_workspace/experiment/`.
+
+### Plugin versions
+
+| Plugin                  | Version |
+| ----------------------- | ------- |
+| `ceh-build-plan`        | 2.0.12  |
+| `ceh-every-session`     | 2.9.23  |
+| `ceh-git-workflow`      | 1.5.20  |
+| `ceh-product-direction` | 2.0.12  |
+| `ceh-security-audit`    | 1.1.13  |
+| `ceh-testing`           | 1.6.26  |
+| `ceh-usability-audit`   | 1.2.15  |
+
+### Changed
+
+- Save paths: plan reviews to `product/review/plan/`, code reviews to `product/review/code/`,
+  business plan reviews to `product/review/business-plan/`, stress tests to
+  `product/review/stress-test/`, usability audits to `product/audit/ux/`, security audits to
+  `product/audit/security/`, test audits to `product/audit/test/`, and skill and plugin evals to
+  `product/eval/skill/` and `product/eval/plugin/`.
+- `write-evidence-report` and the three usability audit skills also read the older folders.
+- `decision-artifact-locations.md`, `decision-evaluation.md`, `docs/STRATEGY.md` and root
+  `CLAUDE.md` name the new folders.
+
+---
+
 ## 2026-11-15
 
 This repo's root `product/` (architecture, plans, fix records, retros) moved to

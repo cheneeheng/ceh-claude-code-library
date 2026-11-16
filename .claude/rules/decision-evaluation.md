@@ -7,7 +7,7 @@ source: "CLAUDE.md (b5fcb75)"
 # Evaluation
 
 Evals use Anthropic's own tools, nothing bespoke: `skill-creator:skill-creator` for one skill, with
-its workspace in `.agents_workspace/skill-evals/<skill>/`, never under `plugins/`, and
+its workspace in `.agents_workspace/product/eval/skill/<skill>/`, never under `plugins/`, and
 `claude plugin eval` for a whole plugin. Eval only when asked. Do not run the archived
 `ceh-evaluation` plugin.
 

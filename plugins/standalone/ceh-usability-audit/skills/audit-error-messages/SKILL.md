@@ -173,8 +173,9 @@ The message being right is half of it; the other half is whether the reader sees
 
 ## Output
 
-`.agents_workspace/product/ux-audits/<target>/run-<NNN>/ERROR_MESSAGES.yaml` — the same run-folder convention
+`.agents_workspace/product/audit/ux/<target>/run-<NNN>/ERROR_MESSAGES.yaml` — the same run-folder convention
 the walkthrough skills use, zero-padded index so a re-run never overwrites the previous evidence.
+Count the runs in both that folder and the older `.agents_workspace/product/ux-audits/<target>/`.
 Create missing parents. It fills `assets/error-messages-audit.template.yaml`, per the
 `error-messages-audit/v2` section of `references/error-messages-audit-schema.md`: the triage rows
 and, per row, whether the rewrite was applied or left with a reason, with `commit` from

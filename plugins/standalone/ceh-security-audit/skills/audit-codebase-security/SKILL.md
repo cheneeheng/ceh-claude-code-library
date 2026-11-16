@@ -77,7 +77,7 @@ saved.
 
 ## Output
 
-Save to `.agents_workspace/product/security-audit/<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml`, so a
+Save to `.agents_workspace/product/audit/security/<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml`, so a
 second audit keeps the first. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`. Reply
 with the counts by severity and the critical and high rows. The report fills
 `assets/security-audit.template.yaml`, per the `security-audit/v2` section of

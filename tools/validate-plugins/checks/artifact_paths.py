@@ -30,12 +30,12 @@ YAML_FORMAT_MD = re.compile(
             rf"product/retros/{P}repeat-mistake\.md\b",
             rf"product/qa/{P}QA_REPORT\.md\b",
             rf"product/perf/{P}\.md\b",
-            rf"product/security-audit/{P}security-audit\.md\b",
-            rf"product/ux-audits/{P}(?:UX_AUDIT|ERROR_MESSAGES)\.md\b",
+            rf"product/audit/security/{P}security-audit\.md\b",
+            rf"product/audit/ux/{P}(?:UX_AUDIT|ERROR_MESSAGES)\.md\b",
             rf"handoff/{P}handoff\.md\b",
             # The Markdown-only formats, per .agents_workspace/product/plans/markdown-formats-yaml.yaml.
-            rf"product/plan-reviews/{P}\.md\b",
-            rf"product/business-plan-reviews/{P}\.md\b",
+            rf"product/review/plan/{P}\.md\b",
+            rf"product/review/business-plan/{P}\.md\b",
             r"product/business/INVESTOR_(?:DECK|OUTREACH)\.md\b",
             rf"product/(?:refactor|test-audits|stress-tests|learning|blog|code-reviews)/{P}\.md\b",
             # The session retro's -shareable.md copy is Markdown on purpose, not a format.

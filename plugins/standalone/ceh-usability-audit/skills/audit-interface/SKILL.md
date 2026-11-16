@@ -186,8 +186,10 @@ Mark an unmeasurable criterion **N/A with a reason** and report the gate out of 
 
 ## Output
 
-Write `.agents_workspace/product/ux-audits/<target>/run-<NNN>/UX_AUDIT.yaml` (zero-padded sequential run
-index, so a re-run never overwrites prior evidence). Keep the walker transcripts and any screenshots
+Write `.agents_workspace/product/audit/ux/<target>/run-<NNN>/UX_AUDIT.yaml` (zero-padded sequential run
+index, so a re-run never overwrites prior evidence). Count the runs in both that folder and the
+older `.agents_workspace/product/ux-audits/<target>/`, so the index keeps rising in a workspace
+not yet migrated. Keep the walker transcripts and any screenshots
 in that folder. The report fills `assets/interface-audit.template.yaml`, per the
 `interface-audit/v2` section of `references/interface-audit-schema.md`, with `commit` from
 `git rev-parse --short HEAD` in the target as walked. After the last edit, run
