@@ -39,6 +39,10 @@ layout keeps the `product/` root for the vision, strategy, architecture and evid
 `docs/VISION.md` found it long from repeats, not from scope: the same idea stated in full in the
 Identity "is not" list, the Goals, the Non-goals and a principle.
 
+`docs/VISION.md` drops those repeats and keeps every heading and every rule. Each idea is now
+stated in full once: autonomy in Autonomy and its limits, what the library is not in Identity, and
+the no-releases and app-specific rules in their `decision-*.md` files. No plugin changes.
+
 The install guide now puts every plugin at `local` scope unless the person decides otherwise,
 replacing the recommended split of the core at user scope and the rest at project scope, because
 the owner installs at local scope by default. The setup prompt no longer asks for scopes, and
@@ -90,6 +94,9 @@ the owner installs at local scope by default. The setup prompt no longer asks fo
   `product/blog-voice.yaml` still read and still checked by the render hook.
 - `write-vision-and-strategy`: a "Said once" row in The tests fails a doc whose "is not", goal or
   non-goal repeats a principle or each other.
+- `docs/VISION.md`: the non-goals "Human in the loop by default", "Other hosts", "Releases" and
+  "App-specific patterns" leave, Goals 1 to 4 and Principles 2 and 10 shorten, and the three scope
+  rulings for components made for a person become one list.
 
 ### Fixed
 
