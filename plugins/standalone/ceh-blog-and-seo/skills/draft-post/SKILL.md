@@ -48,8 +48,9 @@ Then:
 - **Leave a thread** (series): plan what this episode leaves open. Closure instead if the series is
   finished.
 - **Capture the voice once**: if the blog has three or more posts, the target repo's `CLAUDE.md`
-  defines no blog voice, and neither `.agents_workspace/product/blog-voice.yaml` nor
-  `blog-voice.md` exists there yet, write `blog-voice.yaml` from the posts, filling
+  defines no blog voice, and neither `blog-voice.yaml` nor `blog-voice.md` exists in
+  `.agents_workspace/product/blog/` or the older `.agents_workspace/product/` root yet, write
+  `.agents_workspace/product/blog/blog-voice.yaml` from the posts, filling
   `${CLAUDE_SKILL_DIR}/assets/blog-voice.template.yaml`, per the `blog-voice/v2` section of
   `${CLAUDE_SKILL_DIR}/references/blog-voice-schema.md`, each point backed by a line quoted word
   for word with the post it came from. After the last edit, run

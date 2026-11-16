@@ -1133,8 +1133,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{ce}/generated-md-guard.py", "stdin": edit(gl_generated.as_posix()), "out": "GLOSSARY.yaml"},
     ]  # fmt: skip
     # The blog voice profile: draft-post writes it, edit-post reads it. It is found by its schema
-    # key, or at .agents_workspace/product/blog-voice.yaml under the payload cwd with no Markdown
-    # needed. ceh-blog-and-seo also carries the evidence model, so its hook renders EVIDENCE.yaml
+    # key, or at .agents_workspace/product/blog/blog-voice.yaml or the older
+    # .agents_workspace/product/blog-voice.yaml under the payload cwd, with no Markdown needed. ceh-blog-and-seo also carries the evidence model, so its hook renders EVIDENCE.yaml
     # too.
     good_bv = (
         "schema: blog-voice/v2\nblog: content/posts\nposts_read: 3\ndate: 2026-11-12\n"
@@ -1145,6 +1145,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     )
     bv = tmp / "blog-voice"
     bv_ws = Path(".agents_workspace") / "product"
+    bv_blog = bv_ws / "blog"
     bv_files = {
         f"ok/{bv_ws.as_posix()}/blog-voice.yaml": good_bv,
         f"bad/{bv_ws.as_posix()}/blog-voice.yaml": good_bv.replace(
@@ -1152,6 +1153,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ),
         f"none/{bv_ws.as_posix()}/blog-voice.yaml": "key: value\n",
         f"none/{bv_ws.as_posix()}/other.yaml": "key: value\n",
+        f"none/{bv_blog.as_posix()}/blog-voice.yaml": "key: value\n",
+        f"none/{bv_blog.as_posix()}/other.yaml": "key: value\n",
         "none/blog-voice.yaml": "key: value\n",
         "ev/product/EVIDENCE.yaml": good_ev,
     }
@@ -1185,10 +1188,14 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": rh_bl, "stdin": write_at(bv / "bad" / bv_ws / "blog-voice.yaml"), "out": "register.0.quote"},
         {"script": rh_bl, "stdin": write_rel(bv / "none", f"{bv_ws.as_posix()}/blog-voice.yaml"), "out": "no 'schema:"},
         {"script": rh_bl, "stdin": write_rel(bv / "none", (bv / "none" / bv_ws / "blog-voice.yaml").as_posix()), "out": "no 'schema:"},
+        {"script": rh_bl, "stdin": write_rel(bv / "none", f"{bv_blog.as_posix()}/blog-voice.yaml"), "out": "no 'schema:"},
+        {"script": rh_bl, "stdin": write_rel(bv / "none", (bv / "none" / bv_blog / "blog-voice.yaml").as_posix()), "out": "no 'schema:"},
         {"script": rh_bl, "stdin": write_at(bv / "ev" / "product" / "EVIDENCE.yaml"), "out": "", "after": ev_rendered},
     ] if have_uv else []) + [
         {"script": rh_bl, "stdin": write_rel(bv / "none", f"{bv_ws.as_posix()}/blog-voice.yaml"), "env": no_uv, "out": "uv is not installed"},
         {"script": rh_bl, "stdin": write_rel(bv / "none", f"{bv_ws.as_posix()}/other.yaml"), "env": no_uv, "out": ""},
+        {"script": rh_bl, "stdin": write_rel(bv / "none", f"{bv_blog.as_posix()}/blog-voice.yaml"), "env": no_uv, "out": "uv is not installed"},
+        {"script": rh_bl, "stdin": write_rel(bv / "none", f"{bv_blog.as_posix()}/other.yaml"), "env": no_uv, "out": ""},
         {"script": rh_bl, "stdin": write_rel(bv / "none", "blog-voice.yaml"), "env": no_uv, "out": ""},
         {"script": rh_bl, "stdin": write_at(bv / "none" / bv_ws / "blog-voice.yaml"), "env": no_uv, "out": ""},
         {"script": "ceh-blog-and-seo/generated-md-guard.py", "stdin": edit(bv_generated.as_posix()), "out": "blog-voice.yaml"},

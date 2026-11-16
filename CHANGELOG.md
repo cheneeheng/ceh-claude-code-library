@@ -29,26 +29,32 @@ The root `audits/` and `examples/` folders are gone. Model-audit reports now sav
 workflow's draft PR carries only the summary in its body. The AG-UI worked examples moved into the
 plugin, as `ceh-ag-ui/examples/README.md`.
 
+The blog voice profile now saves to `.agents_workspace/product/blog/blog-voice.yaml`, beside the
+blog drafts, per `.agents_workspace/product/plan/blog-voice-folder.yaml`, because the workspace
+layout keeps the `product/` root for the vision, strategy, architecture and evidence. `draft-post`,
+`edit-post` and the render hook in every plugin that carries it also find a profile at the older
+`product/` root, and a profile found there is amended and converted where it is.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-ag-ui`                    | 1.1.6   |
-| `ceh-blog-and-seo`             | 2.0.12  |
-| `ceh-build-plan`               | 2.0.13  |
-| `ceh-check-build-against-plan` | 1.1.18  |
-| `ceh-codebase-explanation`     | 1.3.16  |
-| `ceh-coding-conduct`           | 2.5.18  |
-| `ceh-competitor-analysis`      | 1.2.13  |
-| `ceh-every-session`            | 2.9.24  |
-| `ceh-git-workflow`             | 1.5.21  |
-| `ceh-product-direction`        | 2.0.13  |
-| `ceh-security-audit`           | 1.1.14  |
-| `ceh-session-learning`         | 2.0.6   |
-| `ceh-testing`                  | 1.6.27  |
-| `ceh-usability-audit`          | 1.2.16  |
-| `ceh-workflow-builder`         | 1.4.12  |
-| `ceh-workflow-runner`          | 1.1.11  |
+| `ceh-blog-and-seo`             | 2.0.13  |
+| `ceh-build-plan`               | 2.0.14  |
+| `ceh-check-build-against-plan` | 1.1.19  |
+| `ceh-codebase-explanation`     | 1.3.17  |
+| `ceh-coding-conduct`           | 2.5.19  |
+| `ceh-competitor-analysis`      | 1.2.14  |
+| `ceh-every-session`            | 2.9.25  |
+| `ceh-git-workflow`             | 1.5.22  |
+| `ceh-product-direction`        | 2.0.14  |
+| `ceh-security-audit`           | 1.1.15  |
+| `ceh-session-learning`         | 2.0.7   |
+| `ceh-testing`                  | 1.6.28  |
+| `ceh-usability-audit`          | 1.2.17  |
+| `ceh-workflow-builder`         | 1.4.13  |
+| `ceh-workflow-runner`          | 1.1.12  |
 
 ### Changed
 
@@ -66,6 +72,8 @@ plugin, as `ceh-ag-ui/examples/README.md`.
 - `model-audit` writes its reports to `.agents_workspace/product/audit/model/<date>/`, and the
   `hygiene` and `retired-names` checks no longer scan the removed `audits/` and `examples/`.
 - `ceh-ag-ui`: the worked examples ship inside the plugin, at `examples/README.md`.
+- Save path: the blog voice profile to `product/blog/blog-voice.yaml`, with the older
+  `product/blog-voice.yaml` still read and still checked by the render hook.
 
 ### Fixed
 
