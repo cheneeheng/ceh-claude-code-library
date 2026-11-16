@@ -1,12 +1,9 @@
 # Vision
 
 What this library is, what it is for, and the principles that settle a decision when the rules
-elsewhere do not. Everything added to or changed in this repo must hold up against it. Read it
-before adding or changing a plugin, skill, agent, hook, script, or rule, and before accepting an
-idea into [`IDEAS.md`](IDEAS.md).
-
-`CLAUDE.md` says how the repo works, and this file says why. If the two disagree, one of them is
-wrong. Fix it on purpose, as described in Changing this file, never by quietly ignoring one.
+elsewhere do not. `CLAUDE.md` says how the repo works, and this file says why, so every change
+must hold up against it. If the two disagree, fix one on purpose, as described in Changing this
+file, never by quietly ignoring one.
 
 ## Identity
 
@@ -22,7 +19,7 @@ It is:
 - **Guidance, not a cage.** The agent still decides. The plugins give it what it needs to decide
   well, and constrain it only where guidance has been shown to fail.
 - **Claude Code native.** It runs on any Claude Code runtime: interactive sessions, headless
-  `claude -p`, subagents, and agent teams. It adds only what Claude Code lacks.
+  `claude -p`, subagents, and agent teams.
 - **Granular.** You install a small core once, then the plugin for the stage you are in, and
   nothing else. [`GETTING_STARTED.md`](GETTING_STARTED.md) is the route.
 
@@ -59,8 +56,9 @@ How it asks:
 - **With no human present** (a headless run), the agent takes the conservative option for a fact,
   records it, and leaves an irreversible action undone and reported instead of doing it.
 - **Interviews are the exception.** A skill whose job is drawing knowledge out of a person, such as
-  a product-market-fit loop, asks adaptively: each answer picks the next question. It still asks only what it cannot infer, and it still has a path for a run with no
-  human: draft from what exists, mark every gap, and end with the questions a person must answer.
+  a product-market-fit loop, asks adaptively: each answer picks the next question. It still asks
+  only what it cannot infer, and it still has a path for a run with no human: draft from what
+  exists, mark every gap, and end with the questions a person must answer.
 
 ## Who overrides
 
@@ -92,32 +90,27 @@ The test for a new plugin or skill: **does it help an agent ship a product, or g
 people?** If not, it does not belong here, however useful it is. General productivity, chat
 helpers, and anything bound to one application are out.
 
-Teaching a person passes the test when that person must give the agent something it cannot get
-alone: a yes before an irreversible action, or a fact only they hold. A yes to a system nobody
-understood is not consent, so `ceh-codebase-explanation:explain-until-understood` stays.
+Three kinds of component made for a person pass the test:
 
-Advising a person passes too, when it only points at the installed skill or agent that fits their
-situation and runs nothing. Which stage to enter next is the person's intent, a fact only they
-hold, and nobody remembers every skill installed. An advisor that ran what it suggested would be
-the router the strategy rules out, so it stops at the suggestion.
-
-A component that changes only what a person sees, never what an agent reads, passes when it helps
-that person do what this file asks of them: give a fact or a yes, and judge the evidence. Such a
-component costs an agent nothing, because the agent's context and behavior stay the same, so the
-only question is whether it serves the person's part. A mod that folds a reply to its summary
-table, or draws its closing questions as options, passes. One that only makes chatting more
-pleasant does not.
+- **Teaching a person** passes when that person must give the agent a yes or a fact only they
+  hold. A yes to a system nobody understood is not consent, so
+  `ceh-codebase-explanation:explain-until-understood` stays.
+- **Advising a person** passes when it only points at the installed skill or agent that fits their
+  situation and runs nothing. Which stage to enter next is the person's intent, and an advisor
+  that ran what it suggested would be the router the strategy rules out.
+- **Changing only what a person sees**, never what an agent reads, passes when it helps that
+  person give a fact or a yes, or judge the evidence, because it costs the agent's context
+  nothing. A mod that folds a reply to its summary table, or draws its closing questions as
+  options, passes. One that only makes chatting more pleasant does not.
 
 ## Goals
 
 1. **Agents finish tasks without a human.** Every question an agent asks falls under Autonomy and
-   its limits. Any other question is a gap in the guidance.
-2. **Agents act as intended.** An agent following the guidance makes the choice the author would
-   have made, so no one has to restate a standard in a session.
-3. **Proven, not claimed.** No human checks the work, so evidence is the only signal that it is
-   done. Work reported as done arrives with the evidence that it works.
-4. **Load only what the moment needs.** Context is the agent's working memory. Installing a plugin
-   costs one use case, and a loaded skill costs only what its moment needs.
+   its limits.
+2. **Agents act as intended.** No one has to restate a standard in a session.
+3. **Proven, not claimed.** Work reported as done arrives with the evidence that it works.
+4. **Load only what the moment needs.** Installing a plugin costs one use case, and a loaded skill
+   costs only what its moment needs.
 5. **A repo that checks itself.** Every invariant a machine can check lives in `validate.py`, and
    CI is the gate.
 6. **Ready to open up.** Nothing ties a plugin to one machine, account, or private context, and
@@ -125,10 +118,6 @@ pleasant does not.
 
 ## Non-goals
 
-- **Human in the loop by default.** A workflow that waits on a person at every step has failed its
-  design, however careful it looks.
-- **Other hosts.** Claude Code runtimes only, whatever competitors ship for Cursor, Codex, or
-  others.
 - **Every stack.** A stack plugin exists because the author ships with that stack. A new one
   arrives with a real project, not for coverage.
 - **Rebuilding Claude Code.** Where Claude Code already does the job (auto-mode permission checks,
@@ -137,9 +126,6 @@ pleasant does not.
 - **Switchable opinions.** Environment variables, listed in `docs/ENVIRONMENT_VARIABLES.md`, tune
   thresholds and paths, and may turn a guard off, because setting one is an explicit human act. None
   swaps one standard for another.
-- **Releases.** Per-plugin versions and dated changelog sections are how changes reach users.
-- **App-specific patterns.** A pattern bound to one application's schema or design is not a
-  standard.
 
 ## Principles
 
@@ -154,10 +140,9 @@ person reading the same text should still be able to follow it.
 
 ### 2. Decide by default, ask by exception
 
-On ambiguity the agent picks the conservative option, records it, and keeps going. It asks only
-under Autonomy and its limits, all at once, with a recommended answer for each question. A decision
-that shapes the repo for others belongs in a committed file or the versioned workspace, not only in
-the git-ignored decision log.
+On ambiguity the agent picks the conservative option, records it, and keeps going. It asks only as
+Autonomy and its limits allows. A decision that shapes the repo for others belongs in a committed
+file or the versioned workspace, not only in the git-ignored decision log.
 **Ask:** does this make the agent stop for something it could have decided or found out?
 
 ### 3. Proof over permission
@@ -216,12 +201,11 @@ it is not proposed again.
 ### 10. Names say what they do
 
 A plugin, skill, agent, hook, or script is named so a person or an agent can tell what it does from
-the name alone, without opening it. The name is the only part an agent always sees in full:
-descriptions get truncated in the skill listing, and only the name appears in file trees and in
-`Invoke the Skill tool with skill="..."` calls. Choose clear over short and the plain word over the
-clever one. A term of art stays only when the people who use it already know it (`ag-ui`,
-`pull-request`). The `ceh-` prefix is a namespace that keeps these plugins apart from everyone
-else's, not part of the name this principle judges.
+the name alone. The name is the only part an agent always sees in full: descriptions get truncated
+in the skill listing, and only the name appears in file trees and in
+`Invoke the Skill tool with skill="..."` calls. Choose the plain word over the short or clever one.
+A term of art stays only when the people who use it already know it (`ag-ui`, `pull-request`), and
+the `ceh-` prefix is a namespace, not part of the name this principle judges.
 **Ask:** could someone who has seen only the name say what it does and when it is used?
 
 ## When principles conflict
@@ -240,8 +224,8 @@ every run would pay for the extra install, so standards are duplicated (3 beats 
 
 ## Where the repo does not match yet
 
-This list shrinks as the gaps close. Remove a line in the PR that closes it. Add one when a change
-here, or a new finding, opens a gap the same PR cannot close.
+Remove a line in the PR that closes its gap, and add one when a change here, or a new finding,
+opens a gap the same PR cannot close.
 
 No known gaps as of 2026-10-10.
 
