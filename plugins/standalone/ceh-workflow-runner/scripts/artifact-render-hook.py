@@ -9,6 +9,8 @@ A relative `file_path` is resolved against the payload's `cwd`. It runs `scripts
 reason. The tool has already run, so the file stays on disk until the agent fixes it, and the
 Markdown is not regenerated. When the check cannot run (no uv, a failed install, an unknown
 version), the agent is told once per session and reason, never left with a silent pass.
+Every installed plugin holding the format runs its own copy on the same write, so the first copy to
+claim the write's `tool_use_id` checks it and the others exit quietly.
 CEH_ARTIFACT_CHECK=off disables it.
 """
 
@@ -20,6 +22,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -98,6 +101,31 @@ def warn_once(session: str, path: str, why: str) -> None:
     print(json.dumps(out))
 
 
+def claim(session: str, tool_use_id: str, fmt: str) -> bool:
+    """True when this copy may check the write: the first copy to claim it wins."""
+    if not tool_use_id:  # an older Claude Code: every copy checks, as before
+        return True
+    tmp = Path(tempfile.gettempdir())
+    stale = time.time() - 86400
+    for old in tmp.glob("ceh-artifact-claim-*"):
+        try:
+            if old.stat().st_mtime < stale:
+                old.unlink()
+        except OSError:
+            pass
+    key = hashlib.sha1(f"{session}\n{tool_use_id}\n{fmt}".encode()).hexdigest()[:16]
+    try:
+        fd = os.open(
+            tmp / f"ceh-artifact-claim-{key}", os.O_CREAT | os.O_EXCL | os.O_WRONLY
+        )
+    except FileExistsError:
+        return False
+    except OSError:  # a broken temp folder never skips the check
+        return True
+    os.close(fd)
+    return True
+
+
 def main() -> None:
     disabled = os.environ.get("CEH_DISABLED_HOOKS", "").replace(" ", "").split(",")
     if Path(__file__).stem in disabled:
@@ -116,10 +144,13 @@ def main() -> None:
         return
     m = SCHEMA.search(file.read_text(encoding="utf-8"))
     names = model_names()
-    if not (m and m.group(1) in names) and place_format(file, root) not in names:
+    fmt = m.group(1) if m and m.group(1) in names else place_format(file, root)
+    if fmt not in names:
         return
 
     session = SESSION[0]
+    if not claim(session, str(payload.get("tool_use_id", "")), fmt):
+        return
     uv = shutil.which("uv")
     if not uv:
         warn_once(session, path, f"uv is not installed. {UV_HELP}")
