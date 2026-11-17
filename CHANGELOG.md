@@ -27,27 +27,34 @@ rendered once, not once per plugin (finding 02.02 of the same audit). Each copy 
 `artifact-render-hook.py` claims the write's `tool_use_id` in the temp folder, and only the first
 copy to claim it runs `uv`. A Claude Code that sends no `tool_use_id` keeps the old behavior.
 
+An Edit or Write of a file that is neither `.md` nor `.yaml` no longer starts the generated-file
+guard or the artifact check in any of the 15 plugins that carry them, through the `if` field on
+each handler (`Edit(*.md)`, `Write(*.md)`, `Edit(*.yaml)`, `Write(*.yaml)`), proved in a trial on
+2026-11-17 for files at the repo root and three folders deep. `MultiEdit` keeps both hooks with no
+filter. A Claude Code version that does not know `if` is assumed to ignore it and run the hooks on
+every edit, as before.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
-| `ceh-blog-and-seo`             | 2.0.14  |
-| `ceh-build-plan`               | 2.0.15  |
-| `ceh-check-build-against-plan` | 1.1.21  |
-| `ceh-codebase-explanation`     | 1.3.19  |
-| `ceh-coding-conduct`           | 2.5.20  |
-| `ceh-competitor-analysis`      | 1.2.16  |
-| `ceh-every-session`            | 2.9.27  |
-| `ceh-git-workflow`             | 2.0.1   |
-| `ceh-product-direction`        | 2.0.16  |
+| `ceh-blog-and-seo`             | 2.0.15  |
+| `ceh-build-plan`               | 2.0.16  |
+| `ceh-check-build-against-plan` | 1.1.22  |
+| `ceh-codebase-explanation`     | 1.3.20  |
+| `ceh-coding-conduct`           | 2.5.21  |
+| `ceh-competitor-analysis`      | 1.2.17  |
+| `ceh-every-session`            | 2.9.28  |
+| `ceh-git-workflow`             | 2.0.2   |
+| `ceh-product-direction`        | 2.0.17  |
 | `ceh-python-service`           | 1.1.10  |
-| `ceh-security-audit`           | 1.1.17  |
-| `ceh-session-learning`         | 2.0.8   |
-| `ceh-testing`                  | 1.6.29  |
-| `ceh-usability-audit`          | 1.2.18  |
+| `ceh-security-audit`           | 1.1.18  |
+| `ceh-session-learning`         | 2.0.9   |
+| `ceh-testing`                  | 1.6.30  |
+| `ceh-usability-audit`          | 1.2.19  |
 | `ceh-web-frontend`             | 1.3.7   |
-| `ceh-workflow-builder`         | 1.4.14  |
-| `ceh-workflow-runner`          | 1.1.13  |
+| `ceh-workflow-builder`         | 1.4.15  |
+| `ceh-workflow-runner`          | 1.1.14  |
 
 ### Changed
 
@@ -57,6 +64,8 @@ copy to claim it runs `uv`. A Claude Code that sends no `tool_use_id` keeps the 
 
 ### Fixed
 
+- `hooks.json` in all 15 plugins that carry the artifact hooks: `generated-md-guard.py` starts only
+  on an Edit or Write of a `.md`, and `artifact-render-hook.py` only on one of a `.yaml`.
 - `artifact-render-hook.py` in all 15 plugins that carry it: the first copy to claim a write checks
   and renders it, and the other copies exit without running `uv`. Claim files older than a day are
   removed.

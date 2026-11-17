@@ -2,7 +2,29 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Edit|Write|MultiEdit",
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/skill-started-guard.py\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Edit(*.md)",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/generated-md-guard.py\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Write(*.md)",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/generated-md-guard.py\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "MultiEdit",
         "hooks": [
           {
             "type": "command",
@@ -19,7 +41,24 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Edit|Write|MultiEdit",
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Edit(*.yaml)",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/artifact-render-hook.py\"",
+            "timeout": 120
+          },
+          {
+            "type": "command",
+            "if": "Write(*.yaml)",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/artifact-render-hook.py\"",
+            "timeout": 120
+          }
+        ]
+      },
+      {
+        "matcher": "MultiEdit",
         "hooks": [
           {
             "type": "command",
