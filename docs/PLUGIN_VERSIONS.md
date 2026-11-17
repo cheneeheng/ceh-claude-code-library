@@ -27,11 +27,11 @@ a removed plugin loses its row.
 | `ceh-git-workflow`             | 2.0.7   | `2026-11-17` |
 | `ceh-python-library`           | 1.0.5   | `2026-11-12` |
 | `ceh-python-service`           | 1.1.10  | `2026-11-17` |
-| `ceh-security-audit`           | 1.1.18  | `2026-11-17` |
+| `ceh-security-audit`           | 1.1.19  | `2026-11-17` |
 | `ceh-session-learning`         | 2.0.10  | `2026-11-17` |
-| `ceh-testing`                  | 1.6.31  | `2026-11-17` |
+| `ceh-testing`                  | 1.6.32  | `2026-11-17` |
 | `ceh-ui-design`                | 1.0.12  | `2026-11-13` |
-| `ceh-usability-audit`          | 1.2.19  | `2026-11-17` |
+| `ceh-usability-audit`          | 1.2.20  | `2026-11-17` |
 | `ceh-web-frontend`             | 1.3.7   | `2026-11-17` |
 | `ceh-workflow-builder`         | 1.4.15  | `2026-11-17` |
 | `ceh-workflow-runner`          | 1.1.14  | `2026-11-17` |

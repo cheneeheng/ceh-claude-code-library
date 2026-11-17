@@ -254,6 +254,29 @@ each error it lists. Before editing a saved report, run it with `check` and stop
 errors. Never edit the generated `.md`. On exit 2 or 3, or without uv, say in the reply that the
 report went unchecked and unrendered.
 
+## Acting on findings
+
+The saved report stays as it is: it records what the audit found, never what came of it. Act only
+on the findings the user chooses in this session, and only on those this run did not already fix.
+Choosing a finding is the request to fix it, and a fix made directly follows this skill's own rule
+on commits. With no user to choose, as in a headless run or a report-only subagent, route nothing:
+the report stands, and a calling agent does any routing.
+
+| Finding is                               | Route                                                     |
+| ---------------------------------------- | --------------------------------------------------------- |
+| A bug in this repo's code or config      | `ceh-coding-conduct:find-root-cause`, writes a fix record |
+| A feature or design change in this repo  | `ceh-build-plan:write-build-plan`                         |
+| A rule for how work is done in this repo | `ceh-every-session:record-project-decisions`              |
+| Anything else in this repo               | Fixed directly, with the check that proves it             |
+| Outside this repo                        | Left for the user                                         |
+
+Each chosen finding ends handed off, fixed, or dropped with a reason, and stays open only while it
+waits on a user decision: one outside the repo, or a route whose plugin is not installed. A row in
+a backlog file the repo names (in its README, `CLAUDE.md` or `AGENTS.md`) counts as handed off, and
+an open finding gets one there too. Every plan, fix record, rule or backlog row names the audit
+file and the finding as its source, the finding by its `id` where the format has one, else by its
+`location`. The reply lists each chosen finding with where it went.
+
 ## Stop conditions
 
 - **The frozen set cannot be established** — nobody can say what a newcomer actually receives → ask;
