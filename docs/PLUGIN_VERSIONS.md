@@ -24,7 +24,7 @@ a removed plugin loses its row.
 | `ceh-competitor-analysis`      | 1.2.17  | `2026-11-17` |
 | `ceh-documentation`            | 1.0.11  | `2026-11-14` |
 | `ceh-every-session`            | 2.9.28  | `2026-11-17` |
-| `ceh-git-workflow`             | 2.0.2   | `2026-11-17` |
+| `ceh-git-workflow`             | 2.0.3   | `2026-11-17` |
 | `ceh-python-library`           | 1.0.5   | `2026-11-12` |
 | `ceh-python-service`           | 1.1.10  | `2026-11-17` |
 | `ceh-security-audit`           | 1.1.18  | `2026-11-17` |

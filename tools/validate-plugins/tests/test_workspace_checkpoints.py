@@ -60,6 +60,21 @@ class WorkspaceCheckpointTests(unittest.TestCase):
             sorted(entry.name for entry in self.pending.iterdir()), ["pr-12", "pr-13"]
         )
 
+    def test_unexpanded_reference_records_the_current_branch(self):
+        for command in (
+            "N=$(gh pr view --json number -q .number) && gh pr merge $N --merge",
+            'gh pr merge "$N" --merge',
+            "gh pr merge ${N} --merge",
+            "gh pr merge `echo 5` --merge",
+            "gh pr merge $(gh pr view --json number -q .number) --merge",
+        ):
+            with self.subTest(command=command):
+                with patch.object(sync, "current_branch", return_value="feat/x"):
+                    sync.record_merge(self.top, self.workspace, command)
+                (entry,) = self.pending.iterdir()
+                self.assertEqual(entry.read_text().splitlines()[1], "feat/x")
+                entry.unlink()
+
     def test_quoted_merge_mention_is_not_a_command(self):
         sync.record_merge(self.top, self.workspace, "printf '%s' '; gh pr merge 12 ;'")
         self.assertFalse(self.pending.exists())
