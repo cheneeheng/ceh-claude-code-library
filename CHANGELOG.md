@@ -94,6 +94,12 @@ mid-session, right after a handoff load, and when the next step looks obvious. F
 skill on these prompts, while Opus answered them by hand from the documents it had read. Per
 `.agents_workspace/product/plan/20261117-211103-whats-next-description.yaml`.
 
+The five audit skills now say what happens to the findings the user chooses to act on: each goes to
+a fix record, a plan, a decision rule or a backlog row, is fixed directly, or is dropped with a
+reason, the same routes a retro uses minus its agent-mistake row. The audit report stays a report,
+with no record section, because whether an audit is worked on is the user's choice. Per
+`.agents_workspace/product/plan/20261117-215708-audit-findings-routed.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -108,16 +114,20 @@ skill on these prompts, while Opus answered them by hand from the documents it h
 | `ceh-git-workflow`             | 2.0.7   |
 | `ceh-product-direction`        | 2.0.18  |
 | `ceh-python-service`           | 1.1.10  |
-| `ceh-security-audit`           | 1.1.18  |
+| `ceh-security-audit`           | 1.1.19  |
 | `ceh-session-learning`         | 2.0.10  |
-| `ceh-testing`                  | 1.6.31  |
-| `ceh-usability-audit`          | 1.2.19  |
+| `ceh-testing`                  | 1.6.32  |
+| `ceh-usability-audit`          | 1.2.20  |
 | `ceh-web-frontend`             | 1.3.7   |
 | `ceh-workflow-builder`         | 1.4.15  |
 | `ceh-workflow-runner`          | 1.1.14  |
 
 ### Changed
 
+- `ceh-security-audit:audit-codebase-security`, `ceh-testing:audit-test-suite`,
+  `ceh-usability-audit:audit-interface`, `ceh-usability-audit:audit-error-messages` and
+  `ceh-usability-audit:simulate-newcomer-first-run`: a new "Acting on findings" section routes each
+  finding the user chooses, and `docs/CROSS_REFERENCES.md` registers it as "Audit finding routing".
 - `ceh-every-session:whats-next`: the description names the mid-session, after-handoff and
   obvious-next-step moments, and its triggers are "what's next", "what now" and "which skill do I
   use".

@@ -897,6 +897,30 @@ one-file save: every issue, in the repo or outside it, in
 rendered beside it. Each skill keeps its own report template (`period-retro/v3`,
 `session-retro/v3`, `repeat-mistake/v2`), because the three reports differ.
 
+The audit skills carry the same route table minus the agent-mistake row, in
+"Audit finding routing" below. An edit to a row both tables share is mirrored there in the same
+session.
+
+## Audit finding routing
+
+**Canonical:** `plugins/standalone/ceh-security-audit/skills/audit-codebase-security/SKILL.md` — § Acting on findings
+
+| Copy                                                                                 | Section              | Diverges                            |
+| ------------------------------------------------------------------------------------ | -------------------- | ----------------------------------- |
+| `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`                    | § Acting on findings | drops the committed-secret sentence |
+| `plugins/standalone/ceh-usability-audit/skills/audit-interface/SKILL.md`             | § Acting on findings | drops the committed-secret sentence |
+| `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/SKILL.md`        | § Acting on findings | drops the committed-secret sentence |
+| `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/SKILL.md` | § Acting on findings | drops the committed-secret sentence |
+
+**Shared:** the whole section word for word: the report stays as saved; only the findings the user
+chooses in the session, and not already fixed in the run, are acted on; choosing one is the request
+to fix it, under the skill's own commit rule; nothing is routed with no user to choose; the route
+table (the "Retro routing and report location" table above minus its agent-mistake row); each
+chosen finding ending handed off, fixed, or dropped with a reason, open only while it waits on a
+user decision, with a backlog row where the repo names a backlog file; each destination naming the
+audit file and the finding by `id`, else `location`; and the reply listing where each went. An edit
+to a row both tables share is mirrored in the retro entry in the same session.
+
 ## Eval case strictness levels
 
 **Canonical:** `.claude/skills/add-plugin-component/SKILL.md` — § 6. Validate, the eval-cases paragraph and its three levels
