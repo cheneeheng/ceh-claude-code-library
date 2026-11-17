@@ -11,8 +11,9 @@ Arguments, one per event:
   start   in a linked worktree, commit the main workspace's pending changes, then create its
           workspace, so an uncommitted plan reaches it; in a main checkout, catch up: merge every
           ceh-ws/<X>/ branch not yet merged, and report each merge that failed.
-  commit  commit the worktree's workspace changes, so a removed worktree loses nothing committed.
-          Check pending source PR merges and commit their workspace checkpoints first.
+  commit  commit the workspace changes, so a removed worktree loses nothing and a main checkout's
+          plans and records are committed in the session that wrote them. Check pending source
+          PR merges and commit their workspace checkpoints first.
   merge   record a gh pr merge command as pending, without calling gh or changing the command.
   end     start end-worker detached and return, because the SessionEnd budget (1.5 s, which a
           plugin cannot raise) can kill a merge in progress.
@@ -171,20 +172,60 @@ def record_merge(top, main_ws, command):
         temporary.unlink(missing_ok=True)
 
 
-def checkpoint_warning(session, reference, reason, folder):
+def warn_once(session, reason, text):
     key = hashlib.sha1(f"{session}\n{reason}".encode()).hexdigest()[:16]
     marker = Path(tempfile.gettempdir()) / f"ceh-checkpoint-warning-{key}"
     try:
         marker.touch(exist_ok=False)
     except FileExistsError:
         return
-    print(
-        json.dumps(
-            {
-                "systemMessage": f"Workspace checkpoint for {reference} is pending: {reason}. Pending folder: {folder}"
-            }
-        )
+    print(json.dumps({"systemMessage": text}))
+
+
+def checkpoint_warning(session, reference, reason, folder):
+    warn_once(
+        session,
+        reason,
+        f"Workspace checkpoint for {reference} is pending: {reason}. Pending folder: {folder}",
     )
+
+
+def sync_main(main_ws, session):
+    """Commit every pending change in the main checkout's workspace, unless a merge, autostash or
+    index lock is in progress. A clean workspace commits nothing, so a retry is harmless."""
+    if any(
+        (main_ws / ".git" / name).exists()
+        for name in ("MERGE_HEAD", "MERGE_AUTOSTASH", "index.lock")
+    ):
+        return
+    code, status = git(main_ws, "status", "--porcelain")
+    if code or not status:
+        return
+    try:
+        failed = git(main_ws, "add", "-A")[0]
+        if not failed:
+            paths = git(main_ws, "diff", "--cached", "--name-only")[1].splitlines()
+            body = paths[:20] + (
+                [f"and {len(paths) - 20} more"] if len(paths) > 20 else []
+            )
+            failed = git(
+                main_ws,
+                "commit",
+                "-q",
+                "-m",
+                f"chore(workspace): sync session {session[:8]}",
+                "-m",
+                "\n".join(body),
+            )[0]
+    except (OSError, subprocess.TimeoutExpired):
+        failed = True
+    if failed:
+        warn_once(
+            session,
+            "git workspace commit failed",
+            f"The {WORKSPACE} changes were not committed: git workspace commit failed. "
+            "The next Stop tries again.",
+        )
 
 
 def checkpoints(top, main_ws, x, folder, session, linked):
@@ -505,12 +546,6 @@ def main():
         detach(cwd, main_checkout or top)
         return
     pending = (main_checkout or top) / WORKSPACE / ".git" / "ceh-checkpoint-pending"
-    if (
-        not main_checkout
-        and event == "commit"
-        and (not pending.is_dir() or not any(pending.iterdir()))
-    ):
-        return  # Stop in a main checkout normally needs only one git spawn.
     main_ws = workspace_repo(main_checkout or top)
     x = current_branch(main_ws) if main_ws else ""
     if not x:  # no workspace repo, or detached: no branch to merge back into
@@ -522,14 +557,10 @@ def main():
 
     if not main_checkout:
         if event == "commit":
-            checkpoints(
-                top,
-                main_ws,
-                x,
-                pending,
-                str(payload.get("session_id") or os.getpid()),
-                False,
-            )
+            session = str(payload.get("session_id") or os.getpid())
+            if pending.is_dir() and any(pending.iterdir()):
+                checkpoints(top, main_ws, x, pending, session, False)
+            sync_main(main_ws, session)
         elif event == "end-worker":
             catch_up(
                 main_ws, x

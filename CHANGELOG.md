@@ -39,6 +39,12 @@ branch for the workspace checkpoint instead of the unexpanded text, because the 
 command before the shell expands it. Before, `gh pr view '$N'` failed on every Stop, so the merged
 PR never got its checkpoint and the warning repeated for 14 days.
 
+The workspace sync hook now commits a main checkout's pending `.agents_workspace` changes at every
+Stop, as it already did in a linked worktree, so plans, reviews and records written in a session
+with no PR merge are committed in that session. Before, they waited for the next PR merge's
+checkpoint, under a subject that did not describe them. Per
+`.agents_workspace/product/plan/20261117-124454-workspace-commit-on-stop.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -50,7 +56,7 @@ PR never got its checkpoint and the warning repeated for 14 days.
 | `ceh-coding-conduct`           | 2.5.21  |
 | `ceh-competitor-analysis`      | 1.2.17  |
 | `ceh-every-session`            | 2.9.28  |
-| `ceh-git-workflow`             | 2.0.3   |
+| `ceh-git-workflow`             | 2.0.4   |
 | `ceh-product-direction`        | 2.0.17  |
 | `ceh-python-service`           | 1.1.10  |
 | `ceh-security-audit`           | 1.1.18  |
@@ -75,6 +81,10 @@ PR never got its checkpoint and the warning repeated for 14 days.
 - `ceh-git-workflow`: rename the skill `code-review` to `write-code-review`, and every mention of
   it in the READMEs of `ceh-check-build-against-plan`, `ceh-python-service`, `ceh-security-audit`
   and `ceh-web-frontend`, the two reviewer agents, and the docs.
+- `ceh-git-workflow`: `sync-agents-workspace.py` commits a main checkout's workspace at every Stop
+  with the subject `chore(workspace): sync session <id>` and the changed paths in the body,
+  skipping while a merge, autostash or index lock is in progress and warning once per session
+  when the commit fails.
 
 ### Fixed
 

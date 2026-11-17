@@ -389,6 +389,61 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         g(ws, "config", "--unset", "core.hooksPath")
         return checkpoint_result((12,), proj, False, True, False, None)
 
+    # A main checkout's Stop commits pending workspace changes (sync_main), unless busy.
+    stop_before = {}
+
+    def stop_setup(dirty=True, busy=None, refuse=False):
+        def before() -> None:
+            clear_pending()
+            stop_before["head"] = g(ws, "rev-parse", "HEAD")
+            if dirty:
+                append(ws, "s1")
+            if busy:
+                (ws / ".git" / busy).write_text(
+                    stop_before["head"] + "\n", encoding="utf-8"
+                )
+            if refuse:
+                refused_commit()
+                clear_pending()
+
+        return before
+
+    def stop_result(committed, busy=None, refuse=False):
+        def after() -> str | None:
+            if busy:
+                (ws / ".git" / busy).unlink()
+            if refuse:
+                g(ws, "config", "--unset", "core.hooksPath")
+            head = g(ws, "rev-parse", "HEAD")
+            problem = None
+            if (head != stop_before["head"]) != committed:
+                problem = f"main workspace commit expected={committed}"
+            elif committed:
+                if g(ws, "rev-list", "--count", f"{stop_before['head']}..HEAD") != "1":
+                    problem = "expected exactly one workspace commit"
+                elif (
+                    g(ws, "log", "-1", "--format=%s")
+                    != "chore(workspace): sync session abcdef12"
+                ):
+                    problem = "wrong workspace commit subject"
+                elif g(ws, "log", "-1", "--format=%b") != "DECISION_LOG.md":
+                    problem = "workspace commit body should list the staged path"
+                elif g(ws, "status", "--porcelain"):
+                    problem = "workspace commit left changes behind"
+            g(ws, "commit", "-qam", "stop fixture cleanup")  # no-op when clean
+            return problem
+
+        return after
+
+    def stop(committed=True, dirty=True, busy=None, refuse=False, out=""):
+        return {
+            **sync("commit", proj),
+            "stdin": {"cwd": str(proj), "session_id": "abcdef1234567890"},
+            "out": out,
+            "before": stop_setup(dirty, busy, refuse),
+            "after": stop_result(committed, busy, refuse),
+        }
+
     def main_appends() -> None:
         # The main checkout commits m1 and leaves m2 uncommitted, as a live session would.
         append(ws, "m1")
@@ -1526,6 +1581,11 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**sync("commit", proj), "env": checkpoint_env, "stdin": {"cwd": str(proj), "session_id": "checkpoint-failure"}, "out": "",
          "after": lambda: checkpoint_result((12,), proj, False, True, False, None)},
         checkpoint(before=refused_commit, after=kept_after_refusal, out="git checkpoint commit failed"),
+        stop(),
+        stop(committed=False, dirty=False),
+        stop(committed=False, busy="MERGE_HEAD"),
+        stop(committed=False, busy="MERGE_AUTOSTASH"),
+        stop(committed=False, refuse=True, out="git workspace commit failed"),
         {**sync("merge", wt), "stdin": {"cwd": str(wt), "tool_input": {"command": "git status"}}, "before": clear_pending, "out": ""},
         {**sync("end", wt), "out": "", "before": main_appends, "after": merged_with_dirty_log},
         {**sync("start", proj), "out": "ceh-ws/ws/wt", "before": both_edit_notes, "after": conflict_aborted},
