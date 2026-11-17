@@ -61,8 +61,9 @@ root cause 1.
 - `root_causes`: `kind` (`Request`, `Guidance`, `Environment`, `Model` or `Claude Code`),
   `cause`, `first_wrong_turn` (a `citation`, `<transcript>:<line>` with no spaces, and its
   `quote`), `chain` (at least two steps, from the first wrong turn to the visible failure, each
-  with its line, rendered joined by `→`), `route`, `status` (`handed off` or `open`) and
-  `status_detail`, the artifact handed off to or why it is open. The renderer numbers them from 1.
+  with its line, rendered joined by `→`), `route`, `status` (`handed off`, `open` or
+  `dropped`) and `status_detail`, the artifact handed off to, the user decision an `open` cause
+  waits on, or why it was dropped. The renderer numbers them from 1.
 - `other_findings`: `lens`, `finding` and `citation`. `hypotheses`: `cause` and `confirm`.
 - An empty list is `[]` and renders as `None`.
 

@@ -888,7 +888,10 @@ delete".
 **Shared:** the route table word for word (bug to `find-root-cause`, feature or design to
 `write-build-plan`, agent mistake to `prevent-repeat-mistake`, working rule to
 `record-project-decisions`, anything else in the repo fixed directly, outside the repo left for the
-user), acting on every in-scope route in the same session, an uninstalled route left open, and the
+user), acting on every in-scope route in the same session, every issue ending handed off or dropped
+with a reason and left open only while it waits on a user decision (an uninstalled route, or one
+outside the repo), a row in a backlog file the repo names counting as handed off, a later status
+update made in place, and the
 one-file save: every issue, in the repo or outside it, in
 `.agents_workspace/product/retro/<YYYYMMDD-HHMMSS>-<session-id>-<kind>.yaml`, with its `.md`
 rendered beside it. Each skill keeps its own report template (`period-retro/v3`,

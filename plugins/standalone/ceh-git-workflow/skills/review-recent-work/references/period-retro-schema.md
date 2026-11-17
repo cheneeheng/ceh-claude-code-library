@@ -54,8 +54,8 @@ issue 1.
   command it came from.
 - `hotspots`: `path` and `commits`, an integer.
 - `issues`: at most three, each with `kind` (`Bug`, `Design`, `Project rule` or `Agent mistake`),
-  `issue`, `evidence`, `route`, `status` (`handed off` or `open`) and `status_detail`, the
-  artifact handed off to or why it is open. The renderer numbers them from 1.
+  `issue`, `evidence`, `route`, `status` (`handed off`, `open` or `dropped`) and `status_detail`,
+  the artifact handed off to, the user decision an `open` issue waits on, or why it was dropped. The renderer numbers them from 1.
 - `questions`: one line per question.
 - An empty list is `[]` and renders as `None`, or `none` for `hotspots`.
 

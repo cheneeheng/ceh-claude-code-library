@@ -15,7 +15,7 @@ root_causes:
       - <step>
       - <visible failure>
     route: '<skill | user: <where>>'
-    status: <handed off | open>
+    status: <handed off | open | dropped>
     status_detail: <artifact | why>
 other_findings:
   - lens: <lens>

@@ -45,8 +45,10 @@ session" is the current one, "the last session" the newest other transcript.
 | Anything else in this repo                                            | Fixed directly, with the check that proves it             |
 | Outside this repo: user settings, an installed plugin, Claude Code    | Left in the report for the user                           |
 
-The agent acts on every in-repo route in the same session. A route whose plugin is not installed
-stays open in the report, with the route named. A Claude Code root cause from `diagnose-session` is
+The agent acts on every in-repo route in the same session. Each issue ends handed off or
+dropped with a reason, and stays open only while it waits on a user decision: one outside the
+repo, or a route whose plugin is not installed. A row in a backlog file the repo names counts as
+handed off. A Claude Code root cause from `diagnose-session` is
 always left for the user, because filing its bug report is outward-facing.
 
 `prevent-repeat-mistake` has no route table. It climbs its own ladder, strongest rung first: remove

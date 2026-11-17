@@ -16,7 +16,7 @@ date: YYYY-MM-DD
 - **First wrong turn:** `<transcript>:<line>` "<quote>"
 - **Chain:** <first wrong turn> → <step> → <visible failure>
 - **Route:** <skill, or "user: <where>">
-- **Status:** <handed off: <artifact> | open: <why>>
+- **Status:** <handed off: <artifact> | open: <decision> | dropped: <why>>
 
 ## Other findings
 

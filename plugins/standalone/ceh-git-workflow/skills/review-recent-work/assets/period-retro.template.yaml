@@ -24,7 +24,7 @@ issues:
     issue: <issue>
     evidence: <commits or PRs>
     route: '<skill | user: <where>>'
-    status: <handed off | open>
+    status: <handed off | open | dropped>
     status_detail: <artifact | why>
 questions:
   - <question>
