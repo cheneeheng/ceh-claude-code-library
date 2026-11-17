@@ -34,6 +34,11 @@ each handler (`Edit(*.md)`, `Write(*.md)`, `Edit(*.yaml)`, `Write(*.yaml)`), pro
 filter. A Claude Code version that does not know `if` is assumed to ignore it and run the hooks on
 every edit, as before.
 
+A `gh pr merge $N`, or a merge whose PR comes from `$(...)` or backticks, now records the current
+branch for the workspace checkpoint instead of the unexpanded text, because the hook reads the
+command before the shell expands it. Before, `gh pr view '$N'` failed on every Stop, so the merged
+PR never got its checkpoint and the warning repeated for 14 days.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -45,7 +50,7 @@ every edit, as before.
 | `ceh-coding-conduct`           | 2.5.21  |
 | `ceh-competitor-analysis`      | 1.2.17  |
 | `ceh-every-session`            | 2.9.28  |
-| `ceh-git-workflow`             | 2.0.2   |
+| `ceh-git-workflow`             | 2.0.3   |
 | `ceh-product-direction`        | 2.0.17  |
 | `ceh-python-service`           | 1.1.10  |
 | `ceh-security-audit`           | 1.1.18  |
@@ -83,6 +88,8 @@ every edit, as before.
   question.
 - `ceh-competitor-analysis:analyze-competitor`: with no user present, the current repository is
   our work, and a target that needs credentials is reported as not analysed.
+- `ceh-git-workflow`: `sync-agents-workspace.py` records the current branch when the PR reference
+  of `gh pr merge` holds `$` or a backtick.
 
 ## 2026-11-16
 

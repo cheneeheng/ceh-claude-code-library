@@ -149,7 +149,10 @@ def record_merge(top, main_ws, command):
         elif not token.startswith("-"):
             reference = token
             break
-    reference = reference or current_branch(top)
+    # The hook sees the command before the shell expands $N or `...`, and the
+    # session is still on the PR branch at merge time.
+    if not reference or "$" in reference or "`" in reference:
+        reference = current_branch(top)
     url = re.fullmatch(r"https?://[^/]+/[^/]+/[^/]+/pull/(\d+)/?", reference)
     if url:
         reference = url[1]
