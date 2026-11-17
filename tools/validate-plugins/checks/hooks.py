@@ -444,6 +444,39 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             "after": stop_result(committed, busy, refuse),
         }
 
+    # attribution.commit: a user settings file sets the line, a project-local file may hide it.
+    signer = tmp / "claude-config-signed"
+    signer.mkdir()
+    (signer / "settings.json").write_text(
+        '{"attribution": {"commit": "Signed T"}}', encoding="utf-8"
+    )
+    signed_env = {**who, "CLAUDE_CONFIG_DIR": str(signer)}
+    local_settings = proj / ".claude" / "settings.local.json"
+
+    def hide_line() -> None:
+        local_settings.parent.mkdir(exist_ok=True)
+        local_settings.write_text('{"attribution": {"commit": ""}}', encoding="utf-8")
+        stop_setup()()
+
+    def stop_body(expected: str):
+        def after() -> str | None:
+            local_settings.unlink(missing_ok=True)
+            got = g(ws, "log", "-1", "--format=%b")
+            g(ws, "commit", "-qam", "stop fixture cleanup")  # no-op when clean
+            return None if got == expected else f"workspace commit body {got!r}"
+
+        return after
+
+    def signed_stop(expected: str, before) -> dict:
+        return {
+            **sync("commit", proj),
+            "stdin": {"cwd": str(proj), "session_id": "abcdef1234567890"},
+            "env": signed_env,
+            "out": "",
+            "before": before,
+            "after": stop_body(expected),
+        }
+
     def main_appends() -> None:
         # The main checkout commits m1 and leaves m2 uncommitted, as a live session would.
         append(ws, "m1")
@@ -567,6 +600,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**sync("start", tmp / "wt3"), "out": "", "before": pending_plan("wt3"), "after": lambda: plan_reached("wt3")},
         {**sync("start", tmp / "wt4"), "out": "", "before": pending_plan("wt4", branch_first=True), "after": lambda: plan_reached("wt4")},
         {**sync("start", tmp / "wt5"), "out": "", "before": pending_plan("wt5", merge_head=True), "after": no_commit_in_merge},
+        # SessionStart tells the agent to commit its own workspace files, in either checkout.
+        {**sync("start", tmp / "wt3"), "stdin": {"hook_event_name": "SessionStart", "cwd": str(tmp / "wt3")}, "out": "commit skill's Workspace section"},
+        {**sync("start", proj2), "stdin": {"hook_event_name": "SessionStart", "cwd": str(proj2)}, "out": "commit skill's Workspace section"},
     ]  # fmt: skip
 
     # artifact-render-hook and generated-md-guard: plan/v2 YAML in tmp/product/plan.
@@ -1543,6 +1579,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**sync("start", wt), "out": "", "after": on_ws_branch},
         {**sync("commit", wt), "out": "", "before": lambda: append(wt_ws, "w1"),
          "after": lambda: None if g(wt_ws, "log", "-1", "--format=%s") == "chore(workspace): sync worktree wt" else "no workspace sync commit"},
+        {**sync("commit", wt), "env": signed_env, "out": "", "before": lambda: append(wt_ws, "w2"),
+         "after": lambda: None if g(wt_ws, "log", "-1", "--format=%b") == "Signed T" else "worktree commit lacks the attribution line"},
         recording("gh pr merge 12 --merge", "12"),
         recording("gh pr merge --subject 'fix; ship' 12 --merge", "12"),
         recording("gh pr merge --subject 'fix | ship' 12 --merge", "12"),
@@ -1592,12 +1630,14 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         stop(committed=False, busy="MERGE_HEAD"),
         stop(committed=False, busy="MERGE_AUTOSTASH"),
         stop(committed=False, refuse=True, out="git workspace commit failed"),
+        signed_stop("DECISION_LOG.md\n\nSigned T", stop_setup()),
+        signed_stop("DECISION_LOG.md", hide_line),
         {**sync("merge", wt), "stdin": {"cwd": str(wt), "tool_input": {"command": "git status"}}, "before": clear_pending, "out": ""},
         {**sync("end", wt), "out": "", "before": main_appends, "after": merged_with_dirty_log},
         {**sync("start", proj), "out": "ceh-ws/ws/wt", "before": both_edit_notes, "after": conflict_aborted},
         {**sync("start", wt), "out": "", "before": lambda: shutil.rmtree(wt_ws), "after": on_ws_branch},
         # EnterWorktree mid-session: PostToolUse runs start with the worktree as cwd.
-        {**sync("start", wt2), "stdin": {"tool_name": "EnterWorktree", "tool_input": {}, "cwd": str(wt2)}, "out": "",
+        {**sync("start", wt2), "stdin": {"hook_event_name": "PostToolUse", "tool_name": "EnterWorktree", "tool_input": {}, "cwd": str(wt2)}, "out": "",
          "before": lambda: g(proj, "worktree", "add", "-q", "-b", "feat2", str(wt2)),
          "after": lambda: None if g(wt2 / ".agents_workspace", "branch", "--show-current") == "ceh-ws/ws/wt2" else "no wt2 workspace"},
         # A session that ends in the main checkout catches up: wt2 merges, wt's conflict aborts.
@@ -1643,6 +1683,9 @@ def run_batch(batch: int, batches: int, bash: str | None) -> list[tuple[int, str
         state = tmp / "state"  # denial counters and warn-once markers land here
         state.mkdir()
         base_env.update({"TMP": str(state), "TEMP": str(state), "TMPDIR": str(state)})
+        # An empty Claude Code config folder: the developer's attribution.commit must not leak in.
+        (tmp / "claude-config").mkdir()
+        base_env["CLAUDE_CONFIG_DIR"] = str(tmp / "claude-config")
         fixtures = hook_fixtures(tmp)
         groups = {
             name: n % batches

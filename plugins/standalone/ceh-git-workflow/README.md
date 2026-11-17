@@ -94,7 +94,13 @@ link to a folder outside the worktree.
 the session id>` and the changed paths in the body. It skips while a merge, an autostash or an
   index lock is in progress, and warns once per session when the commit fails. Each turn's files
   are committed at its end, so an agent that wants a subject naming what it wrote commits the
-  workspace itself before the turn ends.
+  workspace itself before the turn ends. At `SessionStart` the hook tells the agent to do so, and
+  the `commit` skill's Workspace section says how.
+- **Attribution:** every workspace commit the hook makes ends with your `attribution.commit` line,
+  read from `.claude/settings.local.json` in the main checkout, then the project's
+  `.claude/settings.json`, then `settings.json` in `$CLAUDE_CONFIG_DIR` or `~/.claude`. The first
+  file that sets the key decides, and `false` or `""` leaves the line out. Managed settings and
+  `--settings` are not read.
 - **Session end:** starts a background process and returns at once, because `SessionEnd` hooks get
   1.5 s that a plugin cannot raise. In a worktree, the process commits once more and merges the
   branch into `<X>`, autostashing uncommitted changes in the main workspace. When Claude Code
