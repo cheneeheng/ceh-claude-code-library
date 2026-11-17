@@ -8,11 +8,24 @@ its own.
 
 ## Location
 
-`.agents_workspace/product/plan/<slug>.yaml` in the target repo, unless the repo's `CLAUDE.md`
-names another plan folder. A plan shapes the repo for whoever builds next, so it lives with the
-project's other product artifacts. A workspace not yet migrated keeps its plans in the older
-`.agents_workspace/product/plans/`: a skill that looks for a plan also looks there, and saves a
-new plan only to `plan/`. `<slug>` is kebab-case from the goal: `mvp`, `checkout-flow`.
+`.agents_workspace/product/plan/<YYYYMMDD-HHMMSS>-<slug>.yaml` in the target repo, unless the
+repo's `CLAUDE.md` names another plan folder. A plan shapes the repo for whoever builds next, so it
+lives with the project's other product artifacts. A workspace not yet migrated keeps its plans in
+the older `.agents_workspace/product/plans/`: a skill that looks for a plan also looks there, and
+saves a new plan only to `plan/`. `<slug>` is kebab-case from the goal: `mvp`, `checkout-flow`.
+The time is the plan's creation, from one `date +%Y%m%d-%H%M%S` call, and never changes on later
+edits. It carries no session id, because several sessions edit a plan in place. A plan saved
+before 2026-11-17 is `<slug>.yaml` and keeps that name. Where this file writes `<slug>.yaml` or
+`<slug>.md`, it means the plan's whole file stem.
+
+A plan's slug is its file stem with any leading `YYYYMMDD-HHMMSS-` removed. A skill given a slug
+matches names in the plan folder against `^(\d{8}-\d{6}-)?<slug>\.yaml$`, so the slug `layout`
+never matches `workspace-layout`. With several matches it takes the newest by the time prefix, and
+a name with no prefix counts as older than any prefixed one.
+
+One plan covers one functionality: a change that lands in its own PR and can be checked on its
+own. A request that covers several functionalities becomes one plan each, never phases of one
+plan, and a plan that needs another built first names it in `depends_on`.
 Plans are never deleted: a built plan stays where it is, with `status: built`, as the record of how
 that change was planned, built, and proven, and every path that cites it stays valid. A skill that
 looks for work in the folder reads only the frontmatter of a `built` plan, and its full text only
@@ -55,7 +68,7 @@ version of the format a plan follows.
 
 ## plan/v2: YAML with generated Markdown
 
-A `plan/v2` plan is `.agents_workspace/product/plan/<slug>.yaml`, a copy of
+A `plan/v2` plan is `.agents_workspace/product/plan/<YYYYMMDD-HHMMSS>-<slug>.yaml`, a copy of
 `../assets/plan.template.yaml`, and its Markdown is generated from it and saved beside it. The YAML is the
 source: agents read and edit it, and nobody edits the Markdown, which opens with
 `generated_from: <slug>.yaml` and a `generated_note` saying not to edit it. The skill that edits the
@@ -69,8 +82,8 @@ and rule below, and its renderer writes the Markdown. `scripts/artifact.py` in t
 file's `references/`, runs both through uv, and the plugin's render hook runs its own copy:
 
 ```bash
-uv run --script scripts/artifact.py check .agents_workspace/product/plan/<slug>.yaml   # errors, or a stale .md
-uv run --script scripts/artifact.py render .agents_workspace/product/plan/<slug>.yaml  # check, then write the .md
+uv run --script scripts/artifact.py check .agents_workspace/product/plan/<file>.yaml   # errors, or a stale .md
+uv run --script scripts/artifact.py render .agents_workspace/product/plan/<file>.yaml  # check, then write the .md
 ```
 
 Exit `0` is valid, `1` lists each error as `<path>: <field path>: <error>`, `2` is any other
@@ -81,6 +94,10 @@ failure, and `3` means no model for that version sits beside the script. Field p
 
 - `schema`: `plan/v2`. `title`, `status`, `created`, `business_plan` (optional, legacy, see
   above): as the `plan/v1` frontmatter above. `created` is an unquoted date, `2026-11-06`.
+- `depends_on` (optional): the plans this one needs built first, at least one when present, each
+  the plan's repo-relative YAML path, such as `.agents_workspace/product/plan/<file>.yaml`. The
+  model checks that each is relative and ends in `.yaml`, not its folder or that it exists. It
+  renders as a `**Depends on:**` line above the Goal. With no dependency, leave the key out.
 - `goal`: the Goal paragraph.
 - `scope.in`: one item per capability, at least one. `scope.out`: `item` and `reason` per
   exclusion, `[]` when none.

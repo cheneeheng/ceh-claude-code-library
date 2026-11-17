@@ -22,8 +22,9 @@ feature that was never built. Done means every plan item has a status and the re
 
 ## Procedure
 
-1. **Find the plan.** Take the path from the arguments, or the most recent plan in the plans
-   folder whose status is `building` or `built`, and say which. The format is in
+1. **Find the plan.** Take the path from the arguments, matching a slug given in place of a path
+   as the format's Location section says, or the most recent plan in the plans folder whose
+   status is `building` or `built`, and say which. The format is in
    `${CLAUDE_SKILL_DIR}/references/plan-schema.md`. With no plan, use the spec the user names: an
    issue, a PRD, or a README section. With neither, stop: there is nothing to check against.
 

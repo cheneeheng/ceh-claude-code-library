@@ -45,17 +45,26 @@ with no PR merge are committed in that session. Before, they waited for the next
 checkpoint, under a subject that did not describe them. Per
 `.agents_workspace/product/plan/20261117-124454-workspace-commit-on-stop.yaml`.
 
+A build plan now covers one functionality, a change that lands in its own PR and can be checked on
+its own, and a request that covers several becomes one plan each, never phases of one plan. A new
+plan is named `<YYYYMMDD-HHMMSS>-<slug>.yaml`, with no session id because several sessions edit a
+plan in place, and may list the plans it needs built first in a new optional `depends_on` key.
+Plans one session writes get one review over all of them, in one fresh-context subagent, which
+saves a reviewer re-reading the repo per plan. `decision-saved-file-names.md` now names three
+forms by how a file behaves: written once, edited in place, or singleton. Per
+`.agents_workspace/product/plan/20261117-113524-plans-by-functionality.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-blog-and-seo`             | 2.0.15  |
-| `ceh-build-plan`               | 2.0.16  |
-| `ceh-check-build-against-plan` | 1.1.22  |
+| `ceh-build-plan`               | 2.0.17  |
+| `ceh-check-build-against-plan` | 1.1.23  |
 | `ceh-codebase-explanation`     | 1.3.20  |
 | `ceh-coding-conduct`           | 2.5.21  |
 | `ceh-competitor-analysis`      | 1.2.17  |
-| `ceh-every-session`            | 2.9.28  |
+| `ceh-every-session`            | 2.9.29  |
 | `ceh-git-workflow`             | 2.0.4   |
 | `ceh-product-direction`        | 2.0.17  |
 | `ceh-python-service`           | 1.1.10  |
@@ -85,6 +94,15 @@ checkpoint, under a subject that did not describe them. Per
   with the subject `chore(workspace): sync session <id>` and the changed paths in the body,
   skipping while a merge, autostash or index lock is in progress and warning once per session
   when the commit fails.
+
+- `ceh-build-plan`: `write-build-plan` splits a request into one plan per functionality, saves each
+  as `<YYYYMMDD-HHMMSS>-<slug>.yaml` with an optional `depends_on`, and reviews the session's plans
+  once. `review-build-plan` takes several plan paths and reviews them in one subagent.
+  `implement-from-plan` and `check-build-against-plan` match a slug given in place of a path.
+- The plan format (`plan/v2`), in all six copies: the time-prefixed name, the slug lookup, the
+  one-functionality rule and the optional `depends_on` key.
+- `decision-saved-file-names.md`: three name forms, by whether a file is written once, edited in
+  place, or a singleton.
 
 ### Fixed
 

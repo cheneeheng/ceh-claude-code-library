@@ -22,6 +22,9 @@ Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 Line = Annotated[
     str, StringConstraints(strip_whitespace=True, min_length=1, pattern=r"^[^\n]*$")
 ]
+# A plan path: relative (no leading / or \, and no : so no drive letter) and ending in .yaml.
+# The folder is not checked, because a repo's CLAUDE.md may name its own plan folder.
+PlanPath = Annotated[str, StringConstraints(pattern=r"^[^/\\:\n][^:\n]*\.yaml$")]
 
 
 class _Strict(BaseModel):
@@ -96,6 +99,8 @@ class Plan(_Strict):
     business_plan: Optional[Line] = Field(
         default=None, json_schema_extra={"deprecated": True}
     )
+    # The plans this one needs built first. Left out when there are none.
+    depends_on: Optional[Annotated[list[PlanPath], Field(min_length=1)]] = None
     goal: Text
     scope: Scope
     design: list[Decision] = Field(min_length=1)
@@ -163,6 +168,10 @@ def render(plan: Plan, source: str) -> str:
         "",
         "<!-- prettier-ignore-start -->",
         "",
+    ]
+    if plan.depends_on:
+        out += [f"**Depends on:** {', '.join(plan.depends_on)}", ""]
+    out += [
         "## Goal",
         "",
         plan.goal,
