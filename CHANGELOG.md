@@ -58,6 +58,8 @@ every edit, as before.
 
 ### Changed
 
+- `decision-version-levels.md` and the `add-plugin-component` checklist: a skill rename is a MAJOR
+  bump of its plugin, as the user chose for the `write-code-review` rename.
 - `ceh-git-workflow`: rename the skill `code-review` to `write-code-review`, and every mention of
   it in the READMEs of `ceh-check-build-against-plan`, `ceh-python-service`, `ceh-security-audit`
   and `ceh-web-frontend`, the two reviewer agents, and the docs.
