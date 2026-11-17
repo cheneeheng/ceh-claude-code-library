@@ -100,12 +100,17 @@ reason, the same routes a retro uses minus its agent-mistake row. The audit repo
 with no record section, because whether an audit is worked on is the user's choice. Per
 `.agents_workspace/product/plan/20261117-215708-audit-findings-routed.yaml`.
 
+`ceh-build-plan` now keeps a record of a trigger check: 12 headless runs with `ceh-testing` also
+installed, to see which skill loads first on a feature request. `write-build-plan` loaded in 2 of
+the 12, and `write-test-first` only after a refused edit. Every run also loaded the tester's own
+global `CLAUDE.md`, so the record says a clean re-run is still to do.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-blog-and-seo`             | 2.0.15  |
-| `ceh-build-plan`               | 2.0.18  |
+| `ceh-build-plan`               | 2.0.19  |
 | `ceh-check-build-against-plan` | 1.1.23  |
 | `ceh-codebase-explanation`     | 1.3.20  |
 | `ceh-coding-conduct`           | 2.5.22  |
@@ -124,6 +129,8 @@ with no record section, because whether an audit is worked on is the user's choi
 
 ### Changed
 
+- `ceh-build-plan`: `docs/TRIGGER_OVERLAP_RESULTS.md` records the trigger check against
+  `ceh-testing:write-test-first`, with the prompts, results, cost and the script that ran it.
 - `ceh-security-audit:audit-codebase-security`, `ceh-testing:audit-test-suite`,
   `ceh-usability-audit:audit-interface`, `ceh-usability-audit:audit-error-messages` and
   `ceh-usability-audit:simulate-newcomer-first-run`: a new "Acting on findings" section routes each
