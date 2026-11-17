@@ -79,6 +79,13 @@ which its detail names. A row in a backlog file the repo names counts as handed 
 session that acts on a later decision updates the finding in place. Per
 `.agents_workspace/product/plan/20261117-113524-retro-findings-routed.yaml`.
 
+The workspace sync hook's commits now end with the user's `attribution.commit` line, which a hook
+never receives from Claude Code, so the hook reads it from the settings files itself. Agents are
+now told, by the commit skill and at session start, to commit their own workspace files with a
+subject that names what they wrote, because the hook's generic `chore(workspace): sync ...` subject
+was the only one these files ever got. Per
+`.agents_workspace/product/fix/20261117-150310-workspace-sync-commits.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -90,7 +97,7 @@ session that acts on a later decision updates the finding in place. Per
 | `ceh-coding-conduct`           | 2.5.22  |
 | `ceh-competitor-analysis`      | 1.2.17  |
 | `ceh-every-session`            | 2.9.30  |
-| `ceh-git-workflow`             | 2.0.6   |
+| `ceh-git-workflow`             | 2.0.7   |
 | `ceh-product-direction`        | 2.0.18  |
 | `ceh-python-service`           | 1.1.10  |
 | `ceh-security-audit`           | 1.1.18  |
@@ -153,6 +160,10 @@ session that acts on a later decision updates the finding in place. Per
   our work, and a target that needs credentials is reported as not analysed.
 - `ceh-git-workflow`: `sync-agents-workspace.py` records the current branch when the PR reference
   of `gh pr merge` holds `$` or a backtick.
+- `ceh-git-workflow`: `sync-agents-workspace.py` ends its four workspace commits with the
+  `attribution.commit` line from `.claude/settings.local.json`, `.claude/settings.json` or the
+  user's `settings.json`, the first that sets it, and prints at `SessionStart` that the agent
+  commits its own workspace files. The `commit` skill gains a Workspace section saying how.
 
 ## 2026-11-16
 

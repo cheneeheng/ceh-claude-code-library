@@ -10,7 +10,8 @@ branch the main workspace has checked out.
 Arguments, one per event:
   start   in a linked worktree, commit the main workspace's pending changes, then create its
           workspace, so an uncommitted plan reaches it; in a main checkout, catch up: merge every
-          ceh-ws/<X>/ branch not yet merged, and report each merge that failed.
+          ceh-ws/<X>/ branch not yet merged, and report each merge that failed. On SessionStart,
+          in either checkout, also tell the agent to commit its own workspace files.
   commit  commit the workspace changes, so a removed worktree loses nothing and a main checkout's
           plans and records are committed in the session that wrote them. Check pending source
           PR merges and commit their workspace checkpoints first.
@@ -22,7 +23,7 @@ Arguments, one per event:
           catch up, since Claude Code may report the main checkout as cwd when a session ends.
 
 Reads cwd from the hook payload (end-worker: from argv), never os.getcwd(), and does nothing
-without it. Fails open: anything unexpected exits 0. Checkpoint lookup and commit failures print
+without it. Every commit ends with the user's attribution.commit line, see attribution(). Fails open: anything unexpected exits 0. Checkpoint lookup and commit failures print
 one systemMessage per session and reason, because a convenience hook must never stop a session.
 """
 
@@ -45,6 +46,13 @@ PREFIX = "ceh-ws/"
 UNION = Path(__file__).resolve().parent / "union.attributes"
 # Words that may stand before a command in its segment without changing which command runs.
 SHELL_WORDS = {"if", "then", "elif", "else", "do", "while", "until", "!", "{", "time"}
+# Plain words, not the skill's plugin:name, so /commit stays a slash command (repo_rules.py).
+WORKSPACE_NOTE = (
+    f"{WORKSPACE} is a git repo of its own. Before a turn that wrote files there ends, commit "
+    "them in it yourself, as the commit skill's Workspace section says: stage only your own "
+    "files, with a subject naming what was written, a body saying why, and the attribution "
+    "line. The Stop hook commits only what is left, under a generic subject."
+)
 
 
 def git(cwd, *args):
@@ -52,6 +60,32 @@ def git(cwd, *args):
         ["git", "-C", str(cwd), *args], capture_output=True, text=True, timeout=10
     )
     return out.returncode, out.stdout.strip()
+
+
+def attribution(project, main_checkout):
+    """The user's attribution.commit line, read in Claude Code's precedence order: local, project,
+    user. The first file holding the key decides, and false or "" hides the line. Hooks receive no
+    settings, so the script reads the files itself. Managed settings and --settings are left out."""
+    config = os.environ.get("CLAUDE_CONFIG_DIR") or Path.home() / ".claude"
+    for path in (
+        main_checkout / ".claude" / "settings.local.json",
+        project / ".claude" / "settings.json",
+        Path(config) / "settings.json",
+    ):
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))["attribution"][
+                "commit"
+            ]
+        except (OSError, ValueError, KeyError, TypeError):
+            continue
+        if value is False or isinstance(value, str):
+            return value or ""
+    return ""
+
+
+def signed(line):
+    """The -m arguments that end a commit message with the attribution line, if there is one."""
+    return ["-m", line] if line else []
 
 
 def same(a, b):
@@ -190,7 +224,7 @@ def checkpoint_warning(session, reference, reason, folder):
     )
 
 
-def sync_main(main_ws, session):
+def sync_main(main_ws, session, line):
     """Commit every pending change in the main checkout's workspace, unless a merge, autostash or
     index lock is in progress. A clean workspace commits nothing, so a retry is harmless."""
     if any(
@@ -216,6 +250,7 @@ def sync_main(main_ws, session):
                 f"chore(workspace): sync session {session[:8]}",
                 "-m",
                 "\n".join(body),
+                *signed(line),
             )[0]
     except (OSError, subprocess.TimeoutExpired):
         failed = True
@@ -228,7 +263,7 @@ def sync_main(main_ws, session):
         )
 
 
-def checkpoints(top, main_ws, x, folder, session, linked):
+def checkpoints(top, main_ws, x, folder, session, linked, line):
     repo = workspace_repo(top) if linked else main_ws
     if not repo or (linked and current_branch(repo) != f"{PREFIX}{x}/{top.name}"):
         return
@@ -387,6 +422,7 @@ def checkpoints(top, main_ws, x, folder, session, linked):
                         subject,
                         "-m",
                         "\n".join(merged[n] for n in numbers),
+                        *signed(line),
                     )[0]
                 )
             except (OSError, subprocess.TimeoutExpired):
@@ -413,7 +449,7 @@ def checkpoints(top, main_ws, x, folder, session, linked):
                 claim.unlink()
 
 
-def create(top, main_ws, x, branch):
+def create(top, main_ws, x, branch, line):
     """Add <top>/.agents_workspace as a worktree of the main workspace repo. The main workspace's
     pending changes are committed first, because a worktree holds only committed files and a plan
     written in the main checkout must reach it."""
@@ -423,7 +459,9 @@ def create(top, main_ws, x, branch):
     if not merging(main_ws):  # the user's own merge: never conclude it
         git(main_ws, "add", "-A")
         subject = f"chore(workspace): sync main before worktree {top.name}"[:72]
-        git(main_ws, "commit", "-q", "-m", subject)  # exits 1 when nothing is pending
+        git(
+            main_ws, "commit", "-q", "-m", subject, *signed(line)
+        )  # exits 1 when nothing is pending
     git(main_ws, "worktree", "prune")
     code, _ = git(main_ws, "rev-parse", "--verify", "--quiet", f"refs/heads/{branch}")
     if code == 0:
@@ -438,7 +476,7 @@ def create(top, main_ws, x, branch):
         git(main_ws, "worktree", "add", "-q", "-b", branch, str(path))
 
 
-def commit(top, branch):
+def commit(top, branch, line):
     """Commit every change in <top>/.agents_workspace when it is on its ceh-ws/ branch."""
     path = top / WORKSPACE
     if not path.is_dir():
@@ -448,7 +486,8 @@ def commit(top, branch):
     if code or not lines or lines[0][3:].split("...")[0] != branch or len(lines) == 1:
         return
     git(path, "add", "-A")
-    git(path, "commit", "-q", "-m", f"chore(workspace): sync worktree {top.name}"[:72])
+    subject = f"chore(workspace): sync worktree {top.name}"[:72]
+    git(path, "commit", "-q", "-m", subject, *signed(line))
 
 
 def merging(repo):
@@ -520,6 +559,20 @@ def detach(cwd, run_in):
         subprocess.Popen(args, creationflags=flags, **io)
 
 
+def start_context(notes):
+    if notes:
+        print(
+            json.dumps(
+                {
+                    "hookSpecificOutput": {
+                        "hookEventName": "SessionStart",
+                        "additionalContext": " ".join(notes),
+                    }
+                }
+            )
+        )
+
+
 def main():
     # Kill switch: CEH_DISABLED_HOOKS lists hook script names to skip.
     disabled = os.environ.get("CEH_DISABLED_HOOKS", "").replace(" ", "").split(",")
@@ -555,38 +608,33 @@ def main():
         record_merge(top, main_ws, command)
         return
 
+    line = attribution(top, main_checkout or top)
+    # The EnterWorktree run of start prints nothing: the session already has the note.
+    notes = [WORKSPACE_NOTE] if payload.get("hook_event_name") == "SessionStart" else []
     if not main_checkout:
         if event == "commit":
             session = str(payload.get("session_id") or os.getpid())
             if pending.is_dir() and any(pending.iterdir()):
-                checkpoints(top, main_ws, x, pending, session, False)
-            sync_main(main_ws, session)
+                checkpoints(top, main_ws, x, pending, session, False, line)
+            sync_main(main_ws, session, line)
         elif event == "end-worker":
             catch_up(
                 main_ws, x
             )  # SessionEnd output is discarded: the next start reports failures
-        elif event == "start" and (failed := catch_up(main_ws, x)):
-            names = ", ".join(failed)
-            note = (
-                f"The {WORKSPACE} branches {names} did not merge into {x} on their own "
-                f"(a conflict, or a merge git refused). Merge each by hand: "
-                f"git -C {WORKSPACE} merge <branch>."
-            )
-            print(
-                json.dumps(
-                    {
-                        "hookSpecificOutput": {
-                            "hookEventName": "SessionStart",
-                            "additionalContext": note,
-                        }
-                    }
+        elif event == "start":
+            if failed := catch_up(main_ws, x):
+                notes.append(
+                    f"The {WORKSPACE} branches {', '.join(failed)} did not merge into {x} "
+                    f"on their own (a conflict, or a merge git refused). Merge each by hand: "
+                    f"git -C {WORKSPACE} merge <branch>."
                 )
-            )
+            start_context(notes)
         return
 
     branch = f"{PREFIX}{x}/{top.name}"
     if event == "start":
-        create(top, main_ws, x, branch)
+        create(top, main_ws, x, branch, line)
+        start_context(notes)
     elif event in ("commit", "end-worker"):
         if event == "commit" and pending.is_dir():
             checkpoints(
@@ -596,8 +644,9 @@ def main():
                 pending,
                 str(payload.get("session_id") or os.getpid()),
                 True,
+                line,
             )
-        commit(top, branch)
+        commit(top, branch, line)
         if event == "end-worker":
             merge(main_ws, branch)
 

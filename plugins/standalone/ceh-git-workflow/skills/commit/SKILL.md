@@ -79,6 +79,15 @@ lowercase and consistent with scopes already used in the log (`git log --oneline
   instructions supply, verbatim. Never substitute a literal from this skill or from memory. If no
   line is supplied, or the setting is `false` or empty, omit it.
 
+### Workspace
+
+When `.agents_workspace/` is a git repo of its own and the turn wrote files there, commit them in
+that repo before the turn ends: `git -C .agents_workspace add <your files>`, then a commit whose
+subject names what was written (`docs(plan): add the export plan`), whose body says why, and which
+ends with the attribution line. Stage only the files this turn wrote. The plugin's Stop hook
+commits whatever is left under a generic `chore(workspace): sync ...` subject, which says nothing
+about the change.
+
 ## Output
 
 ```
