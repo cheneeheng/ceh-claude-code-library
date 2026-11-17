@@ -9,6 +9,28 @@ before this repo live in
 
 ---
 
+## 2026-11-17
+
+`maintain-glossary` and `analyze-competitor` now say what to do at each question when no user is
+present, because the vision's Autonomy section asks for the conservative option, recorded, and a
+plugin cannot rely on the `ceh-every-session` output style being installed. This is finding 02.08
+of the 2026-11-16 vision audit, per `.agents_workspace/product/plan/vision-audit-fixes.yaml`.
+
+### Plugin versions
+
+| Plugin                     | Version |
+| -------------------------- | ------- |
+| `ceh-codebase-explanation` | 1.3.18  |
+| `ceh-competitor-analysis`  | 1.2.15  |
+
+### Fixed
+
+- `ceh-codebase-explanation:maintain-glossary`: with no user present, a term whose choice changes
+  meaning keeps its current word and definition and goes to `open` with the proposal as its
+  question.
+- `ceh-competitor-analysis:analyze-competitor`: with no user present, the current repository is
+  our work, and a target that needs credentials is reported as not analysed.
+
 ## 2026-11-16
 
 Reviews, audits and evals now save one folder per kind, in the layout of the shared workspace
