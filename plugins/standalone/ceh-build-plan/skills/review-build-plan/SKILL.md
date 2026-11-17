@@ -24,9 +24,11 @@ quotes the plan, and the verdict is delivered.
 
 ## Procedure
 
-1. **Find the plan.** Take the path from the arguments, or the newest plan in the plan folder
-   whose status is `draft` or `ready`, and say which. The format is in
-   `${CLAUDE_SKILL_DIR}/references/plan-schema.md`. With no plan but a spec (an issue, a PRD, a
+1. **Find the plans.** Take the paths from the arguments, one or several, or the newest plan in
+   the plan folder whose status is `draft` or `ready`, and say which. A slug given in place of a
+   path is matched as the format's Location section says. The format is in
+   `${CLAUDE_SKILL_DIR}/references/plan-schema.md`. Several plans get one review: steps 2 to 7
+   run once over all of them, and each plan gets its own findings, Record entry and saved review. With no plan but a spec (an issue, a PRD, a
    spec file), review the spec with the Scope lens and the gap checks of step 5, and skip what
    concerns phases. With neither, stop: there is nothing to review.
 
@@ -38,9 +40,10 @@ quotes the plan, and the verdict is delivered.
    When it exits 3 or uv is missing, say in the reply that the plan went unchecked, and go on.
    After the last write to the YAML, run `render`.
 
-2. **Review from a fresh context when this session wrote the plan.** Dispatch one background
-   subagent on the session's own model with the plan path and `${CLAUDE_SKILL_DIR}/SKILL.md`, told
-   to run steps 3 to 6 and return the Output. The author reads what they meant, a fresh reader
+2. **Review from a fresh context when this session wrote the plans.** Dispatch one background
+   subagent on the session's own model with every plan path and `${CLAUDE_SKILL_DIR}/SKILL.md`,
+   told to run steps 3 to 6 on each and return one Output per plan. One subagent reads the shared
+   repo once, where one per plan would read it again for each. The author reads what they meant, a fresh reader
    reads what is written, and only the second is what the builder gets.
 3. **Read what the plan rests on**: every file, route, model, and dependency it names in the
    repo. Read no business plan, even when an older plan links to one: the review judges

@@ -2,6 +2,8 @@ schema: plan/v2
 title: <title>
 status: <draft | ready | building | built>
 created: YYYY-MM-DD
+depends_on:
+  - <plan path>
 goal: |
   <goal>
 scope:

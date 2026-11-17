@@ -22,7 +22,8 @@ reason recorded.
 
 ## Procedure
 
-1. **Find the plan.** Take the path from the arguments. Otherwise look in the plan folder for a
+1. **Find the plan.** Take the path from the arguments, matching a slug given in place of a path
+   as the format's Location section says. Otherwise look in the plan folder for a
    plan with `status: ready` or `building`, and when there are several, take the most recently
    created and say which. With no plan at all, write a minimal one from the request as `plan/v2`,
    a filled copy of `${CLAUDE_SKILL_DIR}/assets/plan.template.yaml`: Goal, Scope, and phases with

@@ -440,7 +440,7 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-session-learning/scripts/generated-md-guard.py`                                                           | whole file                                                  | none                                                                             |
 | `ceh-build-plan:review-build-plan`, `ceh-build-plan:implement-from-plan`, `ceh-check-build-against-plan:check-build-against-plan` | the "A `plan/v2` plan is checked first" paragraph in step 1 | `implement-from-plan` adds where a Status note and a Record entry go in the YAML |
 
-**Shared:** the whole plan format, byte for byte: the `.agents_workspace/product/plan/<slug>.yaml` location, the
+**Shared:** the whole plan format, byte for byte: the `.agents_workspace/product/plan/<YYYYMMDD-HHMMSS>-<slug>.yaml` location and the slug lookup, the
 frontmatter and its four statuses, the Goal, Scope, Design, Phases, and Open sections, the phase
 rules (a runnable Check, `todo` / `unplanned` / `done` with evidence), and the rules for changing
 a plan, and the `plan/v2` YAML template `plan.template.yaml` with its keys and rules. Every skill

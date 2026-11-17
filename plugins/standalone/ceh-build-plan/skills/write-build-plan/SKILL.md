@@ -66,7 +66,10 @@ draft: say so and write a new plan as usual.
 3. **Draw the scope.** Write In and Out. For each candidate item ask: _is this needed to build
    what was asked, now?_ If not, it goes under Out with its reason. For a new app, In is the MVP:
    the smallest set that makes the app usable for its core purpose. If an item can be removed and
-   the app still delivers that, it is Out.
+   the app still delivers that, it is Out. One plan covers one functionality: a change that lands
+   in its own PR and can be checked on its own. When In holds several, split the request into one
+   plan each, never into phases of one plan, and run steps 3 to 7 per plan. A plan that needs
+   another built first lists it in `depends_on`.
 
 4. **Decide how far to plan in detail.** Plan every phase in full when the build is foreseeable.
    Uncertainty, not size, cuts the detail short: a novel or unproven core mechanic, a decision
@@ -107,22 +110,27 @@ draft: say so and write a new plan as usual.
    - No placeholder (`TODO`, `...`, "adjust as needed"), no reference to a file, route, type, or
      field the plan does not define, and no field named differently in two places.
 
-   Save the plan as `plan/v2`: `<slug>.yaml` in the plan folder, a filled copy of
+   Save the plan as `plan/v2`: `<YYYYMMDD-HHMMSS>-<slug>.yaml` in the plan folder, the time from
+   one `date +%Y%m%d-%H%M%S` call, a filled copy of
    `${CLAUDE_SKILL_DIR}/assets/plan.template.yaml`, with `status: ready`, or `status: draft` when
-   an Open question blocks building, and a Planned entry in its `record`. Then run
-   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <slug>.yaml` and fix the YAML
-   for each error it lists until it exits 0, which writes `<slug>.md` beside it. Never write the
+   an Open question blocks building, and a Planned entry in its `record`. Leave `depends_on` out
+   when the plan needs no other built first. Then run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml` and fix the YAML
+   for each error it lists until it exits 0, which writes the `.md` beside it. Never write the
    `.md` by hand: it is generated. When the command exits 3 or uv is missing, say in the reply
    that the plan was saved unchecked and unrendered.
 
-8. **Have it reviewed.** Invoke the Skill tool with skill="ceh-build-plan:review-build-plan"
-   with the plan's YAML path, for every plan saved, whatever its label. That skill reviews from a
-   fresh context on its own, so do not dispatch a reviewer yourself.
+8. **Have them reviewed, once.** After the last plan of the session's batch is saved (the split
+   from step 3, or the plans a caller such as a retro asked for), invoke the Skill tool with
+   skill="ceh-build-plan:review-build-plan" with every saved plan's YAML path, whatever their
+   labels. One review over the batch reads the repo once, which saves the tokens of a fresh reviewer
+   per plan. That skill reviews from a fresh context on its own, so do not dispatch a reviewer
+   yourself.
 
 ## Rules
 
-- One plan per request. Leave a `built` plan as written: new work gets a new plan file. A draft
-  passed by path is completed, not written again.
+- One plan per functionality. Leave a `built` plan as written: new work gets a new plan file. A
+  draft passed by path is completed, not written again.
 - Write only the plan's YAML. Its Markdown is rendered from it.
 - Leave every decision that is not needed now under Out or Open, not in Design.
 
@@ -130,7 +138,7 @@ draft: say so and write a new plan as usual.
 
 Close the reply with:
 
-- The label from step 1 and the plan's YAML path.
+- The label from step 1 and each plan's YAML path, with its `depends_on`.
 - The In list, and the phases one line each with their Check.
 - Open: every assumption taken without an answer.
 - The review's verdict from step 8.
