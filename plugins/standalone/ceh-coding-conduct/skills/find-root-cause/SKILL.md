@@ -30,7 +30,9 @@ predict one observation you have not made yet that then comes true.
    a stack trace, find the deepest frame in this repo's code, and read that code before going
    further. Then grep `.agents_workspace/product/fix/` (and the older `fixes/` beside it) for that file or function, or with no stack trace, for the
    one the step 1 command calls. An earlier fix record's Cause becomes one of the hypotheses in
-   step 3, because a bug that came back often came back the same way.
+   step 3, because a bug that came back often came back the same way. Note the functionality the
+   bug sits in and its record, if any, found as the format's "Finding the record of a
+   functionality" says, for step 8.
 3. **Write 3 to 5 hypotheses, each with what would refute it.** "The cache returns a stale row"
    is refuted by "the row read at line 40 matches the database". A hypothesis no observation can
    refute is a mood, so rewrite it or drop it. Order them by how cheap they are to test, then by
@@ -45,23 +47,28 @@ predict one observation you have not made yet that then comes true.
 6. **Confirm by prediction.** From the cause, predict something new: another input that must
    also fail, or one that must pass. Run it. A cause that predicts nothing new is still a guess.
 7. **Remove the instrumentation** you added, then hand over with the Output below.
-8. **Write the fix record** when the cause is in this repo's code or config. Save the hand-over to
-   `.agents_workspace/product/fix/<slug>.yaml` with `status: diagnosed`, a copy of
-   `assets/fix-record.template.yaml` in the `fix-record/v2` format in
-   `references/fix-record-schema.md`, setting `plan:` and `previous:` as it says. Then run
-   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render .agents_workspace/product/fix/<slug>.yaml`,
+8. **Write the fix record** when the cause is in this repo's code or config, in the
+   `fix-record/v3` format in `references/fix-record-schema.md`: one record per functionality, each
+   bug one issue in it. When step 2 found an open record of the functionality (`status:
+diagnosed`), add the hand-over to its `issues` with `status: diagnosed`. Otherwise save a new
+   record, `.agents_workspace/product/fix/<YYYYMMDD-HHMMSS>-<functionality-slug>.yaml` with the time
+   from one `date +%Y%m%d-%H%M%S` call, a copy of `assets/fix-record.template.yaml` holding this one
+   issue, and set `previous:` to a closed record of the functionality, and `plan:`, as the format
+   says. Set the record's `status` to the one its issues derive. Then run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <the record>.yaml`,
    which writes the `.md` beside it, and fix the YAML for each error it lists. Never edit the
    generated `.md`. On exit 2 or 3, or without uv, say in the reply that the record went unchecked
    and unrendered. The chat ends with the session, and the record is how a later reader learns why
-   the fix exists. The fix's commit message carries the footer `Refs: fix/<slug>`. No fix will
-   land here when the cause is outside this repo or the user declined the fix: then the record is
-   saved alone and stays `diagnosed`. A fix that waits on a user decision is open work, and nothing reports the bug as
-   done.
+   the fix exists. The fix's commit message carries the footer `Refs: fix/<stem>`, the record's
+   whole file stem. No fix will land here when the cause is outside this repo or the user declined
+   the fix: then the issue is `declined`, with its Cause naming where the fix belongs or why it was
+   declined. A fix that waits on a user decision is open work, and nothing reports the bug as done.
 9. **Hand over the fix.** When the fix lands in this session, load `ceh-testing:test-a-bug-fix`
    before writing it: it turns the step 1 command into a regression test and drives the fix.
    Without `ceh-testing` installed, write the failing test before the fix yourself, then in the
-   record's YAML set `fix`, one `tests` item per test and `status: fixed`, render it again, and
-   commit the fix and the test with the footer `Refs: fix/<slug>`.
+   record's YAML set the issue's `fix`, one `tests` item per test and its `status: fixed`, set the
+   record's derived `status`, render it again, and commit the fix and the test with the footer
+   `Refs: fix/<stem>`.
 
 ## Rules
 

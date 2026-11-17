@@ -1,8 +1,9 @@
-"""fix-record/v2: the fix record's model and its Markdown renderer.
+"""fix-record/v3: the fix record's model and its Markdown renderer.
 
 The format in code, per fix-record-schema.md beside this file: `artifact.py` validates a
-`.agents_workspace/product/fix/<slug>.yaml` with `MODEL` and writes `render(doc, source)` beside it, in the
-`fix-record/v1` layout. Copied word for word into every skill that holds fix-record-schema.md.
+`.agents_workspace/product/fix/<YYYYMMDD-HHMMSS>-<slug>.yaml` with `MODEL` and writes
+`render(doc, source)` beside it. Copied word for word into every skill that holds
+fix-record-schema.md.
 """
 
 from __future__ import annotations
@@ -15,7 +16,7 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 NAME = "fix-record"
-VERSION = 2
+VERSION = 3
 
 Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 Line = Annotated[
@@ -26,13 +27,14 @@ Line = Annotated[
 PlanPath = Annotated[
     str, StringConstraints(pattern=r"^(\.agents_workspace/)?product/plans?/\S+$")
 ]
-# The earlier record's .yaml (v2) or .md (v1).
+# The earlier record's .yaml (v2, v3) or .md (v1).
 FixPath = Annotated[
     str,
     StringConstraints(
         pattern=r"^(\.agents_workspace/)?product/fix(es)?/\S+\.(yaml|md)$"
     ),
 ]
+Status = Literal["diagnosed", "fixed", "unreproduced", "declined"]
 
 
 class _Strict(BaseModel):
@@ -79,14 +81,9 @@ class Test(_Strict):
     why_new: Line
 
 
-class FixRecord(_Strict):
-    schema_: Literal["fix-record/v2"] = Field(alias="schema")
-    status: Literal["diagnosed", "fixed", "unreproduced"]
-    date: dt.date
-    issue: Optional[Line] = None
-    plan: Optional[PlanPath] = None
-    previous: Optional[FixPath] = None
+class Issue(_Strict):
     title: Line
+    status: Status
     symptom: Symptom
     diagnosis: Diagnosis
     cause: Optional[Cause] = None
@@ -96,46 +93,68 @@ class FixRecord(_Strict):
     unverified: Text
 
     @model_validator(mode="after")
-    def _status(self) -> FixRecord:
-        """The v1 "Sections by status" rules. Moving forward only and the same-commit rule compare
-        a record with its history, so they stay prose."""
+    def _status(self) -> Issue:
+        """The Sections-by-status rules, per issue. Moving forward only compares a record with its
+        history, so it stays prose."""
         rows = self.diagnosis.rows or []
         confirmed = any(r.result == "confirmed" for r in rows)
         s = self.status
         if self.diagnosis.known_from_report is not None and s != "fixed":
             raise ValueError(
-                f"diagnosis.known_from_report: only a fixed record skips the investigation, not a {s} one"
+                f"diagnosis.known_from_report: only a fixed issue skips the investigation, not a {s} one"
             )
-        if s in ("diagnosed", "fixed"):
+        if s in ("diagnosed", "fixed", "declined"):
             if self.cause is None:
-                raise ValueError(f"cause: a {s} record names its cause")
+                raise ValueError(f"cause: a {s} issue names its cause")
             if self.diagnosis.rows is not None and not confirmed:
                 raise ValueError(
-                    f"diagnosis.rows: a {s} record needs a confirmed hypothesis"
+                    f"diagnosis.rows: a {s} issue needs a confirmed hypothesis"
                 )
-        if s == "diagnosed" and self.fix is not None:
-            raise ValueError(
-                "fix: a diagnosed record has no fix yet, set status: fixed"
-            )
-        if s == "diagnosed" and self.tests:
-            raise ValueError(
-                "tests: a diagnosed record has no tests yet, set status: fixed"
-            )
+        if s in ("diagnosed", "declined") and self.fix is not None:
+            raise ValueError(f"fix: a {s} issue has no fix here, set status: fixed")
+        if s in ("diagnosed", "declined") and self.tests:
+            raise ValueError(f"tests: a {s} issue has no tests here, set status: fixed")
         if s == "fixed" and self.fix is None:
-            raise ValueError("fix: a fixed record says what changed")
+            raise ValueError("fix: a fixed issue says what changed")
         if s == "fixed" and not self.tests:
-            raise ValueError("tests: a fixed record names at least one regression test")
+            raise ValueError("tests: a fixed issue names at least one regression test")
         if s == "unreproduced":
             if confirmed:
                 raise ValueError(
-                    "diagnosis.rows: an unreproduced record has no confirmed hypothesis"
+                    "diagnosis.rows: an unreproduced issue has no confirmed hypothesis"
                 )
             for key in ("cause", "fix"):
                 if getattr(self, key) is not None:
-                    raise ValueError(f"{key}: an unreproduced record has none")
+                    raise ValueError(f"{key}: an unreproduced issue has none")
             for key in ("prediction", "tests"):
                 if getattr(self, key):
-                    raise ValueError(f"{key}: an unreproduced record has none, use []")
+                    raise ValueError(f"{key}: an unreproduced issue has none, use []")
+        return self
+
+
+def record_status(issues: list[Issue]) -> str:
+    """diagnosed while any issue is, else fixed, else declined, else unreproduced."""
+    found = {i.status for i in issues}
+    return next(
+        s for s in ("diagnosed", "fixed", "declined", "unreproduced") if s in found
+    )
+
+
+class FixRecord(_Strict):
+    schema_: Literal["fix-record/v3"] = Field(alias="schema")
+    status: Status
+    date: dt.date
+    issue: Optional[Line] = None
+    plan: Optional[PlanPath] = None
+    previous: Optional[FixPath] = None
+    title: Line
+    issues: list[Issue] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _derived(self) -> FixRecord:
+        want = record_status(self.issues)
+        if self.status != want:
+            raise ValueError(f"status: the issues make this record {want}")
         return self
 
 
@@ -159,8 +178,42 @@ def _run(command: Optional[str], result: str) -> str:
     return f"`{command}` → {result}" if command else result
 
 
+def _issue(n: int, i: Issue) -> list[str]:
+    out = [
+        f"## {n}. {i.title}",
+        "",
+        f"**Status:** {i.status}",
+        "",
+        f"**Symptom:** {_run(i.symptom.command, i.symptom.output)}",
+        "",
+        "### Diagnosis",
+        "",
+    ]
+    if i.diagnosis.rows is None:
+        out.append(f"Cause known from the report: {i.diagnosis.known_from_report}")
+    else:
+        out += ["| Hypothesis | Refuted by | Result |", "| --- | --- | --- |"]
+        out += [
+            f"| {_cell(r.hypothesis)} | {_cell(r.refuted_by)} | {r.result}: {_cell(r.output)} |"
+            for r in i.diagnosis.rows
+        ]
+    if i.cause:
+        out += ["", f"**Cause:** {i.cause.location}: {i.cause.chain}"]
+    if i.prediction:
+        runs = (_run(p.command, p.result).rstrip(".") + "." for p in i.prediction)
+        out += ["", "**Prediction:** " + " ".join(runs)]
+    if i.fix:
+        out += ["", "### Fix", "", i.fix, "", "**Tests:**", ""]
+        out += [
+            f"- `{t.test}` — protects: {t.protects}; fails_when: {t.fails_when}; why_new: {t.why_new}"
+            for t in i.tests
+        ]
+    return out + ["", f"**Unverified:** {i.unverified}", ""]
+
+
 def render(doc: FixRecord, source: str) -> str:
-    """The record in the fix-record/v1 layout. The same YAML always renders to the same text."""
+    """The record as Markdown, one numbered section per issue. The same YAML always renders to
+    the same text."""
     note = f"Do not edit. artifact.py renders this file from {source}: edit the YAML, then run artifact.py render."
     out = [
         "---",
@@ -175,36 +228,8 @@ def render(doc: FixRecord, source: str) -> str:
         for k in ("issue", "plan", "previous")
         if getattr(doc, k)
     ]
-    out += [
-        "---",
-        "",
-        "<!-- prettier-ignore-start -->",
-        "",
-        f"# {doc.title}",
-        "",
-        f"**Symptom:** {_run(doc.symptom.command, doc.symptom.output)}",
-        "",
-        "## Diagnosis",
-        "",
-    ]
-    if doc.diagnosis.rows is None:
-        out.append(f"Cause known from the report: {doc.diagnosis.known_from_report}")
-    else:
-        out += ["| Hypothesis | Refuted by | Result |", "| --- | --- | --- |"]
-        out += [
-            f"| {_cell(r.hypothesis)} | {_cell(r.refuted_by)} | {r.result}: {_cell(r.output)} |"
-            for r in doc.diagnosis.rows
-        ]
-    if doc.cause:
-        out += ["", f"**Cause:** {doc.cause.location}: {doc.cause.chain}"]
-    if doc.prediction:
-        runs = (_run(p.command, p.result).rstrip(".") + "." for p in doc.prediction)
-        out += ["", "**Prediction:** " + " ".join(runs)]
-    if doc.fix:
-        out += ["", "## Fix", "", doc.fix, "", "**Tests:**", ""]
-        out += [
-            f"- `{t.test}` — protects: {t.protects}; fails_when: {t.fails_when}; why_new: {t.why_new}"
-            for t in doc.tests
-        ]
-    out += ["", f"**Unverified:** {doc.unverified}", "", "<!-- prettier-ignore-end -->"]
+    out += ["---", "", "<!-- prettier-ignore-start -->", "", f"# {doc.title}", ""]
+    for n, i in enumerate(doc.issues, 1):
+        out += _issue(n, i)
+    out.append("<!-- prettier-ignore-end -->")
     return "\n".join(out) + "\n"

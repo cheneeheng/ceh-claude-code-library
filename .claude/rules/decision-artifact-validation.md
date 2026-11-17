@@ -26,7 +26,8 @@ report (`qa-report/v2`), the performance file (`perf-report/v2`), the security a
 (`security-audit/v2`), and the three usability audits (`first-run-audit/v2`, `interface-audit/v2`,
 `error-messages-audit/v2`). The fix record (`fix-record/v2`) follows, per
 `.agents_workspace/product/plan/fix-record-yaml.yaml`, with the hooks in core `ceh-coding-conduct` by the user's
-choice, so a record is checked even without `ceh-testing`. The session handoff (`handoff/v2`)
+choice, so a record is checked even without `ceh-testing`, and is now `fix-record/v3`, one
+functionality per record, per `.agents_workspace/product/plan/20261117-113524-fix-records-by-functionality.yaml`. The session handoff (`handoff/v2`)
 follows, per `.agents_workspace/product/plan/handoff-yaml.yaml`, with the hooks in `ceh-every-session`, which leaves
 `READERS`, also by the user's choice. The workflow spec (`workflow-spec/v2`) follows, per
 `.agents_workspace/product/plan/workflow-spec-yaml.yaml`, with the hooks in `ceh-workflow-builder`, which holds both

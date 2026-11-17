@@ -618,11 +618,11 @@ them, so each carries a copy to check `VISION.yaml` and `STRATEGY.yaml` before r
 | `plugins/standalone/ceh-testing/skills/test-a-bug-fix/assets/fix-record.template.md`   | whole file | none     |
 | `plugins/standalone/ceh-testing/skills/test-a-bug-fix/assets/fix-record.template.yaml` | whole file | none     |
 
-**Shared:** the whole fix record format, `fix-record/v1` and the `fix-record/v2` YAML with its
-model, which renders the `v1` layout of `fix-record.template.md`, and the templates (canonical in
-`find-root-cause/assets/`, beside the canonical schema's `references/`), byte for byte: the `.agents_workspace/product/fix/<slug>.yaml` location and
-slug rule, the write-only-for-repo-causes rule, the frontmatter with its three statuses and the
-`plan:` and `previous:` rules, the sections each status keeps, and the `Refs:` footer and
+**Shared:** the whole fix record format, the `fix-record/v3` YAML with its
+model, which renders the layout of `fix-record.template.md`, and the templates (canonical in
+`find-root-cause/assets/`, beside the canonical schema's `references/`), byte for byte: the `.agents_workspace/product/fix/<YYYYMMDD-HHMMSS>-<slug>.yaml` location,
+one functionality per record and the slug lookup, the write-only-for-repo-causes rule, the record status derived from its issues' four statuses, the
+`plan:` and `previous:` rules, the sections each issue's status keeps, and the `Refs:` footer and
 saved-alone rules. `find-root-cause` writes the record and `test-a-bug-fix` completes or creates
 it, and each plugin carries a copy so it works installed alone. `validate.py` fails when a copy
 differs from the canonical file.
