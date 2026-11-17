@@ -26,7 +26,7 @@ Churn hotspots: `<path>` (<n> commits)
 
 - **Evidence:** <commits or PRs>
 - **Route:** <skill, or "user: <where>">
-- **Status:** <handed off: <artifact> | open: <why>>
+- **Status:** <handed off: <artifact> | open: <decision> | dropped: <why>>
 
 ## Questions the history cannot answer
 

@@ -54,8 +54,15 @@ route in this repo's scope has been acted on, and the report is saved.
    | Anything else in this repo                                                                        | Fix it directly, with the check that proves it                    |
    | Outside this repo: user settings or memory, an installed plugin, Claude Code itself, another repo | Left in the report for the user                                   |
 
-   A route whose plugin is not installed stays open in the report, with the route named. A Claude
-   Code root cause is always out of scope: filing its bug report is outward-facing.
+   Every root cause ends `handed off`, with the artifact its route wrote or the commit that fixed
+   it, or `dropped`, with why acting on it is not worth it. A root cause stays `open` only while it
+   waits on a user decision, with `status_detail` naming that decision: one outside this repo, or
+   one whose route's plugin is not installed, which waits on the user installing it. When the
+   repo's README, `CLAUDE.md` or `AGENTS.md` names a backlog file, a row added there counts as
+   handed off, with `status_detail` naming the row. When the user later decides, the session
+   acting on it sets the root cause's `status` and `status_detail` in place and renders the retro
+   again, and the file keeps its name. A Claude Code root cause is always out of scope: filing its
+   bug report is outward-facing.
 
 7. **Save the report** (see Output).
 

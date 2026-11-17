@@ -53,8 +53,8 @@ class Issue(_Strict):
     issue: Line
     evidence: Line
     route: Line
-    status: Literal["handed off", "open"]
-    # The artifact handed off to, or why it is open.
+    status: Literal["handed off", "open", "dropped"]
+    # The artifact handed off to, the user decision it waits on, or why it was dropped.
     status_detail: Line
 
 

@@ -29,7 +29,7 @@
     {
       "name": "ceh-git-workflow",
       "source": "./plugins/standalone/ceh-git-workflow",
-      "version": "2.0.5",
+      "version": "2.0.6",
       "description": "CEH Git workflow: branching, commits, pull requests from open to merge (with definition-of-done gate), changelog entries, README upkeep, releases including hotfixes, code review, and addressing review comments. Stack-agnostic."
     },
     {
@@ -113,7 +113,7 @@
     {
       "name": "ceh-session-learning",
       "source": "./plugins/standalone/ceh-session-learning",
-      "version": "2.0.9",
+      "version": "2.0.10",
       "description": "CEH session learning: turn one Claude Code session's transcript into something durable. When the session went wrong, parallel analysts find why, every finding citing a transcript line and each root cause routed to a fix, with a scrubbed copy for sharing. When it went right, the steps that worked become a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments."
     },
     {

@@ -40,7 +40,8 @@ class RootCause(_Strict):
     # From the first wrong turn through each step to the visible failure.
     chain: list[Line] = Field(min_length=2)
     route: Line
-    status: Literal["handed off", "open"]
+    status: Literal["handed off", "open", "dropped"]
+    # The artifact handed off to, the user decision it waits on, or why it was dropped.
     status_detail: Line
 
 

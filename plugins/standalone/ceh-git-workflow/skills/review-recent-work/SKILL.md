@@ -67,7 +67,14 @@ repo's scope has been handed to its route, and the path, headline numbers, and r
    | Anything else in this repo                                                                        | Fix it directly, with the check that proves it                    |
    | Outside this repo: user settings or memory, an installed plugin, Claude Code itself, another repo | Left in the report for the user                                   |
 
-   A route whose plugin is not installed stays open in the report, with the route named.
+   Every issue ends `handed off`, with the artifact its route wrote or the commit that fixed it,
+   or `dropped`, with why acting on it is not worth it. An issue stays `open` only while it waits
+   on a user decision, with `status_detail` naming that decision: one outside this repo, or one
+   whose route's plugin is not installed, which waits on the user installing it. When the repo's
+   README, `CLAUDE.md` or `AGENTS.md` names a backlog file, a row added there counts as handed off,
+   with `status_detail` naming the row. When the user later decides, the session acting on it sets
+   the issue's `status` and `status_detail` in place and renders the retro again, and the file
+   keeps its name.
 
 7. **Save and report** per Output.
 

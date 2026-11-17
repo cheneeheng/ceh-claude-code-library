@@ -73,6 +73,12 @@ re-checking open findings each round, and ticking them off. The plan review, cod
 business plan review move to `v3`. The stress test keeps `stress-test/v2`, its open list serving
 as its findings. Per `.agents_workspace/product/plan/20261117-113524-reviews-edited-in-place.yaml`.
 
+A retro stays a record whose every finding leads somewhere. Each finding now ends handed off or
+`dropped` with a reason, a new status, and stays `open` only while it waits on a user decision,
+which its detail names. A row in a backlog file the repo names counts as handed off, and the
+session that acts on a later decision updates the finding in place. Per
+`.agents_workspace/product/plan/20261117-113524-retro-findings-routed.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -84,11 +90,11 @@ as its findings. Per `.agents_workspace/product/plan/20261117-113524-reviews-edi
 | `ceh-coding-conduct`           | 2.5.22  |
 | `ceh-competitor-analysis`      | 1.2.17  |
 | `ceh-every-session`            | 2.9.30  |
-| `ceh-git-workflow`             | 2.0.5   |
+| `ceh-git-workflow`             | 2.0.6   |
 | `ceh-product-direction`        | 2.0.18  |
 | `ceh-python-service`           | 1.1.10  |
 | `ceh-security-audit`           | 1.1.18  |
-| `ceh-session-learning`         | 2.0.9   |
+| `ceh-session-learning`         | 2.0.10  |
 | `ceh-testing`                  | 1.6.31  |
 | `ceh-usability-audit`          | 1.2.19  |
 | `ceh-web-frontend`             | 1.3.7   |
@@ -129,6 +135,9 @@ as its findings. Per `.agents_workspace/product/plan/20261117-113524-reviews-edi
   findings with a status. `review-build-plan`, `write-code-review`, `review-business-plan` and
   `stress-test-plan` find the target's one file and add a round, and `address-review-comments`
   ticks off the findings of a saved code review.
+- `ceh-git-workflow` and `ceh-session-learning`: `period-retro/v3` and `session-retro/v3` take a
+  `dropped` status, and `review-recent-work` and `diagnose-session` step 6 leave a finding `open`
+  only while it waits on a user decision.
 
 ### Fixed
 
