@@ -58,6 +58,13 @@ every edit, as before.
 
 ### Changed
 
+- `docs/VISION.md`, `README.md` and `docs/STRATEGY.md`: the Every step row now lists the four
+  cross-cutting plugins of root `CLAUDE.md`, with `ceh-testing` also kept in Prove, and a new Any
+  step row holds `ceh-workflow-builder`, `ceh-workflow-runner` and `ceh-session-learning`. The
+  vision's "Where the repo does not match yet" section lists the five known gaps in place of "No
+  known gaps", and `docs/PLUGIN_DEPENDENCIES.md` records the `ceh-competitor-analysis` →
+  `ceh-ui-design` edge as kept against principle 6 by user decision (finding 02.03 and 02.05 of the
+  2026-11-16 vision audit).
 - `decision-version-levels.md` and the `add-plugin-component` checklist: a skill rename is a MAJOR
   bump of its plugin, as the user chose for the `write-code-review` rename.
 - `ceh-git-workflow`: rename the skill `code-review` to `write-code-review`, and every mention of
