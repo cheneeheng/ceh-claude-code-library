@@ -1,9 +1,10 @@
 ---
 name: whats-next
 description: >-
-  Load this skill when the user asks what to do next or which skill or agent fits their situation:
-  read the request and the repo, then suggest the installed skills or agents that fit, and run
-  none of them. Trigger on "what's next", "what should I do now", "which skill do I use".
+  Load this skill whenever the user asks what's next, even mid-session or right after loading a
+  handoff, and even when the next step looks obvious: read the repo, then suggest the installed
+  skills or agents that fit, and run none. Trigger on "what's next", "what now",
+  "which skill do I use".
 argument-hint: "[what you want to do]"
 disable-model-invocation: false
 user-invocable: true
