@@ -48,7 +48,7 @@ undo it.
 
 ## Not this plugin
 
-- Reviewing one diff or pull request: `ceh-git-workflow:code-review`, which also checks a diff
+- Reviewing one diff or pull request: `ceh-git-workflow:write-code-review`, which also checks a diff
   against a linked spec.
 - Finding bugs in working code: `ceh-testing`.
 

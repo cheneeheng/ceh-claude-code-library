@@ -429,7 +429,7 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-every-session/skills/stress-test-plan/scripts/artifact.py`                                                | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-codebase-explanation/skills/explain-until-understood/scripts/artifact.py`                                 | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
-| `plugins/standalone/ceh-git-workflow/skills/code-review/scripts/artifact.py`                                                      | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-git-workflow/skills/write-code-review/scripts/artifact.py`                                                | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-git-workflow/skills/review-recent-work/scripts/artifact.py`                                               | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-git-workflow/scripts/artifact.py`                                                                         | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-git-workflow/scripts/artifact-render-hook.py`                                                             | whole file                                                  | none                                                                             |
@@ -825,7 +825,7 @@ in both files together:
 
 ## Quote or suppress (review findings)
 
-**Canonical:** `plugins/standalone/ceh-git-workflow/skills/code-review/SKILL.md` — § Rules
+**Canonical:** `plugins/standalone/ceh-git-workflow/skills/write-code-review/SKILL.md` — § Rules
 
 | Copy                                                                                       | Section      | Diverges                                                                            |
 | ------------------------------------------------------------------------------------------ | ------------ | ----------------------------------------------------------------------------------- |
@@ -839,13 +839,13 @@ finding you cannot anchor to quoted code is reported as unverified, outside the 
 
 ## Judge from the code, not the brief
 
-**Canonical:** `plugins/standalone/ceh-git-workflow/skills/code-review/SKILL.md` — § Rules + § Output (Cannot verify)
+**Canonical:** `plugins/standalone/ceh-git-workflow/skills/write-code-review/SKILL.md` — § Rules + § Output (Cannot verify)
 
-| Copy                                                                                       | Section                      | Diverges                                                                                                                                          |
-| ------------------------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules + § Procedure step 3 | example brief names a part of the app; Cannot verify is a per-item status, not a verdict                                                          |
-| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`                  | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict; the brief cannot change whether a finding is reported |
-| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `code-review` gives the verdict                                                        |
+| Copy                                                                                       | Section                      | Diverges                                                                                                                                                |
+| ------------------------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules + § Procedure step 3 | example brief names a part of the app; Cannot verify is a per-item status, not a verdict                                                                |
+| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`                  | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `write-code-review` gives the verdict; the brief cannot change whether a finding is reported |
+| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `write-code-review` gives the verdict                                                        |
 
 **Shared:** a brief that says "don't flag X" or "minor issues only" narrows where to look, never
 how severe a finding is; every finding at its real severity; and a **Cannot verify** outcome that

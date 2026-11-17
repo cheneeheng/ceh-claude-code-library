@@ -29,12 +29,12 @@ implicit mid-turn decisions, sharpen its description rather than add a hook.
 
 ## Agents
 
-| Agent                       | Use when                                                                                                                                                                                      |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `vitest-unit-tester`        | Writing isolated unit tests for TypeScript functions or modules                                                                                                                               |
-| `vitest-integration-tester` | Testing components wired with real shared state and MSW network handlers                                                                                                                      |
-| `playwright-system-tester`  | Writing Playwright E2E tests or smoke tests against a running stack                                                                                                                           |
-| `web-frontend-reviewer`     | Reviewing the frontend files of a large diff in parallel, dispatched by `ceh-git-workflow:code-review`. Read-only. It's working if every finding quotes its `path:line` from the head version |
+| Agent                       | Use when                                                                                                                                                                                            |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `vitest-unit-tester`        | Writing isolated unit tests for TypeScript functions or modules                                                                                                                                     |
+| `vitest-integration-tester` | Testing components wired with real shared state and MSW network handlers                                                                                                                            |
+| `playwright-system-tester`  | Writing Playwright E2E tests or smoke tests against a running stack                                                                                                                                 |
+| `web-frontend-reviewer`     | Reviewing the frontend files of a large diff in parallel, dispatched by `ceh-git-workflow:write-code-review`. Read-only. It's working if every finding quotes its `path:line` from the head version |
 
 The three testers preload `ceh-web-frontend:write-vitest-playwright-tests` and
 `ceh-testing:design-test-cases`. `web-frontend-reviewer` preloads nothing: it loads only the skills

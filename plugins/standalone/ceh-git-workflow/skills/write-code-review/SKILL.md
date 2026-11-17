@@ -1,5 +1,5 @@
 ---
-name: code-review
+name: write-code-review
 description: >-
   Load this skill when reviewing a pull request or someone else's diff: what to review first,
   blocking versus advisory comments, and the verdict. Trigger on "review this PR", "is this ready

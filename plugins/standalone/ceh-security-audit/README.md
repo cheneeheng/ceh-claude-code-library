@@ -46,5 +46,5 @@ it the agent is told once per session that the file went unchecked. `CEH_ARTIFAC
 ## Not this plugin
 
 - Changes not yet merged: Claude Code's built-in `/security-review`.
-- Reviewing a PR: `ceh-git-workflow:code-review`, whose priority order includes security.
+- Reviewing a PR: `ceh-git-workflow:write-code-review`, whose priority order includes security.
 - Testing a deployed system: the skill proves findings locally and never touches a live host.

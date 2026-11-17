@@ -3,7 +3,7 @@ name: web-frontend-reviewer
 description: >-
   Use this agent to review the frontend part of a diff (React, SvelteKit, TypeScript, styles,
   tests) against this plugin's standards, in parallel with the main review. Dispatched by
-  ceh-git-workflow:code-review with a diff file path. Read-only: returns findings, never edits.
+  ceh-git-workflow:write-code-review with a diff file path. Read-only: returns findings, never edits.
 model: inherit
 tools: Read, Grep, Glob, Skill
 ---
@@ -36,7 +36,7 @@ this plugin's standards, and return ranked findings the calling review merges in
 
 ## Output to parent session
 
-Lead with the counts. Then each finding, most severe first, in code-review's format: a prefix
+Lead with the counts. Then each finding, most severe first, in write-code-review's format: a prefix
 (`[blocking]`, `[advisory]`, or `[question]`), `path:line`, the quoted line, the problem, and for
 `[blocking]` what would resolve it. Your job is coverage, not filtering: the calling review
 re-reads every quoted line and applies its own cap after the merge, so a real finding you drop is

@@ -916,7 +916,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "      - {component: gate, evidence: skills/gate, what: Gates a merge, rating: Partial,"
         " ours: ceh-git-workflow:pull-request}\n"
         "      - {component: review, evidence: skills/review, what: Reviews, rating: Covered,"
-        " ours: ceh-git-workflow:code-review}\n"
+        " ours: ceh-git-workflow:write-code-review}\n"
     )
     ca = "ceh-competitor-analysis"
     competitor_report_fixtures = [
