@@ -89,6 +89,12 @@ link to a folder outside the worktree.
 - **After every turn:** commits the worktree's workspace changes to that branch, so removing the
   worktree loses only what changed since the last turn. The commit's subject is
   `chore(workspace): sync worktree <worktree folder>`.
+- **After every turn in a main checkout:** commits the main workspace's pending changes, after any
+  PR checkpoint below, with the subject `chore(workspace): sync session <first 8 characters of
+the session id>` and the changed paths in the body. It skips while a merge, an autostash or an
+  index lock is in progress, and warns once per session when the commit fails. Each turn's files
+  are committed at its end, so an agent that wants a subject naming what it wrote commits the
+  workspace itself before the turn ends.
 - **Session end:** starts a background process and returns at once, because `SessionEnd` hooks get
   1.5 s that a plugin cannot raise. In a worktree, the process commits once more and merges the
   branch into `<X>`, autostashing uncommitted changes in the main workspace. When Claude Code
