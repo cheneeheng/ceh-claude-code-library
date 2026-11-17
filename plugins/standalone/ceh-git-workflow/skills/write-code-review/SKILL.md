@@ -143,11 +143,21 @@ threads.
 | **Cannot verify**   | Correctness rests on code, config, or data outside the diff. Name what settles it. |
 
 When the comments are posted on a PR, the PR is the record. Otherwise (a local diff, or comments
-not posted) save the summary, the line comments, and the verdict to
-`.agents_workspace/product/review/code/<YYYYMMDD-HHMMSS>-<session-id>-<branch>.yaml`, filling
-`assets/code-review.template.yaml` per the `code-review/v2` section of
+not posted) save the summary, the line comments, and the verdict as a round of the branch's one
+review file in `.agents_workspace/product/review/code/`, filling
+`assets/code-review.template.yaml` per the `code-review/v3` section of
 `references/code-review-schema.md`, so the author can work through them in a later session, and
-name the path in the reply. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
+name the path in the reply. Follow the schema's Review lifecycle, and read the diff before the
+review file, so earlier rounds do not anchor this one:
+
+1. Find the branch's file. With none, the file is `<YYYYMMDD-HHMMSS>-<branch>.yaml`, the branch
+   with every `/` replaced by `-` and the time from one `date +%Y%m%d-%H%M%S` call. A found
+   `code-review/v2` file is converted to `v3` in place first.
+2. Re-check each `open` finding against the current diff and set it `fixed`, with the resolution
+   `found fixed in round <n>`, where the code no longer has the defect.
+3. Append the round, and add its comments as findings with `round: <n>` and `status: open`,
+   skipping one that repeats an `open` finding and reopening one that repeats a `fixed` finding.
+
 After the last edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`,
 which writes the `.md` beside it in the layout of `assets/code-review.template.md`, and fix the
 YAML for each error it lists. Never edit the generated `.md`. On exit 2 or 3, or without uv, say

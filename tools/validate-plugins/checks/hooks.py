@@ -989,23 +989,26 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     # The formats that were Markdown-only (.agents_workspace/product/plan/markdown-formats-yaml.yaml): each is found
     # by its schema key alone, so a file without one is skipped.
     good_pr = (
-        "schema: plan-review/v2\nplan: .agents_workspace/product/plan/wordy.yaml\ndate: 2026-11-15\n"
-        "verdict: Revise first\nlenses: [Scope, Engineering]\n"
-        "skipped: [{lens: Design, reason: no UI}]\nfindings:\n"
-        "  - {lens: Engineering, severity: blocking, plan_line: 'Phase 2 Check: \"it runs\"',"
-        " finding: Proves nothing, fix: Run the tests}\n"
-        "questions: []\nunverified: []\nfixes_made: null\n"
+        "schema: plan-review/v3\nplan: .agents_workspace/product/plan/wordy.yaml\nrounds:\n"
+        "  - date: 2026-11-15\n    verdict: Revise first\n    lenses: [Scope, Engineering]\n"
+        "    skipped: [{lens: Design, reason: no UI}]\n"
+        "    questions: []\n    unverified: []\n    fixes_made: null\nfindings:\n"
+        "  - {round: 1, lens: Engineering, severity: blocking, plan_line: 'Phase 2 Check: \"it runs\"',"
+        " finding: Proves nothing, fix: Run the tests, status: open}\n"
     )
     good_bpr = (
-        "schema: business-plan-review/v2\nplan: BUSINESS_PLAN.yaml\nproduct: Wordy\ndate: 2026-11-15\n"
-        "verdict: fix first\nverdict_reason: No channel.\nscore: 11\nheadline_finding: No channel.\nlenses:\n"
+        "schema: business-plan-review/v3\nplan: BUSINESS_PLAN.yaml\nproduct: Wordy\nrounds:\n"
+        "  - date: 2026-11-15\n    verdict: fix first\n    verdict_reason: No channel.\n    score: 11\n"
+        "    headline_finding: No channel.\n    lenses:\n"
         # Money scores 1 and Reach 0, so the total is 11 and the verdict is fix first.
         + "".join(
-            f"  - {{lens: {lens}, score: {dict(Money=1, Reach=0).get(lens, 2)}, evidence: nothing found, gap: none}}\n"
+            f"      - {{lens: {lens}, score: {dict(Money=1, Reach=0).get(lens, 2)}, evidence: nothing found, gap: none}}\n"
             for lens in ("Customer", "Edge", "Focus", "Money", "Reach", "Survival", "Execution")
         )
-        + "fresh_owner: {stop: features, start: calls}\nstrongest_part: {quote: '\"x\"', why: real.}\n"
-        "run_next:\n  - {skill: stress-test-unit-economics, lens: Money}\n  - {skill: plan-go-to-market, lens: Reach}\n"
+        + "    fresh_owner: {stop: features, start: calls}\n    strongest_part: {quote: '\"x\"', why: real.}\n"
+        "    run_next:\n      - {skill: stress-test-unit-economics, lens: Money}\n      - {skill: plan-go-to-market, lens: Reach}\n"
+        "findings:\n  - {round: 1, lens: Money, gap: no unit price, status: open}\n"
+        "  - {round: 1, lens: Reach, gap: no channel, status: open}\n"
     )  # fmt: skip
     good_deck = (
         "schema: investor-deck/v2\nplan: BUSINESS_PLAN.yaml\npmf_gate: 8\nplan_updated: 2026-11-10\n"
@@ -1047,9 +1050,11 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "text: |\n  1/ I wrote the parser by hand.\n"
     )
     good_cr2 = (
-        "schema: code-review/v2\nbranch: feat/export\ndate: 2026-11-15\nverdict: Request changes\n"
-        "verdict_detail: fix the swallowed error\nsummary: |\n  Adds CSV export.\n"
-        "comments:\n  - {location: 'app/export.py:42', label: blocking, comment: the except swallows it}\n"
+        "schema: code-review/v3\nbranch: feat/export\nrounds:\n"
+        "  - date: 2026-11-15\n    verdict: Request changes\n    verdict_detail: fix the swallowed error\n"
+        "    summary: |\n      Adds CSV export.\n"
+        "findings:\n  - {round: 1, location: 'app/export.py:42', label: blocking, comment: the except swallows it,"
+        " status: open}\n"
     )
     good_pr3 = (
         "schema: period-retro/v3\nsince: 2026-11-01\nuntil: 2026-11-14\n"
@@ -1107,8 +1112,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *report_fixtures("ceh-testing", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-test-audit", good_ta, good_ta.replace("severity: HIGH", "severity: XHIGH"), "findings.0.severity", "HIGH      src/discount.py", "test-audit"),
         *report_fixtures("ceh-testing", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-test-audit", good_ta, good_ta.replace("severity: HIGH", "severity: TMP").replace("severity: LOW", "severity: HIGH").replace("severity: TMP", "severity: LOW"), "worst first", "HIGH      src/discount.py", "test-audit-order"),
         *report_fixtures("ceh-every-session", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-cache-layer", good_st, good_st.replace("state: blocked", "state: pending"), "open.0.state", "- Which TTL — blocked on the store answer", "stress-test"),
-        *report_fixtures("ceh-build-plan", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-wordy", good_pr, good_pr.replace("Revise first", "Ready to build"), "allows no blocking finding", "| 1 | Engineering | blocking | Phase 2 Check: \"it runs\" |", "plan-review"),
-        *report_fixtures(pd, "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-business-plan-review", good_bpr, good_bpr.replace("score: 11", "score: 12"), "not the lens total", "**Run next:** stress-test-unit-economics for Money, plan-go-to-market for Reach", "business-plan-review"),
+        *report_fixtures("ceh-build-plan", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-wordy", good_pr, good_pr.replace("Revise first", "Ready to build"), "allows no blocking finding", "| 1 | 1 | Engineering | blocking | Phase 2 Check: \"it runs\" |", "plan-review"),
+        *report_fixtures(pd, "20261115-120000-business-plan-review", good_bpr, good_bpr.replace("score: 11", "score: 12"), "not the lens total", "**Run next:** stress-test-unit-economics for Money, plan-go-to-market for Reach", "business-plan-review"),
         *report_fixtures(pd, "INVESTOR_DECK", good_deck, good_deck.replace("pmf_gate: 8", "pmf_gate: 6"), "needs draft: true", "Source: §02", "investor-deck"),
         *report_fixtures(pd, "INVESTOR_OUTREACH", good_out, good_out.replace("investors: []", "investors: ['']"), "investors.0", "**Investors:** none supplied", "investor-outreach"),
         # ceh-git-workflow's new hooks: the guard denies an edit to a rendered retro, and the render

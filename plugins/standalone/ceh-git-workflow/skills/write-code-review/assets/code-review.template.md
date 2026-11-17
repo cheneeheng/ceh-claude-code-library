@@ -1,5 +1,5 @@
 ---
-schema: code-review/v2
+schema: code-review/v3
 branch: <branch>
 date: YYYY-MM-DD
 verdict: <Approve | Request changes | Comment | Cannot verify>
@@ -7,12 +7,14 @@ verdict: <Approve | Request changes | Comment | Cannot verify>
 
 # Code review: <branch>
 
-**Verdict:** <Approve | Request changes | Comment | Cannot verify> — <what flips or settles it>
-
-## Summary
-
-<summary>
+**Verdict:** <latest round's verdict> (round <n>) — <what flips or settles it>
 
 ## Line comments
 
-- `<path>:<line>` [<blocking | advisory | question>] <comment>
+- `<path>:<line>` [<blocking | advisory | question>] <comment> (round <n>, <open | fixed: <resolution>>)
+
+## Round <n>: YYYY-MM-DD, <verdict>
+
+**Verdict:** <verdict> — <what flips or settles it>
+
+<summary>

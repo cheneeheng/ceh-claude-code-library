@@ -22,7 +22,9 @@ every thread has a reply.
 ## Procedure
 
 1. **Collect every comment** with its file, line, and prefix. For a PR:
-   `gh pr view <n> --comments` and `gh api repos/{owner}/{repo}/pulls/<n>/comments`. Number them.
+   `gh pr view <n> --comments` and `gh api repos/{owner}/{repo}/pulls/<n>/comments`. For a review
+   saved to a file, the branch's file in `.agents_workspace/product/review/code/`: its `open`
+   findings. Number them.
 2. **Verify each one against the current code** before deciding. Open the line, read enough
    around it to know whether the claim is true, and run the code or a test when reading cannot
    settle it. A comment about a line that has since changed may already be resolved.
@@ -35,7 +37,10 @@ every thread has a reply.
    `[blocking]` comments come first.
 5. **Reply in every thread** with the verdict and its evidence: the commit that fixes it, the
    output that shows the claim is wrong, or the question. Resolve a thread only when it is fixed
-   or the reviewer agreed.
+   or the reviewer agreed. For a saved review, tick each finding off in its YAML instead: `fixed`
+   with the fixing commit, or `won't fix` with the evidence, as its `resolution`, leaving an
+   unclear one `open`. This plugin's render hook checks the YAML and re-renders its `.md` on
+   each edit, and the generated `.md` is never edited by hand.
 
 ## Rules
 

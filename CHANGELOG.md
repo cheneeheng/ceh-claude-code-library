@@ -63,19 +63,29 @@ record that names the old one in `previous:`. A new `declined` issue status repl
 `fix-record/v2` record keeps its contents and reports unchecked. Per
 `.agents_workspace/product/plan/20261117-113524-fix-records-by-functionality.yaml`.
 
+Every saved review now keeps one file per target, which later reviews add a round to, and every
+finding carries a status (`open`, `fixed` or `won't fix`) with its resolution, so it can be ticked
+off once the work it asks for is done. Before, two reviews of one plan left two files, and nobody
+could tell which findings were still open. One shared Review lifecycle, copied into the plan
+review, code review, business plan review and stress test schemas, covers the time-only name, the
+lookup, converting an older file in place, a reviewer that reads the target before earlier rounds,
+re-checking open findings each round, and ticking them off. The plan review, code review and
+business plan review move to `v3`. The stress test keeps `stress-test/v2`, its open list serving
+as its findings. Per `.agents_workspace/product/plan/20261117-113524-reviews-edited-in-place.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-blog-and-seo`             | 2.0.15  |
-| `ceh-build-plan`               | 2.0.17  |
+| `ceh-build-plan`               | 2.0.18  |
 | `ceh-check-build-against-plan` | 1.1.23  |
 | `ceh-codebase-explanation`     | 1.3.20  |
 | `ceh-coding-conduct`           | 2.5.22  |
 | `ceh-competitor-analysis`      | 1.2.17  |
-| `ceh-every-session`            | 2.9.29  |
-| `ceh-git-workflow`             | 2.0.4   |
-| `ceh-product-direction`        | 2.0.17  |
+| `ceh-every-session`            | 2.9.30  |
+| `ceh-git-workflow`             | 2.0.5   |
+| `ceh-product-direction`        | 2.0.18  |
 | `ceh-python-service`           | 1.1.10  |
 | `ceh-security-audit`           | 1.1.18  |
 | `ceh-session-learning`         | 2.0.9   |
@@ -115,6 +125,10 @@ record that names the old one in `previous:`. A new `declined` issue status repl
 - `ceh-coding-conduct` and `ceh-testing`: the fix record is `fix-record/v3`, one functionality
   per record with an `issues` list. `find-root-cause` adds an issue to its functionality's open
   record or saves a new time-prefixed one, and `test-a-bug-fix` fills the issue it fixed.
+- Reviews: `plan-review/v3`, `code-review/v3` and `business-plan-review/v3` hold rounds and
+  findings with a status. `review-build-plan`, `write-code-review`, `review-business-plan` and
+  `stress-test-plan` find the target's one file and add a round, and `address-review-comments`
+  ticks off the findings of a saved code review.
 
 ### Fixed
 

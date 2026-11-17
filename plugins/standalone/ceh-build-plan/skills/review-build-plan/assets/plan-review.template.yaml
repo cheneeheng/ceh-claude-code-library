@@ -1,23 +1,27 @@
-schema: plan-review/v2
-plan: .agents_workspace/product/plan/<slug>.yaml
-date: YYYY-MM-DD
-verdict: <Ready to build | Revise first | Rethink>
-lenses:
-  - <lens>
-skipped:
-  - lens: <lens>
-    reason: <reason>
+schema: plan-review/v3
+plan: .agents_workspace/product/plan/<file>.yaml
+rounds:
+  - date: YYYY-MM-DD
+    verdict: <Ready to build | Revise first | Rethink>
+    lenses:
+      - <lens>
+    skipped:
+      - lens: <lens>
+        reason: <reason>
+    questions:
+      - question: <question>
+        recommended: <answer>
+    unverified:
+      - finding: <finding>
+        why: <why unverified>
+    fixes_made:
+      - <edit made, or left open>
 findings:
-  - lens: <lens>
+  - round: <n>
+    lens: <lens>
     severity: <blocking | advisory>
     plan_line: <"quote">
     finding: <finding>
     fix: <fix>
-questions:
-  - question: <question>
-    recommended: <answer>
-unverified:
-  - finding: <finding>
-    why: <why unverified>
-fixes_made:
-  - <edit made, or left open>
+    status: <open | fixed | won't fix>
+    resolution: <resolution>

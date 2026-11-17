@@ -1,16 +1,52 @@
 # Stress test schema
 
 The file `stress-test-plan` saves to
-`.agents_workspace/product/review/stress-test/<YYYYMMDD-HHMMSS>-<session-id>-<topic>.yaml`, with its
-`.md` rendered beside it, when there is no plan file to write the outcome back to. A reference to
-it names the `.yaml`. Its layout is `../assets/stress-test.template.md`, relative to this file. A
-new file is written as `stress-test/v2` YAML, per the section at the end, and an older
-`stress-test/v1` file, a `.md` with no YAML beside it, stays as written, its `schema:` line
-included.
+`.agents_workspace/product/review/stress-test/<YYYYMMDD-HHMMSS>-<topic>.yaml`, with its `.md`
+rendered beside it, when there is no plan file to write the outcome back to, one file per topic,
+updated in place by every later stress test of that topic. A reference to it names the `.yaml`.
+Its layout is `../assets/stress-test.template.md`, relative to this file. A new file is written as
+`stress-test/v2` YAML, per the section at the end, and an older `stress-test/v1` file, a `.md`
+with no YAML beside it, stays as written, its `schema:` line included.
+
+## Review lifecycle
+
+Every saved review follows these rules, whatever its kind. The section is copied word for word
+into each review format's schema, and only the Targets line differs.
+
+- **Name:** `.agents_workspace/product/review/<kind>/<YYYYMMDD-HHMMSS>-<target>.yaml`, the time
+  from one `date +%Y%m%d-%H%M%S` call when the file is first saved, never changed after. It
+  carries no session id, because several sessions edit a review in place.
+- **Lookup:** match names in the kind's folder against
+  `^\d{8}-\d{6}-([0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}-)?<target>\.yaml$`, so an older name
+  with a session id counts and `layout` never matches `workspace-layout`, and take the newest by
+  time prefix. With none, save a new file. Older duplicates are left as written.
+- **Convert:** a found file of the kind's older YAML version is rewritten in place to the new one,
+  its content becoming round 1 and each of its findings `open`, keeping its name.
+- **Cold round:** the reviewer reads the target before the review file, and a subagent reviewer
+  gets the target and never the file, so earlier rounds cannot anchor it.
+- **Re-check:** before a round is merged, each `open` finding is read against the current target
+  and set `fixed`, with the resolution `found fixed in round <n>`, where the target no longer has
+  the defect.
+- **Merge:** a finding that repeats an `open` one is not added again, and one that repeats a
+  `fixed` one reopens it with a note in its resolution.
+- **Tick off:** the session that makes a fix sets the finding's status and resolution (the edit,
+  commit or PR, or why it will not be fixed) when it knows of the review file.
+- **Targets:** a stress test's target is its topic, and its findings are its `open` list: an
+  answered question moves to `decisions`, which is how it is ticked off.
+
+## Updating a topic's file
+
+A later stress test of the same topic, run without a plan file, updates the file it finds:
+
+- It adds each newly settled question to `decisions`.
+- It changes a decision only when the user answers it differently, with the reason saying what
+  changed.
+- It moves a question from `open` to `decisions` once answered, and adds new open questions.
+- It sets `date` to the run's date. The file keeps its name.
 
 ## Frontmatter
 
-- `date`: the session date.
+- `date`: the date of the latest run on the topic.
 - `topic`: the plan's topic, matching the file name.
 
 ## Body

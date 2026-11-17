@@ -47,8 +47,8 @@ The repeat-mistake report (`repeat-mistake/v2`) follows, per
 `prevent-repeat-mistake` both writes it and reads it in a later session.
 The formats left Markdown-only follow by the user's decision of 2026-11-13, not because another
 stage reads them, per `.agents_workspace/product/plan/markdown-formats-yaml.yaml`: the plan review
-(`plan-review/v2`), with the hooks already in `ceh-build-plan`, and the business plan review
-(`business-plan-review/v2`) and the investor deck and outreach notes (`investor-deck/v2`,
+(`plan-review/v3`), with the hooks already in `ceh-build-plan`, and the business plan review
+(`business-plan-review/v3`) and the investor deck and outreach notes (`investor-deck/v2`,
 `investor-outreach/v2`), with the hooks already in `ceh-product-direction`. The refactor report
 (`refactor-report/v2`), the test audit (`test-audit/v2`) and the stress test (`stress-test/v2`)
 follow, with the hooks already in `ceh-coding-conduct`, `ceh-testing` and `ceh-every-session`.
@@ -56,7 +56,7 @@ The learning record (`learning/v2`) follows, with the hooks already in
 `ceh-codebase-explanation`, and the blog draft and repurposed post (`blog-draft/v2`,
 `repurposed-post/v2`), with the hooks already in `ceh-blog-and-seo`, where `edit-post` and
 `repurpose-post` carry the blog draft model to check a post before reading it. The code review
-(`code-review/v2`) and the period retro (`period-retro/v3`) follow, with the hooks added to
+(`code-review/v3`) and the period retro (`period-retro/v3`) follow, with the hooks added to
 `ceh-git-workflow`, which had none of its own for an artifact. The session retro
 (`session-retro/v3`) follows, with the hooks added to `ceh-session-learning` in a new
 `hooks/hooks.json`. Its `-shareable.md` copy for sharing stays Markdown, with no

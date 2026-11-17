@@ -1,8 +1,8 @@
 """stress-test/v2: the stress test outcome's model and its Markdown renderer.
 
 The format in code, per stress-test-schema.md beside this file: `artifact.py` validates a
-`<YYYYMMDD-HHMMSS>-<session-id>-<topic>.yaml` with `MODEL` and writes `render(doc, source)`
-beside it, in the `stress-test/v1` layout.
+`<YYYYMMDD-HHMMSS>-<topic>.yaml`, one file per topic that later runs update, with `MODEL` and
+writes `render(doc, source)` beside it, in the `stress-test/v1` layout.
 """
 
 from __future__ import annotations
