@@ -1,17 +1,21 @@
 ---
-schema: fix-record/v1
-status: <diagnosed | fixed | unreproduced>
+schema: fix-record/v3
+status: <diagnosed | fixed | unreproduced | declined>
 date: YYYY-MM-DD
 issue: <link or ID>
-plan: .agents_workspace/product/plan/<slug>.yaml
-previous: .agents_workspace/product/fix/<slug>.yaml
+plan: .agents_workspace/product/plan/<file>.yaml
+previous: .agents_workspace/product/fix/<file>.yaml
 ---
 
-# <behavior that was wrong>
+# <functionality>
+
+## 1. <behavior that was wrong>
+
+**Status:** <diagnosed | fixed | unreproduced | declined>
 
 **Symptom:** `<command>` → <failing output line>
 
-## Diagnosis
+### Diagnosis
 
 | Hypothesis | Refuted by    | Result                          |
 | ---------- | ------------- | ------------------------------- |
@@ -21,7 +25,7 @@ previous: .agents_workspace/product/fix/<slug>.yaml
 
 **Prediction:** `<command>` → <result>
 
-## Fix
+### Fix
 
 <change and why>
 

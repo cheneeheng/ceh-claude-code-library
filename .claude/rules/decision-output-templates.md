@@ -29,7 +29,7 @@ evidence report (`evidence/v2`), the architecture document (`architecture/v3`), 
 strategy (`vision/v2`, `strategy/v2`), the business plan (`business-plan/v3`), the QA report
 (`qa-report/v2`), the performance file (`perf-report/v2`), the security audit
 (`security-audit/v2`), the three usability audits (`first-run-audit/v2`, `interface-audit/v2`,
-`error-messages-audit/v2`), the fix record (`fix-record/v2`), the session handoff
+`error-messages-audit/v2`), the fix record (`fix-record/v3`), the session handoff
 (`handoff/v2`), the workflow spec (`workflow-spec/v2`), the run state (`run-state/v2`), the
 competitor report (`competitor-report/v2`), the glossary (`glossary/v2`), the blog voice
 profile (`blog-voice/v2`), the repeat-mistake report (`repeat-mistake/v2`), the plan review

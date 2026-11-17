@@ -833,12 +833,13 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     ]  # fmt: skip
     # The fix record: ceh-coding-conduct writes it and ceh-testing completes it, so both check it.
     good_fix = (
-        "schema: fix-record/v2\nstatus: diagnosed\ndate: 2026-11-10\ntitle: Count drops the last word\n"
-        "symptom: {command: wordy count a.txt, output: 2 words instead of 3}\ndiagnosis:\n  rows:\n"
-        "    - {hypothesis: The split drops a trailing token, refuted_by: Three words with a newline count 3,"
+        "schema: fix-record/v3\nstatus: diagnosed\ndate: 2026-11-10\ntitle: Word counting\n"
+        "issues:\n  - title: Count drops the last word\n    status: diagnosed\n"
+        "    symptom: {command: wordy count a.txt, output: 2 words instead of 3}\n    diagnosis:\n      rows:\n"
+        "        - {hypothesis: The split drops a trailing token, refuted_by: Three words with a newline count 3,"
         " result: confirmed, output: counts 2}\n"
-        "cause: {location: 'wordy.py:12', chain: The loop stops one short.}\nprediction: []\n"
-        "tests: []\nunverified: none\n"
+        "    cause: {location: 'wordy.py:12', chain: The loop stops one short.}\n    prediction: []\n"
+        "    tests: []\n    unverified: none\n"
     )
     cc = "ceh-coding-conduct"
     no_confirmed = good_fix.replace("result: confirmed", "result: standing")
@@ -891,8 +892,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *[fix_path(form, plugin, "previous" if form == "bad" else "")
           for plugin in (cc, "ceh-testing") for form in fix_paths],
     ] if have_uv else []) + [
-        *report_fixtures(cc, "count-drops-last-word", good_fix, no_confirmed, "diagnosis.rows", "# Count drops the last word", "fix-cc"),
-        *report_fixtures("ceh-testing", "count-drops-last-word", good_fix, no_confirmed, "diagnosis.rows", "# Count drops the last word", "fix-testing"),
+        *report_fixtures(cc, "count-drops-last-word", good_fix, no_confirmed, "issues.0: Value error, diagnosis.rows", "## 1. Count drops the last word", "fix-cc"),
+        *report_fixtures("ceh-testing", "count-drops-last-word", good_fix, no_confirmed, "issues.0: Value error, diagnosis.rows", "## 1. Count drops the last word", "fix-testing"),
         {"script": f"{cc}/artifact-render-hook.py", "stdin": write_at(tmp / "report-fix-cc" / "bad" / "count-drops-last-word.yaml"), "env": no_uv, "out": "uv is not installed"},
         # ceh-coding-conduct holds no plan model, so a plan YAML is not its to check.
         {"script": f"{cc}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},

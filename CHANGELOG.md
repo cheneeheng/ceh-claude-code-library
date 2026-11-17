@@ -54,6 +54,15 @@ saves a reviewer re-reading the repo per plan. `decision-saved-file-names.md` no
 forms by how a file behaves: written once, edited in place, or singleton. Per
 `.agents_workspace/product/plan/20261117-113524-plans-by-functionality.yaml`.
 
+A fix record now covers one functionality and holds every issue found in it until its fix lands,
+in a new `fix-record/v3` format with an `issues` list and a record status derived from them. A
+new issue joins its functionality's open record, and a bug after the fix has landed starts a new
+record that names the old one in `previous:`. A new `declined` issue status replaces a
+`diagnosed` record left open forever when its fix lands outside the repo. Records are named
+`<YYYYMMDD-HHMMSS>-<slug>.yaml`, and the commit footer names the whole stem. An existing
+`fix-record/v2` record keeps its contents and reports unchecked. Per
+`.agents_workspace/product/plan/20261117-113524-fix-records-by-functionality.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -62,7 +71,7 @@ forms by how a file behaves: written once, edited in place, or singleton. Per
 | `ceh-build-plan`               | 2.0.17  |
 | `ceh-check-build-against-plan` | 1.1.23  |
 | `ceh-codebase-explanation`     | 1.3.20  |
-| `ceh-coding-conduct`           | 2.5.21  |
+| `ceh-coding-conduct`           | 2.5.22  |
 | `ceh-competitor-analysis`      | 1.2.17  |
 | `ceh-every-session`            | 2.9.29  |
 | `ceh-git-workflow`             | 2.0.4   |
@@ -70,7 +79,7 @@ forms by how a file behaves: written once, edited in place, or singleton. Per
 | `ceh-python-service`           | 1.1.10  |
 | `ceh-security-audit`           | 1.1.18  |
 | `ceh-session-learning`         | 2.0.9   |
-| `ceh-testing`                  | 1.6.30  |
+| `ceh-testing`                  | 1.6.31  |
 | `ceh-usability-audit`          | 1.2.19  |
 | `ceh-web-frontend`             | 1.3.7   |
 | `ceh-workflow-builder`         | 1.4.15  |
@@ -103,6 +112,9 @@ forms by how a file behaves: written once, edited in place, or singleton. Per
   one-functionality rule and the optional `depends_on` key.
 - `decision-saved-file-names.md`: three name forms, by whether a file is written once, edited in
   place, or a singleton.
+- `ceh-coding-conduct` and `ceh-testing`: the fix record is `fix-record/v3`, one functionality
+  per record with an `issues` list. `find-root-cause` adds an issue to its functionality's open
+  record or saves a new time-prefixed one, and `test-a-bug-fix` fills the issue it fixed.
 
 ### Fixed
 

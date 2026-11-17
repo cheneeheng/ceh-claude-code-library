@@ -134,7 +134,8 @@ Keeping every file a stage writes would bloat the folder, so the artifacts have 
   only the frontmatter of built plans.
 - **Fix records are kept.** A bug fix does not go through a build plan, because the bug already
   says what to build. What it needs is the reason, so every fix saves
-  `fix/<slug>.yaml` (`fix-record/v2`, its `.md` rendered beside it) with its symptom,
+  `fix/<YYYYMMDD-HHMMSS>-<slug>.yaml` (`fix-record/v3`, one record per functionality, its `.md`
+  rendered beside it) with its symptom,
   diagnosis, cause, and regression tests, written by
   `ceh-coding-conduct:find-root-cause` and `ceh-testing:test-a-bug-fix`. A fix that changes a
   contract or the design is a feature, and goes through `ceh-build-plan:write-build-plan`.

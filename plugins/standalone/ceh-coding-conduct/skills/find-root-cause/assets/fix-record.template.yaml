@@ -1,32 +1,35 @@
-schema: fix-record/v2
-status: <diagnosed | fixed | unreproduced>
+schema: fix-record/v3
+status: <diagnosed | fixed | unreproduced | declined>
 date: YYYY-MM-DD
 issue: <link or ID>
-plan: .agents_workspace/product/plan/<slug>.yaml
-previous: .agents_workspace/product/fix/<slug>.yaml
-title: <behavior that was wrong>
-symptom:
-  command: <command>
-  output: <failing output line>
-diagnosis:
-  rows:
-    - hypothesis: <claim>
-      refuted_by: <observation>
-      result: <refuted | standing | confirmed>
-      output: <output>
-  known_from_report: <report reference>
-cause:
-  location: <file:line or condition>
-  chain: |
-    <cause to symptom>
-prediction:
-  - command: <command>
-    result: <result predicted and seen>
-fix: |
-  <change and why>
-tests:
-  - test: <test>
-    protects: <behavior>
-    fails_when: <defect returns>
-    why_new: <reason>
-unverified: <what stayed unrun, or none>
+plan: .agents_workspace/product/plan/<file>.yaml
+previous: .agents_workspace/product/fix/<file>.yaml
+title: <functionality>
+issues:
+  - title: <behavior that was wrong>
+    status: <diagnosed | fixed | unreproduced | declined>
+    symptom:
+      command: <command>
+      output: <failing output line>
+    diagnosis:
+      rows:
+        - hypothesis: <claim>
+          refuted_by: <observation>
+          result: <refuted | standing | confirmed>
+          output: <output>
+      known_from_report: <report reference>
+    cause:
+      location: <file:line or condition>
+      chain: |
+        <cause to symptom>
+    prediction:
+      - command: <command>
+        result: <result predicted and seen>
+    fix: |
+      <change and why>
+    tests:
+      - test: <test>
+        protects: <behavior>
+        fails_when: <defect returns>
+        why_new: <reason>
+    unverified: <what stayed unrun, or none>

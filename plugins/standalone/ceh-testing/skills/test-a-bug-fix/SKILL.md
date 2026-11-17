@@ -93,24 +93,30 @@ In the hand-over, give the reproducer and each sibling a value line: `<test> —
 <behavior>; fails_when: <the defect returns>; why_new: <why no existing test caught it>`. The
 reproducer's `why_new` is the gap that let the bug ship.
 
-The commit carries the footer `Refs: fix/<slug>`, naming the fix record, in the format in
-`references/fix-record-schema.md`, when the cause is in this repo's code or config. Look for a
-record with `status: diagnosed` in `.agents_workspace/product/fix/*.yaml` (and the older
-`fixes/` beside it), or a `*.md` with no
-YAML beside it, which `ceh-coding-conduct:find-root-cause` leaves:
+The commit carries the footer `Refs: fix/<stem>`, the fix record's whole file stem, in the format
+in `references/fix-record-schema.md`, when the cause is in this repo's code or config. Look for
+the open record of the bug's functionality, `status: diagnosed`, in
+`.agents_workspace/product/fix/*.yaml` (and the older `fixes/` beside it), found as the format's
+"Finding the record of a functionality" says, or a `*.md` with no YAML beside it, which
+`ceh-coding-conduct:find-root-cause` leaves:
 
-- **A `<slug>.yaml`** (`fix-record/v2`): run
-  `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check .agents_workspace/product/fix/<slug>.yaml` first,
-  and stop on exit 1 with its errors. Set `fix` and one `tests` item per value line, set
-  `status: fixed`, then run the same command with `render`, which writes the `.md`, and fix the
-  YAML for each error it lists. Never edit the generated `.md`.
-- **A `<slug>.md` with no `.yaml` beside it** (`fix-record/v1`): fill its Fix section with the
-  value lines and set `status: fixed`, in the `v1` form.
+- **A `fix-record/v3` `.yaml`**: run
+  `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <the record>.yaml` first, and
+  stop on exit 1 with its errors. On the issue this fix closes, set `fix`, one `tests` item per
+  value line and `status: fixed`, set the record's `status` to the one its issues derive, then run
+  the same command with `render`, which writes the `.md`, and fix the YAML for each error it
+  lists. Never edit the generated `.md`.
+- **A `fix-record/v2` `.yaml`**, which reports unchecked (exit 3): set `fix`, one `tests` item
+  per value line and `status: fixed` in its own form, and say in the reply that it went unchecked.
+- **A `.md` with no `.yaml` beside it** (`fix-record/v1`): fill its Fix section with the value
+  lines and set `status: fixed`, in the `v1` form.
 
-With none, create `.agents_workspace/product/fix/<slug>.yaml` from `assets/fix-record.template.yaml` with
-`status: fixed`, the reproducer as the `symptom`, `diagnosis.known_from_report` naming where the
-report gives the cause, and `plan:` set from the fixed `file:line` as the format says, then render
-it. On exit 2 or 3, or without uv, say in the reply that the record went unchecked and unrendered. The
+With none, create a new record,
+`.agents_workspace/product/fix/<YYYYMMDD-HHMMSS>-<functionality-slug>.yaml` with the time from
+one `date +%Y%m%d-%H%M%S` call, from `assets/fix-record.template.yaml`, holding one `fixed` issue
+with the reproducer as its `symptom` and `diagnosis.known_from_report` naming where the report
+gives the cause, `previous:` set to a closed record of the functionality, and `plan:` set from the
+fixed `file:line` as the format says, then render it. On exit 2 or 3, or without uv, say in the reply that the record went unchecked and unrendered. The
 commit says what changed, and the record keeps why, for whoever touches this code next.
 
 ### When it used to work — bisect on the reproducer
