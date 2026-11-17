@@ -573,6 +573,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ] + ([
             {"script": rh, "stdin": write("dashed.yaml"), "out": "phases.0.check"},
             {"script": rh, "stdin": write("no-schema.yaml"), "out": "no 'schema:"},
+            # One write seen by two installed copies: the first claims it, the second stays quiet.
+            # One copy run twice, because each batch has its own temp folder.
+            {"script": rh, "stdin": {**write("broken.yaml"), "session_id": "claim", "tool_use_id": "toolu_claim"}, "out": '"decision": "block"'},
+            {"script": rh, "stdin": {**write("broken.yaml"), "session_id": "claim", "tool_use_id": "toolu_claim"}, "out": ""},
         ] if full else [])  # fmt: skip
         smoke = [
             {
