@@ -29,7 +29,9 @@ the code or text that still uses a rejected alias is reported.
 3. **Challenge the term.** Look for three faults: one word used in two senses, two words used for
    one sense, and a word whose everyday meaning misleads ("user" for a paying organisation). For
    each fault, propose one word and one definition, and ask the user to settle it when the choice
-   changes meaning. A choice that is purely spelling or casing is yours.
+   changes meaning. With no user present, keep the current word and definition, and add the term
+   to `open` with your proposal as its question. A choice that is purely spelling or casing is
+   yours.
 4. **Write the entry** in `GLOSSARY.yaml` at the repo root, or under `docs/` when the repo keeps
    its docs there, in the format under Output. An existing glossary at either place is the one to
    amend. When both places hold one and they differ, stop and report it, overwriting neither. A
