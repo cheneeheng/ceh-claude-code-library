@@ -89,6 +89,11 @@ was the only one these files ever got. Per
 A pick in the mod's decision options now fills the prompt box with numbers only, since the reply
 above already holds the question and its options, so repeating them cost tokens for nothing.
 
+`whats-next` now says in its description that it applies whenever the user asks what's next, also
+mid-session, right after a handoff load, and when the next step looks obvious. Fable picked the
+skill on these prompts, while Opus answered them by hand from the documents it had read. Per
+`.agents_workspace/product/plan/20261117-211103-whats-next-description.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -99,7 +104,7 @@ above already holds the question and its options, so repeating them cost tokens 
 | `ceh-codebase-explanation`     | 1.3.20  |
 | `ceh-coding-conduct`           | 2.5.22  |
 | `ceh-competitor-analysis`      | 1.2.17  |
-| `ceh-every-session`            | 2.9.31  |
+| `ceh-every-session`            | 2.9.32  |
 | `ceh-git-workflow`             | 2.0.7   |
 | `ceh-product-direction`        | 2.0.18  |
 | `ceh-python-service`           | 1.1.10  |
@@ -113,6 +118,9 @@ above already holds the question and its options, so repeating them cost tokens 
 
 ### Changed
 
+- `ceh-every-session:whats-next`: the description names the mid-session, after-handoff and
+  obvious-next-step moments, and its triggers are "what's next", "what now" and "which skill do I
+  use".
 - `ceh-every-session` mod: a decision option pick fills the prompt box with the option number
   alone, or one `<decision>: <option>` line per pick when the reply has several decision blocks,
   in place of the question and option text. One test added for the single-decision case.
