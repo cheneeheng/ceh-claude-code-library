@@ -70,11 +70,20 @@ test.
 
 ## Output
 
-The review fills `assets/business-plan-review.template.yaml`, per the `business-plan-review/v2`
-section of `references/business-plan-review-schema.md`. Save the review to `.agents_workspace/product/review/business-plan/<YYYYMMDD-HHMMSS>-<session-id>-business-plan-review.yaml`, never into the plan,
-which this skill only reads, so the scores survive into the session that runs the next skill. Name
-the path in the reply. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
-After the last edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`,
+The review fills `assets/business-plan-review.template.yaml`, per the `business-plan-review/v3`
+section of `references/business-plan-review-schema.md`. Save it as a round of the one review file
+in `.agents_workspace/product/review/business-plan/`, never into the plan, which this skill only
+reads, so the scores survive into the session that runs the next skill. Follow the schema's Review
+lifecycle, and score the plan before reading the file, so earlier rounds do not anchor this one:
+
+1. Find the file, `<YYYYMMDD-HHMMSS>-business-plan-review.yaml`. With none, take the time from one
+   `date +%Y%m%d-%H%M%S` call. A found `business-plan-review/v2` file is converted to `v3` in
+   place first.
+2. Set each `open` finding whose lens now scores 2 to `fixed`, with the resolution
+   `found fixed in round <n>`.
+3. Append the round, and add an `open` finding for each lens below 2 that has none open.
+
+Name the path in the reply. After the last edit, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`,
 which writes the `.md` beside it in the layout of `assets/business-plan-review.template.md`, and
 fix the YAML for each error it lists. Never edit the generated `.md`. On exit 2 or 3, or without
 uv, say in the reply that the review went unchecked and unrendered.

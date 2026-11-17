@@ -40,11 +40,12 @@ quotes the plan, and the verdict is delivered.
    When it exits 3 or uv is missing, say in the reply that the plan went unchecked, and go on.
    After the last write to the YAML, run `render`.
 
-2. **Review from a fresh context when this session wrote the plans.** Dispatch one background
-   subagent on the session's own model with every plan path and `${CLAUDE_SKILL_DIR}/SKILL.md`,
-   told to run steps 3 to 6 on each and return one Output per plan. One subagent reads the shared
-   repo once, where one per plan would read it again for each. The author reads what they meant, a fresh reader
-   reads what is written, and only the second is what the builder gets.
+2. **Review from a fresh context when this session wrote the plans, or a plan already has a
+   review file.** Dispatch one background subagent on the session's own model with every plan path
+   and `${CLAUDE_SKILL_DIR}/SKILL.md`, told to run steps 3 to 6 on each and return one Output per
+   plan, and never give it a review file, so earlier rounds cannot anchor it. One subagent reads
+   the shared repo once, where one per plan would read it again for each. The author reads what
+   they meant, a fresh reader reads what is written, and only the second is what the builder gets.
 3. **Read what the plan rests on**: every file, route, model, and dependency it names in the
    repo. Read no business plan, even when an older plan links to one: the review judges
    the plan against the code, the vision and the strategy only. A plan claim the code contradicts
@@ -80,6 +81,7 @@ quotes the plan, and the verdict is delivered.
    Record line. When asked to fix, edit the plan for each blocking finding whose fix the
    plan or the code already settles, put a finding that would change In or Out under Open as a
    question with a recommended answer, and set `status: draft` while any blocking finding is open.
+   In the review file, set each finding it fixed to `fixed` with the edit as its resolution.
 
 ## Rules
 
@@ -95,8 +97,9 @@ quotes the plan, and the verdict is delivered.
 
 ## Output
 
-The review fills `assets/plan-review.template.yaml`, per the `plan-review/v2` section of
-`references/plan-review-schema.md`. After the last edit, run
+The review fills `assets/plan-review.template.yaml`, per the `plan-review/v3` section of
+`references/plan-review-schema.md`, one file per plan that every review of the plan adds a round
+to. After the last edit, run
 `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`, which writes the
 `.md` beside it in the layout of `assets/plan-review.template.md`, and fix the YAML for each error
 it lists. Never edit the generated `.md`. On exit 2 or 3, or without uv, say in the reply that the
@@ -108,12 +111,21 @@ review went unchecked and unrendered.
 | **Revise first**   | Blocking findings, each fixable by editing the plan.                               |
 | **Rethink**        | A Scope finding changes what to build, or shows the Goal is out of reach as drawn. |
 
-Save the whole review to `.agents_workspace/product/review/plan/<YYYYMMDD-HHMMSS>-<session-id>-<slug>.yaml`, because the
-Record line keeps only the verdict and counts, and the author fixing the plan in a later session
-needs the findings. Take `<YYYYMMDD-HHMMSS>` from one `date +%Y%m%d-%H%M%S` call and `<session-id>` from `${CLAUDE_SESSION_ID}`.
-When a subagent runs the review, build the path in this session and pass it in the subagent's
-prompt, because a subagent reading this file by path sees the variable unfilled. Reply with the
-verdict, the blocking findings, and the path.
+Save the whole review to the plan's review file in `.agents_workspace/product/review/plan/`,
+because the Record line keeps only the verdict and counts, and the author fixing the plan in a
+later session needs the findings and which are still open. Follow the schema's Review lifecycle:
+
+1. Find the plan's file by its slug. With none, the file is
+   `<YYYYMMDD-HHMMSS>-<plan-slug>.yaml`, the time from one `date +%Y%m%d-%H%M%S` call. A found
+   `plan-review/v2` file is converted to `v3` in place first.
+2. Before merging the new round, re-check each `open` finding against the current plan and set it
+   `fixed`, with the resolution `found fixed in round <n>`, where the plan no longer has the
+   defect.
+3. Append the round, and add its findings with `round: <n>` and `status: open`, skipping one that
+   repeats an `open` finding and reopening one that repeats a `fixed` finding.
+
+The main session does this, never the subagent, which returns only its Output. Reply with the
+verdict, the blocking findings, the findings still open from earlier rounds, and the path.
 
 ## Hands off to
 

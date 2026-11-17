@@ -33,11 +33,11 @@ strategy (`vision/v2`, `strategy/v2`), the business plan (`business-plan/v3`), t
 (`handoff/v2`), the workflow spec (`workflow-spec/v2`), the run state (`run-state/v2`), the
 competitor report (`competitor-report/v2`), the glossary (`glossary/v2`), the blog voice
 profile (`blog-voice/v2`), the repeat-mistake report (`repeat-mistake/v2`), the plan review
-(`plan-review/v2`), the business plan review (`business-plan-review/v2`), the investor deck
+(`plan-review/v3`), the business plan review (`business-plan-review/v3`), the investor deck
 and outreach notes (`investor-deck/v2`, `investor-outreach/v2`), the refactor report
 (`refactor-report/v2`), the test audit (`test-audit/v2`), the stress test (`stress-test/v2`), the learning record
 (`learning/v2`), the blog draft (`blog-draft/v2`), the repurposed post (`repurposed-post/v2`), the code review
-(`code-review/v2`), the period retro (`period-retro/v3`), and the session retro
+(`code-review/v3`), the period retro (`period-retro/v3`), and the session retro
 (`session-retro/v3`).
 
 Why: the format lives in one pair of files, and each saved file names its version. A YAML format

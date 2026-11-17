@@ -27,7 +27,7 @@ Auto-trigger on context; each loads only the relevant content.
 | `pull-request`            | A branch is heading into `main`: opening a PR, merging one (or a local branch), or landing the branch in one pass — changelog under `[Unreleased]` → commit → PR → merge → cleanup                                                                                                                                                      |
 | `release`                 | Shipping a version: bump → changelog → PR → merge → tag → GitHub release. Also covers tag-only and the hotfix variant                                                                                                                                                                                                                   |
 | `write-code-review`       | Writing PR review comments. A linked spec is checked on its own axis and reported in an Against the spec list. Say "panel review" for the same brief on two or three models, ranked by agreement (opt-in, several times the cost). Say "gate this PR" for two fresh reviewers who must both approve, up to three rounds                 |
-| `address-review-comments` | Acting on review feedback on your own change. It's working if every comment gets a fixed, pushed-back, or answered line, and no reply agrees before quoting code or output                                                                                                                                                              |
+| `address-review-comments` | Acting on review feedback on your own change, from a PR or the branch's saved review file. It's working if every comment gets a fixed, pushed-back, or answered line, a saved finding is ticked off with its resolution, and no reply agrees before quoting code or output                                                              |
 | `update-changelog`        | Writing a `CHANGELOG.md` entry — a versioned section, or bullets under `[Unreleased]`                                                                                                                                                                                                                                                   |
 | `update-readme`           | Keeping `README.md` accurate after a significant change: surgical edits behind a gate that does nothing when nothing material changed                                                                                                                                                                                                   |
 | `review-recent-work`      | Looking back over a period: what shipped, how work flowed, and at most three issues from git history, each routed to the skill that fixes it. Saved to `.agents_workspace/product/retro/`, one file for every issue. It's working if every number names the command it came from, every issue names a route, and no line ranks a person |
@@ -146,7 +146,7 @@ transcript, so it starts the skill itself. It fails open. `CEH_SKILL_STARTED_GUA
 
 ### Artifact hooks
 
-`artifact-render-hook.py` (PostToolUse) checks a written code review (`code-review/v2`) or period
+`artifact-render-hook.py` (PostToolUse) checks a written code review (`code-review/v3`) or period
 retro (`period-retro/v3`) YAML against its model and renders its Markdown. The check needs `uv`;
 without it the agent is told once per session that the file went unchecked.
 `generated-md-guard.py` (PreToolUse) denies a hand edit to the generated Markdown, which the next

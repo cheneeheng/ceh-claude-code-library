@@ -1059,6 +1059,20 @@ check `BUSINESS_PLAN.yaml` before reading it.
 request unless asked, and a branch only when the environment requires one before editing) and "Report other defects, do not fix them", word for word, in each
 skill that edits the target.
 
+## Review lifecycle
+
+**Canonical:** `plugins/standalone/ceh-build-plan/skills/review-build-plan/references/plan-review-schema.md` — § Review lifecycle
+
+| Copy                                                                                                             | Section            | Diverges                                                   |
+| ---------------------------------------------------------------------------------------------------------------- | ------------------ | ---------------------------------------------------------- |
+| `plugins/standalone/ceh-git-workflow/skills/write-code-review/references/code-review-schema.md`                  | § Review lifecycle | Targets line: the branch, with every `/` replaced by `-`   |
+| `plugins/standalone/ceh-product-direction/skills/review-business-plan/references/business-plan-review-schema.md` | § Review lifecycle | Targets line: the fixed target `business-plan-review`      |
+| `plugins/standalone/ceh-every-session/skills/stress-test-plan/references/stress-test-schema.md`                  | § Review lifecycle | Targets line: the topic, and its open list is the findings |
+
+**Shared:** every rule but the Targets line, word for word: the time-only name, the lookup that
+also accepts an older name with a session id, converting an older YAML version in place, the cold
+round, re-checking open findings, merging a round, and ticking a finding off.
+
 ## Update protocol
 
 When changing a shared block:
