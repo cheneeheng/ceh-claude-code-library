@@ -1,6 +1,6 @@
 # Code review schema
 
-The review `code-review` saves to
+The review `write-code-review` saves to
 `.agents_workspace/product/review/code/<YYYYMMDD-HHMMSS>-<session-id>-<branch>.yaml`, with its
 `.md` rendered beside it, when its comments are not posted on a PR. A reference to it names the
 `.yaml`. Its layout is `../assets/code-review.template.md`, relative to this file. A new review is

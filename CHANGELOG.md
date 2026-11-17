@@ -16,12 +16,29 @@ present, because the vision's Autonomy section asks for the conservative option,
 plugin cannot rely on the `ceh-every-session` output style being installed. This is finding 02.08
 of the 2026-11-16 vision audit, per `.agents_workspace/product/plan/vision-audit-fixes.yaml`.
 
+The skill `ceh-git-workflow:code-review` is now `ceh-git-workflow:write-code-review`, so its name
+alone tells it apart from Claude Code's built-in `/code-review`, which finds defects (finding 02.07
+of the same audit). A workflow, `CLAUDE.md` or prompt that names `ceh-git-workflow:code-review`
+must use the new name. The saved review keeps its `code-review/v2` format. `ceh-git-workflow` takes
+a MAJOR bump, by the user's choice for a skill rename.
+
 ### Plugin versions
 
-| Plugin                     | Version |
-| -------------------------- | ------- |
-| `ceh-codebase-explanation` | 1.3.18  |
-| `ceh-competitor-analysis`  | 1.2.15  |
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-check-build-against-plan` | 1.1.20  |
+| `ceh-codebase-explanation`     | 1.3.18  |
+| `ceh-competitor-analysis`      | 1.2.15  |
+| `ceh-git-workflow`             | 2.0.0   |
+| `ceh-python-service`           | 1.1.10  |
+| `ceh-security-audit`           | 1.1.16  |
+| `ceh-web-frontend`             | 1.3.7   |
+
+### Changed
+
+- `ceh-git-workflow`: rename the skill `code-review` to `write-code-review`, and every mention of
+  it in the READMEs of `ceh-check-build-against-plan`, `ceh-python-service`, `ceh-security-audit`
+  and `ceh-web-frontend`, the two reviewer agents, and the docs.
 
 ### Fixed
 
