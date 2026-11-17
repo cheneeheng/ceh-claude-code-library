@@ -86,6 +86,9 @@ subject that names what they wrote, because the hook's generic `chore(workspace)
 was the only one these files ever got. Per
 `.agents_workspace/product/fix/20261117-150310-workspace-sync-commits.yaml`.
 
+A pick in the mod's decision options now fills the prompt box with numbers only, since the reply
+above already holds the question and its options, so repeating them cost tokens for nothing.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -96,7 +99,7 @@ was the only one these files ever got. Per
 | `ceh-codebase-explanation`     | 1.3.20  |
 | `ceh-coding-conduct`           | 2.5.22  |
 | `ceh-competitor-analysis`      | 1.2.17  |
-| `ceh-every-session`            | 2.9.30  |
+| `ceh-every-session`            | 2.9.31  |
 | `ceh-git-workflow`             | 2.0.7   |
 | `ceh-product-direction`        | 2.0.18  |
 | `ceh-python-service`           | 1.1.10  |
@@ -110,6 +113,9 @@ was the only one these files ever got. Per
 
 ### Changed
 
+- `ceh-every-session` mod: a decision option pick fills the prompt box with the option number
+  alone, or one `<decision>: <option>` line per pick when the reply has several decision blocks,
+  in place of the question and option text. One test added for the single-decision case.
 - `docs/VISION.md`, `README.md` and `docs/STRATEGY.md`: the Every step row now lists the four
   cross-cutting plugins of root `CLAUDE.md`, with `ceh-testing` also kept in Prove, and a new Any
   step row holds `ceh-workflow-builder`, `ceh-workflow-runner` and `ceh-session-learning`. The

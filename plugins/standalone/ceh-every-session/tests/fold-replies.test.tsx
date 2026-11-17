@@ -140,7 +140,7 @@ test('paragraphs, tables, and bullets after them all stay inside their fold', as
   await ui.unmount()
 })
 
-test('decision blocks become options, and a pick fills the prompt box with every pick', async ($, on) => {
+test('decision blocks become options, and a pick fills the prompt box with every pick as numbers',async ($, on) => {
   const filled: string[] = []
   on('prompt.fill', (_$, e) => {
     filled.push(e.text)
@@ -151,11 +151,23 @@ test('decision blocks become options, and a pick fills the prompt box with every
   expect(await ui.find({ key: 'reply-1#1' })).toBeDefined()
 
   await ui.press({ key: 'reply-1#d0o0' })
-  expect(filled.at(-1)).toBe('Which store? Postgres')
+  expect(filled.at(-1)).toBe('1: 1')
   expect((await ui.find({ key: 'reply-1#d0o0' }))?.text).toMatch(/● 1\. Postgres/)
 
   await ui.press({ key: 'reply-1#d1o1' })
-  expect(filled.at(-1)).toBe('Which store? Postgres\nWhich port? 3000')
+  expect(filled.at(-1)).toBe('1: 1\n2: 2')
+  await ui.unmount()
+})
+
+test('a pick in a reply with one decision fills the prompt box with the option number alone', async ($, on) => {
+  const filled: string[] = []
+  on('prompt.fill', (_$, e) => {
+    filled.push(e.text)
+    return { isFilled: true }
+  })
+  const ui = await $.ui.mount({ surface: 'terminal', ...message(`${REPLY}\n\n${DECISIONS.split('\n\n**')[0]}`) })
+  await ui.press({ key: 'reply-1#d0o1' })
+  expect(filled.at(-1)).toBe('2')
   await ui.unmount()
 })
 

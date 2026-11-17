@@ -55,13 +55,16 @@ export const register: Register = on => {
     }
 
     // A pick fills the prompt box with every pick of this reply, unsent, so the
-    // person can add to it or pick again before pressing Enter.
+    // person can add to it or pick again before pressing Enter. Only numbers go
+    // in, since the reply above already holds the question and options: the
+    // option number alone, or `<decision>: <option>` when the reply has several.
     const pick = async (index: number, option: number) => {
       const now = { ...picks, [decisionId(index)]: option }
       await update($, picked, all => ({ ...all, [decisionId(index)]: option }))
-      const answers = decisions.flatMap((decision, at) => {
-        const chosen = decision.options[now[decisionId(at)] ?? -1]
-        return chosen ? [`${decision.question} ${chosen.replace(/\s*\(recommended\)\s*$/i, '')}`] : []
+      const answers = decisions.flatMap((_, at) => {
+        const chosen = now[decisionId(at)]
+        if (chosen === undefined) return []
+        return [decisions.length > 1 ? `${at + 1}: ${chosen + 1}` : `${chosen + 1}`]
       })
       await $.prompt.fill({ text: answers.join('\n') })
     }
