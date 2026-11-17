@@ -192,7 +192,8 @@ Same commit, both files, or CI fails:
 - `.claude-plugin/marketplace.json`
 
 **PATCH** for content/description updates, **MINOR** for a new skill or agent or for adding or
-removing a `dependencies` entry, **MAJOR** for renaming or removing the plugin. Bump at commit
+removing a `dependencies` entry, **MAJOR** for renaming or removing the plugin, or renaming one of
+its skills. Bump at commit
 time, not during iterative edits. The PR also adds its `CHANGELOG.md` entry under the date it is
 opened and updates `docs/PLUGIN_VERSIONS.md` — see `.claude/rules/decision-version-levels.md` and
 `decision-changelog-sections.md`.
