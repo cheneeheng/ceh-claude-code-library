@@ -75,7 +75,9 @@ To use another scope, swap the `--scope` value in any command below.
 /plugin marketplace add cheneeheng/ceh-claude-code-library
 ```
 
-`claude plugin marketplace list` confirms it was added. To undo it, run
+Leave `--scope` off this command: it then adds the marketplace once for your user, in
+`~/.claude/settings.json`, so every folder can install from it. The plugins themselves stay at
+`local` scope. `claude plugin marketplace list` confirms it was added. To undo it, run
 `claude plugin marketplace remove ceh-claude-code-library`, which also uninstalls every plugin
 installed from it.
 
