@@ -30,6 +30,9 @@ still names the PR URL and merge commit. Per
   paths, so it holds no files, staged or not. The README's checkpoint paragraph says so, the
   `hooks` check's dirty-checkpoint fixtures expect the empty checkpoint then a sync commit, and
   `test_workspace_checkpoints.py` gains a reproducer with one untracked and one staged file.
+- `tools/validate-plugins`: the repeat-merge test in `test_workspace_checkpoints.py` passes the
+  attribution line `checkpoints()` has taken since the hook signed its commits, so the unit tests
+  run green again. CI runs only `validate.py`, so the error went unnoticed.
 
 ## 2026-11-17
 

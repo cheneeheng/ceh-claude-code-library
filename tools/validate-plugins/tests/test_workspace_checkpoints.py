@@ -119,7 +119,7 @@ class WorkspaceCheckpointTests(unittest.TestCase):
             patch.object(sync.subprocess, "run", return_value=result),
         ):
             sync.checkpoints(
-                self.top, self.workspace, "main", self.pending, "repeat", False
+                self.top, self.workspace, "main", self.pending, "repeat", False, ""
             )
         self.assertFalse(
             any(call.args[1] == "commit" for call in commands.call_args_list)
