@@ -132,17 +132,23 @@ If you write code in git repos, add:
 /plugin install ceh-coding-conduct@ceh-claude-code-library --scope local
 ```
 
+`ceh-git-workflow` blocks file edits on the default branch, so in a brand-new repo create a
+branch before the first skill writes anything:
+
+```
+git checkout -b <name>
+```
+
+It works even before the first commit. Without a branch, Claude's first edit is denied with
+`On the default branch (main). Create a feature branch first ...`. To edit the default branch
+anyway, set `CEH_BRANCH_GUARD` to `off`, as described in
+[Environment variables](ENVIRONMENT_VARIABLES.md).
+
 ## 3. Add the plugin for what you are about to do
 
 `--scope local` keeps a plugin to the folder that needs it, a git repo or any plain folder, so a
 project that is only being planned does not load the build and launch plugins. It records the
 plugin in that folder's `.claude/settings.local.json`, which is not committed.
-
-If you installed `ceh-git-workflow` and the repo is brand new, create a branch before the first
-skill writes anything: that plugin blocks file edits on the default branch.
-`git checkout -b <name>` works even before the first commit. To edit the default branch anyway,
-set `CEH_BRANCH_GUARD` to `off`, as described in
-[Environment variables](ENVIRONMENT_VARIABLES.md).
 
 Install each plugin below in a Claude Code session opened in that folder, putting its name in place
 of `<plugin>`:
@@ -213,7 +219,8 @@ plan is written. In a Claude Code session opened in that repo, install the plan 
 /plugin install ceh-build-plan@ceh-claude-code-library --scope local
 ```
 
-Then, when you build from the plan:
+After `/reload-plugins`, start the plan with `/ceh-build-plan:write-build-plan`. Then, when you
+build from the plan:
 
 ```
 /plugin install ceh-python-service@ceh-claude-code-library --scope local
