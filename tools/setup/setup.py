@@ -43,6 +43,10 @@ STATUSLINE_README = (
     f"{STATUSLINE_TAG}/tools/statusline-hook#quota-export"
 )
 STATUSLINE_OFF = "C4_STATUSLINE_DISABLE_EXPORT"
+# The skill listing budget, a fraction of the context window (Claude Code's default is 0.01).
+BUDGET_KEY = "skillListingBudgetFraction"
+BUDGET = 0.02
+BUDGET_VAR = "SLASH_COMMAND_TOOL_CHAR_BUDGET"
 
 # Tool name -> how to find it, which version it needs, what names it in a `compatibility`
 # field, and how to install it per platform (None: no known installer).
@@ -630,6 +634,15 @@ def statusline_command(
     return f'{"pwsh" if has_pwsh else "powershell"} -NoProfile -File "{path}"'
 
 
+def merge_budget(settings: dict, value: float) -> dict | None:
+    """The settings with skillListingBudgetFraction raised to value, or None when it is
+    already at least that. Every other key is kept."""
+    current = settings.get(BUDGET_KEY)
+    if isinstance(current, (int, float)) and current >= value:
+        return None
+    return {**settings, BUDGET_KEY: value}
+
+
 def statusline_state(settings: dict, environ: dict, root: Path, now: float) -> str:
     """ "disabled", "fed" or "not fed", from the files the usage-limit guard reads."""
     if "1" in (
@@ -1108,6 +1121,35 @@ def main(argv: list[str] | None = None) -> int:
             note("Nothing installed.")
 
     # 7. Settings
+    heading("Skill listing budget")
+    note(
+        "With many skills installed, Claude Code drops the descriptions of the least-used ones, "
+        "and a skill without its description is not matched to a request.",
+        2,
+    )
+    path = settings_path()
+    settings = read_settings(path)
+    if settings is None:
+        row("bad", "settings.json", f"{path} cannot be read as JSON, nothing written")
+        return 1
+    merged = merge_budget(settings, BUDGET)
+    current = settings.get(BUDGET_KEY, "not set, default 0.01")
+    if merged is None:
+        row("ok", BUDGET_KEY, f"{current}, at least {BUDGET}")
+    elif report_only:
+        row("todo", BUDGET_KEY, f"{current}, would set {BUDGET}")
+    elif ask(f"Set {BUDGET_KEY} to {BUDGET} in {path}?", True):
+        write_settings(path, merged)
+        row("ok", BUDGET_KEY, f"set to {BUDGET}")
+        done.append(f"{BUDGET_KEY} set to {BUDGET}")
+    else:
+        row("todo", BUDGET_KEY, f"{current}, left as it is")
+    if os.environ.get(BUDGET_VAR):
+        note(
+            f"{BUDGET_VAR} is set to {os.environ[BUDGET_VAR]} and may override the fraction. "
+            "Run /doctor in Claude Code to see the budget in effect."
+        )
+
     if "ceh-every-session" in plugins:
         heading("Statusline")
         note("The usage-limit guard reads its quota from the statusline.", 2)

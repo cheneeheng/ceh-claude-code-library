@@ -23,12 +23,32 @@ The usage-limit guard's docs now name the file `statusline-hook` writes from `sl
 `C4_STATUSLINE_DISABLE_EXPORT=1` to turn it off. They still described per-session files and the
 old opt-in `C4_STATUSLINE_EXPORT=1`. The guard reads both layouts, so its behaviour does not change.
 
+A setup script, `tools/setup/setup.py`, sets up a machine and a folder for the plugins: the
+tools the picked plugins need, the plugins themselves at `local` scope, the skill listing budget,
+and the statusline the usage-limit guard reads, each after a yes. This reverses the 2026-10-10
+rejection of a setup script. That one installed plugins, which the guide's prompt already does,
+and needed four copies to keep in sync. This one is one stdlib Python file run with `uv run`, and
+it does what no plugin can do for itself: install machine tools and change Claude Code settings.
+A new `setup-registry` check keeps its list of what each plugin needs in line with the plugins.
+Per `.agents_workspace/product/plan/setup-script.yaml`. Windows is tested, Linux and macOS are not.
+
 ### Plugin versions
 
 | Plugin              | Version |
 | ------------------- | ------- |
 | `ceh-git-workflow`  | 2.0.8   |
 | `ceh-every-session` | 2.9.33  |
+
+### Added
+
+- `tools/setup/`: `setup.py`, its `README.md` and `test_setup.py`. `--check` reports only,
+  `--scope` picks the install scope, `--plugins` names the picks. With no terminal it is
+  report-only.
+- `tools/validate-plugins`: the `setup-registry` check, which fails when `setup.py`'s `TOOLS` and
+  `PLUGINS` drift from the plugins, skills, dependencies, `compatibility` fields or stated Claude
+  Code versions.
+- `docs/GETTING_STARTED.md` "Set up with the script", and pointers from its listing budget
+  section, the README prerequisites, `CONTRIBUTING.md` and `CLAUDE.md`.
 
 ### Fixed
 

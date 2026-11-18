@@ -1,8 +1,11 @@
 """Tests for the decisions in setup.py. Run: python -m unittest tools/setup/test_setup.py"""
 
+import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -123,6 +126,59 @@ class StatuslineCommandTests(unittest.TestCase):
             setup.statusline_command({}, False, False, "/h/.claude/s.sh"),
             'bash "/h/.claude/s.sh"',
         )
+
+
+class BudgetTests(unittest.TestCase):
+    def test_missing_file_gets_only_the_budget(self):
+        self.assertEqual(
+            setup.merge_budget({}, 0.02), {"skillListingBudgetFraction": 0.02}
+        )
+
+    def test_lower_value_is_raised_and_other_keys_kept(self):
+        self.assertEqual(
+            setup.merge_budget(
+                {"model": "x", "skillListingBudgetFraction": 0.01}, 0.02
+            ),
+            {"model": "x", "skillListingBudgetFraction": 0.02},
+        )
+
+    def test_equal_or_higher_value_changes_nothing(self):
+        self.assertIsNone(
+            setup.merge_budget({"skillListingBudgetFraction": 0.02}, 0.02)
+        )
+        self.assertIsNone(
+            setup.merge_budget({"skillListingBudgetFraction": 0.05}, 0.02)
+        )
+
+    def test_invalid_json_reads_as_none(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "settings.json"
+            path.write_text("{not json", encoding="utf-8")
+            self.assertIsNone(setup.read_settings(path))
+            self.assertEqual(setup.read_settings(Path(tmp) / "missing.json"), {})
+
+
+class WriteSettingsTests(unittest.TestCase):
+    def test_write_keeps_other_keys(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "settings.json"
+            path.write_text('{"model": "x"}', encoding="utf-8")
+            setup.write_settings(
+                path, setup.merge_budget(setup.read_settings(path), 0.02)
+            )
+            self.assertEqual(
+                json.loads(path.read_text(encoding="utf-8")),
+                {"model": "x", "skillListingBudgetFraction": 0.02},
+            )
+
+    def test_failed_write_leaves_the_old_file_whole(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "settings.json"
+            path.write_text('{"model": "x"}', encoding="utf-8")
+            with patch.object(setup.os, "replace", side_effect=OSError("disk full")):
+                with self.assertRaises(OSError):
+                    setup.write_settings(path, {"model": "y"})
+            self.assertEqual(path.read_text(encoding="utf-8"), '{"model": "x"}')
 
 
 class VersionTests(unittest.TestCase):
