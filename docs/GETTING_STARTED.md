@@ -9,6 +9,14 @@ The route below follows the product lifecycle in [`STRATEGY.md`](STRATEGY.md): S
 Tell. You can start at any stage. Each plugin works installed alone, and with several installed they
 chain through the committed files each one writes.
 
+There are three ways through the same route. Pick one and skip the other two:
+
+- [Let Claude set you up](#let-claude-set-you-up): Claude asks what you are about to do and runs
+  the installs.
+- [Set up with the script](#set-up-with-the-script): the same from a terminal, plus the tools and
+  settings the plugins need.
+- [Steps 1 to 5](#1-add-the-marketplace): every command written out, to run yourself.
+
 ## Let Claude set you up
 
 Open Claude Code in the folder you are about to work in, a git repo or any plain folder, and type:
