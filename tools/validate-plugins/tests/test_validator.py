@@ -33,6 +33,21 @@ class BashTests(unittest.TestCase):
                 self.assertEqual(common.find_bash(), str(bash))
                 which.assert_called_once_with("git")
 
+    def test_ucrt64_git_finds_git_bash(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            git = root / "ucrt64" / "bin" / "git.exe"
+            git.parent.mkdir(parents=True)
+            git.touch()
+            bash = root / "usr" / "bin" / "bash.exe"
+            bash.parent.mkdir(parents=True)
+            bash.touch()
+            with (
+                patch.object(sys, "platform", "win32"),
+                patch.object(common.shutil, "which", return_value=str(git)),
+            ):
+                self.assertEqual(common.find_bash(), str(bash))
+
     def test_windows_without_git_bash_never_uses_wsl(self):
         with (
             patch.object(sys, "platform", "win32"),

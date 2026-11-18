@@ -34,7 +34,8 @@ def find_bash() -> str | None:
         return None
     directory = Path(git).resolve().parent
     root = directory.parent
-    if root.name in ("mingw64", "mingw32", "usr"):
+    # Git for Windows puts git.exe under cmd/, mingw64/bin/, ucrt64/bin/ or clang64/bin/.
+    if root.name in ("mingw64", "mingw32", "ucrt64", "clang64", "clangarm64", "usr"):
         root = root.parent
     for candidate in (
         directory / "bash.exe",
