@@ -56,6 +56,7 @@ plugins/                      # All plugins — one directory per plugin, no tie
                 └── references/            # Sparingly — see Skills below (same for assets/, scripts/); every file the skill uses lives here, copies included
 tools/
 ├── model-audit/               # README.md pointer only — the tools live in .claude/skills/model-audit/
+├── setup/                     # setup.py — installs the tools, plugins and settings a machine needs, after asking; own README.md
 ├── skills-sync/               # Copies skills into a project's .claude/skills/ — py/sh/ps1/html, own README.md
 └── validate-plugins/          # The CI gate — stdlib-only Python, own README.md
 ```

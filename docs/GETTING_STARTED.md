@@ -30,6 +30,25 @@ same route by hand, and the route Claude follows.
 > not the `/plugin` slash command. Do not install every plugin. When you finish, tell the user to
 > run `/reload-plugins`.
 
+## Set up with the script
+
+The setup script does the same route from a terminal, and also what a plugin cannot do for
+itself: it installs the tools the plugins need (`python3`, `uv`, `git`, the GitHub CLI, Bun),
+raises the skill listing budget, and offers the statusline the usage-limit guard reads. It asks
+before each change. Run it in the folder you are about to work in, from PowerShell or Windows
+Terminal on Windows:
+
+```
+uv run https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/tools/setup/setup.py
+```
+
+Without `uv`, install it first: `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
+on Windows, `curl -LsSf https://astral.sh/uv/install.sh | sh` on Linux and macOS. The script
+installs plugins at `local` scope, as this guide does, unless you pass `--scope project` or
+`--scope user`. `--check` reports what it would do and changes nothing. Windows is tested, and
+Linux and macOS are untested. The options and every step are in
+[`tools/setup/README.md`](../tools/setup/README.md).
+
 ## Install at local scope
 
 Install every plugin at `local` scope, unless you decide otherwise or a step below says so. The
@@ -241,7 +260,8 @@ Without a description, a skill loses the keywords Claude needs to match your req
 Run `/doctor` to estimate the listing's context cost. `/skill-doctor` (Claude Code v2.1.252 or
 later) shows what each skill costs and how often it is used.
 
-To raise the budget to 2%, merge this setting into `~/.claude/settings.json`:
+The [setup script](#set-up-with-the-script) raises the budget to 2% for you. To do it by hand,
+merge this setting into `~/.claude/settings.json`:
 
 ```json
 {
