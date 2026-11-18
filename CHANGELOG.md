@@ -42,6 +42,12 @@ folder can install from it, while the plugins stay `local`. In the first-run aud
 ran `--help` to learn the command's scope, and three went over twice their action budget, per
 `.agents_workspace/product/audit/ux/ceh-claude-code-library/run-003/UX_AUDIT.yaml` finding F1.
 
+The guide's branch note moves from step 3 into step 2, under the `ceh-git-workflow` install it
+belongs to, with `git checkout -b <name>` as its own command and the start of the guard's denial
+text, so a reader can match the message to the doc. The Python-service example now names the
+command that starts the plan. In the same audit, walkers matched the example to the Build list
+by hand (F6), and one left the branch command out of its install list (F7).
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -64,6 +70,9 @@ ran `--help` to learn the command's scope, and three went over twice their actio
 
 - `docs/GETTING_STARTED.md` step 1: the marketplace's scope (user, in `~/.claude/settings.json`)
   and that one add serves every folder.
+- `docs/GETTING_STARTED.md`: the branch note sits in step 2 under the `ceh-git-workflow` install
+  and quotes the guard's denial text; the Python-service example names
+  `/ceh-build-plan:write-build-plan`.
 
 ### Fixed
 
