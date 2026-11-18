@@ -83,12 +83,16 @@ terminal, a script or another session needs `/reload-plugins` in a session alrea
 per-install reload lines are gone, and "Interrupted partway?" has its own heading so step 5 links
 straight to it (run-003 F5, run-006 and run-007 R2, run-008 R3).
 
+The `ceh-ag-ui` examples README installs the plugin with the same terminal command, at `local`
+scope. It showed `/plugin install` with no scope, which opens the menu in a session.
+
 ### Plugin versions
 
 | Plugin              | Version |
 | ------------------- | ------- |
 | `ceh-git-workflow`  | 2.0.8   |
 | `ceh-every-session` | 2.9.33  |
+| `ceh-ag-ui`         | 1.1.7   |
 
 ### Added
 
@@ -121,6 +125,8 @@ straight to it (run-003 F5, run-006 and run-007 R2, run-008 R3).
 - `docs/GETTING_STARTED.md`, `README.md`, `docs/TESTING_WORKFLOW.md`: install commands in the
   `claude plugin` terminal form; when `/reload-plugins` is needed; a heading for "Interrupted
   partway?".
+- `ceh-ag-ui`: the examples README's install line is the `claude plugin` terminal command at
+  `local` scope.
 
 ### Fixed
 
