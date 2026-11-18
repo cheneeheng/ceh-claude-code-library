@@ -172,9 +172,12 @@ a subagent it tells the subagent to stop and report upward instead of writing an
 subagent sees only its own slice of the work.
 
 > **Prerequisite for the usage-limit guard:** the hook reads the rate-limit data that a statusline
-> export writes to `~/.claude/statusline/<project-dir>/<session_id>.jsonl` — a statusline script
-> that appends its stdin JSON there (each line `{"session_id", "ts", "data": <payload>}`, with
-> `:` and path separators in the project dir name replaced by `-`). Claude Code itself provides
+> export writes to `~/.claude/statusline/latest/rate-limits.jsonl`, one line
+> `{"session_id", "ts", "data": <payload>}` that each turn overwrites.
+> [`statusline-hook`](https://github.com/cheneeheng/claude-code-command-center/tree/main/tools/statusline-hook)
+> writes it by default from `slh-v0.3.0` on, and `C4_STATUSLINE_DISABLE_EXPORT=1` turns it off.
+> The hook also reads an older export's per-session files,
+> `~/.claude/statusline/<project-dir>/<session_id>.jsonl`. Claude Code itself provides
 > `rate_limits` only to the statusline, not to hooks, hence the relay. Without the export the guard
 > does nothing and says nothing, unless `CEH_USAGE_LIMIT_THRESHOLD` or `CEH_USAGE_STALE_MINUTES` is
 > set or the export folder exists, in which case it warns once per session that it is inactive.
