@@ -60,6 +60,11 @@ The README's install section gives the setup script its own subsection, "Set up 
 options are. Before, the script was named only in the prerequisites paragraph, which made it
 unclear what it was.
 
+`docs/GETTING_STARTED.md` opens with the three ways through its route (Claude, the script, steps
+1 to 5) and when to pick each, so a reader who wants the commands goes straight to step 1. In
+run 006 of the first-run audit, the walkers still read the first two routes before step 1, and
+one went over twice its budget (R1, run-003 F4).
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -89,6 +94,8 @@ unclear what it was.
   and the re-run replies; the success lines of an add and an install; step 5 points to it.
 - `README.md`: the setup script has its own subsection under "Installing in Claude Code", and the
   prerequisites paragraph links to it.
+- `docs/GETTING_STARTED.md`: a list of the three ways through the route, each linked, before the
+  first of them.
 
 ### Fixed
 
