@@ -2,7 +2,8 @@
 """usage-limit-watch.py - PostToolUse hook (all tools)
 
 Samples the account-wide quota that the user's statusline export writes to
-~/.claude/statusline/<project-dir>/<session_id>.jsonl and, when any rate-limit
+~/.claude/statusline/latest/rate-limits.jsonl (or an older export's
+~/.claude/statusline/<project-dir>/<session_id>.jsonl) and, when any rate-limit
 window crosses the threshold, feeds a message back to Claude (exit 2)
 instructing it to stop starting new work and run the usage-limit-handoff skill.
 
@@ -15,8 +16,8 @@ projects, not just the current one, so a second Claude Code window does not
 leave this session acting on a stale number.
 
 Prerequisite (documented in the plugin README): a statusline script that
-exports its stdin JSON to that path - e.g. ~/.claude/statusline-hook.ps1 with
-C4_STATUSLINE_EXPORT=1. Without it the hook does nothing and says nothing unless
+exports its stdin JSON to that path - e.g. statusline-hook from slh-v0.3.0 on,
+which exports by default unless C4_STATUSLINE_DISABLE_EXPORT=1. Without it the hook does nothing and says nothing unless
 CEH_USAGE_LIMIT_THRESHOLD or CEH_USAGE_STALE_MINUTES is set, or the export folder
 exists. Then it warns once per session that the guard is inactive.
 

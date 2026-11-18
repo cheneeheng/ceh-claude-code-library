@@ -18,13 +18,23 @@ files now go into the same Stop's `chore(workspace): sync ...` commit, and the c
 still names the PR URL and merge commit. Per
 `.agents_workspace/product/fix/20261118-100843-workspace-pr-checkpoint-commits.yaml`.
 
+The usage-limit guard's docs now name the file `statusline-hook` writes from `slh-v0.3.0` on,
+`~/.claude/statusline/latest/rate-limits.jsonl`, on by default with
+`C4_STATUSLINE_DISABLE_EXPORT=1` to turn it off. They still described per-session files and the
+old opt-in `C4_STATUSLINE_EXPORT=1`. The guard reads both layouts, so its behaviour does not change.
+
 ### Plugin versions
 
-| Plugin             | Version |
-| ------------------ | ------- |
-| `ceh-git-workflow` | 2.0.8   |
+| Plugin              | Version |
+| ------------------- | ------- |
+| `ceh-git-workflow`  | 2.0.8   |
+| `ceh-every-session` | 2.9.33  |
 
 ### Fixed
+
+- `ceh-every-session`: the `usage-limit-watch.py` docstring and the README's usage-limit guard
+  prerequisite name the single overwritten export file and its opt-out variable, link
+  `statusline-hook`, and keep the per-session layout as the older export's.
 
 - `ceh-git-workflow`: `sync-agents-workspace.py` commits the checkpoint with `--only` and no
   paths, so it holds no files, staged or not. The README's checkpoint paragraph says so, the
