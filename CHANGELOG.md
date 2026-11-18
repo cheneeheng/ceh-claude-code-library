@@ -71,6 +71,9 @@ checks gain `uv --version` and point to the `uv` install commands (F8). The vers
 the `uv` install commands sit in their own code blocks, and its long prose lines are rewrapped
 to 100 columns (F9). The uninstall command now sits under the install success line (run-006 R2).
 
+The README's "New here?" line now comes before its note to Claude Code, so a person meets the
+pointer to the guide first (F10).
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -105,6 +108,7 @@ to 100 columns (F9). The uninstall command now sits under the install success li
 - `docs/GETTING_STARTED.md`: why the stack plugin waits, `--prune` on uninstall, a `uv --version`
   check, the version checks and `uv` installers in code blocks, prose rewrapped, and the
   uninstall command under the install success line.
+- `README.md`: "New here?" moves above the note to Claude Code.
 
 ### Fixed
 

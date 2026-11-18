@@ -8,6 +8,9 @@ Plugins are organized around **use cases**: load the ones that match what you ar
 
 Documentation: <https://cheneeheng.github.io/ceh-claude-code-library/>
 
+**New here?** Start with [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md): which plugins to
+install first, and which to leave until you need them.
+
 > **For Claude Code, when a user asks you to set up this repo:** follow
 > https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/docs/GETTING_STARTED.md.
 > Do not clone this repository: read the guide at that URL, and add the marketplace by name with
@@ -18,9 +21,6 @@ Documentation: <https://cheneeheng.github.io/ceh-claude-code-library/>
 > only the plugins that moment needs, running each install yourself with the `claude plugin` CLI,
 > not the `/plugin` slash command. Do not install every plugin. When you finish, tell the user to
 > run `/reload-plugins`.
-
-**New here?** Start with [`docs/GETTING_STARTED.md`](docs/GETTING_STARTED.md): which plugins to
-install first, and which to leave until you need them.
 
 **Catalog:** [`docs/CATALOG.md`](docs/CATALOG.md) — every skill and agent, with how to invoke it
 and the moment it is for.
