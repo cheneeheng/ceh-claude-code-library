@@ -14,6 +14,34 @@ with ast.literal_eval and fails when they drift from the plugins.
 
 from __future__ import annotations
 
+import argparse
+import json
+import ntpath
+import os
+import posixpath
+import re
+import shutil
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+MARKETPLACE = "ceh-claude-code-library"
+MARKETPLACE_REPO = "cheneeheng/ceh-claude-code-library"
+SCOPE_RANK = {"user": 0, "project": 1, "local": 2}
+# The guard's default, CEH_USAGE_STALE_MINUTES in ceh-every-session's usage-limit-watch.py.
+STALE_MINUTES = 15
+STATUSLINE_TAG = "slh-v0.4.0"
+STATUSLINE_RAW = (
+    "https://raw.githubusercontent.com/cheneeheng/claude-code-command-center/"
+    f"{STATUSLINE_TAG}/tools/statusline-hook/statusline-hook"
+)
+STATUSLINE_README = (
+    "https://github.com/cheneeheng/claude-code-command-center/tree/"
+    f"{STATUSLINE_TAG}/tools/statusline-hook#quota-export"
+)
+STATUSLINE_OFF = "C4_STATUSLINE_DISABLE_EXPORT"
+
 # Tool name -> how to find it, which version it needs, what names it in a `compatibility`
 # field, and how to install it per platform (None: no known installer).
 TOOLS = {
@@ -99,6 +127,10 @@ TOOLS = {
     },
     "chrome-extension": {
         "probe": None,
+        "note": (
+            "need the Claude in Chrome extension to walk a live web UI. The script cannot "
+            "check for it, so check it yourself."
+        ),
         "alternatives": [],
         "words": [r"Claude in Chrome"],
         "install": {"windows": None, "darwin": None, "linux": None},
@@ -498,3 +530,365 @@ PLUGINS = {
         "degrades": {"python3": ["hooks"], "uv": ["hooks"]},
     },
 }
+
+
+# ---- decisions: pure functions, tested in test_setup.py ----
+
+
+def version_of(text: str) -> tuple[int, int] | None:
+    """The first N.N in a probe's output, such as 3.13 from "3.13" or 18.19 from "v18.19.1"."""
+    m = re.search(r"(\d+)\.(\d+)", text)
+    return (int(m.group(1)), int(m.group(2))) if m else None
+
+
+def closure(picks: list[str]) -> list[str]:
+    """The picks plus every plugin their dependencies bring, in pick order."""
+    out: list[str] = []
+
+    def add(name: str) -> None:
+        if name in PLUGINS and name not in out:
+            out.append(name)
+            for dep in PLUGINS[name]["dependencies"]:
+                add(dep)
+
+    for name in picks:
+        add(name)
+    return out
+
+
+def plugin_states(
+    entries: list[dict], cwd: str, windows: bool
+) -> dict[str, tuple[str, str]]:
+    """Plugin name -> ("on" or "off", the winning scope) for this folder, from
+    `claude plugin list --json`. Absent: not installed for this folder."""
+    path = ntpath if windows else posixpath
+
+    def norm(p: str) -> str:
+        return path.normcase(path.normpath(p))
+
+    here = norm(cwd)
+    best: dict[str, tuple[str, str]] = {}
+    for e in entries:
+        name, _, market = e.get("id", "").partition("@")
+        scope = e.get("scope")
+        if market != MARKETPLACE or scope not in SCOPE_RANK:
+            continue
+        if scope != "user" and norm(e.get("projectPath") or "") != here:
+            continue
+        # local beats project beats user, as Claude Code's settings precedence does.
+        if name not in best or SCOPE_RANK[scope] > SCOPE_RANK[best[name][1]]:
+            # `enabled`, never `projectEnabled`, which reads false for enabled local installs.
+            best[name] = ("on" if e.get("enabled") else "off", scope)
+    return best
+
+
+def resolve(
+    picks: list[str], unmet: set[str], claude_version: tuple[int, int, int] | None
+) -> tuple[list[str], list[str]]:
+    """The picks plus their dependencies to set up, and the warning lines."""
+    plugins: list[str] = []
+    lines: list[str] = []
+    for name in closure(picks):
+        spec = PLUGINS[name]
+        missing = [t for t in spec["requires"] if t in unmet]
+        if missing:
+            lines.append(
+                f"{name} will not be installed: it needs {', '.join(missing)}. "
+                f"Skills not installed: {', '.join(spec['skills'])}"
+            )
+            continue
+        plugins.append(name)
+        for tool, what in spec["degrades"].items():
+            if tool in unmet:
+                lines.append(
+                    f"{name}: without {tool}, these lose function: {', '.join(what)}"
+                )
+            elif TOOLS[tool]["probe"] is None:
+                lines.append(f"{name}: {', '.join(what)} {TOOLS[tool]['note']}")
+        for version, skills in spec.get("min_claude", {}).items():
+            need = tuple(int(x) for x in version.split("."))
+            if claude_version and claude_version < need:
+                have = ".".join(map(str, claude_version))
+                lines.append(
+                    f"{name}: {', '.join(skills)} need Claude Code {version} or later, "
+                    f"you have {have}"
+                )
+    return plugins, lines
+
+
+def statusline_command(
+    settings: dict, windows: bool, has_pwsh: bool, path: str
+) -> str | None:
+    """The statusLine command to set, the one statusline-hook's own setup scripts write, or
+    None when a statusLine is already set."""
+    if settings.get("statusLine"):
+        return None
+    if not windows:
+        return f'bash "{path}"'
+    return f'{"pwsh" if has_pwsh else "powershell"} -NoProfile -File "{path}"'
+
+
+def statusline_state(settings: dict, environ: dict, root: Path, now: float) -> str:
+    """ "disabled", "fed" or "not fed", from the files the usage-limit guard reads."""
+    if "1" in (
+        environ.get(STATUSLINE_OFF),
+        settings.get("env", {}).get(STATUSLINE_OFF),
+    ):
+        return "disabled"
+    times = [p.stat().st_mtime for p in root.glob("*/*.jsonl") if p.is_file()]
+    return "fed" if times and now - max(times) < STALE_MINUTES * 60 else "not fed"
+
+
+# ---- the machine: commands, probes, files ----
+
+
+def say(line: str = "") -> None:
+    print(line, flush=True)
+
+
+def run(cmd: list[str], timeout: int = 60) -> tuple[int | None, str]:
+    """Exit code and output, or (None, "") when the command cannot start."""
+    exe = shutil.which(cmd[0]) or (cmd[0] if os.path.isabs(cmd[0]) else None)
+    if not exe:
+        return None, ""
+    try:
+        r = subprocess.run(
+            [exe, *cmd[1:]], capture_output=True, text=True, timeout=timeout
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None, ""
+    return r.returncode, (r.stdout + r.stderr).strip()
+
+
+def git_bash() -> str | None:
+    """Git Bash on Windows, never System32's bash.exe, which starts WSL."""
+    git = shutil.which("git")
+    if not git:
+        return None
+    directory = Path(git).resolve().parent
+    root = directory.parent
+    # Git for Windows puts git.exe under cmd/, mingw64/bin/, ucrt64/bin/ or clang64/bin/.
+    if root.name in ("mingw64", "mingw32", "ucrt64", "clang64", "clangarm64", "usr"):
+        root = root.parent
+    for candidate in (
+        directory / "bash.exe",
+        root / "bin/bash.exe",
+        root / "usr/bin/bash.exe",
+    ):
+        if candidate.is_file():
+            return str(candidate)
+    return None
+
+
+def probe(tool: str) -> tuple[bool, str]:
+    """(present, what was found) for a tool with a probe."""
+    cmd = list(TOOLS[tool]["probe"])
+    if tool == "bash" and sys.platform == "win32":
+        bash = git_bash()
+        if not bash:
+            return False, "missing (Git Bash)"
+        cmd[0] = bash
+    code, out = run(cmd)
+    if code is None:
+        return False, "missing"
+    first = out.splitlines()[0] if out else ""
+    if code != 0:
+        return False, f"not working: {first or 'exit ' + str(code)}"
+    floor = TOOLS[tool].get("min_version")
+    if floor and (version_of(out) or (0, 0)) < floor:
+        return False, f"{first} is older than {floor[0]}.{floor[1]}"
+    return True, first
+
+
+def claude_json(*args: str) -> list | None:
+    code, out = run(["claude", *args])
+    if code != 0:
+        return None
+    try:
+        return json.loads(out)
+    except json.JSONDecodeError:
+        return None
+
+
+def settings_path() -> Path:
+    base = os.environ.get("CLAUDE_CONFIG_DIR") or Path.home() / ".claude"
+    return Path(base) / "settings.json"
+
+
+def read_settings(path: Path) -> dict | None:
+    """The settings, {} when the file is missing, None when it cannot be read or parsed."""
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def recommended_core(git_repo: bool) -> list[str]:
+    core = ["ceh-every-session"]
+    if git_repo:
+        core += ["ceh-git-workflow", "ceh-coding-conduct"]
+    return core
+
+
+# ---- the run ----
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        description="Set up this machine and folder for the ceh-claude-code-library plugins."
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="report only: install, enable and write nothing",
+    )
+    parser.add_argument(
+        "--scope",
+        choices=["local", "project", "user"],
+        default="local",
+        help="scope for plugins it installs (default: local, this folder only)",
+    )
+    parser.add_argument(
+        "--plugins",
+        help="comma-separated plugins to set up, instead of choosing from the list",
+    )
+    args = parser.parse_args(argv)
+    windows = sys.platform == "win32"
+    picks_given = [p.strip() for p in (args.plugins or "").split(",") if p.strip()]
+    unknown = [p for p in picks_given if p not in PLUGINS]
+    if unknown:
+        parser.error(f"unknown plugins: {', '.join(unknown)}")
+
+    # 1. Preflight
+    if args.check:
+        say("Report-only mode (--check): nothing is installed, enabled or written.")
+    else:
+        say(
+            "Report-only mode: no terminal to answer, so nothing is installed, enabled or written."
+        )
+        if windows:
+            say(
+                "Git Bash's mintty may not count as a terminal: run the script from "
+                "PowerShell or Windows Terminal to install."
+            )
+    if not shutil.which("claude"):
+        say("claude is not on PATH. Install Claude Code first, then run this again.")
+        return 2
+    code, out = run(["claude", "--version"])
+    m = re.search(r"(\d+)\.(\d+)\.(\d+)", out or "")
+    claude_version = tuple(int(x) for x in m.groups()) if m else None
+    say(f"Claude Code: {out.splitlines()[0] if out else 'version unknown'}")
+
+    # 2. Marketplace
+    say("\nMarketplace")
+    markets = claude_json("plugin", "marketplace", "list", "--json")
+    if markets is None:
+        say("  `claude plugin marketplace list --json` failed.")
+        return 1
+    has_market = MARKETPLACE in {m.get("name") for m in markets}
+    say(
+        f"  {MARKETPLACE}: "
+        + (
+            "added"
+            if has_market
+            else f"missing, would run `claude plugin marketplace add {MARKETPLACE_REPO}`"
+        )
+    )
+
+    # 3. Picks
+    entries = claude_json("plugin", "list", "--json")
+    if entries is None:
+        say("  `claude plugin list --json` failed.")
+        return 1
+    cwd = os.path.realpath(os.getcwd())
+    states = plugin_states(entries, cwd, windows)
+    git_repo = run(["git", "-C", cwd, "rev-parse", "--is-inside-work-tree"])[0] == 0
+    core = recommended_core(git_repo)
+    picks = picks_given or list(dict.fromkeys([*states, *core]))
+    say(f"\nPicks for {cwd}")
+    say("  " + ", ".join(picks))
+
+    # 4. Tools
+    say("\nTools")
+    wanted = closure(picks)
+    tools = ["python3"] + [
+        t
+        for t in TOOLS
+        if t != "python3"
+        and TOOLS[t]["probe"] is not None
+        and any(
+            t in PLUGINS[p]["requires"] or t in PLUGINS[p]["degrades"] for p in wanted
+        )
+    ]
+    unmet: set[str] = set()
+    found: dict[str, bool] = {}
+    for tool in tools:
+        ok, what = probe(tool)
+        found[tool] = ok
+        if not ok:
+            unmet.add(tool)
+        say(f"  {tool}: {'found, ' + what if ok else what}")
+
+    # 5. Resolve
+    plugins, warnings = resolve(picks, unmet, claude_version)
+    degraded_by = {t for p in plugins for t in PLUGINS[p]["degrades"]}
+    if "gh" in degraded_by and found.get("gh"):
+        if run(["gh", "auth", "status"])[0] == 0:
+            say("  gh login: logged in")
+        else:
+            warnings.append("gh is not logged in: run gh auth login")
+    if "git" in degraded_by and found.get("git"):
+        for key in ("user.name", "user.email"):
+            code, out = run(["git", "config", key])
+            if code == 0 and out:
+                say(f"  git {key}: set")
+            else:
+                warnings.append(
+                    f'git {key} is not set: run git config --global {key} "<value>"'
+                )
+
+    # 6. Plugins
+    say("\nPlugins for this folder")
+    for name in plugins:
+        state = states.get(name)
+        if state and state[0] == "on":
+            say(f"  {name}: already on ({state[1]})")
+        elif state:
+            say(f"  {name}: off, would enable at {state[1]} scope")
+        else:
+            say(f"  {name}: not installed, would install at {args.scope} scope")
+
+    # 7. Settings
+    if "ceh-every-session" in plugins:
+        say("\nStatusline for the usage-limit guard")
+        settings = read_settings(settings_path())
+        if settings is None:
+            say(f"  {settings_path()} cannot be read as JSON.")
+            return 1
+        if settings.get("statusLine"):
+            state = statusline_state(
+                settings,
+                dict(os.environ),
+                Path.home() / ".claude/statusline",
+                time.time(),
+            )
+            say(
+                f"  {state}"
+                + ("" if state != "not fed" else f": see {STATUSLINE_README}")
+            )
+        else:
+            say(f"  would install statusline-hook {STATUSLINE_TAG}")
+
+    # 8. Summary
+    say("\nSummary")
+    say(f"  Tools missing: {', '.join(sorted(unmet)) or 'none'}")
+    for line in warnings:
+        say(f"  {line}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
