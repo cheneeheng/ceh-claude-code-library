@@ -181,6 +181,41 @@ class WriteSettingsTests(unittest.TestCase):
             self.assertEqual(path.read_text(encoding="utf-8"), '{"model": "x"}')
 
 
+class ExitCodeTests(unittest.TestCase):
+    def run_main(self, install_code):
+        """main with a terminal, the marketplace added, every tool found, and every yes given,
+        where `claude plugin install` exits with install_code."""
+
+        def fake_run(cmd, timeout=60):
+            if cmd[:3] == ["claude", "plugin", "install"]:
+                return install_code, "boom" if install_code else ""
+            if cmd[:2] == ["claude", "--version"]:
+                return 0, "2.1.300 (Claude Code)"
+            return 1, ""
+
+        def fake_json(*args):
+            return [{"name": setup.MARKETPLACE}] if "marketplace" in args else []
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with (
+                patch.object(setup.sys.stdin, "isatty", return_value=True),
+                patch.object(setup.shutil, "which", return_value="x"),
+                patch.object(setup, "run", fake_run),
+                patch.object(setup, "claude_json", fake_json),
+                patch.object(setup, "probe", return_value=(True, "1.0")),
+                patch.object(setup, "ask", return_value=True),
+                patch.object(setup, "settings_path", return_value=Path(tmp) / "s.json"),
+                patch("builtins.print"),
+            ):
+                return setup.main(["--plugins", "ceh-ui-design"])
+
+    def test_failed_plugin_install_exits_1(self):
+        self.assertEqual(self.run_main(1), 1)
+
+    def test_successful_run_exits_0(self):
+        self.assertEqual(self.run_main(0), 0)
+
+
 class VersionTests(unittest.TestCase):
     def test_python3_probe_output_meets_its_floor(self):
         self.assertEqual(setup.version_of("3.13\n"), (3, 13))

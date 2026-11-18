@@ -72,6 +72,10 @@ strategy says the script is a second way through the guide's route, not a bundle
   (or `clang64/bin/`), the layout of current Git for Windows builds. Before, it found none, so a
   local run on such a machine skipped every bash check with "Git Bash not found".
   `test_validator.py` gains the reproducer.
+- `tools/setup`: a failed `claude plugin install`, `enable` or `marketplace add` makes the run
+  exit 1 and shows "Failed: ..." in the summary. Before, it printed the failure and exited 0, so
+  a script wrapping the setup read success. Found by the build-against-plan check, per
+  `.agents_workspace/product/fix/20261118-164108-setup-script-exit-code.yaml`.
 
 ## 2026-11-17
 
