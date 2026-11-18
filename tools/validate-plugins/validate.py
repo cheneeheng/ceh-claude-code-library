@@ -36,6 +36,7 @@ CHECKS = [
     "invocations",
     "repo_rules",
     "registry",
+    "setup_registry",
     "hygiene",
     "scripts",
     "hooks",
