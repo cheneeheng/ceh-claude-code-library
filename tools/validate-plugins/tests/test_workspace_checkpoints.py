@@ -126,6 +126,55 @@ class WorkspaceCheckpointTests(unittest.TestCase):
         )
         self.assertEqual(list(self.pending.iterdir()), [])
 
+    def test_checkpoint_commit_leaves_uncommitted_workspace_files_alone(self):
+        workspace = self.top / "real" / ".agents_workspace"
+        workspace.mkdir(parents=True)
+        for args in (
+            ("init", "-q", "-b", "main"),
+            ("config", "user.email", "test@example.com"),
+            ("config", "user.name", "test"),
+            ("commit", "-q", "--allow-empty", "-m", "root"),
+        ):
+            subprocess.run(["git", "-C", str(workspace), *args], check=True)
+        (workspace / "plan.yaml").write_text("unrelated\n")
+        (workspace / "staged.yaml").write_text("unrelated\n")
+        sync.git(workspace, "add", "staged.yaml")
+        pending = Path(sync.git(workspace, "rev-parse", "--absolute-git-dir")[1])
+        pending /= "ceh-checkpoint-pending"
+        sync.record_merge(self.top, workspace, "gh pr merge 12")
+        view = json.dumps(
+            {
+                "state": "MERGED",
+                "number": 12,
+                "url": "https://github.com/example/project/pull/12",
+                "mergeCommit": {"oid": "merged-12"},
+                "mergedAt": dt.datetime.now(dt.timezone.utc).isoformat(),
+            }
+        )
+        run = subprocess.run
+
+        def fake_run(command, *args, **kwargs):
+            if command[0] == "stub-gh":
+                return subprocess.CompletedProcess(command, 0, view, "")
+            return run(command, *args, **kwargs)
+
+        with (
+            patch.object(sync.shutil, "which", return_value="stub-gh"),
+            patch.object(sync.subprocess, "run", side_effect=fake_run),
+        ):
+            sync.checkpoints(self.top, workspace, "main", pending, "s", False, "")
+        self.assertEqual(
+            sync.git(workspace, "log", "-1", "--format=%s")[1],
+            "chore(workspace): checkpoint source pr #12",
+        )
+        self.assertEqual(
+            sync.git(workspace, "show", "--format=", "--name-only", "HEAD"), (0, "")
+        )
+        self.assertEqual(
+            sync.git(workspace, "status", "--porcelain")[1],
+            "A  staged.yaml\n?? plan.yaml",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

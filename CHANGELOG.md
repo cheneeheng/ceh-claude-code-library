@@ -9,6 +9,28 @@ before this repo live in
 
 ---
 
+## 2026-11-18
+
+The workspace checkpoint a PR merge leaves is now an empty commit. Before, it staged the whole
+workspace first, so a checkpoint made at a later Stop filed whatever another session had written
+since, such as the next morning's plan, under `chore(workspace): checkpoint source pr #<n>`. Those
+files now go into the same Stop's `chore(workspace): sync ...` commit, and the checkpoint's body
+still names the PR URL and merge commit. Per
+`.agents_workspace/product/fix/20261118-100843-workspace-pr-checkpoint-commits.yaml`.
+
+### Plugin versions
+
+| Plugin             | Version |
+| ------------------ | ------- |
+| `ceh-git-workflow` | 2.0.8   |
+
+### Fixed
+
+- `ceh-git-workflow`: `sync-agents-workspace.py` commits the checkpoint with `--only` and no
+  paths, so it holds no files, staged or not. The README's checkpoint paragraph says so, the
+  `hooks` check's dirty-checkpoint fixtures expect the empty checkpoint then a sync commit, and
+  `test_workspace_checkpoints.py` gains a reproducer with one untracked and one staged file.
+
 ## 2026-11-17
 
 `maintain-glossary` and `analyze-competitor` now say what to do at each question when no user is

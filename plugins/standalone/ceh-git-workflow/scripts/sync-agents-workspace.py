@@ -411,20 +411,20 @@ def checkpoints(top, main_ws, x, folder, session, linked, line):
             if len(subject) > 72:
                 subject = f"chore(workspace): checkpoint {len(numbers)} source prs"
             try:
-                failed = (
-                    git(repo, "add", "-A")[0]
-                    or git(
-                        repo,
-                        "commit",
-                        "-q",
-                        "--allow-empty",
-                        "-m",
-                        subject,
-                        "-m",
-                        "\n".join(merged[n] for n in numbers),
-                        *signed(line),
-                    )[0]
-                )
+                # An empty marker: --only with no paths leaves even staged files out, so
+                # pending changes fall through to sync_main's own commit.
+                failed = git(
+                    repo,
+                    "commit",
+                    "-q",
+                    "--only",
+                    "--allow-empty",
+                    "-m",
+                    subject,
+                    "-m",
+                    "\n".join(merged[n] for n in numbers),
+                    *signed(line),
+                )[0]
             except (OSError, subprocess.TimeoutExpired):
                 failed = True
             if failed:
