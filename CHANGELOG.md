@@ -48,6 +48,13 @@ text, so a reader can match the message to the doc. The Python-service example n
 command that starts the plan. In the same audit, walkers matched the example to the Build list
 by hand (F6), and one left the branch command out of its install list (F7).
 
+The guide's "Interrupted partway?" note is now the one resume step: run
+`claude plugin marketplace list` and `claude plugin list`, with what each shows, and the reply a
+re-run gives. Steps 1 and 2 quote the success line of an add and an install. Every quoted line
+was taken from a fresh add and install in an isolated `CLAUDE_CONFIG_DIR`. In run 005 of the
+same audit, the interrupted walker joined the resume facts from three places and went over twice
+its budget (R1, the open F2).
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -73,6 +80,8 @@ by hand (F6), and one left the branch command out of its install list (F7).
 - `docs/GETTING_STARTED.md`: the branch note sits in step 2 under the `ceh-git-workflow` install
   and quotes the guard's denial text; the Python-service example names
   `/ceh-build-plan:write-build-plan`.
+- `docs/GETTING_STARTED.md`: one resume step in step 1 with the two list commands, their output
+  and the re-run replies; the success lines of an add and an install; step 5 points to it.
 
 ### Fixed
 

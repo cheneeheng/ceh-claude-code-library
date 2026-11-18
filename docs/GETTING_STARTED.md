@@ -77,15 +77,30 @@ To use another scope, swap the `--scope` value in any command below.
 
 Leave `--scope` off this command: it then adds the marketplace once for your user, in
 `~/.claude/settings.json`, so every folder can install from it. The plugins themselves stay at
-`local` scope. `claude plugin marketplace list` confirms it was added. To undo it, run
-`claude plugin marketplace remove ceh-claude-code-library`, which also uninstalls every plugin
-installed from it.
+`local` scope. Run in a terminal, it ends with this line:
+
+```
+✔ Successfully added marketplace: ceh-claude-code-library (declared in user settings)
+```
+
+To undo it, run `claude plugin marketplace remove ceh-claude-code-library`, which also uninstalls
+every plugin installed from it.
 
 Every `/plugin ...` command typed in a Claude Code session also runs in a terminal as
 `claude plugin ...`. They are the same command.
 
-Interrupted partway? `claude plugin list` shows what is already installed, and running an install
-again is safe.
+Interrupted partway? Run these two in the folder you work in to see where you are:
+
+```
+claude plugin marketplace list
+claude plugin list
+```
+
+The first lists `ceh-claude-code-library` once the marketplace is added. The second lists each
+plugin installed in this folder with `Scope: local`. Re-run any step that is missing. Re-running
+a step that already ran is safe: the marketplace add answers
+`Marketplace 'ceh-claude-code-library' already on disk`, and an install answers
+`Plugin "<name>@ceh-claude-code-library" is already installed (scope: local)`.
 
 Installing before this step fails with `Plugin "<name>" not found in marketplace`, which is the
 message Claude Code gives for a marketplace it does not know. Run the command above, then repeat
@@ -124,6 +139,9 @@ installing a plugin never installs `python3` for you.
 ```
 /plugin install ceh-every-session@ceh-claude-code-library --scope local
 ```
+
+Run in a terminal, each install ends with
+`✔ Successfully installed plugin: <name>@ceh-claude-code-library (scope: local)`.
 
 If you write code in git repos, add:
 
@@ -251,8 +269,8 @@ still runs, and says which claims rest on nothing proven.
 
 Installed plugins do not load into a running session until `/reload-plugins` or a new session. Then
 the `ceh-*:` skills you installed appear in the skills list. `claude plugin list` shows each
-installed plugin with its version and scope. Running an install again is safe: it reports that the
-plugin is already installed, so after an interruption, check the list and carry on.
+installed plugin with its version and scope. After an interruption, see
+[Interrupted partway?](#1-add-the-marketplace) in step 1.
 
 To drop a plugin you no longer need, `claude plugin uninstall <name>@ceh-claude-code-library`, adding
 the `--scope` it was installed at, such as `--scope local`. Removing the marketplace removes every plugin
