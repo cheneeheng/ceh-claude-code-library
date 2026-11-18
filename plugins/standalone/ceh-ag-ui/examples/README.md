@@ -22,8 +22,9 @@ you, in Claude Code ──► skill loads ──► code lands in your repo ─�
 The prompts below are what you type into Claude Code. Any wording that describes the same moment
 triggers the skill, and you can always invoke one directly with `/ceh-ag-ui:<skill>`.
 
-Install: `/plugin install ceh-ag-ui@ceh-claude-code-library`. This brings `ceh-ui-design` with it, for the
-theme.
+Install from a terminal in your project folder:
+`claude plugin install ceh-ag-ui@ceh-claude-code-library --scope local`. This brings
+`ceh-ui-design` with it, for the theme.
 
 ---
 
