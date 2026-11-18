@@ -37,6 +37,11 @@ VISION asks. The listing budget gap now names the script and what is left: the u
 plugins share the budget, so the script cannot promise every skill keeps its description. The
 strategy says the script is a second way through the guide's route, not a bundle.
 
+`docs/GETTING_STARTED.md` step 1 now says the marketplace is added once for your user, so every
+folder can install from it, while the plugins stay `local`. In the first-run audit, every walker
+ran `--help` to learn the command's scope, and three went over twice their action budget, per
+`.agents_workspace/product/audit/ux/ceh-claude-code-library/run-003/UX_AUDIT.yaml` finding F1.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -54,6 +59,11 @@ strategy says the script is a second way through the guide's route, not a bundle
   Code versions.
 - `docs/GETTING_STARTED.md` "Set up with the script", and pointers from its listing budget
   section, the README prerequisites, `CONTRIBUTING.md` and `CLAUDE.md`.
+
+### Changed
+
+- `docs/GETTING_STARTED.md` step 1: the marketplace's scope (user, in `~/.claude/settings.json`)
+  and that one add serves every folder.
 
 ### Fixed
 
