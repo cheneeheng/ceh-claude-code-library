@@ -55,6 +55,11 @@ was taken from a fresh add and install in an isolated `CLAUDE_CONFIG_DIR`. In ru
 same audit, the interrupted walker joined the resume facts from three places and went over twice
 its budget (R1, the open F2).
 
+The README's install section gives the setup script its own subsection, "Set up with the script
+(alternative)", beside the local-clone one: what it does, the command, `--check`, and where its
+options are. Before, the script was named only in the prerequisites paragraph, which made it
+unclear what it was.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -82,6 +87,8 @@ its budget (R1, the open F2).
   `/ceh-build-plan:write-build-plan`.
 - `docs/GETTING_STARTED.md`: one resume step in step 1 with the two list commands, their output
   and the re-run replies; the success lines of an add and an install; step 5 points to it.
+- `README.md`: the setup script has its own subsection under "Installing in Claude Code", and the
+  prerequisites paragraph links to it.
 
 ### Fixed
 
