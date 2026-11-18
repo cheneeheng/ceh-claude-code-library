@@ -961,6 +961,7 @@ def main(argv: list[str] | None = None) -> int:
         note("Every install and every write asks you first.", 0)
     platform = {"win32": "windows", "darwin": "darwin"}.get(sys.platform, "linux")
     done: list[str] = []
+    failed: list[str] = []  # claude commands that failed: the run exits 1
     heading("Claude Code")
     if not shutil.which("claude"):
         row("bad", "claude", "not on PATH")
@@ -985,6 +986,8 @@ def main(argv: list[str] | None = None) -> int:
         note(" ".join(add_cmd), 6)
     elif ask(f"Add the {MARKETPLACE} marketplace?", True):
         has_market = run_shown(add_cmd) == 0
+        if not has_market:
+            failed.append(f"adding the {MARKETPLACE} marketplace")
         row(
             "ok" if has_market else "bad",
             MARKETPLACE,
@@ -1100,6 +1103,8 @@ def main(argv: list[str] | None = None) -> int:
             )
             if ok:
                 done.append(f"{name} enabled")
+            else:
+                failed.append(f"enabling {name}")
         elif report_only:
             row("todo", name, f"not installed, would install ({args.scope})")
         else:
@@ -1117,6 +1122,8 @@ def main(argv: list[str] | None = None) -> int:
                 )
                 if ok:
                     done.append(f"{name} installed at {args.scope} scope")
+                else:
+                    failed.append(f"installing {name}")
         else:
             note("Nothing installed.")
 
@@ -1188,9 +1195,11 @@ def main(argv: list[str] | None = None) -> int:
     heading("Summary")
     for line in done:
         row("ok", line)
+    for line in failed:
+        row("bad", f"Failed: {line}")
     if unmet:
         row("bad", "Tools missing: " + ", ".join(sorted(unmet)))
-    if not done and not unmet and not warnings:
+    if not done and not unmet and not warnings and not failed:
         row("ok", "Everything is in place.")
     for line in warnings:
         # "<plugin>: <what>" reads as a heading and its wrapped detail.
@@ -1209,7 +1218,7 @@ def main(argv: list[str] | None = None) -> int:
             else "To install, run this again from a terminal.",
             2,
         )
-    return 0
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":
