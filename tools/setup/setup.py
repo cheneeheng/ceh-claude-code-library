@@ -23,6 +23,7 @@ import re
 import shutil
 import subprocess
 import sys
+import textwrap
 import time
 import urllib.request
 from pathlib import Path
@@ -647,6 +648,51 @@ def say(line: str = "") -> None:
     print(line, flush=True)
 
 
+# ---- display ----
+
+COLOR = sys.stdout.isatty() and not os.environ.get("NO_COLOR")
+try:
+    "✓✗→─".encode(sys.stdout.encoding or "ascii")
+    UNICODE = True
+except (UnicodeEncodeError, LookupError):
+    UNICODE = False  # a legacy code page, such as output piped on Windows
+RULE = "─" if UNICODE else "-"
+MARKS = {
+    "ok": ("✓" if UNICODE else "+", "32"),  # green
+    "bad": ("✗" if UNICODE else "x", "31"),  # red
+    "warn": ("!", "33"),  # yellow
+    "todo": ("→" if UNICODE else ">", "36"),  # cyan: would do, or not done yet
+}
+
+
+def paint(text: str, code: str) -> str:
+    return f"\033[{code}m{text}\033[0m" if COLOR else text
+
+
+def heading(title: str) -> None:
+    say()
+    say(paint(f"{RULE * 2} {title} ", "1") + paint(RULE * max(4, 60 - len(title)), "2"))
+
+
+def row(kind: str, label: str, detail: str = "", width: int = 30) -> None:
+    mark, code = MARKS[kind]
+    say(
+        f"  {paint(mark, code)} {label:<{width}} {paint(detail, '2') if detail else ''}".rstrip()
+    )
+
+
+def note(text: str, indent: int = 6) -> None:
+    """A wrapped line under a row, for a command or an explanation."""
+    width = max(60, min(shutil.get_terminal_size().columns, 110)) - indent
+    for line in textwrap.wrap(text, width, break_on_hyphens=False) or [""]:
+        say(" " * indent + line)
+
+
+def short_version(text: str) -> str:
+    m = re.search(r"\d+(\.\d+)+", text)
+    return m.group(0) if m else text
+
+
 def run(cmd: list[str], timeout: int = 60) -> tuple[int | None, str]:
     """Exit code and output, or (None, "") when the command cannot start."""
     exe = shutil.which(cmd[0]) or (cmd[0] if os.path.isabs(cmd[0]) else None)
@@ -750,7 +796,11 @@ def write_file(path: Path, text: str) -> None:
 def ask(question: str, default: bool) -> bool:
     hint = "[Y/n]" if default else "[y/N]"
     try:
-        answer = input(f"{question} {hint} ").strip().lower()
+        answer = (
+            input(f"  {paint('?', '35')} {question} {paint(hint, '2')} ")
+            .strip()
+            .lower()
+        )
     except EOFError:
         return False
     return default if not answer else answer in ("y", "yes")
@@ -774,19 +824,34 @@ def pick_plugins(states: dict, core: list[str], git_repo: bool) -> list[str]:
     for i, name in enumerate(names, 1):
         if PLUGINS[name]["group"] != group:
             group = PLUGINS[name]["group"]
-            say(f"  {group}")
-        mark = states.get(name, ("", ""))[0]
-        say(f"    {i:2}. {name}{'  (' + mark + ')' if mark else ''}")
-    say(
-        "  Recommended core: ceh-every-session always; ceh-git-workflow if you work in a git "
-        "repo; ceh-coding-conduct if you write code with Claude."
+            say(f"  {paint(group, '1')}")
+        state = states.get(name, ("", ""))[0]
+        tag = (
+            paint("  on", "32")
+            if state == "on"
+            else paint("  off", "33")
+            if state
+            else ""
+        )
+        say(f"    {paint(f'{i:2}', '36')}  {name}{tag}")
+    say()
+    note(
+        "Recommended core: ceh-every-session always, ceh-git-workflow if you work in a git "
+        "repo, ceh-coding-conduct if you write code with Claude.",
+        indent=2,
     )
-    say(
-        f"  This folder is {'a git repo, so Enter takes all three' if git_repo else 'not a git repo, so Enter takes ceh-every-session'}."
+    note(
+        "This folder is "
+        + (
+            "a git repo, so Enter takes all three."
+            if git_repo
+            else "not a git repo, so Enter takes ceh-every-session."
+        ),
+        indent=2,
     )
     while True:
         try:
-            answer = input("Numbers to set up, separated by spaces (Enter: core): ")
+            answer = input("\n  Numbers to set up, separated by spaces (Enter: core): ")
         except EOFError:
             return core
         if not answer.strip():
@@ -794,7 +859,7 @@ def pick_plugins(states: dict, core: list[str], git_repo: bool) -> list[str]:
         try:
             chosen = [names[int(n) - 1] for n in re.split(r"[\s,]+", answer.strip())]
         except (ValueError, IndexError):
-            say(f"  Type numbers from 1 to {len(names)}.")
+            say(f"  Type numbers from 1 to {len(names)}, or press Enter.")
             continue
         return list(dict.fromkeys(chosen))
 
@@ -860,72 +925,87 @@ def main(argv: list[str] | None = None) -> int:
         parser.error(f"unknown plugins: {', '.join(unknown)}")
 
     # 1. Preflight
+    # Symbols must never crash a redirected run on a legacy code page.
+    sys.stdout.reconfigure(errors="replace")
+    if windows and COLOR:
+        os.system("")  # less-code: turns on ANSI colours in a classic Windows console.
     report_only = args.check or not sys.stdin.isatty()
+    say(paint("ceh-claude-code-library setup", "1"))
     if args.check:
-        say("Report-only mode (--check): nothing is installed, enabled or written.")
+        note("Report only (--check): nothing is installed, enabled or written.", 0)
     elif report_only:
-        say(
-            "Report-only mode: no terminal to answer, so nothing is installed, enabled or written."
+        note(
+            "Report only: there is no terminal to answer, so nothing is installed, enabled or written.",
+            0,
         )
         if windows:
-            say(
+            note(
                 "Git Bash's mintty may not count as a terminal: run the script from "
-                "PowerShell or Windows Terminal to install."
+                "PowerShell or Windows Terminal to install.",
+                0,
             )
     else:
-        say("Setup mode: every install and write asks first.")
+        note("Every install and every write asks you first.", 0)
     platform = {"win32": "windows", "darwin": "darwin"}.get(sys.platform, "linux")
     done: list[str] = []
+    heading("Claude Code")
     if not shutil.which("claude"):
-        say("claude is not on PATH. Install Claude Code first, then run this again.")
+        row("bad", "claude", "not on PATH")
+        note("Install Claude Code first, then run this again.")
         return 2
     code, out = run(["claude", "--version"])
     m = re.search(r"(\d+)\.(\d+)\.(\d+)", out or "")
     claude_version = tuple(int(x) for x in m.groups()) if m else None
-    say(f"Claude Code: {out.splitlines()[0] if out else 'version unknown'}")
+    row("ok", "claude", m.group(0) if m else "version unknown")
 
     # 2. Marketplace
-    say("\nMarketplace")
     markets = claude_json("plugin", "marketplace", "list", "--json")
     if markets is None:
-        say("  `claude plugin marketplace list --json` failed.")
+        row("bad", "marketplaces", "`claude plugin marketplace list --json` failed")
         return 1
     has_market = MARKETPLACE in {m.get("name") for m in markets}
     add_cmd = ["claude", "plugin", "marketplace", "add", MARKETPLACE_REPO]
     if has_market:
-        say(f"  {MARKETPLACE}: added")
+        row("ok", MARKETPLACE, "marketplace added")
     elif report_only:
-        say(f"  {MARKETPLACE}: missing, would run `{' '.join(add_cmd)}`")
+        row("todo", MARKETPLACE, "marketplace missing, would add it")
+        note(" ".join(add_cmd), 6)
     elif ask(f"Add the {MARKETPLACE} marketplace?", True):
         has_market = run_shown(add_cmd) == 0
-        say(f"  {MARKETPLACE}: {'added' if has_market else 'adding failed'}")
+        row(
+            "ok" if has_market else "bad",
+            MARKETPLACE,
+            "marketplace added" if has_market else "adding failed",
+        )
         if has_market:
             done.append(f"marketplace {MARKETPLACE} added")
     if not has_market and not report_only:
-        say(
-            "  Without the marketplace no plugin can be installed: plugins are skipped."
+        note(
+            "Without the marketplace no plugin can be installed, so plugins are skipped."
         )
 
     # 3. Picks
     entries = claude_json("plugin", "list", "--json")
     if entries is None:
-        say("  `claude plugin list --json` failed.")
+        row("bad", "plugins", "`claude plugin list --json` failed")
         return 1
     cwd = os.path.realpath(os.getcwd())
     states = plugin_states(entries, cwd, windows)
     git_repo = run(["git", "-C", cwd, "rev-parse", "--is-inside-work-tree"])[0] == 0
     core = recommended_core(git_repo)
-    say(f"\nPlugins to set up in {cwd}")
+    heading("Choose plugins")
+    note(f"Folder: {cwd}", 2)
     if picks_given:
         picks = picks_given
     elif report_only:
         picks = list(dict.fromkeys([*states, *core]))
     else:
+        say()
         picks = pick_plugins(states, core, git_repo)
-    say("  Picked: " + ", ".join(picks))
+    note("Picked: " + ", ".join(picks), 2)
 
     # 4. Tools
-    say("\nTools")
+    heading("Tools")
     wanted = closure(picks)
     tools = ["python3"] + [
         t
@@ -940,27 +1020,26 @@ def main(argv: list[str] | None = None) -> int:
     found: dict[str, bool] = {}
     for tool in tools:
         ok, what = probe(tool)
-        say(f"  {tool}: {'found, ' + what if ok else what}")
+        row("ok" if ok else "bad", tool, short_version(what) if ok else what, 10)
         cmd = TOOLS[tool]["install"][platform]
         if not ok and cmd and shutil.which(cmd[0]):
             if report_only:
-                say(f"    would ask to run: {' '.join(cmd)}")
-            elif ask(f"    Install {tool} with `{' '.join(cmd)}`?", False):
+                note("would offer: " + " ".join(cmd))
+            elif ask(f"Install {tool} with `{' '.join(cmd)}`?", False):
                 if run_shown(cmd) == 0:
                     ok, what = probe(tool)
                     if ok:
+                        row("ok", tool, "installed, " + short_version(what), 10)
                         done.append(f"{tool} installed")
                     else:
-                        say(
-                            f"    {tool} installed, but this shell cannot see it yet: open a "
+                        note(
+                            f"{tool} installed, but this shell cannot see it yet: open a "
                             "new terminal and run the script again."
                         )
                 else:
-                    say(f"    The {tool} install failed.")
+                    note(f"The {tool} install failed.")
         elif not ok:
-            say(
-                f"    No known installer here: install {tool} from its own install page."
-            )
+            note(f"No known installer here: install {tool} from its own install page.")
         found[tool] = ok
         if not ok:
             unmet.add(tool)
@@ -970,61 +1049,71 @@ def main(argv: list[str] | None = None) -> int:
     degraded_by = {t for p in plugins for t in PLUGINS[p]["degrades"]}
     if "gh" in degraded_by and found.get("gh"):
         if run(["gh", "auth", "status"])[0] == 0:
-            say("  gh login: logged in")
+            row("ok", "gh login", "logged in", 10)
         else:
+            row("warn", "gh login", "not logged in", 10)
             warnings.append("gh is not logged in: run gh auth login")
     if "git" in degraded_by and found.get("git"):
         for key in ("user.name", "user.email"):
             code, out = run(["git", "config", key])
             if code == 0 and out:
-                say(f"  git {key}: set")
+                row("ok", f"git {key.split('.')[1]}", "set", 10)
             else:
+                row("warn", f"git {key.split('.')[1]}", "not set", 10)
                 warnings.append(
                     f'git {key} is not set: run git config --global {key} "<value>"'
                 )
 
     # 6. Plugins
-    say("\nPlugins for this folder")
+    heading("Plugins")
     to_install = []
     for name in plugins:
         state = states.get(name)
         plugin_id = f"{name}@{MARKETPLACE}"
         if state and state[0] == "on":
-            say(f"  {name}: already on ({state[1]})")
+            row("ok", name, f"on ({state[1]})")
         elif state and report_only:
-            say(f"  {name}: off, would enable at {state[1]} scope")
+            row("todo", name, f"off, would enable ({state[1]})")
         elif state and has_market:
             # Picking it was the yes.
             ok = (
                 run(["claude", "plugin", "enable", plugin_id, "--scope", state[1]])[0]
                 == 0
             )
-            say(
-                f"  {name}: {'enabled' if ok else 'enabling failed'} at {state[1]} scope"
+            row(
+                "ok" if ok else "bad",
+                name,
+                f"enabled ({state[1]})" if ok else "enabling failed",
             )
             if ok:
                 done.append(f"{name} enabled")
         elif report_only:
-            say(f"  {name}: not installed, would install at {args.scope} scope")
+            row("todo", name, f"not installed, would install ({args.scope})")
         else:
+            row("todo", name, "not installed")
             to_install.append(name)
     if to_install and has_market:
         if ask(f"Install {len(to_install)} plugins at {args.scope} scope?", True):
             for name in to_install:
                 cmd = ["claude", "plugin", "install", f"{name}@{MARKETPLACE}"]
                 ok = run([*cmd, "--scope", args.scope], timeout=300)[0] == 0
-                say(f"  {name}: {'installed' if ok else 'install failed'}")
+                row(
+                    "ok" if ok else "bad",
+                    name,
+                    f"installed ({args.scope})" if ok else "install failed",
+                )
                 if ok:
                     done.append(f"{name} installed at {args.scope} scope")
         else:
-            say("  Nothing installed.")
+            note("Nothing installed.")
 
     # 7. Settings
     if "ceh-every-session" in plugins:
-        say("\nStatusline for the usage-limit guard")
+        heading("Statusline")
+        note("The usage-limit guard reads its quota from the statusline.", 2)
         settings = read_settings(settings_path())
         if settings is None:
-            say(f"  {settings_path()} cannot be read as JSON.")
+            row("bad", "settings.json", f"{settings_path()} cannot be read as JSON")
             return 1
         if settings.get("statusLine"):
             state = statusline_state(
@@ -1033,27 +1122,51 @@ def main(argv: list[str] | None = None) -> int:
                 Path.home() / ".claude/statusline",
                 time.time(),
             )
-            say(
-                f"  {state}"
-                + ("" if state != "not fed" else f": see {STATUSLINE_README}")
-            )
+            kind = {"fed": "ok", "disabled": "warn"}.get(state, "bad")
+            detail = {
+                "fed": "set, and the guard gets readings",
+                "disabled": "set, but its export is turned off",
+            }.get(state, "set, but the guard gets no readings")
+            row(kind, "statusLine", detail)
+            if state == "not fed":
+                note(f"See {STATUSLINE_README}")
         elif report_only:
-            say(f"  would install statusline-hook {STATUSLINE_TAG}")
+            row(
+                "todo",
+                "statusLine",
+                f"not set, would offer statusline-hook {STATUSLINE_TAG}",
+            )
         elif ask(f"Install the statusline-hook statusline ({STATUSLINE_TAG})?", False):
             result = install_statusline(windows)
-            say(f"  statusline-hook {result}")
+            row("ok" if result.startswith("installed") else "bad", "statusLine", result)
             if result.startswith("installed"):
-                done.append(f"statusline-hook {STATUSLINE_TAG} {result}")
+                done.append(f"statusline-hook {STATUSLINE_TAG} installed")
 
     # 8. Summary
-    say("\nSummary")
+    heading("Summary")
     for line in done:
-        say(f"  Done: {line}")
-    say(f"  Tools missing: {', '.join(sorted(unmet)) or 'none'}")
+        row("ok", line)
+    if unmet:
+        row("bad", "Tools missing: " + ", ".join(sorted(unmet)))
+    if not done and not unmet and not warnings:
+        row("ok", "Everything is in place.")
     for line in warnings:
-        say(f"  {line}")
+        # "<plugin>: <what>" reads as a heading and its wrapped detail.
+        head, _, rest = line.partition(": ")
+        row("warn", head if rest else line)
+        if rest:
+            note(rest)
     if done:
-        say("  Run /reload-plugins in any open Claude Code session.")
+        say()
+        note("Next: run /reload-plugins in any open Claude Code session.", 2)
+    elif report_only and not args.check:
+        say()
+        note(
+            "To install, run this again from PowerShell or Windows Terminal."
+            if windows
+            else "To install, run this again from a terminal.",
+            2,
+        )
     return 0
 
 
