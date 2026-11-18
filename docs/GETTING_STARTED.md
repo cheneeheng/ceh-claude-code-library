@@ -34,9 +34,9 @@ same route by hand, and the route Claude follows.
 > repository. Before you install anything, ask the user in one round what they are about to do.
 > Install every plugin at `local` scope, unless the user names another scope. With no user to ask,
 > say which moment you assumed. Always install `ceh-every-session` in step 2, whatever the
-> answer. Then follow steps 1 to 4 for that moment only, running each install yourself with the `claude plugin` CLI,
-> not the `/plugin` slash command. Do not install every plugin. When you finish, tell the user to
-> run `/reload-plugins`.
+> answer. Then follow steps 1 to 4 for that moment only, running each install yourself with the
+> `claude plugin` CLI, not the `/plugin` slash command. Do not install every plugin. When you
+> finish, tell the user to run `/reload-plugins`.
 
 ## Set up with the script
 
@@ -50,9 +50,19 @@ Terminal on Windows:
 uv run https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/tools/setup/setup.py
 ```
 
-Without `uv`, install it first: `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
-on Windows, `curl -LsSf https://astral.sh/uv/install.sh | sh` on Linux and macOS. The script
-installs plugins at `local` scope, as this guide does, unless you pass `--scope project` or
+Without `uv`, install it first. On Windows:
+
+```
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+On Linux and macOS:
+
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+The script installs plugins at `local` scope, as this guide does, unless you pass `--scope project` or
 `--scope user`. `--check` reports what it would do and changes nothing. Windows is tested, and
 Linux and macOS are untested. The options and every step are in
 [`tools/setup/README.md`](../tools/setup/README.md).
@@ -117,7 +127,8 @@ the install.
 ## 2. Install the core in each folder you work in
 
 At `local` scope the core is on only in the folder you install it in, so install it again in the
-next folder. A hook is a script Claude Code runs at fixed points, such as before each file edit, so a plugin with hooks acts on every session.
+next folder. A hook is a script Claude Code runs at fixed points, such as before each file edit,
+so a plugin with hooks acts on every session.
 
 | Plugin               | Install when               | What you get                                                                                                                                                                                                                                                                    |
 | -------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -141,15 +152,26 @@ What each core plugin changes in every session, so you can decide before you ins
   start of every session, and after every file edit checks the fix record when the edit wrote one.
 
 Their hooks need `python3` on your `PATH` (`ceh-every-session`, `ceh-git-workflow`,
-`ceh-coding-conduct`) and `bash` (`ceh-coding-conduct`). The fix record and handoff checks also need `uv`. `python3 --version` and `bash --version` show whether they are there. Without `python3` the guards do nothing instead of blocking you, and
-installing a plugin never installs `python3` for you.
+`ceh-coding-conduct`) and `bash` (`ceh-coding-conduct`). The fix record and handoff checks, and
+the plan check in step 3, also need `uv`. These show whether each is there:
+
+```
+python3 --version
+bash --version
+uv --version
+```
+
+Without `python3` the guards do nothing instead of blocking you, and installing a plugin never
+installs `python3` for you. Without `uv`, the commands in
+[Set up with the script](#set-up-with-the-script) install it.
 
 ```
 /plugin install ceh-every-session@ceh-claude-code-library --scope local
 ```
 
 Run in a terminal, each install ends with
-`✔ Successfully installed plugin: <name>@ceh-claude-code-library (scope: local)`.
+`✔ Successfully installed plugin: <name>@ceh-claude-code-library (scope: local)`. To undo one,
+run `claude plugin uninstall <name>@ceh-claude-code-library --scope local`.
 
 If you write code in git repos, add:
 
@@ -201,9 +223,10 @@ file to the same sub-path under `.agents_workspace/product/`, or names its locat
 **Build**
 
 - Plan a new app or one feature: install `ceh-build-plan`, start with
-  `/ceh-build-plan:write-build-plan`. Writes `.agents_workspace/product/plan/<YYYYMMDD-HHMMSS>-<slug>.yaml`
-  and the `.md` generated from it, and deleting both discards the plan. It needs `uv` to check and
-  render the plan, and saves it unchecked without.
+  `/ceh-build-plan:write-build-plan`. Writes
+  `.agents_workspace/product/plan/<YYYYMMDD-HHMMSS>-<slug>.yaml` and the `.md` generated from
+  it, and deleting both discards the plan. It needs `uv` to check and render the plan, and saves
+  it unchecked without.
 - Build from that plan: the same plugin and your stack plugin (below), start with
   `/ceh-build-plan:implement-from-plan`. Writes the code and the plan's evidence.
 - Write the user and operator docs: install `ceh-documentation`, start with
@@ -215,10 +238,11 @@ file to the same sub-path under `.agents_workspace/product/`, or names its locat
   `/ceh-check-build-against-plan:check-build-against-plan`. Reports in the session.
 - Test it and roll up the evidence: `ceh-testing` (a stack plugin already brings it), start with
   `/ceh-testing:explore-app-for-bugs`, then `/ceh-testing:write-evidence-report`. Writes
-  `.agents_workspace/product/EVIDENCE.yaml` and the `EVIDENCE.md` generated from it. It needs `uv` to check and
-  render the report, and saves it unchecked without.
+  `.agents_workspace/product/EVIDENCE.yaml` and the `EVIDENCE.md` generated from it. It needs
+  `uv` to check and render the report, and saves it unchecked without.
 - Check a stranger can use it: install `ceh-usability-audit`, start with
-  `/ceh-usability-audit:simulate-newcomer-first-run`. Writes a report in `.agents_workspace/product/`.
+  `/ceh-usability-audit:simulate-newcomer-first-run`. Writes a report in
+  `.agents_workspace/product/`.
 - Audit the whole codebase for security: install `ceh-security-audit`, start with
   `/ceh-security-audit:audit-codebase-security`. Writes a report.
 
@@ -229,8 +253,9 @@ file to the same sub-path under `.agents_workspace/product/`, or names its locat
 - Make it findable: the same plugin, start with `/ceh-blog-and-seo:write-project-listing-text` for
   the README first screen and listings, or `/ceh-blog-and-seo:make-page-crawlable` for web pages.
 
-Pick one stack plugin for the build. Each brings `ceh-testing`, and the web one also brings
-`ceh-ui-design`:
+Pick one stack plugin for the build, and install it when you build from a plan, not before: its
+skills load in every session in that folder, so while you only plan they take listing space for
+nothing. Each brings `ceh-testing`, and the web one also brings `ceh-ui-design`:
 
 | You are building           | Install              |
 | -------------------------- | -------------------- |
@@ -254,8 +279,9 @@ build from the plan:
 
 Run `/reload-plugins` after each install, so the new skills load.
 
-The Tell stage reads `.agents_workspace/product/business/BUSINESS_PLAN.yaml` and `.agents_workspace/product/EVIDENCE.yaml` when they exist. Without them it
-still runs, and says which claims rest on nothing proven.
+The Tell stage reads `.agents_workspace/product/business/BUSINESS_PLAN.yaml` and
+`.agents_workspace/product/EVIDENCE.yaml` when they exist. Without them it still runs, and says
+which claims rest on nothing proven.
 
 ## 4. Add these only when the moment arrives
 
@@ -280,9 +306,11 @@ the `ceh-*:` skills you installed appear in the skills list. `claude plugin list
 installed plugin with its version and scope. After an interruption, see
 [Interrupted partway?](#1-add-the-marketplace) in step 1.
 
-To drop a plugin you no longer need, `claude plugin uninstall <name>@ceh-claude-code-library`, adding
-the `--scope` it was installed at, such as `--scope local`. Removing the marketplace removes every plugin
-installed from it. Prerequisites (Python for hooks, `uv`, Bun, the GitHub CLI) are in the root
+To drop a plugin you no longer need, `claude plugin uninstall <name>@ceh-claude-code-library`,
+adding the `--scope` it was installed at, such as `--scope local`. Add `--prune` to also remove
+the plugins it brought, such as the `ceh-testing` a stack plugin installs, when nothing else
+needs them. Removing the marketplace removes every plugin installed from it. Prerequisites
+(Python for hooks, `uv`, Bun, the GitHub CLI) are in the root
 [`README.md`](../README.md#prerequisites).
 
 ## If a skill stops triggering, raise the listing budget

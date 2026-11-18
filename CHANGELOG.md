@@ -65,6 +65,12 @@ unclear what it was.
 run 006 of the first-run audit, the walkers still read the first two routes before step 1, and
 one went over twice its budget (R1, run-003 F4).
 
+The guide closes four more findings from that audit. It says why the stack plugin waits for the
+build (F3), and step 5 names `--prune` for the plugins a stack plugin brings. The prerequisite
+checks gain `uv --version` and point to the `uv` install commands (F8). The version checks and
+the `uv` install commands sit in their own code blocks, and its long prose lines are rewrapped
+to 100 columns (F9). The uninstall command now sits under the install success line (run-006 R2).
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -96,6 +102,9 @@ one went over twice its budget (R1, run-003 F4).
   prerequisites paragraph links to it.
 - `docs/GETTING_STARTED.md`: a list of the three ways through the route, each linked, before the
   first of them.
+- `docs/GETTING_STARTED.md`: why the stack plugin waits, `--prune` on uninstall, a `uv --version`
+  check, the version checks and `uv` installers in code blocks, prose rewrapped, and the
+  uninstall command under the install success line.
 
 ### Fixed
 
