@@ -230,7 +230,7 @@ every run would pay for the extra install, so standards are duplicated (3 beats 
 Remove a line in the PR that closes its gap, and add one when a change here, or a new finding,
 opens a gap the same PR cannot close.
 
-As of 2026-11-17:
+As of 2026-11-18:
 
 - **Principle 5, Only the delta.** The `SessionStart` hook loads both coding skills in a session
   that writes no code. Kept until a session shows it doing harm.
@@ -238,8 +238,9 @@ As of 2026-11-17:
 - **Principle 6, One use case, one install.** `ceh-competitor-analysis`, a Shape plugin, depends on
   `ceh-ui-design`, a Build plugin, to render its reports, kept as an exception until design is
   something every skill can reach.
-- **Goal 2 and principle 4, Moments, not topics.** A full install overflows the skill listing
-  budget, so some skills lose the description they trigger on until a setup script raises it.
+- **Goal 2 and principle 4, Moments, not topics.** A full install overflows the default skill
+  listing budget. `tools/setup/setup.py` raises it to 2%, but the user's other plugins share the
+  budget, so some skills can still lose the description they trigger on. `/doctor` shows it.
 - **Scope.** `ceh-workflow-builder` and `ceh-workflow-runner` are decided to move out of this repo
   and still sit in the Any step row.
 

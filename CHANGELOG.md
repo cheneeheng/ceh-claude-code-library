@@ -32,6 +32,11 @@ it does what no plugin can do for itself: install machine tools and change Claud
 A new `setup-registry` check keeps its list of what each plugin needs in line with the plugins.
 Per `.agents_workspace/product/plan/setup-script.yaml`. Windows is tested, Linux and macOS are not.
 
+`docs/VISION.md` and `docs/STRATEGY.md` catch up with the setup script, in their own PR as
+VISION asks. The listing budget gap now names the script and what is left: the user's other
+plugins share the budget, so the script cannot promise every skill keeps its description. The
+strategy says the script is a second way through the guide's route, not a bundle.
+
 ### Plugin versions
 
 | Plugin              | Version |
