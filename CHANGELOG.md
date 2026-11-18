@@ -74,6 +74,15 @@ to 100 columns (F9). The uninstall command now sits under the install success li
 The README's "New here?" line now comes before its note to Claude Code, so a person meets the
 pointer to the guide first (F10).
 
+Install commands in `docs/GETTING_STARTED.md`, the README and `docs/TESTING_WORKFLOW.md` now use
+the terminal form, `claude plugin ...`. The user found that typing `/plugin install ... --scope
+local` inside a session opens the `/plugin` menu instead of running the line, so the slash form
+the guide showed could not be pasted as written. The guide now says once what the menu does,
+that a plugin picked there loads into its session at once, and that one installed from a
+terminal, a script or another session needs `/reload-plugins` in a session already running. The
+per-install reload lines are gone, and "Interrupted partway?" has its own heading so step 5 links
+straight to it (run-003 F5, run-006 and run-007 R2, run-008 R3).
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -109,6 +118,9 @@ pointer to the guide first (F10).
   check, the version checks and `uv` installers in code blocks, prose rewrapped, and the
   uninstall command under the install success line.
 - `README.md`: "New here?" moves above the note to Claude Code.
+- `docs/GETTING_STARTED.md`, `README.md`, `docs/TESTING_WORKFLOW.md`: install commands in the
+  `claude plugin` terminal form; when `/reload-plugins` is needed; a heading for "Interrupted
+  partway?".
 
 ### Fixed
 

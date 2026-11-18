@@ -89,13 +89,17 @@ To use another scope, swap the `--scope` value in any command below.
 
 ## 1. Add the marketplace
 
+Run every `claude plugin ...` command below in a terminal opened in the folder you work in.
+Inside a Claude Code session, `/plugin` opens a menu instead of taking these arguments: pick the
+same plugin and the `local` scope there, and the plugin loads into that session straight away.
+
 ```
-/plugin marketplace add cheneeheng/ceh-claude-code-library
+claude plugin marketplace add cheneeheng/ceh-claude-code-library
 ```
 
 Leave `--scope` off this command: it then adds the marketplace once for your user, in
 `~/.claude/settings.json`, so every folder can install from it. The plugins themselves stay at
-`local` scope. Run in a terminal, it ends with this line:
+`local` scope. It ends with this line:
 
 ```
 ✔ Successfully added marketplace: ceh-claude-code-library (declared in user settings)
@@ -104,10 +108,9 @@ Leave `--scope` off this command: it then adds the marketplace once for your use
 To undo it, run `claude plugin marketplace remove ceh-claude-code-library`, which also uninstalls
 every plugin installed from it.
 
-Every `/plugin ...` command typed in a Claude Code session also runs in a terminal as
-`claude plugin ...`. They are the same command.
+### Interrupted partway?
 
-Interrupted partway? Run these two in the folder you work in to see where you are:
+Run these two in the folder you work in to see where you are:
 
 ```
 claude plugin marketplace list
@@ -166,18 +169,18 @@ installs `python3` for you. Without `uv`, the commands in
 [Set up with the script](#set-up-with-the-script) install it.
 
 ```
-/plugin install ceh-every-session@ceh-claude-code-library --scope local
+claude plugin install ceh-every-session@ceh-claude-code-library --scope local
 ```
 
-Run in a terminal, each install ends with
+Each install ends with
 `✔ Successfully installed plugin: <name>@ceh-claude-code-library (scope: local)`. To undo one,
 run `claude plugin uninstall <name>@ceh-claude-code-library --scope local`.
 
 If you write code in git repos, add:
 
 ```
-/plugin install ceh-git-workflow@ceh-claude-code-library --scope local
-/plugin install ceh-coding-conduct@ceh-claude-code-library --scope local
+claude plugin install ceh-git-workflow@ceh-claude-code-library --scope local
+claude plugin install ceh-coding-conduct@ceh-claude-code-library --scope local
 ```
 
 `ceh-git-workflow` blocks file edits on the default branch, so in a brand-new repo create a
@@ -198,11 +201,11 @@ anyway, set `CEH_BRANCH_GUARD` to `off`, as described in
 project that is only being planned does not load the build and launch plugins. It records the
 plugin in that folder's `.claude/settings.local.json`, which is not committed.
 
-Install each plugin below in a Claude Code session opened in that folder, putting its name in place
-of `<plugin>`:
+Install each plugin below from a terminal opened in that folder, putting its name in place of
+`<plugin>`:
 
 ```
-/plugin install <plugin>@ceh-claude-code-library --scope local
+claude plugin install <plugin>@ceh-claude-code-library --scope local
 ```
 
 Each moment names the plugin, the command that starts it, and the file it writes. Every product
@@ -264,20 +267,17 @@ nothing. Each brings `ceh-testing`, and the web one also brings `ceh-ui-design`:
 | a web frontend             | `ceh-web-frontend`   |
 
 For example, a new Python backend service starts with a plan and adds the build plugins once the
-plan is written. In a Claude Code session opened in that repo, install the plan plugin now:
+plan is written. From a terminal in that repo, install the plan plugin now:
 
 ```
-/plugin install ceh-build-plan@ceh-claude-code-library --scope local
+claude plugin install ceh-build-plan@ceh-claude-code-library --scope local
 ```
 
-After `/reload-plugins`, start the plan with `/ceh-build-plan:write-build-plan`. Then, when you
-build from the plan:
+Then start the plan with `/ceh-build-plan:write-build-plan`. When you build from the plan:
 
 ```
-/plugin install ceh-python-service@ceh-claude-code-library --scope local
+claude plugin install ceh-python-service@ceh-claude-code-library --scope local
 ```
-
-Run `/reload-plugins` after each install, so the new skills load.
 
 The Tell stage reads `.agents_workspace/product/business/BUSINESS_PLAN.yaml` and
 `.agents_workspace/product/EVIDENCE.yaml` when they exist. Without them it still runs, and says
@@ -296,15 +296,19 @@ which claims rest on nothing proven.
 
 ## 5. Check it worked
 
+In a Claude Code session opened in the folder, run:
+
 ```
 /reload-plugins
 /help
 ```
 
-Installed plugins do not load into a running session until `/reload-plugins` or a new session. Then
-the `ceh-*:` skills you installed appear in the skills list. `claude plugin list` shows each
+The `ceh-*:` skills you installed appear in the skills list. A plugin installed from a terminal,
+by "Let Claude set you up", by the setup script, or by another session does not load into a
+session that was already running until `/reload-plugins` or a new session. One picked in the
+`/plugin` menu loads into its own session straight away. `claude plugin list` shows each
 installed plugin with its version and scope. After an interruption, see
-[Interrupted partway?](#1-add-the-marketplace) in step 1.
+[Interrupted partway?](#interrupted-partway) in step 1.
 
 To drop a plugin you no longer need, `claude plugin uninstall <name>@ceh-claude-code-library`,
 adding the `--scope` it was installed at, such as `--scope local`. Add `--prune` to also remove

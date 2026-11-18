@@ -205,7 +205,7 @@ Each stack plugin depends on `ceh-testing`, so installing one brings the techniq
 | Any other stack             | `ceh-testing` alone                       |
 
 ```
-/plugin install ceh-testing@ceh-claude-code-library --scope local
+claude plugin install ceh-testing@ceh-claude-code-library --scope local
 ```
 
 `ceh-testing` alone is usable, because the technique skills need no stack plugin, but you lose the
