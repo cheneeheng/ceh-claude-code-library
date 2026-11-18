@@ -86,9 +86,8 @@ _alongside_ a stage plugin, not instead of one. Which to install first is in
 
 ### Prerequisites
 
-The [setup script](tools/setup/README.md) checks everything below for the plugins you pick and
-installs what is missing after asking, as [Getting started](docs/GETTING_STARTED.md#set-up-with-the-script)
-shows. Windows is tested, and Linux and macOS are untested.
+The [setup script](#set-up-with-the-script-alternative) checks everything below for the plugins
+you pick and installs what is missing after asking.
 
 `python3` on `PATH` (stdlib only, no packages) for the hooks in [`ceh-every-session`](plugins/standalone/ceh-every-session/), [`ceh-git-workflow`](plugins/standalone/ceh-git-workflow/)
 and [`ceh-coding-conduct`](plugins/standalone/ceh-coding-conduct/), which also needs `bash`. Every plugin that saves a YAML artifact (a plan, a report, a fix
@@ -133,6 +132,22 @@ where you author a flow and [`ceh-workflow-runner`](plugins/standalone/ceh-workf
 
 Installed plugins load after `/reload-plugins` or in a new session. Then the `ceh-*:` skills appear
 in the skills list.
+
+### Set up with the script (alternative)
+
+The setup script does Steps 1 and 2 from a terminal, and also what a plugin cannot do for itself:
+it installs the tools the plugins need (`python3`, `uv`, `git`, the GitHub CLI, Bun), raises the
+skill listing budget, and offers the statusline the usage-limit guard reads. It asks before each
+change. Run it in the folder you are about to work in:
+
+```
+uv run https://raw.githubusercontent.com/cheneeheng/ceh-claude-code-library/main/tools/setup/setup.py
+```
+
+`--check` reports what it would do and changes nothing. Windows is tested, and Linux and macOS
+are untested. How to get `uv` first is in
+[Getting started](docs/GETTING_STARTED.md#set-up-with-the-script), and every option in
+[`tools/setup/README.md`](tools/setup/README.md).
 
 ### From a local clone (alternative)
 
