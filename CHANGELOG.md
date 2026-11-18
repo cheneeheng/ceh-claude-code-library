@@ -43,6 +43,10 @@ old opt-in `C4_STATUSLINE_EXPORT=1`. The guard reads both layouts, so its behavi
 - `tools/validate-plugins`: the repeat-merge test in `test_workspace_checkpoints.py` passes the
   attribution line `checkpoints()` has taken since the hook signed its commits, so the unit tests
   run green again. CI runs only `validate.py`, so the error went unnoticed.
+- `tools/validate-plugins`: `find_bash()` finds Git Bash when `git.exe` sits under `ucrt64/bin/`
+  (or `clang64/bin/`), the layout of current Git for Windows builds. Before, it found none, so a
+  local run on such a machine skipped every bash check with "Git Bash not found".
+  `test_validator.py` gains the reproducer.
 
 ## 2026-11-17
 
