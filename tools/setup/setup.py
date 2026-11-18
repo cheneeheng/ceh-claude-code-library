@@ -24,6 +24,7 @@ import shutil
 import subprocess
 import sys
 import time
+import urllib.request
 from pathlib import Path
 
 MARKETPLACE = "ceh-claude-code-library"
@@ -733,6 +734,102 @@ def recommended_core(git_repo: bool) -> list[str]:
     return core
 
 
+def write_settings(path: Path, settings: dict) -> None:
+    """Write through a temporary file that replaces the original, so a failed write leaves the
+    old file whole."""
+    write_file(path, json.dumps(settings, indent=2) + "\n")
+
+
+def write_file(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text, encoding="utf-8", newline="\n")
+    os.replace(tmp, path)
+
+
+def ask(question: str, default: bool) -> bool:
+    hint = "[Y/n]" if default else "[y/N]"
+    try:
+        answer = input(f"{question} {hint} ").strip().lower()
+    except EOFError:
+        return False
+    return default if not answer else answer in ("y", "yes")
+
+
+def run_shown(cmd: list[str]) -> int | None:
+    """Run with the person's terminal attached, for installers that print or ask (sudo)."""
+    exe = shutil.which(cmd[0])
+    if not exe:
+        return None
+    try:
+        return subprocess.run([exe, *cmd[1:]]).returncode
+    except OSError:
+        return None
+
+
+def pick_plugins(states: dict, core: list[str], git_repo: bool) -> list[str]:
+    """Step 3: a numbered list grouped as docs/GETTING_STARTED.md, Enter takes the core."""
+    names = [n for g in GROUPS for n in PLUGINS if PLUGINS[n]["group"] == g]
+    group = None
+    for i, name in enumerate(names, 1):
+        if PLUGINS[name]["group"] != group:
+            group = PLUGINS[name]["group"]
+            say(f"  {group}")
+        mark = states.get(name, ("", ""))[0]
+        say(f"    {i:2}. {name}{'  (' + mark + ')' if mark else ''}")
+    say(
+        "  Recommended core: ceh-every-session always; ceh-git-workflow if you work in a git "
+        "repo; ceh-coding-conduct if you write code with Claude."
+    )
+    say(
+        f"  This folder is {'a git repo, so Enter takes all three' if git_repo else 'not a git repo, so Enter takes ceh-every-session'}."
+    )
+    while True:
+        try:
+            answer = input("Numbers to set up, separated by spaces (Enter: core): ")
+        except EOFError:
+            return core
+        if not answer.strip():
+            return core
+        try:
+            chosen = [names[int(n) - 1] for n in re.split(r"[\s,]+", answer.strip())]
+        except (ValueError, IndexError):
+            say(f"  Type numbers from 1 to {len(names)}.")
+            continue
+        return list(dict.fromkeys(chosen))
+
+
+def install_statusline(windows: bool) -> str:
+    """Download statusline-hook from the pinned tag and point statusLine at it."""
+    path = settings_path()
+    settings = read_settings(path)
+    if settings is None:
+        return f"not installed: {path} cannot be read as JSON"
+    ext = "ps1" if windows else "sh"
+    if not windows and not shutil.which("jq"):
+        return "not installed: the sh statusline needs jq, which is missing"
+    url = f"{STATUSLINE_RAW}.{ext}"
+    try:
+        with urllib.request.urlopen(url, timeout=30) as r:
+            script = r.read().decode("utf-8")
+    except (OSError, ValueError) as e:
+        return f"not installed: download of {url} failed ({e})"
+    dest = path.parent / f"statusline-hook.{ext}"
+    command = statusline_command(
+        settings, windows, bool(shutil.which("pwsh")), str(dest)
+    )
+    if command is None:
+        return "already set"
+    write_file(dest, script)
+    settings["statusLine"] = {
+        "type": "command",
+        "command": command,
+        "refreshInterval": 60,
+    }
+    write_settings(path, settings)
+    return f"installed: {command}"
+
+
 # ---- the run ----
 
 
@@ -763,9 +860,10 @@ def main(argv: list[str] | None = None) -> int:
         parser.error(f"unknown plugins: {', '.join(unknown)}")
 
     # 1. Preflight
+    report_only = args.check or not sys.stdin.isatty()
     if args.check:
         say("Report-only mode (--check): nothing is installed, enabled or written.")
-    else:
+    elif report_only:
         say(
             "Report-only mode: no terminal to answer, so nothing is installed, enabled or written."
         )
@@ -774,6 +872,10 @@ def main(argv: list[str] | None = None) -> int:
                 "Git Bash's mintty may not count as a terminal: run the script from "
                 "PowerShell or Windows Terminal to install."
             )
+    else:
+        say("Setup mode: every install and write asks first.")
+    platform = {"win32": "windows", "darwin": "darwin"}.get(sys.platform, "linux")
+    done: list[str] = []
     if not shutil.which("claude"):
         say("claude is not on PATH. Install Claude Code first, then run this again.")
         return 2
@@ -789,14 +891,20 @@ def main(argv: list[str] | None = None) -> int:
         say("  `claude plugin marketplace list --json` failed.")
         return 1
     has_market = MARKETPLACE in {m.get("name") for m in markets}
-    say(
-        f"  {MARKETPLACE}: "
-        + (
-            "added"
-            if has_market
-            else f"missing, would run `claude plugin marketplace add {MARKETPLACE_REPO}`"
+    add_cmd = ["claude", "plugin", "marketplace", "add", MARKETPLACE_REPO]
+    if has_market:
+        say(f"  {MARKETPLACE}: added")
+    elif report_only:
+        say(f"  {MARKETPLACE}: missing, would run `{' '.join(add_cmd)}`")
+    elif ask(f"Add the {MARKETPLACE} marketplace?", True):
+        has_market = run_shown(add_cmd) == 0
+        say(f"  {MARKETPLACE}: {'added' if has_market else 'adding failed'}")
+        if has_market:
+            done.append(f"marketplace {MARKETPLACE} added")
+    if not has_market and not report_only:
+        say(
+            "  Without the marketplace no plugin can be installed: plugins are skipped."
         )
-    )
 
     # 3. Picks
     entries = claude_json("plugin", "list", "--json")
@@ -807,9 +915,14 @@ def main(argv: list[str] | None = None) -> int:
     states = plugin_states(entries, cwd, windows)
     git_repo = run(["git", "-C", cwd, "rev-parse", "--is-inside-work-tree"])[0] == 0
     core = recommended_core(git_repo)
-    picks = picks_given or list(dict.fromkeys([*states, *core]))
-    say(f"\nPicks for {cwd}")
-    say("  " + ", ".join(picks))
+    say(f"\nPlugins to set up in {cwd}")
+    if picks_given:
+        picks = picks_given
+    elif report_only:
+        picks = list(dict.fromkeys([*states, *core]))
+    else:
+        picks = pick_plugins(states, core, git_repo)
+    say("  Picked: " + ", ".join(picks))
 
     # 4. Tools
     say("\nTools")
@@ -827,10 +940,30 @@ def main(argv: list[str] | None = None) -> int:
     found: dict[str, bool] = {}
     for tool in tools:
         ok, what = probe(tool)
+        say(f"  {tool}: {'found, ' + what if ok else what}")
+        cmd = TOOLS[tool]["install"][platform]
+        if not ok and cmd and shutil.which(cmd[0]):
+            if report_only:
+                say(f"    would ask to run: {' '.join(cmd)}")
+            elif ask(f"    Install {tool} with `{' '.join(cmd)}`?", False):
+                if run_shown(cmd) == 0:
+                    ok, what = probe(tool)
+                    if ok:
+                        done.append(f"{tool} installed")
+                    else:
+                        say(
+                            f"    {tool} installed, but this shell cannot see it yet: open a "
+                            "new terminal and run the script again."
+                        )
+                else:
+                    say(f"    The {tool} install failed.")
+        elif not ok:
+            say(
+                f"    No known installer here: install {tool} from its own install page."
+            )
         found[tool] = ok
         if not ok:
             unmet.add(tool)
-        say(f"  {tool}: {'found, ' + what if ok else what}")
 
     # 5. Resolve
     plugins, warnings = resolve(picks, unmet, claude_version)
@@ -852,14 +985,39 @@ def main(argv: list[str] | None = None) -> int:
 
     # 6. Plugins
     say("\nPlugins for this folder")
+    to_install = []
     for name in plugins:
         state = states.get(name)
+        plugin_id = f"{name}@{MARKETPLACE}"
         if state and state[0] == "on":
             say(f"  {name}: already on ({state[1]})")
-        elif state:
+        elif state and report_only:
             say(f"  {name}: off, would enable at {state[1]} scope")
-        else:
+        elif state and has_market:
+            # Picking it was the yes.
+            ok = (
+                run(["claude", "plugin", "enable", plugin_id, "--scope", state[1]])[0]
+                == 0
+            )
+            say(
+                f"  {name}: {'enabled' if ok else 'enabling failed'} at {state[1]} scope"
+            )
+            if ok:
+                done.append(f"{name} enabled")
+        elif report_only:
             say(f"  {name}: not installed, would install at {args.scope} scope")
+        else:
+            to_install.append(name)
+    if to_install and has_market:
+        if ask(f"Install {len(to_install)} plugins at {args.scope} scope?", True):
+            for name in to_install:
+                cmd = ["claude", "plugin", "install", f"{name}@{MARKETPLACE}"]
+                ok = run([*cmd, "--scope", args.scope], timeout=300)[0] == 0
+                say(f"  {name}: {'installed' if ok else 'install failed'}")
+                if ok:
+                    done.append(f"{name} installed at {args.scope} scope")
+        else:
+            say("  Nothing installed.")
 
     # 7. Settings
     if "ceh-every-session" in plugins:
@@ -879,14 +1037,23 @@ def main(argv: list[str] | None = None) -> int:
                 f"  {state}"
                 + ("" if state != "not fed" else f": see {STATUSLINE_README}")
             )
-        else:
+        elif report_only:
             say(f"  would install statusline-hook {STATUSLINE_TAG}")
+        elif ask(f"Install the statusline-hook statusline ({STATUSLINE_TAG})?", False):
+            result = install_statusline(windows)
+            say(f"  statusline-hook {result}")
+            if result.startswith("installed"):
+                done.append(f"statusline-hook {STATUSLINE_TAG} {result}")
 
     # 8. Summary
     say("\nSummary")
+    for line in done:
+        say(f"  Done: {line}")
     say(f"  Tools missing: {', '.join(sorted(unmet)) or 'none'}")
     for line in warnings:
         say(f"  {line}")
+    if done:
+        say("  Run /reload-plugins in any open Claude Code session.")
     return 0
 
 
