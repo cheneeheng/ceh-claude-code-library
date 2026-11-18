@@ -277,7 +277,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         if busy:
             (ws / ".git" / busy).touch()
 
-    def checkpoint_result(refs, checkout, committed, kept, no_call, busy):
+    def checkpoint_result(refs, checkout, committed, kept, no_call, busy, dirty=False):
         if busy:
             (ws / ".git" / busy).unlink()
         head = g(checkout / ".agents_workspace", "rev-parse", "HEAD")
@@ -288,11 +288,14 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             return "checkpoint pending entries were not kept or cleared correctly"
         if committed:
             repo = checkout / ".agents_workspace"
-            if (
-                g(repo, "rev-list", "--count", f"{checkpoint_before['head']}..HEAD")
-                != "1"
+            # The checkpoint is an empty marker; a dirty workspace adds a sync commit after it.
+            if g(repo, "rev-list", "--count", f"{checkpoint_before['head']}..HEAD") != (
+                "2" if dirty else "1"
             ):
-                return "expected exactly one checkpoint commit"
+                return "expected one checkpoint commit, then a sync commit when dirty"
+            marker = "HEAD~1" if dirty else "HEAD"
+            if g(repo, "show", "--format=", "--name-only", marker):
+                return "checkpoint commit holds files"
             subject = (
                 f"chore(workspace): checkpoint source pr #{refs[0]}"
                 if len(refs) == 1
@@ -301,9 +304,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             )
             if len(subject) > 72:
                 subject = f"chore(workspace): checkpoint {len(refs)} source prs"
-            if g(repo, "log", "-1", "--format=%s") != subject:
+            if g(repo, "log", "-1", "--format=%s", marker) != subject:
                 return "wrong checkpoint subject"
-            body = g(repo, "log", "-1", "--format=%b")
+            body = g(repo, "log", "-1", "--format=%b", marker)
             for n in refs:
                 if (
                     f"https://github.com/example/project/pull/{n} merged as merge-{n}-{checkpoint_before['sequence']}"
@@ -311,7 +314,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
                 ):
                     return "checkpoint body lost the PR URL or merge commit"
             if g(repo, "status", "--porcelain"):
-                return "checkpoint did not commit all workspace changes"
+                return "the Stop left workspace changes uncommitted"
         if no_call and (gh_stub / "calls").exists():
             return "gh should not have been called"
         return None
@@ -348,7 +351,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
                 code,
             ),
             "after": lambda: checkpoint_result(
-                refs, checkout, committed, kept, no_call, busy
+                refs, checkout, committed, kept, no_call, busy, dirty
             ),
             **extra,
         }

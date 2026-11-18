@@ -112,15 +112,15 @@ the session id>` and the changed paths in the body. It skips while a merge, an a
 
 Before a `gh pr merge` command, the hook records its PR number, URL or branch as pending,
 without calling GitHub. At Stop it checks pending entries for that checkout. Once GitHub confirms
-a recent merge, it commits all workspace changes with a subject such as
+a recent merge, it makes an empty commit with a subject such as
 `chore(workspace): checkpoint source pr #123` and a body containing the PR URL and merge commit.
-A clean workspace gets an empty checkpoint. Several confirmed PRs share one checkpoint commit.
-Repeated merge events are cleared when Git history already holds that PR and merge commit.
-The commit stays local and includes every workspace change, including another session's work.
+The checkpoint holds no files, staged or not, so it never files unrelated work under a PR's name.
+Uncommitted workspace changes go into the same Stop's `chore(workspace): sync ...` commit. Several confirmed PRs share one checkpoint commit. Repeated merge events are cleared when
+Git history already holds that PR and merge commit. The commit stays local.
 
 Pending entries live in the main workspace's `.git/ceh-checkpoint-pending/`. An open PR stays
 pending even if its merge command was denied or failed. A queued auto-merge is checked at a later
-Stop in the same checkout, so its checkpoint contains the workspace at that later time. Closed
+Stop in the same checkout, so its checkpoint commit is made at that later time. Closed
 PRs, older merges and entries older than 14 days are cleared without a checkpoint. Merges made
 only in a browser are not recorded. Commands targeting another repo with `-R` or `--repo` are
 ignored. Lookup or commit failures keep the entry and show a message once per session and reason,
