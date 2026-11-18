@@ -108,8 +108,10 @@ Environment variables the plugins read are indexed in
 
 ### Step 1 — Add the marketplace
 
+In a terminal:
+
 ```
-/plugin marketplace add cheneeheng/ceh-claude-code-library
+claude plugin marketplace add cheneeheng/ceh-claude-code-library
 ```
 
 ### Step 2 — Install what you need now
@@ -130,8 +132,9 @@ where you author a flow and [`ceh-workflow-runner`](plugins/standalone/ceh-workf
 /help
 ```
 
-Installed plugins load after `/reload-plugins` or in a new session. Then the `ceh-*:` skills appear
-in the skills list.
+The `ceh-*:` skills you installed appear in the skills list. A plugin installed from a terminal
+loads into a running session after `/reload-plugins`, or in a new session. One picked in a
+session's `/plugin` menu loads into that session straight away.
 
 ### Set up with the script (alternative)
 
@@ -158,7 +161,7 @@ git clone https://github.com/cheneeheng/ceh-claude-code-library.git ~/ceh-claude
 ```
 
 ```
-/plugin marketplace add ~/ceh-claude-code-library
+claude plugin marketplace add ~/ceh-claude-code-library
 ```
 
 Plugins from a marketplace added by local path load in place, so a `git pull` takes effect at the
