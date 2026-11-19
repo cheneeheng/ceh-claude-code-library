@@ -9,6 +9,37 @@ before this repo live in
 
 ---
 
+## 2026-11-19
+
+The plan skills now serve a repo whose deliverable is documents, such as a knowledge base, a docs
+repo, a deck outline or an analysis, as well as software. They had assumed code: an auth and
+endpoint checklist, a failing test first, and a check against "the code". Each skill now branches
+only where its step differs, so a software plan reads the same steps as before, and the `plan/v2`
+format and model are unchanged. A trial in a Markdown-only knowledge base planned, reviewed, built
+and checked an appendix through them. Per
+`.agents_workspace/product/plan/20261119-105118-plan-skills-for-documents.yaml`.
+
+### Plugin versions
+
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-build-plan`               | 2.0.20  |
+| `ceh-check-build-against-plan` | 1.1.24  |
+| `ceh-every-session`            | 2.9.34  |
+
+### Changed
+
+- `write-build-plan` names the deliverable (code, documents, or both) in its triage line, and
+  its design step gains a document checklist: the reader, sources and citation, file layout and
+  index links, the repo's conventions, and what a finished document holds.
+- `review-build-plan` gains a Content lens for documents, and runs Engineering only when the build
+  includes code.
+- `implement-from-plan` writes a document phase's acceptance checks first and records them failing
+  in the phase's note, where a code phase writes its failing test first.
+- `check-build-against-plan` checks the plan against the repo's files, code or documents.
+- `plan-schema.md` says "the build" and "the deliverable" where it said "the code" and "the app",
+  with a Check example for documents, in all six copies.
+
 ## 2026-11-18
 
 The workspace checkpoint a PR merge leaves is now an empty commit. Before, it staged the whole

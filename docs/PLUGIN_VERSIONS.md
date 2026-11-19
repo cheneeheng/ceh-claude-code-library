@@ -16,14 +16,14 @@ a removed plugin loses its row.
 | ------------------------------ | ------- | ------------ |
 | `ceh-ag-ui`                    | 1.1.7   | `2026-11-18` |
 | `ceh-blog-and-seo`             | 2.0.15  | `2026-11-17` |
-| `ceh-build-plan`               | 2.0.19  | `2026-11-17` |
+| `ceh-build-plan`               | 2.0.20  | `2026-11-19` |
 | `ceh-product-direction`        | 2.0.18  | `2026-11-17` |
-| `ceh-check-build-against-plan` | 1.1.23  | `2026-11-17` |
+| `ceh-check-build-against-plan` | 1.1.24  | `2026-11-19` |
 | `ceh-codebase-explanation`     | 1.3.20  | `2026-11-17` |
 | `ceh-coding-conduct`           | 2.5.22  | `2026-11-17` |
 | `ceh-competitor-analysis`      | 1.2.17  | `2026-11-17` |
 | `ceh-documentation`            | 1.0.11  | `2026-11-14` |
-| `ceh-every-session`            | 2.9.33  | `2026-11-18` |
+| `ceh-every-session`            | 2.9.34  | `2026-11-19` |
 | `ceh-git-workflow`             | 2.0.8   | `2026-11-18` |
 | `ceh-python-library`           | 1.0.5   | `2026-11-12` |
 | `ceh-python-service`           | 1.1.10  | `2026-11-17` |

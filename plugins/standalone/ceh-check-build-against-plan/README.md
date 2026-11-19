@@ -1,6 +1,6 @@
 # ceh-check-build-against-plan
 
-Check whether finished code is what its plan said to build. Tests show that what exists works.
+Check whether finished code or docs is what its plan said to build. Tests show that what exists works.
 This check shows whether what exists is what was planned: every planned item built, nothing built
 that the plan left out, and each phase's check still passing.
 
@@ -10,9 +10,9 @@ spec you name, so it works installed alone.
 
 ## Skills
 
-| Skill                      | When it loads                                 | What it does                                                                                                                                                                                                                                                                                                                                             |
-| -------------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `check-build-against-plan` | When asking whether the code matches the plan | Lists every plan item, marks each Built, Gap, Deviation, Extra, Failing, or Cannot verify with quoted evidence, and reruns each phase's check. Report-only unless asked to fix. Say "gate it" to have two fresh reviewers recheck the fix, both required to pass, for up to three rounds. It's working if the report opens with a `Build vs plan` table. |
+| Skill                      | When it loads                                       | What it does                                                                                                                                                                                                                                                                                                                                             |
+| -------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `check-build-against-plan` | When asking whether the code or docs match the plan | Lists every plan item, marks each Built, Gap, Deviation, Extra, Failing, or Cannot verify with quoted evidence, and reruns each phase's check. Report-only unless asked to fix. Say "gate it" to have two fresh reviewers recheck the fix, both required to pass, for up to three rounds. It's working if the report opens with a `Build vs plan` table. |
 
 **Manual trigger:** `/ceh-check-build-against-plan:check-build-against-plan [plan-file]`, or say
 `"does the code match the plan"` / `"did we build what we planned"`. Each check appends a Checked
