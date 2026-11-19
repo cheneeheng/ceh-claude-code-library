@@ -827,12 +827,12 @@ in both files together:
 
 **Canonical:** `plugins/standalone/ceh-git-workflow/skills/write-code-review/SKILL.md` — § Rules
 
-| Copy                                                                                       | Section      | Diverges                                                                            |
-| ------------------------------------------------------------------------------------------ | ------------ | ----------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules      | a Gap quotes the plan line it is missing; an unquoted finding goes under Unverified |
-| `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`                          | § Output     | an unquoted finding goes below the findings list                                    |
-| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`                  | § Hard rules | quotes the line from the head version; an unquoted finding goes under Dismissed     |
-| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules | same as `python-service-reviewer`                                                   |
+| Copy                                                                                       | Section      | Diverges                                                                                                               |
+| ------------------------------------------------------------------------------------------ | ------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules      | a Gap quotes the plan line it is missing; an unquoted finding goes under Unverified; quotes the file, code or document |
+| `plugins/standalone/ceh-testing/skills/audit-test-suite/SKILL.md`                          | § Output     | an unquoted finding goes below the findings list                                                                       |
+| `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`                  | § Hard rules | quotes the line from the head version; an unquoted finding goes under Dismissed                                        |
+| `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules | same as `python-service-reviewer`                                                                                      |
 
 **Shared:** every finding quotes the code it is about, as `path:line` plus the line itself, and a
 finding you cannot anchor to quoted code is reported as unverified, outside the findings.
@@ -843,7 +843,7 @@ finding you cannot anchor to quoted code is reported as unverified, outside the 
 
 | Copy                                                                                       | Section                      | Diverges                                                                                                                                                |
 | ------------------------------------------------------------------------------------------ | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules + § Procedure step 3 | example brief names a part of the app; Cannot verify is a per-item status, not a verdict                                                                |
+| `plugins/standalone/ceh-check-build-against-plan/skills/check-build-against-plan/SKILL.md` | § Rules + § Procedure step 3 | example brief names a part of the app; Cannot verify is a per-item status, not a verdict; judges from the files, code or documents                      |
 | `plugins/standalone/ceh-python-service/agents/python-service-reviewer.md`                  | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `write-code-review` gives the verdict; the brief cannot change whether a finding is reported |
 | `plugins/standalone/ceh-web-frontend/agents/web-frontend-reviewer.md`                      | § Hard rules + § Output      | Cannot verify is a list in the agent's report; the calling `write-code-review` gives the verdict                                                        |
 

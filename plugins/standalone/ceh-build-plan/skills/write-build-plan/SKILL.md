@@ -1,7 +1,7 @@
 ---
 name: write-build-plan
 description: >-
-  Load this skill before the first edit of a change that has no plan yet: a new app or tool, a
+  Load this skill before the first edit of a change that has no plan yet: a new app, tool or doc set, a
   feature added to existing code even when it sounds quick, or a multi-file change such as a
   retro's fixes. Writes one plan file. Trigger on "build me X", "add X to the app", "plan this".
 argument-hint: "[what to build | <draft plan path>]"
@@ -32,16 +32,21 @@ draft: say so and write a new plan as usual.
 
 ## Procedure
 
-1. **Triage, and announce the label in one line.**
+1. **Triage, and announce the label and the deliverable in one line.**
 
-   | Label             | The work                                                         | Path                                                  |
-   | ----------------- | ---------------------------------------------------------------- | ----------------------------------------------------- |
-   | **Spike**         | Throwaway code to answer one question ("can this library do X?") | No plan. Name the question and stop                   |
-   | **Bounded**       | One change inside the existing design: no new component or model | A plan of one to three phases                         |
-   | **Architectural** | A new app, component, data model, or major version               | A full plan. A new app gets an MVP boundary in step 3 |
+   | Label             | The work                                                                                    | Path                                                  |
+   | ----------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+   | **Spike**         | Throwaway work to answer one question ("can this library do X?", "does this outline hold?") | No plan. Name the question and stop                   |
+   | **Bounded**       | One change inside the existing design: no new component or model                            | A plan of one to three phases                         |
+   | **Architectural** | A new app, component, data model, major version, or a new document set or series            | A full plan. A new app gets an MVP boundary in step 3 |
 
    The label may move up mid-session, never down: a spike that turns into a keeper gets a plan, and
    architectural work keeps its plan when it shrinks.
+
+   The deliverable includes code, documents, or both, read from the request and the repo, never
+   asked. Documents count only when they are a deliverable the request names, such as a new
+   appendix, guide, deck or analysis. A README, changelog or docstring updated alongside code
+   does not. Steps 5 and 6 branch on it, and a build that has both runs both branches.
 
 2. **Read what exists before asking.** When a `VISION.yaml` and `STRATEGY.yaml` exist (in
    `.agents_workspace/product/`, or the `VISION.md` and `STRATEGY.md` in `docs/`, the root, or
@@ -80,7 +85,10 @@ draft: say so and write a new plan as usual.
 
 5. **Write the Design.** Only the decisions the phases need, each with its reason. Settle or
    explicitly defer each of these that applies, because each one stops a builder mid-phase when
-   it is left open:
+   it is left open.
+
+   When the build includes code:
+
    - Auth, and who owns each resource. A resource that exists but belongs to someone else returns
      the same status as a missing one, so the response does not leak that it exists.
    - Pagination on list endpoints, environment variable names, and the migration strategy.
@@ -98,9 +106,20 @@ draft: say so and write a new plan as usual.
      once. Shared state: name who writes each value two requests or processes touch. Smallest
      interface: a module that exposes most of what it holds hides nothing, so merge or cut it.
 
-6. **Sequence the phases.** Foundations first (data model, auth) before the features that use
-   them. No phase relies on anything a later phase introduces. Prefer thin vertical slices that
-   leave the app demonstrable, but when a foundation and a slice pull against each other, the
+   When the deliverable includes documents:
+
+   - The reader, and what they can do after reading that they could not before.
+   - Where each claim's source comes from and how it is cited, matching the repo's existing
+     citations.
+   - Where each new file goes, its name in the repo's numbering, and every index or README that
+     must link it.
+   - The conventions read from the existing files: heading levels, section order, terms, and date
+     style.
+   - What a finished document holds: no placeholder, every claim sourced, every link resolving.
+
+6. **Sequence the phases.** Foundations first (data model, auth, or, for documents, the outline
+   and the index entries) before the features that use them. No phase relies on anything a later
+   phase introduces. Prefer thin vertical slices that leave the deliverable usable, but when a foundation and a slice pull against each other, the
    foundation wins. Give each phase a Check a builder can run. More than six phases is a sign to
    re-run step 4.
 
