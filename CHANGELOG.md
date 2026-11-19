@@ -67,6 +67,15 @@ deliberate break pass. Each fix was shown failing on that break first. No plugin
 since only tests, CI and the validator change. Per
 `.agents_workspace/product/audit/test/20261119-222750-ead3d83a-9fba-49d8-a3ab-3e8d6b60d94d-test-audit.yaml`.
 
+A sixth PR fixes what an audit of `docs/VISION.md` found, where the vision gave an agent two
+answers or none. Goal 5 put every check a machine can run in `validate.py`, while principle 7
+allowed one only on evidence. Now principle 7 decides whether a check exists and goal 5 where it
+goes. The vision said to change it in its own PR, while `decision-vision-governs.md` said to fix
+either side in the same PR. Now a file that disagrees is fixed in the PR that finds it, and a
+change to the vision lands first in its own PR. The rest defines a stage, the versioned workspace
+and which Core plugin takes a skill, and corrects claims that no longer matched the repo. Per
+`.agents_workspace/product/audit/general/20261119-222709-d8e52515-a07a-4c9e-836e-09c969999791-docs-VISION-md.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -128,6 +137,13 @@ since only tests, CI and the validator change. Per
 
 ### Fixed
 
+- `docs/VISION.md`: goal 5 and principle 7 now agree on adding checks. "Changing this file" and
+  `decision-vision-governs.md` now agree on PRs, and the list of files to update includes
+  `.claude/rules/`. A stage is one of the four route rows. The versioned workspace is defined,
+  and so is which Core plugin takes an unannounced skill. A pre-authorized action is recorded as
+  a rule. Principle 6 says which dependencies keep a plugin standing alone. `ceh-testing` sits in
+  Prove because the stack plugins that write tests depend on it. The core is no longer "installed
+  once", since `GETTING_STARTED.md` installs it per folder. `docs/STRATEGY.md` follows.
 - CI runs the validator and setup unit tests (`tools/validate-plugins/tests/`,
   `tools/setup/test_setup.py`) after `validate.py`. The mod tests stay local, since they need
   Claude Code on the runner.

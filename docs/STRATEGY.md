@@ -37,7 +37,7 @@ at once. This repo keeps its granularity and adds the second kind of idea withou
 | Tell  | Who should find it, and what do they read?             | `ceh-blog-and-seo`                                                                                                                                              |
 
 The vision's Core plugins (`ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`,
-`ceh-testing`) apply at every stage, and `ceh-testing` is also on the route as the Prove plugin. The
+`ceh-testing`) apply at every stage, and `ceh-testing` also sits on the route in Prove. The
 On demand plugins (`ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`) sit
 outside the route, installed for an activity that can come at any stage. How a stage, a plugin
 and a skill nest is in the vision's How the library is cut.
