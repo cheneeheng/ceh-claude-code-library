@@ -28,8 +28,8 @@ ceh-competitor-analysis  ──► ceh-ui-design
 ```
 
 `ceh-testing` and `ceh-ui-design` are leaves. The worst-case closure is three plugins
-(`ceh-web-frontend` → `ceh-testing` + `ceh-ui-design`). The cross-cutting rule holds: `ceh-testing`
-is cross-cutting and depends on nothing.
+(`ceh-web-frontend` → `ceh-testing` + `ceh-ui-design`). The Core rule holds: `ceh-testing` is Core
+and depends on nothing.
 
 No plugin exists only to install others. The scenario bundles that did were retired on 2026-10-10,
 and `docs/GETTING_STARTED.md` now says which plugins to install for each stage.
@@ -56,7 +56,8 @@ conditional hand-offs or negative routing, which stay prose.
 1. **The reference fires on every run of the skill or agent.** A conditional handoff stays prose.
 2. **Negative routing never counts.** It names an alternative, and an edge would install what the
    user steered away from.
-3. **A cross-cutting plugin depends only on cross-cutting plugins.** This keeps the graph layered.
+3. **A Core plugin depends only on Core plugins.** This keeps the graph layered. The Core list is
+   the Core row of the stage table in `docs/VISION.md`.
 4. **An explicit invocation needs its edge.** `Invoke the Skill tool with skill="ceh-x:y"` must
    target a skill in the same plugin or a declared dependency, and the target must not set
    `disable-model-invocation: true`. A call to such a target fails silently.

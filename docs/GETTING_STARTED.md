@@ -139,7 +139,8 @@ so a plugin with hooks acts on every session.
 | `ceh-git-workflow`   | you work in git repos      | branches, commits, pull requests from open to merge, changelog, code review, and a hook that blocks edits on `main`                                                                                                                                                             |
 | `ceh-coding-conduct` | you write code with Claude | the coding contract, write-less-code, root-cause debugging. Always on, through hooks                                                                                                                                                                                            |
 
-Install `ceh-every-session` first, every time. It is not a dependency of any other plugin, so
+These are the Core plugins of the stage table in [`VISION.md`](VISION.md), less `ceh-testing`,
+which the stack plugin in step 3 brings. Install `ceh-every-session` first, every time. It is not a dependency of any other plugin, so
 nothing installs it for you. Then install only the other rows whose "Install when" fits you. If
 you neither write code nor use git, for example you only write business plans or posts,
 `ceh-every-session` is the whole core.

@@ -25,7 +25,9 @@ tiers, the vision by lifecycle stage, and `add-plugin-component` said "not by li
 so the documents disagreed on the axis. A new skill now passes a five-step moment test: name the
 moment, check no skill owns it, name the step the agent gets wrong without it, check scope, and
 put it where the user already is. The Every step and Any step rows are renamed Core and On
-demand, and the `CLAUDE.md` tier table is gone, its Core list now read from the vision.
+demand, and the `CLAUDE.md` tier table is gone, its Core list now read from the vision. A
+second PR carries the new row names and the hierarchy into the README, the strategy, the install
+guide and the docs that named a tier.
 
 ### Plugin versions
 
@@ -34,6 +36,7 @@ demand, and the `CLAUDE.md` tier table is gone, its Core list now read from the 
 | `ceh-build-plan`               | 2.0.20  |
 | `ceh-check-build-against-plan` | 1.1.24  |
 | `ceh-every-session`            | 2.9.34  |
+| `ceh-git-workflow`             | 2.0.9   |
 
 ### Changed
 
@@ -54,6 +57,10 @@ demand, and the `CLAUDE.md` tier table is gone, its Core list now read from the 
   follow.
 - The `repo-rules` check reads the Core plugins from the vision's Core row instead of the
   `CLAUDE.md` Cross-cutting row.
+- `README.md`, `docs/STRATEGY.md`, `docs/GETTING_STARTED.md`, `docs/PLUGIN_DEPENDENCIES.md`,
+  `docs/TESTING_WORKFLOW.md` and the `ceh-git-workflow` README say Core and On demand where they
+  said Every step, Any step or cross-cutting, and the strategy's rule for new work points to the
+  moment test.
 
 ## 2026-11-18
 

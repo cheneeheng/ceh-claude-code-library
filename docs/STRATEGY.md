@@ -36,10 +36,11 @@ at once. This repo keeps its granularity and adds the second kind of idea withou
 | Prove | Does it work, is it safe, and can a person use it?     | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                      |
 | Tell  | Who should find it, and what do they read?             | `ceh-blog-and-seo`                                                                                                                                              |
 
-The vision's Every step plugins (`ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`,
+The vision's Core plugins (`ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`,
 `ceh-testing`) apply at every stage, and `ceh-testing` is also on the route as the Prove plugin. The
-Any step plugins (`ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`) sit
-outside the route, installed for an activity that can come at any stage.
+On demand plugins (`ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`) sit
+outside the route, installed for an activity that can come at any stage. How a stage, a plugin
+and a skill nest is in the vision's How the library is cut.
 
 **Build planning belongs to Build, not Shape.** Shape decides what and whether, once per product.
 A build plan decides how, and it recurs for every feature inside the build loop:
@@ -157,11 +158,12 @@ Keeping every file a stage writes would bloat the folder, so the artifacts have 
 **A new skill or plugin has to fix a break on the spine:** a handoff a stage cannot use, a stop for
 a human the vision does not allow, or a moment where the agent improvised because no skill covered
 it. "A competitor has it" does not count, and neither does "it would be useful." This makes vision
-principle 9 (small surface, sharp edges) a rule for choosing work.
+principle 9 (small surface, sharp edges) a rule for choosing work. A new skill also passes the
+vision's moment test, whose third step, the step the agent gets wrong without the skill, is where
+a break on the spine shows.
 
-The rule governs new components only. Fixes to existing components, and the Every step and Any
-step plugins,
-follow the usual rules in `CLAUDE.md`, still bound by the vision.
+The rule governs new components only. Fixes to existing components, and the Core and On demand
+plugins, follow the usual rules in `CLAUDE.md`, still bound by the vision.
 
 Done on 2026-10-10, when the strategy was adopted: Prove writes the evidence report, through a
 roll-up skill in `ceh-testing` because it is the Prove plugin every stack plugin already installs,

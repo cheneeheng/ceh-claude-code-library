@@ -5,7 +5,7 @@ Conventional Commits, pull requests from opening to merge, code review conventio
 entries, README upkeep, and releases. Everything here is stack-agnostic: language toolchains, coverage targets,
 and package management belong in stack plugins.
 
-Tier: **cross-cutting**. No plugin dependencies.
+Stage: **Core**. No plugin dependencies.
 
 ## Prerequisites
 
