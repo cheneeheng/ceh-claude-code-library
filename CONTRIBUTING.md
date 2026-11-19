@@ -17,7 +17,13 @@ Run the CI gate locally before you push:
 
 ```bash
 python tools/validate-plugins/validate.py
+python -m unittest discover -s tools/validate-plugins/tests
+python -m unittest tools/setup/test_setup.py
 ```
+
+The mod tests are not in CI, because they need Claude Code on the runner. Run them before you push
+a change to `plugins/standalone/ceh-every-session/hooks/`:
+`claude plugin test plugins/standalone/ceh-every-session`.
 
 ## Formatting
 

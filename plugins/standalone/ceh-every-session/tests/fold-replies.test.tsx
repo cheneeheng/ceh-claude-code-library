@@ -220,7 +220,9 @@ test('/details on boxes the summary and opens every topic, /details off folds ag
 
   await $.command.run(details('off'))
   const folded = await $.ui.mount({ surface: 'terminal', ...message(REPLY) })
-  expect(await folded.find({ key: 'reply-1#1' })).toBeDefined()
+  // Alpha was never pressed, so it folds again. Beta keeps the press made while details were on.
+  expect((await folded.find({ key: 'reply-1#0' }))?.text).toMatch(/▸ 1 Alpha/)
+  expect(await folded.find({ text: /alpha detail/ })).toBeUndefined()
   await folded.unmount()
 })
 
@@ -244,5 +246,6 @@ test('the footer shows a folded replies mode while folding is on', async ($, on)
   await $.command.run(details('on'))
   const shown = await $.ui.mount({ surface: 'terminal', ...footer })
   expect(await shown.find({ type: 'Text', text: 'focus' })).toBeDefined()
+  expect(await shown.find({ type: 'Text', text: /folded replies/ })).toBeUndefined()
   await shown.unmount()
 })

@@ -61,6 +61,12 @@ Both dispatch the new read-only `independent-reader` agent, which has not seen t
 its cited findings, and save the result. Per
 `.agents_workspace/product/plan/20261119-191613-review-anything.yaml`.
 
+A fifth PR closes the gaps a test-suite audit found: CI ran only `validate.py`, so 42 Python unit
+tests could fail on `main` unnoticed, and two mod tests, one hook-fixture loop and one guard let a
+deliberate break pass. Each fix was shown failing on that break first. No plugin version changes,
+since only tests, CI and the validator change. Per
+`.agents_workspace/product/audit/test/20261119-222750-ead3d83a-9fba-49d8-a3ab-3e8d6b60d94d-test-audit.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -119,6 +125,17 @@ its cited findings, and save the result. Per
   moment test.
 - `docs/VISION.md` moment test step 5: a moment that can arrive unannounced in any session puts
   its skill in Core, ahead of an On demand plugin doing related work.
+
+### Fixed
+
+- CI runs the validator and setup unit tests (`tools/validate-plugins/tests/`,
+  `tools/setup/test_setup.py`) after `validate.py`. The mod tests stay local, since they need
+  Claude Code on the runner.
+- `fold-replies.test.tsx` now fails when `/details off` leaves topics open, or when `/details on`
+  keeps the folded-replies footer label.
+- A test covers `sync-agents-workspace.py` recording nothing for `gh pr merge --repo` or `-R`.
+- The hook fixture runner checks the exit code and valid JSON on every repeat of a fixture, not
+  only the last.
 
 ## 2026-11-18
 

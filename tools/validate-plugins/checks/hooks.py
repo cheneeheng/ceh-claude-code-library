@@ -1748,7 +1748,10 @@ def run_batch(batch: int, batches: int, bash: str | None) -> list[tuple[int, str
             env = {**base_env, **f.get("env", {})}
             if "before" in f:
                 f["before"]()
-            for _ in range(f.get("repeat", 1)):
+            # Every run must exit as expected and print valid JSON. The output checks below apply
+            # to the last run only, since a repeat fixture expects earlier runs to differ
+            # ("denial 1" before "denial 4", a once-per-session warning before silence).
+            for n in range(1, f.get("repeat", 1) + 1):
                 r = subprocess.run(
                     # cwd=REPO + POSIX-relative path so Git Bash on Windows resolves it.
                     [*cmd, rel(script), *f.get("args", [])],
@@ -1759,11 +1762,20 @@ def run_batch(batch: int, batches: int, bash: str | None) -> list[tuple[int, str
                     env=env,
                     timeout=30,
                 )
-            if r.returncode != f.get("code", 0):
-                fail(
-                    where,
-                    f"exit {r.returncode}, expected {f.get('code', 0)}: {r.stderr.strip()}",
-                )
+                run = f" (run {n})" if f.get("repeat") else ""
+                if r.returncode != f.get("code", 0):
+                    fail(
+                        where,
+                        f"exit {r.returncode}{run}, expected {f.get('code', 0)}: {r.stderr.strip()}",
+                    )
+                if r.stdout.strip():
+                    try:
+                        json.loads(r.stdout)
+                    except ValueError:
+                        fail(
+                            where,
+                            f"stdout{run} is not valid JSON: {r.stdout.strip()[:200]}",
+                        )
             if f.get("out") == "" and r.stdout.strip():
                 fail(where, f"expected no output, got: {r.stdout.strip()[:200]}")
             elif f.get("out") and f["out"] not in r.stdout:
@@ -1772,11 +1784,6 @@ def run_batch(batch: int, batches: int, bash: str | None) -> list[tuple[int, str
                 fail(where, f"stderr lacks {f['err']!r}: {r.stderr.strip()[:200]}")
             if "after" in f and (problem := f["after"]()):
                 fail(where, problem)
-            if r.stdout.strip():
-                try:
-                    json.loads(r.stdout)
-                except ValueError:
-                    fail(where, f"stdout is not valid JSON: {r.stdout.strip()[:200]}")
     return problems
 
 
