@@ -1,5 +1,5 @@
 ---
-name: review-recent-work
+name: write-period-retro
 description: >-
   Load this skill when looking back over a period of work in a repo: what shipped, how work flowed,
   and the issues the history shows, each routed to a fix. Trigger on "write a retro", "what did we
@@ -13,7 +13,7 @@ compatibility: >-
 license: Apache-2.0
 ---
 
-# Review recent work
+# Write a period retro
 
 Summarise a period of work from what the repository recorded, not from memory, and route each issue
 the history shows to the skill that fixes it. Done means the retro is saved, every issue in this

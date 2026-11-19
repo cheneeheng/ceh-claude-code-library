@@ -45,14 +45,20 @@ shipped, by a reader independent of whoever built and checked it, and ends in fi
 looks back at how the work went and ends in learnings. So "review this" about a merged document is
 an audit. The rule file is renamed to match.
 
+A third PR renames the one skill whose name used the wrong kind's word.
+`ceh-git-workflow:review-recent-work` wrote a period retro under the word "review", so it is now
+`ceh-git-workflow:write-period-retro`, named for the file it writes. Its procedure, its
+`period-retro/v3` format and its save folder are unchanged. Per
+`.agents_workspace/product/plan/20261119-191836-rename-review-recent-work.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-build-plan`               | 2.0.20  |
 | `ceh-check-build-against-plan` | 1.1.24  |
-| `ceh-every-session`            | 2.9.34  |
-| `ceh-git-workflow`             | 2.0.9   |
+| `ceh-every-session`            | 2.9.35  |
+| `ceh-git-workflow`             | 3.0.0   |
 
 ### Added
 
@@ -63,6 +69,10 @@ an audit. The rule file is renamed to match.
 
 ### Changed
 
+- `ceh-git-workflow:review-recent-work` is now `ceh-git-workflow:write-period-retro`. A prompt,
+  workflow or `CLAUDE.md` that names the old skill, or runs `/ceh-git-workflow:review-recent-work`,
+  must be updated to the new name. "write a retro" still loads it. `ceh-every-session`'s
+  `prevent-repeat-mistake` names the new skill.
 - `write-build-plan` names the deliverable (code, documents, or both) in its triage line, and
   its design step gains a document checklist: the reader, sources and citation, file layout and
   index links, the repo's conventions, and what a finished document holds.
