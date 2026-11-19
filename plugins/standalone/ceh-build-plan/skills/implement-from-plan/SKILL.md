@@ -1,7 +1,7 @@
 ---
 name: implement-from-plan
 description: >-
-  Load this skill when building from a written plan: phase by phase, failing test first, only what
+  Load this skill when building from a written plan: phase by phase, failing check first, only what
   the phase names, with each phase's check run and its evidence recorded. Trigger on "implement the
   plan", "build phase 2", "start building the mvp plan".
 argument-hint: "[plan-file] [phase]"
@@ -43,7 +43,7 @@ reason recorded.
    and `evidence`, the reason or failure the steps below put in a Status goes in its `note`, and a
    Record line is a `record` entry, with `phase` set on a Built Phase entry.
 
-2. **Read the whole plan before any code.** Design is binding. An Open item marked as blocking
+2. **Read the whole plan before any edit.** Design is binding. An Open item marked as blocking
    stops the run before it starts.
 3. **Build each targeted phase in order.** The target is the named phase, or by default every
    `todo` phase. Skip `done` phases. At an `unplanned` phase, stop: it needs planning first.
@@ -54,8 +54,11 @@ reason recorded.
       first: the signature, the file it lives in, a forbidden value each type can hold, what each
       write does when it runs twice, who writes each shared value, and the smallest interface each
       module needs. Append a Design changed line to the Record.
-   2. Write the failing test for the behavior the phase adds, and run it to see it fail. When
-      `ceh-testing` is installed, `ceh-testing:write-test-first` sets out how.
+   2. When the phase builds code, write the failing test for the behavior it adds and run it to
+      see it fail. When `ceh-testing` is installed, `ceh-testing:write-test-first` sets out how.
+      When the phase builds documents, write its acceptance checks (the commands or read-through
+      items its Check names) into the phase's `note`, run them, and add one line of their failing
+      output to the note.
    3. Implement what **Builds** names, and nothing else.
    4. Run the phase's **Check**. When it fails, fix and rerun. When the same failure comes back
       after two fixes, stop: record the failure and what you tried in the phase's Status, leave
@@ -80,10 +83,10 @@ reason recorded.
 ## Rules
 
 - Build only what the phase names. A gap you find in the plan goes under Open with the
-  assumption you took, never into code as unplanned scope.
-- When the code has to depart from Design, edit the Design line, give the reason in the phase's
+  assumption you took, never into the build as unplanned scope.
+- When the build has to depart from Design, edit the Design line, give the reason in the phase's
   Status, and append a Design changed line to the plan's `## Record` quoting the old line, so the
-  plan stays true to the code and the original decision survives.
+  plan stays true to the build and the original decision survives.
 - A phase is `done` only on a passing Check run after its last edit. A check you could not run
   leaves the phase `todo`, with the reason in its Status. The one exception is a check the user
   reports having run: it sets the phase `done` with

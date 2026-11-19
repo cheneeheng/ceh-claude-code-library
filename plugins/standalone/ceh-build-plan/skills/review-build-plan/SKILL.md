@@ -2,7 +2,7 @@
 name: review-build-plan
 description: >-
   Load this skill when a build plan or spec exists and nobody has built from it yet, even for a
-  quick look before building: review it on scope, engineering, design, and developer experience,
+  quick look before building: review it on scope, engineering, content, design, and developer experience,
   and end with a verdict. Trigger on "review this plan", "just check the phases", "review the
   spec".
 argument-hint: "[plan-file]"
@@ -17,7 +17,7 @@ license: Apache-2.0
 
 # Review a Build Plan
 
-Read a plan the way its builder will, before any code exists, and report everything that would
+Read a plan the way its builder will, before anything is built, and report everything that would
 stop the build or send it the wrong way. A plan error caught here costs one edit. Caught in phase
 four, it costs every phase built on it. Done means each applicable lens has run, every finding
 quotes the plan, and the verdict is delivered.
@@ -48,7 +48,7 @@ quotes the plan, and the verdict is delivered.
    they meant, a fresh reader reads what is written, and only the second is what the builder gets.
 3. **Read what the plan rests on**: every file, route, model, and dependency it names in the
    repo. Read no business plan, even when an older plan links to one: the review judges
-   the plan against the code, the vision and the strategy only. A plan claim the code contradicts
+   the plan against the repo, the vision and the strategy only. A plan claim the repo contradicts
    is a finding. A plan claim that contradicts the repo's `VISION.yaml` or `STRATEGY.yaml` in
    `.agents_workspace/product/`, or its `VISION.md` or `STRATEGY.md` in `docs/`, the root, or
    where the repo's `CLAUDE.md` says, is a finding too. When a
@@ -63,7 +63,8 @@ quotes the plan, and the verdict is delivered.
    | Lens                     | Applies                                   | Asks                                                                                                                                                                                                                                                                                                                                                     |
    | ------------------------ | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
    | **Scope**                | Always                                    | Does In deliver the Goal, and is each item needed now? Does the core flow need anything under Out? Is there a cheaper path to the same Goal: an installed library, an existing component, a smaller MVP?                                                                                                                                                 |
-   | **Engineering**          | Always                                    | Is each phase buildable from the ones before it? Does each Check prove its phase's Builds, or only that something runs? Are timeouts, retries, duplicate requests, and partial writes designed or left open? Do the Design's types rule out illegal states, is each shared value's writer named, and does each module expose only what its callers need? |
+   | **Engineering**          | The build includes code                   | Is each phase buildable from the ones before it? Does each Check prove its phase's Builds, or only that something runs? Are timeouts, retries, duplicate requests, and partial writes designed or left open? Do the Design's types rule out illegal states, is each shared value's writer named, and does each module expose only what its callers need? |
+   | **Content**              | The deliverable includes documents        | Is each document's reader named, and does In deliver what that reader needs? Is each claim's source decided? Does the structure fit the repo's existing index and numbering? Is each phase buildable from the ones before it? Does each Check prove the content, such as every claim sourced and every link resolving, or only that the file exists?     |
    | **Design**               | The build has a user interface            | Does every screen in scope have its loading, error, and empty state? Does the plan say what the user sees after each action? Is the core flow as short as it can be?                                                                                                                                                                                     |
    | **Developer experience** | The callers are developers: lib, CLI, API | Can a caller reach a first working call from what the plan builds? Are names, error shapes, and defaults decided, or left to the builder? Does a breaking change get a migration path?                                                                                                                                                                   |
 
@@ -79,7 +80,7 @@ quotes the plan, and the verdict is delivered.
    file), as a `record` entry in a `plan/v2` YAML or a line under `## Record` in a `plan/v1`
    Markdown plan, so the review stays part of the plan's trail. A spec that is not a plan gets no
    Record line. When asked to fix, edit the plan for each blocking finding whose fix the
-   plan or the code already settles, put a finding that would change In or Out under Open as a
+   plan or the repo already settles, put a finding that would change In or Out under Open as a
    question with a recommended answer, and set `status: draft` while any blocking finding is open.
    In the review file, set each finding it fixed to `fixed` with the edit as its resolution.
 
@@ -90,7 +91,7 @@ quotes the plan, and the verdict is delivered.
 - **Judge from the plan, not the brief.** A request like "just check the phases" narrows which
   lenses run, never how severe a finding is. Say where the brief asked for less.
 - Review only what is unbuilt. In a `building` plan, review the phases still `todo` or
-  `unplanned`. A `built` plan is checked against its code by
+  `unplanned`. A `built` plan is checked against its build by
   `ceh-check-build-against-plan:check-build-against-plan`, not reviewed.
 - During the review, turn a question only the plan's owner can answer into a finding with a
   recommended answer.

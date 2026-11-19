@@ -2,7 +2,7 @@
 
 A build plan is one Markdown file (`plan/v1`), or a YAML file with its Markdown generated beside
 it (`plan/v2`, below). `ceh-build-plan` writes it, builds from it and records evidence in it, and
-`ceh-check-build-against-plan` checks the code against it.
+`ceh-check-build-against-plan` checks the build against it.
 This file is copied word for word into every skill that reads a plan, so each skill folder works on
 its own.
 
@@ -56,11 +56,13 @@ version of the format a plan follows.
   what done means. **Out** has one bullet per thing deliberately not built, with a one-line reason.
 - **Design:** only the decisions the phases need, each with its reason: stack, components (a
   Mermaid diagram when there are more than two), data model (entities and key fields), and
-  interface (routes with method and path, CLI commands, or public functions). Each decision is
-  written once here, and phases refer to it.
+  interface (routes with method and path, CLI commands, or public functions), or, for documents,
+  the outline and file layout. Each decision is written once here, and phases refer to it.
 - **Phases:** one `### Phase <n>: <name>` per phase. **Builds** names what the phase adds by its
   Scope and Design items. **Check** is the command that proves it and what passing looks like, for
-  example `uv run pytest tests/test_signup.py` passes. **Status** follows Phase rules below.
+  example `uv run pytest tests/test_signup.py` passes, or, for documents,
+  `grep -c 'appendix-b-' docs/README.md` is at least 1, or a named read-through of the outline.
+  **Status** follows Phase rules below.
 - **Open:** each unsettled question, with the assumption taken until it is answered. `None` when
   empty.
 - **Record:** append-only, oldest first, one dated line per lifecycle event, per Record rules
@@ -122,7 +124,8 @@ bool and `1.10` a number, so quote a value that must stay text.
 
 ## Phase rules
 
-- Phases run in order. Each is buildable from the phases before it and leaves the app runnable.
+- Phases run in order. Each is buildable from the phases before it and leaves the deliverable
+  usable: the app runs, or the documents read whole.
 - Every phase has a runnable Check. A phase no command can prove is merged into the next one, or
   names its manual check and why no command can do it.
 - **Status** is `todo`, `unplanned` (a one-line placeholder that must be planned before it is
@@ -154,7 +157,7 @@ are appended in any status, including after `built`.
 
 - A builder that departs from Design edits the Design line, gives the reason in that phase's
   Status, and appends a Design changed line to Record quoting the old line, so the plan stays true
-  to the code and the original decision survives in the file.
+  to the build and the original decision survives in the file.
 - A `built` plan is kept. Once every phase is done, each Design decision a later reader still
   needs is copied to the Key Decisions log in `.agents_workspace/product/ARCHITECTURE.yaml`, after the check of the
   build against the plan when that check is installed, and the change gets a changelog entry when
