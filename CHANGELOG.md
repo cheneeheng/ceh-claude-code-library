@@ -31,6 +31,12 @@ guide and the docs that named a tier. A third says which wins when a moment can 
 unannounced in any session: the moment test's last step, so such a skill goes in Core, which is
 why `prevent-repeat-mistake` stays in `ceh-every-session` rather than `ceh-session-learning`.
 
+A review and an audit are now defined. The folders and the file-name forms already treated them
+as two kinds, but nothing said what makes a file one or the other, so a new skill had nothing to
+choose its verb or its save folder by. A review judges a proposal or a change before someone acts
+on it and ends in a verdict. An audit examines something that already exists and ends in
+findings. No skill is renamed here.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -39,6 +45,13 @@ why `prevent-repeat-mistake` stays in `ceh-every-session` rather than `ceh-sessi
 | `ceh-check-build-against-plan` | 1.1.24  |
 | `ceh-every-session`            | 2.9.34  |
 | `ceh-git-workflow`             | 2.0.9   |
+
+### Added
+
+- `.claude/rules/decision-audit-vs-review.md`: the test that tells a review from an audit, and
+  where each is saved.
+- `docs/STRATEGY.md` gains "A review or an audit" under "Where files live", with the two kinds
+  side by side.
 
 ### Changed
 

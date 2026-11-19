@@ -97,8 +97,9 @@ sees them all in one place, and a reference from one artifact to another never c
 repo whose `CLAUDE.md` names another location keeps it.
 
 - **`.agents_workspace/product/`** holds every lifecycle artifact: the vision and strategy, plans,
-  the architecture document, the evidence report, fix records, retros, the reviews and audits
-  (plan, code, test-suite, security, and usability reviews, QA and performance reports), blog
+  the architecture document, the evidence report, fix records, retros, the reviews (plan, code,
+  business plan, stress test), the audits (test suite, security, usability), QA and performance
+  reports, blog
   drafts outside a blog repo, scratch work such as design variants and learning notes, and the
   business material in `business/`.
 - **`.agents_workspace/workflow/`** holds `ceh-workflow-builder` specs and drafts and the run state
@@ -152,6 +153,26 @@ Keeping every file a stage writes would bloat the folder, so the artifacts have 
 - **The evidence report is append-only.** `EVIDENCE.yaml` is one file per product, and each run
   adds a dated section at the top, so the section a plan's Record cites never changes. The separate
   QA, performance, security, and usability reports are read only by the roll-up.
+
+### A review or an audit
+
+The two words name different kinds of artifact, per `.claude/rules/decision-audit-vs-review.md`.
+One question tells them apart: is someone waiting on a verdict before acting on the subject? Yes
+is a review, no is an audit.
+
+|            | Review                                                         | Audit                                             |
+| ---------- | -------------------------------------------------------------- | ------------------------------------------------- |
+| Subject    | A proposal or a change, before someone acts on it              | Something that already exists                     |
+| Examples   | A plan before the build, a diff before the merge               | A codebase, a test suite, an interface            |
+| Ends in    | A verdict                                                      | Findings, with no verdict                         |
+| Saved to   | `review/<kind>/`                                               | `audit/<kind>/`                                   |
+| After that | Edited in place as its findings are fixed                      | Written once, so a rerun is a new file            |
+| File name  | `<YYYYMMDD-HHMMSS>-<name>`, per `decision-saved-file-names.md` | `<YYYYMMDD-HHMMSS>-<session-id>-<name>`, the same |
+
+A new skill, schema or folder takes the word that matches. A review is edited in place because
+the person waiting on the verdict reads one file until it passes. An audit is a record of what was
+found at one time, so fixing its findings does not change it, and the next audit shows whether
+they held.
 
 ## How work is chosen
 
