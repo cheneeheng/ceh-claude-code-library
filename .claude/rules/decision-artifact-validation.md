@@ -60,7 +60,10 @@ The learning record (`learning/v2`) follows, with the hooks already in
 `ceh-git-workflow`, which had none of its own for an artifact. The session retro
 (`session-retro/v3`) follows, with the hooks added to `ceh-session-learning` in a new
 `hooks/hooks.json`. Its `-shareable.md` copy for sharing stays Markdown, with no
-`generated_from`, so the guard lets its scrub edits pass.
+`generated_from`, so the guard lets its scrub edits pass. The general review
+(`general-review/v1`) and the general audit (`general-audit/v1`) follow, with the hooks already
+in `ceh-every-session`, whose `review-anything` writes the review and reads it back in a later
+round, and whose `audit-anything` writes the audit.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed

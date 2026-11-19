@@ -51,16 +51,37 @@ A third PR renames the one skill whose name used the wrong kind's word.
 `period-retro/v3` format and its save folder are unchanged. Per
 `.agents_workspace/product/plan/20261119-191836-rename-review-recent-work.yaml`.
 
+A fourth PR gives a review or an audit that no skill owns a skill of its own. Before, the agent
+checked such a subject (a document, a design, a rule file, a plugin) in the context that wrote
+it, picked its own folder and file name, and gave a verdict or not as it happened.
+`ceh-every-session` now carries `review-anything` and `audit-anything`, which hand a subject with
+its own skill to that skill, decide the kind from the state of the work per
+`decision-review-audit-retro.md`, and hand each other the work that belongs to the other kind.
+Both dispatch the new read-only `independent-reader` agent, which has not seen the session, check
+its cited findings, and save the result. Per
+`.agents_workspace/product/plan/20261119-191613-review-anything.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
 | ------------------------------ | ------- |
 | `ceh-build-plan`               | 2.0.20  |
 | `ceh-check-build-against-plan` | 1.1.24  |
-| `ceh-every-session`            | 2.9.35  |
+| `ceh-every-session`            | 2.10.0  |
 | `ceh-git-workflow`             | 3.0.0   |
 
 ### Added
+
+- `ceh-every-session:review-anything`: a review of work not yet marked done, saved as
+  `general-review/v1` in `.agents_workspace/product/review/general/`, one file per target edited
+  in place, ending in `Done`, `Not yet` or `Cannot judge`.
+- `ceh-every-session:audit-anything`: an audit of work already marked done or shipped, saved as a
+  new `general-audit/v1` file in `.agents_workspace/product/audit/general/` on every run, findings
+  worst first.
+- The `independent-reader` agent in `ceh-every-session`, read-only on the session's model, which
+  both skills dispatch with the subject and the criteria.
+- `general-review/v1` and `general-audit/v1` YAML formats, each with a pydantic model, checked and
+  rendered by the hooks `ceh-every-session` already ships.
 
 - `.claude/rules/decision-review-audit-retro.md`, first added as `decision-audit-vs-review.md`:
   the two questions that tell a review, an audit and a retro apart, and where each is saved.
@@ -69,6 +90,8 @@ A third PR renames the one skill whose name used the wrong kind's word.
 
 ### Changed
 
+- `docs/STRATEGY.md` "A review, an audit or a retro" says a subject with no skill of its own goes
+  to `review-anything` or `audit-anything`, and where those two go beyond the table.
 - `ceh-git-workflow:review-recent-work` is now `ceh-git-workflow:write-period-retro`. A prompt,
   workflow or `CLAUDE.md` that names the old skill, or runs `/ceh-git-workflow:review-recent-work`,
   must be updated to the new name. "write a retro" still loads it. `ceh-every-session`'s
