@@ -180,6 +180,33 @@ class WorkspaceCheckpointTests(unittest.TestCase):
             "A  staged.yaml\n?? plan.yaml",
         )
 
+    def test_catch_up_reports_a_merge_that_times_out(self):
+        workspace = self.top / "real" / ".agents_workspace"
+        workspace.mkdir(parents=True)
+        branch = "ceh-ws/main/feature"
+        for args in (
+            ("init", "-q", "-b", "main"),
+            ("config", "user.email", "test@example.com"),
+            ("config", "user.name", "test"),
+            ("commit", "-q", "--allow-empty", "-m", "root"),
+            ("branch", branch),
+            ("commit", "-q", "--allow-empty", "-m", "main moves on"),
+        ):
+            subprocess.run(["git", "-C", str(workspace), *args], check=True)
+        sync.git(workspace, "checkout", "-q", branch)
+        sync.git(workspace, "commit", "-q", "--allow-empty", "-m", "branch work")
+        sync.git(workspace, "checkout", "-q", "main")
+        run = subprocess.run
+
+        def slow_merge(command, *args, **kwargs):
+            if "merge" in command and "--autostash" in command:
+                raise subprocess.TimeoutExpired(command, kwargs.get("timeout"))
+            return run(command, *args, **kwargs)
+
+        with patch.object(sync.subprocess, "run", side_effect=slow_merge):
+            failed = sync.catch_up(workspace, "main")
+        self.assertEqual(failed, [branch])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -56,9 +56,14 @@ WORKSPACE_NOTE = (
 
 
 def git(cwd, *args):
-    out = subprocess.run(
-        ["git", "-C", str(cwd), *args], capture_output=True, text=True, timeout=10
-    )
+    """(exit code, stdout). A call past the timeout returns 124 like a failed command, so its
+    caller reports it: raised, it escaped catch_up and main()'s fail-open hid the failure."""
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(cwd), *args], capture_output=True, text=True, timeout=10
+        )
+    except subprocess.TimeoutExpired:
+        return 124, ""
     return out.returncode, out.stdout.strip()
 
 

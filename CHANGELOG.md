@@ -76,6 +76,12 @@ change to the vision lands first in its own PR. The rest defines a stage, the ve
 and which Core plugin takes a skill, and corrects claims that no longer matched the repo. Per
 `.agents_workspace/product/audit/general/20261119-222709-d8e52515-a07a-4c9e-836e-09c969999791-docs-VISION-md.yaml`.
 
+A seventh PR fixes the workspace catch-up that skipped a merge without a word. A git call that
+outlived the sync hook's 10 s timeout raised past the code that reports a failed merge, and the
+hook's fail-open swallowed it, so `start` printed nothing and left the branch unmerged. A timeout
+now counts as a failed git command, and the start note names the branch to merge by hand. Per
+`.agents_workspace/product/fix/20261119-232900-workspace-branch-catch-up-merge.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -83,7 +89,7 @@ and which Core plugin takes a skill, and corrects claims that no longer matched 
 | `ceh-build-plan`               | 2.0.20  |
 | `ceh-check-build-against-plan` | 1.1.24  |
 | `ceh-every-session`            | 2.10.0  |
-| `ceh-git-workflow`             | 3.0.0   |
+| `ceh-git-workflow`             | 3.0.1   |
 
 ### Added
 
@@ -137,6 +143,9 @@ and which Core plugin takes a skill, and corrects claims that no longer matched 
 
 ### Fixed
 
+- `ceh-git-workflow` sync hook: a git call past its 10 s timeout returns a failed code instead of
+  raising, so a catch-up merge that times out is reported in the start note rather than skipped
+  silently.
 - `docs/VISION.md`: goal 5 and principle 7 now agree on adding checks. "Changing this file" and
   `decision-vision-governs.md` now agree on PRs, and the list of files to update includes
   `.claude/rules/`. A stage is one of the four route rows. The versioned workspace is defined,
