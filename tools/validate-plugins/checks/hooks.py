@@ -1136,6 +1136,20 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     (sl_dir / f"{stem_sr}-shareable.md").write_text(
         "---\nschema: session-retro/v3\nsession: de93dc4b\n---\n", encoding="utf-8"
     )
+    good_gr = (
+        "schema: general-review/v1\ntarget: docs-pricing-md\nsubject: [docs/pricing.md]\n"
+        "criteria: [docs/VISION.md]\nrounds:\n"
+        "  - date: 2026-11-19\n    verdict: Not yet\n    verdict_detail: name the price\n"
+        "    summary: |\n      A pricing draft.\n    not_covered: []\n"
+        "findings:\n  - {round: 1, location: 'docs/pricing.md:3', label: blocking, comment: no price given,"
+        " status: open}\n"
+    )
+    good_ga = (
+        "schema: general-audit/v1\ndate: 2026-11-19\ntarget: docs\nsubject: [docs/]\n"
+        "criteria: [docs/VISION.md]\nsummary: |\n  The docs drift from the vision.\n"
+        "findings:\n  - {severity: HIGH, location: 'docs/STRATEGY.md:12', finding: names a retired plugin}\n"
+        "not_covered: []\n"
+    )
     pd = "ceh-product-direction"
     markdown_format_fixtures = [
         *report_fixtures(sl, stem_sr, good_sr, good_sr.replace("kind: Guidance", "kind: Luck"), "root_causes.0.kind", "- **Chain:** de93dc4b.jsonl:41 edit → de93dc4b.jsonl:90 stopped", "session-retro"),
@@ -1151,6 +1165,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *report_fixtures("ceh-testing", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-test-audit", good_ta, good_ta.replace("severity: HIGH", "severity: XHIGH"), "findings.0.severity", "HIGH      src/discount.py", "test-audit"),
         *report_fixtures("ceh-testing", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-test-audit", good_ta, good_ta.replace("severity: HIGH", "severity: TMP").replace("severity: LOW", "severity: HIGH").replace("severity: TMP", "severity: LOW"), "worst first", "HIGH      src/discount.py", "test-audit-order"),
         *report_fixtures("ceh-every-session", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-cache-layer", good_st, good_st.replace("state: blocked", "state: pending"), "open.0.state", "- Which TTL — blocked on the store answer", "stress-test"),
+        *report_fixtures("ceh-every-session", "20261119-120000-docs-pricing-md", good_gr, good_gr.replace("label: blocking", "label: urgent"), "findings.0.label", "- `docs/pricing.md:3` [blocking] no price given", "general-review"),
+        *report_fixtures("ceh-every-session", "20261119-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-docs", good_ga, good_ga.replace("severity: HIGH", "severity: URGENT"), "findings.0.severity", "- HIGH `docs/STRATEGY.md:12` names a retired plugin", "general-audit"),
         *report_fixtures("ceh-build-plan", "20261115-120000-7c9e6679-7425-40de-944b-e07fc1f90ae7-wordy", good_pr, good_pr.replace("Revise first", "Ready to build"), "allows no blocking finding", "| 1 | 1 | Engineering | blocking | Phase 2 Check: \"it runs\" |", "plan-review"),
         *report_fixtures(pd, "20261115-120000-business-plan-review", good_bpr, good_bpr.replace("score: 11", "score: 12"), "not the lens total", "**Run next:** stress-test-unit-economics for Money, plan-go-to-market for Reach", "business-plan-review"),
         *report_fixtures(pd, "INVESTOR_DECK", good_deck, good_deck.replace("pmf_gate: 8", "pmf_gate: 6"), "needs draft: true", "Source: §02", "investor-deck"),

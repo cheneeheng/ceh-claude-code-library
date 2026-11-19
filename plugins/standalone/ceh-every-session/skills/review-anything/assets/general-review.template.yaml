@@ -1,0 +1,21 @@
+schema: general-review/v1
+target: <target>
+subject:
+  - <path>
+criteria:
+  - <criterion>
+rounds:
+  - date: YYYY-MM-DD
+    verdict: <Done | Not yet | Cannot judge>
+    verdict_detail: <what flips or settles it>
+    summary: |
+      <summary>
+    not_covered:
+      - <what was not judged, and why>
+findings:
+  - round: <n>
+    location: <path[:line]>
+    label: <blocking | advisory | question>
+    comment: <comment>
+    status: <open | fixed | won't fix>
+    resolution: <resolution>

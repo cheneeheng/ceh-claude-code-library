@@ -98,7 +98,8 @@ repo whose `CLAUDE.md` names another location keeps it.
 
 - **`.agents_workspace/product/`** holds every lifecycle artifact: the vision and strategy, plans,
   the architecture document, the evidence report, fix records, retros, the reviews (plan, code,
-  business plan, stress test), the audits (test suite, security, usability), QA and performance
+  business plan, stress test, general), the audits (test suite, security, usability, general), QA
+  and performance
   reports, blog
   drafts outside a blog repo, scratch work such as design variants and learning notes, and the
   business material in `business/`.
@@ -174,6 +175,12 @@ is an audit.
 | Ends in    | A verdict: done, or not yet                      | Findings on its state                                   | Learnings that change the next piece of work      |
 | Saved to   | `review/<kind>/`                                 | `audit/<kind>/`                                         | `retro/`                                          |
 | After that | Edited in place as its findings are fixed        | Written once, so a rerun is a new file                  | Written once, so a rerun is a new file            |
+
+A subject with a skill of its own goes to that skill. Any other review goes to
+`ceh-every-session:review-anything`, and any other audit to `ceh-every-session:audit-anything`.
+The two generic skills go beyond the table in two places: a review may end in `Cannot judge` when
+the reader could not read the subject or the criteria, and the word typed decides only when the
+state of the work cannot be told.
 
 The file-name forms are in `decision-saved-file-names.md`: a review carries no session id, and an
 audit and a retro carry one. A new skill, schema or folder takes the word that matches.

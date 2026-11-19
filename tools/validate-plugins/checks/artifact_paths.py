@@ -38,6 +38,7 @@ YAML_FORMAT_MD = re.compile(
             rf"product/review/business-plan/{P}\.md\b",
             r"product/business/INVESTOR_(?:DECK|OUTREACH)\.md\b",
             rf"product/(?:refactor|test-audits|stress-tests|learning|blog|code-reviews)/{P}\.md\b",
+            rf"product/(?:review|audit)/general/{P}\.md\b",
             # The session retro's -shareable.md copy is Markdown on purpose, not a format.
             rf"product/retro/{P}-(?:period|session(?:-{P})?)(?<!-shareable)\.md\b",
         )

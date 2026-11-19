@@ -427,6 +427,8 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-coding-conduct/skills/refactor-repo/scripts/artifact.py`                                                  | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-testing/skills/audit-test-suite/scripts/artifact.py`                                                      | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-every-session/skills/stress-test-plan/scripts/artifact.py`                                                | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/review-anything/scripts/artifact.py`                                                 | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-every-session/skills/audit-anything/scripts/artifact.py`                                                  | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-codebase-explanation/skills/explain-until-understood/scripts/artifact.py`                                 | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-git-workflow/skills/write-code-review/scripts/artifact.py`                                                | whole file                                                  | none                                                                             |
@@ -911,6 +913,7 @@ session.
 | `plugins/standalone/ceh-usability-audit/skills/audit-interface/SKILL.md`             | § Acting on findings | drops the committed-secret sentence |
 | `plugins/standalone/ceh-usability-audit/skills/audit-error-messages/SKILL.md`        | § Acting on findings | drops the committed-secret sentence |
 | `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/SKILL.md` | § Acting on findings | drops the committed-secret sentence |
+| `plugins/standalone/ceh-every-session/skills/audit-anything/SKILL.md`                | § Acting on findings | drops the committed-secret sentence |
 
 **Shared:** the whole section word for word: the report stays as saved; only the findings the user
 chooses in the session, and not already fixed in the run, are acted on; choosing one is the request
@@ -1090,11 +1093,12 @@ skill that edits the target.
 
 **Canonical:** `plugins/standalone/ceh-build-plan/skills/review-build-plan/references/plan-review-schema.md` — § Review lifecycle
 
-| Copy                                                                                                             | Section            | Diverges                                                   |
-| ---------------------------------------------------------------------------------------------------------------- | ------------------ | ---------------------------------------------------------- |
-| `plugins/standalone/ceh-git-workflow/skills/write-code-review/references/code-review-schema.md`                  | § Review lifecycle | Targets line: the branch, with every `/` replaced by `-`   |
-| `plugins/standalone/ceh-product-direction/skills/review-business-plan/references/business-plan-review-schema.md` | § Review lifecycle | Targets line: the fixed target `business-plan-review`      |
-| `plugins/standalone/ceh-every-session/skills/stress-test-plan/references/stress-test-schema.md`                  | § Review lifecycle | Targets line: the topic, and its open list is the findings |
+| Copy                                                                                                             | Section            | Diverges                                                                  |
+| ---------------------------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-git-workflow/skills/write-code-review/references/code-review-schema.md`                  | § Review lifecycle | Targets line: the branch, with every `/` replaced by `-`                  |
+| `plugins/standalone/ceh-product-direction/skills/review-business-plan/references/business-plan-review-schema.md` | § Review lifecycle | Targets line: the fixed target `business-plan-review`                     |
+| `plugins/standalone/ceh-every-session/skills/stress-test-plan/references/stress-test-schema.md`                  | § Review lifecycle | Targets line: the topic, and its open list is the findings                |
+| `plugins/standalone/ceh-every-session/skills/review-anything/references/general-review-schema.md`                | § Review lifecycle | Targets line: the subject's path, and a differing `subject` is a new file |
 
 **Shared:** every rule but the Targets line, word for word: the time-only name, the lookup that
 also accepts an older name with a session id, converting an older YAML version in place, the cold
