@@ -37,6 +37,14 @@ choose its verb or its save folder by. A review judges a proposal or a change be
 on it and ends in a verdict. An audit examines something that already exists and ends in
 findings. No skill is renamed here.
 
+A second PR on the same day replaces that test and adds the third kind, the retro. The first test
+asked whether someone was waiting on a verdict, which depends on reading the asker's intent. The
+new one asks a fact about the work: has it been marked done or shipped? A review checks finished
+work before it is marked done and ends in a verdict. An audit checks work already marked done or
+shipped, by a reader independent of whoever built and checked it, and ends in findings. A retro
+looks back at how the work went and ends in learnings. So "review this" about a merged document is
+an audit. The rule file is renamed to match.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -48,10 +56,10 @@ findings. No skill is renamed here.
 
 ### Added
 
-- `.claude/rules/decision-audit-vs-review.md`: the test that tells a review from an audit, and
-  where each is saved.
-- `docs/STRATEGY.md` gains "A review or an audit" under "Where files live", with the two kinds
-  side by side.
+- `.claude/rules/decision-review-audit-retro.md`, first added as `decision-audit-vs-review.md`:
+  the two questions that tell a review, an audit and a retro apart, and where each is saved.
+- `docs/STRATEGY.md` gains "A review, an audit or a retro" under "Where files live", with the
+  three kinds side by side.
 
 ### Changed
 

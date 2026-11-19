@@ -154,25 +154,34 @@ Keeping every file a stage writes would bloat the folder, so the artifacts have 
   adds a dated section at the top, so the section a plan's Record cites never changes. The separate
   QA, performance, security, and usability reports are read only by the roll-up.
 
-### A review or an audit
+### A review, an audit or a retro
 
-The two words name different kinds of artifact, per `.claude/rules/decision-audit-vs-review.md`.
-One question tells them apart: is someone waiting on a verdict before acting on the subject? Yes
-is a review, no is an audit.
+The three words name different kinds of artifact, per
+`.claude/rules/decision-review-audit-retro.md`. Two questions sort a request:
 
-|            | Review                                                         | Audit                                             |
-| ---------- | -------------------------------------------------------------- | ------------------------------------------------- |
-| Subject    | A proposal or a change, before someone acts on it              | Something that already exists                     |
-| Examples   | A plan before the build, a diff before the merge               | A codebase, a test suite, an interface            |
-| Ends in    | A verdict                                                      | Findings, with no verdict                         |
-| Saved to   | `review/<kind>/`                                               | `audit/<kind>/`                                   |
-| After that | Edited in place as its findings are fixed                      | Written once, so a rerun is a new file            |
-| File name  | `<YYYYMMDD-HHMMSS>-<name>`, per `decision-saved-file-names.md` | `<YYYYMMDD-HHMMSS>-<session-id>-<name>`, the same |
+1. Is it about how the work went, not the work itself? Then it is a retro.
+2. Otherwise, has the work been marked done or shipped? No is a review, yes is an audit.
 
-A new skill, schema or folder takes the word that matches. A review is edited in place because
-the person waiting on the verdict reads one file until it passes. An audit is a record of what was
-found at one time, so fixing its findings does not change it, and the next audit shows whether
-they held.
+The state of the work decides, not the word the user typed: "review this" about a merged document
+is an audit.
+
+|            | Review                                           | Audit                                                   | Retro                                             |
+| ---------- | ------------------------------------------------ | ------------------------------------------------------- | ------------------------------------------------- |
+| Subject    | The work itself                                  | The work itself                                         | How the work went                                 |
+| When       | Finished, but not yet marked done or shipped     | Already marked done or shipped                          | After the work, looking back                      |
+| Who checks | Someone the author asks                          | A reader independent of whoever built and checked it    | The people who did the work                       |
+| Examples   | A plan before the build, a diff before the merge | A merged codebase, a shipped interface, a published doc | A session that went wrong, a month of merged work |
+| Ends in    | A verdict: done, or not yet                      | Findings on its state                                   | Learnings that change the next piece of work      |
+| Saved to   | `review/<kind>/`                                 | `audit/<kind>/`                                         | `retro/`                                          |
+| After that | Edited in place as its findings are fixed        | Written once, so a rerun is a new file                  | Written once, so a rerun is a new file            |
+
+The file-name forms are in `decision-saved-file-names.md`: a review carries no session id, and an
+audit and a retro carry one. A new skill, schema or folder takes the word that matches.
+
+A review is edited in place because the author reads one file until the verdict is done. An audit
+is a record of what was found at one time, so fixing its findings does not change it, and the next
+audit shows whether they held. For an agent, an independent reader is one that has not seen the
+session that built the work.
 
 ## How work is chosen
 
