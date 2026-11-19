@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -606,6 +607,142 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         # SessionStart tells the agent to commit its own workspace files, in either checkout.
         {**sync("start", tmp / "wt3"), "stdin": {"hook_event_name": "SessionStart", "cwd": str(tmp / "wt3")}, "out": "commit skill's Workspace section"},
         {**sync("start", proj2), "stdin": {"hook_event_name": "SessionStart", "cwd": str(proj2)}, "out": "commit skill's Workspace section"},
+    ]  # fmt: skip
+
+    # sync-agents-workspace on SubagentStart and SubagentStop: a subagent in its own worktree,
+    # agent-<agent_id>, gets a workspace and merges it back, on its own project.
+    proj3 = tmp / "proj3"
+    ws3 = proj3 / ".agents_workspace"
+    for d, branch in ((proj3, "main"), (ws3, "ws")):
+        d.mkdir(parents=True)
+        (d / "README.md").write_text("x\n", encoding="utf-8")
+        g(d, "init", "-q", "-b", branch)
+        g(d, "add", ".")
+        g(d, "commit", "-q", "-m", "x")
+    a1, a2, a3, sess = (
+        tmp / "agents" / n for n in ("agent-a1", "agent-a2", "agent-a3", "sess")
+    )
+    pending3 = ws3 / ".git" / "ceh-checkpoint-pending"
+    sub_before = {}
+
+    def subagent(arg: str, hook: str, cwd: Path, agent_id: str, **extra) -> dict:
+        return {
+            **sync(arg, cwd),
+            "env": checkpoint_env,
+            "stdin": {"hook_event_name": hook, "cwd": str(cwd), "agent_id": agent_id, "agent_type": "general-purpose"},
+            "out": "",
+            **extra,
+        }  # fmt: skip
+
+    def add_wt(path: Path) -> None:
+        g(proj3, "worktree", "add", "-q", "-b", path.name, str(path))
+        sub_before["head"] = g(ws3, "rev-parse", "HEAD")
+
+    def ws_branch(path: Path, expected: str) -> str | None:
+        got = (
+            g(path / ".agents_workspace", "branch", "--show-current")
+            if (path / ".agents_workspace").is_dir()
+            else "no folder"
+        )
+        return None if got == expected else f"{path.name}: expected workspace branch {expected}, got {got!r}"  # fmt: skip
+
+    def hold_lock() -> None:
+        """Hold the main workspace's index lock for one second, as a concurrent git process would."""
+        if timer := sub_before.get(
+            "timer"
+        ):  # an earlier fixture's timer must not free this lock
+            timer.join()
+        lock = ws3 / ".git" / "index.lock"
+        lock.write_text("", encoding="utf-8")
+        sub_before["timer"] = threading.Timer(1.0, lambda: lock.unlink(missing_ok=True))
+        sub_before["timer"].start()
+
+    def unchanged_main(problem: str) -> str | None:
+        return problem if g(ws3, "rev-parse", "HEAD") != sub_before["head"] else None
+
+    def dirty_main() -> None:
+        sub_before["head"] = g(ws3, "rev-parse", "HEAD")
+        (ws3 / "main.txt").write_text("m\n", encoding="utf-8")
+
+    def main_untouched() -> str | None:
+        (ws3 / "main.txt").unlink()
+        return unchanged_main(
+            "a subagent event in the main checkout committed the main workspace"
+        )
+
+    def agent_record() -> None:
+        pending3.mkdir(exist_ok=True)
+        (pending3 / "pr-31").write_text(f"{a1.as_posix()}\n31\n", encoding="utf-8")
+        (gh_stub / "code").write_text("0", encoding="utf-8")
+        merged = dt.datetime.now(dt.timezone.utc).isoformat()
+        (gh_stub / "31.json").write_text(json.dumps({"state": "MERGED", "number": 31, "url": "https://github.com/example/project/pull/31",
+                                                     "mergeCommit": {"oid": "merge-31"}, "mergedAt": merged}), encoding="utf-8")  # fmt: skip
+        (a1 / ".agents_workspace" / "rec.txt").write_text("r\n", encoding="utf-8")
+
+    def agent_merged() -> str | None:
+        if g(ws3, "show", "HEAD:rec.txt") != "r":
+            return "the subagent's record did not reach the main workspace"
+        if not g(
+            ws3,
+            "log",
+            "--format=%s",
+            "--fixed-strings",
+            "--grep=checkpoint source pr #31",
+        ):
+            return "the subagent's PR checkpoint did not reach the main workspace"
+        return "the pending entry was not cleared" if any(pending3.iterdir()) else None
+
+    def main_entry() -> None:
+        pending3.mkdir(exist_ok=True)
+        (pending3 / "pr-32").write_text(f"{proj3.as_posix()}\n32\n", encoding="utf-8")
+
+    def entry_kept() -> str | None:
+        kept = (pending3 / "pr-32").is_file()
+        (pending3 / "pr-32").unlink(missing_ok=True)
+        return (
+            None
+            if kept
+            else "a SubagentStop in the main checkout took the main session's pending entry"
+        )
+
+    def session_worktree() -> None:
+        add_wt(sess)
+        g(
+            ws3,
+            "worktree",
+            "add",
+            "-q",
+            "-b",
+            "ceh-ws/ws/sess",
+            str(sess / ".agents_workspace"),
+        )
+        (sess / ".agents_workspace" / "s.txt").write_text("s\n", encoding="utf-8")
+
+    def session_untouched() -> str | None:
+        if not g(sess / ".agents_workspace", "status", "--porcelain"):
+            return "a subagent stop committed the session's worktree workspace"
+        return unchanged_main("a subagent stop merged the session's worktree workspace")
+
+    def locked_record() -> None:
+        (a2 / ".agents_workspace" / "lock.txt").write_text("l\n", encoding="utf-8")
+        hold_lock()
+
+    def locked_plan() -> None:
+        (ws3 / "plan.yaml").write_text("p\n", encoding="utf-8")
+        add_wt(a3)
+        hold_lock()
+
+    subagent_fixtures = [
+        subagent("start", "SubagentStart", a1, "a1", before=lambda: add_wt(a1), after=lambda: ws_branch(a1, "ceh-ws/ws/agent-a1")),
+        subagent("start", "SubagentStart", a2, "agent-a2", before=lambda: add_wt(a2), after=lambda: ws_branch(a2, "ceh-ws/ws/agent-a2")),
+        subagent("start", "SubagentStart", proj3, "a1", before=dirty_main, after=main_untouched),
+        subagent("subagent-end", "SubagentStop", a1, "a1", before=agent_record, after=agent_merged),
+        subagent("subagent-end", "SubagentStop", proj3, "a1", before=main_entry, after=entry_kept),
+        subagent("subagent-end", "SubagentStop", sess, "a9", before=session_worktree, after=session_untouched),
+        subagent("subagent-end", "SubagentStop", a2, "agent-a2", before=locked_record,
+                 after=lambda: None if g(ws3, "show", "HEAD:lock.txt") == "l" else "a held index lock stopped the merge"),
+        subagent("start", "SubagentStart", a3, "a3", before=locked_plan,
+                 after=lambda: None if (a3 / ".agents_workspace" / "plan.yaml").is_file() else "a held index lock kept the plan from the new workspace"),
     ]  # fmt: skip
 
     # artifact-render-hook and generated-md-guard: plan/v2 YAML in tmp/product/plan.
@@ -1663,6 +1800,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**sync("end", proj), "out": "", "before": commit_v1, "after": caught_up_at_end},
         {**sync("start", None), "out": ""},
         *create_fixtures,
+        *subagent_fixtures,
         # Context injectors: valid JSON naming their skill, silent when switched off.
         {"script": "load-contract.sh", "stdin": {}, "out": "ceh-coding-conduct:agent-coding-contract"},
         {"script": "load-contract.sh", "stdin": {}, "args": ["SubagentStart"], "out": '"hookEventName": "SubagentStart"'},
