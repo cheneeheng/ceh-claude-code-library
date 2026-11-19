@@ -45,12 +45,12 @@ out into one per step.
 
 The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled.
 
-| Hook                                        | Event                                                                                        | Script                                             | Default |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------- |
-| [Branch guard](#branch-guard)               | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`)                                  | `branch-guard.py`                                  | on      |
-| [Workspace sync](#workspace-sync)           | `SessionStart`, `PreToolUse` (`Bash`), `PostToolUse` (`EnterWorktree`), `Stop`, `SessionEnd` | `sync-agents-workspace.py`                         | on      |
-| [Skill-started guard](#skill-started-guard) | `PreToolUse` (`Bash`, `Edit`, `Write`, `MultiEdit`)                                          | `skill-started-guard.py`                           | on      |
-| [Artifact hooks](#artifact-hooks)           | `PostToolUse` and `PreToolUse` (`Edit`, `Write`, `MultiEdit`)                                | `artifact-render-hook.py`, `generated-md-guard.py` | on      |
+| Hook                                        | Event                                                                                                                         | Script                                             | Default |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------- |
+| [Branch guard](#branch-guard)               | `PreToolUse` (`Edit`, `Write`, `MultiEdit`, `NotebookEdit`)                                                                   | `branch-guard.py`                                  | on      |
+| [Workspace sync](#workspace-sync)           | `SessionStart`, `PreToolUse` (`Bash`), `PostToolUse` (`EnterWorktree`), `Stop`, `SessionEnd`, `SubagentStart`, `SubagentStop` | `sync-agents-workspace.py`                         | on      |
+| [Skill-started guard](#skill-started-guard) | `PreToolUse` (`Bash`, `Edit`, `Write`, `MultiEdit`)                                                                           | `skill-started-guard.py`                           | on      |
+| [Artifact hooks](#artifact-hooks)           | `PostToolUse` and `PreToolUse` (`Edit`, `Write`, `MultiEdit`)                                                                 | `artifact-render-hook.py`, `generated-md-guard.py` | on      |
 
 ### Branch guard
 
@@ -128,8 +128,14 @@ naming the pending folder. Ordinary sync failures remain silent.
 
 It never pushes or aborts a merge it did not start, and a sync hook must never stop a session.
 It does nothing without a `.agents_workspace` git repo in the main
-checkout, when that repo is on a detached `HEAD`, or in a bare repo. It does not cover subagent
-worktrees (`isolation: "worktree"`), which fire none of its events. On Windows, a job object that
+checkout, when that repo is on a detached `HEAD`, or in a bare repo. A subagent with
+`isolation: "worktree"` gets the same workspace on `SubagentStart`, and on `SubagentStop` its
+workspace is committed, its PR checkpoints made, and its branch merged into the main workspace
+before the hook returns, retried while parallel subagents hold the index. The subagent's report
+can reach the caller before that merge, so read its records once its completion notice arrives.
+The merge stashes the main workspace's uncommitted changes and reapplies them, so an edit landing
+in between can stay in the stash: `git -C .agents_workspace stash list` shows it. A subagent
+without isolation shares the caller's checkout and changes nothing here. On Windows, a job object that
 kills its children and forbids breakaway would kill the background merge; the next session start
 then merges. `CEH_DISABLED_HOOKS` with `sync-agents-workspace` switches it off.
 
@@ -161,14 +167,14 @@ off either by name.
 
 ## Scripts
 
-| Script                                                             | Purpose                                                                                                                                                                          |
-| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `scripts/branch-guard.py`                                          | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                                                     |
-| `scripts/sync-agents-workspace.py`                                 | Workspace sync and PR checkpoint hook on `SessionStart`, `PreToolUse` (`Bash`), `PostToolUse` (`EnterWorktree`), `Stop` and `SessionEnd` (see [Workspace sync](#workspace-sync)) |
-| `scripts/skill-started-guard.py`                                   | `PreToolUse` hook: deny a commit, changelog or README edit until its skill was started (see [Skill-started guard](#skill-started-guard))                                         |
-| `scripts/artifact-render-hook.py`, `scripts/generated-md-guard.py` | The artifact hooks (see [Artifact hooks](#artifact-hooks))                                                                                                                       |
-| `scripts/artifact.py`, `skills/<skill>/scripts/artifact.py`        | Check a code review or period retro YAML against its model, or render its Markdown, through uv                                                                                   |
-| `skills/update-changelog/scripts/check-semver.py`                  | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                                              |
+| Script                                                             | Purpose                                                                                                                                                                                                           |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/branch-guard.py`                                          | `PreToolUse` hook: deny file edits on the default branch (see [Branch guard](#branch-guard))                                                                                                                      |
+| `scripts/sync-agents-workspace.py`                                 | Workspace sync and PR checkpoint hook on `SessionStart`, `PreToolUse` (`Bash`), `PostToolUse` (`EnterWorktree`), `Stop`, `SessionEnd`, `SubagentStart` and `SubagentStop` (see [Workspace sync](#workspace-sync)) |
+| `scripts/skill-started-guard.py`                                   | `PreToolUse` hook: deny a commit, changelog or README edit until its skill was started (see [Skill-started guard](#skill-started-guard))                                                                          |
+| `scripts/artifact-render-hook.py`, `scripts/generated-md-guard.py` | The artifact hooks (see [Artifact hooks](#artifact-hooks))                                                                                                                                                        |
+| `scripts/artifact.py`, `skills/<skill>/scripts/artifact.py`        | Check a code review or period retro YAML against its model, or render its Markdown, through uv                                                                                                                    |
+| `skills/update-changelog/scripts/check-semver.py`                  | Validate `CHANGELOG.md` — semver format, date order, no duplicates; accepts `-` or `—` date separators (used by `update-changelog`)                                                                               |
 
 ```bash
 python3 skills/update-changelog/scripts/check-semver.py CHANGELOG.md

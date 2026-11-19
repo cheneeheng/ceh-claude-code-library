@@ -82,6 +82,15 @@ hook's fail-open swallowed it, so `start` printed nothing and left the branch un
 now counts as a failed git command, and the start note names the branch to merge by hand. Per
 `.agents_workspace/product/fix/20261119-232900-workspace-branch-catch-up-merge.yaml`.
 
+An eighth PR gives a subagent started with `isolation: "worktree"` the workspace too. Its worktree held the
+source repo only, so it could not read a plan or keep a record, and a PR it merged waited on its
+worktree's removal before the workspace recorded it. `ceh-git-workflow`'s workspace sync now runs
+on `SubagentStart` and `SubagentStop`: the subagent gets its own workspace worktree, and when it
+stops, that workspace is committed, its PR checkpoints made, and its branch merged back before the
+hook returns, retried while parallel subagents hold the index. A live probe showed the subagent's
+report reaches the caller before `SubagentStop` runs, so a caller reads the records once the
+completion notice arrives. Per `.agents_workspace/product/plan/subagent-workspace.yaml`.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -89,7 +98,7 @@ now counts as a failed git command, and the start note names the branch to merge
 | `ceh-build-plan`               | 2.0.20  |
 | `ceh-check-build-against-plan` | 1.1.24  |
 | `ceh-every-session`            | 2.10.0  |
-| `ceh-git-workflow`             | 3.0.1   |
+| `ceh-git-workflow`             | 3.0.2   |
 
 ### Added
 
@@ -111,6 +120,9 @@ now counts as a failed git command, and the start note names the branch to merge
 
 ### Changed
 
+- `ceh-git-workflow`'s `sync-agents-workspace.py` runs on `SubagentStart` and `SubagentStop`, in
+  the subagent's own `agent-<id>` worktree only, through a new `subagent-end` argument that merges
+  synchronously. A subagent in the main checkout or in a session's worktree costs no git call.
 - `docs/STRATEGY.md` "A review, an audit or a retro" says a subject with no skill of its own goes
   to `review-anything` or `audit-anything`, and where those two go beyond the table.
 - `ceh-git-workflow:review-recent-work` is now `ceh-git-workflow:write-period-retro`. A prompt,

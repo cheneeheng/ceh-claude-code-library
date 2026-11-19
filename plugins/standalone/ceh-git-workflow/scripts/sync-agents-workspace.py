@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""SessionStart, PreToolUse (Bash), PostToolUse (EnterWorktree), Stop and SessionEnd hook: give a linked git
-worktree its own worktree of the main checkout's .agents_workspace repo, and merge it back.
+"""SessionStart, PreToolUse (Bash), PostToolUse (EnterWorktree), Stop, SessionEnd, SubagentStart and
+SubagentStop hook: give a linked git worktree its own worktree of the main checkout's
+.agents_workspace repo, and merge it back.
 
 Claude Code's worktree isolation refuses Edit and Write through a link to the main checkout, so
 the worktree gets a real git worktree of the workspace repo instead, at
@@ -21,6 +22,13 @@ Arguments, one per event:
   end-worker <cwd>
           in a linked worktree, commit, then merge its branch into <X>; in a main checkout,
           catch up, since Claude Code may report the main checkout as cwd when a session ends.
+  subagent-end
+          SubagentStop: the commit event's checkpoints and commit, then the merge into <X>,
+          synchronously, since the hook has the time and the caller reads the records next.
+
+SubagentStart (start) and SubagentStop (subagent-end) act only in the subagent's own worktree,
+agent-<agent_id>, and return before any git call otherwise. There, a step another git process
+may hold the index for is retried.
 
 Reads cwd from the hook payload (end-worker: from argv), never os.getcwd(), and does nothing
 without it. Every commit ends with the user's attribution.commit line, see attribution(). Fails open: anything unexpected exits 0. Checkpoint lookup and commit failures print
@@ -454,19 +462,24 @@ def checkpoints(top, main_ws, x, folder, session, linked, line):
                 claim.unlink()
 
 
-def create(top, main_ws, x, branch, line):
+def create(top, main_ws, x, branch, line, tries=1):
     """Add <top>/.agents_workspace as a worktree of the main workspace repo. The main workspace's
     pending changes are committed first, because a worktree holds only committed files and a plan
-    written in the main checkout must reach it."""
+    written in the main checkout must reach it. With tries > 1, a commit that leaves changes
+    pending, as when another process holds the index, is retried 0.5 s apart."""
     path = top / WORKSPACE
     if os.path.lexists(path):
         return
     if not merging(main_ws):  # the user's own merge: never conclude it
-        git(main_ws, "add", "-A")
         subject = f"chore(workspace): sync main before worktree {top.name}"[:72]
-        git(
-            main_ws, "commit", "-q", "-m", subject, *signed(line)
-        )  # exits 1 when nothing is pending
+        for attempt in range(tries):
+            git(main_ws, "add", "-A")
+            git(
+                main_ws, "commit", "-q", "-m", subject, *signed(line)
+            )  # exits 1 when nothing is pending
+            if attempt + 1 == tries or not git(main_ws, "status", "--porcelain")[1]:
+                break
+            time.sleep(0.5)
     git(main_ws, "worktree", "prune")
     code, _ = git(main_ws, "rev-parse", "--verify", "--quiet", f"refs/heads/{branch}")
     if code == 0:
@@ -499,24 +512,31 @@ def merging(repo):
     return git(repo, "rev-parse", "-q", "--verify", "MERGE_HEAD")[0] == 0
 
 
-def merge(main_ws, branch):
+def merge(main_ws, branch, tries=1):
     """Merge branch into the main workspace, uncommitted changes there included. False on failure,
-    with any merge this started aborted."""
-    if merging(main_ws):  # the user's own merge: never touch it
-        return False
-    code, _ = git(
-        main_ws,
-        "-c",
-        f"core.attributesFile={UNION}",
-        "merge",
-        "--autostash",  # git refuses a merge over a dirty file, and the log usually is dirty
-        "--no-edit",
-        "-q",
-        branch,
-    )
-    if code and merging(main_ws):
-        git(main_ws, "merge", "--abort")  # also reapplies the autostash
-    return code == 0
+    with any merge this started aborted. With tries > 1, a failure that started no merge, such as
+    another process holding the index, is retried 0.5 s apart. A conflict never is."""
+    for attempt in range(tries):
+        if merging(main_ws):  # the user's own merge: never touch it
+            return False
+        code, _ = git(
+            main_ws,
+            "-c",
+            f"core.attributesFile={UNION}",
+            "merge",
+            "--autostash",  # git refuses a merge over a dirty file, and the log usually is dirty
+            "--no-edit",
+            "-q",
+            branch,
+        )
+        if code == 0:
+            return True
+        if merging(main_ws):
+            git(main_ws, "merge", "--abort")  # also reapplies the autostash
+            return False
+        if attempt + 1 < tries:
+            time.sleep(0.5)
+    return False
 
 
 def catch_up(main_ws, x):
@@ -564,13 +584,23 @@ def detach(cwd, run_in):
         subprocess.Popen(args, creationflags=flags, **io)
 
 
-def start_context(notes):
+def own_worktree(payload):
+    """True when cwd is the subagent's own worktree. Claude Code names it agent-<agent_id>, and the
+    hooks docs show agent_id both with and without that prefix."""
+    agent = payload.get("agent_id") or ""
+    return bool(agent) and Path(payload.get("cwd") or "").name in (
+        agent,
+        f"agent-{agent}",
+    )
+
+
+def start_context(notes, event):
     if notes:
         print(
             json.dumps(
                 {
                     "hookSpecificOutput": {
-                        "hookEventName": "SessionStart",
+                        "hookEventName": event or "SessionStart",
                         "additionalContext": " ".join(notes),
                     }
                 }
@@ -594,6 +624,10 @@ def main():
     command = payload.get("tool_input", {}).get("command", "")
     if event == "merge" and not re.search(r"\bgh\s+pr\s+merge\b", command):
         return  # Runs before every Bash call: no git process without a merge.
+    hook = payload.get("hook_event_name")
+    subagent = hook in ("SubagentStart", "SubagentStop")
+    if subagent and not own_worktree(payload):
+        return  # A subagent in the main checkout or in a session's worktree: no git call.
     if not cwd or not os.path.isdir(cwd):
         return
     found = checkouts(cwd)
@@ -615,7 +649,7 @@ def main():
 
     line = attribution(top, main_checkout or top)
     # The EnterWorktree run of start prints nothing: the session already has the note.
-    notes = [WORKSPACE_NOTE] if payload.get("hook_event_name") == "SessionStart" else []
+    notes = [WORKSPACE_NOTE] if hook == "SessionStart" else []
     if not main_checkout:
         if event == "commit":
             session = str(payload.get("session_id") or os.getpid())
@@ -633,15 +667,16 @@ def main():
                     f"on their own (a conflict, or a merge git refused). Merge each by hand: "
                     f"git -C {WORKSPACE} merge <branch>."
                 )
-            start_context(notes)
+            start_context(notes, hook)
         return
 
     branch = f"{PREFIX}{x}/{top.name}"
+    tries = 10 if subagent else 1  # 5 s inside the 30 s budget, for parallel subagents
     if event == "start":
-        create(top, main_ws, x, branch, line)
-        start_context(notes)
-    elif event in ("commit", "end-worker"):
-        if event == "commit" and pending.is_dir():
+        create(top, main_ws, x, branch, line, tries)
+        start_context(notes, hook)
+    elif event in ("commit", "end-worker", "subagent-end"):
+        if event != "end-worker" and pending.is_dir():
             checkpoints(
                 top,
                 main_ws,
@@ -652,8 +687,8 @@ def main():
                 line,
             )
         commit(top, branch, line)
-        if event == "end-worker":
-            merge(main_ws, branch)
+        if event != "commit":
+            merge(main_ws, branch, tries)
 
 
 if __name__ == "__main__":
