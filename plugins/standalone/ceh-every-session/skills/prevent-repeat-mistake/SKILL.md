@@ -16,7 +16,7 @@ license: Apache-2.0
 # Prevent a repeat mistake
 
 Turn a mistake that must not come back into a fix that stops it, placed at the strongest level that
-works. The mistake may have repeated already, or a retro (`diagnose-session`, `review-recent-work`)
+works. The mistake may have repeated already, or a retro (`diagnose-session`, `write-period-retro`)
 may have found it once and routed it here: either way, one occurrence quoted from evidence is
 enough to start. The files can be anything: code, a knowledge base of notes, plans, a roadmap, a business
 strategy. Done means each mistake has a fix that is either in place and proven, or drafted and

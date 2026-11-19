@@ -13,7 +13,7 @@ Each skill declares what it needs in its `compatibility` frontmatter. In short: 
 every skill, the GitHub CLI (`gh`, authenticated via `gh auth login`) for `pull-request`,
 `release` and workspace PR checkpoints, and `python3` on PATH (stdlib only) for the `update-changelog` validator and the
 branch guard, skill-started guard and workspace sync hooks. The workspace sync hook also needs git 2.27 or later.
-`write-code-review` and `review-recent-work` save YAML and render its Markdown through
+`write-code-review` and `write-period-retro` save YAML and render its Markdown through
 [uv](https://docs.astral.sh/uv/), which installs pydantic and PyYAML on first use. Without uv the
 YAML is saved unchecked and the agent says the Markdown was not rendered.
 
@@ -30,7 +30,7 @@ Auto-trigger on context; each loads only the relevant content.
 | `address-review-comments` | Acting on review feedback on your own change, from a PR or the branch's saved review file. It's working if every comment gets a fixed, pushed-back, or answered line, a saved finding is ticked off with its resolution, and no reply agrees before quoting code or output                                                              |
 | `update-changelog`        | Writing a `CHANGELOG.md` entry — a versioned section, or bullets under `[Unreleased]`                                                                                                                                                                                                                                                   |
 | `update-readme`           | Keeping `README.md` accurate after a significant change: surgical edits behind a gate that does nothing when nothing material changed                                                                                                                                                                                                   |
-| `review-recent-work`      | Looking back over a period: what shipped, how work flowed, and at most three issues from git history, each routed to the skill that fixes it. Saved to `.agents_workspace/product/retro/`, one file for every issue. It's working if every number names the command it came from, every issue names a route, and no line ranks a person |
+| `write-period-retro`      | Looking back over a period: what shipped, how work flowed, and at most three issues from git history, each routed to the skill that fixes it. Saved to `.agents_workspace/product/retro/`, one file for every issue. It's working if every number names the command it came from, every issue names a route, and no line ranks a person |
 
 `pull-request` and `release` each carry their full sequence inline and call only
 `update-changelog` on every run, plus `update-readme` when the change is user-facing, so a compound

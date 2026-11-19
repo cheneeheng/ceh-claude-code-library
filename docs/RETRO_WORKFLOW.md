@@ -10,7 +10,7 @@ what no single skill can document: the routing _between_ them and the files they
 
 | Skill                                      | Looks back over                     | Reads                                         | Report kind           |
 | ------------------------------------------ | ----------------------------------- | --------------------------------------------- | --------------------- |
-| `ceh-git-workflow:review-recent-work`      | A period of work in a repo          | `git log`, and merged PRs when `gh` is set up | `period`              |
+| `ceh-git-workflow:write-period-retro`      | A period of work in a repo          | `git log`, and merged PRs when `gh` is set up | `period`              |
 | `ceh-session-learning:diagnose-session`    | One Claude Code session             | The session transcript and its subagents'     | `session-<id-prefix>` |
 | `ceh-every-session:prevent-repeat-mistake` | One mistake that must not come back | The quoted evidence of that mistake           | `repeat-mistake`      |
 
@@ -22,18 +22,18 @@ fix, because the routed skill finds the cause and designs the fix.
 
 | Moment                                                                     | Loads                                                          |
 | -------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| "write a retro", "what did we ship this week", "how did the last month go" | `review-recent-work`, over the period since the last retro     |
+| "write a retro", "what did we ship this week", "how did the last month go" | `write-period-retro`, over the period since the last retro     |
 | "diagnose this session", "why did that session go wrong"                   | `diagnose-session`, which dispatches four `transcript-analyst` |
 | "the agent kept doing X", with a session to read                           | `diagnose-session`                                             |
 | "you did X again", "make sure this never happens again"                    | `prevent-repeat-mistake`                                       |
 
-`review-recent-work` starts the day after the newest `.agents_workspace/product/retro/*-period.yaml`, or an older `*-period.md`, when no dates are
+`write-period-retro` starts the day after the newest `.agents_workspace/product/retro/*-period.yaml`, or an older `*-period.md`, when no dates are
 given, otherwise the last 14 days. `diagnose-session` reads `~/.claude/projects/<project>/`: "this
 session" is the current one, "the last session" the newest other transcript.
 
 ## Where each issue goes
 
-`review-recent-work` and `diagnose-session` share one route table (registered in
+`write-period-retro` and `diagnose-session` share one route table (registered in
 `docs/CROSS_REFERENCES.md`, "Retro routing and report location"):
 
 | Issue is                                                              | Route                                                     |
@@ -77,7 +77,7 @@ data), and `prevent-repeat-mistake` masks secrets as `<secret>`.
 
 ## Scenario A: a period retro
 
-1. Say "write a retro for the last two weeks". `review-recent-work` collects the history, groups
+1. Say "write a retro for the last two weeks". `write-period-retro` collects the history, groups
    what shipped, reads the flow, and names at most three issues, each with the PRs that show it.
 2. Each in-repo issue goes to its route in the same session: a fix-of-a-fix to `find-root-cause`, a
    churn hotspot to `write-build-plan`, slow or unreviewed merges to `record-project-decisions`.

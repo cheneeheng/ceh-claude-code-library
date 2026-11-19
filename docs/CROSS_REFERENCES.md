@@ -430,7 +430,7 @@ the initial backend directory tree. Add it here as a copy if `ceh-scaffolding` i
 | `plugins/standalone/ceh-codebase-explanation/skills/explain-until-understood/scripts/artifact.py`                                 | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-blog-and-seo/skills/repurpose-post/scripts/artifact.py`                                                   | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-git-workflow/skills/write-code-review/scripts/artifact.py`                                                | whole file                                                  | none                                                                             |
-| `plugins/standalone/ceh-git-workflow/skills/review-recent-work/scripts/artifact.py`                                               | whole file                                                  | none                                                                             |
+| `plugins/standalone/ceh-git-workflow/skills/write-period-retro/scripts/artifact.py`                                               | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-git-workflow/scripts/artifact.py`                                                                         | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-git-workflow/scripts/artifact-render-hook.py`                                                             | whole file                                                  | none                                                                             |
 | `plugins/standalone/ceh-git-workflow/scripts/generated-md-guard.py`                                                               | whole file                                                  | none                                                                             |
@@ -878,7 +878,7 @@ delete".
 
 ## Retro routing and report location
 
-**Canonical:** `plugins/standalone/ceh-git-workflow/skills/review-recent-work/SKILL.md` — § Procedure step 6 + § Output, first paragraph
+**Canonical:** `plugins/standalone/ceh-git-workflow/skills/write-period-retro/SKILL.md` — § Procedure step 6 + § Output, first paragraph
 
 | Copy                                                                          | Section                                        | Diverges                                                                                                                                                                               |
 | ----------------------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
