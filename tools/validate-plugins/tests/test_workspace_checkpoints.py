@@ -79,6 +79,11 @@ class WorkspaceCheckpointTests(unittest.TestCase):
         sync.record_merge(self.top, self.workspace, "printf '%s' '; gh pr merge 12 ;'")
         self.assertFalse(self.pending.exists())
 
+    def test_merge_in_another_repo_records_nothing(self):
+        for flag in ("--repo o/r", "--repo=o/r", "-R o/r", "-Ro/r"):
+            sync.record_merge(self.top, self.workspace, f"gh pr merge 12 {flag}")
+        self.assertFalse(self.pending.exists())
+
     def test_distinct_branch_references_do_not_overwrite_each_other(self):
         for branch in ("feat/a", "feat_a", "feat/b", "feat_b", "feat/A"):
             sync.record_merge(self.top, self.workspace, f"gh pr merge {branch}")

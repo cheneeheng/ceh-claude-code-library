@@ -98,8 +98,12 @@ The PR also carries its `CHANGELOG.md` entry and `docs/PLUGIN_VERSIONS.md` rows,
 
 ```bash
 # Validate the whole repo — CI runs this too
-# (no arguments, whole repo only; CI uses Python 3.13; the repo has no test suite, this is the gate)
+# (no arguments, whole repo only; CI uses Python 3.13)
 python tools/validate-plugins/validate.py
+
+# Unit tests for the validator and the setup script — CI runs these after validate.py
+python -m unittest discover -s tools/validate-plugins/tests
+python -m unittest tools/setup/test_setup.py
 
 # Strict YAML parse check of one plugin's skills and agents
 claude plugin validate plugins/standalone/ceh-<plugin>
