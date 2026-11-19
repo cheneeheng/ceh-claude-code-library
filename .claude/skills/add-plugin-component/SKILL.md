@@ -20,17 +20,20 @@ fails when they drift.
 
 ## 1. Pick the plugin and the component type
 
-Plugins split on **use case**, not tech domain or lifecycle phase. Load exactly one plugin per
-use case, so each must be self-contained. The tiers are defined in `CLAUDE.md`.
+A stage holds plugins, a plugin is one **use case**, and a skill is one **moment**, per
+`docs/VISION.md` "How the library is cut". A use case sits in one stage, and each plugin is
+self-contained, because a user loads exactly one per use case.
 
 Check the component against `docs/VISION.md` first, whether it is new or a change: it passes the
 scope test, and it answers the **Ask** question of every principle it touches. A component the
 vision does not allow is changed until it does, or not built. Record the reason in `docs/IDEAS.md`
 when it is rejected.
 
-- A skill triggers on a **moment** (a verb: "I'm opening a PR", "I'm writing a migration"), never
-  a **topic** (a noun: "PostgreSQL"). Topic-named skills either never auto-trigger or restate what
-  the model already knows. If you cannot name the moment, the skill is not ready.
+- A new skill passes the **moment test** in `docs/VISION.md`, in order: name the moment ("The
+  agent is ___" plus two or three phrases a user would type), check no skill in `docs/CATALOG.md`
+  already fires on it, name the step the agent gets wrong without it, check the scope, then put it
+  in the plugin a user already has installed at that moment. A topic (a noun: "PostgreSQL") is
+  not a moment: topic-named skills either never auto-trigger or restate what the model knows.
 - Framework variants do **not** get their own plugin when their skills trigger on disjoint file
   types — `sveltekit` and `react-vite` share `ceh-web-frontend`.
 - A foundational standard needed by two use-case plugins is **duplicated into both**, never
@@ -140,7 +143,7 @@ the same job:
 target plugin to `dependencies` in `plugin.json` (never in `marketplace.json`; bare strings, no
 ranges) and call it explicitly: `Invoke the Skill tool with skill="ceh-<plugin>:<skill>"`.
 Conditional handoffs and negative routing ("Not for X, use ...") stay prose with no dependency. A
-cross-cutting plugin may depend only on other cross-cutting plugins. `validate.py` rejects a call
+Core plugin may depend only on other Core plugins. `validate.py` rejects a call
 whose target does not resolve, is not a declared dependency, or sets
 `disable-model-invocation: true`.
 
@@ -211,8 +214,8 @@ Same gate CI runs via `.github/workflows/validate.yml`. It checks:
   `compatibility` ≤ 500 chars; only documented keys; no plugin-agent keys Claude Code ignores;
   `disable-model-invocation`, `user-invocable`, and `license` stated on every skill
 - `docs/PLUGIN_VERSIONS.md` matches every `plugin.json`, and so does each plugin's newest
-  `CHANGELOG.md` Plugin versions row, under the date `PLUGIN_VERSIONS.md` gives it; cross-cutting plugins depend only on
-  cross-cutting plugins; a skill a hook names is `user-invocable: false`
+  `CHANGELOG.md` Plugin versions row, under the date `PLUGIN_VERSIONS.md` gives it; Core plugins (the Core row of the
+  `docs/VISION.md` stage table) depend only on Core plugins; a skill a hook names is `user-invocable: false`
 - no `TEMPLATE-GUIDANCE` comment left from a template
 - `references/...`, `${CLAUDE_PLUGIN_ROOT}/{scripts,references}/...`, and `${CLAUDE_SKILL_DIR}/...` mentions
   resolve to real files, and `ceh-<plugin>:<component>` mentions resolve
@@ -258,10 +261,10 @@ Report any check you did not run as not run. Do not imply it passed.
 
 Only when step 1 finds no plugin that owns the use case. The layout is fixed by this section and
 the Structure section of `CLAUDE.md`, so do not load `plugin-dev:plugin-structure`. Decide the
-tier (cross-cutting, use-case workflow, stack/build — see `CLAUDE.md`) and the lifecycle stage,
-and plan every component with the step 1 table before creating anything, then:
+stage, a row of the `docs/VISION.md` stage table, and plan every component with the step 1 table
+before creating anything, then:
 
-1. `plugins/standalone/ceh-<name>/.claude-plugin/plugin.json`, under `plugins/standalone/` with no tier folder:
+1. `plugins/standalone/ceh-<name>/.claude-plugin/plugin.json`, under `plugins/standalone/` with no stage folder:
 
    ```json
    {
@@ -284,7 +287,7 @@ and plan every component with the step 1 table before creating anything, then:
 4. Root `README.md` — a row in the **Plugins** table and the plugin in the **By lifecycle stage**
    table. Its Skills/Agents rows go in `docs/CATALOG.md`. Install commands live only in
    `docs/GETTING_STARTED.md`.
-5. `CLAUDE.md` — the plugin in the tier table.
+5. `docs/VISION.md` and `docs/STRATEGY.md` — the plugin in its stage row.
 6. `docs/GETTING_STARTED.md` — an entry for the moment it serves, under its stage in step 3
    (with the slash command that starts it) if it is on the lifecycle route, or a row in step 4 if
    users add it only when that moment arrives. Record any new

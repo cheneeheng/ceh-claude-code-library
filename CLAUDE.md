@@ -16,18 +16,13 @@ describes the repo and its procedures. A new decision gets its own file, through
 
 ## Organizing Principle
 
-Plugins split on one axis: **use case**. How they split, and what each tier admits, is in
-`decision-plugin-boundaries.md`, `decision-no-bundles.md`, `decision-every-session-admission.md`,
-and `decision-shared-standards-duplication.md`. `docs/GETTING_STARTED.md` is the install entry
-point.
-
-Plugins fall into three tiers:
-
-| Tier                  | Loaded           | Plugins                                                                                                                                                                                                                                                                                                        |
-| --------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Cross-cutting**     | most sessions    | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                                                                                                                                                                   |
-| **Use-case workflow** | per activity     | `ceh-blog-and-seo`, `ceh-build-plan`, `ceh-check-build-against-plan`, `ceh-documentation`, `ceh-usability-audit`, `ceh-product-direction`, `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`, `ceh-security-audit`, `ceh-competitor-analysis`, `ceh-ui-design`, `ceh-codebase-explanation` |
-| **Stack / build**     | per project type | `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ag-ui`                                                                                                                                                                                                                                    |
+The repo has three levels: a **stage** holds plugins, a **plugin** is one use case, and a
+**skill** is one moment. The stage table, the levels, and the moment test a new skill must pass
+are in `docs/VISION.md`, "Scope: the product lifecycle" and "How the library is cut". The stage
+table's Core row is the list `validate.py` checks Core dependencies against. The rules for
+splitting are in `decision-plugin-boundaries.md`, `decision-no-bundles.md`,
+`decision-every-session-admission.md`, and `decision-shared-standards-duplication.md`.
+`docs/GETTING_STARTED.md` is the install entry point.
 
 ## Structure
 
@@ -39,7 +34,7 @@ Plugins fall into three tiers:
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
 .github/workflows/            # validate.yml — runs validate.py on push and PR; model-audit.yml — weekly audit draft PR
 docs/                         # GETTING_STARTED.md (user-facing install guide), CATALOG.md (every skill and agent), and maintainer docs — VISION.md, STRATEGY.md, CROSS_REFERENCES.md, PLUGIN_DEPENDENCIES.md, ENVIRONMENT_VARIABLES.md, TESTING_WORKFLOW.md, RETRO_WORKFLOW.md, PLUGIN_VERSIONS.md, IDEAS.md
-plugins/                      # All plugins — one directory per plugin, no tier subfolders
+plugins/                      # All plugins — one directory per plugin, no stage subfolders
 └── standalone/
     └── ceh-<plugin-name>/
         ├── .claude-plugin/           # plugin.json — version and dependencies live here; tuning.json — model-audit state

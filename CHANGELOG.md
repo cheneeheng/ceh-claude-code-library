@@ -19,6 +19,14 @@ format and model are unchanged. A trial in a Markdown-only knowledge base planne
 and checked an appendix through them. Per
 `.agents_workspace/product/plan/20261119-105118-plan-skills-for-documents.yaml`.
 
+The vision now says how the library is cut, in one hierarchy: a stage holds plugins, a plugin is
+one use case, and a skill is one moment. Before, `CLAUDE.md` split plugins by use case into three
+tiers, the vision by lifecycle stage, and `add-plugin-component` said "not by lifecycle phase",
+so the documents disagreed on the axis. A new skill now passes a five-step moment test: name the
+moment, check no skill owns it, name the step the agent gets wrong without it, check scope, and
+put it where the user already is. The Every step and Any step rows are renamed Core and On
+demand, and the `CLAUDE.md` tier table is gone, its Core list now read from the vision.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -39,6 +47,13 @@ and checked an appendix through them. Per
 - `check-build-against-plan` checks the plan against the repo's files, code or documents.
 - `plan-schema.md` says "the build" and "the deliverable" where it said "the code" and "the app",
   with a Check example for documents, in all six copies.
+- `docs/VISION.md` gains "How the library is cut" with the moment test, principles 4 and 6
+  point to it, and the Every step and Any step rows are renamed Core and On demand.
+- `CLAUDE.md` drops the three-tier table for the vision's stage table, and
+  `decision-plugin-boundaries.md`, `decision-plugin-dependencies.md` and `add-plugin-component`
+  follow.
+- The `repo-rules` check reads the Core plugins from the vision's Core row instead of the
+  `CLAUDE.md` Cross-cutting row.
 
 ## 2026-11-18
 
