@@ -8,12 +8,12 @@ This guide covers only what no single plugin can document: the routing _between_
 
 ## The split
 
-| Plugin               | Tier          | Owns                                                                   | Surface                                                            |
+| Plugin               | Stage         | Owns                                                                   | Surface                                                            |
 | -------------------- | ------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| `ceh-testing`        | cross-cutting | **Technique**: which inputs, which scenarios, is the suite trustworthy | 5 skills, no agents                                                |
-| `ceh-python-service` | stack         | **Tooling**: pytest, test DB, httpx, fixtures                          | `write-pytest-service-tests` + 3 tester agents + runner scripts    |
-| `ceh-python-library` | stack         | **Tooling**: pytest, public-API surface                                | `write-pytest-library-tests` (skill only)                          |
-| `ceh-web-frontend`   | stack         | **Tooling**: Vitest, Testing Library, MSW, Playwright                  | `write-vitest-playwright-tests` + 3 tester agents + runner scripts |
+| `ceh-testing`        | Core          | **Technique**: which inputs, which scenarios, is the suite trustworthy | 5 skills, no agents                                                |
+| `ceh-python-service` | Build (stack) | **Tooling**: pytest, test DB, httpx, fixtures                          | `write-pytest-service-tests` + 3 tester agents + runner scripts    |
+| `ceh-python-library` | Build (stack) | **Tooling**: pytest, public-API surface                                | `write-pytest-library-tests` (skill only)                          |
+| `ceh-web-frontend`   | Build (stack) | **Tooling**: Vitest, Testing Library, MSW, Playwright                  | `write-vitest-playwright-tests` + 3 tester agents + runner scripts |
 
 `ceh-testing` is loaded **alongside** a stack plugin, never instead of one. The test for what belongs
 where: would the content be byte-identical across stacks? Boundary analysis is, `asyncio_mode` is not.
