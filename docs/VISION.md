@@ -71,19 +71,19 @@ How it asks:
 
 ## Scope: the product lifecycle
 
-A plugin belongs here when it helps shape, build, prove, or tell people about a product. The
-cross-cutting plugins, in the Every step row, hold the disciplines that apply at every stage, and
-`ceh-testing` is also the Prove plugin. The Any step plugins are installed for an activity that can
-come at any stage.
+A plugin belongs here when it helps shape, build, prove, or tell people about a product. The Core
+plugins hold the disciplines that apply at every stage and load in most sessions, and
+`ceh-testing` is also the Prove plugin. The On demand plugins are installed for an activity that
+can come at any stage.
 
-| Stage      | What happens                                                           | Plugins today                                                                                                                                                   |
-| ---------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Shape      | Decide what to build and whether it is worth it                        | `ceh-product-direction`, `ceh-competitor-analysis`                                                                                                              |
-| Build      | Decide how to build it, then write the code, the UI, and the docs      | `ceh-build-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-documentation`, `ceh-codebase-explanation` |
-| Prove      | Show it works and that a person can use it                             | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                      |
-| Tell       | Get it in front of the people who should find it                       | `ceh-blog-and-seo`                                                                                                                                              |
-| Every step | How the agent behaves, commits, tests, and spends context              | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                    |
-| Any step   | Turn repeated work into a workflow and run it, or learn from a session | `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`                                                                                           |
+| Stage     | What happens                                                           | Plugins today                                                                                                                                                   |
+| --------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shape     | Decide what to build and whether it is worth it                        | `ceh-product-direction`, `ceh-competitor-analysis`                                                                                                              |
+| Build     | Decide how to build it, then write the code, the UI, and the docs      | `ceh-build-plan`, `ceh-python-service`, `ceh-python-library`, `ceh-web-frontend`, `ceh-ui-design`, `ceh-ag-ui`, `ceh-documentation`, `ceh-codebase-explanation` |
+| Prove     | Show it works and that a person can use it                             | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                      |
+| Tell      | Get it in front of the people who should find it                       | `ceh-blog-and-seo`                                                                                                                                              |
+| Core      | How the agent behaves, commits, tests, and spends context              | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                    |
+| On demand | Turn repeated work into a workflow and run it, or learn from a session | `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`                                                                                           |
 
 The stages are a route, not only a filing system: each one writes handoff files the next
 one reads, so installed plugins chain without a router. How they chain, and how the next piece of
@@ -105,6 +105,39 @@ Three kinds of component made for a person pass the test:
   person give a fact or a yes, or judge the evidence, because it costs the agent's context
   nothing. A mod that folds a reply to its summary table, or draws its closing questions as
   options, passes. One that only makes chatting more pleasant does not.
+
+## How the library is cut
+
+The library has three levels, and each has one name and one job. A stage holds plugins, and a
+plugin holds skills:
+
+| Level  | What it is                                                                                                      | What decides it                                                       |
+| ------ | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Stage  | A row of the table above: where on the route a plugin sits, and so when a user installs it                      | Where its moments come in a product's life                            |
+| Plugin | One use case: the moments a user reaches together, in one stage, for one kind of work, so they install together | Would a user who reaches one of its moments want the rest loaded too? |
+| Skill  | One moment: something the agent is doing, such as opening a PR                                                  | The moment test below                                                 |
+
+Each plugin sits in one row. `ceh-testing` is the one exception, in Core and in Prove, because
+every stack plugin brings it. A stack plugin is a Build plugin picked by what is being built, and
+is named for its stack. A standard a hook loads on every session, such as the coding contract,
+has no moment of its own, so the moment test does not apply to it: it must hold in every session
+its plugin loads in.
+
+### The moment test
+
+A new skill passes these in order, and stops at the first no:
+
+1. **Name the moment.** Finish "The agent is \_\_\_", and give two or three phrases a real user
+   would type. If the blank cannot be filled, it is not a skill yet.
+2. **The moment is free.** No skill in `docs/CATALOG.md` already fires on it. If one does, extend
+   that skill instead.
+3. **There is a delta.** Name what the agent does at this moment without the skill: the step it
+   gets wrong or improvises. If it already does the right thing, the skill restates the model
+   (principle 5).
+4. **It is in scope.** The moment comes while shaping, building, proving, or telling a product,
+   per the scope test above.
+5. **It has a home.** It goes in the plugin a user already has installed when the moment arrives.
+   With none, it starts a new plugin in the moment's stage.
 
 ## Goals
 
@@ -161,7 +194,8 @@ request.
 
 A skill fires on something the agent is doing ("opening a PR"), not on a subject ("PostgreSQL").
 The agent loads skills by matching what it is doing to a description, so a topic description
-either never matches or restates what the model already knows.
+either never matches or restates what the model already knows. The moment test, in How the
+library is cut, is the gate for a new skill.
 **Ask:** what is the agent doing when this loads?
 
 ### 5. Only the delta
@@ -175,9 +209,9 @@ every session that loads it.
 
 Each plugin stands alone. A standard needed by two plugins is copied into both and registered in
 `docs/CROSS_REFERENCES.md`, rather than pulled into a shared base that must also be installed.
-Duplication costs the author effort, and a forced extra install costs every run. A plugin covers
-one lifecycle stage. One that spans several splits, so a user who enters at one stage installs
-only that stage.
+Duplication costs the author effort, and a forced extra install costs every run. A plugin is one
+use case, and a use case sits in one lifecycle stage. One that spans several splits, so a user who
+enters at one stage installs only that stage.
 **Ask:** can this situation be equipped with exactly this and nothing more?
 
 ### 7. Guide first, enforce on evidence
@@ -242,7 +276,7 @@ As of 2026-11-18:
   listing budget. `tools/setup/setup.py` raises it to 2%, but the user's other plugins share the
   budget, so some skills can still lose the description they trigger on. `/doctor` shows it.
 - **Scope.** `ceh-workflow-builder` and `ceh-workflow-runner` are decided to move out of this repo
-  and still sit in the Any step row.
+  and still sit in the On demand row.
 
 ## Changing this file
 

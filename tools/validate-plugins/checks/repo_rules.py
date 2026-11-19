@@ -2,8 +2,8 @@
 
 docs/PLUGIN_VERSIONS.md matches every plugin.json version; each plugin's newest CHANGELOG.md Plugin
 versions row matches it too, under the section PLUGIN_VERSIONS.md dates it to; no marketplace entry
-declares dependencies; a cross-cutting plugin (CLAUDE.md tier table) depends only on cross-cutting
-plugins; a skill a hook script names sets user-invocable: false; every user-only skill is named in
+declares dependencies; a Core plugin (the Core row of the docs/VISION.md stage table) depends only on
+Core plugins; a skill a hook script names sets user-invocable: false; every user-only skill is named in
 ceh-every-session:whats-next.
 """
 
@@ -96,24 +96,24 @@ def check() -> None:
                 f"{entry.get('name')}: declare dependencies in plugin.json only",
             )
 
-    # A cross-cutting plugin depends only on cross-cutting plugins. The tier list is the
-    # **Cross-cutting** row of the CLAUDE.md tier table.
+    # A Core plugin depends only on Core plugins. The list is the Core row of the
+    # docs/VISION.md stage table.
     row = re.search(
-        r"^\| \*\*Cross-cutting\*\*.*$",
-        (REPO / "CLAUDE.md").read_text(encoding="utf-8"),
+        r"^\| Core\s*\|.*$",
+        (REPO / "docs/VISION.md").read_text(encoding="utf-8"),
         re.MULTILINE,
     )
     if row is None:
-        fail("CLAUDE.md", "tier table has no **Cross-cutting** row")
+        fail("docs/VISION.md", "stage table has no Core row")
     else:
-        cross = set(re.findall(r"`(ceh-[a-z0-9-]+)`", row.group(0)))
+        core = set(re.findall(r"`(ceh-[a-z0-9-]+)`", row.group(0)))
         for name, targets in plugin_deps().items():
-            if name in cross:
+            if name in core:
                 for t in targets:
-                    if t not in cross:
+                    if t not in core:
                         fail(
                             f"plugins/standalone/{name}",
-                            f"cross-cutting plugin depends on non-cross-cutting '{t}'",
+                            f"Core plugin depends on non-Core '{t}'",
                         )
 
     # A skill a hook names is model-only: `user-invocable: false`.
