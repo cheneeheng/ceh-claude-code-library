@@ -1,8 +1,8 @@
 # Vision
 
 What this library is, what it is for, and the principles that settle a decision when the rules
-elsewhere do not. `CLAUDE.md` says how the repo works, and this file says why, so every change
-must hold up against it. If the two disagree, fix one on purpose, as described in Changing this
+elsewhere do not. `CLAUDE.md` and the decision rules in `.claude/rules/` say how the repo works,
+and this file says why, so every change must hold up against it. If the two disagree, fix one on purpose, as described in Changing this
 file, never by quietly ignoring one.
 
 ## Identity
@@ -20,8 +20,8 @@ It is:
   well, and constrain it only where guidance has been shown to fail.
 - **Claude Code native.** It runs on any Claude Code runtime: interactive sessions, headless
   `claude -p`, subagents, and agent teams.
-- **Granular.** You install a small core once, then the plugin for the stage you are in, and
-  nothing else. [`GETTING_STARTED.md`](GETTING_STARTED.md) is the route.
+- **Granular.** You install a small core, then the plugin for the stage you are in, and nothing
+  else. [`GETTING_STARTED.md`](GETTING_STARTED.md) is the route.
 
 It is not:
 
@@ -44,8 +44,9 @@ The agent decides by default. It asks a human only in these cases:
   standard decides.
 - **Before an irreversible or outward-facing action:** publishing, pushing or merging to a shared
   remote, spending money, deleting data, or sending content to an external service. A human can
-  authorize a class of these actions ahead of time, and then the agent no longer asks for that
-  class.
+  authorize a class of these actions ahead of time, recorded as a rule in `.claude/rules/` (as
+  `decision-pr-review.md` does for merging this repo's own PRs), and then the agent no longer asks
+  for that class.
 
 How it asks:
 
@@ -73,8 +74,8 @@ How it asks:
 
 A plugin belongs here when it helps shape, build, prove, or tell people about a product. The Core
 plugins hold the disciplines that apply at every stage and load in most sessions, and
-`ceh-testing` is also the Prove plugin. The On demand plugins are installed for an activity that
-can come at any stage.
+`ceh-testing` also sits in Prove. The On demand plugins are installed for an activity that can come
+at any stage.
 
 | Stage     | What happens                                                           | Plugins today                                                                                                                                                   |
 | --------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -111,15 +112,16 @@ Three kinds of component made for a person pass the test:
 The library has three levels, and each has one name and one job. A stage holds plugins, and a
 plugin holds skills:
 
-| Level  | What it is                                                                                                      | What decides it                                                       |
-| ------ | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| Stage  | A row of the table above: where on the route a plugin sits, and so when a user installs it                      | Where its moments come in a product's life                            |
-| Plugin | One use case: the moments a user reaches together, in one stage, for one kind of work, so they install together | Would a user who reaches one of its moments want the rest loaded too? |
-| Skill  | One moment: something the agent is doing, such as opening a PR                                                  | The moment test below                                                 |
+| Level  | What it is                                                                                                                                                                                      | What decides it                                                       |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Stage  | Shape, Build, Prove or Tell, the four route rows of the table above: where a plugin sits on the route, and so when a user installs it. Core and On demand are rows beside the route, not stages | Where its moments come in a product's life                            |
+| Plugin | One use case: the moments a user reaches together, in one row of the table, for one kind of work, so they install together                                                                      | Would a user who reaches one of its moments want the rest loaded too? |
+| Skill  | One moment: something the agent is doing, such as opening a PR                                                                                                                                  | The moment test below                                                 |
 
 Each plugin sits in one row. `ceh-testing` is the one exception, in Core and in Prove, because
-every stack plugin brings it. A stack plugin is a Build plugin picked by what is being built, and
-is named for its stack. A standard a hook loads on every session, such as the coding contract,
+the stack plugins that write tests (`ceh-python-service`, `ceh-python-library`,
+`ceh-web-frontend`) depend on it. A stack plugin is a Build plugin picked by what is being built,
+and is named for its stack. A standard a hook loads on every session, such as the coding contract,
 has no moment of its own, so the moment test does not apply to it: it must hold in every session
 its plugin loads in.
 
@@ -139,8 +141,9 @@ A new skill passes these in order, and stops at the first no:
 5. **It has a home.** It goes in the plugin a user already has installed when the moment arrives.
    With none, it starts a new plugin in the moment's stage. When the moment can arrive unannounced
    in any session, such as "you did X again", this step outranks the plugin's kind of work: the
-   skill goes in Core if it passes `decision-every-session-admission.md`, even when an On demand
-   plugin does related work.
+   skill goes in `ceh-every-session` if it passes `decision-every-session-admission.md`, and
+   otherwise in the Core plugin whose kind of work it is, even when an On demand plugin does
+   related work.
 
 ## Goals
 
@@ -150,8 +153,9 @@ A new skill passes these in order, and stops at the first no:
 3. **Proven, not claimed.** Work reported as done arrives with the evidence that it works.
 4. **Load only what the moment needs.** Installing a plugin costs one use case, and a loaded skill
    costs only what its moment needs.
-5. **A repo that checks itself.** Every invariant a machine can check lives in `validate.py`, and
-   CI is the gate.
+5. **A repo that checks itself.** A check that has earned its place under principle 7 lives in
+   `validate.py`, or in the unit tests CI runs beside it, and CI is the gate. Principle 7 decides
+   whether a check exists, and this goal decides where it goes.
 6. **Ready to open up.** Nothing ties a plugin to one machine, account, or private context, and
    every opinion carries its reason.
 
@@ -181,7 +185,9 @@ person reading the same text should still be able to follow it.
 
 On ambiguity the agent picks the conservative option, records it, and keeps going. It asks only as
 Autonomy and its limits allows. A decision that shapes the repo for others belongs in a committed
-file or the versioned workspace, not only in the git-ignored decision log.
+file or the versioned workspace, not only in the git-ignored decision log. The versioned workspace
+is `.agents_workspace/` when it is a git repository of its own, pushed to a private remote, so its
+history versions the artifacts even though this repo ignores the folder.
 **Ask:** does this make the agent stop for something it could have decided or found out?
 
 ### 3. Proof over permission
@@ -213,15 +219,19 @@ every session that loads it.
 Each plugin stands alone. A standard needed by two plugins is copied into both and registered in
 `docs/CROSS_REFERENCES.md`, rather than pulled into a shared base that must also be installed.
 Duplication costs the author effort, and a forced extra install costs every run. A plugin is one
-use case, and a use case sits in one lifecycle stage. One that spans several splits, so a user who
-enters at one stage installs only that stage.
+use case, and a use case sits in one row of the stage table. One that spans several splits, so a
+user who enters at one stage installs only that stage. A dependency is declared only when a skill
+calls the other plugin on every run (`decision-plugin-dependencies.md`), and it stays within the
+plugin's own stage or reaches a Core plugin, which the user has installed already. One that
+reaches another stage is a gap, listed below. The edges are in `docs/PLUGIN_DEPENDENCIES.md`.
 **Ask:** can this situation be equipped with exactly this and nothing more?
 
 ### 7. Guide first, enforce on evidence
 
 Reach for a Claude Code feature first, skill prose second, and a hook, validator, or test only
 when there is evidence the prose fails. Enforcement narrows what the agent can do, so it has to be
-earned. A hook is never added because a competitor has one.
+earned. A hook is never added because a competitor has one. A check that earns its place goes
+where goal 5 says.
 **Ask:** what failure did we see that guidance did not prevent?
 
 ### 8. Opinions with reasons
@@ -284,5 +294,8 @@ As of 2026-11-18:
 ## Changing this file
 
 Change it on purpose: in its own PR, with a `CHANGELOG.md` entry, and with any rule it now
-contradicts in `CLAUDE.md`, `plugins/CLAUDE.md`, or a skill updated in the same PR. A proposal that
-needs this file changed is a bigger decision than one that fits inside it, so treat it that way.
+contradicts in `CLAUDE.md`, `plugins/CLAUDE.md`, `.claude/rules/decision-*.md`, or a skill updated
+in that same PR. The PR lands before any other change that relies on the new text. A file found
+disagreeing with the vision as it stands is fixed in the PR that finds it, with no vision change.
+A proposal that needs this file changed is a bigger decision than one that fits inside it, so treat
+it that way.
