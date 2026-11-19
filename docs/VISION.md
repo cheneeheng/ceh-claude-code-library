@@ -137,7 +137,10 @@ A new skill passes these in order, and stops at the first no:
 4. **It is in scope.** The moment comes while shaping, building, proving, or telling a product,
    per the scope test above.
 5. **It has a home.** It goes in the plugin a user already has installed when the moment arrives.
-   With none, it starts a new plugin in the moment's stage.
+   With none, it starts a new plugin in the moment's stage. When the moment can arrive unannounced
+   in any session, such as "you did X again", this step outranks the plugin's kind of work: the
+   skill goes in Core if it passes `decision-every-session-admission.md`, even when an On demand
+   plugin does related work.
 
 ## Goals
 

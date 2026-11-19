@@ -27,7 +27,9 @@ moment, check no skill owns it, name the step the agent gets wrong without it, c
 put it where the user already is. The Every step and Any step rows are renamed Core and On
 demand, and the `CLAUDE.md` tier table is gone, its Core list now read from the vision. A
 second PR carries the new row names and the hierarchy into the README, the strategy, the install
-guide and the docs that named a tier.
+guide and the docs that named a tier. A third says which wins when a moment can arrive
+unannounced in any session: the moment test's last step, so such a skill goes in Core, which is
+why `prevent-repeat-mistake` stays in `ceh-every-session` rather than `ceh-session-learning`.
 
 ### Plugin versions
 
@@ -61,6 +63,8 @@ guide and the docs that named a tier.
   `docs/TESTING_WORKFLOW.md` and the `ceh-git-workflow` README say Core and On demand where they
   said Every step, Any step or cross-cutting, and the strategy's rule for new work points to the
   moment test.
+- `docs/VISION.md` moment test step 5: a moment that can arrive unannounced in any session puts
+  its skill in Core, ahead of an On demand plugin doing related work.
 
 ## 2026-11-18
 
