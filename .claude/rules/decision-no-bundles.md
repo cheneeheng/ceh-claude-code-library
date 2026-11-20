@@ -1,7 +1,10 @@
 ---
 schema: decision-rule/v2
-decided: 2026-10-10
+decided: 2026-11-20
 source: "CLAUDE.md (5afc00c)"
+paths:
+  - "plugins/**"
+  - ".claude-plugin/**"
 ---
 
 # No bundles
