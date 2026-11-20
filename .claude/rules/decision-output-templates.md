@@ -1,6 +1,6 @@
 ---
 schema: decision-rule/v2
-decided: 2026-10-21
+decided: 2026-11-20
 source: "plugins/CLAUDE.md (f366fe9)"
 paths:
   - "plugins/**"
@@ -24,22 +24,7 @@ A format may instead be YAML validated end to end: `<schema>.template.yaml`, who
 and Markdown renderer. The skill saves the YAML, and the Markdown generated from it is saved
 beside it with `generated_from: <file>.yaml` and a do-not-edit `generated_note` in its
 frontmatter, its body inside a prettier-ignore range, and never edited by hand: the skill that
-edits the YAML re-renders it. The YAML formats so far are the build plan (`plan/v2`), the
-evidence report (`evidence/v2`), the architecture document (`architecture/v3`), the vision and
-strategy (`vision/v2`, `strategy/v2`), the business plan (`business-plan/v3`), the QA report
-(`qa-report/v2`), the performance file (`perf-report/v2`), the security audit
-(`security-audit/v2`), the three usability audits (`first-run-audit/v2`, `interface-audit/v2`,
-`error-messages-audit/v2`), the fix record (`fix-record/v3`), the session handoff
-(`handoff/v2`), the workflow spec (`workflow-spec/v2`), the run state (`run-state/v2`), the
-competitor report (`competitor-report/v2`), the glossary (`glossary/v2`), the blog voice
-profile (`blog-voice/v2`), the repeat-mistake report (`repeat-mistake/v2`), the plan review
-(`plan-review/v3`), the business plan review (`business-plan-review/v3`), the investor deck
-and outreach notes (`investor-deck/v2`, `investor-outreach/v2`), the refactor report
-(`refactor-report/v2`), the test audit (`test-audit/v2`), the stress test (`stress-test/v2`), the learning record
-(`learning/v2`), the blog draft (`blog-draft/v2`), the repurposed post (`repurposed-post/v2`), the code review
-(`code-review/v3`), the period retro (`period-retro/v3`), and the session retro
-(`session-retro/v3`), the general review (`general-review/v1`), and the general audit
-(`general-audit/v1`).
+edits the YAML re-renders it. The YAML formats are the ones with a `<schema>-model.py`.
 
 Why: the format lives in one pair of files, and each saved file names its version. A YAML format
 adds the model, so every field of the file, body included, is checked rather than described.

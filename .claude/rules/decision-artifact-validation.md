@@ -1,6 +1,6 @@
 ---
 schema: decision-rule/v2
-decided: 2026-11-06
+decided: 2026-11-20
 source: ".agents_workspace/product/plan/artifact-validation.md"
 paths:
   - "plugins/**"
@@ -16,54 +16,11 @@ and a PreToolUse guard denying hand edits to that Markdown. Each skill that read
 carries its own copy of the model and `artifact.py`, and each plugin whose skills write it keeps
 `artifact.py` and the hooks at its root for its hooks. A plugin in `READERS` in `checks/artifact_models.py`,
 whose skills read a format or, as `write-fastapi-endpoints` does, render it themselves, carries no
-hooks. The user approved the build plan trial
-(`plan/v2`) on 2026-11-07, and the other spine formats follow it, per
-`.agents_workspace/product/plan/artifact-validation-formats.yaml`: the evidence report (`evidence/v2`), the
-architecture document (`architecture/v3`), the vision and strategy (`vision/v2`,
-`strategy/v2`), and the business plan (`business-plan/v3`). The reports
-`write-evidence-report` reads follow them, per `.agents_workspace/product/plan/report-only-formats.yaml`: the QA
-report (`qa-report/v2`), the performance file (`perf-report/v2`), the security audit
-(`security-audit/v2`), and the three usability audits (`first-run-audit/v2`, `interface-audit/v2`,
-`error-messages-audit/v2`). The fix record (`fix-record/v2`) follows, per
-`.agents_workspace/product/plan/fix-record-yaml.yaml`, with the hooks in core `ceh-coding-conduct` by the user's
-choice, so a record is checked even without `ceh-testing`, and is now `fix-record/v3`, one
-functionality per record, per `.agents_workspace/product/plan/20261117-113524-fix-records-by-functionality.yaml`. The session handoff (`handoff/v2`)
-follows, per `.agents_workspace/product/plan/handoff-yaml.yaml`, with the hooks in `ceh-every-session`, which leaves
-`READERS`, also by the user's choice. The workflow spec (`workflow-spec/v2`) follows, per
-`.agents_workspace/product/plan/workflow-spec-yaml.yaml`, with the hooks in `ceh-workflow-builder`, which holds both
-its writer and its reader. The run state (`run-state/v2`) follows, per
-`.agents_workspace/product/plan/run-state-yaml.yaml`, with the hooks in `ceh-workflow-runner`, which writes and
-reads it, and its model copied beside the `flow.yaml` contract in `ceh-workflow-builder`. The
-competitor report (`competitor-report/v2`) follows, per
-`.agents_workspace/product/plan/competitor-report-yaml.yaml`, with the hooks in `ceh-competitor-analysis`, which
-holds both its writer and its reader. The glossary (`glossary/v2`) follows, per
-`.agents_workspace/product/plan/glossary-yaml.yaml`, with the hooks in `ceh-codebase-explanation`, which writes it,
-and its model copied into `record-project-decisions` in `ceh-every-session`, which reads it. The
-blog voice profile (`blog-voice/v2`) follows, per `.agents_workspace/product/plan/blog-voice-yaml.yaml`, with the
-hooks in `ceh-blog-and-seo`, which is not in `READERS` because `draft-post` writes it and
-`edit-post` reads it.
-The repeat-mistake report (`repeat-mistake/v2`) follows, per
-`.agents_workspace/product/plan/repeat-mistake-yaml.yaml`, with the hooks already in `ceh-every-session`, whose
-`prevent-repeat-mistake` both writes it and reads it in a later session.
-The formats left Markdown-only follow by the user's decision of 2026-11-13, not because another
-stage reads them, per `.agents_workspace/product/plan/markdown-formats-yaml.yaml`: the plan review
-(`plan-review/v3`), with the hooks already in `ceh-build-plan`, and the business plan review
-(`business-plan-review/v3`) and the investor deck and outreach notes (`investor-deck/v2`,
-`investor-outreach/v2`), with the hooks already in `ceh-product-direction`. The refactor report
-(`refactor-report/v2`), the test audit (`test-audit/v2`) and the stress test (`stress-test/v2`)
-follow, with the hooks already in `ceh-coding-conduct`, `ceh-testing` and `ceh-every-session`.
-The learning record (`learning/v2`) follows, with the hooks already in
-`ceh-codebase-explanation`, and the blog draft and repurposed post (`blog-draft/v2`,
-`repurposed-post/v2`), with the hooks already in `ceh-blog-and-seo`, where `edit-post` and
-`repurpose-post` carry the blog draft model to check a post before reading it. The code review
-(`code-review/v3`) and the period retro (`period-retro/v3`) follow, with the hooks added to
-`ceh-git-workflow`, which had none of its own for an artifact. The session retro
-(`session-retro/v3`) follows, with the hooks added to `ceh-session-learning` in a new
-`hooks/hooks.json`. Its `-shareable.md` copy for sharing stays Markdown, with no
-`generated_from`, so the guard lets its scrub edits pass. The general review
-(`general-review/v1`) and the general audit (`general-audit/v1`) follow, with the hooks already
-in `ceh-every-session`, whose `review-anything` writes the review and reads it back in a later
-round, and whose `audit-anything` writes the audit.
+hooks. The formats checked this way are the ones with a `<schema>-model.py` in a skill's
+`references/`. A format no other stage reads gets the same when the user decides so. A core
+plugin carries the hooks when the user chooses so, as `ceh-coding-conduct` does for the fix
+record, so a record is checked even without `ceh-testing`, and `ceh-every-session` for the
+session handoff.
 
 Why: the user asked for handoff files that are deterministic and checkable
 (VISION, Who overrides), which satisfies principle 7's evidence bar in place of an observed
