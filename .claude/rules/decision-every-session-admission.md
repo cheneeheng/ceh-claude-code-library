@@ -1,7 +1,10 @@
 ---
 schema: decision-rule/v2
-decided: 2026-10-01
+decided: 2026-11-20
 source: "CLAUDE.md (1142f63)"
+paths:
+  - "plugins/**"
+  - ".claude/skills/**"
 ---
 
 # Every-session admission

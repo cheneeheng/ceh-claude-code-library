@@ -1,7 +1,11 @@
 ---
 schema: decision-rule/v2
-decided: 2026-09-30
+decided: 2026-11-20
 source: "CLAUDE.md (6df04b8)"
+paths:
+  - "plugins/**"
+  - ".claude-plugin/marketplace.json"
+  - "docs/PLUGIN_VERSIONS.md"
 ---
 
 # Version levels

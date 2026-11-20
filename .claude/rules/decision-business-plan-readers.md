@@ -1,7 +1,10 @@
 ---
 schema: decision-rule/v2
-decided: 2026-11-11
+decided: 2026-11-20
 source: "conversation, `.agents_workspace/product/retro/2026-11-11-39c94071-business-plan-leak.md`"
+paths:
+  - "plugins/**"
+  - ".claude/skills/**"
 ---
 
 # Business plan readers

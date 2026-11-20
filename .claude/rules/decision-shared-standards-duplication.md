@@ -1,7 +1,10 @@
 ---
 schema: decision-rule/v2
-decided: 2026-09-30
+decided: 2026-11-20
 source: "CLAUDE.md (6df04b8)"
+paths:
+  - "plugins/**"
+  - "docs/CROSS_REFERENCES.md"
 ---
 
 # Shared-standards duplication

@@ -1,7 +1,10 @@
 ---
 schema: decision-rule/v2
-decided: 2026-10-05
+decided: 2026-11-20
 source: "CLAUDE.md (0ee2394)"
+paths:
+  - "CHANGELOG.md"
+  - "docs/PLUGIN_VERSIONS.md"
 ---
 
 # Changelog sections
