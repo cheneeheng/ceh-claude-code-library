@@ -9,6 +9,34 @@ before this repo live in
 
 ---
 
+## 2026-11-20
+
+The repo's decision rules now load when they are needed and hold only the rule. A test showed that
+a folder-level `CLAUDE.md` and a rule with `paths` frontmatter load the same way: once, on the
+first read of a matching file, and again on demand after compaction. So decisions and rules stay
+in `.claude/rules/`, and a folder-level `CLAUDE.md` holds only context about its subtree. Eight
+rules that bind work on plugins, the marketplace manifest or the changelog now carry `paths`,
+which takes about 80 lines out of every session that reads none of those files. Two rules had
+grown into a history of every YAML format and the plan that added it, and are cut to the rule. No
+plugin changes. Per `.agents_workspace/product/plan/20261120-104247-rules-load-on-demand.yaml`.
+
+### Added
+
+- `.claude/rules/decision-localized-rules.md`: decisions and rules go in `.claude/rules/`, with
+  `paths` when they concern one part of the tree, never in a folder-level `CLAUDE.md`.
+
+### Changed
+
+- `decision-business-plan-readers.md`, `decision-changelog-sections.md`,
+  `decision-every-session-admission.md`, `decision-no-bundles.md`,
+  `decision-plugin-boundaries.md`, `decision-plugin-dependencies.md`,
+  `decision-shared-standards-duplication.md` and `decision-version-levels.md` take `paths`
+  frontmatter, so each loads when a matching file is read instead of at launch.
+- `decision-artifact-validation.md` and `decision-output-templates.md` no longer list every YAML
+  format: the formats are the ones with a `<schema>-model.py`.
+- `CLAUDE.md` names the decision file in three places where it restated the decision: the
+  workspace layout, the changelog step and the version-bump step.
+
 ## 2026-11-19
 
 The plan skills now serve a repo whose deliverable is documents, such as a knowledge base, a docs

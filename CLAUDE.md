@@ -27,7 +27,7 @@ splitting are in `decision-plugin-boundaries.md`, `decision-no-bundles.md`,
 ## Structure
 
 ```
-.agents_workspace/            # Session artifacts, git-ignored in full: DECISION_LOG.md, and product/ (plans, ARCHITECTURE, fixes, retros, review/, audit/, eval/), per decision-artifact-locations.md
+.agents_workspace/            # Session artifacts, git-ignored in full, laid out per decision-artifact-locations.md
 .claude/rules/                # Project decisions, one decision-<topic>.md each
 .claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/), model-audit (scripts/, references/, assets/), evaluate-plugin (scripts/)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
@@ -149,11 +149,11 @@ Follow `ceh-git-workflow:pull-request` (open, merge, land), with these differenc
 Where they conflict, this section wins:
 
 - **Changelog step:** start `ceh-git-workflow:update-changelog` as the step says, but write the
-  entry under today's `## YYYY-MM-DD` section, per `decision-changelog-sections.md`, never under
-  `## [Unreleased]`.
+  entry as `decision-changelog-sections.md` says, never under `## [Unreleased]`.
 - **Version bumps ride in the PR.** The skill's "needs a version bump or tag → switch to
-  `ceh-git-workflow:release`" does not apply: bump `plugin.json`, `marketplace.json`, and
-  `docs/PLUGIN_VERSIONS.md` in the PR's commit, and never tag or release.
+  `ceh-git-workflow:release`" does not apply: the bump rides in the PR's commit, per
+  `decision-version-levels.md` and `decision-changelog-sections.md`, and nothing is tagged or
+  released, per `decision-no-releases.md`.
 - **Commit step:** expect the pre-commit hook to abort on reformatted Markdown, see Commands.
 
 ## Key Files
