@@ -898,6 +898,12 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "conflicts:\n  order:\n    - {principle: Simple, protects: ease}\n  example: For example, none.\n"
         "gaps: []\nextra_sections: []\nchanging: A PR.\n"
     )
+    good_prd = (
+        "schema: prd/v1\nstatus: draft\nupdated: 2026-11-22\nfeatures:\n"
+        "  - {id: F01, name: Count words, user: A writer, requirements: [Prints the count.],"
+        " acceptance: [An empty file prints 0.], depends_on: [], status: todo, plans: []}\n"
+        "non_functional: []\nnon_goals: []\n"
+    )
     good_bp = (
         "schema: business-plan/v3\nstatus: draft\ncreated: 2026-11-07\nupdated: 2026-11-07\n"
         "product: Wordy\nstage: idea\nderived_from: []\npmf_gate: 2\nsections:\n"
@@ -1563,6 +1569,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             good_bp.replace("pmf_gate: 2", "pmf_gate: 9"),
             "pmf_gate", "## §01 Executive Summary",
         ),
+        # PRD is not in the hook's SPINE table, so a copy with no schema key is skipped.
+        *report_fixtures("ceh-product-direction", "PRD", good_prd, good_prd.replace("status: todo", "status: planned"), "F01: status planned needs a plan", "## 01. Features"),
         *report_fixtures("ceh-testing", "QA_REPORT", good_qa, good_qa.replace("bugs: []", "bugs: [B3]", 1), "charters.0.bugs", "# QA report: Wordy"),
         *report_fixtures("ceh-testing", "search", good_perf, good_perf.replace("low: 110", "low: 125"), "attempts.0", "# Performance: search"),
         *security_fixtures,

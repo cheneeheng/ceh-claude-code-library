@@ -10,8 +10,8 @@ paths:
 # Business plan readers
 
 The business plan flows one way. The vision, the strategy and the build plans may feed it, and no
-skill that writes a committed product document (vision, strategy, build plan, decision rule,
-architecture) reads it. Tell may read it for audience and positioning, and `whats-next` for whether
+skill that writes a committed product document (vision, strategy, product requirements, build
+plan, decision rule, architecture) reads it. Tell may read it for audience and positioning, and `whats-next` for whether
 it exists.
 
 Why: a business plan turns guesses into dated tests, and a skill that reads it copies those tests

@@ -223,6 +223,10 @@ file to the same sub-path under `.agents_workspace/product/`, or names its locat
 - Write down the repo's direction: the same plugin, start with
   `/ceh-product-direction:write-vision-and-strategy`. Writes
   `.agents_workspace/product/VISION.yaml` and `.agents_workspace/product/STRATEGY.yaml`.
+- Break the product into features: the same plugin, start with
+  `/ceh-product-direction:write-product-requirements`. Writes
+  `.agents_workspace/product/PRD.yaml`: each feature with its requirements, its acceptance
+  criteria and its status.
 
 **Build**
 

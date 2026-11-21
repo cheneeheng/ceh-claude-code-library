@@ -1,0 +1,21 @@
+schema: prd/v1
+status: <draft | adopted>
+updated: YYYY-MM-DD
+features:
+  - id: <F01>
+    name: <name>
+    user: <who it is for>
+    requirements:
+      - <observable behaviour>
+    acceptance:
+      - <checkable statement>
+    depends_on:
+      - <feature id>
+    status: <todo | planned | built>
+    plans:
+      - <plan path>
+non_functional:
+  - <requirement>
+non_goals:
+  - item: <feature not built>
+    reason: <reason>

@@ -54,16 +54,18 @@ become a plan's goals (`decision-business-plan-readers.md`).
 
 Every path below is under `.agents_workspace/product/` in the target repo.
 
-| Stage | Reads                                                                                                        | Writes                                                                                                  |
-| ----- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| Shape | an idea, a conversation, the repo                                                                            | `business/BUSINESS_PLAN.yaml`, `VISION.yaml` and `STRATEGY.yaml`, each with its generated `.md`         |
-| Build | `VISION.yaml` and `STRATEGY.yaml` when present, each checked first (the `.md` when no YAML exists), the repo | `plan/<slug>.yaml` and its generated `<slug>.md`, the code, `ARCHITECTURE.yaml` and its generated `.md` |
-| Prove | the plan, the code                                                                                           | `EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance            |
-| Tell  | `business/BUSINESS_PLAN.yaml`, `EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists)           | posts, listings, SEO pages                                                                              |
+| Stage | Reads                                                                                                        | Writes                                                                                                      |
+| ----- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Shape | an idea, a conversation, the repo                                                                            | `business/BUSINESS_PLAN.yaml`, `VISION.yaml`, `STRATEGY.yaml` and `PRD.yaml`, each with its generated `.md` |
+| Build | `VISION.yaml` and `STRATEGY.yaml` when present, each checked first (the `.md` when no YAML exists), the repo | `plan/<slug>.yaml` and its generated `<slug>.md`, the code, `ARCHITECTURE.yaml` and its generated `.md`     |
+| Prove | the plan, the code                                                                                           | `EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                |
+| Tell  | `business/BUSINESS_PLAN.yaml`, `EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists)           | posts, listings, SEO pages                                                                                  |
 
 Shape to Build: `ceh-product-direction` writes `VISION.yaml` and `STRATEGY.yaml`, and
 `ceh-build-plan` reads them, putting what a plan would contradict under Open, and writes the
-plan that it builds from and `ceh-check-build-against-plan` reads. `ceh-product-direction` also writes
+plan that it builds from and `ceh-check-build-against-plan` reads. `ceh-product-direction` also
+writes `PRD.yaml`, the product's features with their requirements, acceptance criteria and
+status, so the next plan is picked from a list. `ceh-product-direction` also writes
 `business/BUSINESS_PLAN.yaml`, which no Build skill reads. Prove to
 Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `EVIDENCE.yaml`, and
 `ceh-blog-and-seo:draft-post` and `ceh-blog-and-seo:write-project-listing-text` read it with `business/BUSINESS_PLAN.yaml`. Each YAML has its
@@ -120,8 +122,8 @@ breaks silently when a file name changes.
 **Business material stays out of committed product documents.** The business plan, the investor
 deck, and the outreach notes hold pricing, unit economics, kill criteria, and investor contacts.
 Only Tell reads the business plan, for audience and positioning, and works without it (rule 1
-above). No skill that writes a product document the builders read (vision, strategy, build plan,
-architecture) reads it, because its tests, stages and dates would become that document's goals.
+above). No skill that writes a product document the builders read (vision, strategy, product
+requirements, build plan, architecture) reads it, because its tests, stages and dates would become that document's goals.
 
 **`.agents_workspace/product/` for the builders, `docs/` for users.** `docs/` holds only what users
 of the product read, so a docs site built from it never publishes a plan.
@@ -130,6 +132,8 @@ Keeping every file a stage writes would bloat the folder, so the artifacts have 
 
 - **Vision and strategy are revised in place.** One of each per repo, kept, because every later
   stage reads them.
+- **The product requirements are revised in place.** One `PRD.yaml` per repo. A feature keeps its
+  id for good, and one that is dropped moves to the non-goals with its reason.
 - **Plans are kept.** A built plan stays in `plan/` with `status: built` and an append-only
   Record of how it was planned, reviewed, built, checked, proven, and merged, so the plan is the
   audit trail of its change. Its lasting decisions are also copied to the Key Decisions log in
