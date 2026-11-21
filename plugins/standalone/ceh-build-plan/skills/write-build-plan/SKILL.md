@@ -7,8 +7,9 @@ description: >-
 argument-hint: "[what to build | <draft plan path>]"
 compatibility: >-
   Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
-  plan/v2 plan and render its Markdown, and to check a VISION or STRATEGY YAML before reading it. Without uv the plan is saved unchecked and unrendered, and those files are
-  read unchecked.
+  plan/v2 plan and render its Markdown, and to check a VISION, STRATEGY or PRD YAML before
+  reading it. Without uv the plan is saved unchecked and unrendered, and those files are read
+  unchecked.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -64,7 +65,19 @@ draft: say so and write a new plan as usual.
    (formats in `references/vision-schema.md` and `strategy-schema.md`). On exit 1, stop and report its errors, because a plan built on a
    broken source carries the error into every phase. On a stale `.md` alone, read the YAML
    instead. On exit 2 or 3, or without uv, say in the reply that the file went unchecked, and go
-   on. Put whatever is still unclear into **one round** of
+   on.
+
+   **When `.agents_workspace/product/PRD.yaml` exists, plan from its feature.** Check it the same
+   way first (format in `${CLAUDE_SKILL_DIR}/references/prd-schema.md`), with the same result on
+   each exit code. Match the request to a feature by its `id` or `name`. With a match: the
+   feature's `requirements` become Scope In items, each `acceptance` item is covered by a phase
+   Check, a `depends_on` feature that is not `built` goes under Open, with its plan in the
+   plan's `depends_on` when it has one, and anything the plan would add beyond the feature goes
+   under Out. A request that would build a `non_goals` item goes under Open. With no match,
+   plan the request as usual and say in the reply that the PRD does not list it, which
+   `ceh-product-direction:write-product-requirements` can add.
+
+   Put whatever is still unclear into **one round** of
    questions, each with a recommended answer. With no human to answer, take each recommended
    answer and list it under Open.
 
@@ -139,6 +152,12 @@ draft: say so and write a new plan as usual.
    `.md` by hand: it is generated. When the command exits 3 or uv is missing, say in the reply
    that the plan was saved unchecked and unrendered.
 
+   **Link the plan in the PRD,** only when step 2 matched a feature. Add the plan's repo-relative
+   YAML path to that feature's `plans`, unless it is already there, so a second run adds
+   nothing. Set the feature's `status` to `planned` when it was `todo` or `built`, since a built
+   feature with a new plan is in flight again. Set the PRD's `updated`, then run `artifact.py
+render` on `PRD.yaml` as for the plan.
+
 8. **Have them reviewed, once.** After the last plan of the session's batch is saved (the split
    from step 3, or the plans a caller such as a retro asked for), invoke the Skill tool with
    skill="ceh-build-plan:review-build-plan" with every saved plan's YAML path, whatever their
@@ -150,14 +169,16 @@ draft: say so and write a new plan as usual.
 
 - One plan per functionality. Leave a `built` plan as written: new work gets a new plan file. A
   draft passed by path is completed, not written again.
-- Write only the plan's YAML. Its Markdown is rendered from it.
+- Write only the plan's YAML and, with a matched feature, that feature's `status` and `plans` and
+  the PRD's `updated`. Each Markdown is rendered from its YAML.
 - Leave every decision that is not needed now under Out or Open, not in Design.
 
 ## Output
 
 Close the reply with:
 
-- The label from step 1 and each plan's YAML path, with its `depends_on`.
+- The label from step 1 and each plan's YAML path, with its `depends_on`, and the PRD feature it
+  delivers, or that the PRD lists none.
 - The In list, and the phases one line each with their Check.
 - Open: every assumption taken without an answer.
 - The review's verdict from step 8.

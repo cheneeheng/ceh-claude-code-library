@@ -13,6 +13,13 @@ plugins works installed alone, and each of their skills carries the plan format 
 request first. A built plan stays in `.agents_workspace/product/plan/` with an append-only `## Record`, so the build
 keeps its history.
 
+When the repo has a `.agents_workspace/product/PRD.yaml`, written by
+`ceh-product-direction:write-product-requirements`, the plan comes from its feature list.
+`write-build-plan` takes the matched feature's requirements as the plan's Scope In and its
+acceptance items as phase checks, then adds the plan to the feature and sets it `planned`.
+`implement-from-plan` sets the feature `built` once every plan it lists is built. A request the
+PRD does not list is still planned, and the reply says so. Without a PRD nothing changes.
+
 ## Skills
 
 | Skill                 | When it loads                                                                                                                                                               | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -30,8 +37,8 @@ or `"review this plan"`. `/ceh-build-plan:implement-from-plan [plan-file] [phase
 
 The plugin ships three hooks (`hooks/hooks.json`) that activate automatically when the plugin is
 enabled. The artifact check and the generated-file guard act on `plan/v2` plans, the YAML format in each skill's
-`references/plan-schema.md`, which the skills write, and on the `VISION.yaml` and `STRATEGY.yaml`
-the skills check before reading, because the skills carry those models too.
+`references/plan-schema.md`, which the skills write, and on the `VISION.yaml`, `STRATEGY.yaml` and
+`PRD.yaml` the skills check before reading, because the skills carry those models too.
 
 | Hook                 | Event                                        | Script                    | Default |
 | -------------------- | -------------------------------------------- | ------------------------- | ------- |
