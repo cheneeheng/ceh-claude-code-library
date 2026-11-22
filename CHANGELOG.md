@@ -49,15 +49,25 @@ hold none of them. `choice` is Markdown with lists, tables and code blocks, and 
 have small parts, its sub-sections. A part over 30 lines is refused and becomes a topic of its
 own. Per `.agents_workspace/product/plan/20261122-085803-technical-design-contract-entries.yaml`.
 
+The two new skills now have `claude plugin eval` cases, 15 each, built to stay hard for later
+models. Trigger cases load the competing plugins, so the model has a real wrong skill to pick,
+and outcome cases plant traps a capable model can still miss: a business plan beside the vision,
+a dropped feature whose id must not be reused, a switch to PostgreSQL that collides with an
+accepted "standard library only" decision. Both skills fired 3/3 when the request named the
+moment or only the task, and 0/3 when the user asked for less, which stays the target. With the
+skill, the first-write cases score 0.92 to 1.00 against 0.00 without it. Per the eval reports in
+`.agents_workspace/product/eval/plugin/ceh-product-direction/` and
+`.agents_workspace/product/eval/plugin/ceh-build-plan/`.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
-| `ceh-build-plan`           | 2.1.2   |
+| `ceh-build-plan`           | 2.1.3   |
 | `ceh-codebase-explanation` | 1.3.23  |
 | `ceh-documentation`        | 1.0.14  |
 | `ceh-every-session`        | 2.10.4  |
-| `ceh-product-direction`    | 2.1.4   |
+| `ceh-product-direction`    | 2.1.5   |
 | `ceh-python-service`       | 1.1.13  |
 
 ### Added
@@ -87,6 +97,15 @@ own. Per `.agents_workspace/product/plan/20261122-085803-technical-design-contra
   rendered as `**Planned:** not built yet.` under its heading. `false` is an error, so a built
   diagram has one spelling. A session with an older copy of the format rejects a file that holds
   the key until that plugin is updated.
+- `claude plugin eval` cases for `ceh-product-direction:write-product-requirements`
+  (`ceh-product-direction/evals/prd-*`) and `ceh-build-plan:write-technical-design`
+  (`ceh-build-plan/evals/td-*`): per skill, six trigger cases at three strictness levels, five
+  near-misses, and four outcome cases graded on the file the run leaves. Run them from
+  `plugins/standalone` with `--eval-dir`, so a case may load its competing plugins, and with
+  `--allow-tools Edit Write`, because Windows refuses a shell grant. The two cases tagged
+  `needs-shell` run on Linux or macOS only.
+- `validate.py`'s `artifact-paths` check allows a product `.md` path under `*/evals/*`, because
+  an eval fixture seeds the Markdown generated beside each YAML and its graders read it.
 
 ### Changed
 
