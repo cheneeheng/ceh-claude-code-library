@@ -107,7 +107,8 @@ draft: say so and write a new plan as usual.
    it is left open.
 
    A `technical_design` entry or an `Accepted` decision in `ARCHITECTURE.yaml` binds the plan:
-   name the entry by its topic, or the decision by its date and title, where a phase relies on
+   name the entry by its topic, a part by its topic and title, or the decision by its date and
+   title, where a phase relies on
    it, and do not restate or decide it again. Where a `technical_design` entry covers a topic,
    the entry binds and every `key_decisions` entry on that topic is its history. A plan that
    must depart from one lists it under Open with the entry to change or supersede. When the Design would hold a
