@@ -85,6 +85,12 @@ and its reason, edited in place, and the log keeps what changed and why. Per
 - `decision-business-plan-readers.md` names the product requirements among the documents whose
   writer never reads the business plan.
 - `docs/STRATEGY.md` and `docs/GETTING_STARTED.md` name `PRD.yaml` among the files Shape writes.
+- With the Technical Design section: `ceh-build-plan:write-build-plan` follows its entries, and
+  where one covers a topic the Key Decisions on that topic are history.
+  `ceh-build-plan:implement-from-plan` edits an entry the build departed from.
+  `ceh-codebase-explanation:document-architecture` leaves the section as written.
+  `find-product-market-fit`, `write-concept-docs` and `record-project-decisions` read it where
+  they read the Key Decisions.
 - The description budget in `validate.py` rises by the new skill's description, and the
   `artifact-paths` check rejects a reference to `PRD.md`.
 - `ceh-build-plan:write-build-plan` reads `PRD.yaml` when it exists, plans the matched feature

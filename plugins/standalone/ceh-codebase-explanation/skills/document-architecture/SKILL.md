@@ -48,7 +48,8 @@ Key Decisions entries, so a reader gets the reasoning without opening every plan
   `ceh-build-plan:write-technical-design` writes, for a design settled before the build. Never
   add the mark here, and remove it when you redraw that diagram from the code.
 - **Leave `technical_design` as written.** The section records the choices several features
-  share, and this skill draws what the code is, so write no entry there and change none. When
+  share, and this skill draws what the code is, so write no entry there, change none, and append no `key_decisions` entry on a topic an
+  entry covers. A new file drops the template's `technical_design` key. When
   the code contradicts an entry, say so in the report, and that
   `ceh-build-plan:write-technical-design` changes it.
 - **The minimum text a newcomer needs, never a wall of text.** Each diagram opens with a short

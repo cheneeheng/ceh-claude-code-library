@@ -79,8 +79,10 @@ failure, and `3` means no model for that version. Field paths count from 0.
   the built entry it replaces is deleted.
 - `technical_design` (optional): one entry per topic, each with `topic`, `choice` and `reason`.
   `topic` is the name a plan cites the entry by, so no two entries share one, whatever the case
-  of its letters. `reason` says why this choice and not the option rejected. A file with no
-  technical design leaves the key out: `[]` is an error. An entry is edited in place when the
+  of its letters. `reason` says why this choice and not the option rejected, and each of the two
+  is one paragraph. A file with no technical design leaves the key out: `[]` is an error, and a
+  new file started from the template drops the template's placeholder entry with the key. An
+  entry is edited in place when the
   choice changes, and the change gets a `key_decisions` entry. Where an entry covers a topic,
   the entry is what holds now and every `key_decisions` entry on that topic is its history.
 - `key_decisions`: newest last, each with `date`, `title`, `status`, `context`, `decision`,

@@ -55,7 +55,7 @@ alone needs stays for that feature's build plan.
    and say so.
 2. **List the decisions the features need,** per What belongs here. For each, write down the
    options and the one chosen with its reason. An entry `technical_design` already holds is
-   kept, and so is a choice an `Accepted` entry of `key_decisions` already made.
+   kept unless the request changes it, and a change follows step 4.
 3. **Ask the owner one round of questions,** each with a recommended answer, for what only they
    know: a stack they require, a hosting account, a budget. Decide everything else yourself.
 4. **Write each decision as a `technical_design` entry.** `topic` is its name from What belongs
