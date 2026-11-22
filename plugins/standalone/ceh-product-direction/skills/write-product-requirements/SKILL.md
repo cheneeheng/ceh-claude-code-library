@@ -1,9 +1,9 @@
 ---
 name: write-product-requirements
 description: >-
-  Load this skill when breaking a product into features before any is planned: a lean PRD.yaml of
-  features with requirements and acceptance criteria. Trigger on "write the PRD", "break the
-  product into features", "what features do we need". Not for one feature (use
+  Load this skill when breaking a product into features before any is planned, even if a chat
+  list or a hand edit seems enough: PRD.yaml. Trigger on "write the PRD", "break the product into
+  features", "what features do we need". Not for one feature (use
   ceh-build-plan:write-build-plan).
 disable-model-invocation: false
 user-invocable: true

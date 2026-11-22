@@ -59,15 +59,22 @@ skill, the first-write cases score 0.92 to 1.00 against 0.00 without it. Per the
 `.agents_workspace/product/eval/plugin/ceh-product-direction/` and
 `.agents_workspace/product/eval/plugin/ceh-build-plan/`.
 
+The two skills now also fire when the user asks for less, such as "a quick list in chat is
+probably fine" or "a line in the README is plenty". Each description names that lighter route and
+says the skill still applies, with every trigger phrase kept as it was. The PRD skill's competing
+cases rose from 0 of 6 to 5 of 6 and the technical design skill's from 0 of 6 to 3 of 6, while
+every supportive and neutral case stayed at 3 of 3 and every near-miss stayed quiet. Per
+`.agents_workspace/product/fix/20261122-143657-prd-and-technical-design-descriptions.yaml`.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
-| `ceh-build-plan`           | 2.1.3   |
+| `ceh-build-plan`           | 2.1.4   |
 | `ceh-codebase-explanation` | 1.3.23  |
 | `ceh-documentation`        | 1.0.14  |
 | `ceh-every-session`        | 2.10.4  |
-| `ceh-product-direction`    | 2.1.5   |
+| `ceh-product-direction`    | 2.1.6   |
 | `ceh-python-service`       | 1.1.13  |
 
 ### Added
@@ -142,6 +149,12 @@ skill, the first-write cases score 0.92 to 1.00 against 0.00 without it. Per the
 - The architecture format's copies in `ceh-product-direction`, `ceh-every-session`,
   `ceh-documentation` and `ceh-python-service` follow the canonical file, with no change to what
   those skills do.
+
+### Fixed
+
+- `ceh-product-direction:write-product-requirements` and `ceh-build-plan:write-technical-design`
+  load when the user asks for less: their descriptions add "even if a chat list or a hand edit
+  seems enough" and "even if a README line seems enough".
 
 ## 2026-11-20
 
