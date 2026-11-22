@@ -2,8 +2,8 @@
 name: write-technical-design
 description: >-
   Load this skill when settling the technical design several features share, before any is
-  planned: stack, components and data model, in ARCHITECTURE.yaml. Trigger on "write the
-  technical design", "pick the stack". Not for what is already built (use
+  planned, even if a README line seems enough: ARCHITECTURE.yaml. Trigger on "write the technical
+  design", "pick the stack". Not for what is already built (use
   ceh-codebase-explanation:document-architecture).
 disable-model-invocation: false
 user-invocable: true
