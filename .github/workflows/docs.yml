@@ -29,11 +29,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -47,5 +44,15 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/starlight/dist
+
+  # A job of its own: deploy-pages lists the run's artifacts, and a listing made right after
+  # the upload in the same job can come back empty (actions/deploy-pages#451).
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
