@@ -22,6 +22,12 @@ diagrams:
           - <what to notice>
         mermaid: |
           <diagram>
+technical_design:
+  - topic: <topic>
+    choice: |
+      <choice>
+    reason: |
+      <reason>
 key_decisions:
   - date: YYYY-MM-DD
     title: <title>

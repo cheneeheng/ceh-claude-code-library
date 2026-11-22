@@ -31,22 +31,28 @@ The technical decisions several features share now have a moment of their own. T
 made inside each build plan's Design, reached `ARCHITECTURE.yaml` only after that plan was built,
 and were never read back when the next plan was written. The new skill settles the stack, the
 data model, the components and their interfaces before the first plan, and writes them into
-`ARCHITECTURE.yaml` as Key Decisions, with each diagram of what is not built yet marked
-`planned`. A build plan now reads that log and follows it. There is still one architecture file:
+`ARCHITECTURE.yaml`, with each diagram of what is not built yet marked `planned`. A build plan
+now reads them and follows them. There is still one architecture file:
 `ceh-codebase-explanation:document-architecture` keeps drawing what is built, and removes the
 mark when the code matches. Per
 `.agents_workspace/product/plan/20261122-000752-technical-design-skill.yaml`.
+
+The technical design has a section of its own in that file. It was first appended to the Key
+Decisions log, the dated history every built plan also appends to, so finding the stack meant
+scanning the whole log. The Technical Design section holds one entry per topic with the choice
+and its reason, edited in place, and the log keeps what changed and why. Per
+`.agents_workspace/product/plan/20261122-072748-technical-design-section.yaml`.
 
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
-| `ceh-build-plan`           | 2.1.0   |
-| `ceh-codebase-explanation` | 1.3.21  |
-| `ceh-documentation`        | 1.0.12  |
-| `ceh-every-session`        | 2.10.2  |
-| `ceh-product-direction`    | 2.1.2   |
-| `ceh-python-service`       | 1.1.11  |
+| `ceh-build-plan`           | 2.1.1   |
+| `ceh-codebase-explanation` | 1.3.22  |
+| `ceh-documentation`        | 1.0.13  |
+| `ceh-every-session`        | 2.10.3  |
+| `ceh-product-direction`    | 2.1.3   |
+| `ceh-python-service`       | 1.1.12  |
 
 ### Added
 
@@ -59,9 +65,16 @@ mark when the code matches. Per
   listed earlier, a `todo` feature has no plan, and a plan path has one spelling: forward
   slashes, repo-relative, listed once.
 - `ceh-build-plan:write-technical-design`: settles the decisions two or more features depend on,
-  or that cost a migration to reverse, appends each to the Key Decisions of
-  `.agents_workspace/product/ARCHITECTURE.yaml` with the options it rejected, and draws the
+  or that cost a migration to reverse, writes each as one entry of the Technical Design section
+  of `.agents_workspace/product/ARCHITECTURE.yaml` with the option it rejected, and draws the
   diagrams they imply.
+- `architecture/v3` takes an optional `technical_design` list, one entry per topic with `topic`,
+  `choice` and `reason`, rendered as a numbered Technical Design section before Key Decisions.
+  An empty list and a topic used twice are errors. A change edits the entry in place and adds
+  one Key Decisions entry, and where an entry covers a topic the log on that topic is its
+  history. An older installed copy of the format exits 1 on a file that holds the key, so a
+  skill that reads the file stops and an older plugin's render hook blocks the write, until
+  that plugin is updated.
 - `architecture/v3` takes an optional `planned: true` on a diagram of what is not built yet,
   rendered as `**Planned:** not built yet.` under its heading. `false` is an error, so a built
   diagram has one spelling. A session with an older copy of the format rejects a file that holds
@@ -72,6 +85,12 @@ mark when the code matches. Per
 - `decision-business-plan-readers.md` names the product requirements among the documents whose
   writer never reads the business plan.
 - `docs/STRATEGY.md` and `docs/GETTING_STARTED.md` name `PRD.yaml` among the files Shape writes.
+- With the Technical Design section: `ceh-build-plan:write-build-plan` follows its entries, and
+  where one covers a topic the Key Decisions on that topic are history.
+  `ceh-build-plan:implement-from-plan` edits an entry the build departed from.
+  `ceh-codebase-explanation:document-architecture` leaves the section as written.
+  `find-product-market-fit`, `write-concept-docs` and `record-project-decisions` read it where
+  they read the Key Decisions.
 - The description budget in `validate.py` rises by the new skill's description, and the
   `artifact-paths` check rejects a reference to `PRD.md`.
 - `ceh-build-plan:write-build-plan` reads `PRD.yaml` when it exists, plans the matched feature

@@ -9,6 +9,8 @@ schema: architecture/v2
 - [01. Overview](#01-overview)
 - [02. <diagram name>](#02-<anchor>)
   - [02.01 <subsection>](#0201-<anchor>)
+- [NN. Technical Design](#nn-technical-design)
+  - [NN.01 <topic>](#nn01-<anchor>)
 - [NN. Key Decisions](#nn-key-decisions)
 
 ## 01. Overview
@@ -38,6 +40,14 @@ flowchart LR
 ```mermaid
 <diagram>
 ```
+
+## NN. Technical Design
+
+### NN.01 <topic>
+
+**Choice:** <choice>
+
+**Reason:** <reason>
 
 ## NN. Key Decisions
 
