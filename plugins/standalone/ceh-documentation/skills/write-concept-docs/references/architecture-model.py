@@ -64,10 +64,57 @@ class Diagram(_Strict):
         return self
 
 
+PART_MAX_LINES = 30
+ATX = re.compile(r"^ {0,3}#{1,6}(\s|$)")
+UNDERLINE = re.compile(r"^ {0,3}(=+|-+)\s*$")
+
+
+def _heading_error(text: str) -> Optional[str]:
+    """What breaks the renderer's numbering in a Markdown field: a heading it did not number, or
+    a code block left open, which swallows every heading after it."""
+    fenced, above = False, ""
+    for line in text.splitlines():
+        if line.lstrip().startswith(("```", "~~~")):
+            fenced = not fenced
+        elif not fenced and (
+            ATX.match(line) or (above.strip() and UNDERLINE.match(line))
+        ):
+            return "holds a heading line"
+        above = line
+    return "holds an unclosed code block" if fenced else None
+
+
+class DesignPart(_Strict):
+    title: Heading
+    body: Text
+
+    @model_validator(mode="after")
+    def _small(self) -> DesignPart:
+        n = len(self.body.splitlines())
+        if n > PART_MAX_LINES:
+            raise ValueError(
+                f"part '{self.title}' has {n} lines, over {PART_MAX_LINES}: make it its own topic"
+            )
+        return self
+
+
 class DesignTopic(_Strict):
     topic: Heading
+    # Markdown that states the contract: paragraphs, lists, tables, code blocks, no heading.
     choice: Text
     reason: Text
+    parts: Optional[list[DesignPart]] = Field(default=None, min_length=1)
+
+    @model_validator(mode="after")
+    def _no_headings(self) -> DesignTopic:
+        if err := _heading_error(self.choice):
+            raise ValueError(f"{self.topic}: choice {err}, use parts")
+        if err := _heading_error(self.reason):
+            raise ValueError(f"{self.topic}: reason {err}")
+        for p in self.parts or []:
+            if err := _heading_error(p.body):
+                raise ValueError(f"{self.topic}, part '{p.title}': body {err}")
+        return self
 
 
 class KeyDecision(_Strict):
@@ -142,12 +189,13 @@ def _walk(walkthrough: str, notice: list[str]) -> list[str]:
 def render(doc: Architecture, source: str) -> str:
     """The document in the architecture/v2 layout. The same YAML always renders to the same text."""
     note = f"Do not edit. artifact.py renders this file from {source}: edit the YAML, then run artifact.py render."
-    sections: list[tuple[str, list[str]]] = [("01. Overview", [])]
+    # The Contents list: each numbered heading with its depth below `##`.
+    toc: list[tuple[int, str]] = [(0, "01. Overview")]
     body: list[str] = ["## 01. Overview", ""]
     body += [f"- {b}" for b in doc.overview.bullets] + [""] + _fence(doc.overview.flow)
     for n, d in enumerate(doc.diagrams, 2):
         head = f"{n:02d}. {d.name}"
-        subs = []
+        toc.append((0, head))
         body += ["", f"## {head}", ""]
         if d.planned:
             body += ["**Planned:** not built yet.", ""]
@@ -156,27 +204,28 @@ def render(doc: Architecture, source: str) -> str:
             body += _fence(d.mermaid)
         for i, p in enumerate(d.parts or [], 1):
             sub = f"{n:02d}.{i:02d} {p.title}"
-            subs.append(sub)
+            toc.append((1, sub))
             body += (
                 ["", f"### {sub}", ""]
                 + _walk(p.walkthrough, p.notice)
                 + _fence(p.mermaid)
             )
-        sections.append((head, subs))
     n = len(doc.diagrams) + 2
     if doc.technical_design:
         head = f"{n:02d}. Technical Design"
-        subs = [
-            f"{n:02d}.{i:02d} {t.topic}" for i, t in enumerate(doc.technical_design, 1)
-        ]
+        toc.append((0, head))
         body += ["", f"## {head}"]
-        for sub, t in zip(subs, doc.technical_design):
-            body += ["", f"### {sub}", ""]
-            body += [f"**Choice:** {t.choice}", "", f"**Reason:** {t.reason}"]
-        sections.append((head, subs))
+        for i, t in enumerate(doc.technical_design, 1):
+            sub = f"{n:02d}.{i:02d} {t.topic}"
+            toc.append((1, sub))
+            body += ["", f"### {sub}", "", t.choice, "", f"**Reason:** {t.reason}"]
+            for j, p in enumerate(t.parts or [], 1):
+                part = f"{n:02d}.{i:02d}.{j:02d} {p.title}"
+                toc.append((2, part))
+                body += ["", f"#### {part}", "", p.body]
         n += 1
     kd = f"{n:02d}. Key Decisions"
-    sections.append((kd, []))
+    toc.append((0, kd))
     body += ["", f"## {kd}"]
     for k in doc.key_decisions:
         body += ["", f"### {k.date.isoformat()} — {k.title}", ""]
@@ -186,10 +235,7 @@ def render(doc: Architecture, source: str) -> str:
             f"**Decision:** {k.decision}",
             f"**Consequences:** {k.consequences}",
         ]
-    contents = []
-    for head, subs in sections:
-        contents.append(f"- [{head}](#{anchor(head)})")
-        contents += [f"  - [{s}](#{anchor(s)})" for s in subs]
+    contents = [f"{'  ' * depth}- [{h}](#{anchor(h)})" for depth, h in toc]
     out = [
         "---",
         _key("schema", doc.schema_),

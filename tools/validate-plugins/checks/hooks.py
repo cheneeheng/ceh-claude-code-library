@@ -854,7 +854,12 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         return {"tool_name": "Write", "tool_input": {"file_path": p.as_posix()}}
 
     def spine_fixtures(
-        plugin: str, stem: str, good: str, bad: str, field: str, marker: str
+        plugin: str,
+        stem: str,
+        good: str,
+        bad: str,
+        field: str,
+        marker: str | tuple[str, ...],
     ) -> list[dict]:
         """One spine format's hooks in the plugin that owns it: render a valid file, block a bad
         one naming `field`, report a missing schema key, leave plan YAML alone, warn without uv."""
@@ -868,7 +873,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
 
         def rendered() -> str | None:
             md = at["ok"].with_suffix(".md")
-            ok = md.is_file() and marker in md.read_text(encoding="utf-8")
+            markers = (marker,) if isinstance(marker, str) else marker
+            ok = md.is_file() and all(
+                m in md.read_text(encoding="utf-8") for m in markers
+            )
             return None if ok else f"{stem}.md was not rendered"
 
         rh = f"{plugin}/artifact-render-hook.py"
@@ -890,8 +898,16 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "  flow: |\n    flowchart LR\n        a --> b\ndiagrams:\n"
         "  - {name: Components, planned: true, walkthrough: Read left to right., notice: [],"
         " mermaid: flowchart LR}\n"
-        "technical_design:\n  - {topic: Stack, choice: Python., reason: One file.}\n"
+        "technical_design:\n  - {topic: Stack, choice: Python., reason: One file.,"
+        " parts: [{title: Runtime, body: uv.}]}\n"
         "key_decisions: []\n"
+    )
+    # A part one line over the limit: it has to become a topic of its own.
+    long_part = tmp / "ARCHITECTURE-long-part" / "product" / "ARCHITECTURE.yaml"
+    long_part.parent.mkdir(parents=True, exist_ok=True)
+    long_part.write_text(
+        good_arch.replace("body: uv.", 'body: "' + "\\n".join(["x"] * 31) + '"'),
+        encoding="utf-8",
     )
     # Two topics that differ only in case: a plan cites an entry by its topic.
     twice = tmp / "ARCHITECTURE-twice" / "product" / "ARCHITECTURE.yaml"
@@ -1572,11 +1588,18 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             "ceh-codebase-explanation", "ARCHITECTURE", good_arch,
             good_arch.replace("  bullets:\n    - It counts words.\n", "  bullets: []\n"),
             "overview.bullets",
-            # One marker for the planned line and the Technical Design section after the diagram.
-            "**Planned:** not built yet.\n\nRead left to right.\n\n```mermaid\nflowchart LR\n```\n\n"
-            "## 03. Technical Design\n\n### 03.01 Stack\n\n**Choice:** Python.",
+            (
+                # The planned line, then the Technical Design section with its part.
+                "**Planned:** not built yet.\n\nRead left to right.\n\n```mermaid\nflowchart LR\n```\n\n"
+                "## 03. Technical Design\n\n### 03.01 Stack\n\nPython.\n\n**Reason:** One file.\n\n"
+                "#### 03.01.01 Runtime\n\nuv.",
+                "    - [03.01.01 Runtime](#030101-runtime)",
+            ),
         ),
-        *([{"script": "ceh-codebase-explanation/artifact-render-hook.py", "stdin": write_at(twice), "out": "appears twice"}] if have_uv else []),
+        *([
+            {"script": "ceh-codebase-explanation/artifact-render-hook.py", "stdin": write_at(twice), "out": "appears twice"},
+            {"script": "ceh-codebase-explanation/artifact-render-hook.py", "stdin": write_at(long_part), "out": "make it its own topic"},
+        ] if have_uv else []),  # fmt: skip
         *spine_fixtures(
             "ceh-product-direction", "VISION", good_vision,
             good_vision.replace("status: draft", "status: adopted"),

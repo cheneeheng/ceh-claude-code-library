@@ -28,6 +28,10 @@ technical_design:
       <choice>
     reason: |
       <reason>
+    parts:
+      - title: <part>
+        body: |
+          <body>
 key_decisions:
   - date: YYYY-MM-DD
     title: <title>
