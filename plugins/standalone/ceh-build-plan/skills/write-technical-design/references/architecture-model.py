@@ -64,6 +64,12 @@ class Diagram(_Strict):
         return self
 
 
+class DesignTopic(_Strict):
+    topic: Heading
+    choice: Text
+    reason: Text
+
+
 class KeyDecision(_Strict):
     date: dt.date
     title: Heading
@@ -83,10 +89,17 @@ class Architecture(_Strict):
     schema_: Literal["architecture/v3"] = Field(alias="schema")
     overview: Overview
     diagrams: list[Diagram]
+    # The current choice per topic, edited in place. A file with no technical design leaves it out.
+    technical_design: Optional[list[DesignTopic]] = Field(default=None, min_length=1)
     key_decisions: list[KeyDecision]
 
     @model_validator(mode="after")
     def _superseded_by_another(self) -> Architecture:
+        seen: set[str] = set()
+        for t in self.technical_design or []:
+            if t.topic.casefold() in seen:
+                raise ValueError(f"technical_design: topic '{t.topic}' appears twice")
+            seen.add(t.topic.casefold())
         entries = {(e.date.isoformat(), e.title) for e in self.key_decisions}
         for k in self.key_decisions:
             m = SUPERSEDED.match(k.status)
@@ -150,7 +163,19 @@ def render(doc: Architecture, source: str) -> str:
                 + _fence(p.mermaid)
             )
         sections.append((head, subs))
-    kd = f"{len(doc.diagrams) + 2:02d}. Key Decisions"
+    n = len(doc.diagrams) + 2
+    if doc.technical_design:
+        head = f"{n:02d}. Technical Design"
+        subs = [
+            f"{n:02d}.{i:02d} {t.topic}" for i, t in enumerate(doc.technical_design, 1)
+        ]
+        body += ["", f"## {head}"]
+        for sub, t in zip(subs, doc.technical_design):
+            body += ["", f"### {sub}", ""]
+            body += [f"**Choice:** {t.choice}", "", f"**Reason:** {t.reason}"]
+        sections.append((head, subs))
+        n += 1
+    kd = f"{n:02d}. Key Decisions"
     sections.append((kd, []))
     body += ["", f"## {kd}"]
     for k in doc.key_decisions:

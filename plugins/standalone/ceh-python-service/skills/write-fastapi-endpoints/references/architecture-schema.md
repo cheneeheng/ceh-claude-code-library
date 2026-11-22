@@ -3,8 +3,9 @@
 `.agents_workspace/product/ARCHITECTURE.yaml` in the target repo, with its Markdown rendered beside
 it, unless the repo's `CLAUDE.md` names another path. A reference to it names the `.yaml`.
 `ceh-codebase-explanation:document-architecture` writes it,
-`ceh-build-plan:write-technical-design` writes the decisions and planned diagrams settled before
-the build, and `ceh-build-plan:implement-from-plan` appends Key Decisions to it. This file is
+`ceh-build-plan:write-technical-design` writes the Technical Design section and the planned
+diagrams settled before the build, and `ceh-build-plan:implement-from-plan` appends Key Decisions
+to it and edits a Technical Design entry the build changed. This file is
 copied word for word into every skill that reads or writes the file. A new file is a copy of `../assets/architecture.template.md`, relative to
 this file. The `schema: architecture/v2` line stays as written. A `v1` file gets its sections
 numbered, a Contents list, and the `v2` line on its next update.
@@ -29,6 +30,11 @@ numbered, a Contents list, and the `v2` line on its next update.
   stage or subsystem gets one numbered `###` subsection per part. Each diagram opens with a short
   walkthrough: one or two sentences on how to read it, then up to three bullets on what to notice,
   then the Mermaid block. The walkthrough never restates the diagram, its table, or Key Decisions.
+- **Technical Design:** the section before Key Decisions, present only when the file holds a
+  technical design: the choices several features share, such as the stack or the data model. One
+  numbered `###` subsection per topic, with its **Choice** and its **Reason**. It states the
+  current choice, so an entry is edited in place, and a change also adds a Key Decisions entry
+  that says what changed and why.
 - **Key Decisions:** always the last section, numbered like the others, with no walkthrough.
   Entries are appended newest last and never deleted. A changed decision gets a new entry, and the
   old one is marked Superseded.
@@ -71,6 +77,12 @@ failure, and `3` means no model for that version. Field paths count from 0.
   unchanged heading. A planned diagram that changes what a built one shows is a second entry of
   the same `name`, right after the built one. When the code matches it, the mark is removed and
   the built entry it replaces is deleted.
+- `technical_design` (optional): one entry per topic, each with `topic`, `choice` and `reason`.
+  `topic` is the name a plan cites the entry by, so no two entries share one, whatever the case
+  of its letters. `reason` says why this choice and not the option rejected. A file with no
+  technical design leaves the key out: `[]` is an error. An entry is edited in place when the
+  choice changes, and the change gets a `key_decisions` entry. Where an entry covers a topic,
+  the entry is what holds now and every `key_decisions` entry on that topic is its history.
 - `key_decisions`: newest last, each with `date`, `title`, `status`, `context`, `decision`,
   `consequences`. `status` is `Accepted`, or `Superseded by YYYY-MM-DD <title>` naming another
   entry by its date and title. An entry is never deleted.

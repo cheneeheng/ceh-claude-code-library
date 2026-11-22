@@ -889,7 +889,19 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "schema: architecture/v3\noverview:\n  bullets:\n    - It counts words.\n"
         "  flow: |\n    flowchart LR\n        a --> b\ndiagrams:\n"
         "  - {name: Components, planned: true, walkthrough: Read left to right., notice: [],"
-        " mermaid: flowchart LR}\nkey_decisions: []\n"
+        " mermaid: flowchart LR}\n"
+        "technical_design:\n  - {topic: Stack, choice: Python., reason: One file.}\n"
+        "key_decisions: []\n"
+    )
+    # Two topics that differ only in case: a plan cites an entry by its topic.
+    twice = tmp / "ARCHITECTURE-twice" / "product" / "ARCHITECTURE.yaml"
+    twice.parent.mkdir(parents=True, exist_ok=True)
+    twice.write_text(
+        good_arch.replace(
+            "key_decisions: []",
+            "  - {topic: stack, choice: Go., reason: Two.}\nkey_decisions: []",
+        ),
+        encoding="utf-8",
     )
     good_vision = (
         "schema: vision/v2\nstatus: draft\nupdated: 2026-11-07\nidentity:\n  name: Wordy\n"
@@ -1559,8 +1571,12 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *spine_fixtures(
             "ceh-codebase-explanation", "ARCHITECTURE", good_arch,
             good_arch.replace("  bullets:\n    - It counts words.\n", "  bullets: []\n"),
-            "overview.bullets", "**Planned:** not built yet.",
+            "overview.bullets",
+            # One marker for the planned line and the Technical Design section after the diagram.
+            "**Planned:** not built yet.\n\nRead left to right.\n\n```mermaid\nflowchart LR\n```\n\n"
+            "## 03. Technical Design\n\n### 03.01 Stack\n\n**Choice:** Python.",
         ),
+        *([{"script": "ceh-codebase-explanation/artifact-render-hook.py", "stdin": write_at(twice), "out": "appears twice"}] if have_uv else []),
         *spine_fixtures(
             "ceh-product-direction", "VISION", good_vision,
             good_vision.replace("status: draft", "status: adopted"),
