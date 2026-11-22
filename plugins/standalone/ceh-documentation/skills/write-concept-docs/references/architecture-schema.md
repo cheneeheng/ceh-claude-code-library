@@ -16,8 +16,8 @@ numbered, a Contents list, and the `v2` line on its next update.
   order, and every `###` subsection with two digits as well: `03.01`, `03.02`, never `03.1`. A
   `####` part of a Technical Design topic takes a third pair: `04.02.01`.
 - **Anchors:** GitHub heading anchors drop the dots, so `### 03.01 Export: the CLI` links as
-  `#0301-export-the-cli`, and `#### 04.02.01 Style fields` as `#040201-style-fields`. No em dash in a numbered heading, since it leaves a double hyphen in the
-  anchor.
+  `#0301-export-the-cli`, and `#### 04.02.01 Style fields` as `#040201-style-fields`. No em
+  dash in a numbered heading, since it leaves a double hyphen in the anchor.
 
 ## Sections
 
@@ -88,7 +88,9 @@ failure, and `3` means no model for that version. Field paths count from 0.
   present) are the topic's sub-sections, each with `title` and `body`, the body Markdown like
   `choice`. A part is small: a body of more than 30 lines is an error, and that part becomes a
   topic of its own. None of the three texts holds a heading line or an unclosed code block,
-  which is an error too, because the renderer writes and numbers every heading. An entry
+  which is an error too, because the renderer writes and numbers every heading. The check
+  reads Markdown headings (`# x`, a line underlined with `===` or `---`, also at the start of a
+  quote or a list item) outside code blocks, and does not see an HTML heading, so write none. An entry
   refers to another by its topic, and to a part by its topic and title, never by a section
   number. A file with no technical design leaves the key out: `[]` is an error, and a
   new file started from the template drops the template's placeholder entry with the key. An

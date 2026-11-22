@@ -70,8 +70,8 @@ share.
    a `title` and a `body`. Keep a part small: one over 30 lines fails the check and becomes a
    topic of its own. Write no heading in any of these texts, because the renderer numbers them.
    Refer to another entry by its topic, and to a part by its topic and title, never by a
-   section number, because the rendered numbers move when a topic is added. A first write adds nothing to `key_decisions`, because the entry holds its
-   own reason. **To change an entry,** edit it in place and append one `key_decisions` entry
+   section number, because the rendered numbers move when a topic is added. A first write adds
+   nothing to `key_decisions`, because the entry holds its own reason. **To change an entry,** edit it in place and append one `key_decisions` entry
    dated today with `status: Accepted`, titled `<topic>: <the new choice in a few words>`,
    whose `context` holds the old choice and why it no longer holds. Then mark every earlier
    `Accepted` entry of `key_decisions` that decides the same topic, whoever wrote it,

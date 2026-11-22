@@ -65,23 +65,44 @@ class Diagram(_Strict):
 
 
 PART_MAX_LINES = 30
-ATX = re.compile(r"^ {0,3}#{1,6}(\s|$)")
+HEADING = "holds a heading line"
+# `# x`, also as the first thing in a quote or a list item, where it still renders as a heading.
+ATX = re.compile(r"^ {0,3}(?:(?:>|[-*+]|\d+[.)])\s+)*#{1,6}(\s|$)")
 UNDERLINE = re.compile(r"^ {0,3}(=+|-+)\s*$")
+FENCE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
+# A line an underline cannot turn into a heading: a list item or a table row.
+NO_PARAGRAPH = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s|^\s*\|")
 
 
 def _heading_error(text: str) -> Optional[str]:
     """What breaks the renderer's numbering in a Markdown field: a heading it did not number, or
-    a code block left open, which swallows every heading after it."""
-    fenced, above = False, ""
+    a code block left open, which swallows every heading after it.
+
+    less-code: a line scan, not a Markdown parser. A fence counts at any indent, so one inside a
+    list item works and a fence line inside a 4-space indented code block is misread, and an HTML
+    heading is not seen. Swap in a parser if either turns up in a real file."""
+    fence, above = "", ""
     for line in text.splitlines():
-        if line.lstrip().startswith(("```", "~~~")):
-            fenced = not fenced
-        elif not fenced and (
-            ATX.match(line) or (above.strip() and UNDERLINE.match(line))
-        ):
-            return "holds a heading line"
-        above = line
-    return "holds an unclosed code block" if fenced else None
+        m = FENCE.match(line)
+        if fence:
+            # Only the opener's character, at least as long, alone on its line, closes a block.
+            if (
+                m
+                and m[1][0] == fence[0]
+                and len(m[1]) >= len(fence)
+                and not m[2].strip()
+            ):
+                fence = ""
+            above = ""
+        elif m:
+            fence, above = m[1], ""
+        elif ATX.match(line):
+            return HEADING
+        elif above.strip() and not NO_PARAGRAPH.match(above) and UNDERLINE.match(line):
+            return HEADING
+        else:
+            above = line
+    return "holds an unclosed code block" if fence else None
 
 
 class DesignPart(_Strict):
@@ -108,7 +129,8 @@ class DesignTopic(_Strict):
     @model_validator(mode="after")
     def _no_headings(self) -> DesignTopic:
         if err := _heading_error(self.choice):
-            raise ValueError(f"{self.topic}: choice {err}, use parts")
+            hint = ", use parts" if err == HEADING else ""
+            raise ValueError(f"{self.topic}: choice {err}{hint}")
         if err := _heading_error(self.reason):
             raise ValueError(f"{self.topic}: reason {err}")
         for p in self.parts or []:

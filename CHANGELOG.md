@@ -78,9 +78,9 @@ own. Per `.agents_workspace/product/plan/20261122-085803-technical-design-contra
   `choice`, `reason` and optional `parts`, rendered as a numbered Technical Design section
   before Key Decisions, each part a numbered sub-section listed in Contents. `choice` and a
   part's `body` are Markdown. An empty list, a topic used twice, a part over 30 lines, and a
-  heading line or an unclosed code block in any of the texts are errors. A change edits the entry in place and adds
-  one Key Decisions entry, and where an entry covers a topic the log on that topic is its
-  history. An older installed copy of the format exits 1 on a file that holds the key, so a
+  heading line or an unclosed code block in any of the texts are errors. A change edits the
+  entry in place and adds one Key Decisions entry, and where an entry covers a topic the log on
+  that topic is its history. An older installed copy of the format exits 1 on a file that holds the key, so a
   skill that reads the file stops and an older plugin's render hook blocks the write, until
   that plugin is updated.
 - `architecture/v3` takes an optional `planned: true` on a diagram of what is not built yet,

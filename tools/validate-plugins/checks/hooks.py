@@ -919,6 +919,12 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ),
         encoding="utf-8",
     )
+    # A heading the renderer did not number: it would break the numbering and the Contents list.
+    heading = tmp / "ARCHITECTURE-heading" / "product" / "ARCHITECTURE.yaml"
+    heading.parent.mkdir(parents=True, exist_ok=True)
+    heading.write_text(
+        good_arch.replace("choice: Python.", 'choice: "a\\n\\n## H"'), encoding="utf-8"
+    )
     good_vision = (
         "schema: vision/v2\nstatus: draft\nupdated: 2026-11-07\nidentity:\n  name: Wordy\n"
         "  sentence: a CLI.\n  is:\n    - {trait: Small, meaning: One file.}\n  is_not: [An editor.]\n"
@@ -1599,6 +1605,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *([
             {"script": "ceh-codebase-explanation/artifact-render-hook.py", "stdin": write_at(twice), "out": "appears twice"},
             {"script": "ceh-codebase-explanation/artifact-render-hook.py", "stdin": write_at(long_part), "out": "make it its own topic"},
+            {"script": "ceh-codebase-explanation/artifact-render-hook.py", "stdin": write_at(heading), "out": "choice holds a heading line, use parts"},
         ] if have_uv else []),  # fmt: skip
         *spine_fixtures(
             "ceh-product-direction", "VISION", good_vision,
