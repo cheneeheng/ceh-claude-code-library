@@ -18,7 +18,8 @@ When the repo has a `.agents_workspace/product/PRD.yaml`, written by
 `write-build-plan` takes the matched feature's requirements as the plan's Scope In and its
 acceptance items as phase checks, then adds the plan to the feature and sets it `planned`.
 `implement-from-plan` sets the feature `built` once every plan it lists is built. A request the
-PRD does not list is still planned, and the reply says so. Without a PRD nothing changes.
+PRD does not list is still planned, and the reply says so. A request that names a replaced feature
+is planned from the feature that replaced it. Without a PRD nothing changes.
 
 ## Skills
 

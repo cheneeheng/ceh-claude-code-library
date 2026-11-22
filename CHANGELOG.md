@@ -80,15 +80,24 @@ showed the new one, so the deploy failed with "No artifacts named github-pages w
 ([actions/deploy-pages#451](https://github.com/actions/deploy-pages/issues/451)). No plugin
 changed.
 
+The product requirements keep the features a later version replaced. When version 2 of a product
+changed what a built feature did, the file had two choices: overwrite the feature's requirements,
+which lost why it was built that way, or keep both texts, which left a file that contradicted
+itself. `PRD.yaml` now takes a `replaced` list beside its features, the way `ARCHITECTURE.yaml`
+keeps its Key Decisions beside the Technical Design. The new behaviour gets a new id, and the old
+feature moves to `replaced` with its successor, the reason and the plans that built it, so the
+feature list is always the product as it is now. Per
+`.agents_workspace/product/plan/20261122-225429-prd-replaced-features.yaml`.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
-| `ceh-build-plan`           | 2.1.5   |
+| `ceh-build-plan`           | 2.1.6   |
 | `ceh-codebase-explanation` | 1.3.24  |
 | `ceh-documentation`        | 1.0.15  |
-| `ceh-every-session`        | 2.10.5  |
-| `ceh-product-direction`    | 2.1.7   |
+| `ceh-every-session`        | 2.10.6  |
+| `ceh-product-direction`    | 2.1.8   |
 | `ceh-python-service`       | 1.1.14  |
 
 ### Added
@@ -163,6 +172,18 @@ changed.
 - The architecture format's copies in `ceh-product-direction`, `ceh-every-session`,
   `ceh-documentation` and `ceh-python-service` follow the canonical file, with no change to what
   those skills do.
+- `prd/v1` takes an optional `replaced` list, each entry with `id`, `name`, `date`,
+  `replaced_by`, `reason` and `plans`, rendered as `## 04. Replaced features`. An id is unique
+  across the features, the non-goals and the replaced entries, and a `replaced_by` id names a
+  feature, a non-goal id or a later replaced entry. A file without the key is valid and renders
+  as before. An older installed copy of the format exits 1 on a file that holds the key, until
+  that plugin is updated.
+- `ceh-product-direction:write-product-requirements` replaces a built feature when code built
+  to its old requirements would fail the new ones, and edits everything else in place.
+- `ceh-build-plan:write-build-plan` plans a request that names a replaced feature from the
+  feature that replaced it. The format's copies in its three skills follow the canonical file.
+- `ceh-every-session:whats-next` carries the new copy of the format, with no change to what it
+  does.
 
 ### Fixed
 

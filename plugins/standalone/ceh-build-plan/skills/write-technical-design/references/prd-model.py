@@ -68,6 +68,28 @@ class NonGoal(_Strict):
     reason: Text
 
 
+class Replaced(_Strict):
+    # A feature a later version replaced: history, never a requirement.
+    id: FeatureId
+    name: Heading
+    date: dt.date
+    replaced_by: list[FeatureId] = Field(min_length=1)
+    reason: Text
+    plans: list[PlanPath]
+
+
+def _entry_lists(owner: str, lists: tuple[tuple[str, list[str]], ...]) -> None:
+    for name, items in lists:
+        if len(set(items)) != len(items):
+            raise ValueError(f"{owner}: {name} lists an entry twice")
+        if name == "plans" and any(
+            s in ("", ".", "..") for p in items for s in p.split("/")
+        ):
+            raise ValueError(
+                f"{owner}: plans holds a path with an empty, . or .. segment"
+            )
+
+
 class Prd(_Strict):
     schema_: Literal["prd/v1"] = Field(alias="schema")
     status: Literal["draft", "adopted"]
@@ -75,6 +97,7 @@ class Prd(_Strict):
     features: list[Feature] = Field(min_length=1)
     non_functional: list[Text]
     non_goals: list[NonGoal]
+    replaced: list[Replaced] = []
 
     @model_validator(mode="after")
     def _rules(self) -> Prd:
@@ -83,21 +106,26 @@ class Prd(_Strict):
         ):
             raise ValueError("status adopted allows no [assumed], set draft")
         ids = [f.id for f in self.features]
-        retired = [g.id for g in self.non_goals if g.id]
+        retired = [g.id for g in self.non_goals if g.id] + [r.id for r in self.replaced]
         for i in retired:
             if retired.count(i) > 1 or i in ids:
                 raise ValueError(f"{i}: id is used twice")
+        # A successor is live, a non-goal, or replaced later, which rules out itself and a cycle.
+        successors = set(ids) | {g.id for g in self.non_goals if g.id}
+        for r in reversed(self.replaced):
+            _entry_lists(r.id, (("replaced_by", r.replaced_by), ("plans", r.plans)))
+            for by in r.replaced_by:
+                if by not in successors:
+                    raise ValueError(
+                        f"{r.id}: replaced_by names {by}, not a feature, a non-goal or a"
+                        " later replaced entry"
+                    )
+            successors.add(r.id)
         earlier: set[str] = set()
         for f in self.features:
             if f.id in earlier:
                 raise ValueError(f"{f.id}: id is used twice")
-            for name, items in (("depends_on", f.depends_on), ("plans", f.plans)):
-                if len(set(items)) != len(items):
-                    raise ValueError(f"{f.id}: {name} lists an entry twice")
-            if any(s in ("", ".", "..") for p in f.plans for s in p.split("/")):
-                raise ValueError(
-                    f"{f.id}: plans holds a path with an empty, . or .. segment"
-                )
+            _entry_lists(f.id, (("depends_on", f.depends_on), ("plans", f.plans)))
             for dep in f.depends_on:
                 if dep not in ids:
                     raise ValueError(f"{f.id}: depends_on names {dep}, not a feature")
@@ -151,6 +179,8 @@ def render(doc: Prd, source: str) -> str:
         ("02. Non-functional requirements", []),
         ("03. Non-goals", []),
     ]
+    if doc.replaced:
+        sections.append(("04. Replaced features", []))
     contents = []
     for head, subs in sections:
         contents.append(f"- [{head}](#{anchor(head)})")
@@ -211,5 +241,22 @@ def render(doc: Prd, source: str) -> str:
         _item("- ", f"**{g.item}{f' (was {g.id})' if g.id else ''}.** {g.reason}")
         for g in doc.non_goals
     ] or ["None"]
+    if doc.replaced:
+        out += [
+            "",
+            "## 04. Replaced features",
+            "",
+            "History, not requirements: nothing below describes the product as it is now.",
+            "",
+        ]
+        for r in doc.replaced:
+            out += [
+                _item(
+                    "- ",
+                    f"**{r.id}: {r.name}.** Replaced by {', '.join(r.replaced_by)}"
+                    f" on {r.date.isoformat()}. {r.reason}",
+                ),
+                f"  - Plans: {', '.join(f'`{p}`' for p in r.plans) or 'None'}",
+            ]
     out += ["", "<!-- prettier-ignore-end -->"]
     return "\n".join(out) + "\n"
