@@ -74,6 +74,12 @@ rules an agent could not follow as written, and schema wording that disagreed wi
 The descriptions are unchanged, so the trigger results above still hold. Per
 `.agents_workspace/product/audit/general/20261122-204415-54049974-7429-4e49-83c0-a5a51a80fa5b-plugins-standalone-ceh-product-direction-skills-write-product-requirements-and-8-more.yaml`.
 
+The docs site deploys again. The workflow uploaded the site and deployed it in one job, and the
+deploy step listed the run's artifacts within a second of the upload, before GitHub's listing
+showed the new one, so the deploy failed with "No artifacts named github-pages were found"
+([actions/deploy-pages#451](https://github.com/actions/deploy-pages/issues/451)). No plugin
+changed.
+
 ### Plugin versions
 
 | Plugin                     | Version |
@@ -181,6 +187,8 @@ The descriptions are unchanged, so the trigger results above still hold. Per
   the renderer ends with a full stop. Every copy follows its canonical file.
 - The `ceh-build-plan` README lists `ARCHITECTURE.yaml` among the files its hooks check, and
   `docs/PLUGIN_DEPENDENCIES.md` lists the two skills' prose references.
+- `.github/workflows/docs.yml` builds the site in one job and deploys it in a second, so the
+  deploy step no longer lists the artifact right after its upload.
 
 ## 2026-11-20
 
