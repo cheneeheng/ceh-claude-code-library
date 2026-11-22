@@ -7,8 +7,8 @@ description: >-
 argument-hint: "[what to build | <draft plan path>]"
 compatibility: >-
   Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
-  plan/v2 plan and render its Markdown, and to check a VISION, STRATEGY or PRD YAML before
-  reading it. Without uv the plan is saved unchecked and unrendered, and those files are read
+  plan/v2 plan and render its Markdown, and to check a VISION, STRATEGY, PRD or ARCHITECTURE YAML
+  before reading it. Without uv the plan is saved unchecked and unrendered, and those files are read
   unchecked.
 disable-model-invocation: false
 user-invocable: true
@@ -77,6 +77,11 @@ draft: say so and write a new plan as usual.
    plan the request as usual and say in the reply that the PRD does not list it, which
    `ceh-product-direction:write-product-requirements` can add.
 
+   **When `.agents_workspace/product/ARCHITECTURE.yaml` exists, read its decisions.** Check it
+   the same way first (format in `${CLAUDE_SKILL_DIR}/references/architecture-schema.md`), with
+   the same result on each exit code. Read its `key_decisions` whose `status` is `Accepted`, and
+   each diagram marked `planned: true`, which shows where the system is going.
+
    Put whatever is still unclear into **one round** of
    questions, each with a recommended answer. With no human to answer, take each recommended
    answer and list it under Open.
@@ -99,6 +104,13 @@ draft: say so and write a new plan as usual.
 5. **Write the Design.** Only the decisions the phases need, each with its reason. Settle or
    explicitly defer each of these that applies, because each one stops a builder mid-phase when
    it is left open.
+
+   An `Accepted` decision in `ARCHITECTURE.yaml` binds the plan: name it by its date and title
+   where a phase relies on it, and do not restate or decide it again. A plan that must depart
+   from one lists it under Open with the entry to supersede. When the Design would hold a
+   decision two or more features share (a stack, a data model, a component boundary) and no
+   entry settles it, decide it here as usual and say in the reply that
+   `ceh-build-plan:write-technical-design` settles such decisions for the whole product.
 
    When the build includes code:
 

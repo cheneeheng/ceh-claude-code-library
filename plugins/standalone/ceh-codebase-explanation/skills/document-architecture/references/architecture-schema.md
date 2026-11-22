@@ -2,9 +2,10 @@
 
 `.agents_workspace/product/ARCHITECTURE.yaml` in the target repo, with its Markdown rendered beside
 it, unless the repo's `CLAUDE.md` names another path. A reference to it names the `.yaml`.
-`ceh-codebase-explanation:document-architecture` writes it, and
-`ceh-build-plan:implement-from-plan` appends Key Decisions to it. This file is copied word for
-word into both plugins. A new file is a copy of `../assets/architecture.template.md`, relative to
+`ceh-codebase-explanation:document-architecture` writes it,
+`ceh-build-plan:write-technical-design` writes the decisions and planned diagrams settled before
+the build, and `ceh-build-plan:implement-from-plan` appends Key Decisions to it. This file is
+copied word for word into every skill that reads or writes the file. A new file is a copy of `../assets/architecture.template.md`, relative to
 this file. The `schema: architecture/v2` line stays as written. A `v1` file gets its sections
 numbered, a Contents list, and the `v2` line on its next update.
 
@@ -64,7 +65,12 @@ failure, and `3` means no model for that version. Field paths count from 0.
 - `diagrams`: in order, each with `name` (`System context`, `Components`, `Key flows`,
   `Data model` or `State machines`), `walkthrough`, `notice` (at most 3, `[]` when none), and
   exactly one of `mermaid` (the diagram without its fence) and `parts`. A part is a numbered
-  subsection: `title`, `walkthrough`, `notice`, `mermaid`.
+  subsection: `title`, `walkthrough`, `notice`, `mermaid`. `planned` (optional) is `true` on a
+  diagram of what is not built yet, and is left out of every other diagram: `false` is an error,
+  so built has one spelling. Its section opens with `**Planned:** not built yet.` under an
+  unchanged heading. A planned diagram that changes what a built one shows is a second entry of
+  the same `name`, right after the built one. When the code matches it, the mark is removed and
+  the built entry it replaces is deleted.
 - `key_decisions`: newest last, each with `date`, `title`, `status`, `context`, `decision`,
   `consequences`. `status` is `Accepted`, or `Superseded by YYYY-MM-DD <title>` naming another
   entry by its date and title. An entry is never deleted.

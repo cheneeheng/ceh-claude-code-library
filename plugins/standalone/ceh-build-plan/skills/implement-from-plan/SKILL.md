@@ -84,7 +84,12 @@ reason recorded.
    `references/architecture-schema.md` (a missing file starts as a copy of the template, and an
    `ARCHITECTURE.md` with no YAML is moved first, as that section says). Check the YAML with
    `artifact.py check` before the edit and `render` it after, as for the plan, and never edit the
-   generated `ARCHITECTURE.md`. Add a changelog entry when the repo keeps a changelog. Say which
+   generated `ARCHITECTURE.md`. Skip a decision the log already holds, under the same title or
+   with the same decision, as one `ceh-build-plan:write-technical-design` wrote before the build
+   would be, and say which were skipped. Then look at each diagram marked `planned: true`: when
+   every node or entity it shows now exists in the code, remove the key, delete the built entry
+   of the same `name` that it replaces when there is one, and say so. Otherwise leave it and
+   name what is still missing. Add a changelog entry when the repo keeps a changelog. Say which
    decisions were copied.
 
 ## Rules

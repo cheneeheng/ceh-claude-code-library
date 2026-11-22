@@ -282,7 +282,12 @@ PLUGINS = {
     "ceh-build-plan": {
         "group": "build",
         "dependencies": [],
-        "skills": ["implement-from-plan", "review-build-plan", "write-build-plan"],
+        "skills": [
+            "implement-from-plan",
+            "review-build-plan",
+            "write-build-plan",
+            "write-technical-design",
+        ],
         "requires": [],
         "degrades": {
             "python3": ["hooks"],
@@ -291,6 +296,7 @@ PLUGINS = {
                 "implement-from-plan",
                 "review-build-plan",
                 "write-build-plan",
+                "write-technical-design",
             ],
         },
     },

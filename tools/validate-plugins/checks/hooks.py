@@ -887,7 +887,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
 
     good_arch = (
         "schema: architecture/v3\noverview:\n  bullets:\n    - It counts words.\n"
-        "  flow: |\n    flowchart LR\n        a --> b\ndiagrams: []\nkey_decisions: []\n"
+        "  flow: |\n    flowchart LR\n        a --> b\ndiagrams:\n"
+        "  - {name: Components, planned: true, walkthrough: Read left to right., notice: [],"
+        " mermaid: flowchart LR}\nkey_decisions: []\n"
     )
     good_vision = (
         "schema: vision/v2\nstatus: draft\nupdated: 2026-11-07\nidentity:\n  name: Wordy\n"
@@ -1557,7 +1559,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *spine_fixtures(
             "ceh-codebase-explanation", "ARCHITECTURE", good_arch,
             good_arch.replace("  bullets:\n    - It counts words.\n", "  bullets: []\n"),
-            "overview.bullets", "## 01. Overview",
+            "overview.bullets", "**Planned:** not built yet.",
         ),
         *spine_fixtures(
             "ceh-product-direction", "VISION", good_vision,

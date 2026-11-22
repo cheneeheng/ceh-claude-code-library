@@ -230,6 +230,10 @@ file to the same sub-path under `.agents_workspace/product/`, or names its locat
 
 **Build**
 
+- Settle the technical design the features share, before the first plan: install
+  `ceh-build-plan`, start with `/ceh-build-plan:write-technical-design`. Writes the stack,
+  components and data model into `.agents_workspace/product/ARCHITECTURE.yaml` as decisions and
+  planned diagrams, which every later plan follows.
 - Plan a new app or one feature: install `ceh-build-plan`, start with
   `/ceh-build-plan:write-build-plan`. Writes
   `.agents_workspace/product/plan/<YYYYMMDD-HHMMSS>-<slug>.yaml` and the `.md` generated from

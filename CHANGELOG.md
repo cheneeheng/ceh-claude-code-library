@@ -27,13 +27,26 @@ with no plan whose dependencies are built. A request the PRD does not list is st
 repo without a PRD works as before. Per
 `.agents_workspace/product/plan/20261122-000752-product-requirements-readers.yaml`.
 
+The technical decisions several features share now have a moment of their own. They used to be
+made inside each build plan's Design, reached `ARCHITECTURE.yaml` only after that plan was built,
+and were never read back when the next plan was written. The new skill settles the stack, the
+data model, the components and their interfaces before the first plan, and writes them into
+`ARCHITECTURE.yaml` as Key Decisions, with each diagram of what is not built yet marked
+`planned`. A build plan now reads that log and follows it. There is still one architecture file:
+`ceh-codebase-explanation:document-architecture` keeps drawing what is built, and removes the
+mark when the code matches. Per
+`.agents_workspace/product/plan/20261122-000752-technical-design-skill.yaml`.
+
 ### Plugin versions
 
-| Plugin                  | Version |
-| ----------------------- | ------- |
-| `ceh-build-plan`        | 2.0.21  |
-| `ceh-every-session`     | 2.10.1  |
-| `ceh-product-direction` | 2.1.1   |
+| Plugin                     | Version |
+| -------------------------- | ------- |
+| `ceh-build-plan`           | 2.1.0   |
+| `ceh-codebase-explanation` | 1.3.21  |
+| `ceh-documentation`        | 1.0.12  |
+| `ceh-every-session`        | 2.10.2  |
+| `ceh-product-direction`    | 2.1.2   |
+| `ceh-python-service`       | 1.1.11  |
 
 ### Added
 
@@ -43,6 +56,14 @@ repo without a PRD works as before. Per
   plan.
 - The `prd/v1` format, with its model and renderer: a feature id is unique and never reused, a
   dependency names a feature listed earlier, and a `todo` feature has no plan.
+- `ceh-build-plan:write-technical-design`: settles the decisions two or more features depend on,
+  or that cost a migration to reverse, appends each to the Key Decisions of
+  `.agents_workspace/product/ARCHITECTURE.yaml` with the options it rejected, and draws the
+  diagrams they imply.
+- `architecture/v3` takes an optional `planned: true` on a diagram of what is not built yet,
+  rendered as `**Planned:** not built yet.` under its heading. `false` is an error, so a built
+  diagram has one spelling. A session with an older copy of the format rejects a file that holds
+  the key until that plugin is updated.
 
 ### Changed
 
@@ -60,6 +81,15 @@ repo without a PRD works as before. Per
   whose dependencies are built.
 - `prd-schema.md` names the skills that write and read the file, and each of the three reading
   skills carries a copy of the format, registered in `docs/CROSS_REFERENCES.md`.
+- `ceh-build-plan:write-build-plan` reads `ARCHITECTURE.yaml` when it exists. An accepted
+  decision binds the plan, and a plan that must depart from one lists it under Open.
+- `ceh-build-plan:implement-from-plan` copies no decision the log already holds, and removes a
+  diagram's `planned` mark once the code matches it.
+- `ceh-codebase-explanation:document-architecture` never adds the `planned` mark and removes it
+  when it redraws the diagram from the code.
+- The architecture format's copies in `ceh-product-direction`, `ceh-every-session`,
+  `ceh-documentation` and `ceh-python-service` follow the canonical file, with no change to what
+  those skills do.
 
 ## 2026-11-20
 

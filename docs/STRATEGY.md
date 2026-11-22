@@ -54,12 +54,12 @@ become a plan's goals (`decision-business-plan-readers.md`).
 
 Every path below is under `.agents_workspace/product/` in the target repo.
 
-| Stage | Reads                                                                                                                    | Writes                                                                                                      |
-| ----- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
-| Shape | an idea, a conversation, the repo                                                                                        | `business/BUSINESS_PLAN.yaml`, `VISION.yaml`, `STRATEGY.yaml` and `PRD.yaml`, each with its generated `.md` |
-| Build | `VISION.yaml`, `STRATEGY.yaml` and `PRD.yaml` when present, each checked first (the `.md` when no YAML exists), the repo | `plan/<slug>.yaml` and its generated `<slug>.md`, the code, `ARCHITECTURE.yaml` and its generated `.md`     |
-| Prove | the plan, the code                                                                                                       | `EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                |
-| Tell  | `business/BUSINESS_PLAN.yaml`, `EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists)                       | posts, listings, SEO pages                                                                                  |
+| Stage | Reads                                                                                                                                         | Writes                                                                                                      |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Shape | an idea, a conversation, the repo                                                                                                             | `business/BUSINESS_PLAN.yaml`, `VISION.yaml`, `STRATEGY.yaml` and `PRD.yaml`, each with its generated `.md` |
+| Build | `VISION.yaml`, `STRATEGY.yaml`, `PRD.yaml` and `ARCHITECTURE.yaml` when present, each checked first (the `.md` when no YAML exists), the repo | `plan/<slug>.yaml` and its generated `<slug>.md`, the code, `ARCHITECTURE.yaml` and its generated `.md`     |
+| Prove | the plan, the code                                                                                                                            | `EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                |
+| Tell  | `business/BUSINESS_PLAN.yaml`, `EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists)                                            | posts, listings, SEO pages                                                                                  |
 
 Shape to Build: `ceh-product-direction` writes `VISION.yaml` and `STRATEGY.yaml`, and
 `ceh-build-plan` reads them, putting what a plan would contradict under Open, and writes the
@@ -139,7 +139,10 @@ Keeping every file a stage writes would bloat the folder, so the artifacts have 
 - **Plans are kept.** A built plan stays in `plan/` with `status: built` and an append-only
   Record of how it was planned, reviewed, built, checked, proven, and merged, so the plan is the
   audit trail of its change. Its lasting decisions are also copied to the Key Decisions log in
-  `ARCHITECTURE.yaml`. Planning stays cheap because `ceh-build-plan:write-build-plan` reads
+  `ARCHITECTURE.yaml`. The decisions several features share are written there before the first
+  plan, by `ceh-build-plan:write-technical-design`, with a diagram of what is not built yet
+  marked `planned`. Every plan reads the log and follows it, so one feature's plan never decides
+  the stack for the rest. Planning stays cheap because `ceh-build-plan:write-build-plan` reads
   only the frontmatter of built plans.
 - **Fix records are kept.** A bug fix does not go through a build plan, because the bug already
   says what to build. What it needs is the reason, so every fix saves

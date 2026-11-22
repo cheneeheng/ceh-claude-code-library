@@ -32,6 +32,9 @@ rules for how an agent behaves while it codes.
 ### Architecture render and generated Markdown guard
 
 `document-architecture` saves `.agents_workspace/product/ARCHITECTURE.yaml` (`architecture/v3`).
+It draws what is built. A diagram marked `planned: true` comes from
+`ceh-build-plan:write-technical-design`, which settles a design before the build, and
+`document-architecture` removes the mark when it redraws that diagram from the code.
 After every write to it, the render hook checks the YAML against its model through `uv` and renders
 the `ARCHITECTURE.md` beside it with its section numbers and Contents list, or reports each error back
 to the agent and leaves the Markdown as it was. `maintain-glossary` saves `GLOSSARY.yaml`
