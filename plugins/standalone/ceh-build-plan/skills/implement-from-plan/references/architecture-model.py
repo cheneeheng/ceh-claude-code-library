@@ -64,10 +64,79 @@ class Diagram(_Strict):
         return self
 
 
+PART_MAX_LINES = 30
+HEADING = "holds a heading line"
+# `# x`, also as the first thing in a quote or a list item, where it still renders as a heading.
+ATX = re.compile(r"^ {0,3}(?:(?:>|[-*+]|\d+[.)])\s+)*#{1,6}(\s|$)")
+UNDERLINE = re.compile(r"^ {0,3}(=+|-+)\s*$")
+FENCE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
+# A line an underline cannot turn into a heading: a list item or a table row.
+NO_PARAGRAPH = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s|^\s*\|")
+
+
+def _heading_error(text: str) -> Optional[str]:
+    """What breaks the renderer's numbering in a Markdown field: a heading it did not number, or
+    a code block left open, which swallows every heading after it.
+
+    less-code: a line scan, not a Markdown parser. A fence counts at any indent, so one inside a
+    list item works and a fence line inside a 4-space indented code block is misread, and an HTML
+    heading is not seen. Swap in a parser if either turns up in a real file."""
+    fence, above = "", ""
+    for line in text.splitlines():
+        m = FENCE.match(line)
+        if fence:
+            # Only the opener's character, at least as long, alone on its line, closes a block.
+            if (
+                m
+                and m[1][0] == fence[0]
+                and len(m[1]) >= len(fence)
+                and not m[2].strip()
+            ):
+                fence = ""
+            above = ""
+        elif m:
+            fence, above = m[1], ""
+        elif ATX.match(line):
+            return HEADING
+        elif above.strip() and not NO_PARAGRAPH.match(above) and UNDERLINE.match(line):
+            return HEADING
+        else:
+            above = line
+    return "holds an unclosed code block" if fence else None
+
+
+class DesignPart(_Strict):
+    title: Heading
+    body: Text
+
+    @model_validator(mode="after")
+    def _small(self) -> DesignPart:
+        n = len(self.body.splitlines())
+        if n > PART_MAX_LINES:
+            raise ValueError(
+                f"part '{self.title}' has {n} lines, over {PART_MAX_LINES}: make it its own topic"
+            )
+        return self
+
+
 class DesignTopic(_Strict):
     topic: Heading
+    # Markdown that states the contract: paragraphs, lists, tables, code blocks, no heading.
     choice: Text
     reason: Text
+    parts: Optional[list[DesignPart]] = Field(default=None, min_length=1)
+
+    @model_validator(mode="after")
+    def _no_headings(self) -> DesignTopic:
+        if err := _heading_error(self.choice):
+            hint = ", use parts" if err == HEADING else ""
+            raise ValueError(f"{self.topic}: choice {err}{hint}")
+        if err := _heading_error(self.reason):
+            raise ValueError(f"{self.topic}: reason {err}")
+        for p in self.parts or []:
+            if err := _heading_error(p.body):
+                raise ValueError(f"{self.topic}, part '{p.title}': body {err}")
+        return self
 
 
 class KeyDecision(_Strict):
@@ -142,12 +211,13 @@ def _walk(walkthrough: str, notice: list[str]) -> list[str]:
 def render(doc: Architecture, source: str) -> str:
     """The document in the architecture/v2 layout. The same YAML always renders to the same text."""
     note = f"Do not edit. artifact.py renders this file from {source}: edit the YAML, then run artifact.py render."
-    sections: list[tuple[str, list[str]]] = [("01. Overview", [])]
+    # The Contents list: each numbered heading with its depth below `##`.
+    toc: list[tuple[int, str]] = [(0, "01. Overview")]
     body: list[str] = ["## 01. Overview", ""]
     body += [f"- {b}" for b in doc.overview.bullets] + [""] + _fence(doc.overview.flow)
     for n, d in enumerate(doc.diagrams, 2):
         head = f"{n:02d}. {d.name}"
-        subs = []
+        toc.append((0, head))
         body += ["", f"## {head}", ""]
         if d.planned:
             body += ["**Planned:** not built yet.", ""]
@@ -156,27 +226,28 @@ def render(doc: Architecture, source: str) -> str:
             body += _fence(d.mermaid)
         for i, p in enumerate(d.parts or [], 1):
             sub = f"{n:02d}.{i:02d} {p.title}"
-            subs.append(sub)
+            toc.append((1, sub))
             body += (
                 ["", f"### {sub}", ""]
                 + _walk(p.walkthrough, p.notice)
                 + _fence(p.mermaid)
             )
-        sections.append((head, subs))
     n = len(doc.diagrams) + 2
     if doc.technical_design:
         head = f"{n:02d}. Technical Design"
-        subs = [
-            f"{n:02d}.{i:02d} {t.topic}" for i, t in enumerate(doc.technical_design, 1)
-        ]
+        toc.append((0, head))
         body += ["", f"## {head}"]
-        for sub, t in zip(subs, doc.technical_design):
-            body += ["", f"### {sub}", ""]
-            body += [f"**Choice:** {t.choice}", "", f"**Reason:** {t.reason}"]
-        sections.append((head, subs))
+        for i, t in enumerate(doc.technical_design, 1):
+            sub = f"{n:02d}.{i:02d} {t.topic}"
+            toc.append((1, sub))
+            body += ["", f"### {sub}", "", t.choice, "", f"**Reason:** {t.reason}"]
+            for j, p in enumerate(t.parts or [], 1):
+                part = f"{n:02d}.{i:02d}.{j:02d} {p.title}"
+                toc.append((2, part))
+                body += ["", f"#### {part}", "", p.body]
         n += 1
     kd = f"{n:02d}. Key Decisions"
-    sections.append((kd, []))
+    toc.append((0, kd))
     body += ["", f"## {kd}"]
     for k in doc.key_decisions:
         body += ["", f"### {k.date.isoformat()} — {k.title}", ""]
@@ -186,10 +257,7 @@ def render(doc: Architecture, source: str) -> str:
             f"**Decision:** {k.decision}",
             f"**Consequences:** {k.consequences}",
         ]
-    contents = []
-    for head, subs in sections:
-        contents.append(f"- [{head}](#{anchor(head)})")
-        contents += [f"  - [{s}](#{anchor(s)})" for s in subs]
+    contents = [f"{'  ' * depth}- [{h}](#{anchor(h)})" for depth, h in toc]
     out = [
         "---",
         _key("schema", doc.schema_),

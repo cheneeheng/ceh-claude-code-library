@@ -43,16 +43,22 @@ scanning the whole log. The Technical Design section holds one entry per topic w
 and its reason, edited in place, and the log keeps what changed and why. Per
 `.agents_workspace/product/plan/20261122-072748-technical-design-section.yaml`.
 
+An entry of that section now holds a contract, not one paragraph. A technical design is a data
+model, a route table, a stack with the commands that run it, and one `choice` paragraph could
+hold none of them. `choice` is Markdown with lists, tables and code blocks, and an entry may
+have small parts, its sub-sections. A part over 30 lines is refused and becomes a topic of its
+own. Per `.agents_workspace/product/plan/20261122-085803-technical-design-contract-entries.yaml`.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
-| `ceh-build-plan`           | 2.1.1   |
-| `ceh-codebase-explanation` | 1.3.22  |
-| `ceh-documentation`        | 1.0.13  |
-| `ceh-every-session`        | 2.10.3  |
-| `ceh-product-direction`    | 2.1.3   |
-| `ceh-python-service`       | 1.1.12  |
+| `ceh-build-plan`           | 2.1.2   |
+| `ceh-codebase-explanation` | 1.3.23  |
+| `ceh-documentation`        | 1.0.14  |
+| `ceh-every-session`        | 2.10.4  |
+| `ceh-product-direction`    | 2.1.4   |
+| `ceh-python-service`       | 1.1.13  |
 
 ### Added
 
@@ -69,10 +75,12 @@ and its reason, edited in place, and the log keeps what changed and why. Per
   of `.agents_workspace/product/ARCHITECTURE.yaml` with the option it rejected, and draws the
   diagrams they imply.
 - `architecture/v3` takes an optional `technical_design` list, one entry per topic with `topic`,
-  `choice` and `reason`, rendered as a numbered Technical Design section before Key Decisions.
-  An empty list and a topic used twice are errors. A change edits the entry in place and adds
-  one Key Decisions entry, and where an entry covers a topic the log on that topic is its
-  history. An older installed copy of the format exits 1 on a file that holds the key, so a
+  `choice`, `reason` and optional `parts`, rendered as a numbered Technical Design section
+  before Key Decisions, each part a numbered sub-section listed in Contents. `choice` and a
+  part's `body` are Markdown. An empty list, a topic used twice, a part over 30 lines, and a
+  heading line or an unclosed code block in any of the texts are errors. A change edits the
+  entry in place and adds one Key Decisions entry, and where an entry covers a topic the log on
+  that topic is its history. An older installed copy of the format exits 1 on a file that holds the key, so a
   skill that reads the file stops and an older plugin's render hook blocks the write, until
   that plugin is updated.
 - `architecture/v3` takes an optional `planned: true` on a diagram of what is not built yet,
@@ -85,8 +93,10 @@ and its reason, edited in place, and the log keeps what changed and why. Per
 - `decision-business-plan-readers.md` names the product requirements among the documents whose
   writer never reads the business plan.
 - `docs/STRATEGY.md` and `docs/GETTING_STARTED.md` name `PRD.yaml` among the files Shape writes.
-- With the Technical Design section: `ceh-build-plan:write-build-plan` follows its entries, and
-  where one covers a topic the Key Decisions on that topic are history.
+- With the Technical Design section: `ceh-build-plan:write-technical-design` puts the exact
+  contract of each topic in its entry and a small sub-section in a part.
+  `ceh-build-plan:write-build-plan` follows the entries, cites a part by its topic and title, and
+  where an entry covers a topic the Key Decisions on that topic are history.
   `ceh-build-plan:implement-from-plan` edits an entry the build departed from.
   `ceh-codebase-explanation:document-architecture` leaves the section as written.
   `find-product-market-fit`, `write-concept-docs` and `record-project-decisions` read it where

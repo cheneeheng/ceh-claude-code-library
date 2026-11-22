@@ -13,10 +13,11 @@ numbered, a Contents list, and the `v2` line on its next update.
 ## Numbering
 
 - **Sections:** every `##` section after Contents is numbered with two digits, `01.`, `02.`, in
-  order, and every `###` subsection with two digits as well: `03.01`, `03.02`, never `03.1`.
+  order, and every `###` subsection with two digits as well: `03.01`, `03.02`, never `03.1`. A
+  `####` part of a Technical Design topic takes a third pair: `04.02.01`.
 - **Anchors:** GitHub heading anchors drop the dots, so `### 03.01 Export: the CLI` links as
-  `#0301-export-the-cli`. No em dash in a numbered heading, since it leaves a double hyphen in the
-  anchor.
+  `#0301-export-the-cli`, and `#### 04.02.01 Style fields` as `#040201-style-fields`. No em
+  dash in a numbered heading, since it leaves a double hyphen in the anchor.
 
 ## Sections
 
@@ -32,7 +33,9 @@ numbered, a Contents list, and the `v2` line on its next update.
   then the Mermaid block. The walkthrough never restates the diagram, its table, or Key Decisions.
 - **Technical Design:** the section before Key Decisions, present only when the file holds a
   technical design: the choices several features share, such as the stack or the data model. One
-  numbered `###` subsection per topic, with its **Choice** and its **Reason**. It states the
+  numbered `###` subsection per topic, which holds the topic's contract as Markdown (lists,
+  tables, code blocks), then its **Reason**, then a numbered `####` subsection per part, each a
+  small sub-section of the topic. It states the
   current choice, so an entry is edited in place, and a change also adds a Key Decisions entry
   that says what changed and why.
 - **Key Decisions:** always the last section, numbered like the others, with no walkthrough.
@@ -77,10 +80,19 @@ failure, and `3` means no model for that version. Field paths count from 0.
   unchanged heading. A planned diagram that changes what a built one shows is a second entry of
   the same `name`, right after the built one. When the code matches it, the mark is removed and
   the built entry it replaces is deleted.
-- `technical_design` (optional): one entry per topic, each with `topic`, `choice` and `reason`.
-  `topic` is the name a plan cites the entry by, so no two entries share one, whatever the case
-  of its letters. `reason` says why this choice and not the option rejected, and each of the two
-  is one paragraph. A file with no technical design leaves the key out: `[]` is an error, and a
+- `technical_design` (optional): one entry per topic, each with `topic`, `choice`, `reason` and
+  `parts` (optional). `topic` is the name a plan cites the entry by, so no two entries share
+  one, whatever the case of its letters. `choice` is Markdown that states the contract for the
+  topic: paragraphs, lists, tables and code blocks, exact enough to build from. `reason` is one
+  short paragraph on why this choice and not the option rejected. `parts` (at least one when
+  present) are the topic's sub-sections, each with `title` and `body`, the body Markdown like
+  `choice`. A part is small: a body of more than 30 lines is an error, and that part becomes a
+  topic of its own. None of the three texts holds a heading line or an unclosed code block,
+  which is an error too, because the renderer writes and numbers every heading. The check
+  reads Markdown headings (`# x`, a line underlined with `===` or `---`, also at the start of a
+  quote or a list item) outside code blocks, and does not see an HTML heading, so write none. An entry
+  refers to another by its topic, and to a part by its topic and title, never by a section
+  number. A file with no technical design leaves the key out: `[]` is an error, and a
   new file started from the template drops the template's placeholder entry with the key. An
   entry is edited in place when the
   choice changes, and the change gets a `key_decisions` entry. Where an entry covers a topic,

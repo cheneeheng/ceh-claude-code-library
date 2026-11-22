@@ -37,7 +37,9 @@ given here, so every plan cites one spelling:
 - `Configuration and errors`: how both are handled across components
 
 Add a topic of your own when the product needs one these do not cover. A decision one feature
-alone needs stays for that feature's build plan.
+alone needs stays for that feature's build plan. The PRD says what a feature must do and how to
+tell it is done. The technical design fixes the exact data, routes and states the features
+share.
 
 ## Procedure
 
@@ -59,9 +61,17 @@ alone needs stays for that feature's build plan.
 3. **Ask the owner one round of questions,** each with a recommended answer, for what only they
    know: a stack they require, a hosting account, a budget. Decide everything else yourself.
 4. **Write each decision as a `technical_design` entry.** `topic` is its name from What belongs
-   here, `choice` what was chosen, and `reason` why: the features that need it, and one option
-   rejected and why. A first write adds nothing to `key_decisions`, because the entry holds its
-   own reason. **To change an entry,** edit it in place and append one `key_decisions` entry
+   here, and `reason` is one short paragraph on why: the features that need it, and one option
+   rejected and why. `choice` holds the contract for the topic as Markdown (lists, tables, code
+   blocks), exact enough that a plan cites it and a builder does not ask again: for `Stack` the
+   versions, the folders and the commands that run, for `Persistence` each model with its
+   fields and limits, for `Interfaces` the routes with body, status codes and error shape. A
+   sub-section that stands on its own, such as the style fields of one model, is a part, with
+   a `title` and a `body`. Keep a part small: one over 30 lines fails the check and becomes a
+   topic of its own. Write no heading in any of these texts, because the renderer numbers them.
+   Refer to another entry by its topic, and to a part by its topic and title, never by a
+   section number, because the rendered numbers move when a topic is added. A first write adds
+   nothing to `key_decisions`, because the entry holds its own reason. **To change an entry,** edit it in place and append one `key_decisions` entry
    dated today with `status: Accepted`, titled `<topic>: <the new choice in a few words>`,
    whose `context` holds the old choice and why it no longer holds. Then mark every earlier
    `Accepted` entry of `key_decisions` that decides the same topic, whoever wrote it,
@@ -84,6 +94,7 @@ alone needs stays for that feature's build plan.
 | ---------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
 | Shared     | Which two features need each entry, or what would reversing it cost?                                               | One feature, cheap to reverse: it belongs in a plan              |
 | Options    | Does each `reason` name an option rejected and why?                                                                | Only the chosen option appears                                   |
+| Exact      | Could a builder implement the topic from the entry alone?                                                          | A field, route or status the plans need is left to the builder   |
 | Covers     | Which component serves each feature in the PRD?                                                                    | A feature has none                                               |
 | Qualities  | Which entry answers each `non_functional` item in the PRD?                                                         | An item has none and is not listed as open                       |
 | Consistent | Does every diagram show only what the entries say, and does no `Accepted` entry of `key_decisions` contradict one? | A node or entity has no entry behind it, or such a decision does |

@@ -11,6 +11,7 @@ schema: architecture/v2
   - [02.01 <subsection>](#0201-<anchor>)
 - [NN. Technical Design](#nn-technical-design)
   - [NN.01 <topic>](#nn01-<anchor>)
+    - [NN.01.01 <part>](#nn0101-<anchor>)
 - [NN. Key Decisions](#nn-key-decisions)
 
 ## 01. Overview
@@ -45,9 +46,13 @@ flowchart LR
 
 ### NN.01 <topic>
 
-**Choice:** <choice>
+<choice>
 
 **Reason:** <reason>
+
+#### NN.01.01 <part>
+
+<body>
 
 ## NN. Key Decisions
 
