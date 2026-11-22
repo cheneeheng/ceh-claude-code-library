@@ -53,7 +53,8 @@ failure, and `3` means no model for that version.
 `columns`, so a repo can change the columns and keep one row per part), `work` (`rule`, `reason`,
 and `next` as `work` and `why`), `measuring`, `not_to_do` (`approach`, `reason`), `gaps`, `open`
 (`question`, `assumption`), `extra_sections` (`title`, `body`) and `changing`. A rule, work item,
-approach or question renders in bold, so write it with its own full stop where it needs one. An
+approach or question renders in bold. Write a rule with its own full stop, and a work item,
+approach or question without one, because the renderer adds it. An
 empty `gaps` renders "No known gaps as of <updated>.", an empty `open` renders `None`, and an empty
 list is `[]`. `status: adopted` with `[assumed]` anywhere in the file is an error.
 

@@ -6,9 +6,11 @@ it, unless the repo's `CLAUDE.md` names another path. A reference to it names th
 `ceh-build-plan:write-technical-design` writes the Technical Design section and the planned
 diagrams settled before the build, and `ceh-build-plan:implement-from-plan` appends Key Decisions
 to it and edits a Technical Design entry the build changed. This file is
-copied word for word into every skill that reads or writes the file. A new file is a copy of `../assets/architecture.template.md`, relative to
-this file. The `schema: architecture/v2` line stays as written. A `v1` file gets its sections
-numbered, a Contents list, and the `v2` line on its next update.
+copied word for word into every skill that reads or writes the file. A new file is a copy of
+`../assets/architecture.template.yaml`, relative to this file, per the `architecture/v3` section
+below. `../assets/architecture.template.md` is the layout its Markdown is rendered in, and its
+`schema: architecture/v2` line names that layout. A `v1` or `v2` Markdown file with no YAML
+beside it is moved on its next update, as that section says.
 
 ## Numbering
 
@@ -54,8 +56,8 @@ numbered, a Contents list, and the `v2` line on its next update.
 
 An `architecture/v3` document is `ARCHITECTURE.yaml` beside the `ARCHITECTURE.md` it renders, a
 copy of `../assets/architecture.template.yaml`. The Markdown is generated in the `v2` layout above
-and saved beside it: nobody edits it, and it opens with `generated_from: ARCHITECTURE.yaml` and
-a do-not-edit `generated_note`. The renderer writes the section numbers, the Contents list and
+and saved beside it: nobody edits it, and it opens with `schema: architecture/v3`,
+`generated_from: ARCHITECTURE.yaml` and a do-not-edit `generated_note`. The renderer writes the section numbers, the Contents list and
 every anchor, so the YAML holds none of them. The format in code is `architecture-model.py` beside
 this file, and `scripts/artifact.py` in the skill checks and renders it through uv:
 
@@ -99,7 +101,7 @@ failure, and `3` means no model for that version. Field paths count from 0.
   the entry is what holds now and every `key_decisions` entry on that topic is its history.
 - `key_decisions`: newest last, each with `date`, `title`, `status`, `context`, `decision`,
   `consequences`. `status` is `Accepted`, or `Superseded by YYYY-MM-DD <title>` naming another
-  entry by its date and title. An entry is never deleted.
+  entry by its date and title. An entry is never deleted. `[]` when none.
 
 No title or name holds an em dash, which would leave a double hyphen in its anchor. Free text goes
 in `|` blocks or quotes, because ` #` starts a YAML comment and a `: ` in a plain value breaks it.

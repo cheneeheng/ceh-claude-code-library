@@ -28,8 +28,8 @@ Heading = Annotated[
 ]
 FeatureId = Annotated[str, StringConstraints(pattern=r"^F\d{2,}$")]
 # Repo-relative with forward slashes only, so one plan has one spelling on every OS: no leading
-# slash, no backslash and no drive colon. A `..` segment is refused in the model's rules, since
-# pydantic's regex has no look-around.
+# slash, no backslash and no drive colon. An empty, `.` or `..` segment is refused in the
+# model's rules, since pydantic's regex has no look-around.
 PlanPath = Annotated[
     str, StringConstraints(pattern=r"^[A-Za-z0-9_.-][A-Za-z0-9_./-]*\.yaml$")
 ]
@@ -94,8 +94,10 @@ class Prd(_Strict):
             for name, items in (("depends_on", f.depends_on), ("plans", f.plans)):
                 if len(set(items)) != len(items):
                     raise ValueError(f"{f.id}: {name} lists an entry twice")
-            if any(".." in p.split("/") for p in f.plans):
-                raise ValueError(f"{f.id}: plans holds a path with a .. segment")
+            if any(s in ("", ".", "..") for p in f.plans for s in p.split("/")):
+                raise ValueError(
+                    f"{f.id}: plans holds a path with an empty, . or .. segment"
+                )
             for dep in f.depends_on:
                 if dep not in ids:
                     raise ValueError(f"{f.id}: depends_on names {dep}, not a feature")

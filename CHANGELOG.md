@@ -66,16 +66,24 @@ cases rose from 0 of 6 to 5 of 6 and the technical design skill's from 0 of 6 to
 every supportive and neutral case stayed at 3 of 3 and every near-miss stayed quiet. Per
 `.agents_workspace/product/fix/20261122-143657-prd-and-technical-design-descriptions.yaml`.
 
+An independent audit of the two skills found no blocking defect and 20 smaller ones, and 18 are
+fixed here. The PRD skill handed off straight to planning and skipped the technical design, the
+technical design skill looked for `PRD.yaml` in one folder only, and the architecture schema
+named two different templates for a new file. The rest were steps written only under Output,
+rules an agent could not follow as written, and schema wording that disagreed with the model.
+The descriptions are unchanged, so the trigger results above still hold. Per
+`.agents_workspace/product/audit/general/20261122-204415-54049974-7429-4e49-83c0-a5a51a80fa5b-plugins-standalone-ceh-product-direction-skills-write-product-requirements-and-8-more.yaml`.
+
 ### Plugin versions
 
 | Plugin                     | Version |
 | -------------------------- | ------- |
-| `ceh-build-plan`           | 2.1.4   |
-| `ceh-codebase-explanation` | 1.3.23  |
-| `ceh-documentation`        | 1.0.14  |
-| `ceh-every-session`        | 2.10.4  |
-| `ceh-product-direction`    | 2.1.6   |
-| `ceh-python-service`       | 1.1.13  |
+| `ceh-build-plan`           | 2.1.5   |
+| `ceh-codebase-explanation` | 1.3.24  |
+| `ceh-documentation`        | 1.0.15  |
+| `ceh-every-session`        | 2.10.5  |
+| `ceh-product-direction`    | 2.1.7   |
+| `ceh-python-service`       | 1.1.14  |
 
 ### Added
 
@@ -155,6 +163,24 @@ every supportive and neutral case stayed at 3 of 3 and every near-miss stayed qu
 - `ceh-product-direction:write-product-requirements` and `ceh-build-plan:write-technical-design`
   load when the user asks for less: their descriptions add "even if a chat list or a hand edit
   seems enough" and "even if a README line seems enough".
+- `ceh-product-direction:write-product-requirements` hands off to
+  `ceh-build-plan:write-technical-design` before the first plan, checks every `VISION.yaml` and
+  `STRATEGY.yaml` it reads, renders as a step of its own, and suggests
+  `ceh-product-direction:write-vision-and-strategy` when the repo has neither. That skill now
+  points back to it.
+- `ceh-build-plan:write-technical-design` finds `PRD.yaml` and `ARCHITECTURE.yaml` at a path the
+  repo's `CLAUDE.md` names, starts a missing file in its first step, records a change as a step
+  of its own, says the Overview takes no `planned` mark, and lists each open `non_functional`
+  item in its reply.
+- Both skills keep their tests and scope under `## Rules`, the heading set of the skill template.
+- A `PRD.yaml` plan path with an empty or `.` segment, such as `./plan/a.yaml`, fails the check,
+  so one plan has one spelling.
+- The architecture schema names the YAML template for a new file, gives `[]` as the empty
+  `key_decisions`, and says the rendered Markdown opens with `schema: architecture/v3`. The PRD
+  schema lists the technical design skill as a reader, and the strategy schema says which lines
+  the renderer ends with a full stop. Every copy follows its canonical file.
+- The `ceh-build-plan` README lists `ARCHITECTURE.yaml` among the files its hooks check, and
+  `docs/PLUGIN_DEPENDENCIES.md` lists the two skills' prose references.
 
 ## 2026-11-20
 
