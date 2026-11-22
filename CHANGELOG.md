@@ -189,6 +189,8 @@ changed.
   `docs/PLUGIN_DEPENDENCIES.md` lists the two skills' prose references.
 - `.github/workflows/docs.yml` builds the site in one job and deploys it in a second, so the
   deploy step no longer lists the artifact right after its upload.
+- `model-audit.yml`: the weekly audit's commit and draft PR end with `Co-authored-by: Claude Code`,
+  the attribution line sessions now use, in place of `Generated with Claude Code by CEH`.
 
 ## 2026-11-20
 
