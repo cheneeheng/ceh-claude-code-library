@@ -62,6 +62,11 @@ ALLOW = (
         "the eval fixtures build plan/v1 plans, which are Markdown with no YAML",
     ),
     (
+        "*/evals/*",
+        r"product/(?:[\w-]+/)*[\w-]+\.md\b",
+        "eval fixtures seed the Markdown generated beside each YAML, and graders read it",
+    ),
+    (
         "ceh-build-plan/scripts/build-record-guard.py",
         r"plans?/\*\.md",
         "a plan/v1 plan is Markdown, and the guard covers its Built Phase lines",
