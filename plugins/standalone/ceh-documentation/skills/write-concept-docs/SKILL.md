@@ -52,13 +52,14 @@ Collect the "why" before writing, ordered by how much to trust each source:
 
 | Source                  | How                                                                                                                                            |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| Design records          | ADRs (`docs/adr/`, `docs/decisions/`), `ARCHITECTURE.md` Key Decisions, decision logs                                                          |
+| Design records          | ADRs (`docs/adr/`, `docs/decisions/`), `ARCHITECTURE.md` Technical Design and Key Decisions, decision logs                                     |
 | Merge and commit bodies | `git -C <root> log --grep='<term>' --format='%h %s%n%b'`; `git -C <root> log -S'<symbol>' --reverse` for the commit that introduced a behavior |
 | Code comments           | Comments next to the behavior, especially `NOTE`, `WHY`, and "we do X because" prose                                                           |
 | Changelog               | `CHANGELOG.md` entries that changed the behavior, and the breaking-change notes                                                                |
 | The code itself         | A constraint the code makes visible (a lock, a bounded queue, a version check) — label it as inferred                                          |
 
-When `ARCHITECTURE.yaml` sits beside `ARCHITECTURE.md`, read its `key_decisions` from the YAML:
+When `ARCHITECTURE.yaml` sits beside `ARCHITECTURE.md`, read its `technical_design` and
+`key_decisions` from the YAML:
 first run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check ARCHITECTURE.yaml`
 (format in `${CLAUDE_SKILL_DIR}/references/architecture-schema.md`). On exit 1, stop and report
 its errors, unless the only error is a stale `.md`. On exit 2 or 3, or without uv, say in the

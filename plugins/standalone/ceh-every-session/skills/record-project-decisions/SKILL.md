@@ -78,7 +78,7 @@ installed.
      from `~/.claude/plugins/cache/`, which keeps every version ever installed and would surface
      choices that no longer exist. Project skills live in `.claude/skills/`.
    - **Decisions already written down:** the README, `.agents_workspace/product/ARCHITECTURE.yaml`
-     Key Decisions, plans under `.agents_workspace/product/plan/`, ADRs (`docs/adr/`, `docs/decisions/`), `GLOSSARY.md`, and
+     Technical Design and Key Decisions, plans under `.agents_workspace/product/plan/`, ADRs (`docs/adr/`, `docs/decisions/`), `GLOSSARY.md`, and
      manifests (`package.json`, `pyproject.toml`) as evidence of the stack. Read no business
      plan: a rule file is committed and binds later sessions, so a business plan's dated tests
      must not become one. Look for the glossary at the repo root and under `docs/`, and read each
@@ -89,7 +89,7 @@ installed.
      `glossary-schema.md`). On exit 1, leave that file out and report its errors, unless the only
      error is a stale `.md`. On exit 2 or 3, without uv, or when the command is denied, say in the report that the file went
      unchecked, and go on. The decisions are a plan's `design`, the architecture's
-     `key_decisions`, and the glossary's `entries[].term`, `entries[].definition`,
+     `technical_design` and `key_decisions`, and the glossary's `entries[].term`, `entries[].definition`,
      `entries[].avoid` and `entries[].not_confused_with`. A term under the glossary's `open` is
      undecided and settles no rule.
    - **Areas no skill asks about:** who the product is for, market, language and locale, what is

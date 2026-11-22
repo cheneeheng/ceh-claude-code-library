@@ -51,7 +51,7 @@ Before any question, gather everything that already constrains the plan.
    who it's for, the key flow), Scope, and Design carry your product, target-user hint, and
    solution detail. A plan whose Goal points to a `BUSINESS_PLAN.md` was written from this plan:
    read it for its Scope and Design only. Record their paths in `derived_from`. Built plans stay in
-   the folder with `status: built`: read them too, and the Overview and Key Decisions of
+   the folder with `status: built`: read them too, and the Overview, Technical Design and Key Decisions of
    `.agents_workspace/product/ARCHITECTURE.yaml` when it exists, or of its `.md` where no YAML
    exists. Run
    `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check .agents_workspace/product/ARCHITECTURE.yaml`

@@ -87,8 +87,11 @@ reason recorded.
    `ARCHITECTURE.md` with no YAML is moved first, as that section says). Check the YAML with
    `artifact.py check` before the edit and `render` it after, as for the plan, and never edit the
    generated `ARCHITECTURE.md`. Skip a decision the log already holds, under the same title or
-   with the same decision, as one `ceh-build-plan:write-technical-design` wrote before the build
-   would be, and say which were skipped. Then look at each diagram marked `planned: true`: when
+   with the same decision, or that a `technical_design` entry already states, and say which
+   were skipped. When the plan's Design, or one of its Design changed entries, states a
+   different choice on a `technical_design` entry's topic, edit that entry to what was built:
+   the decision you copy is its history, and each earlier `Accepted` entry of `key_decisions`
+   on that topic becomes `Superseded by <date> <title>`. Say which entries you edited. Then look at each diagram marked `planned: true`: when
    every node or entity it shows now exists in the code, remove the key, delete the built entry
    of the same `name` that it replaces when there is one, and say so. Otherwise leave it and
    name what is still missing. Add a changelog entry when the repo keeps a changelog. Say which

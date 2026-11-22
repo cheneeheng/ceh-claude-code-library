@@ -139,9 +139,11 @@ Keeping every file a stage writes would bloat the folder, so the artifacts have 
 - **Plans are kept.** A built plan stays in `plan/` with `status: built` and an append-only
   Record of how it was planned, reviewed, built, checked, proven, and merged, so the plan is the
   audit trail of its change. Its lasting decisions are also copied to the Key Decisions log in
-  `ARCHITECTURE.yaml`. The decisions several features share are written there before the first
-  plan, by `ceh-build-plan:write-technical-design`, with a diagram of what is not built yet
-  marked `planned`. Every plan reads the log and follows it, so one feature's plan never decides
+  `ARCHITECTURE.yaml`. The decisions several features share are written before the first plan,
+  by `ceh-build-plan:write-technical-design`, into the file's Technical Design section, one
+  entry per topic that is edited in place while the log keeps its history, with a diagram of
+  what is not built yet marked `planned`. Every plan reads the section and the log and follows
+  them, so one feature's plan never decides
   the stack for the rest. Planning stays cheap because `ceh-build-plan:write-build-plan` reads
   only the frontmatter of built plans.
 - **Fix records are kept.** A bug fix does not go through a build plan, because the bug already

@@ -16,26 +16,28 @@ license: Apache-2.0
 # Write the technical design
 
 Settle the technical decisions that several features share, before the first of them is planned,
-and write them into `.agents_workspace/product/ARCHITECTURE.yaml`: each decision as a Key
-Decisions entry, and each diagram of what is not built yet marked `planned: true`. A build plan
-then follows these decisions and never decides them again for one feature. Done means the file
-passes its check and the tests below, and the reply lists every decision, diagram and answer
-assumed.
+and write them into `.agents_workspace/product/ARCHITECTURE.yaml`: each decision as one entry of
+its `technical_design` section, found by its topic, and each diagram of what is not built yet
+marked `planned: true`. A build plan then follows these entries and never decides them again for
+one feature. Done means the file passes its check and the tests below, and the reply lists every
+entry, diagram and answer assumed.
 
 ## What belongs here
 
 A decision belongs in the technical design when two or more features depend on it, or when
-reversing it would cost a migration or a refactor:
+reversing it would cost a migration or a refactor. Each gets one entry, under the topic name
+given here, so every plan cites one spelling:
 
-- the stack and runtime
-- persistence and the core data model
-- the components and their boundaries
-- the interface between components
-- who owns each resource, and how a caller is authenticated
-- the deployment target
-- how configuration and errors are handled across components
+- `Stack`: the stack and runtime
+- `Persistence`: persistence and the core data model
+- `Components`: the components and their boundaries
+- `Interfaces`: the interface between components
+- `Ownership and auth`: who owns each resource, and how a caller is authenticated
+- `Deployment`: the deployment target
+- `Configuration and errors`: how both are handled across components
 
-A decision one feature alone needs stays for that feature's build plan.
+Add a topic of your own when the product needs one these do not cover. A decision one feature
+alone needs stays for that feature's build plan.
 
 ## Procedure
 
@@ -52,14 +54,20 @@ A decision one feature alone needs stays for that feature's build plan.
    code. Read no business plan. With no PRD, take the features from the request and the vision,
    and say so.
 2. **List the decisions the features need,** per What belongs here. For each, write down the
-   options and the one chosen with its reason. A decision the log already holds as `Accepted`
-   is kept: to change it, write a new entry and mark the old one `Superseded by <date> <title>`.
+   options and the one chosen with its reason. An entry `technical_design` already holds is
+   kept, and so is a choice an `Accepted` entry of `key_decisions` already made.
 3. **Ask the owner one round of questions,** each with a recommended answer, for what only they
    know: a stack they require, a hosting account, a budget. Decide everything else yourself.
-4. **Append each decision to `key_decisions`** with `status: Accepted`. `context` holds the
-   options considered and the features that need the decision, `decision` what was chosen, and
-   `consequences` the trade-off.
-5. **Draw the diagrams the decisions imply,** each with `planned: true`: Components, and Data
+4. **Write each decision as a `technical_design` entry.** `topic` is its name from What belongs
+   here, `choice` what was chosen, and `reason` why: the features that need it, and one option
+   rejected and why. A first write adds nothing to `key_decisions`, because the entry holds its
+   own reason. **To change an entry,** edit it in place and append one `key_decisions` entry
+   dated today with `status: Accepted`, titled `<topic>: <the new choice in a few words>`,
+   whose `context` holds the old choice and why it no longer holds. Then mark every earlier
+   `Accepted` entry of `key_decisions` that decides the same topic, whoever wrote it,
+   `Superseded by <date> <title>` naming the new one. A first write whose choice an `Accepted`
+   entry contradicts is a change too.
+5. **Draw the diagrams the entries imply,** each with `planned: true`: Components, and Data
    model and Key flows when the product has them. A new file also gets its Overview. Leave a
    diagram that shows built code as it is. When the design changes what such a diagram shows,
    add a second entry of the same `name` right after it, marked `planned: true` and showing the
@@ -72,22 +80,23 @@ A decision one feature alone needs stays for that feature's build plan.
 
 ## The tests
 
-| Test       | Ask                                                                  | Fails when                                          |
-| ---------- | -------------------------------------------------------------------- | --------------------------------------------------- |
-| Shared     | Which two features need each decision, or what would reversing cost? | One feature, cheap to reverse: it belongs in a plan |
-| Options    | Does each `context` name an option rejected and why?                 | Only the chosen option appears                      |
-| Covers     | Which component serves each feature in the PRD?                      | A feature has none                                  |
-| Qualities  | Which decision answers each `non_functional` item in the PRD?        | An item has none and is not listed as open          |
-| Consistent | Does every diagram show only what the decisions say?                 | A node or entity has no decision behind it          |
+| Test       | Ask                                                                                                                | Fails when                                                       |
+| ---------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| Shared     | Which two features need each entry, or what would reversing it cost?                                               | One feature, cheap to reverse: it belongs in a plan              |
+| Options    | Does each `reason` name an option rejected and why?                                                                | Only the chosen option appears                                   |
+| Covers     | Which component serves each feature in the PRD?                                                                    | A feature has none                                               |
+| Qualities  | Which entry answers each `non_functional` item in the PRD?                                                         | An item has none and is not listed as open                       |
+| Consistent | Does every diagram show only what the entries say, and does no `Accepted` entry of `key_decisions` contradict one? | A node or entity has no entry behind it, or such a decision does |
 
 With no PRD, run Covers against the features taken in step 1 and mark Qualities
 `not run: no PRD`.
 
 ## Rules
 
-- Never delete a decision, and edit no field of one but its `status`. A changed decision is a
-  new entry, and the old one's `status` becomes `Superseded by <date> <title>`, so the trail
-  stays whole and no two `Accepted` entries disagree.
+- A `technical_design` entry states what holds now: edit it in place, and never write a second
+  entry for its topic. `key_decisions` is its history: never delete an entry there, and edit no
+  field of one but its `status`, so the trail stays whole and no `Accepted` entry disagrees
+  with the section.
 - Mark every diagram of what is not built `planned: true`, and never mark one that shows built
   code. `ceh-build-plan:implement-from-plan` and `ceh-codebase-explanation:document-architecture`
   remove the mark once the code matches the diagram.
@@ -102,14 +111,14 @@ in the shape of `${CLAUDE_SKILL_DIR}/assets/architecture.template.yaml`, per the
 file starts as a copy of the template, and an `ARCHITECTURE.md` with no YAML is moved first, as
 that section says. `ARCHITECTURE.md` is rendered beside it and never edited by hand.
 
-Close the reply with the path, each decision by its title, each diagram drawn, the result of each
-test, and every answer assumed.
+Close the reply with the path, each entry by its topic, each entry changed with its history
+entry, each diagram drawn, the result of each test, and every answer assumed.
 
 ## Stop conditions
 
 - **No human to answer** (a headless run, or called by another agent): ask nothing. Take each
-  recommended answer, write the decisions, and end with each question and the answer assumed, so
-  the owner can supersede a decision they disagree with.
+  recommended answer, write the entries, and end with each question and the answer assumed, so
+  the owner can change an entry they disagree with.
 
 ## Hands off to
 

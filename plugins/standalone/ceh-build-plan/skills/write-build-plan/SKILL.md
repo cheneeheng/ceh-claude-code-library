@@ -79,8 +79,9 @@ draft: say so and write a new plan as usual.
 
    **When `.agents_workspace/product/ARCHITECTURE.yaml` exists, read its decisions.** Check it
    the same way first (format in `${CLAUDE_SKILL_DIR}/references/architecture-schema.md`), with
-   the same result on each exit code. Read its `key_decisions` whose `status` is `Accepted`, and
-   each diagram marked `planned: true`, which shows where the system is going.
+   the same result on each exit code. Read its `technical_design` entries, its `key_decisions`
+   whose `status` is `Accepted`, and each diagram marked `planned: true`, which shows where the
+   system is going.
 
    Put whatever is still unclear into **one round** of
    questions, each with a recommended answer. With no human to answer, take each recommended
@@ -105,9 +106,11 @@ draft: say so and write a new plan as usual.
    explicitly defer each of these that applies, because each one stops a builder mid-phase when
    it is left open.
 
-   An `Accepted` decision in `ARCHITECTURE.yaml` binds the plan: name it by its date and title
-   where a phase relies on it, and do not restate or decide it again. A plan that must depart
-   from one lists it under Open with the entry to supersede. When the Design would hold a
+   A `technical_design` entry or an `Accepted` decision in `ARCHITECTURE.yaml` binds the plan:
+   name the entry by its topic, or the decision by its date and title, where a phase relies on
+   it, and do not restate or decide it again. Where a `technical_design` entry covers a topic,
+   the entry binds and every `key_decisions` entry on that topic is its history. A plan that
+   must depart from one lists it under Open with the entry to change or supersede. When the Design would hold a
    decision two or more features share (a stack, a data model, a component boundary) and no
    entry settles it, decide it here as usual and say in the reply that
    `ceh-build-plan:write-technical-design` settles such decisions for the whole product.

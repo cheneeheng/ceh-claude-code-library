@@ -491,10 +491,11 @@ Design sections.
 | `plugins/standalone/ceh-build-plan/skills/write-build-plan/assets/architecture.template.yaml`               | whole file | none     |
 
 **Shared:** the `.agents_workspace/product/ARCHITECTURE.yaml` location and layout: its `schema:` line, the Overview, the diagram
-sections, and the Key Decisions entry shape. `document-architecture` owns the file,
-`write-technical-design` writes the Key Decisions and the `planned` diagrams settled before the
-build, and `implement-from-plan` appends Key Decisions entries to it and removes a diagram's
-`planned` mark once the code matches it, so each plugin carries a copy to work installed alone.
+sections, the Technical Design section, and the Key Decisions entry shape. `document-architecture`
+owns the file, `write-technical-design` writes the Technical Design section and the `planned`
+diagrams settled before the build, and `implement-from-plan` appends Key Decisions entries to it,
+edits a Technical Design entry the build changed, and removes a diagram's `planned` mark once
+the code matches it, so each plugin carries a copy to work installed alone.
 `write-build-plan` only reads the file, so a plan follows its decisions, and carries a copy to
 check it first. `find-product-market-fit` only reads the file, and carries a copy to check
 `ARCHITECTURE.yaml` before its intake reads it. `validate.py` fails when a copy differs from the
