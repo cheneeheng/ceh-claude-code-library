@@ -73,7 +73,10 @@ draft: say so and write a new plan as usual.
    feature's `requirements` become Scope In items, each `acceptance` item is covered by a phase
    Check, a `depends_on` feature that is not `built` goes under Open, with its plan in the
    plan's `depends_on` when it has one, and anything the plan would add beyond the feature goes
-   under Out. A request that would build a `non_goals` item goes under Open. With no match,
+   under Out. A request that would build a `non_goals` item goes under Open. A request that
+   names a `replaced` feature by its `id` or `name` is planned from the feature in its
+   `replaced_by`, the first when there are several, with the others named under Open, and the
+   reply says which feature replaced it, because a `replaced` entry is history. With no match,
    plan the request as usual and say in the reply that the PRD does not list it, which
    `ceh-product-direction:write-product-requirements` can add.
 

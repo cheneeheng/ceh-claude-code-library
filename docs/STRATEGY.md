@@ -135,7 +135,9 @@ Keeping every file a stage writes would bloat the folder, so the artifacts have 
 - **Vision and strategy are revised in place.** One of each per repo, kept, because every later
   stage reads them.
 - **The product requirements are revised in place.** One `PRD.yaml` per repo. A feature keeps its
-  id for good, and one that is dropped moves to the non-goals with its reason.
+  id for good, and one that is dropped moves to the non-goals with its reason. A built feature a
+  later version changes becomes a replaced feature: it moves to `replaced` with its successor,
+  its reason and its plans, so the feature list is always the product as it is now.
 - **Plans are kept.** A built plan stays in `plan/` with `status: built` and an append-only
   Record of how it was planned, reviewed, built, checked, proven, and merged, so the plan is the
   audit trail of its change. Its lasting decisions are also copied to the Key Decisions log in

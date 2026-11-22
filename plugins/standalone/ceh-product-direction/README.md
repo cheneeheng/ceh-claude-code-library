@@ -39,6 +39,11 @@ rendered beside it. The features are in build order, and each has an id that is 
 status (`todo`, `planned` or `built`) and the build plans that deliver it. What is already built
 is listed too, so the list is whole. Only an `adopted` file is free of `[assumed]` marks.
 
+When a later version changes what a built feature does, the new behaviour gets a new id and the
+old one becomes a replaced feature: it moves to the file's `replaced` list with its successor,
+the reason and the plans that built it. The feature list then always describes the product as
+it is now, and the history stays in the same file, marked as history.
+
 ## How the business plan works
 
 `develop-business-plan` is a thin entry point: it finds `BUSINESS_PLAN.yaml`, works out which moment

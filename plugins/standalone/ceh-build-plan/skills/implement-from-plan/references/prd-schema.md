@@ -1,7 +1,7 @@
 # PRD schema
 
 The product requirements: the features a product has or will have, each with its requirements
-and acceptance criteria, and what the product refuses. It goes in
+and acceptance criteria, what the product refuses, and what a later version replaced. It goes in
 `.agents_workspace/product/PRD.yaml` in the target repo, with its Markdown rendered beside it,
 unless the repo's `CLAUDE.md` names another location, because later sessions and the Build stage
 read it, and users of the product do not. A reference to it names the `.yaml`. There is one per
@@ -30,7 +30,7 @@ failure, and `3` means no model for that version. Field paths count from 0, so `
 first feature. A rule across keys is reported at the top level, and its message names the feature
 id.
 
-**Keys**, each required, and no other key allowed:
+**Keys**, each required unless marked optional, and no other key allowed:
 
 - `schema`: `prd/v1`.
 - `status`: `draft` while any `[assumed]` remains or the owner has not confirmed the file,
@@ -54,10 +54,25 @@ id.
 - `non_goals`: `item` and `reason` per feature deliberately not built, `[]` when none. An item
   renders in bold with a full stop after it, so write it without one. `id` (optional) is the id
   of a feature that was dropped: it stays here so no later feature takes it.
+- `replaced` (optional): the features a later version replaced, oldest first. It is history,
+  never a requirement: `features` alone says what the product is now. With nothing replaced,
+  leave the key out. It renders as `## 04. Replaced features`, and a file without it renders no
+  such section. Each entry has:
+  - `id` and `name`: the id and the name the feature had in `features`.
+  - `date`: the day it was replaced, unquoted.
+  - `replaced_by`: at least one id, each a feature, the `id` of a `non_goals` entry (a
+    successor that was dropped later), or a `replaced` entry listed later (a successor that
+    was replaced in turn).
+  - `reason`: what the feature did, in a sentence, and why that no longer holds. Its old
+    requirements are not kept here: the plans hold what was built, and `git log` the old text.
+  - `plans`: the plans that built it, as a feature's `plans`, `[]` when none.
 
-**Rules across keys:** an id appears once, across the features and the `non_goals` that carry
-one. A `depends_on` id names a feature listed earlier, which rules out a feature depending on
-itself and any cycle. `depends_on` and `plans` each list an entry once. A `todo` feature has no plans, and a
+**Rules across keys:** an id appears once, across the features, the `non_goals` that carry
+one, and `replaced`. A `depends_on` id names a feature listed earlier, which rules out a feature
+depending on itself and any cycle, so a feature that depended on a replaced one names its
+successor or drops the dependency. A `replaced_by` id names a feature, a `non_goals` id or a
+later `replaced` entry, which rules out an entry replaced by itself and any cycle. `depends_on`,
+`replaced_by` and `plans` each list an entry once. A `todo` feature has no plans, and a
 `planned` one has at least one. A `built` feature may have none, because a product that existed
 before its PRD has features no plan built. `status: adopted` with `[assumed]` anywhere in the file
 is an error.

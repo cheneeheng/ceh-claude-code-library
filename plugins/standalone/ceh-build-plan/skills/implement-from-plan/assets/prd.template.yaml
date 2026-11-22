@@ -20,3 +20,12 @@ non_goals:
   - id: <retired feature id>
     item: <feature not built>
     reason: <reason>
+replaced:
+  - id: <replaced feature id>
+    name: <name it had>
+    date: YYYY-MM-DD
+    replaced_by:
+      - <feature id>
+    reason: <reason>
+    plans:
+      - <plan path>

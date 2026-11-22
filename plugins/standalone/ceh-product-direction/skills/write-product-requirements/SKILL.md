@@ -26,8 +26,9 @@ and its check, and is `adopted`, or `draft` with its open questions listed.
    repo's `CLAUDE.md` names. Run `artifact.py check` on it, per Output, and stop on exit 1 with
    its errors, unless the only error is a stale `.md`, which the render after your edit fixes.
    An existing file is revised in place: change only what the request or a finding
-   needs, and keep every `id`. A PRD or spec the user names in another format (a `PRD.md`, an
-   issue, a pasted document) is input: read it, and never edit it.
+   needs, and keep every `id` in `features`, `non_goals` or `replaced`. A PRD or spec the user
+   names in another format (a `PRD.md`, an issue, a pasted document) is input: read it, and
+   never edit it.
 2. **Read what the repo shows:** the vision and the strategy (`VISION.yaml` and `STRATEGY.yaml`
    in `.agents_workspace/product/`, or their `.md` in `docs/`, the root, or where `CLAUDE.md`
    says), the README, `CLAUDE.md`, the `status`, `goal` and `scope` keys of each plan YAML in
@@ -84,6 +85,22 @@ against`, say so, and suggest `ceh-product-direction:write-vision-and-strategy`.
 - Never reuse or renumber an `id`. A feature that is dropped moves to `non_goals` with its
   reason and keeps its `id` there, so the check refuses a later feature that takes it, because
   plans and commits name features by `id`.
+- Replace a `built` feature, never rewrite it, when code built to its old requirements or
+  acceptance items would fail the new ones. The new behaviour is a new feature with a new `id`.
+  The old one moves to `replaced` with the successor in `replaced_by`, today's date, the reason
+  and its `plans`, so `features` is always the product as it is now and the old text is not
+  left beside the new.
+- Each feature that depended on a replaced one names the successor, or drops the dependency
+  when it no longer needs it. Move the successor before its dependants, because `depends_on`
+  names only an earlier feature.
+- Edit everything else in place and keep its `id`: a reworded item the old code still passes, a
+  changed `name` or `user`, and any change to a `todo` or `planned` feature, because nothing is
+  built to it yet. For a `planned` one, say in the reply that its plan must be revised before
+  it is built.
+- A `built` feature that gains a requirement stays `built`. Name the new requirement in the
+  reply as work for `ceh-build-plan:write-build-plan`, which sets the feature `planned` when it
+  plans it.
+- `replaced` is history. Never edit an entry but to correct it, and never plan from one.
 - Build skills read this file and must not read business material, so it carries no pricing,
   unit economics, kill criteria, contacts, a home path, or any test, stage or date from a
   business plan, and it never quotes `.agents_workspace/product/business/`.
@@ -101,7 +118,8 @@ its errors, unless the only one is a stale `.md`. After the last edit, run it wi
 On exit 2 or 3, or without uv, say in the reply that the file went unchecked and unrendered.
 
 Close the reply with the file's path and status, the feature table (id, name, status, depends
-on), the result of each test, and the open questions.
+on), each feature replaced in this run with its successor, the result of each test, and the
+open questions.
 
 ## Stop conditions
 

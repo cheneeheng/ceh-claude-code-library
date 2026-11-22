@@ -940,6 +940,17 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         " acceptance: [An empty file prints 0.], depends_on: [], status: todo, plans: []}\n"
         "non_functional: []\nnon_goals: []\n"
     )
+    # F02 replaced F03, so the file renders its history section.
+    replaced_prd = (
+        good_prd.replace(
+            "non_functional",
+            "  - {id: F02, name: Count lines, user: A writer, requirements: [Prints the lines.],"
+            " acceptance: [An empty file prints 0.], depends_on: [], status: built, plans: []}\n"
+            "non_functional",
+        )
+        + "replaced:\n  - {id: F03, name: Count pages, date: 2026-11-22, replaced_by: [F02],"
+        " reason: Pages depend on the font., plans: []}\n"
+    )
     good_bp = (
         "schema: business-plan/v3\nstatus: draft\ncreated: 2026-11-07\nupdated: 2026-11-07\n"
         "product: Wordy\nstage: idea\nderived_from: []\npmf_gate: 2\nsections:\n"
@@ -1619,6 +1630,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ),
         # PRD is not in the hook's SPINE table, so a copy with no schema key is skipped.
         *report_fixtures("ceh-product-direction", "PRD", good_prd, good_prd.replace("status: todo", "status: planned"), "F01: status planned needs a plan", "## 01. Features"),
+        *report_fixtures("ceh-product-direction", "PRD", replaced_prd, replaced_prd.replace("[F02]", "[F09]"), "F03: replaced_by names F09", "## 04. Replaced features", tag="PRD-replaced"),
         *report_fixtures("ceh-testing", "QA_REPORT", good_qa, good_qa.replace("bugs: []", "bugs: [B3]", 1), "charters.0.bugs", "# QA report: Wordy"),
         *report_fixtures("ceh-testing", "search", good_perf, good_perf.replace("low: 110", "low: 125"), "attempts.0", "# Performance: search"),
         *security_fixtures,
