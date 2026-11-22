@@ -1,10 +1,13 @@
 # ceh-product-direction
 
-Decide what to build and whether it is worth it. The plugin has two entry points:
+Decide what to build and whether it is worth it. The plugin has three entry points:
 
 - `write-vision-and-strategy` writes down a repo's direction so later decisions can be settled
   from it: `VISION.yaml`, why the repo exists and which principles decide, and `STRATEGY.yaml`, how it
   gets there and how work is chosen. The repo can hold code or only documents.
+- `write-product-requirements` breaks the product into features: `PRD.yaml`, each feature with
+  its user, its requirements, its acceptance criteria and its status, so the next build plan is
+  picked from a list.
 - `develop-business-plan` turns a product idea — or an existing app plan — into a **validated
   business plan** with a clear product-market fit. It drafts proactively from whatever already
   exists, then runs a disciplined interview loop that attacks the plan's weakest assumption until
@@ -12,8 +15,8 @@ Decide what to build and whether it is worth it. The plugin has two entry points
 
 ## The reader rule
 
-`write-vision-and-strategy` never reads the business plan. The business plan may read the vision
-and the strategy. The reason is in `.claude/rules/decision-business-plan-readers.md` in this
+`write-vision-and-strategy` and `write-product-requirements` never read the business plan. The
+business plan may read the vision and the strategy. The reason is in `.claude/rules/decision-business-plan-readers.md` in this
 library's repo: a business plan turns guesses into dated tests, and a skill that reads it copies
 those tests into committed files later sessions treat as binding.
 
@@ -26,6 +29,15 @@ confirmed. It writes `.agents_workspace/product/VISION.yaml` and
 `VISION.md` and `STRATEGY.md` rendered beside them. Only an `adopted` doc gets a pointer from
 `CLAUDE.md`, so an assumption never binds a later session. Build skills read these docs and must
 not read business material, so they carry no pricing or unit economics.
+
+## How the product requirements are written
+
+`write-product-requirements` drafts the feature list from the vision, the strategy and the repo,
+asks the owner one round of questions, and tests that each requirement is observable and each
+acceptance item checkable. It writes `.agents_workspace/product/PRD.yaml` (`prd/v1`) with `PRD.md`
+rendered beside it. The features are in build order, and each has an id that is never reused, a
+status (`todo`, `planned` or `built`) and the build plans that deliver it. What is already built
+is listed too, so the list is whole. Only an `adopted` file is free of `[assumed]` marks.
 
 ## How the business plan works
 
@@ -55,21 +67,22 @@ is to convert each into evidence or a cheap, scheduled test.
 
 ## Skills
 
-| Skill                        | Description                                                                                                                                                                                                                            |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `write-vision-and-strategy`  | An entry point: draft `VISION.yaml` and `STRATEGY.yaml` from what the repo shows, then confirm them with its owner. It's working if the first run writes both files with `status: draft` and `[assumed]` marks before it asks anything |
-| `develop-business-plan`      | The entry point for a business plan: find the plan, work out the moment, and route to the specialist that owns it                                                                                                                      |
-| `find-product-market-fit`    | Draft a business plan proactively, then loop interview→revise until the PMF readiness gate passes                                                                                                                                      |
-| `review-business-plan`       | Report-only board review: score the plan on seven lenses and name the one finding that most changes it                                                                                                                                 |
-| `sharpen-strategy`           | Where to play, how to win, what to refuse, checked against nine tests of a defensible edge                                                                                                                                             |
-| `stress-test-unit-economics` | Per-unit model with arithmetic shown, cash low point, and the one input that kills the business                                                                                                                                        |
-| `plan-go-to-market`          | The first ten customers by name, one channel, its arithmetic, and a pass-or-fail channel test                                                                                                                                          |
-| `run-premortem`              | Assume the business failed, write how, and attach a warning signal, kill criterion, and loss cap                                                                                                                                       |
-| `set-operating-plan`         | A 90-day plan: at most three objectives, owned key results, weekly inputs, a stop-doing list                                                                                                                                           |
-| `write-investor-materials`   | A deck outline and outreach notes from a validated plan, every claim citing its plan section. It's working if each slide ends in a `Source: §NN` line and the ask names the milestones it buys                                         |
+| Skill                        | Description                                                                                                                                                                                                                                                                   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `write-vision-and-strategy`  | An entry point: draft `VISION.yaml` and `STRATEGY.yaml` from what the repo shows, then confirm them with its owner. It's working if the first run writes both files with `status: draft` and `[assumed]` marks before it asks anything                                        |
+| `write-product-requirements` | An entry point: draft `PRD.yaml`, the product's features with their requirements and acceptance criteria, then confirm it with its owner. It's working if the first run writes the file with `status: draft` before it asks anything, and the reply ends with a feature table |
+| `develop-business-plan`      | The entry point for a business plan: find the plan, work out the moment, and route to the specialist that owns it                                                                                                                                                             |
+| `find-product-market-fit`    | Draft a business plan proactively, then loop interview→revise until the PMF readiness gate passes                                                                                                                                                                             |
+| `review-business-plan`       | Report-only board review: score the plan on seven lenses and name the one finding that most changes it                                                                                                                                                                        |
+| `sharpen-strategy`           | Where to play, how to win, what to refuse, checked against nine tests of a defensible edge                                                                                                                                                                                    |
+| `stress-test-unit-economics` | Per-unit model with arithmetic shown, cash low point, and the one input that kills the business                                                                                                                                                                               |
+| `plan-go-to-market`          | The first ten customers by name, one channel, its arithmetic, and a pass-or-fail channel test                                                                                                                                                                                 |
+| `run-premortem`              | Assume the business failed, write how, and attach a warning signal, kill criterion, and loss cap                                                                                                                                                                              |
+| `set-operating-plan`         | A 90-day plan: at most three objectives, owned key results, weekly inputs, a stop-doing list                                                                                                                                                                                  |
+| `write-investor-materials`   | A deck outline and outreach notes from a validated plan, every claim citing its plan section. It's working if each slide ends in a `Source: §NN` line and the ask names the milestones it buys                                                                                |
 
-`write-vision-and-strategy` and `develop-business-plan` are the two skills you invoke. The other
-eight are business plan specialists and model-only, with no
+`write-vision-and-strategy`, `write-product-requirements` and `develop-business-plan` are the
+three skills you invoke. The other eight are business plan specialists and model-only, with no
 slash command and a one-line description: they do not trigger on their own, and
 `develop-business-plan` calls the right one. After each specialist returns it resets
 `status: draft` when the gate has dropped below 8/8, and names the specialist to run next.
@@ -78,11 +91,15 @@ Invoke manually:
 
 ```
 /ceh-product-direction:write-vision-and-strategy
+/ceh-product-direction:write-product-requirements
 /ceh-product-direction:develop-business-plan
 ```
 
 **write-vision-and-strategy** loads automatically when you say `"write the vision doc"` or
 `"create a strategy doc"`.
+
+**write-product-requirements** loads automatically when you say `"write the PRD"` or
+`"break the product into features"`.
 
 ## Where the specialist skills come from
 
@@ -124,10 +141,11 @@ rendered `.md`, to
 
 ## Hooks
 
-After every write to `BUSINESS_PLAN.yaml`, `VISION.yaml` or `STRATEGY.yaml`,
+After every write to `BUSINESS_PLAN.yaml`, `VISION.yaml`, `STRATEGY.yaml` or `PRD.yaml`,
 `artifact-render-hook.py` (`PostToolUse`) checks it against its model through `uv` and renders its
 Markdown, or reports each error back to the agent and leaves the Markdown as it was. An adopted
-vision or strategy that still holds `[assumed]` is one such error. `find-product-market-fit` also carries the architecture
+vision, strategy or PRD that still holds `[assumed]` is one such error. A `PRD.yaml` is found by
+its `schema:` line only, so one that has lost that line is not reported. `find-product-market-fit` also carries the architecture
 model, to check `.agents_workspace/product/ARCHITECTURE.yaml` before reading it, so the hook acts on a write to that
 file too. It also checks and renders `review-business-plan`'s saved review
 (`business-plan-review/v3`, one file whose rounds and lens findings later reviews update in place) and `write-investor-materials`' `INVESTOR_DECK.yaml`

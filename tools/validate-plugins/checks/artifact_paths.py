@@ -25,7 +25,7 @@ YAML_FORMAT_MD = re.compile(
     "|".join(
         (
             rf"product/plan/{P}\.md\b",
-            r"product/(?:business/)?(?:VISION|STRATEGY|ARCHITECTURE|EVIDENCE|BUSINESS_PLAN)\.md\b",
+            r"product/(?:business/)?(?:VISION|STRATEGY|PRD|ARCHITECTURE|EVIDENCE|BUSINESS_PLAN)\.md\b",
             rf"product/fix/{P}\.md\b",
             rf"product/retro/{P}repeat-mistake\.md\b",
             rf"product/qa/{P}QA_REPORT\.md\b",

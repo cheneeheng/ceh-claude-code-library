@@ -9,6 +9,40 @@ before this repo live in
 
 ---
 
+## 2026-11-22
+
+A product now gets a feature list before its features are planned. Nothing sat between the vision
+and the build plan of one change, so each plan was written from whatever seemed next and no file
+listed the features, their requirements or their acceptance criteria. The new skill writes a lean
+`PRD.yaml`: the features in build order, each with its user, requirements, acceptance criteria,
+status and build plans, plus the product-wide requirements and the features it refuses. It leaves
+out the problem, audience, goals and milestones of a classic PRD, which the vision, the strategy
+and the business plan already hold. Per
+`.agents_workspace/product/plan/20261122-000752-product-requirements-skill.yaml`.
+
+### Plugin versions
+
+| Plugin                  | Version |
+| ----------------------- | ------- |
+| `ceh-product-direction` | 2.1.0   |
+
+### Added
+
+- `ceh-product-direction:write-product-requirements`: drafts `.agents_workspace/product/PRD.yaml`
+  from the vision, the strategy and the repo, asks the owner one round of questions, and tests
+  that each requirement is observable and each acceptance item checkable. It reads no business
+  plan.
+- The `prd/v1` format, with its model and renderer: a feature id is unique and never reused, a
+  dependency names a feature listed earlier, and a `todo` feature has no plan.
+
+### Changed
+
+- `decision-business-plan-readers.md` names the product requirements among the documents whose
+  writer never reads the business plan.
+- `docs/STRATEGY.md` and `docs/GETTING_STARTED.md` name `PRD.yaml` among the files Shape writes.
+- The description budget in `validate.py` rises by the new skill's description, and the
+  `artifact-paths` check rejects a reference to `PRD.md`.
+
 ## 2026-11-20
 
 The repo's decision rules now load when they are needed and hold only the rule. A test showed that
