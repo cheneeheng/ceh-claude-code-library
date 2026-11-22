@@ -31,8 +31,8 @@ and its check, and is `adopted`, or `draft` with its open questions listed.
 2. **Read what the repo shows:** the vision and the strategy (`VISION.yaml` and `STRATEGY.yaml`
    in `.agents_workspace/product/`, or their `.md` in `docs/`, the root, or where `CLAUDE.md`
    says), the README, `CLAUDE.md`, the `status`, `goal` and `scope` keys of each plan YAML in
-   `.agents_workspace/product/plan/`, and the code. When a `VISION.yaml` or `STRATEGY.yaml` sits
-   beside its `.md`, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml`
+   `.agents_workspace/product/plan/`, and the code. For each `VISION.yaml` or `STRATEGY.yaml`
+   that exists, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml`
    before reading it (formats in `${CLAUDE_SKILL_DIR}/references/vision-schema.md` and
    `strategy-schema.md`). On exit 1, stop and report its errors, because features drafted from
    a broken source carry the error. On a stale `.md` alone, read the YAML instead. On exit 2 or
@@ -57,8 +57,11 @@ and its check, and is `adopted`, or `draft` with its open questions listed.
 6. **Ask the owner to confirm the file.** On their yes, set `status: adopted`. Otherwise it stays
    `draft`, because an assumption must not bind later sessions. An `adopted` file takes a change
    the owner has not confirmed only as a question.
+7. **Render.** After the last edit, run `artifact.py render` on the file, per Output.
 
-## The tests
+## Rules
+
+### The tests
 
 | Test       | Ask                                                                        | Fails when                                      |
 | ---------- | -------------------------------------------------------------------------- | ----------------------------------------------- |
@@ -70,9 +73,9 @@ and its check, and is `adopted`, or `draft` with its open questions listed.
 | Clean      | Does the file hold pricing, dates, tests or contacts from a business plan? | It does                                         |
 
 With no vision or strategy in the repo, mark Traces and Refuses `not run: nothing to test
-against`, and say so.
+against`, say so, and suggest `ceh-product-direction:write-vision-and-strategy`.
 
-## Rules
+### What always holds
 
 - Draft first, ask second. A concrete feature list the owner can correct gets a sharper answer
   than "what features do you want?".
@@ -109,4 +112,6 @@ on), the result of each test, and the open questions.
 
 ## Hands off to
 
+- To settle the technical design the features share, before the first plan, suggest
+  `ceh-build-plan:write-technical-design`.
 - To plan the first `todo` feature, suggest `ceh-build-plan:write-build-plan`.

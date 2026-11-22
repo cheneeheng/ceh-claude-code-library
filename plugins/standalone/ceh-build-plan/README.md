@@ -39,8 +39,9 @@ or `"review this plan"`. `/ceh-build-plan:implement-from-plan [plan-file] [phase
 
 The plugin ships three hooks (`hooks/hooks.json`) that activate automatically when the plugin is
 enabled. The artifact check and the generated-file guard act on `plan/v2` plans, the YAML format in each skill's
-`references/plan-schema.md`, which the skills write, and on the `VISION.yaml`, `STRATEGY.yaml` and
-`PRD.yaml` the skills check before reading, because the skills carry those models too.
+`references/plan-schema.md`, which the skills write, and on the `ARCHITECTURE.yaml`,
+`VISION.yaml`, `STRATEGY.yaml` and `PRD.yaml` the skills write or check before reading, because
+the skills carry those models too.
 
 | Hook                 | Event                                        | Script                    | Default |
 | -------------------- | -------------------------------------------- | ------------------------- | ------- |

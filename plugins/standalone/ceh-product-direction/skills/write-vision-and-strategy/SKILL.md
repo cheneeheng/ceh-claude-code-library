@@ -109,4 +109,6 @@ open questions.
 ## Hands off to
 
 - To question the finished docs, suggest `ceh-every-session:stress-test-plan`.
+- To break the product into features before any is planned, suggest
+  `ceh-product-direction:write-product-requirements`.
 - To plan the first piece of work they choose, suggest `ceh-build-plan:write-build-plan`.

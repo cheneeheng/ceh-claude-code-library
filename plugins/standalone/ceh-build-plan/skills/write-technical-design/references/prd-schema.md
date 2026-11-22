@@ -7,7 +7,8 @@ unless the repo's `CLAUDE.md` names another location, because later sessions and
 read it, and users of the product do not. A reference to it names the `.yaml`. There is one per
 repo, revised in place. `ceh-product-direction:write-product-requirements` writes it.
 `ceh-build-plan:write-build-plan` and `ceh-build-plan:implement-from-plan` write only a feature's
-`status` and `plans`, and `updated`. `ceh-every-session:whats-next` reads it. This file is copied
+`status` and `plans`, and `updated`. `ceh-build-plan:write-technical-design` and
+`ceh-every-session:whats-next` read it. This file is copied
 word for word into every skill that reads a PRD.
 
 ## prd/v1: YAML with generated Markdown
@@ -47,7 +48,7 @@ id.
   - `status`: `todo` (no plan yet), `planned` (a plan exists) or `built`.
   - `plans`: the repo-relative path of each build plan that delivers it, each ending `.yaml`,
     `[]` when none. A path uses forward slashes on every OS, with no leading slash, drive
-    letter, backslash or `..` segment, so one plan has one spelling.
+    letter, backslash, or empty, `.` or `..` segment, so one plan has one spelling.
 - `non_functional`: requirements that hold across features, such as speed, security or
   platforms, `[]` when none.
 - `non_goals`: `item` and `reason` per feature deliberately not built, `[]` when none. An item
