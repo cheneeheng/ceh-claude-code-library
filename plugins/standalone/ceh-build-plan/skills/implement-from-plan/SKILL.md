@@ -7,7 +7,8 @@ description: >-
 argument-hint: "[plan-file] [phase]"
 compatibility: >-
   Needs uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML to check a
-  plan/v2 plan and render its Markdown. Without uv the plan is saved unchecked and unrendered.
+  plan/v2 plan, an ARCHITECTURE YAML or a PRD YAML and render its Markdown. Without uv each is
+  saved unchecked and unrendered.
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
@@ -67,7 +68,13 @@ reason recorded.
    5. Set the phase's Status to `done` with its evidence: the commit, or the check command and
       one line of its passing output. Append a Built Phase line to the plan's `## Record`. When
       this is the plan's first `done` phase, set `status: building`.
-4. **Close the plan.** When every phase is `done`, set `status: built`.
+4. **Close the plan.** When every phase is `done`, set `status: built`. Then, when
+   `.agents_workspace/product/PRD.yaml` exists, run `artifact.py check` on it (format in
+   `${CLAUDE_SKILL_DIR}/references/prd-schema.md`). When a feature's `plans` holds this plan's
+   path, read the `status` of every plan that feature lists: when all are `built`, set the
+   feature's `status` to `built` and the PRD's `updated`, and run `artifact.py render` on it.
+   Otherwise leave the feature as it is. A PRD that fails its check is reported and left alone,
+   because the build is already proven and does not stop here.
 5. **Copy the lasting decisions.** The built plan stays in the plan folder as the record of this
    change: later planning runs read only its frontmatter. When `ceh-check-build-against-plan` is
    installed, run `ceh-check-build-against-plan:check-build-against-plan` first, because it adds
@@ -98,7 +105,8 @@ reason recorded.
 After the run, report per phase: done or stopped, the Check command and its result, assumptions
 taken, and anything not verified with the command the user should run. List the phases set `done`
 on the user's report apart from the ones whose Check you ran. List the decisions copied
-to `.agents_workspace/product/ARCHITECTURE.yaml`.
+to `.agents_workspace/product/ARCHITECTURE.yaml`. Name the PRD feature the plan delivers and its
+status after the run, when there is one.
 
 ## Stop conditions
 

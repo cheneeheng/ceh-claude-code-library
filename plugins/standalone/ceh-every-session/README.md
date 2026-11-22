@@ -49,7 +49,8 @@ fits the user's situation, and leaves the choice to them.
 - `find-available-guide` — no slash command (hidden from the `/` menu), loaded by the output style when the work first names a framework, library, or service.
 
 `whats-next` and `record-project-decisions` check a plan or `ARCHITECTURE.yaml` against its model
-before reading it, and `record-project-decisions` a `GLOSSARY.yaml` too, which needs
+before reading it, `whats-next` a `PRD.yaml` too, whose first unplanned feature it suggests
+planning, and `record-project-decisions` a `GLOSSARY.yaml`, which needs
 [uv](https://docs.astral.sh/uv/), installing pydantic and PyYAML on first use. Without uv the file
 is read unchecked, and a repo with none of these files needs no uv.
 

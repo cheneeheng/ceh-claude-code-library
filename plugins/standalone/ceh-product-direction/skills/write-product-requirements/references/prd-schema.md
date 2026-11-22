@@ -5,8 +5,10 @@ and acceptance criteria, and what the product refuses. It goes in
 `.agents_workspace/product/PRD.yaml` in the target repo, with its Markdown rendered beside it,
 unless the repo's `CLAUDE.md` names another location, because later sessions and the Build stage
 read it, and users of the product do not. A reference to it names the `.yaml`. There is one per
-repo, revised in place. `ceh-product-direction:write-product-requirements` writes it. This file is
-copied word for word into every skill that reads a PRD.
+repo, revised in place. `ceh-product-direction:write-product-requirements` writes it.
+`ceh-build-plan:write-build-plan` and `ceh-build-plan:implement-from-plan` write only a feature's
+`status` and `plans`, and `updated`. `ceh-every-session:whats-next` reads it. This file is copied
+word for word into every skill that reads a PRD.
 
 ## prd/v1: YAML with generated Markdown
 

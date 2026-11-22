@@ -610,6 +610,28 @@ so each model file stands alone. `validate.py` fails when a copy differs from th
 them, so each carries a copy to check `VISION.yaml` and `STRATEGY.yaml` before reading them.
 `validate.py` fails when a copy differs from the canonical file.
 
+## PRD format
+
+**Canonical:** whole files, `plugins/standalone/ceh-product-direction/skills/write-product-requirements/references/prd-schema.md`, `plugins/standalone/ceh-product-direction/skills/write-product-requirements/references/prd-model.py`, `plugins/standalone/ceh-product-direction/skills/write-product-requirements/assets/prd.template.yaml`
+
+| Copy                                                                                    | Section    | Diverges |
+| --------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/references/prd-schema.md`    | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/references/prd-model.py`     | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/assets/prd.template.yaml`    | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/implement-from-plan/references/prd-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/implement-from-plan/references/prd-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/implement-from-plan/assets/prd.template.yaml` | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/whats-next/references/prd-schema.md`       | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/whats-next/references/prd-model.py`        | whole file | none     |
+| `plugins/standalone/ceh-every-session/skills/whats-next/assets/prd.template.yaml`       | whole file | none     |
+
+**Shared:** the `prd/v1` format with its template. `write-product-requirements` owns the file.
+`write-build-plan` reads the feature it plans and links the plan back, and `implement-from-plan`
+sets a feature `built`, so each carries a copy to check `PRD.yaml` before reading it and to render
+it after its edit. `whats-next` only reads it, to name the next feature to plan, and carries a
+copy to check it first. `validate.py` fails when a copy differs from the canonical file.
+
 ## Fix record format
 
 **Canonical:** whole files, `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/references/fix-record-schema.md`, `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/references/fix-record-model.py`, `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/assets/fix-record.template.md`, `plugins/standalone/ceh-coding-conduct/skills/find-root-cause/assets/fix-record.template.yaml`

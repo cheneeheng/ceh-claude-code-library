@@ -10,7 +10,8 @@ disable-model-invocation: false
 user-invocable: true
 compatibility: >-
   Uses uv, which runs scripts/artifact.py with Python 3.10+, pydantic 2 and PyYAML, to check a
-  plan/v2 plan or a handoff/v2 handoff before reading it. Without uv the file is read unchecked.
+  plan/v2 plan, a PRD or a handoff/v2 handoff before reading it. Without uv the file is read
+  unchecked.
 license: Apache-2.0
 ---
 
@@ -34,6 +35,11 @@ has one to three suggestions, each with the exact way to start it, and the choic
      `${CLAUDE_SKILL_DIR}/references/plan-schema.md`). On exit 1, report its errors as the reason
      to fix the plan first, unless the only error is a stale `.md`. On exit 2 or 3, or without uv,
      say in the answer that the plan went unchecked, and go on.
+   - `.agents_workspace/product/PRD.yaml`, the product's feature list, checked with
+     `artifact.py check` as a plan is (format in `${CLAUDE_SKILL_DIR}/references/prd-schema.md`).
+     The first `todo` feature in list order whose `depends_on` features are all `built` is the
+     next to plan: suggest `ceh-build-plan:write-build-plan` with "plan <id> <name>" as its
+     start, and quote the feature as the reason. A `planned` feature is covered by its plan above
    - the newest `*-handoff.*` or older `HANDOFF-*` in `.agents_workspace/handoff/` by the timestamp in its name, if any,
      for work a past session left open. When its stem has a `.yaml`, run `artifact.py check` on it
      as for a plan (format in `${CLAUDE_SKILL_DIR}/references/handoff-schema.md`) and read

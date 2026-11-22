@@ -20,11 +20,20 @@ out the problem, audience, goals and milestones of a classic PRD, which the visi
 and the business plan already hold. Per
 `.agents_workspace/product/plan/20261122-000752-product-requirements-skill.yaml`.
 
+The Build stage now uses that list. A plan for a feature takes the feature's requirements as its
+scope and its acceptance items as phase checks, and the PRD shows the feature as planned, then as
+built once every plan it lists is built. Asked what is next, the advisor names the first feature
+with no plan whose dependencies are built. A request the PRD does not list is still planned, and a
+repo without a PRD works as before. Per
+`.agents_workspace/product/plan/20261122-000752-product-requirements-readers.yaml`.
+
 ### Plugin versions
 
 | Plugin                  | Version |
 | ----------------------- | ------- |
-| `ceh-product-direction` | 2.1.0   |
+| `ceh-build-plan`        | 2.0.21  |
+| `ceh-every-session`     | 2.10.1  |
+| `ceh-product-direction` | 2.1.1   |
 
 ### Added
 
@@ -42,6 +51,15 @@ and the business plan already hold. Per
 - `docs/STRATEGY.md` and `docs/GETTING_STARTED.md` name `PRD.yaml` among the files Shape writes.
 - The description budget in `validate.py` rises by the new skill's description, and the
   `artifact-paths` check rejects a reference to `PRD.md`.
+- `ceh-build-plan:write-build-plan` reads `PRD.yaml` when it exists, plans the matched feature
+  from its requirements and acceptance items, and adds the plan to the feature, setting it
+  `planned`.
+- `ceh-build-plan:implement-from-plan` sets a feature `built` when it closes a plan and every
+  plan the feature lists is built.
+- `ceh-every-session:whats-next` reads `PRD.yaml` and suggests planning the first `todo` feature
+  whose dependencies are built.
+- `prd-schema.md` names the skills that write and read the file, and each of the three reading
+  skills carries a copy of the format, registered in `docs/CROSS_REFERENCES.md`.
 
 ## 2026-11-20
 

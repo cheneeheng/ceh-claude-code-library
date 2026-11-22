@@ -54,18 +54,20 @@ become a plan's goals (`decision-business-plan-readers.md`).
 
 Every path below is under `.agents_workspace/product/` in the target repo.
 
-| Stage | Reads                                                                                                        | Writes                                                                                                      |
-| ----- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
-| Shape | an idea, a conversation, the repo                                                                            | `business/BUSINESS_PLAN.yaml`, `VISION.yaml`, `STRATEGY.yaml` and `PRD.yaml`, each with its generated `.md` |
-| Build | `VISION.yaml` and `STRATEGY.yaml` when present, each checked first (the `.md` when no YAML exists), the repo | `plan/<slug>.yaml` and its generated `<slug>.md`, the code, `ARCHITECTURE.yaml` and its generated `.md`     |
-| Prove | the plan, the code                                                                                           | `EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                |
-| Tell  | `business/BUSINESS_PLAN.yaml`, `EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists)           | posts, listings, SEO pages                                                                                  |
+| Stage | Reads                                                                                                                    | Writes                                                                                                      |
+| ----- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Shape | an idea, a conversation, the repo                                                                                        | `business/BUSINESS_PLAN.yaml`, `VISION.yaml`, `STRATEGY.yaml` and `PRD.yaml`, each with its generated `.md` |
+| Build | `VISION.yaml`, `STRATEGY.yaml` and `PRD.yaml` when present, each checked first (the `.md` when no YAML exists), the repo | `plan/<slug>.yaml` and its generated `<slug>.md`, the code, `ARCHITECTURE.yaml` and its generated `.md`     |
+| Prove | the plan, the code                                                                                                       | `EVIDENCE.yaml` and its generated `EVIDENCE.md`: tests, QA, security, usability, performance                |
+| Tell  | `business/BUSINESS_PLAN.yaml`, `EVIDENCE.yaml`, each checked first (the `.md` when no YAML exists)                       | posts, listings, SEO pages                                                                                  |
 
 Shape to Build: `ceh-product-direction` writes `VISION.yaml` and `STRATEGY.yaml`, and
 `ceh-build-plan` reads them, putting what a plan would contradict under Open, and writes the
 plan that it builds from and `ceh-check-build-against-plan` reads. `ceh-product-direction` also
 writes `PRD.yaml`, the product's features with their requirements, acceptance criteria and
-status, so the next plan is picked from a list. `ceh-product-direction` also writes
+status, so the next plan is picked from a list: `ceh-build-plan:write-build-plan` plans a feature
+from its requirements and links the plan back, `ceh-build-plan:implement-from-plan` marks it
+built, and `ceh-every-session:whats-next` names the next one to plan. `ceh-product-direction` also writes
 `business/BUSINESS_PLAN.yaml`, which no Build skill reads. Prove to
 Tell: `ceh-testing:write-evidence-report` rolls the checks' reports into `EVIDENCE.yaml`, and
 `ceh-blog-and-seo:draft-post` and `ceh-blog-and-seo:write-project-listing-text` read it with `business/BUSINESS_PLAN.yaml`. Each YAML has its
