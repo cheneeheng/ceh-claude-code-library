@@ -598,36 +598,44 @@ so each model file stands alone. `validate.py` fails when a copy differs from th
 
 **Canonical:** whole files, `plugins/standalone/ceh-product-direction/skills/write-vision-and-strategy/references/vision-schema.md`, `plugins/standalone/ceh-product-direction/skills/write-vision-and-strategy/references/vision-model.py`, `plugins/standalone/ceh-product-direction/skills/write-vision-and-strategy/assets/vision.template.md`, `plugins/standalone/ceh-product-direction/skills/write-vision-and-strategy/assets/vision.template.yaml`, `plugins/standalone/ceh-product-direction/skills/write-vision-and-strategy/references/strategy-schema.md`, `plugins/standalone/ceh-product-direction/skills/write-vision-and-strategy/references/strategy-model.py`, `plugins/standalone/ceh-product-direction/skills/write-vision-and-strategy/assets/strategy.template.md`, `plugins/standalone/ceh-product-direction/skills/write-vision-and-strategy/assets/strategy.template.yaml`
 
-| Copy                                                                                            | Section    | Diverges |
-| ----------------------------------------------------------------------------------------------- | ---------- | -------- |
-| `plugins/standalone/ceh-build-plan/skills/write-build-plan/references/vision-schema.md`         | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-build-plan/references/vision-model.py`          | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-build-plan/assets/vision.template.md`           | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-build-plan/assets/vision.template.yaml`         | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-build-plan/references/strategy-schema.md`       | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-build-plan/references/strategy-model.py`        | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-build-plan/assets/strategy.template.md`         | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-build-plan/assets/strategy.template.yaml`       | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/review-build-plan/references/vision-schema.md`        | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/review-build-plan/references/vision-model.py`         | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/review-build-plan/assets/vision.template.md`          | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/review-build-plan/assets/vision.template.yaml`        | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/review-build-plan/references/strategy-schema.md`      | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/review-build-plan/references/strategy-model.py`       | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/review-build-plan/assets/strategy.template.md`        | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/review-build-plan/assets/strategy.template.yaml`      | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-technical-design/references/vision-schema.md`   | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-technical-design/references/vision-model.py`    | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-technical-design/assets/vision.template.md`     | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-technical-design/assets/vision.template.yaml`   | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-technical-design/references/strategy-schema.md` | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-technical-design/references/strategy-model.py`  | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-technical-design/assets/strategy.template.md`   | whole file | none     |
-| `plugins/standalone/ceh-build-plan/skills/write-technical-design/assets/strategy.template.yaml` | whole file | none     |
+| Copy                                                                                                       | Section    | Diverges |
+| ---------------------------------------------------------------------------------------------------------- | ---------- | -------- |
+| `plugins/standalone/ceh-product-direction/skills/write-product-requirements/references/vision-schema.md`   | whole file | none     |
+| `plugins/standalone/ceh-product-direction/skills/write-product-requirements/references/vision-model.py`    | whole file | none     |
+| `plugins/standalone/ceh-product-direction/skills/write-product-requirements/assets/vision.template.md`     | whole file | none     |
+| `plugins/standalone/ceh-product-direction/skills/write-product-requirements/assets/vision.template.yaml`   | whole file | none     |
+| `plugins/standalone/ceh-product-direction/skills/write-product-requirements/references/strategy-schema.md` | whole file | none     |
+| `plugins/standalone/ceh-product-direction/skills/write-product-requirements/references/strategy-model.py`  | whole file | none     |
+| `plugins/standalone/ceh-product-direction/skills/write-product-requirements/assets/strategy.template.md`   | whole file | none     |
+| `plugins/standalone/ceh-product-direction/skills/write-product-requirements/assets/strategy.template.yaml` | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/references/vision-schema.md`                    | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/references/vision-model.py`                     | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/assets/vision.template.md`                      | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/assets/vision.template.yaml`                    | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/references/strategy-schema.md`                  | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/references/strategy-model.py`                   | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/assets/strategy.template.md`                    | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-build-plan/assets/strategy.template.yaml`                  | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/review-build-plan/references/vision-schema.md`                   | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/review-build-plan/references/vision-model.py`                    | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/review-build-plan/assets/vision.template.md`                     | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/review-build-plan/assets/vision.template.yaml`                   | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/review-build-plan/references/strategy-schema.md`                 | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/review-build-plan/references/strategy-model.py`                  | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/review-build-plan/assets/strategy.template.md`                   | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/review-build-plan/assets/strategy.template.yaml`                 | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-technical-design/references/vision-schema.md`              | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-technical-design/references/vision-model.py`               | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-technical-design/assets/vision.template.md`                | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-technical-design/assets/vision.template.yaml`              | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-technical-design/references/strategy-schema.md`            | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-technical-design/references/strategy-model.py`             | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-technical-design/assets/strategy.template.md`              | whole file | none     |
+| `plugins/standalone/ceh-build-plan/skills/write-technical-design/assets/strategy.template.yaml`            | whole file | none     |
 
 **Shared:** the `vision/v2` and `strategy/v2` formats with their templates.
-`write-vision-and-strategy` owns both files, and `write-build-plan`, `review-build-plan` and
-`write-technical-design` read them, so each carries a copy to check `VISION.yaml` and `STRATEGY.yaml` before reading them.
+`write-vision-and-strategy` owns both files, and `write-product-requirements`, `write-build-plan`,
+`review-build-plan` and `write-technical-design` read them, so each carries a copy to check `VISION.yaml` and `STRATEGY.yaml` before reading them.
 `validate.py` fails when a copy differs from the canonical file.
 
 ## PRD format

@@ -73,8 +73,10 @@ reason recorded.
    `${CLAUDE_SKILL_DIR}/references/prd-schema.md`). When a feature's `plans` holds this plan's
    path, read the `status` of every plan that feature lists: when all are `built`, set the
    feature's `status` to `built` and the PRD's `updated`, and run `artifact.py render` on it.
-   Otherwise leave the feature as it is. A PRD that fails its check is reported and left alone,
-   because the build is already proven and does not stop here.
+   Otherwise leave the feature as it is. A PRD whose check lists errors is reported and left
+   alone, because the build is already proven and does not stop here. When the only error is a
+   stale `.md`, go on, since the render fixes it. When the check exits 2 or 3 or uv is missing,
+   make the edit and say in the reply that the PRD went unchecked and unrendered.
 5. **Copy the lasting decisions.** The built plan stays in the plan folder as the record of this
    change: later planning runs read only its frontmatter. When `ceh-check-build-against-plan` is
    installed, run `ceh-check-build-against-plan:check-build-against-plan` first, because it adds

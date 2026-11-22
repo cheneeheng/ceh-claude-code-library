@@ -54,8 +54,10 @@ mark when the code matches. Per
   from the vision, the strategy and the repo, asks the owner one round of questions, and tests
   that each requirement is observable and each acceptance item checkable. It reads no business
   plan.
-- The `prd/v1` format, with its model and renderer: a feature id is unique and never reused, a
-  dependency names a feature listed earlier, and a `todo` feature has no plan.
+- The `prd/v1` format, with its model and renderer: a feature id is unique, a dropped feature
+  keeps its id among the non-goals so no later feature takes it, a dependency names a feature
+  listed earlier, a `todo` feature has no plan, and a plan path has one spelling: forward
+  slashes, repo-relative, listed once.
 - `ceh-build-plan:write-technical-design`: settles the decisions two or more features depend on,
   or that cost a migration to reverse, appends each to the Key Decisions of
   `.agents_workspace/product/ARCHITECTURE.yaml` with the options it rejected, and draws the
@@ -87,6 +89,8 @@ mark when the code matches. Per
   diagram's `planned` mark once the code matches it.
 - `ceh-codebase-explanation:document-architecture` never adds the `planned` mark and removes it
   when it redraws the diagram from the code.
+- `ceh-every-session:whats-next` no longer reads an `ARCHITECTURE.yaml` as proof that something
+  is built, since the technical design writes that file before the build.
 - The architecture format's copies in `ceh-product-direction`, `ceh-every-session`,
   `ceh-documentation` and `ceh-python-service` follow the canonical file, with no change to what
   those skills do.

@@ -44,7 +44,8 @@ A decision one feature alone needs stays for that feature's build plan.
    `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml` before reading it
    (formats in `${CLAUDE_SKILL_DIR}/references/architecture-schema.md`, `prd-schema.md`,
    `vision-schema.md` and `strategy-schema.md`). On exit 1, stop and report its errors, because
-   a design built on a broken source carries the error into every plan. On exit 2 or 3, or
+   a design built on a broken source carries the error into every plan. On a stale `.md` alone,
+   read the YAML instead. On exit 2 or 3, or
    without uv, say in the reply that the file went unchecked, and go on. A vision or strategy
    kept as `.md` in `docs/`, the root, or where the repo's `CLAUDE.md` says is read as it is.
    Then read the `design` of each plan in `.agents_workspace/product/plan/`, the README, and the
@@ -84,8 +85,9 @@ With no PRD, run Covers against the features taken in step 1 and mark Qualities
 
 ## Rules
 
-- Never delete or edit an `Accepted` decision. A changed decision is a new entry, and the old
-  one is marked `Superseded`, so the trail stays whole.
+- Never delete a decision, and edit no field of one but its `status`. A changed decision is a
+  new entry, and the old one's `status` becomes `Superseded by <date> <title>`, so the trail
+  stays whole and no two `Accepted` entries disagree.
 - Mark every diagram of what is not built `planned: true`, and never mark one that shows built
   code. `ceh-build-plan:implement-from-plan` and `ceh-codebase-explanation:document-architecture`
   remove the mark once the code matches the diagram.

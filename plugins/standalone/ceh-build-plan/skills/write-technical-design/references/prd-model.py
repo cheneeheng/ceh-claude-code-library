@@ -10,7 +10,7 @@ from __future__ import annotations
 import datetime as dt
 import json
 import re
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Optional
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
@@ -27,8 +27,12 @@ Heading = Annotated[
     str, StringConstraints(strip_whitespace=True, min_length=1, pattern=r"^[^\n—]*$")
 ]
 FeatureId = Annotated[str, StringConstraints(pattern=r"^F\d{2,}$")]
-# Repo-relative: no leading slash and no drive colon. pydantic's regex has no look-around.
-PlanPath = Annotated[str, StringConstraints(pattern=r"^[^/\\\s:][^\s:]*\.yaml$")]
+# Repo-relative with forward slashes only, so one plan has one spelling on every OS: no leading
+# slash, no backslash and no drive colon. A `..` segment is refused in the model's rules, since
+# pydantic's regex has no look-around.
+PlanPath = Annotated[
+    str, StringConstraints(pattern=r"^[A-Za-z0-9_.-][A-Za-z0-9_./-]*\.yaml$")
+]
 
 
 class _Strict(BaseModel):
@@ -58,6 +62,8 @@ class Feature(_Strict):
 
 
 class NonGoal(_Strict):
+    # The id of a feature that was dropped, kept so it is never given to another feature.
+    id: Optional[FeatureId] = None
     item: Line
     reason: Text
 
@@ -77,10 +83,19 @@ class Prd(_Strict):
         ):
             raise ValueError("status adopted allows no [assumed], set draft")
         ids = [f.id for f in self.features]
+        retired = [g.id for g in self.non_goals if g.id]
+        for i in retired:
+            if retired.count(i) > 1 or i in ids:
+                raise ValueError(f"{i}: id is used twice")
         earlier: set[str] = set()
         for f in self.features:
             if f.id in earlier:
                 raise ValueError(f"{f.id}: id is used twice")
+            for name, items in (("depends_on", f.depends_on), ("plans", f.plans)):
+                if len(set(items)) != len(items):
+                    raise ValueError(f"{f.id}: {name} lists an entry twice")
+            if any(".." in p.split("/") for p in f.plans):
+                raise ValueError(f"{f.id}: plans holds a path with a .. segment")
             for dep in f.depends_on:
                 if dep not in ids:
                     raise ValueError(f"{f.id}: depends_on names {dep}, not a feature")
@@ -190,6 +205,9 @@ def render(doc: Prd, source: str) -> str:
     out += ["", "## 02. Non-functional requirements", ""]
     out += [_item("- ", r) for r in doc.non_functional] or ["None"]
     out += ["", "## 03. Non-goals", ""]
-    out += [_item("- ", f"**{g.item}.** {g.reason}") for g in doc.non_goals] or ["None"]
+    out += [
+        _item("- ", f"**{g.item}{f' (was {g.id})' if g.id else ''}.** {g.reason}")
+        for g in doc.non_goals
+    ] or ["None"]
     out += ["", "<!-- prettier-ignore-end -->"]
     return "\n".join(out) + "\n"
