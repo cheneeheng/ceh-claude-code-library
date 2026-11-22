@@ -17,5 +17,6 @@ features:
 non_functional:
   - <requirement>
 non_goals:
-  - item: <feature not built>
+  - id: <retired feature id>
+    item: <feature not built>
     reason: <reason>

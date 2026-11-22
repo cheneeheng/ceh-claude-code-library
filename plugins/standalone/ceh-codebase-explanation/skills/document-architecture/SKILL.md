@@ -32,7 +32,9 @@ Key Decisions entries, so a reader gets the reasoning without opening every plan
    `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <dir>/ARCHITECTURE.yaml` and stop
    on exit 1 with its errors. With no file yet, start one as Storage says.
 2. **Edit the YAML:** the Overview first when it is missing, then each diagram the change touches,
-   then any new Key Decisions entry.
+   then any new Key Decisions entry. A diagram marked `planned: true` that you bring in line
+   with the code loses the mark, and the built entry of the same `name` that it replaces is
+   deleted.
 3. **Render the Mermaid blocks** and look at the images, with the Mermaid CLI command under Rules.
 4. **Render the Markdown:** run `artifact.py` with `render`, and fix the YAML for each error it
    lists.
@@ -40,7 +42,10 @@ Key Decisions entries, so a reader gets the reasoning without opening every plan
 ## Rules
 
 - **Mermaid, never ASCII art.** Diagrams must render and stay diffable.
-- **Show what exists, not what's aspirational.** If it isn't built, it isn't in the diagram.
+- **Show what exists, not what's aspirational.** If it isn't built, it isn't in the diagram. The
+  one exception is a diagram marked `planned: true`, which only
+  `ceh-build-plan:write-technical-design` writes, for a design settled before the build. Never
+  add the mark here, and remove it when you redraw that diagram from the code.
 - **The minimum text a newcomer needs, never a wall of text.** Each diagram opens with a short
   walkthrough: one or two sentences on how to read it, then up to three bullets on what to notice
   (the surprising branch, the lock, the two-request round trip). It never restates the diagram,

@@ -73,8 +73,10 @@ reason recorded.
    `${CLAUDE_SKILL_DIR}/references/prd-schema.md`). When a feature's `plans` holds this plan's
    path, read the `status` of every plan that feature lists: when all are `built`, set the
    feature's `status` to `built` and the PRD's `updated`, and run `artifact.py render` on it.
-   Otherwise leave the feature as it is. A PRD that fails its check is reported and left alone,
-   because the build is already proven and does not stop here.
+   Otherwise leave the feature as it is. A PRD whose check lists errors is reported and left
+   alone, because the build is already proven and does not stop here. When the only error is a
+   stale `.md`, go on, since the render fixes it. When the check exits 2 or 3 or uv is missing,
+   make the edit and say in the reply that the PRD went unchecked and unrendered.
 5. **Copy the lasting decisions.** The built plan stays in the plan folder as the record of this
    change: later planning runs read only its frontmatter. When `ceh-check-build-against-plan` is
    installed, run `ceh-check-build-against-plan:check-build-against-plan` first, because it adds
@@ -84,7 +86,12 @@ reason recorded.
    `references/architecture-schema.md` (a missing file starts as a copy of the template, and an
    `ARCHITECTURE.md` with no YAML is moved first, as that section says). Check the YAML with
    `artifact.py check` before the edit and `render` it after, as for the plan, and never edit the
-   generated `ARCHITECTURE.md`. Add a changelog entry when the repo keeps a changelog. Say which
+   generated `ARCHITECTURE.md`. Skip a decision the log already holds, under the same title or
+   with the same decision, as one `ceh-build-plan:write-technical-design` wrote before the build
+   would be, and say which were skipped. Then look at each diagram marked `planned: true`: when
+   every node or entity it shows now exists in the code, remove the key, delete the built entry
+   of the same `name` that it replaces when there is one, and say so. Otherwise leave it and
+   name what is still missing. Add a changelog entry when the repo keeps a changelog. Say which
    decisions were copied.
 
 ## Rules

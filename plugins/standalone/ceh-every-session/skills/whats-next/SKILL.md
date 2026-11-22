@@ -27,7 +27,9 @@ has one to three suggestions, each with the exact way to start it, and the choic
    - in a git repo: `git status`, the current branch, and `git log --oneline -10`
    - the lifecycle handoff files in `.agents_workspace/product/`, each of which marks a stage
      reached: `business/BUSINESS_PLAN.yaml` (Shape done), `plan/*.yaml` or the older `plans/*.yaml` (a
-     plan not `built` is in flight), `ARCHITECTURE.yaml` (built), `EVIDENCE.yaml` (proven), or the `.md` of each where no
+     plan not `built` is in flight), `ARCHITECTURE.yaml` (built, unless no plan is `built` yet:
+     `ceh-build-plan:write-technical-design` writes it before the build, with its diagrams
+     marked `planned: true`), `EVIDENCE.yaml` (proven), or the `.md` of each where no
      YAML exists. Files only at the old root `product/`, in a repo whose `CLAUDE.md` names no
      location, are reported as needing the move to `.agents_workspace/product/`. When a plan's `<slug>.yaml` sits beside its `.md`,
      read its `status` from the YAML: first run
@@ -39,7 +41,7 @@ has one to three suggestions, each with the exact way to start it, and the choic
      `artifact.py check` as a plan is (format in `${CLAUDE_SKILL_DIR}/references/prd-schema.md`).
      The first `todo` feature in list order whose `depends_on` features are all `built` is the
      next to plan: suggest `ceh-build-plan:write-build-plan` with "plan <id> <name>" as its
-     start, and quote the feature as the reason. A `planned` feature is covered by its plan above
+     start, and quote the feature as the reason. A `planned` feature is covered by its plan above.
    - the newest `*-handoff.*` or older `HANDOFF-*` in `.agents_workspace/handoff/` by the timestamp in its name, if any,
      for work a past session left open. When its stem has a `.yaml`, run `artifact.py check` on it
      as for a plan (format in `${CLAUDE_SKILL_DIR}/references/handoff-schema.md`) and read

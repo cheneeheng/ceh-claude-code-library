@@ -50,6 +50,8 @@ class Diagram(_Strict):
     name: Literal[
         "System context", "Components", "Key flows", "Data model", "State machines"
     ]
+    # Only `true`, on a diagram of what is not built yet. A built diagram leaves the key out.
+    planned: Optional[Literal[True]] = None
     walkthrough: Text
     notice: list[Text] = Field(max_length=3)
     mermaid: Optional[Text] = None
@@ -133,7 +135,10 @@ def render(doc: Architecture, source: str) -> str:
     for n, d in enumerate(doc.diagrams, 2):
         head = f"{n:02d}. {d.name}"
         subs = []
-        body += ["", f"## {head}", ""] + _walk(d.walkthrough, d.notice)
+        body += ["", f"## {head}", ""]
+        if d.planned:
+            body += ["**Planned:** not built yet.", ""]
+        body += _walk(d.walkthrough, d.notice)
         if d.mermaid:
             body += _fence(d.mermaid)
         for i, p in enumerate(d.parts or [], 1):

@@ -46,14 +46,17 @@ id.
   - `depends_on`: the ids of features listed before it, `[]` when none.
   - `status`: `todo` (no plan yet), `planned` (a plan exists) or `built`.
   - `plans`: the repo-relative path of each build plan that delivers it, each ending `.yaml`,
-    `[]` when none.
+    `[]` when none. A path uses forward slashes on every OS, with no leading slash, drive
+    letter, backslash or `..` segment, so one plan has one spelling.
 - `non_functional`: requirements that hold across features, such as speed, security or
   platforms, `[]` when none.
 - `non_goals`: `item` and `reason` per feature deliberately not built, `[]` when none. An item
-  renders in bold with a full stop after it, so write it without one.
+  renders in bold with a full stop after it, so write it without one. `id` (optional) is the id
+  of a feature that was dropped: it stays here so no later feature takes it.
 
-**Rules across keys:** an id appears once. A `depends_on` id names a feature listed earlier,
-which rules out a feature depending on itself and any cycle. A `todo` feature has no plans, and a
+**Rules across keys:** an id appears once, across the features and the `non_goals` that carry
+one. A `depends_on` id names a feature listed earlier, which rules out a feature depending on
+itself and any cycle. `depends_on` and `plans` each list an entry once. A `todo` feature has no plans, and a
 `planned` one has at least one. A `built` feature may have none, because a product that existed
 before its PRD has features no plan built. `status: adopted` with `[assumed]` anywhere in the file
 is an error.

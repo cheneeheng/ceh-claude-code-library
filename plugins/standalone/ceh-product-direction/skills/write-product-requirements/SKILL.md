@@ -24,13 +24,19 @@ and its check, and is `adopted`, or `draft` with its open questions listed.
 
 1. **Find what exists.** Look for `PRD.yaml` in `.agents_workspace/product/` and any path the
    repo's `CLAUDE.md` names. Run `artifact.py check` on it, per Output, and stop on exit 1 with
-   its errors. An existing file is revised in place: change only what the request or a finding
+   its errors, unless the only error is a stale `.md`, which the render after your edit fixes.
+   An existing file is revised in place: change only what the request or a finding
    needs, and keep every `id`. A PRD or spec the user names in another format (a `PRD.md`, an
    issue, a pasted document) is input: read it, and never edit it.
 2. **Read what the repo shows:** the vision and the strategy (`VISION.yaml` and `STRATEGY.yaml`
    in `.agents_workspace/product/`, or their `.md` in `docs/`, the root, or where `CLAUDE.md`
    says), the README, `CLAUDE.md`, the `status`, `goal` and `scope` keys of each plan YAML in
-   `.agents_workspace/product/plan/`, `.agents_workspace/product/ARCHITECTURE.yaml`, and the code.
+   `.agents_workspace/product/plan/`, and the code. When a `VISION.yaml` or `STRATEGY.yaml` sits
+   beside its `.md`, run `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>.yaml`
+   before reading it (formats in `${CLAUDE_SKILL_DIR}/references/vision-schema.md` and
+   `strategy-schema.md`). On exit 1, stop and report its errors, because features drafted from
+   a broken source carry the error. On a stale `.md` alone, read the YAML instead. On exit 2 or
+   3, or without uv, say in the reply that the file went unchecked, and go on.
    Read no business plan: its dated tests would become the features' requirements.
 3. **Draft the file now,** with `status: draft`, because a draft on disk survives an interrupted
    session.
@@ -73,7 +79,8 @@ against`, and say so.
 - Set a feature's `status` and `plans` only to match plans that exist. Planning a feature is
   `ceh-build-plan:write-build-plan`'s job, and building it `ceh-build-plan:implement-from-plan`'s.
 - Never reuse or renumber an `id`. A feature that is dropped moves to `non_goals` with its
-  reason, and its `id` is retired, because plans and commits name features by `id`.
+  reason and keeps its `id` there, so the check refuses a later feature that takes it, because
+  plans and commits name features by `id`.
 - Build skills read this file and must not read business material, so it carries no pricing,
   unit economics, kill criteria, contacts, a home path, or any test, stage or date from a
   business plan, and it never quotes `.agents_workspace/product/business/`.
@@ -87,7 +94,7 @@ step 1 found it elsewhere. `PRD.md` is rendered beside it and never edited by ha
 
 Before editing an existing file, run
 `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py check <file>` and stop on exit 1 with
-its errors. After the last edit, run it with `render` and fix the YAML for each error it lists.
+its errors, unless the only one is a stale `.md`. After the last edit, run it with `render` and fix the YAML for each error it lists.
 On exit 2 or 3, or without uv, say in the reply that the file went unchecked and unrendered.
 
 Close the reply with the file's path and status, the feature table (id, name, status, depends
