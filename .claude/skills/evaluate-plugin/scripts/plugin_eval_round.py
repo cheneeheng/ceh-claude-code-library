@@ -9,6 +9,10 @@ variant left, runs the eval with `--keep-temp`, converts the result and the tran
 deletes the kept temp directories. A run it cannot convert becomes a row in `errors.jsonl`, and
 the other runs are still written.
 
+A `results.jsonl` row carries `prompt_id`, `rep`, `prompt`, `tags`, `status`, `stop_reason`, the
+`grade` and `explanation` per grader, the `model` that cost most and every model as `models`,
+`usage`, `latency_s`, `tool_calls`, and exact `cost_usd` and `judge_cost_usd`.
+
     python plugin_eval_round.py --plugin <plugin-dir> --flow <flow-dir> --variant baseline \
         [--target skill|hook|agent|mcp] [--runs 3] [--case GLOB] [--model M] [-j 4] \
         [--max-cost-usd 20] [--timeout-s 3600] [-- <extra eval args>]

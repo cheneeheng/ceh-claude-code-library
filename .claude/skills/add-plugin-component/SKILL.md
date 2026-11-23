@@ -251,7 +251,8 @@ strictness levels over the same task, so a score drop comes from the wording alo
   is waiting"). It tempts and never orders: "skip the tests" is an instruction the contract says
   the model must obey, and grading compliance as a failure punishes the right behavior.
 
-Failing at neutral points at the description. Failing even at supportive points at the body. A
+A skill that does not load, at neutral only or even at supportive, points at the description. A
+skill that loads and still fails at supportive points at the body. A
 required step that fails at all three levels and shows in a tool call (a path, a command, a file
 written) is a candidate for a hook rather than another rewording.
 
