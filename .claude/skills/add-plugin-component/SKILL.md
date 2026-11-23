@@ -116,7 +116,8 @@ description: >-
 It is the only style with no escaping burden. A plain scalar cannot contain `: `, single-quoted
 needs `''` doubling, double-quoted needs `\` and `"` escaping — all three have silently produced
 invalid YAML in this repo. Keep the indent uniform (a more-indented line becomes a literal newline
-instead of folding) and avoid blank lines. Any _other_ key containing `: ` gets single quotes.
+instead of folding) and avoid blank lines. Any _other_ key containing `: ` gets double quotes,
+which is what the prettier pre-commit hook writes.
 Put the key use case first: Claude Code truncates long descriptions in the skill listing.
 
 Claude Code silently ignores a frontmatter field it does not recognize, so a typo reads as

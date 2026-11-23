@@ -26,7 +26,8 @@ Frontmatter
 - description: always `>-`, 2-space indent, no blank lines, max 300 chars (validate.py): the
   moment, two or three trigger phrases, and at most one "Not for" pointer to the nearest
   look-alike. Triggers live here, not in `when_to_use` and not in the body.
-- Any other value containing ": " gets single quotes: argument-hint: '[plan-file]'.
+- Any other value containing ": " gets double quotes, as prettier writes them:
+  argument-hint: "[plan-file]".
 - Add `compatibility: >-` only when the skill needs software the machine may lack. Name the
   runtime, its minimum version, and what fails without it.
 

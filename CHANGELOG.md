@@ -60,6 +60,10 @@ description even at the supportive level, and `add-plugin-component` says the sa
   fields moved to the script's docstring.
 - `.claude/skills/add-plugin-component`: the failure reading tells a skill that does not load
   from one that loads and still fails.
+- `decision-frontmatter-scalars.md`: a frontmatter value holding `: ` takes double quotes, not
+  single. The prettier pre-commit hook rewrites single quotes to double on every commit, and all
+  39 `argument-hint` values in the repo are already double-quoted, so the rule now says what the
+  files hold. The skill template and `add-plugin-component` say the same.
 
 ### Fixed
 
