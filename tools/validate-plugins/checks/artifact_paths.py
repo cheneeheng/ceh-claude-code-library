@@ -57,11 +57,6 @@ ALLOW = (
         "the old-location note that moves a business plan",
     ),
     (
-        "ceh-build-plan/evals/*",
-        r"product/plan/[\w-]+\.md",
-        "the eval fixtures build plan/v1 plans, which are Markdown with no YAML",
-    ),
-    (
         "*/evals/*",
         r"product/(?:[\w-]+/)*[\w-]+\.md\b",
         "eval fixtures seed the Markdown generated beside each YAML, and graders read it",
