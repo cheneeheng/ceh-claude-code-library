@@ -32,7 +32,8 @@ touches.
 The allowed scaffold and script bundles are `ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent`
 `assets/`), `ceh-product-direction` (`develop-business-plan`'s HTML generator in `scripts/`, with its
 page shell and `brand.css` in `assets/`), and each skill carrying a YAML format's
-`<schema>-model.py` (its `scripts/artifact.py`, which checks and renders that format).
+`<schema>-model.py` (its `scripts/artifact.py`, which checks and renders that format). Outside
+`plugins/`, the repo-local skills `model-audit` and `evaluate-plugin` carry the scripts they run.
 
 `validate.py` cannot check part of speech, so the naming rule is a review rule.
 

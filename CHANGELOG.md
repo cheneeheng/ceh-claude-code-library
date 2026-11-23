@@ -24,6 +24,15 @@ The plugin eval cases written before that change are archived, so the next evals
 the new flow. `ceh-build-plan/evals/` and `ceh-product-direction/evals/` moved to `archive/`, with
 their git-ignored local results, and the two plugins no longer ship them.
 
+An audit of `evaluate-plugin` found that its hill-climb converter could lose a paid round. One
+blank or cut-off transcript line stopped the conversion before any result was written, a rerun
+that died early passed the previous round's results off as its own, and an errored run left its
+transcripts in the temp folder. The script now skips unreadable lines, records a run it cannot
+convert as an error row, clears the earlier run of a variant first, and removes or names every
+temp directory. The skill's spending ceiling now covers every paid run of a session together,
+where two suite invocations could each spend all of it. Its report has a template and a schema,
+and a hill-climb saves to a dated folder a second one cannot overwrite. No plugin version moves.
+
 ### Plugin versions
 
 | Plugin                  | Version |
@@ -38,6 +47,20 @@ their git-ignored local results, and the two plugins no longer ship them.
   `aggregate-result.json`, grader rules from the doc, a free regex check, a judge row in the
   failure table, and a note on `claude plugin eval init`.
 - `ceh-build-plan`, `ceh-product-direction`: the eval cases move to `archive/<plugin>/evals/`.
+
+### Fixed
+
+- `.claude/skills/evaluate-plugin/scripts/plugin_eval_round.py`: tolerant transcript parsing, an
+  error row for a run that cannot be converted, stale output cleared before a round, temp
+  directories removed for errored runs too, `claude` started by its resolved path with no shell,
+  and new `--target` and `--timeout-s` options. Tests in
+  `tools/validate-plugins/tests/test_plugin_eval_round.py`.
+- `.claude/skills/evaluate-plugin`: one ceiling across all paid runs, a `plugin-eval-report/v1`
+  template and schema, dated hill-climb and trigger-set names, every flag the script passes
+  named, Python 3.9+ in `compatibility`, a done condition for a run with no user, and the
+  template's section order.
+- `decision-skill-bundled-files.md`: the repo-local skills `model-audit` and `evaluate-plugin`
+  are named among the skills that carry scripts.
   `validate.py`'s `artifact-paths` check drops its allowance for `ceh-build-plan/evals/*`, which
   no file matches any more.
 
