@@ -984,9 +984,9 @@ to a row both tables share is mirrored in the retro entry in the same session.
 
 **Canonical:** `.claude/skills/add-plugin-component/SKILL.md` — § 6. Validate, the eval-cases paragraph and its three levels
 
-| Copy                                      | Section                   | Diverges                                                                                                            |
-| ----------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `.claude/skills/evaluate-plugin/SKILL.md` | § Procedure steps 4 and 9 | condensed to one sentence per level; the failure reading sits in step 9's table, which adds grader and setup causes |
+| Copy                                      | Section                   | Diverges                                                                                                                   |
+| ----------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `.claude/skills/evaluate-plugin/SKILL.md` | § Procedure steps 4 and 9 | condensed to one sentence per level; the failure reading sits in step 9's table, which adds judge, grader and setup causes |
 
 **Shared:** each positive case written at three strictness levels over the same task (supportive
 names the moment, neutral gives the task only, competing adds a pull that tempts and never orders),

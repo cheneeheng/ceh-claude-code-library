@@ -9,6 +9,24 @@ before this repo live in
 
 ---
 
+## 2026-11-23
+
+The user now shapes the eval cases of the repo-local `evaluate-plugin` skill. It used to write at
+least 15 cases per plugin, read in practice as 15 per skill, and graded each component against its
+own text, with no say from the person who decides whether it is good. It now drafts a small set,
+then asks once, before any paid run, what a good and a bad result looks like per component, and
+which of three sizes and how many runs to pay for, each shown with its noise floor and its cost
+from real runs. It also takes up the grader advice of the official plugin-eval doc, checks every
+regex grader against a correct and a wrong sample for free, and says why it writes the cases
+itself instead of running `claude plugin eval init`. No plugin version changes.
+
+### Changed
+
+- `.claude/skills/evaluate-plugin`: case-set size and good-result criteria are the user's call in
+  one round before the probe, a headless run starts no paid run, cost comes from
+  `aggregate-result.json`, grader rules from the doc, a free regex check, a judge row in the
+  failure table, and a note on `claude plugin eval init`.
+
 ## 2026-11-22
 
 A product now gets a feature list before its features are planned. Nothing sat between the vision
