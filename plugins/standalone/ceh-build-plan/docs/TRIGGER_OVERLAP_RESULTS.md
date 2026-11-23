@@ -13,14 +13,14 @@ re-run is still to do (see §04).
 
 ## 01. Environment
 
-| Item        | Value                                                                           |
-| ----------- | ------------------------------------------------------------------------------- |
-| OS / shell  | Windows 11, Git Bash                                                            |
-| Claude Code | 2.1.326                                                                         |
-| Plugins     | `ceh-build-plan` 2.0.18 and `ceh-testing` 1.6.31, loaded by `--plugin-dir`      |
-| Fixture     | The notes app from `evals/wbp-feature-neutral/scaffold.sh`, in a fresh git repo |
-| Tools       | `Read`, `Glob`, `Grep`, `Skill` allowed. `Edit`, `Write` and `Bash` refused     |
-| Limits      | 4 turns and $0.50 per run                                                       |
+| Item        | Value                                                                                                  |
+| ----------- | ------------------------------------------------------------------------------------------------------ |
+| OS / shell  | Windows 11, Git Bash                                                                                   |
+| Claude Code | 2.1.326                                                                                                |
+| Plugins     | `ceh-build-plan` 2.0.18 and `ceh-testing` 1.6.31, loaded by `--plugin-dir`                             |
+| Fixture     | The notes app from `archive/ceh-build-plan/evals/wbp-feature-neutral/scaffold.sh`, in a fresh git repo |
+| Tools       | `Read`, `Glob`, `Grep`, `Skill` allowed. `Edit`, `Write` and `Bash` refused                            |
+| Limits      | 4 turns and $0.50 per run                                                                              |
 
 `claude plugin eval` loads only one plugin, so it cannot test two plugins competing. Edit and Write
 were refused so that each run stops at its first attempt to change code. That attempt shows whether
@@ -59,7 +59,7 @@ REPO=$1
 P=$2
 MODEL=${3:-sonnet}
 RUN=${4:-1}
-SCAFFOLD=$REPO/plugins/standalone/ceh-build-plan/evals/wbp-feature-neutral/scaffold.sh
+SCAFFOLD=$REPO/archive/ceh-build-plan/evals/wbp-feature-neutral/scaffold.sh
 OUT=$(cd "$(dirname "$0")" && pwd)/trigger-overlap-results
 mkdir -p "$OUT"
 PROMPTS=(

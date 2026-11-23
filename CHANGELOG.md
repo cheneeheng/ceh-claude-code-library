@@ -18,7 +18,18 @@ then asks once, before any paid run, what a good and a bad result looks like per
 which of three sizes and how many runs to pay for, each shown with its noise floor and its cost
 from real runs. It also takes up the grader advice of the official plugin-eval doc, checks every
 regex grader against a correct and a wrong sample for free, and says why it writes the cases
-itself instead of running `claude plugin eval init`. No plugin version changes.
+itself instead of running `claude plugin eval init`. That skill change moves no plugin version.
+
+The plugin eval cases written before that change are archived, so the next evals start anew under
+the new flow. `ceh-build-plan/evals/` and `ceh-product-direction/evals/` moved to `archive/`, with
+their git-ignored local results, and the two plugins no longer ship them.
+
+### Plugin versions
+
+| Plugin                  | Version |
+| ----------------------- | ------- |
+| `ceh-build-plan`        | 2.1.7   |
+| `ceh-product-direction` | 2.1.9   |
 
 ### Changed
 
@@ -26,6 +37,9 @@ itself instead of running `claude plugin eval init`. No plugin version changes.
   one round before the probe, a headless run starts no paid run, cost comes from
   `aggregate-result.json`, grader rules from the doc, a free regex check, a judge row in the
   failure table, and a note on `claude plugin eval init`.
+- `ceh-build-plan`, `ceh-product-direction`: the eval cases move to `archive/<plugin>/evals/`.
+  `validate.py`'s `artifact-paths` check drops its allowance for `ceh-build-plan/evals/*`, which
+  no file matches any more.
 
 ## 2026-11-22
 

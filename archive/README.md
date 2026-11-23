@@ -35,3 +35,11 @@ folders stay in each project's `.agents_workspace/orchestration-lab/`.
 Archived unused on 2026-11-11, by the plugin audit of that day, not rejected: nothing in it was
 found wrong. The folder is whole, so moving it back under `plugins/standalone/` and re-registering
 it per `CLAUDE.md` re-enables it.
+
+## Plugin eval cases (archived 2026-11-23)
+
+`ceh-build-plan/evals/` and `ceh-product-direction/evals/` held the `claude plugin eval` cases
+written up to 2026-11-22, before the repo-local `evaluate-plugin` skill let the user size the
+cases and say what a good result is. They were archived so the next evals start anew under that
+flow, not rejected. Their local `results/` folders moved with them and stay git-ignored. Run an
+archived case from here with `claude plugin eval --eval-dir`, or move it back under its plugin.

@@ -14,6 +14,7 @@ plugins/*/*/.claude-plugin/types/
 
 # claude plugin eval run output
 plugins/*/*/evals/results/
+archive/*/evals/results/
 
 # Ruff
 .ruff_cache/
