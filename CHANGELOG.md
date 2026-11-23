@@ -56,6 +56,12 @@ instead of the theme's `.badge`. The Output now asks for five labeled lines firs
 the replies holding all five from 0 of 6 to 5 of 6, and the status rule names `.badge`, which
 every run then used.
 
+Those cases, and a second suite written a different way for comparison, are archived in
+`archive/ceh-ui-design/` and do not ship with the plugin. `evals/` holds seven cases with one
+claim per grader and three runs per arm. `evals-interactive/` holds eight cases that cover more
+of the skill, each graded by one LLM judge over six to eight claims. Only the first led to a
+plugin fix, because a failed grader there names the gap, so the next cases follow its shape.
+
 ### Plugin versions
 
 | Plugin                  | Version |
@@ -68,6 +74,8 @@ every run then used.
 
 - `docs/IDEAS.md`: nine open ideas from the anthropics/skills analysis, six from its mechanisms
   and three from how its skills are written.
+- `archive/ceh-ui-design/evals/` and `archive/ceh-ui-design/evals-interactive/`: the two
+  plugin-eval suites for `design-ui`, seven and eight cases, kept for reference.
 
 ### Changed
 
