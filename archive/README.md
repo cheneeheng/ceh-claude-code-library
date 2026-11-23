@@ -43,3 +43,14 @@ written up to 2026-11-22, before the repo-local `evaluate-plugin` skill let the 
 cases and say what a good result is. They were archived so the next evals start anew under that
 flow, not rejected. Their local `results/` folders moved with them and stay git-ignored. Run an
 archived case from here with `claude plugin eval --eval-dir`, or move it back under its plugin.
+
+## `ceh-ui-design` eval suites (archived 2026-11-23)
+
+`ceh-ui-design/evals/` and `ceh-ui-design/evals-interactive/` are two `claude plugin eval` suites
+for `design-ui`, written two ways to compare the approaches. `evals/` has seven cases on one
+seeded page, with one claim per grader and three runs per arm, and it found the two gaps fixed in
+`ceh-ui-design` 1.0.13. `evals-interactive/` has eight cases that cover more of the skill, each
+graded by one LLM judge over six to eight claims, and none of its failures was confirmed as a
+plugin gap. They were archived once the comparison was done, as the reference for the next cases:
+the shape of `evals/`, with the scenarios of `evals-interactive/`. Their local `results/` folders
+moved with them and stay git-ignored.
