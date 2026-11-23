@@ -40,12 +40,25 @@ drafted case set, the three sizes, the probe, the flags of a paid run, and one r
 hill-climb script. The failure table now says a skill that does not load points at its
 description even at the supportive level, and `add-plugin-component` says the same.
 
+The competitor analysis of Anthropic's own skill library, anthropics/skills, added nine open
+ideas to `docs/IDEAS.md`. Six are the mechanisms worth taking: fail only on errors a change added,
+a held-out split and a self-critical grader for description tuning, a blind reader test for docs,
+an MCP server skill, and a dated API-drift table in the stack skills. Three come from how its
+skills are written, which reads as tuned for Claude: trigger descriptions about three times our
+300-character cap, sections named by the subject, and stack skills that keep only the failure
+points the model would miss. Nothing is built yet, and no plugin version moves.
+
 ### Plugin versions
 
 | Plugin                  | Version |
 | ----------------------- | ------- |
 | `ceh-build-plan`        | 2.1.7   |
 | `ceh-product-direction` | 2.1.9   |
+
+### Added
+
+- `docs/IDEAS.md`: nine open ideas from the anthropics/skills analysis, six from its mechanisms
+  and three from how its skills are written.
 
 ### Changed
 
