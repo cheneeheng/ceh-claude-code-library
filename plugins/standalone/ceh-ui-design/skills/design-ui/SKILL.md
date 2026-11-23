@@ -240,8 +240,7 @@ Default table styling is the strongest primitive tell. Every data table gets thi
   as color-coded words ("1 succeeded" in success, "2 failed" in danger).
 - **Show only what happened:** a red zero is noise — omit zero counts, use an em dash when
   nothing ran.
-- **Status is the theme's `.badge`**, colored from the lifecycle palette, never plain text and never
-  a pill class of your own.
+- **Status is a colored pill** from the lifecycle palette, never plain text.
 - Numbers use tabular figures; rows get a hover wash and pointer; rows that navigate are keyboard
   operable (`tabindex="0"` + Enter); the last row drops its separator.
 - **Highlight the semantically current row, not the first row:** key the highlight to state
@@ -434,6 +433,5 @@ shared token + class contract means markup does not change, provided it avoids M
 ## Output
 
 The built UI in the project's own files, with the chosen theme's `brand.css` installed whole. Done
-when every item of the review pass holds. Open the final reply with the five design-pass answers,
-one labeled line each (Surface, Layout, Primary action, Theme, States), before any list of
-changes. Then name any review-pass item that does not hold, with the reason.
+when every item of the review pass holds. Report the five design-pass answers, one line each, and
+any review-pass item that does not hold, with the reason.
