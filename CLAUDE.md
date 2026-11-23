@@ -29,7 +29,7 @@ splitting are in `decision-plugin-boundaries.md`, `decision-no-bundles.md`,
 ```
 .agents_workspace/            # Session artifacts, git-ignored in full, laid out per decision-artifact-locations.md
 .claude/rules/                # Project decisions, one decision-<topic>.md each
-.claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/), model-audit (scripts/, references/, assets/), evaluate-plugin (scripts/)
+.claude/skills/               # Repo-local skills — add-plugin-component and its templates (assets/), model-audit (scripts/, references/, assets/), evaluate-plugin (scripts/, references/, assets/)
 .claude-plugin/               # Marketplace manifest (marketplace.json)
 archive/                      # Retired plugins or plugin contents — unpublished, not validated
 .github/workflows/            # validate.yml — runs validate.py on push and PR; model-audit.yml — weekly audit draft PR
