@@ -33,6 +33,13 @@ temp directory. The skill's spending ceiling now covers every paid run of a sess
 where two suite invocations could each spend all of it. Its report has a template and a schema,
 and a hill-climb saves to a dated folder a second one cannot overwrite. No plugin version moves.
 
+`evaluate-plugin` then became easier to read without losing a rule. Its terms are defined where
+they are first used: the three strictness levels with an example prompt each, the noise floor
+with a worked number, an arm, and `Δ`. Dense paragraphs became tables and ordered sub-steps: the
+drafted case set, the three sizes, the probe, the flags of a paid run, and one round of the
+hill-climb script. The failure table now says a skill that does not load points at its
+description even at the supportive level, and `add-plugin-component` says the same.
+
 ### Plugin versions
 
 | Plugin                  | Version |
@@ -47,6 +54,12 @@ and a hill-climb saves to a dated folder a second one cannot overwrite. No plugi
   `aggregate-result.json`, grader rules from the doc, a free regex check, a judge row in the
   failure table, and a note on `claude plugin eval init`.
 - `ceh-build-plan`, `ceh-product-direction`: the eval cases move to `archive/<plugin>/evals/`.
+- `.claude/skills/evaluate-plugin`: terms defined on first use, tables for the case set, the
+  sizes and the flags, the probe as three ordered sub-steps, the hill-climb round as a numbered
+  list, the Linux `bubblewrap` and `socat` requirement moved to `compatibility`, and the row
+  fields moved to the script's docstring.
+- `.claude/skills/add-plugin-component`: the failure reading tells a skill that does not load
+  from one that loads and still fails.
 
 ### Fixed
 
