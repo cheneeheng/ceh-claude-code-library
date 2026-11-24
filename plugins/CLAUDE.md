@@ -31,7 +31,9 @@ touches.
 
 The allowed scaffold and script bundles are `ceh-ag-ui` (`build-ag-ui`, `build-ag-ui-agent`
 `assets/`), `ceh-product-direction` (`develop-business-plan`'s HTML generator in `scripts/`, with its
-page shell and `brand.css` in `assets/`), and each skill carrying a YAML format's
+page shell and `brand.css` in `assets/`), `ceh-competitor-analysis` (`analyze-competitor`'s
+`scripts/render-page.py`, which builds the report page from its YAML into `assets/report-page.html`),
+and each skill carrying a YAML format's
 `<schema>-model.py` (its `scripts/artifact.py`, which checks and renders that format). Outside
 `plugins/`, the repo-local skills `model-audit` and `evaluate-plugin` carry the scripts they run.
 

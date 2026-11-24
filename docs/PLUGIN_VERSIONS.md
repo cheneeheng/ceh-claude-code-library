@@ -21,7 +21,7 @@ a removed plugin loses its row.
 | `ceh-check-build-against-plan` | 1.1.24  | `2026-11-19` |
 | `ceh-codebase-explanation`     | 1.3.24  | `2026-11-22` |
 | `ceh-coding-conduct`           | 2.5.22  | `2026-11-17` |
-| `ceh-competitor-analysis`      | 1.2.17  | `2026-11-17` |
+| `ceh-competitor-analysis`      | 1.2.18  | `2026-11-24` |
 | `ceh-documentation`            | 1.0.15  | `2026-11-22` |
 | `ceh-every-session`            | 2.10.6  | `2026-11-22` |
 | `ceh-git-workflow`             | 3.0.2   | `2026-11-19` |

@@ -9,6 +9,34 @@ before this repo live in
 
 ---
 
+## 2026-11-24
+
+`analyze-competitor` now builds each competitor's HTML page with a script instead of by hand. Its
+step 9 used to have the agent fill `assets/report-page.html` from the report YAML, so nothing kept
+the page in step with its source, and a new report's page never showed up in the nav of the
+others. `scripts/render-page.py` validates the YAML through the skill's own `artifact.py`, takes
+the page's `<head>` and CSS from the template, fills its competitor blocks, escapes every value,
+turns Markdown code spans and bold into HTML, and lists every page in the folder in its nav. A
+rerun on an unchanged YAML leaves the page alone. `design-ui` still picks the theme, and the
+script links the one theme already in `themes/`, and exits 2 when that stylesheet is missing.
+
+### Plugin versions
+
+| Plugin                    | Version |
+| ------------------------- | ------- |
+| `ceh-competitor-analysis` | 1.2.18  |
+
+### Added
+
+- `ceh-competitor-analysis:analyze-competitor`: `scripts/render-page.py`, which renders
+  `<slug>.html` from `<slug>.yaml`.
+
+### Changed
+
+- `ceh-competitor-analysis:analyze-competitor`: step 9 runs `render-page.py` and says the page is
+  never edited by hand. `decision-skill-bundled-files.md` and `plugins/CLAUDE.md` list the script
+  among the allowed script bundles.
+
 ## 2026-11-23
 
 The user now shapes the eval cases of the repo-local `evaluate-plugin` skill. It used to write at
