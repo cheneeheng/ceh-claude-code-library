@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
-import { BASE, REPO } from "./site.mjs";
+import { BASE, REPO, TITLE } from "./site.mjs";
 
 const stages = JSON.parse(readFileSync(new URL("./src/sidebar.json", import.meta.url), "utf8"));
 
@@ -10,7 +10,7 @@ export default defineConfig({
   base: BASE,
   integrations: [
     starlight({
-      title: "CEH Claude Code Library",
+      title: TITLE,
       logo: { src: "./public/favicon.svg" },
       social: [{ icon: "github", label: "GitHub", href: REPO }],
       customCss: ["./src/styles/meridian-tokens.css", "./src/styles/theme.css"],
