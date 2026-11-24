@@ -85,7 +85,19 @@ only in a browser are not recorded. Commands targeting another repo with `-R` or
 ignored. Lookup or commit failures keep the entry and show a message once per session and reason,
 naming the pending folder. Ordinary sync failures remain silent.
 
-It never pushes or aborts a merge it did not start, and a sync hook must never stop a session.
+After `start`, `commit`, `subagent-end` and `end-worker`, a main workspace branch ahead of its
+upstream is pushed. `end-worker` pushes inline, and the other events start a detached
+`push-worker` only when the branch is ahead, so a Stop with nothing to push starts no process.
+A rejected push fetches only the upstream branch, because one `agents-workspace` remote holds a
+branch per project, then merges `FETCH_HEAD` and pushes once more. That merge runs only on a
+clean working tree with no merge, autostash or index lock in progress, so it never stashes a
+file the session is editing, and the hook aborts it on a conflict. Push and fetch run with
+`GIT_TERMINAL_PROMPT=0`, `GCM_INTERACTIVE=never` and, unless set, `ssh -o BatchMode=yes`, and a
+60 s timeout. A branch with no upstream is never pushed, which makes the upstream the switch
+(`decision-workspace-sync-push.md`). The detached worker prints nothing, so SessionStart reads
+the ahead count before its own catch-up and push, and notes a branch still ahead.
+
+It never aborts a merge it did not start, and a sync hook must never stop a session.
 It does nothing without a `.agents_workspace` git repo in the main
 checkout, when that repo is on a detached `HEAD`, or in a bare repo. A subagent with
 `isolation: "worktree"` gets the same workspace on `SubagentStart`, and on `SubagentStop` its

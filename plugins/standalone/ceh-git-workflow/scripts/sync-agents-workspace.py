@@ -25,6 +25,13 @@ Arguments, one per event:
   subagent-end
           SubagentStop: the commit event's checkpoints and commit, then the merge into <X>,
           synchronously, since the hook has the time and the caller reads the records next.
+  push-worker <path>
+          push the workspace repo at <path>, see push().
+
+After start, commit, subagent-end and end-worker, a main workspace branch ahead of its upstream
+is pushed: end-worker pushes inline, the others start push-worker detached, so a slow network
+never holds up the session. A branch with no upstream is never pushed, so setting the upstream
+is what turns the push on. SessionStart in the main checkout notes a branch still ahead.
 
 SubagentStart (start) and SubagentStop (subagent-end) act only in the subagent's own worktree,
 agent-<agent_id>, and return before any git call otherwise. There, a step another git process
@@ -63,12 +70,17 @@ WORKSPACE_NOTE = (
 )
 
 
-def git(cwd, *args):
+def git(cwd, *args, timeout=10, env=None):
     """(exit code, stdout). A call past the timeout returns 124 like a failed command, so its
-    caller reports it: raised, it escaped catch_up and main()'s fail-open hid the failure."""
+    caller reports it: raised, it escaped catch_up and main()'s fail-open hid the failure. env
+    is added to the inherited environment."""
     try:
         out = subprocess.run(
-            ["git", "-C", str(cwd), *args], capture_output=True, text=True, timeout=10
+            ["git", "-C", str(cwd), *args],
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            env={**os.environ, **env} if env else None,
         )
     except subprocess.TimeoutExpired:
         return 124, ""
@@ -539,6 +551,63 @@ def merge(main_ws, branch, tries=1):
     return False
 
 
+def ahead(repo):
+    """How many commits the checked-out branch is ahead of its upstream: 0 with no upstream, a
+    detached HEAD, or on error."""
+    code, out = git(repo, "rev-list", "--count", "@{u}..HEAD")
+    return int(out) if code == 0 and out.isdigit() else 0
+
+
+def remote_env():
+    """No credential prompt from a hidden process: a missing credential fails at once."""
+    env = {"GIT_TERMINAL_PROMPT": "0", "GCM_INTERACTIVE": "never"}
+    if "GIT_SSH_COMMAND" not in os.environ:
+        env["GIT_SSH_COMMAND"] = "ssh -o BatchMode=yes"
+    return env
+
+
+def push(repo):
+    """Push the checked-out branch to its upstream when it is ahead. A rejected push fetches only
+    the upstream branch, merges it and pushes once more, but only on a clean working tree with no
+    merge, autostash or index lock in progress, so it never stashes a file the session is
+    editing. A conflict is aborted. True when the last push succeeded."""
+    if not ahead(repo):
+        return False
+    code, directory = git(repo, "rev-parse", "--absolute-git-dir")
+    if code or any(
+        (Path(directory) / name).exists()
+        for name in ("MERGE_HEAD", "MERGE_AUTOSTASH", "index.lock")
+    ):
+        return False
+    env = remote_env()
+
+    def send():
+        return not git(
+            repo, "-c", "push.default=upstream", "push", "-q", timeout=60, env=env
+        )[0]
+
+    if send():
+        return True
+    x = current_branch(repo)
+    remote = git(repo, "config", f"branch.{x}.remote")[1]
+    ref = git(repo, "config", f"branch.{x}.merge")[1]
+    code, status = git(repo, "status", "--porcelain")
+    if code or status or not remote or not ref:
+        return False
+    if git(repo, "fetch", "-q", remote, ref, timeout=60, env=env)[0]:
+        return False
+    return merge(repo, "FETCH_HEAD") and send()
+
+
+def sync_remote(main_ws, inline):
+    """Push the main workspace inline, or start push-worker detached when there is something to
+    push, so a Stop with nothing to push starts no process."""
+    if inline:
+        push(main_ws)
+    elif ahead(main_ws):
+        detach(main_ws, "push-worker", str(main_ws))
+
+
 def catch_up(main_ws, x):
     """Merge every ceh-ws/<x>/ branch not yet in <x>, delete merged ones no worktree holds, and
     return the branches whose merge failed."""
@@ -558,9 +627,10 @@ def catch_up(main_ws, x):
     return failed
 
 
-def detach(cwd, run_in):
-    """Start `end-worker <cwd>` in its own process group, so it outlives the hook."""
-    args = [sys.executable, "-I", "-S", os.path.abspath(__file__), "end-worker", cwd]
+def detach(run_in, *worker):
+    """Start this script with the worker arguments in its own process group, so it outlives the
+    hook."""
+    args = [sys.executable, "-I", "-S", os.path.abspath(__file__), *worker]
     # The worker runs in the main checkout, so it never holds the worktree folder open.
     io = dict(
         stdin=subprocess.DEVNULL,
@@ -615,6 +685,10 @@ def main():
         return
 
     event = sys.argv[1] if len(sys.argv) > 1 else ""
+    if event == "push-worker":
+        if len(sys.argv) > 2:
+            push(Path(sys.argv[2]))
+        return
     if event == "end-worker":
         cwd = sys.argv[2] if len(sys.argv) > 2 else ""
         payload = {}
@@ -635,7 +709,7 @@ def main():
         return
     top, main_checkout = found
     if event == "end":
-        detach(cwd, main_checkout or top)
+        detach(main_checkout or top, "end-worker", cwd)
         return
     pending = (main_checkout or top) / WORKSPACE / ".git" / "ceh-checkpoint-pending"
     main_ws = workspace_repo(main_checkout or top)
@@ -661,6 +735,17 @@ def main():
                 main_ws, x
             )  # SessionEnd output is discarded: the next start reports failures
         elif event == "start":
+            # Read before catch_up and this start's push, so it shows the last session's push.
+            if hook == "SessionStart" and (unpushed := ahead(main_ws)):
+                behind = git(main_ws, "rev-list", "--count", "HEAD..@{u}")[1] or "0"
+                upstream = git(main_ws, "rev-parse", "--abbrev-ref", "@{u}")[1]
+                notes.append(
+                    f"The {WORKSPACE} branch {x} is {unpushed} ahead and {behind} behind "
+                    f"{upstream}: the sync hook's last push did not go through (no "
+                    "credentials, or a conflict with the remote). The hook is pushing again "
+                    "now. If this note comes back next session, tell the user; do not push or "
+                    "pull it yourself."
+                )
             if failed := catch_up(main_ws, x):
                 notes.append(
                     f"The {WORKSPACE} branches {', '.join(failed)} did not merge into {x} "
@@ -668,27 +753,30 @@ def main():
                     f"git -C {WORKSPACE} merge <branch>."
                 )
             start_context(notes, hook)
-        return
-
-    branch = f"{PREFIX}{x}/{top.name}"
-    tries = 10 if subagent else 1  # 5 s inside the 30 s budget, for parallel subagents
-    if event == "start":
-        create(top, main_ws, x, branch, line, tries)
-        start_context(notes, hook)
-    elif event in ("commit", "end-worker", "subagent-end"):
-        if event != "end-worker" and pending.is_dir():
-            checkpoints(
-                top,
-                main_ws,
-                x,
-                pending,
-                str(payload.get("session_id") or os.getpid()),
-                True,
-                line,
-            )
-        commit(top, branch, line)
-        if event != "commit":
-            merge(main_ws, branch, tries)
+    else:
+        branch = f"{PREFIX}{x}/{top.name}"
+        tries = (
+            10 if subagent else 1
+        )  # 5 s inside the 30 s budget, for parallel subagents
+        if event == "start":
+            create(top, main_ws, x, branch, line, tries)
+            start_context(notes, hook)
+        elif event in ("commit", "end-worker", "subagent-end"):
+            if event != "end-worker" and pending.is_dir():
+                checkpoints(
+                    top,
+                    main_ws,
+                    x,
+                    pending,
+                    str(payload.get("session_id") or os.getpid()),
+                    True,
+                    line,
+                )
+            commit(top, branch, line)
+            if event != "commit":
+                merge(main_ws, branch, tries)
+    if event in ("start", "commit", "end-worker", "subagent-end"):
+        sync_remote(main_ws, inline=event == "end-worker")
 
 
 if __name__ == "__main__":
