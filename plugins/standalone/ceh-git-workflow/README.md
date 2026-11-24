@@ -83,7 +83,13 @@ does nothing without one, on a detached `HEAD`, or in a bare repository.
 - After a `gh pr merge` that GitHub confirms, it adds an empty commit naming the PR, such as
   `chore(workspace): checkpoint source pr #123`. Merges made only in a browser are not recorded.
 - Each commit ends with your `attribution.commit` line from the Claude Code settings.
-- It never pushes, and it never stops a session.
+- When the workspace branch tracks an upstream, it pushes the branch there in the background
+  after it commits or merges. If the remote has moved on, it merges the remote first, but only
+  when the workspace has no uncommitted files, and it leaves a conflict for you. If a push did
+  not go through, the next session start tells the agent. Setting the upstream
+  (`git -C .agents_workspace push -u origin <branch>`) turns this on, and
+  `git -C .agents_workspace branch --unset-upstream` turns it off.
+- It never stops a session.
 
 A subagent's report can arrive before its workspace is merged, so read its records once its
 completion notice arrives. An edit made during that merge can stay in a stash, which
@@ -115,6 +121,7 @@ undo it.
 | `CEH_ARTIFACT_CHECK`      | unset (check on)     | `off` turns the review and retro check off                                                                                                                         |
 | `CEH_DISABLED_HOOKS`      | unset (all hooks on) | Comma-separated hook names to skip: `branch-guard`, `sync-agents-workspace`, `skill-started-guard`, `artifact-render-hook`, `generated-md-guard`                   |
 | `CLAUDE_CONFIG_DIR`       | `~/.claude`          | Claude Code's own variable, not one this plugin adds. Workspace sync reads your `attribution.commit` line from `settings.json` there, after the project's settings |
+| `GIT_SSH_COMMAND`         | unset                | Git's own variable. When unset, the workspace push uses `ssh -o BatchMode=yes`, so an SSH remote that needs a passphrase fails at once instead of waiting          |
 
 ## How it works
 

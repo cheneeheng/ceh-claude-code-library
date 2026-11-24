@@ -208,5 +208,134 @@ class WorkspaceCheckpointTests(unittest.TestCase):
         self.assertEqual(failed, [branch])
 
 
+def run_git(repo, *args):
+    return subprocess.run(
+        ["git", "-C", str(repo), *args], check=True, capture_output=True, text=True
+    ).stdout.strip()
+
+
+class WorkspacePushTests(unittest.TestCase):
+    """push() and the push triggers in main(), on a real bare remote."""
+
+    def setUp(self):
+        self.scratch = tempfile.TemporaryDirectory()
+        self.addCleanup(self.scratch.cleanup)
+        root = Path(self.scratch.name)
+        self.remote = root / "remote.git"
+        run_git(root, "init", "-q", "--bare", "-b", "main", str(self.remote))
+        self.top = root / "project"
+        self.top.mkdir()
+        run_git(self.top, "init", "-q", "-b", "main")
+        self.workspace = self.clone(self.top / ".agents_workspace")
+        self.commit(self.workspace, "root.md", "root\n")
+        run_git(self.workspace, "push", "-q", "-u", "origin", "main")
+
+    def clone(self, path):
+        run_git(self.remote.parent, "clone", "-q", str(self.remote), str(path))
+        run_git(path, "config", "user.email", "test@example.com")
+        run_git(path, "config", "user.name", "test")
+        return path
+
+    def commit(self, repo, name, text):
+        (repo / name).write_text(text)
+        run_git(repo, "add", name)
+        run_git(repo, "commit", "-q", "-m", f"write {name}")
+
+    def remote_head(self):
+        return run_git(self.remote, "rev-parse", "main")
+
+    def other_clone_pushes(self, name, text):
+        other = self.clone(Path(self.scratch.name) / "other")
+        self.commit(other, name, text)
+        run_git(other, "push", "-q")
+
+    def test_ahead_branch_is_pushed(self):
+        self.commit(self.workspace, "plan.md", "plan\n")
+        self.assertTrue(sync.push(self.workspace))
+        self.assertEqual(
+            self.remote_head(), run_git(self.workspace, "rev-parse", "HEAD")
+        )
+
+    def test_rejected_push_merges_the_remote_and_pushes_again(self):
+        self.other_clone_pushes("other.md", "other\n")
+        self.commit(self.workspace, "plan.md", "plan\n")
+        self.assertTrue(sync.push(self.workspace))
+        self.assertEqual(
+            self.remote_head(), run_git(self.workspace, "rev-parse", "HEAD")
+        )
+        self.assertTrue((self.workspace / "other.md").exists())
+
+    def test_conflicting_remote_is_aborted_and_nothing_is_pushed(self):
+        self.other_clone_pushes("plan.md", "theirs\n")
+        self.commit(self.workspace, "plan.md", "ours\n")
+        before = run_git(self.workspace, "rev-parse", "HEAD")
+        remote = self.remote_head()
+        self.assertFalse(sync.push(self.workspace))
+        self.assertEqual(run_git(self.workspace, "rev-parse", "HEAD"), before)
+        self.assertEqual(run_git(self.workspace, "status", "--porcelain"), "")
+        self.assertEqual((self.workspace / "plan.md").read_text(), "ours\n")
+        self.assertEqual(self.remote_head(), remote)
+
+    def test_uncommitted_files_stop_the_fetch_and_merge(self):
+        self.other_clone_pushes("other.md", "other\n")
+        self.commit(self.workspace, "plan.md", "plan\n")
+        (self.workspace / "draft.md").write_text("editing\n")
+        self.assertFalse(sync.push(self.workspace))
+        self.assertFalse((self.workspace / "other.md").exists())
+        self.assertEqual(
+            run_git(self.workspace, "status", "--porcelain"), "?? draft.md"
+        )
+
+    def test_unreachable_remote_fails_without_a_merge(self):
+        self.commit(self.workspace, "plan.md", "plan\n")
+        before = run_git(self.workspace, "rev-parse", "HEAD")
+        run_git(
+            self.workspace, "fetch", "-q"
+        )  # leaves a FETCH_HEAD a later merge could use
+        run_git(self.workspace, "remote", "set-url", "origin", str(self.top / "gone"))
+        with patch.object(sync, "git", wraps=sync.git) as commands:
+            self.assertFalse(sync.push(self.workspace))
+        pushes = [call for call in commands.call_args_list if "push" in call.args]
+        self.assertEqual(len(pushes), 1)
+        self.assertEqual(run_git(self.workspace, "rev-parse", "HEAD"), before)
+
+    def test_branch_without_upstream_is_never_pushed(self):
+        run_git(self.workspace, "branch", "--unset-upstream")
+        self.commit(self.workspace, "plan.md", "plan\n")
+        with patch.object(sync, "git", wraps=sync.git) as commands:
+            self.assertFalse(sync.push(self.workspace))
+        self.assertFalse(any("push" in call.args for call in commands.call_args_list))
+
+    def run_main(self, event, hook):
+        payload = io.StringIO(
+            json.dumps({"cwd": str(self.top), "hook_event_name": hook})
+        )
+        out = io.StringIO()
+        with (
+            patch.object(sync, "detach") as detach,
+            patch.object(sync.sys, "argv", ["sync", event]),
+            patch.object(sync.sys, "stdin", payload),
+            patch.object(sync.sys, "stdout", out),
+        ):
+            sync.main()
+        return detach, out.getvalue()
+
+    def test_stop_starts_a_push_worker_only_when_ahead(self):
+        detach, _ = self.run_main("commit", "Stop")
+        detach.assert_not_called()
+        self.commit(self.workspace, "plan.md", "plan\n")
+        detach, _ = self.run_main("commit", "Stop")
+        detach.assert_called_once_with(
+            self.workspace, "push-worker", str(self.workspace)
+        )
+
+    def test_session_start_notes_an_unpushed_branch(self):
+        _, out = self.run_main("start", "SessionStart")
+        self.assertNotIn("did not go through", out)
+        self.commit(self.workspace, "plan.md", "plan\n")
+        _, out = self.run_main("start", "SessionStart")
+        self.assertIn("is 1 ahead and 0 behind origin/main", out)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -44,6 +44,15 @@ the guides and reference pages, so the landing text still has one home in `READM
 table of every plugin stays on GitHub only. The Plugins page opens with links to each stage's
 section. No plugin version moves.
 
+The workspace sync hook in `ceh-git-workflow` now pushes the main `.agents_workspace` branch to the
+upstream it tracks, because waiting on a separate sync script left workspace commits off the
+remote for too long. The push runs in a background process after the hook commits or merges, so a
+slow network never holds up a turn. When the remote has moved on, the hook fetches only that
+branch, merges it while the workspace has no uncommitted files, aborts a conflict, and pushes once
+more. A branch with no upstream is never pushed, so setting the upstream is what turns the push
+on, as the new `decision-workspace-sync-push.md` records. The next session start tells the agent
+when a push did not go through.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -57,7 +66,7 @@ section. No plugin version moves.
 | `ceh-competitor-analysis`      | 1.2.19  |
 | `ceh-documentation`            | 1.0.16  |
 | `ceh-every-session`            | 2.10.7  |
-| `ceh-git-workflow`             | 3.0.3   |
+| `ceh-git-workflow`             | 3.0.4   |
 | `ceh-product-direction`        | 2.1.10  |
 | `ceh-python-library`           | 1.0.6   |
 | `ceh-python-service`           | 1.1.15  |
@@ -71,6 +80,10 @@ section. No plugin version moves.
 | `ceh-workflow-runner`          | 1.1.15  |
 
 ### Added
+
+- `ceh-git-workflow` workspace sync: pushes the main workspace branch to its upstream, merges the
+  remote on a rejected push, and notes an unpushed branch at session start.
+- `.claude/rules/decision-workspace-sync-push.md`: setting the upstream authorizes the push.
 
 - `ceh-competitor-analysis:analyze-competitor`: `scripts/render-page.py`, which renders
   `<slug>.html` from `<slug>.yaml`.
@@ -94,6 +107,8 @@ section. No plugin version moves.
 - Docs site: `scripts/sync-docs.mjs` generates a splash home page from the README's intro and
   lifecycle stage table, with Learn and Reference cards, and the Plugins page links each stage.
   The site title lives in `site.mjs`, read by the config and the hero.
+- `ceh-git-workflow`: the README and `docs/DESIGN_NOTES.md` describe the push in place of "never
+  pushes", and `docs/ENVIRONMENT_VARIABLES.md` lists `GIT_SSH_COMMAND`, which the push reads.
 
 ## 2026-11-23
 
