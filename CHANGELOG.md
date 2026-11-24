@@ -20,6 +20,11 @@ turns Markdown code spans and bold into HTML, and lists every page in the folder
 rerun on an unchanged YAML leaves the page alone. `design-ui` still picks the theme, and the
 script links the one theme already in `themes/`, and exits 2 when that stylesheet is missing.
 
+`docs/IDEAS.md` takes in the Adopt now and Build ideas from the twelve competitor reports
+analysed or re-analysed this day. Ideas that do the same job as an open entry are merged into it, those already
+built or already rejected are left out, and the rest are new open rows. The intro and the idea
+cells no longer narrate what each competitor does, since the Source column already names it.
+
 ### Plugin versions
 
 | Plugin                    | Version |
@@ -36,6 +41,8 @@ script links the one theme already in `themes/`, and exits 2 when that styleshee
 - `ceh-competitor-analysis:analyze-competitor`: step 9 runs `render-page.py` and says the page is
   never edited by hand. `decision-skill-bundled-files.md` and `plugins/CLAUDE.md` list the script
   among the allowed script bundles.
+- `docs/IDEAS.md`: 67 new open rows and 81 ideas merged into existing rows from the 2026-11-24
+  competitor re-analysis, and competitor commentary removed from the intro and the idea cells.
 
 ## 2026-11-23
 
