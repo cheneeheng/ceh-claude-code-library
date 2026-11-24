@@ -3,24 +3,23 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { BASE, REPO } from "../site.mjs";
+import { BASE, REPO, TITLE } from "../site.mjs";
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ROOT = path.resolve(SITE, "../..");
 const OUT = path.join(SITE, "src/content/docs");
 const read = (rel) => readFileSync(path.join(ROOT, rel), "utf8");
 
-// Repo file -> page slug and title. Plugin pages are added below.
+// Repo file -> page slug, title, and the home page card blurb. Plugin pages are added below.
 const PAGES = [
-  ["README.md", "index", "Home"],
   ["docs/GETTING_STARTED.md", "get-started", "Get started"],
-  ["docs/TESTING_WORKFLOW.md", "guides/testing-workflow", "Testing workflow"],
-  ["docs/RETRO_WORKFLOW.md", "guides/retro-workflow", "Retro workflow"],
-  ["docs/CATALOG.md", "reference/catalog", "Catalog"],
-  ["docs/ENVIRONMENT_VARIABLES.md", "reference/environment-variables", "Environment variables"],
-  ["docs/PLUGIN_DEPENDENCIES.md", "reference/plugin-dependencies", "Plugin dependencies"],
-  ["docs/PLUGIN_VERSIONS.md", "reference/plugin-versions", "Plugin versions"],
-].map(([src, slug, title]) => ({ src, slug, title }));
+  ["docs/TESTING_WORKFLOW.md", "guides/testing-workflow", "Testing workflow", "Writing or running tests? How the testing skills and agents route."],
+  ["docs/RETRO_WORKFLOW.md", "guides/retro-workflow", "Retro workflow", "Running a retro? Which of the three retro skills to start, and where its report goes."],
+  ["docs/CATALOG.md", "reference/catalog", "Catalog", "Looking for one skill or agent? Every one, grouped by plugin."],
+  ["docs/ENVIRONMENT_VARIABLES.md", "reference/environment-variables", "Environment variables", "Configuring a plugin? Every variable a plugin reads."],
+  ["docs/PLUGIN_DEPENDENCIES.md", "reference/plugin-dependencies", "Plugin dependencies", "Wondering what installs with what? The dependency graph."],
+  ["docs/PLUGIN_VERSIONS.md", "reference/plugin-versions", "Plugin versions", "Checking what changed? Every plugin's current version."],
+].map(([src, slug, title, blurb]) => ({ src, slug, title, blurb }));
 
 const plugins = readdirSync(path.join(ROOT, "plugins/standalone")).sort();
 const summary = {};
@@ -40,6 +39,7 @@ for (const name of plugins) {
 // A link to a page's file, or to a plugin's folder, lands on that page.
 const slugOf = new Map(PAGES.map((p) => [p.src, p.slug]));
 for (const name of plugins) slugOf.set(`plugins/standalone/${name}`, `plugins/${name}`);
+slugOf.set("README.md", "index"); // the home page, written below
 
 function rewriteLinks(md, src) {
   let fenced = false;
@@ -78,9 +78,42 @@ for (const { src, slug, title, description } of PAGES) {
   write(slug, description ? { title, description } : { title }, body);
 }
 
+// The home page: a splash hero from the README's first paragraph, then its "By lifecycle stage"
+// table and cards for the other pages, so the landing text keeps its one home in README.md. The
+// README's full plugin table stays on GitHub only: too wide for a landing page.
+const readme = read("README.md").replace(/\r\n/g, "\n");
+const [, intro] = readme.match(/^# .+\n\n([\s\S]+?)\n\n/);
+const stageSection = readme.split("### By lifecycle stage")[1].split("\n---")[0].trim();
+const card = (title, blurb, slug) =>
+  `  <LinkCard title={${JSON.stringify(title)}} description={${JSON.stringify(blurb)}} href="${BASE}/${slug}/" />`;
+const grid = (cards) => `<CardGrid>\n${cards.join("\n")}\n</CardGrid>`;
+const cardsUnder = (prefix) => PAGES.filter((p) => p.slug.startsWith(prefix)).map((p) => card(p.title, p.blurb, p.slug));
+write(
+  "index",
+  {
+    title: "Home",
+    description: intro.split(". ")[0].replace(/\s+/g, " ") + ".",
+    template: "splash",
+    hero: {
+      title: TITLE,
+      tagline: intro.replace(/\*\*/g, "").replace(/\s+/g, " "),
+      actions: [
+        { text: "Get started", link: `${BASE}/get-started/`, icon: "right-arrow" },
+        { text: "Browse plugins", link: `${BASE}/plugins/`, variant: "minimal" },
+      ],
+    },
+  },
+  [
+    'import { CardGrid, LinkCard } from "@astrojs/starlight/components";',
+    `## Plugins by lifecycle stage\n\n${rewriteLinks(stageSection, "README.md")}`,
+    `## Learn\n\n${grid([card("Plugins", "Know what you are about to do? Every plugin, grouped by lifecycle stage.", "plugins"), ...cardsUnder("guides/")])}`,
+    `## Reference\n\n${grid(cardsUnder("reference/"))}`,
+  ].join("\n\n") + "\n",
+  "mdx",
+);
+
 // The plugin hub and sidebar follow the README's "By lifecycle stage" table.
-const stageTable = read("README.md").split("### By lifecycle stage")[1].split("\n---")[0];
-const stages = stageTable
+const stages = stageSection
   .split("\n")
   .filter((line) => line.startsWith("|") && !/^\|\s*(Stage|-)/.test(line))
   .map((line) => {
@@ -99,10 +132,12 @@ const hub = stages.map(({ stage, question, names }) => {
   );
   return `## ${stage}\n\n${question}\n\n<CardGrid>\n${cards.join("\n")}\n</CardGrid>`;
 });
+// Each stage heading's anchor: lowercase, spaces to hyphens ("On demand" -> #on-demand).
+const stageLinks = stages.map(({ stage }) => `[${stage}](#${stage.toLowerCase().replace(/\s+/g, "-")})`);
 write(
   "plugins/index",
   { title: "Plugins", description: "Every plugin, grouped by the lifecycle stage it serves." },
-  `import { CardGrid, LinkCard } from "@astrojs/starlight/components";\n\n${plugins.length} plugins, each installable alone. Find the stage you are in, then open the plugin for what it does, how it is invoked, and what it needs. Which to install first is in [Get started](${BASE}/get-started/).\n\n${hub.join("\n\n")}\n`,
+  `import { CardGrid, LinkCard } from "@astrojs/starlight/components";\n\n${plugins.length} plugins, each installable alone. Find the stage you are in, then open the plugin for what it does, how it is invoked, and what it needs. Which to install first is in [Get started](${BASE}/get-started/).\n\nA product moves through stages in its life, and the plugins are grouped by the stage they serve: ${stageLinks.join(" · ")}.\n\n${hub.join("\n\n")}\n`,
   "mdx",
 );
 writeFileSync(

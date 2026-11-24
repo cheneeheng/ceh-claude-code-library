@@ -38,6 +38,12 @@ the section set. The site now uses the root `README.md` as its home page in plac
 hand-written copy, and no longer publishes `docs/VISION.md` or `docs/STRATEGY.md`, which stay in
 the repo for maintainers.
 
+The site's home page is a splash page again, generated rather than hand-written. Its hero tagline
+is the README's first paragraph, and below it come the README's lifecycle stage table and cards for
+the guides and reference pages, so the landing text still has one home in `README.md`. The wide
+table of every plugin stays on GitHub only. The Plugins page opens with links to each stage's
+section. No plugin version moves.
+
 ### Plugin versions
 
 | Plugin                         | Version |
@@ -85,6 +91,9 @@ the repo for maintainers.
   to it to the site root, clears its generated pages before each run, and drops `docs/VISION.md`
   and `docs/STRATEGY.md`. The hand-written `index.mdx` and the two sidebar entries are gone, and
   the docs workflow no longer watches the two files.
+- Docs site: `scripts/sync-docs.mjs` generates a splash home page from the README's intro and
+  lifecycle stage table, with Learn and Reference cards, and the Plugins page links each stage.
+  The site title lives in `site.mjs`, read by the config and the hero.
 
 ## 2026-11-23
 
