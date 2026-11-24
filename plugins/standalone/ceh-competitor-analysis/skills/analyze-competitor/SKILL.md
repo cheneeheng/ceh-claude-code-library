@@ -11,8 +11,9 @@ compatibility: >-
   Repo targets need git 2.x and network access for the shallow clone. Product targets need WebFetch
   or WebSearch. Without them the skill can analyse only a local checkout or pasted material, and the
   report says which sources were missing. Checking and rendering the report needs uv
-  (https://docs.astral.sh/uv/), which runs scripts/artifact.py with pydantic. Without it the YAML
-  goes unchecked and its Markdown is not rendered, and the reply says so.
+  (https://docs.astral.sh/uv/), which runs scripts/artifact.py and scripts/render-page.py with
+  pydantic. Without it the YAML goes unchecked, its Markdown and HTML page are not built, and the
+  reply says so.
 license: Apache-2.0
 ---
 
@@ -23,7 +24,7 @@ Markdown rendered beside it as `<slug>.md` and its page built as `<slug>.html`. 
 claim in it traces to a file, a URL, or a command you ran, every idea we take names the place in our
 work where it would land, every competitor component our work covers only partly or not at all
 appears in "What we take", `artifact.py check` exits 0 on the YAML, a new reader gets the point at
-a glance, and the HTML page carries the same content as the YAML.
+a glance, and `render-page.py` has written the HTML page from the YAML as it now stands.
 
 ## Procedure
 
@@ -73,18 +74,16 @@ a glance, and the HTML page carries the same content as the YAML.
    render straight over the `v1` Markdown: carry every `v1` row and paragraph word for word into
    its key, per the schema's "Converting a `v1` report", then amend the YAML.
 9. **Render the HTML page.** Invoke the Skill tool with skill="ceh-ui-design:design-ui" for the
-   theme and its review pass. Use the Meridian theme unless the user names another, copied once to
-   `.agents_workspace/competitor-analysis/themes/<theme>.css` and linked from every page. Build
-   `<slug>.html` from the YAML by filling `${CLAUDE_SKILL_DIR}/assets/report-page.html`,
-   keeping its COMPETITOR-ONLY blocks: the hero from `summary`, `verdict`, and up to three headline
-   counts, the Adopt now / Build / Skip board from `take`, the step strip from `how_it_works`, one
-   expandable card per mechanism from `oh_wow`, the inventory bars from `inventory`, and one
-   coverage table per component group from `coverage`, with the tally and legend as the Markdown
-   renders them. An empty `oh_wow` shows `None found.` in place of the cards, and an empty board
-   column shows `None`. The layout is fixed by the template: do not add sections or restyle it, so
-   the `notes` blocks and `extra_sections` stay in the Markdown only. Every closed card shows only
-   a name and one line, and the detail goes inside it. The YAML stays the source: the page may fold
-   detail into cards but adds no claim the YAML lacks, and is rebuilt whenever the YAML changes.
+   theme: Meridian unless the user names another or `.agents_workspace/competitor-analysis/themes/`
+   already holds one, its `brand.css` copied once to `themes/<theme>.css`. Then run
+   `uv run --script ${CLAUDE_SKILL_DIR}/scripts/render-page.py <slug>.yaml`, which writes
+   `<slug>.html` from the YAML into the COMPETITOR-ONLY blocks of
+   `${CLAUDE_SKILL_DIR}/assets/report-page.html`, links the one theme in `themes/` (or the one
+   `--theme <name>` names), and lists every page in the folder in its nav. It exits as
+   `artifact.py` does, and 2 when the theme's `.css` is missing. Never edit the page by hand: a
+   content fix goes into the YAML and a layout fix into the template, then rerun the script. The
+   `notes` blocks and `extra_sections` stay in the Markdown only. Rerun it whenever the YAML
+   changes. Without uv, say in the reply that the page was not built.
 
 ## Rules
 
@@ -131,6 +130,6 @@ YAML, which the hook or `artifact.py render` renders again.
 
 ## Hands off to
 
-- Invoke the Skill tool with skill="ceh-ui-design:design-ui" to render the HTML page (step 9).
+- Invoke the Skill tool with skill="ceh-ui-design:design-ui" to pick the HTML page's theme (step 9).
 - When the user also wants the competitors compared with our work, run
   ceh-competitor-analysis:compare-competitors after the per-competitor reports exist.
