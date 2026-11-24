@@ -1,35 +1,54 @@
 # ceh-ui-design
 
-Visual design for any UI: a web app, a dashboard, or a standalone HTML page such as a report. One
-skill makes the layout, hierarchy, navigation, and state decisions explicitly before any markup,
-then builds against a bundled token-driven theme so the result is finished on the first pass.
+Visual design for any UI: a web app, a dashboard, or a standalone HTML page such as a report. Its
+one skill settles the layout, hierarchy, navigation and states before any markup is written, then
+builds against a bundled theme, so the first pass already looks finished. It works with any
+framework.
 
-The skill is framework-agnostic. It moved here from `ceh-web-frontend` so that plugins which render
-HTML without a frontend stack, such as `ceh-competitor-analysis`, can depend on it alone.
+## Install
+
+See [Getting started](../../../docs/GETTING_STARTED.md). The plugin needs nothing else installed.
+It also arrives by itself with `ceh-ag-ui`, `ceh-competitor-analysis` and `ceh-web-frontend`, which
+depend on it.
 
 ## Skills
 
-| Skill       | Invoke                     | Triggers when                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| ----------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `design-ui` | `/ceh-ui-design:design-ui` | Any UI visual design decision: layout archetypes (including a Document archetype for plans and reports), hierarchy, navigation placement and in-page contents, empty/loading/error states, density, a variants board of throwaway HTML options that differ on one design answer each, finishing recipes (command dock, humanized tables, lifecycle steppers, Mermaid diagrams), plus theming from bundled token-driven templates (Meridian, Tidewater), linked or inlined into a single file |
+| Skill       | Say or type                                                                        | What it does                                                                |
+| ----------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `design-ui` | "design the UI", "lay out this page", "polish this UI", `/ceh-ui-design:design-ui` | Makes the design decisions first, then builds the page on one of two themes |
 
-`design-ui` bundles two themes under `references/` (`meridian/` and `tidewater/`, each a
-`brand.css` plus a `brand-guide.html`) and, in `references/examples.md`, worked markup for the
-finishing recipes and the rules of recipes that apply only when their component is present.
+## Agents
 
-## Used by
+This plugin has no agents.
 
-These plugins declare `ceh-ui-design` as a dependency, so installing any of them installs it:
+## Hooks
 
-| Plugin                    | Why                                                                                           |
-| ------------------------- | --------------------------------------------------------------------------------------------- |
-| `ceh-ag-ui`               | `build-ag-ui` and `add-canvas-component` call `design-ui` on every run for the theme          |
-| `ceh-competitor-analysis` | `analyze-competitor` and `compare-competitors` call `design-ui` on every run for HTML pages   |
-| `ceh-web-frontend`        | Keeps `design-ui` installed with the web stack, where it lived until `ceh-web-frontend` 1.1.0 |
+This plugin has no hooks.
 
-## Prerequisites
+## Settings
 
-None. The skill reads files and writes markup. The themes load their web fonts from Google Fonts,
-so a page viewed offline falls back to system fonts.
+This plugin reads no settings.
 
-The plugin reads no environment variables and ships no hooks.
+## How it works
+
+What `design-ui` decides and builds:
+
+- **Layout:** a page archetype, including a Document archetype for plans and reports.
+- **Reading order:** hierarchy, density, where the navigation sits, and in-page contents.
+- **States:** what the page shows when it is empty, loading, or failed.
+- **Options:** a variants board, throwaway HTML pages that each differ on one design answer, so
+  you can pick by looking.
+- **Finish:** a command dock, readable tables, lifecycle steppers, and Mermaid diagrams.
+- **Theme:** Meridian or Tidewater, linked as a stylesheet or inlined into a single file.
+
+The themes load their fonts from Google Fonts, so a page viewed offline falls back to system fonts.
+
+## Not this plugin
+
+- The frontend code itself (SvelteKit or React, tests, accessibility): `ceh-web-frontend`.
+- The words on the page (labels, empty states, error text): `ceh-usability-audit`.
+
+## Where its files live
+
+The variants board goes to `.agents_workspace/product/design-variants/<surface>/`. The finished
+page goes wherever the project keeps its UI.

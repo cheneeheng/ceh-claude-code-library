@@ -29,7 +29,7 @@ export default defineConfig({
         },
       ],
       sidebar: [
-        { label: "Start here", items: [{ slug: "get-started" }, { slug: "why" }, { slug: "concepts" }] },
+        { label: "Start here", items: [{ slug: "get-started" }] },
         { label: "Plugins", items: [{ label: "Overview", slug: "plugins" }, ...stages] },
         { label: "Guides", items: [{ slug: "guides/testing-workflow" }, { slug: "guides/retro-workflow" }] },
         {

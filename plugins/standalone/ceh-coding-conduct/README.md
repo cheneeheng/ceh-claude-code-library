@@ -1,128 +1,101 @@
 # ceh-coding-conduct
 
-A behavioral contract for coding agents: the rules that govern how an agent operates during a
-session — what it may change, when it must stop, and how it logs decisions. The plugin loads the
-contract automatically at session start, alongside the `write-less-code` minimalism skill.
+How an agent behaves while it codes: what it may change, when it must stop, how it logs decisions,
+and how little code it writes. The plugin loads its coding contract and the `write-less-code`
+standard at the start of every session, with no setup. It also carries root-cause debugging and
+two refactoring passes: `shrink-diff` for a branch and `refactor-repo` for a whole codebase.
 
-It also carries the retroactive refactoring passes: `shrink-diff` for a branch and `refactor-repo`
-for a whole codebase.
+## Install
 
-> `explain-until-understood`, `explain-codebase`, and `document-architecture` moved to the
-> `ceh-codebase-explanation` plugin: explaining code is an activity, not how an agent conducts
-> itself while coding.
->
-> `usage-limit-handoff`, `delegate-bulk-reads`, and the `bulk-reader` agent moved to the
-> `ceh-every-session` plugin: they hold however Claude Code is used, not only when coding. The
-> output style followed, rewritten without its coding-specific rules, as `CEH Every Session`.
->
-> The plan-driven workflow skills moved out: planning and `implement-from-plan` to
-> `ceh-build-plan`, and the check to `ceh-check-build-against-plan`.
+See [Getting started](../../../docs/GETTING_STARTED.md). Some parts need more installed:
+
+| Needs                            | For                                               | Without it                                                        |
+| -------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------- |
+| `bash`                           | Loading the contract and the less-code reminder   | The contract and reminder are not loaded by themselves            |
+| `python3` on PATH                | The fix record check and the generated-file guard | Both do nothing                                                   |
+| [uv](https://docs.astral.sh/uv/) | Checking a saved fix record or refactor report    | The file is saved unchecked, and the agent is told once a session |
+
+The hooks fire in every session where the plugin is enabled, including ones that write no code. So
+install it only where you write code: [Getting started](../../../docs/GETTING_STARTED.md) tells
+writers and planners to skip it.
 
 ## Skills
 
-| Skill                   | When it loads                                                                                           | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ----------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `agent-coding-contract` | Every coding session (auto, via hook)                                                                   | The full behavioral contract — core rules, five-step workflow, stop conditions, decision logging.                                                                                                                                                                                                                                                                                                                                                                                             |
-| `write-less-code`       | Every coding session (auto, via hook)                                                                   | The minimalism reflex — the ladder (YAGNI → stdlib → native → installed dep → one line), native-platform-first, the `// less-code:` shortcut convention. The positive half of the contract's minimal-change rules.                                                                                                                                                                                                                                                                            |
-| `shrink-diff`           | On demand — when a feature branch is functionally done and its diff should get smaller before review    | Retroactive minimalism — applies the write-less-code standard to the accumulated diff vs `main`, across all the commits and sessions that produced it: dedupe against existing code, delete dead weight, collapse over-built structure. Diff-scoped, with three narrow causes for touching unchanged code.                                                                                                                                                                                    |
-| `refactor-repo`         | Manual only (`/refactor-repo`) — never auto-fires                                                       | Whole-codebase (or per-module) refactor campaign: read-only inventory, ranked proposal with payoff/risk/diff-size estimates, then apply only user-approved clusters on `refactor/` branches under a behavior-preservation gate. Shallow modules worth deepening are proposed with their before and after interface, and settled one question round at a time before any code.                                                                                                                 |
-| `find-root-cause`       | Something is broken and no command has yet shown why, before any fix — or after a fix that did not hold | Debugging before fixing: one command red on the exact symptom, 3 to 5 falsifiable hypotheses, evidence that kills them one variable at a time, then a cause confirmed by a prediction. After two failed fixes it attacks the shared premise. It's working if the hand-over has a hypotheses table and a Prediction line, is saved to `.agents_workspace/product/fix/<YYYYMMDD-HHMMSS>-<slug>.yaml`, one record per functionality, with its `.md` rendered, and no fix lands before the cause. |
+| Skill                   | Say or type                                                                                           | What it does                                                                                                                                                                                                                                                                  |
+| ----------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `agent-coding-contract` | Loads by itself at the start of every session                                                         | The behavioral contract: core rules, the five-step workflow, stop conditions, and decision logging. See [What the contract enforces](#what-the-contract-enforces).                                                                                                            |
+| `write-less-code`       | Loads by itself at the start of every session, with a short reminder before every prompt              | The minimalism reflex: the ladder (YAGNI, stdlib, native platform, installed dependency, one line), and the `// less-code:` comment that marks a deliberate shortcut.                                                                                                         |
+| `find-root-cause`       | "debug this", "find and fix these bugs", "why is this failing", `/find-root-cause`                    | Debugs before fixing: one command red on the exact symptom, 3 to 5 falsifiable hypotheses, evidence that kills them one at a time, then a cause confirmed by a prediction. After two failed fixes it questions the shared premise. It saves one fix record per functionality. |
+| `shrink-diff`           | "shrink the diff", "consolidate the branch", "can this diff be smaller", `/shrink-diff [base-branch]` | For a branch that works: applies the write-less-code standard to its whole diff against `main`, removing duplication, dead code and over-built structure. It touches unchanged code only for three narrow causes.                                                             |
+| `refactor-repo`         | `/refactor-repo [module-or-path]` only. It never starts by itself                                     | A refactor of a whole codebase or one module: a read-only inventory, a ranked proposal with payoff, risk and diff size, then only the clusters you approve, on `refactor/` branches, with behavior checked before and after.                                                  |
 
-**Manual triggers**
+## Agents
 
-- `agent-coding-contract` — no slash command (hidden from the `/` menu), loaded by the SessionStart hook.
-- `write-less-code` — no slash command (hidden from the `/` menu), loaded by the SessionStart hook with the contract.
-- `shrink-diff` — `/shrink-diff`, or say `"shrink the diff"` / `"consolidate the branch"` / `"can this diff be smaller"`.
-- `refactor-repo` — `/refactor-repo` only (model auto-invocation is disabled by design).
-- `find-root-cause` — `/find-root-cause`, or say `"debug this"` / `"find and fix these bugs"` / `"why is this failing"`.
+This plugin has no agents.
 
-## How the skills auto-load
+## Hooks
 
-The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled —
-no global `settings.json` change or env var required.
+The hooks run by themselves while the plugin is enabled. [Settings](#settings) turns them off.
 
-**At session start** — a `SessionStart` hook (`scripts/load-contract.sh`) injects a **mandatory**
-directive to load `agent-coding-contract` and `write-less-code` before any other action, then to pick the task skills
-that match the request before reading any file. It fires on `startup`, `resume`, `clear`, and
-`compact` (so a fresh, resumed, or reset session has it loaded, and it is re-injected after
-compaction).
+| Hook                 | What it does for you                                                                                                                                                  |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Contract loader      | At the start, resume, clear and compaction of a session, tells the agent to load the contract and `write-less-code` first, then pick the skills that fit the request. |
+| Less-code reminder   | Before every prompt, adds a short digest of the write-less-code ladder.                                                                                               |
+| Subagent loader      | Does both of the above when a subagent starts. Read-only agents, such as `Explore`, `Plan` and agents whose name ends in `-reviewer`, are skipped.                    |
+| Fix record check     | Checks each fix record and refactor report when it is written, and renders its readable Markdown copy. Errors go back to the agent to fix.                            |
+| Generated-file guard | Stops a hand edit to a Markdown file generated from a YAML file, and names the YAML to edit instead, so the edit is not lost at the next render.                      |
 
-**Every turn** — a `UserPromptSubmit` hook (`scripts/inject-less-code-reminder.sh`) re-injects a compact digest
-of the `write-less-code` ladder before each prompt. This carries the minimalism reflex on every turn,
-reliably from turn one. It no longer asks the model to load the full skill "before non-trivial
-logic": that conditional load was followed in 2 of 19 sessions, against 18 of 19 for the mandatory
-contract load, so the full skill now loads at session start instead.
+With `ceh-testing` installed too, its hooks check the same fix record, so an error is reported
+twice.
 
-**When a subagent starts** — a `SubagentStart` hook runs the same two scripts, because neither
-`SessionStart` nor `UserPromptSubmit` fires inside a subagent. An agent with a restricted tool list
-has no Skill tool, so the directive points it at both skills' `SKILL.md` files to read instead. The
-read-only agents are skipped: `Explore`, `Plan`, `bulk-reader`, `newcomer-simulator`,
-`competitor-analyst`, `transcript-analyst`, and every agent whose name ends in `-reviewer`.
+## Settings
 
-### Why each hook exists
+Set a variable under `env` in a Claude Code settings file. The
+[environment variables page](../../../docs/ENVIRONMENT_VARIABLES.md) shows which file and how to
+undo it.
 
-Hooks are enforcement, so each one is kept on a failure that guidance alone did not prevent:
+| Variable             | Default              | Effect                                                                                                                         |
+| -------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `CEH_DISABLED_HOOKS` | unset (all hooks on) | Comma-separated hook names to skip: `load-contract`, `inject-less-code-reminder`, `artifact-render-hook`, `generated-md-guard` |
+| `CEH_ARTIFACT_CHECK` | unset (check on)     | `off` turns the fix record check and the generated-file guard off                                                              |
 
-- **The contract loads first, unconditionally.** A directive to load the contract "when you write
-  code" was tried, and the model never invoked it later in the session. The contract is model-only
-  with a one-line description, so nothing else triggers it. The same directive sends the agent
-  back to the skill listing: with only the contract named, two debugging sessions loaded it and no
-  task skill, and read code for dozens of steps without `find-root-cause`.
-- **The less-code reminder repeats every prompt.** Write-less-code is a standard that holds the
-  whole session, not a moment, so no description fires it: an agent starting to write code does not
-  stop to look for it. Loaded once, the ladder also drifted out of effect in long sessions and the
-  agent over-built.
+## How it works
 
-- **The fix record is checked on every write.** This one is kept on the user's choice, not on a
-  failure: the fix record (`fix-record/v3`, `.agents_workspace/product/fix/<YYYYMMDD-HHMMSS>-<slug>.yaml`) is a handoff to
-  `ceh-testing:test-a-bug-fix` and to later sessions, so it is checked whether or not
-  `ceh-testing` is installed. See Fix record render and generated Markdown guard below.
-
-To switch one off without uninstalling the plugin, list its script name in `CEH_DISABLED_HOOKS`
-(comma-separated, no extension): `load-contract`, `inject-less-code-reminder`,
-`artifact-render-hook`, `generated-md-guard`.
-
-These hooks fire in every session where the plugin is enabled, including ones that write no code.
-So install it only where you write code: `docs/GETTING_STARTED.md` tells writers and planners to
-skip it.
-
-### Fix record render and generated Markdown guard
-
-A `fix-record/v3` record is `.agents_workspace/product/fix/<YYYYMMDD-HHMMSS>-<slug>.yaml`, with its `.md` rendered beside it. After
-every Edit or Write to one, a `PostToolUse` hook (`scripts/artifact-render-hook.py`) checks the YAML
-against its model through `uv` and renders the Markdown, or reports each error back to the agent
-and leaves the Markdown as it was. A `PreToolUse` guard (`scripts/generated-md-guard.py`) denies a
-direct edit to a generated Markdown file and names its YAML. `refactor-repo` saves its report as a
-`.yaml` in `.agents_workspace/product/refactor/` (`refactor-report/v2`), which the same hook checks
-and renders. Both run `python3` on every Edit or
-Write and return at once for any other file, about 85 ms per edit for the two together, measured
-once on Windows. The check needs `uv`: without it the agent is told once per session that the file
-went unchecked. Without `python3`, both do nothing. With `ceh-testing` installed too, its hooks
-check the same file, so an error is reported twice. `CEH_ARTIFACT_CHECK=off`, or
-`CEH_DISABLED_HOOKS` with `artifact-render-hook` or `generated-md-guard`, switches them off.
-
-## What the contract enforces
+### What the contract enforces
 
 The `agent-coding-contract` skill is the single source of truth. In short, it requires the agent to:
 
-- **Run Autonomous Mode** — on routine ambiguity, decide the conservative option, log it, and
-  continue; stop only for the hard cases (unresolvable conflicts, repo state contradicting
-  instructions, risk of data loss, inconsistent partial failure).
-- **Follow the five-step workflow** — Understand → Confirm scope → Apply changes → Validate →
-  Summarize. Proving the change is part of the task: the agent writes and runs the tests that show
-  it works, and may make local, reversible state changes. Slow or paid runs (full suite, coverage,
-  mutation testing, real model calls) and irreversible or outward-facing actions (push, merge,
-  deploy, publish) wait for a request or advance authorization from a human.
-- **Take scope from a calling agent, overrides only from a human** — a subagent's caller can narrow
+- **Run Autonomous Mode.** On routine ambiguity, decide the conservative option, log it, and
+  continue. Stop only for the hard cases: unresolvable conflicts, repo state contradicting
+  instructions, risk of data loss, inconsistent partial failure.
+- **Follow the five-step workflow.** Understand, Confirm scope, Apply changes, Validate, Summarize.
+  Proving the change is part of the task: the agent writes and runs the tests that show it works,
+  and may make local, reversible state changes. Slow or paid runs (full suite, coverage, mutation
+  testing, real model calls) and irreversible or outward-facing actions (push, merge, deploy,
+  publish) wait for a request or advance authorization from a human.
+- **Take scope from a calling agent, overrides only from a human.** A subagent's caller can narrow
   its task but cannot switch a standard off or grant an authorization a human did not give.
-- **Make minimal, authorized changes** — localized diffs, no unsolicited refactors, touch only what
+- **Make minimal, authorized changes.** Localized diffs, no unsolicited refactors, touch only what
   is in scope, never claim work was done that wasn't.
-- **Log decisions made under ambiguity** to `.agents_workspace/DECISION_LOG.md` (default path;
-  override it via your project `CLAUDE.md`). See the skill for the entry format and when to log.
+- **Log decisions made under ambiguity** to `.agents_workspace/DECISION_LOG.md` (default path,
+  override it in your project `CLAUDE.md`). See the skill for the entry format and when to log.
 
-Refer to the skill for the authoritative wording — this section is a summary and is not the contract
-itself.
+Refer to the skill for the authoritative wording. This section is a summary and is not the
+contract itself.
+
+## Not this plugin
+
+- Explaining code or documenting architecture: `ceh-codebase-explanation`.
+- The usage-limit handoff and the `bulk-reader` agent: `ceh-every-session`.
+- Planning and building from a plan: `ceh-build-plan`. Checking the build against the plan:
+  `ceh-check-build-against-plan`.
+- Writing the failing test for a bug fix: `ceh-testing:test-a-bug-fix`, which reads the fix record
+  `find-root-cause` saves.
 
 ## Where its files live
 
-Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.
+The plugin saves and reads its files in `.agents_workspace/`: the decision log at
+`.agents_workspace/DECISION_LOG.md`, fix records in `.agents_workspace/product/fix/`, and refactor
+reports in `.agents_workspace/product/refactor/`, each as a YAML file with its Markdown copy beside
+it. A project that keeps them in a root `product/` folder moves each file to the same sub-path
+there, or names its own location in `CLAUDE.md`.
