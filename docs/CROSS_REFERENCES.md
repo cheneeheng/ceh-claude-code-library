@@ -797,11 +797,11 @@ criteria has them dated first.
 
 **Canonical:** `plugins/standalone/ceh-usability-audit/skills/audit-interface/references/personas-and-severity.md` — § The personas, § Severity
 
-| Copy                                                                                                            | Section                                                             | Diverges                                                                                       |
-| --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/references/personas-and-severity.md` | whole file                                                          | none                                                                                           |
-| `plugins/standalone/ceh-usability-audit/README.md`                                                              | § The personas, § Severity — assigned by outcome, not by appearance | condensed for the reader: column wording differs, the five personas and four severities do not |
-| `plugins/standalone/ceh-usability-audit/agents/newcomer-simulator.md`                                           | § Holding the persona                                               | the same five personas as second-person instructions to the walker, not a table                |
+| Copy                                                                                                            | Section                                                  | Diverges                                                                                       |
+| --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-usability-audit/skills/simulate-newcomer-first-run/references/personas-and-severity.md` | whole file                                               | none                                                                                           |
+| `plugins/standalone/ceh-usability-audit/README.md`                                                              | § How it works › The personas, § How it works › Severity | condensed for the reader: column wording differs, the five personas and four severities do not |
+| `plugins/standalone/ceh-usability-audit/agents/newcomer-simulator.md`                                           | § Holding the persona                                    | the same five personas as second-person instructions to the walker, not a table                |
 
 **Shared:** the five personas (Blank Slate, Cautious Returner, Interrupted, Wrong Turn, Small
 Screen) with their constraints and the failure class each catches, the four severities (Blocker,

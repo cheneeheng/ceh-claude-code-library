@@ -178,6 +178,7 @@ branches back.
   carries anything a user must do before the component works: prerequisites, when a hook fires,
   and every environment variable the plugin reads, with its default and whether it is required.
   A new variable also gets a row in `docs/ENVIRONMENT_VARIABLES.md`, the index across plugins.
+  The README's sections and their order are fixed by `.claude/rules/decision-plugin-readme-sections.md`.
 
 ## 4. Register any duplication
 
@@ -282,7 +283,8 @@ before creating anything, then:
 
    Add `"dependencies": ["ceh-<other>"]` only per the cross-plugin rule in step 2.
 
-2. `plugins/standalone/ceh-<name>/README.md` with the plugin's own skill/agent table.
+2. `plugins/standalone/ceh-<name>/README.md` with the plugin's own skill/agent table, in the
+   sections `.claude/rules/decision-plugin-readme-sections.md` fixes.
 3. `.claude-plugin/marketplace.json` — a new entry whose `source` (`./plugins/standalone/ceh-<name>`),
    `version`, and `description` mirror `plugin.json`. `validate.py` fails on a plugin missing from
    the marketplace or a version mismatch.

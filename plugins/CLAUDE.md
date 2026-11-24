@@ -5,7 +5,7 @@ Loaded when working under `plugins/`. Repo-wide rules stay in the root `CLAUDE.m
 The authoring decisions live in `.claude/rules/`, scoped to `plugins/**` and `.claude/skills/**`:
 `decision-component-templates.md`, `decision-skill-bundled-files.md`,
 `decision-output-templates.md`, `decision-component-names.md`, `decision-frontmatter-scalars.md`,
-and `decision-invocation-flags.md`. This file explains how they are checked and applied.
+`decision-invocation-flags.md`, and, for plugin READMEs, `decision-plugin-readme-sections.md`. This file explains how they are checked and applied.
 
 ## Skills
 

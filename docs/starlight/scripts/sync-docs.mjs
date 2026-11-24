@@ -1,6 +1,6 @@
 // Publish the repo's own docs as site pages, so the site never drifts from them.
 // Writes src/content/docs/** (git-ignored) and src/sidebar.json, both read by the build.
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { BASE, REPO } from "../site.mjs";
@@ -12,9 +12,8 @@ const read = (rel) => readFileSync(path.join(ROOT, rel), "utf8");
 
 // Repo file -> page slug and title. Plugin pages are added below.
 const PAGES = [
+  ["README.md", "index", "Home"],
   ["docs/GETTING_STARTED.md", "get-started", "Get started"],
-  ["docs/VISION.md", "why", "Why this library"],
-  ["docs/STRATEGY.md", "concepts", "How the plugins fit together"],
   ["docs/TESTING_WORKFLOW.md", "guides/testing-workflow", "Testing workflow"],
   ["docs/RETRO_WORKFLOW.md", "guides/retro-workflow", "Retro workflow"],
   ["docs/CATALOG.md", "reference/catalog", "Catalog"],
@@ -54,7 +53,8 @@ function rewriteLinks(md, src) {
         const [file, hash = ""] = url.split("#");
         const target = path.posix.join(path.posix.dirname(src), file).replace(/\/$/, "");
         const slug = slugOf.get(target);
-        if (slug) return `](${BASE}/${slug}/${hash && "#" + hash})`;
+        // Starlight serves the index page at the site root, not at /index/.
+        if (slug) return `](${BASE}/${slug === "index" ? "" : slug + "/"}${hash && "#" + hash})`;
         if (!existsSync(path.join(ROOT, target))) console.warn(`broken link in ${src}: ${url}`);
         const kind = statSync(path.join(ROOT, target), { throwIfNoEntry: false })?.isDirectory() ? "tree" : "blob";
         return `](${REPO}/${kind}/main/${target}${hash && "#" + hash})`;
@@ -70,6 +70,8 @@ function write(slug, frontmatter, body, ext = "md") {
   writeFileSync(file, `---\n${head.join("\n")}\n---\n\n${body}`);
 }
 
+// Every file in OUT is generated, so clear it: a page dropped from PAGES must not stay built.
+rmSync(OUT, { recursive: true, force: true });
 for (const { src, slug, title, description } of PAGES) {
   // Starlight renders the frontmatter title as the H1, so drop the source's own.
   const body = rewriteLinks(read(src), src).replace(/^\s*# .*\n/, "");

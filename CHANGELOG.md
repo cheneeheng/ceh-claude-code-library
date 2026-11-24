@@ -25,16 +25,52 @@ analysed or re-analysed this day. Ideas that do the same job as an open entry ar
 built or already rejected are left out, and the rest are new open rows. The intro and the idea
 cells no longer narrate what each competitor does, since the Source column already names it.
 
+Every plugin README is now written for the person deciding whether to install the plugin and
+learning to use it, because the docs site publishes each README as that plugin's page and it read
+like maintainer notes. All 21 READMEs share one fixed set of sections, in one order: Install,
+Skills, Agents, Hooks, Settings, How it works, Not this plugin, Where its files live. A section
+with nothing to say keeps its heading and one line, so a reader finds each part in the same place
+on every page. Install links to Getting started instead of repeating an install command.
+Maintainer detail (hook wiring, schema names, measurements, incidents, history) moved word for
+word to a new `docs/DESIGN_NOTES.md` in 19 of the plugins, or to `docs/ARCHITECTURE.md` in
+`ceh-workflow-builder`, which the site does not publish. A new rule, `decision-plugin-readme-sections.md`, holds
+the section set. The site now uses the root `README.md` as its home page in place of a
+hand-written copy, and no longer publishes `docs/VISION.md` or `docs/STRATEGY.md`, which stay in
+the repo for maintainers.
+
 ### Plugin versions
 
-| Plugin                    | Version |
-| ------------------------- | ------- |
-| `ceh-competitor-analysis` | 1.2.18  |
+| Plugin                         | Version |
+| ------------------------------ | ------- |
+| `ceh-ag-ui`                    | 1.1.8   |
+| `ceh-blog-and-seo`             | 2.0.16  |
+| `ceh-build-plan`               | 2.1.8   |
+| `ceh-check-build-against-plan` | 1.1.25  |
+| `ceh-codebase-explanation`     | 1.3.25  |
+| `ceh-coding-conduct`           | 2.5.23  |
+| `ceh-competitor-analysis`      | 1.2.19  |
+| `ceh-documentation`            | 1.0.16  |
+| `ceh-every-session`            | 2.10.7  |
+| `ceh-git-workflow`             | 3.0.3   |
+| `ceh-product-direction`        | 2.1.10  |
+| `ceh-python-library`           | 1.0.6   |
+| `ceh-python-service`           | 1.1.15  |
+| `ceh-security-audit`           | 1.1.20  |
+| `ceh-session-learning`         | 2.0.11  |
+| `ceh-testing`                  | 1.6.33  |
+| `ceh-ui-design`                | 1.0.14  |
+| `ceh-usability-audit`          | 1.2.21  |
+| `ceh-web-frontend`             | 1.3.8   |
+| `ceh-workflow-builder`         | 1.4.16  |
+| `ceh-workflow-runner`          | 1.1.15  |
 
 ### Added
 
 - `ceh-competitor-analysis:analyze-competitor`: `scripts/render-page.py`, which renders
   `<slug>.html` from `<slug>.yaml`.
+- `.claude/rules/decision-plugin-readme-sections.md`: the fixed README section set, named in
+  `plugins/CLAUDE.md` and in the `add-plugin-component` checklist.
+- `docs/DESIGN_NOTES.md` in the plugins whose READMEs held maintainer detail.
 
 ### Changed
 
@@ -43,6 +79,12 @@ cells no longer narrate what each competitor does, since the Source column alrea
   among the allowed script bundles.
 - `docs/IDEAS.md`: 67 new open rows and 81 ideas merged into existing rows from the 2026-11-24
   competitor re-analysis, and competitor commentary removed from the intro and the idea cells.
+- All 21 plugin READMEs: rewritten on the fixed section set for the person installing the plugin.
+- `docs/CROSS_REFERENCES.md`: the `ceh-usability-audit` README row names its new sections.
+- Docs site: `scripts/sync-docs.mjs` publishes the root `README.md` as the home page, sends links
+  to it to the site root, clears its generated pages before each run, and drops `docs/VISION.md`
+  and `docs/STRATEGY.md`. The hand-written `index.mdx` and the two sidebar entries are gone, and
+  the docs workflow no longer watches the two files.
 
 ## 2026-11-23
 

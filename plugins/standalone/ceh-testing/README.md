@@ -1,69 +1,87 @@
 # ceh-testing
 
 Stack-agnostic testing **technique**: which tests to write, and whether the ones you have are worth
-anything.
-
-Your stack's testing skill owns the runner, fixtures, and mocking library
+anything. Your stack's testing skill owns the runner, fixtures, and mocking library
 (`ceh-python-service:write-pytest-service-tests`, `ceh-python-library:write-pytest-library-tests`,
 `ceh-web-frontend:write-vitest-playwright-tests`). This plugin owns the questions those do not
 answer: which inputs, which scenarios, does a green suite actually catch a defect, and what does a
 passing functional suite structurally miss. Load it alongside a stack plugin, not instead of one.
 
+## Install
+
+See [Getting started](../../../docs/GETTING_STARTED.md). Some parts need more installed:
+
+| Needs                            | For                                                         | Without it                                                      |
+| -------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- |
+| `python3` on PATH                | All three hooks                                             | Not tested. A hook that fails blocks no work                    |
+| [uv](https://docs.astral.sh/uv/) | Checking saved reports and fix records against their format | The agent is told once per session that the file went unchecked |
+
+It also arrives by itself with `ceh-python-library`, `ceh-python-service` and `ceh-web-frontend`,
+which depend on it.
+
 ## Skills
 
-| Skill                       | Invoke                                   | Triggers when                                                                                                                                                                                                                                                                                                                                                                           |
-| --------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `test-a-bug-fix`            | `/ceh-testing:test-a-bug-fix`            | A bug, crash, regression, or incident is being fixed: write the failing test before the fix, prove it goes red without the fix, bisect on it when the behavior used to work, and save a fix record to `.agents_workspace/product/fix/<YYYYMMDD-HHMMSS>-<slug>.yaml`                                                                                                                     |
-| `design-test-cases`         | Model-only, no slash command             | Deciding which inputs and scenarios to cover: partitions, boundaries, decision tables, state transitions, pairwise, properties, metamorphic relations, fuzzing, forced dependency failure                                                                                                                                                                                               |
-| `audit-test-suite`          | `/ceh-testing:audit-test-suite`          | Finding out whether a passing suite would catch a defect: assertion quality, mutation testing on the diff, flakiness, level and speed, branch coverage                                                                                                                                                                                                                                  |
-| `verify-behavior-preserved` | `/ceh-testing:verify-behavior-preserved` | Before a change meant to alter no observable behavior: refactor, extraction, dependency or runtime upgrade, port. Pins current behavior with characterization tests, golden files, a differential run                                                                                                                                                                                   |
-| `close-test-risk-gaps`      | `/ceh-testing:close-test-risk-gaps`      | Pre-completion gate: triage concurrency, contract drift, performance, authorization, and migration/rollout gaps. A class whose trigger does not fire is skipped explicitly                                                                                                                                                                                                              |
-| `write-test-first`          | `/ceh-testing:write-test-first`          | About to write code that adds or changes behavior, asked for tests or not: red, green, refactor per slice. It's working if each slice in the hand-over quotes the failure seen before its code existed                                                                                                                                                                                  |
-| `measure-performance`       | `/ceh-testing:measure-performance`       | Speed, memory, or size is the task: vet the measurement against its noise, record a baseline, profile before changing, one change per measurement and one commit per win. It's working if every number is a median with its spread and a kept change clears the noise band                                                                                                              |
-| `explore-app-for-bugs`      | `/ceh-testing:explore-app-for-bugs`      | The running app must be tried for bugs, not its suite: charters over the changed areas, inputs, sequence, state, and environment tours, each bug reproduced twice. Report-only unless fix mode is asked for. It's working if `QA_REPORT.yaml`, rendered to `QA_REPORT.md`, lists each bug as confirmed or unconfirmed with its steps and evidence                                       |
-| `write-evidence-report`     | `/ceh-testing:write-evidence-report`     | Before a launch or a post about the product: one `.agents_workspace/product/EVIDENCE.yaml`, with a dated run added each time, rolled up from the latest test run and the QA, performance, security, and usability reports, read by `ceh-blog-and-seo` and `ceh-blog-and-seo`. It's working if every area shows passed, open issues, stale, or not run, and every claim names its figure |
+| Skill                       | Say or type                                                                                             | What it does                                                                                                                                                                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `test-a-bug-fix`            | "fix this bug", a stack trace, `/ceh-testing:test-a-bug-fix`                                            | Writes the failing test before the fix, proves it goes red without the fix, bisects on it when the behavior used to work, and saves a fix record.                                                                        |
+| `design-test-cases`         | Loads by itself when deciding which inputs and scenarios a test should cover                            | Partitions, boundaries, decision tables, state transitions, pairwise, properties, metamorphic relations, fuzzing, forced dependency failure.                                                                             |
+| `audit-test-suite`          | "are these tests any good", "flaky test", `/ceh-testing:audit-test-suite`                               | Finds out whether a passing suite would catch a defect: assertion quality, mutation testing on the diff, flakiness, level and speed, branch coverage.                                                                    |
+| `verify-behavior-preserved` | "refactor this", "make sure nothing broke", `/ceh-testing:verify-behavior-preserved`                    | Before a change meant to alter no observable behavior (refactor, extraction, dependency or runtime upgrade, port), pins current behavior with characterization tests, golden files, a differential run.                  |
+| `close-test-risk-gaps`      | "is this ready", "before I open the PR", `/ceh-testing:close-test-risk-gaps`                            | A gate before calling work done: triages concurrency, contract drift, performance, authorization, and migration or rollout gaps. A class whose trigger does not fire is skipped explicitly.                              |
+| `write-test-first`          | "implement", "add a feature", "TDD", `/ceh-testing:write-test-first`                                    | Red, green, refactor per slice, whether or not tests were asked for.                                                                                                                                                     |
+| `measure-performance`       | "make this faster", "benchmark this", `/ceh-testing:measure-performance`                                | Vets the measurement against its noise, records a baseline, profiles before changing, one change per measurement and one commit per win.                                                                                 |
+| `explore-app-for-bugs`      | "QA this", "try to break it", `/ceh-testing:explore-app-for-bugs [report \| fix] [area]`                | Tries the running app, not its suite: charters over the changed areas, inputs, sequence, state, and environment tours, each bug reproduced twice. Report-only unless fix mode is asked for.                              |
+| `write-evidence-report`     | "are we ready to launch", "what have we proven", `/ceh-testing:write-evidence-report [product or path]` | Before a launch or a post about the product, rolls the latest test run and the QA, performance, security, and usability reports into one evidence report, with a dated run added each time. `ceh-blog-and-seo` reads it. |
 
-The plugin ships no agents. `audit-test-suite` has a report-only mode for a large or slow suite: hand
-the audit to a background subagent with the skill loaded and it returns a ranked report without
-editing anything. Writing the missing tests belongs to the stack's own tester agents.
+## Agents
+
+This plugin has no agents. `audit-test-suite` has a report-only mode for a large or slow suite:
+hand the audit to a background subagent with the skill loaded and it returns a ranked report
+without editing anything. Writing the missing tests belongs to the stack's own tester agents.
 
 ## Hooks
 
-| Hook                                                                      | Event                                        | Script                    | Default |
-| ------------------------------------------------------------------------- | -------------------------------------------- | ------------------------- | ------- |
-| [Skill-started guard](#skill-started-guard)                               | `PreToolUse` (`Edit`, `Write`, `MultiEdit`)  | `skill-started-guard.py`  | on      |
-| [Evidence render](#evidence-render-and-generated-markdown-guard)          | `PostToolUse` (`Edit`, `Write`, `MultiEdit`) | `artifact-render-hook.py` | on      |
-| [Generated Markdown guard](#evidence-render-and-generated-markdown-guard) | `PreToolUse` (`Edit`, `Write`, `MultiEdit`)  | `generated-md-guard.py`   | on      |
+Three hooks run by themselves while the plugin is enabled. [Settings](#settings) turns them off.
 
-### Skill-started guard
+| Hook                 | What it does for you                                                                                                                         |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Test-file guard      | Stops an edit to a test file until a skill that owns writing tests has been started in the session.                                          |
+| Report check         | Checks each saved report and fix record against its format when it is written, and renders its Markdown. Errors go back to the agent to fix. |
+| Generated-file guard | Stops a hand edit to a Markdown file generated from a YAML file, and names the YAML to edit instead.                                         |
 
-Denies an edit or write of a test file (`test_*.py`, `*_test.py`, `*.test.*` or `*.spec.*` in JS or
-TS) until a skill that owns writing tests has been started in the session, by a `Skill` tool call or
-a slash command: `write-test-first`, `test-a-bug-fix`, `verify-behavior-preserved`, or a stack
-testing skill named above. A skill that another skill's steps only name ("`write-test-first` sets
-out how") still has to be started. Files outside the session's project pass, and so do the six
-tester agents' writes, since each preloads a testing skill. It needs `python3` on
-PATH (stdlib only) and fails open without it. `CEH_SKILL_STARTED_GUARD=off`, or
-`CEH_DISABLED_HOOKS` with `skill-started-guard`, switches it off, in every plugin that ships it.
+### Test-file guard
 
-### Evidence render and generated Markdown guard
+A test file is `test_*.py`, `*_test.py`, or `*.test.*` or `*.spec.*` in JS or TS. The guard allows
+the edit once a skill that owns writing tests has been started in the session, by a `Skill` tool
+call or a slash command: `write-test-first`, `test-a-bug-fix`, `verify-behavior-preserved`, or a
+stack testing skill named above. A skill that another skill's steps only name ("`write-test-first`
+sets out how") still has to be started. Files outside the session's project pass, and so do the
+six tester agents' writes, since each preloads a testing skill. Its setting switches it off in
+every plugin that ships it.
 
-`write-evidence-report` saves `.agents_workspace/product/EVIDENCE.yaml` (`evidence/v2`), `explore-app-for-bugs`
-saves `QA_REPORT.yaml` (`qa-report/v2`), and `measure-performance` saves `<metric>.yaml`
-(`perf-report/v2`). After every write to one, the render hook checks the YAML against its model
-through `uv` and renders the Markdown beside it, or reports each error back to the agent and leaves
-the Markdown as it was. It checks a `<YYYYMMDD-HHMMSS>-<session-id>-security-audit.yaml`, `UX_AUDIT.yaml` and
-`ERROR_MESSAGES.yaml` too, through `write-evidence-report`'s copies of their models, so with
-`ceh-security-audit` or `ceh-usability-audit` installed an error in one is reported by both
-plugins. `test-a-bug-fix` completes or creates a fix record, `.agents_workspace/product/fix/<YYYYMMDD-HHMMSS>-<slug>.yaml`
-(`fix-record/v3`), which the hook checks through the skill's model too, as `ceh-coding-conduct`'s
-does. `audit-test-suite` saves its audit as a `.yaml` in `.agents_workspace/product/audit/test/`
-(`test-audit/v2`), which the hook checks and renders too. The guard denies a direct
-edit to a generated Markdown file and names its YAML. Both need `uv`: without it the agent is told
-once per session that the file went unchecked. `CEH_ARTIFACT_CHECK=off`, or `CEH_DISABLED_HOOKS`
-with `artifact-render-hook` or `generated-md-guard`, switches them off.
+### Report check
 
-## Relation to the stack testing skills
+The check covers the files this plugin's skills save: the evidence report, the QA report, the
+performance reports, the test-suite audit, and the fix record. It also checks a security audit,
+`UX_AUDIT.yaml` and `ERROR_MESSAGES.yaml`, so with `ceh-security-audit` or `ceh-usability-audit`
+installed an error in one is reported by both plugins. A file with errors keeps its old Markdown
+until the errors are fixed.
+
+## Settings
+
+Set a variable under `env` in a Claude Code settings file. The
+[environment variables page](../../../docs/ENVIRONMENT_VARIABLES.md) shows which file and how to
+undo it.
+
+| Variable                  | Default              | Effect                                                                                                  |
+| ------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------- |
+| `CEH_ARTIFACT_CHECK`      | unset (check on)     | `off` turns the report check and the generated-file guard off                                           |
+| `CEH_SKILL_STARTED_GUARD` | unset (guard on)     | `off` turns the test-file guard off                                                                     |
+| `CEH_DISABLED_HOOKS`      | unset (all hooks on) | Comma-separated hook names to skip: `skill-started-guard`, `artifact-render-hook`, `generated-md-guard` |
+
+## How it works
+
+### Which skill answers which question
 
 | Question                                 | Owner                                                                 |
 | ---------------------------------------- | --------------------------------------------------------------------- |
@@ -77,10 +95,10 @@ with `artifact-render-hook` or `generated-md-guard`, switches them off.
 | What does a passing suite still miss     | `close-test-risk-gaps`                                                |
 | What has been proven, for the launch     | `write-evidence-report`                                               |
 
-## Deliberately out of scope
+## Not this plugin
 
 Real techniques left out on purpose: either they belong to another plugin, or nothing in a normal
-coding session triggers them. Listed so a gap reads as a decision rather than an oversight.
+coding session triggers them.
 
 | Technique                                                          | Why not here                                                                                                                                                                                  |
 | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -88,11 +106,21 @@ coding session triggers them. Listed so a gap reads as a decision rather than an
 | Chaos engineering, infra fault injection, failover and DR drills   | Production-environment practice. Dependency-level fault injection _is_ covered (`design-test-cases`, rung 9).                                                                                 |
 | Canary, shadow traffic, progressive rollout, post-deploy smoke     | Deploy-pipeline verification, not a coding moment.                                                                                                                                            |
 | SAST, DAST, dependency and secrets scanning, pen testing           | Security review and dependency audits. Authorization testing is the one security technique kept here, because it is a unit/integration test.                                                  |
-| Continuous fuzzing at scale (OSS-Fuzz, libFuzzer corpora)          | In-suite fuzzing is rung 8; standing fuzz infrastructure is a tooling decision, not a technique to apply inline.                                                                              |
+| Continuous fuzzing at scale (OSS-Fuzz, libFuzzer corpora)          | In-suite fuzzing is rung 8. Standing fuzz infrastructure is a tooling decision, not a technique to apply inline.                                                                              |
 | MC/DC, condition and def-use path coverage                         | Cost far exceeds diff-scoped mutation testing outside regulated domains. Noted in `audit-test-suite` rather than taught.                                                                      |
-| Model-based testing, usability, localization, cross-browser/device | Either manual practice or a tooling investment; no in-session trigger moment. Exploratory, charter-based testing is in, as `explore-app-for-bugs`, since "QA this" is a moment.               |
+| Model-based testing, usability, localization, cross-browser/device | Either manual practice or a tooling investment, with no in-session trigger moment. Exploratory, charter-based testing is in, as `explore-app-for-bugs`, since "QA this" is a moment.          |
 | Runner, fixtures, mocking library, coverage thresholds, CI wiring  | The stack testing skills own these by design.                                                                                                                                                 |
 
 ## Where its files live
 
-Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.
+The plugin saves and reads its files in `.agents_workspace/product/`:
+
+- `EVIDENCE.yaml`, the evidence report
+- `qa/<YYYYMMDD-HHMMSS>-<session-id>/QA_REPORT.yaml`, the QA report
+- `perf/<metric>.yaml`, a performance report
+- `audit/test/`, the test-suite audits
+- `fix/<YYYYMMDD-HHMMSS>-<slug>.yaml`, a fix record
+
+Each YAML file has its Markdown rendered beside it. A project with a root `product/` folder moves
+each file to the same sub-path under `.agents_workspace/product/`, or names its own location in
+`CLAUDE.md`.

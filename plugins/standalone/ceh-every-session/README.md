@@ -1,264 +1,175 @@
 # ceh-every-session
 
-Standards that hold however Claude Code is used — coding, writing, research, or ops. Nothing here
-assumes a repository, code, or a specific activity; that is the admission test for this plugin.
+Help that holds however you use Claude Code: coding, writing, research, or ops. Nothing here
+assumes a repository or code.
 
-Today it carries two session-protection concerns: `hand-off-session` saves a session's working
-state to a file and loads it back in a later session, `usage-limit-handoff` uses it to stop a
-session cleanly before the account usage limit cuts it off, and `delegate-bulk-reads` with the cheap `bulk-reader`
-agent pushes I/O-heavy reading onto a small model so file contents never reach the main context.
-`write-questionnaire` hands open questions to someone outside the session and reads their answers
-back. `write-research-note`, `stress-test-plan`, and `prevent-repeat-mistake` research a question
-with cited sources, question a plan before anyone acts on it, and turn a repeated mistake into a
-fix that stops it, whatever the files are: code, notes, plans, or strategy documents.
-`record-project-decisions` writes the decisions that bind a project, or all of a user's projects,
-one short rule file each, so
-every session follows them whatever the task. `whats-next` suggests which installed skill or agent
-fits the user's situation, and leaves the choice to them.
+What it does for you:
+
+- **Keeps a session's state.** Save where you are to a file, load it in a later session, and stop
+  cleanly before the account usage limit cuts the session off.
+- **Keeps large files out of the context.** A small, cheap agent reads them and returns only the
+  answer.
+- **Gets answers.** Research a question with cited sources, send questions to someone outside the
+  session, or ask which skill fits what you want to do next.
+- **Checks work.** Question a plan before anyone acts on it, review work that is not done yet, or
+  audit work that is.
+- **Keeps what you learn.** Turn a repeated mistake into a fix that stops it, and write a decision
+  down as a rule every later session follows.
+- **Shapes every reply.** A summary first, an honest status per topic, and a decision block when
+  the choice is yours.
+
+## Install
+
+See [Getting started](../../../docs/GETTING_STARTED.md). Some parts need more installed:
+
+| Needs                                  | For                                                                   | Without it                                                                                              |
+| -------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `python3` on PATH                      | Every hook                                                            | Not tested. A hook that fails blocks no work                                                            |
+| [uv](https://docs.astral.sh/uv/)       | Checking saved files such as a handoff or a plan against their format | The file is read unchecked, and the agent says so                                                       |
+| A Claude Code build with mods          | Folded replies                                                        | Replies show as plain text                                                                              |
+| A statusline export of the rate limits | The usage-limit guard, see [Usage-limit guard](#usage-limit-guard)    | The guard does nothing, and warns once per session if you set its variables or the export folder exists |
 
 ## Skills
 
-| Skill                      | When it loads                                                                          | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| -------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hand-off-session`         | On demand — "save the session", "pick this up", or when `usage-limit-handoff` calls it | Save: close the step in flight, write a handoff file (goal, done, in flight, open, decisions pending, resume line) to `.agents_workspace/handoff/` plus a line in the global `~/.claude/handoff/index.md`, or with `--file <path>` overwrite that one file with no index line, adding the caller's fields after `**Session:**` and sending pending forks to a caller-named place. Load: find the named or newest handoff, check it against the repo, and resume from its first open step.                                                                                                                                                                                                                 |
-| `usage-limit-handoff`      | When the usage-limit guard hook fires (5h or weekly window past threshold)             | Stop-and-summarize protocol: close the current atomic step, start nothing new, save the handoff through `hand-off-session` with the usage window in its header, end the turn. Subagents report upward instead of writing the artifact.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `delegate-bulk-reads`      | Before dispatching `bulk-reader`, and before acting on what it returns                 | The caller's half of the delegation. How to write the prompt so the answer is usable (one question per call, explicit paths, never ask it to edit), and the verification rules that apply afterwards: read the anchored lines before editing or reporting them, treat an unanchored bullet as unverified, and distrust a clean `Not found / uncertain` rather than lean on it — confirm coverage yourself, because every path sent owes a verdict in `Answer`. Carries the size floor (~400 lines, not "three or more files") and the rule that a "why" is worth splitting into several "wheres". Guard tuning lives below.                                                                               |
-| `write-questionnaire`      | On demand — "make a questionnaire", "I need to ask the team", "read the answers back"  | Write: turn the session's open questions into one self-contained file under `.agents_workspace/questionnaires/`, each question with its context, what it blocks, and options with a recommended default. With `--issue <owner/repo> --labels <list>`, post it as a GitHub issue instead, when a human authorized opening issues there, and report its number. Read: apply every `Answer:` line, from the file or, with `--issue <owner/repo>#<n>`, from the issue body and its `Answer <n>:` comments, newest first, and list what is still open. It's working if each question reads sensibly to someone who never saw the session, and a blank answer is reported as open, not filled with the default. |
-| `write-research-note`      | On demand — "research X", "look into how Y works", "find out whether Z"                | A background agent reads primary sources and writes one note to `.agents_workspace/research/` in which every claim is cited, then the session re-fetches the two or three citations the answer rests on. It's working if every sentence in the note carries a `[n]` or an "Inference:" label, and the note has a Checked line and a Not found section.                                                                                                                                                                                                                                                                                                                                                    |
-| `stress-test-plan`         | On demand — "grill me on this plan", "stress-test this", "poke holes in this"          | Lists every open decision and untested assumption in a plan, fetches facts with a subagent, and asks the rest in rounds of at most four, each with a recommended answer that "yes" accepts. Writes `## Decisions` and `## Open` back into the plan. It's working if no question asks for a fact the files could answer, and each round asks only questions whose prerequisites are settled.                                                                                                                                                                                                                                                                                                               |
-| `review-anything`          | On demand — "review this", "review X against Y"                                        | For work not yet marked done that no other review skill owns: hands a subject with its own skill to that skill, and done work to an audit, then dispatches `independent-reader` with the subject and the criteria, checks every blocking finding against its cited place, and saves a `general-review/v1` YAML (checked by a model, Markdown rendered beside it) to `.agents_workspace/product/review/general/`, one file per target edited in place by later rounds. It's working if the reply lists the subject and criteria before the reader runs, and ends with a verdict of `Done`, `Not yet` or `Cannot judge` and the file path.                                                                  |
-| `audit-anything`           | On demand — "audit this", "audit X against Y"                                          | For work already marked done or shipped that no other audit skill owns: hands a subject with its own skill to that skill, and work not yet done to `review-anything`, then dispatches `independent-reader` with the subject and the criteria, checks every HIGH finding against its cited place, and saves a new `general-audit/v1` YAML (checked by a model, Markdown rendered beside it) to `.agents_workspace/product/audit/general/` on every run, never edited after. It's working if the reply lists the subject, its boundary and the criteria before the reader runs, and ends with findings worst first and a file name holding the session id.                                                  |
-| `prevent-repeat-mistake`   | On demand — "you did X again", "make sure this never happens again"                    | Names the mistake from quoted evidence, climbs a ladder from removing the cause through a Claude Code setting and checks to written guidance last, proves the fix fails on the real mistake, and only drafts changes to `CLAUDE.md`, settings, memory, or hooks for approval, saved as a `repeat-mistake/v2` YAML (checked by a model, Markdown rendered beside it) to `.agents_workspace/product/retro/`, one report for fixes in the repo and outside it, so a later session can pick them up. Works on code, notes, plans, or any files. It's working if the report quotes the mistake and says why each higher rung did not fit.                                                                      |
-| `whats-next`               | On demand, also mid-session — "what's next", "what now", "which skill do I use"        | Reads the request, then the repo state (git status, the lifecycle handoff files, the newest session handoff), and suggests one to three installed skills or agents that fit, each with why it fits now and how to start it. Runs none of them. Knows the user-only skills the session listing hides. When nothing installed fits, it suggests up to two plugins not yet installed from `claude plugin list --available`, `ceh-` plugins first, each with its install command. It's working if the answer is a table of suggestions whose reasons cite files it read, and nothing ran.                                                                                                                     |
-| `find-available-guide`     | When the work first names a framework, library, or service                             | Looks the names up with one Grep in `references/registry.txt`, a list of pointers to installable skills, plugins, and MCP servers with one line per install method. It finishes the task first, then adds one line per hit below the reply's `---` with the install command, a recommended scope, and the other methods. It installs nothing and says nothing on a miss. It's working if a hit shows a note under `---` with an install command copied word for word from the registry, and a name with no entry shows nothing.                                                                                                                                                                           |
-| `record-project-decisions` | On demand — "we decided X", "from now on we use Y", "set up the project decisions"     | Record: write one decision as its own rule file, `.claude/rules/decision-<topic>.md`, or `~/.claude/rules/` for one that binds all the user's projects, which Claude Code loads in every session. Seed: collect the choices installed skills leave open, the decisions already in the project's documents, and a short list of areas, infer what the files answer, and ask the rest up front. It's working if each decision lands in its own file with a `Why:` line, and an inferred one names the file it came from.                                                                                                                                                                                    |
-
-**Manual triggers**
-
-- `hand-off-session` — `/hand-off-session save [--file <path>]` or `/hand-off-session load [path]`, or say `"save where we are"` / `"pick this up"`.
-- `write-questionnaire` — `/write-questionnaire write [--issue <owner/repo> --labels <list>]` or `/write-questionnaire read [path | --issue <owner/repo>#<n>]`, or say `"make a questionnaire for the team"`.
-- `write-research-note` — `/write-research-note <question>`, or say `"research how X handles Y"`.
-- `stress-test-plan` — `/stress-test-plan [plan-file]`, or say `"grill me on this plan"`.
-- `review-anything` — `/review-anything [subject] [criteria]`, or say `"review docs/pricing.md against the vision"`.
-- `audit-anything` — `/audit-anything [subject] [criteria]`, or say `"audit docs/ against the vision"`.
-- `prevent-repeat-mistake` — `/prevent-repeat-mistake [the mistake]`, or say `"make sure this never happens again"`.
-- `record-project-decisions` — `/record-project-decisions [record <decision> | seed]`, or say `"we decided to use SvelteKit"`.
-- `whats-next` — `/whats-next [what you want to do]`, or say `"what's next?"`.
-- `usage-limit-handoff` — no slash command (hidden from the `/` menu), loaded by the usage-limit guard hook.
-- `delegate-bulk-reads` — no slash command (hidden from the `/` menu), loaded before dispatching `bulk-reader` or when a read guard names it.
-- `find-available-guide` — no slash command (hidden from the `/` menu), loaded by the output style when the work first names a framework, library, or service.
-
-`whats-next` and `record-project-decisions` check a plan or `ARCHITECTURE.yaml` against its model
-before reading it, `whats-next` a `PRD.yaml` too, whose first unplanned feature it suggests
-planning, and `record-project-decisions` a `GLOSSARY.yaml`, which needs
-[uv](https://docs.astral.sh/uv/), installing pydantic and PyYAML on first use. Without uv the file
-is read unchecked, and a repo with none of these files needs no uv.
-
-`record-project-decisions` writes a decision that binds all of the user's projects to the folder
-`CEH_USER_RULES_DIR` names (optional, default `~/.claude/rules/`), for a user who keeps those rules
-in a git-tracked folder. Claude Code loads only the default folder by itself, so for any other
-folder the skill adds one `@<folder>/decision-<topic>.md` import line per rule to
-`~/.claude/CLAUDE.md`.
-
-Why a variable and an import:
-
-- **A tracked home.** `~/.claude/rules/` sits in no repository, so a rule written there has no
-  history and does not reach another machine. The variable lets those rules live in a repo.
-- **The default stays.** A user who does not set the variable sees no change.
-- **The import is the only way in.** The Claude Code memory docs, read 2026-11-13, name no setting
-  that loads user rules from another folder, and an `@path` line in `~/.claude/CLAUDE.md` is the
-  documented way to load a file from elsewhere.
-- **Not built: a symlink.** Making `~/.claude/rules/` a symlink into a tracked repo would need no
-  import, since rules folders support symlinks. It was left out because creating a symlink on
-  Windows needs Developer Mode or administrator rights.
-- **Not checked:** whether a `paths` field in an imported rule still narrows when it loads.
+| Skill                      | Say or type                                                                                                                      | What it does                                                                                                                                                                                                                                                            |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hand-off-session`         | "save where we are", "pick this up", `/ceh-every-session:hand-off-session save` or `load [path]`                                 | Save writes the goal, what is done, what is open and the pending decisions to `.agents_workspace/handoff/`. Load finds the newest handoff, checks it against the repo, and resumes from its first open step.                                                            |
+| `write-questionnaire`      | "make a questionnaire for the team", "read the answers back", `/ceh-every-session:write-questionnaire write` or `read [path]`    | Turns the session's open questions into one file someone outside the session can answer, each with its context and a recommended default. Later it reads the answers back and lists what is still open. It can post to a GitHub issue instead with `--issue`.           |
+| `write-research-note`      | "research how X handles Y", `/ceh-every-session:write-research-note <question>`                                                  | A background agent reads primary sources and writes one note to `.agents_workspace/research/` with every claim cited. The session then checks the citations the answer rests on.                                                                                        |
+| `whats-next`               | "what's next?", "which skill do I use", `/ceh-every-session:whats-next [what you want to do]`                                    | Reads the repo and the newest handoff, then suggests one to three installed skills or agents, each with the reason and how to start it. When nothing installed fits, it suggests up to two plugins not yet installed, with their install command. It runs none of them. |
+| `stress-test-plan`         | "grill me on this plan", "poke holes in this", `/ceh-every-session:stress-test-plan [plan-file]`                                 | Lists every open decision and untested assumption in a plan, looks up what the files can answer, and asks you the rest in rounds of at most four, each with a recommended answer.                                                                                       |
+| `review-anything`          | "review docs/pricing.md against the vision", `/ceh-every-session:review-anything [subject] [criteria]`                           | For work not yet marked done: a reader who has not seen the session checks it against the criteria, and the review is saved with a verdict of `Done`, `Not yet` or `Cannot judge`.                                                                                      |
+| `audit-anything`           | "audit docs/ against the vision", `/ceh-every-session:audit-anything [subject] [criteria]`                                       | For work already done or shipped: the same independent reader, with the findings saved worst first in a new file on every run.                                                                                                                                          |
+| `prevent-repeat-mistake`   | "you did X again", "make sure this never happens again", `/ceh-every-session:prevent-repeat-mistake [the mistake]`               | Names the mistake from quoted evidence, picks the strongest fix that would have caught it (a setting or a check before written guidance), proves it on the real mistake, and drafts the change for your approval.                                                       |
+| `record-project-decisions` | "we decided to use SvelteKit", "from now on we use Y", `/ceh-every-session:record-project-decisions [record <decision> \| seed]` | Writes each decision as its own rule file, `.claude/rules/decision-<topic>.md`, which Claude Code loads in every session. `seed` collects the decisions a new project still has open and asks them up front.                                                            |
+| `find-available-guide`     | Loads by itself when the work first names a framework, library, or service                                                       | Looks the name up in a list of installable skills, plugins and MCP servers, and adds one line with the install command below the reply. It installs nothing and says nothing on a miss.                                                                                 |
+| `usage-limit-handoff`      | Loads by itself when the usage-limit guard fires                                                                                 | Finishes the current step, starts nothing new, saves a handoff, and ends the turn.                                                                                                                                                                                      |
+| `delegate-bulk-reads`      | Loads by itself before the `bulk-reader` agent is used                                                                           | Tells the session how to ask `bulk-reader` one clear question and how to check its answer before acting on it.                                                                                                                                                          |
 
 ## Agents
 
-| Agent                | When to use                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `bulk-reader`        | Read large or numerous files and return a compressed, line-anchored answer to one specific question. Runs on `haiku` with `Read`/`Grep`/`Glob` only — the model line is the entire cost saving, and the recall ceiling. Measured over 30 dispatches (the eval suite in [agent-skills](https://github.com/cheneeheng/agent-skills/tree/main/plugins/ceh-coding-conduct/skills/delegate-bulk-reads/tests), not migrated): 100% recall on enumerative questions, 69% when the answer has to be assembled, which is why `delegate-bulk-reads` makes the caller confirm coverage. Read-only, never edits |
-| `independent-reader` | Check a subject against criteria as a reader who has not seen the session that wrote it, and return findings that each cite a place it read, with a verdict for a review. Dispatched by `review-anything` and `audit-anything` on every run. Runs on the session's model (`inherit`), because the judgement is the job, with `Read`/`Grep`/`Glob` only. Read-only, never edits                                                                                                                                                                                                                      |
-
-## Output style
-
-| Output style                                               | When it applies                                                      | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| ---------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CEH Every Session` (`output-styles/ceh-every-session.md`) | Every session while the plugin is enabled (`force-for-plugin: true`) | Response format and honesty rules: a numbered summary list for 2+ topics, each item `**Topic** · _Status_` with its Outcome below, so it wraps on a phone, the work before the prose, one complete thought per bullet, a closing `**Decision: <question>**` block of numbered options for every fact only the user holds or yes before an irreversible action, never an `AskUserQuestion` dialog, plain "I don't know", and when the prompt or the caller says no user is present, no decision block: the question goes where the caller says, or the agent decides, records it and continues, and reporting what was verified versus assumed. Sets `keep-coding-instructions: true`, so Claude Code's built-in engineering instructions stay in place for coding sessions. |
-
-`force-for-plugin` overrides any `outputStyle` the user set, and if several enabled plugins force a
-style, Claude Code uses the first one loaded. Output styles reach the main conversation and forks
-only. Other subagents run their own system prompt, so rules that must hold there stay in
-`CLAUDE.md` or a skill.
-
-The style's last section, Available guides, is what starts `find-available-guide`. It tells the
-agent to invoke the skill once when the work first names a framework, library, or service, and to
-say nothing about the lookup when the registry lists nothing.
-
-## Registry
-
-`skills/find-available-guide/references/registry.txt` lists pointers to skills, plugins, and MCP
-servers worth installing, one line per install method:
-`name | aliases | kind | beats | method | install | source | checked`. `kind` is what the entry is
-(`skill`, `plugin`, `mcp`) and `method` is how it installs (`plugin`, `mcp-add`, `skill-copy`).
-An entry with several ways to install has several lines, the preferred one first. Each column is
-described in `skills/find-available-guide/references/registry.schema.md`, which sits beside the
-registry because the registry itself takes no header or comment lines.
-
-To add an entry, read the install command at its source, write the line with today's date as
-`checked`, and run `python tools/validate-plugins/validate.py`, which checks every cell. Entries
-are our own pointers, never text copied from a third party, and cover only help for building,
-proving, or telling people about a product. The skill shows the install command and never runs it.
-
-## Mod
-
-`hooks/fold-replies.tsx` is a Claude Code mod, a hooks module `hooks/hooks.json` names under
-`modules`, that redraws replies written in the output style's shape. It changes the drawing only:
-the stored reply and what the model reads stay whole, and ctrl+o shows the raw text. A `code`
-span in a Topic, a question, or an option draws as inline code, as it does in a reply.
-
-| What                 | When it applies                                                    | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| -------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Folded topics        | A reply that opens with a summary list                             | Shows the list in a box titled Summary, then each bold Topic as a bordered box with a `▸ <#> <Topic>` title that a click unfolds, its bullets indented under it. A quick second click or a slip of the hand on a title selects its text instead of toggling, which Claude Code gives a mod no way to stop without shifting every click in VS Code. The `---` right after the list is dropped from the drawing, since the box border separates it, and stays in the reply for surfaces without the mod. Text below a later `---` that belongs to no Topic shows open in a box titled Notes. A reply with no summary list draws as Claude Code draws it. |
-| Decision options     | A reply that ends in one or more `**Decision: <question>**` blocks | Draws each block as a box of options. A press marks the option and fills the prompt box, unsent, with every pick of that reply as numbers only: the option number, or one `<decision>: <option>` line each when the reply has several blocks.                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `/details on \| off` | Typed by the user, `/details` alone toggles                        | `on` keeps the boxes and opens every Topic, and a press folds one. `off` folds again. The prompt footer shows the mode `folded replies (mod)` while folding is on. The setting lasts for the session.                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-
-The mod needs a Claude Code build with mods. Its tests run with `claude plugin test plugins/standalone/ceh-every-session`,
-which `validate.py` does not run.
+| Agent                | What it does                                                                                                                                                                                                            |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bulk-reader`        | Reads large or many files and returns a short answer to one question, with line numbers. It runs on the small `haiku` model, which is the saving, and can miss facts, so the session checks its answer. It never edits. |
+| `independent-reader` | Checks a piece of work against criteria as a reader who has not seen the session that wrote it. `review-anything` and `audit-anything` use it on every run. It never edits.                                             |
 
 ## Hooks
 
-The plugin ships hooks (`hooks/hooks.json`) that activate automatically when the plugin is enabled.
-Each hook script is stdlib-only Python, needs `python3` on PATH, and fails open: a hook that blocked
-work on its own bugs would cost more than it saves. The handoff render hook runs `artifact.py`
-through `uv` for the check itself. One subsection per guard below.
+Four guards run by themselves while the plugin is enabled. A guard never blocks work because of its
+own error. [Settings](#settings) tunes or turns them off.
 
-| Guard                                                 | Event                                         | Script(s)                                          | Default                                |
-| ----------------------------------------------------- | --------------------------------------------- | -------------------------------------------------- | -------------------------------------- |
-| [Usage-limit guard](#usage-limit-guard)               | `PostToolUse` (every tool)                    | `usage-limit-watch.py`                             | acts once a statusline export feeds it |
-| [Bulk-read guards](#bulk-read-guards)                 | `PreToolUse` (`Read`, `Bash`)                 | `bulk-read-guard.py`, `bulk-read-bash-guard.py`    | opt-in                                 |
-| [Question guard](#question-guard)                     | `PreToolUse` (`AskUserQuestion`)              | `ask-user-question-guard.py`                       | on                                     |
-| [Handoff render and guard](#handoff-render-and-guard) | `PostToolUse`, `PreToolUse` (`Edit`, `Write`) | `artifact-render-hook.py`, `generated-md-guard.py` | on                                     |
-
-To switch one hook off without uninstalling the plugin, list its script name in
-`CEH_DISABLED_HOOKS` (comma-separated, no extension): `usage-limit-watch`, `bulk-read-guard`,
-`bulk-read-bash-guard`, `ask-user-question-guard`, `artifact-render-hook`, `generated-md-guard`.
-
-### Handoff render and guard
-
-**After every file edit** — `hand-off-session` saves the handoff as `handoff/v2`, a `.yaml` with the
-`.md` rendered beside it. A `PostToolUse` hook (`scripts/artifact-render-hook.py`) checks a written
-handoff YAML against its model through `uv` and renders the Markdown, or reports each error back to
-the agent and leaves the Markdown as it was. A `PreToolUse` guard (`scripts/generated-md-guard.py`)
-denies a direct edit to a generated Markdown file and names its YAML. Both run on every Edit or
-Write in every session and return at once for any other file, about 85 ms per edit for the two
-together, measured once on Windows. Because `whats-next` and `record-project-decisions` carry the
-plan and architecture models, and `record-project-decisions` the glossary model, the hook also
-checks and renders those files when they
-are written, as their own plugins already do. `prevent-repeat-mistake` saves its report as
-`repeat-mistake/v2`, which the same hook checks and renders, and a dated report missing its schema
-key in either retro folder is reported, not skipped. `stress-test-plan` saves its outcome as
-`stress-test/v2` when there is no plan file to write back to, which the hook checks and renders
-too. `review-anything` saves its review as `general-review/v1`, and `audit-anything` its audit as
-`general-audit/v1`, which the hook checks and renders as well. Without `uv` the agent is told once per session that
-the file went unchecked. `CEH_ARTIFACT_CHECK=off` switches both off.
+| Guard                                                 | What it does for you                                                          | Default                                |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------- |
+| [Usage-limit guard](#usage-limit-guard)               | Stops the session cleanly, with a handoff, before the usage limit cuts it off | Acts once a statusline export feeds it |
+| [Bulk-read guards](#bulk-read-guards)                 | Send whole-file reads of large files to `bulk-reader`                         | Off until you set a line threshold     |
+| [Question guard](#question-guard)                     | Turns a question dialog into a decision block at the end of the reply         | On                                     |
+| [Handoff render and guard](#handoff-render-and-guard) | Checks each saved handoff and keeps its readable Markdown copy in step        | On                                     |
 
 ### Usage-limit guard
 
-**Every tool call** — a `PostToolUse` hook (`scripts/usage-limit-watch.py`) samples the account-wide
-rate-limit percentage, taking whichever window is closest to its cap (the 5-hour and weekly windows
-both count). When it crosses `CEH_USAGE_LIMIT_THRESHOLD` (default 90%), the hook tells the agent to
-stop starting new work and run `usage-limit-handoff`; if ignored, it re-fires every 5 further
-points of usage.
+After every tool call, the guard reads how much of the account usage limit is used, taking
+whichever of the 5-hour and weekly windows is closest to its cap. At 90% it tells the agent to stop
+starting new work and save a handoff. The reading covers the whole account: claude.ai on the web,
+desktop and mobile, and Claude Code all draw from one pool.
 
-The reading is account-wide — claude.ai web, desktop, mobile and Claude Code draw from one pool —
-and refreshes on every API round-trip, so sampling per tool call is fresh enough to stop
-preemptively rather than after a 429. The hook reads the newest record across _all_ sessions and
-projects, so a second Claude Code window does not leave a session acting on a stale number. Inside
-a subagent it tells the subagent to stop and report upward instead of writing an artifact, since a
-subagent sees only its own slice of the work.
+Claude Code gives the rate limits only to the statusline, not to hooks, so the guard needs a
+statusline that exports them.
+[`statusline-hook`](https://github.com/cheneeheng/claude-code-command-center/tree/main/tools/statusline-hook)
+does that by default from `slh-v0.3.0` on, and `C4_STATUSLINE_DISABLE_EXPORT=1` turns its export
+off. Any other statusline can feed the guard by writing
+`~/.claude/statusline/latest/rate-limits.jsonl`, one line `{"session_id", "ts", "data": <payload>}`
+that each turn overwrites, where `data` is the `rate_limits` payload Claude Code gives the
+statusline.
 
-> **Prerequisite for the usage-limit guard:** the hook reads the rate-limit data that a statusline
-> export writes to `~/.claude/statusline/latest/rate-limits.jsonl`, one line
-> `{"session_id", "ts", "data": <payload>}` that each turn overwrites.
-> [`statusline-hook`](https://github.com/cheneeheng/claude-code-command-center/tree/main/tools/statusline-hook)
-> writes it by default from `slh-v0.3.0` on, and `C4_STATUSLINE_DISABLE_EXPORT=1` turns it off.
-> The hook also reads an older export's per-session files,
-> `~/.claude/statusline/<project-dir>/<session_id>.jsonl`. Claude Code itself provides
-> `rate_limits` only to the statusline, not to hooks, hence the relay. Without the export the guard
-> does nothing and says nothing, unless `CEH_USAGE_LIMIT_THRESHOLD` or `CEH_USAGE_STALE_MINUTES` is
-> set or the export folder exists, in which case it warns once per session that it is inactive.
-> Everything else in the plugin works unchanged. Readings older than `CEH_USAGE_STALE_MINUTES`
-> (default 15) are treated as unknown: a stale low number reads as safety that is not there. A window whose
-> `resets_at` has already passed is skipped regardless of the record's age — the reading predates
-> the reset, so a high number there describes a window that no longer exists.
->
-> The hook needs `python3` on PATH (stdlib only, no packages), which is what makes it behave the
-> same on Linux, macOS, and Windows; it replaced a bash+`jq` version that needed a POSIX shell and
-> a `jq` binary Windows does not ship. It is advisory, so it fails open: on error it prints one
-> line to stderr and exits 1 (visible warning, nothing blocked).
+Without the export the guard does nothing, and the rest of the plugin works unchanged. It warns
+once per session that it is inactive when `CEH_USAGE_LIMIT_THRESHOLD` or
+`CEH_USAGE_STALE_MINUTES` is set, or when the export folder exists. If the agent carries on past
+the threshold, the guard fires again every 5 further points of usage.
 
 ### Bulk-read guards
 
-**Before a read — opt-in** — two `PreToolUse` hooks (`scripts/bulk-read-guard.py` on `Read`,
-`scripts/bulk-read-bash-guard.py` on `Bash`) deny whole-file reads of files at or above a line
-threshold and point the agent at `delegate-bulk-reads` instead. Unlike every other hook here they
-are **inert unless `BULK_READER_MIN_LINES` is set**: this plugin loads in most sessions, and
-denying reads by default is not a decision to make on a user's behalf.
-
-Set it in `~/.claude/settings.json` to switch enforcement on:
+The two guards stop a whole-file read of a file at or above a line threshold, and point the agent
+at `bulk-reader` instead. They do nothing until you set the threshold in `~/.claude/settings.json`:
 
 ```json
 { "env": { "BULK_READER_MIN_LINES": "350" } }
 ```
 
-The `bulk-reader` agent itself is let through, since the guard sends work to it. `350` is a reasonable starting value; below roughly 200 the delegation round-trip costs more than
-it saves. `BULK_READER_ALLOW` takes globs that are never blocked, separated by the OS path separator
-(`*.lock:*/migrations/*`, or with `;` on Windows, so a pattern with a drive letter stays whole), on top of the built-in exclusions for lockfiles, minified assets, images
-and archives. `BULK_READER_MIN_LINES=999999` suspends enforcement for a session without
-unregistering the hooks — useful when doing the very things the skill warns against.
+- `350` is a reasonable start. Below roughly 200, handing the read over costs more than it saves.
+- A read of part of a file always passes, and so do lockfiles, minified assets, images and
+  archives, on top of any patterns you set in `BULK_READER_ALLOW`.
+- The guards make the handover happen, but nothing checks that the summary was right. That is why
+  the session checks the cited lines before acting on them.
+- They are a nudge, not a sandbox: other commands can still read a file.
 
 ### Question guard
 
-**Before a question dialog** — a `PreToolUse` hook (`scripts/ask-user-question-guard.py`) denies
-every `AskUserQuestion` call and tells the agent to end the reply with a `**Decision: <question>**`
-block instead, which the mod draws as options. The dialog holds the turn open: a background task or
-subagent that finishes while it waits goes unread until the user answers. A decision block ends the
-turn, so the agent is free to act on that result. When no user is present, the reason sends the
-question where the caller says instead. Skills in other plugins that name
-`AskUserQuestion` keep working, because the denial redirects them. List `ask-user-question-guard`
-in `CEH_DISABLED_HOOKS` to get the dialog back.
+The guard stops every question dialog and has the agent end its reply with a decision block
+instead. A dialog holds the turn open, so a background task that finishes while it waits goes
+unread until you answer. A decision block ends the turn, so the agent can act on that result.
 
-Targeted reads always pass: `Read` with `offset`/`limit`, piped or redirected bash
-(`cat f | grep x`), and `head`/`tail` that genuinely print a small window. The bash guard resolves
-that window against the real file rather than reading the bare integer, so `tail -n +1` (an offset
-— it prints the whole file) is blocked while `tail -n +400` on a 500-line file is not, and `-c`
-is measured in bytes. Several files in one command are summed: `cat a b c` costs their total.
-Each guard sends its full deny text for its first three denials in a session, then one line with
-the denial's number, because repeating an identical block pushes the model into loops.
-Both guards need `python3` on PATH
-(stdlib only) and fail open — unparseable input, a binary file, a missing path, or a crashed
-interpreter allows the read through, because a guard that blocked work on its own bugs would cost
-more than it saves.
+### Handoff render and guard
 
-Three limits are worth knowing before turning enforcement on. The guards are one-directional: they
-make delegation happen, but nothing verifies the summary was right, which is why the skill requires
-spot-checking anchors before acting. They are a nudge with teeth rather than a sandbox — `sed -n`,
-`awk`, `python -c open(...)` and an editor all still read files, and the bash guard covers only the
-common dumps. And a delegation is a full subagent turn, so on small files it is strictly worse than
-reading directly; that is what the threshold exists to prevent.
+`hand-off-session` saves a handoff as a YAML file with a Markdown copy beside it for reading. One
+hook checks the YAML on every write and renders the Markdown, or reports the errors back to the
+agent. The other stops a hand edit to that generated Markdown and names the YAML to edit instead.
+The same pair covers the other files this plugin's skills save or check, such as reviews, audits
+and plans.
 
-**Prior art.** The read-delegation design here follows
-[Portal by Spotify cut my Claude Code token usage by 90%](https://engineering.atspotify.com/2026/9/portal-by-spotify-cut-my-claude-code-token-usage-by-90)
-(Dimitri Mazmanov, September 2026), which pairs a `bulk-reader` worker on a cheaper model with a
-hook that intercepts reads over 350 lines. This plugin keeps the shape and the threshold but not
-the infrastructure: the worker is a plain Claude Code subagent rather than a hosted runtime, and
-the guards are stdlib Python hooks with no service behind them. The 90% figure is theirs and is not
-reproduced here — the eval suite left behind in
-[agent-skills](https://github.com/cheneeheng/agent-skills/tree/main/plugins/ceh-coding-conduct/skills/delegate-bulk-reads/tests) measures this implementation against its own
-corpus and finds roughly 78% saved on enumerative questions, where recall is perfect, and 62% on
-reasoning ones, where about three facts in ten go missing.
+## Settings
+
+Set a variable under `env` in a Claude Code settings file. The
+[environment variables page](../../../docs/ENVIRONMENT_VARIABLES.md) shows which file and how to
+undo it.
+
+| Variable                    | Default              | Effect                                                                                                                                                                                                     |
+| --------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CEH_DISABLED_HOOKS`        | unset (all hooks on) | Comma-separated hook names to skip: `usage-limit-watch`, `bulk-read-guard`, `bulk-read-bash-guard`, `ask-user-question-guard`, `artifact-render-hook`, `generated-md-guard`                                |
+| `CEH_USAGE_LIMIT_THRESHOLD` | `90`                 | The usage percentage at which the usage-limit guard fires                                                                                                                                                  |
+| `CEH_USAGE_STALE_MINUTES`   | `15`                 | A usage reading older than this is treated as unknown                                                                                                                                                      |
+| `BULK_READER_MIN_LINES`     | unset (guards off)   | The line count from which a whole-file read is sent to `bulk-reader`. `999999` suspends the guards for a session                                                                                           |
+| `BULK_READER_ALLOW`         | unset                | File patterns the bulk-read guards never stop, such as `*.lock:*/migrations/*`, separated by `;` on Windows                                                                                                |
+| `CEH_ARTIFACT_CHECK`        | unset (check on)     | `off` turns the handoff render and guard off                                                                                                                                                               |
+| `CEH_USER_RULES_DIR`        | `~/.claude/rules/`   | Where `record-project-decisions` writes a decision that binds all your projects. Set it to keep those rules in a git-tracked folder. The skill then adds one import line per rule to `~/.claude/CLAUDE.md` |
+
+## How it works
+
+### Reply format
+
+While the plugin is enabled, every reply follows its output style, `CEH Every Session`. It replaces
+any output style you set yourself. If several enabled plugins force an output style, Claude Code
+uses the first one loaded.
+
+- A reply with two or more topics opens with a numbered summary, each topic with an honest status
+  such as done, verified or assumed.
+- The work comes before the explanation.
+- A question only you can answer closes the reply as a `**Decision: <question>**` block with
+  numbered options, the recommended one first.
+- The agent says "I don't know" plainly, and separates what it verified from what it assumed.
+
+### Folded replies
+
+On a Claude Code build with mods, the plugin also redraws these replies:
+
+| What you see         | How it works                                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Folded topics        | The summary shows in a box, and each topic below it as a folded box that a click opens.                            |
+| Decision options     | Each decision block shows as a box of options. A press fills the prompt box, unsent, with the number of your pick. |
+| `/details on \| off` | `on` opens every topic, `off` folds them again, and `/details` alone toggles. The setting lasts for the session.   |
+
+Only the drawing changes. The reply itself stays whole, and ctrl+o shows the raw text.
+
+## Not this plugin
+
+- Reviewing a build plan: `ceh-build-plan:review-build-plan`. Reviewing a pull request:
+  `ceh-git-workflow:write-code-review`.
+- Audits with their own skill, such as security or usability: `ceh-security-audit` and
+  `ceh-usability-audit`.
 
 ## Where its files live
 
-Since 2026-11-14 this plugin saves and reads product files in `.agents_workspace/product/`. A project with a root `product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.
+The plugin saves and reads its files in `.agents_workspace/`, and product files such as reviews and
+audits in `.agents_workspace/product/`. `hand-off-session` also adds one line per handoff to
+`~/.claude/handoff/index.md`, so a handoff can be found from any folder. A project with a root
+`product/` folder moves each file to the same sub-path under `.agents_workspace/product/`, or
+names its own location in `CLAUDE.md`.
