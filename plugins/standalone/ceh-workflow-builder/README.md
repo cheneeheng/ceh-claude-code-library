@@ -68,9 +68,9 @@ producing garbage past a green gate.
 ### The interview
 
 `interview-workflow-task` pulls the task out of your head and onto disk as
-`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.yaml` (`workflow-spec/v2`), nine fixed rows checked
-by a model, with the Markdown rendered beside it under the nine headings the builder gates on by
-name. It opens with the repetition test: a task that will not run again in the same shape gets no
+`$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.yaml`, one answer for each of nine fixed questions,
+with a readable Markdown copy beside it. The builder will not start until all nine are there. It
+opens with the repetition test: a task that will not run again in the same shape gets no
 spec.
 
 It records unanswered questions as unanswered rather than as "none". Questions 8 (which steps
@@ -108,8 +108,8 @@ Not automated yet. Keep the output in `.claude/skills/` unless the workflow is s
 To package it by hand:
 
 1. Create `<plugin>/.claude-plugin/plugin.json` with `name`, `version`, and `description`.
-2. Move every `<name>-*` skill directory into `<plugin>/skills/`. Script paths through
-   `${CLAUDE_SKILL_DIR}` keep resolving, because `skills/` stays flat.
+2. Move every `<name>-*` skill directory into `<plugin>/skills/`. The skills' own script paths
+   keep working, because `skills/` stays flat.
 3. Prefix every Skill tool call with the plugin name: `skill="<name>-step"` becomes
    `skill="<plugin>:<name>-step"`. Plugin skills are namespaced, so an unprefixed call no longer
    resolves. This is the one step a plain copy gets wrong.

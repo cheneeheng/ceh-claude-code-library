@@ -1,5 +1,8 @@
 # ceh-testing design notes
 
+Maintainer detail moved out of the plugin README on 2026-11-24, when the README was rewritten for
+the person installing the plugin. The site does not publish this file.
+
 ## Hook wiring
 
 | Hook                     | Event                                        | Script                    | Default |
@@ -23,6 +26,15 @@ plugins. `test-a-bug-fix` completes or creates a fix record, `.agents_workspace/
 (`fix-record/v3`), which the hook checks through the skill's model too, as `ceh-coding-conduct`'s
 does. `audit-test-suite` saves its audit as a `.yaml` in `.agents_workspace/product/audit/test/`
 (`test-audit/v2`), which the hook checks and renders too.
+
+## Skill checks
+
+Moved from the README Skills table on 2026-11-24.
+
+- `write-test-first`: It worked if each slice in the hand-over quotes the failure seen before its code existed.
+- `measure-performance`: It worked if every number is a median with its spread and a kept change clears the noise band.
+- `explore-app-for-bugs`: It worked if the QA report lists each bug as confirmed or unconfirmed with its steps and evidence.
+- `write-evidence-report`: It worked if every area shows passed, open issues, stale, or not run, and every claim names its figure.
 
 ## Why the out-of-scope list exists
 

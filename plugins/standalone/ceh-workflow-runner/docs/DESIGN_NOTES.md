@@ -1,5 +1,8 @@
 # ceh-workflow-runner design notes
 
+Maintainer detail moved out of the plugin README on 2026-11-24, when the README was rewritten for
+the person installing the plugin. The site does not publish this file.
+
 ## Native first
 
 Each stage's work goes to a Claude Code native capability. The runner keeps only what native lacks.

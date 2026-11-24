@@ -88,5 +88,5 @@ Each YAML file has its Markdown rendered beside it. The glossary is committed wi
 `document-architecture` moves an old `.agents_workspace/ARCHITECTURE.md` to its new place on the
 first run. `explain-until-understood` may also write one
 developer-facing explainer of a single subsystem into `docs/`, when you still want one after it
-names the gap. A project that keeps product files in a root `product/` folder moves each file to
-the same sub-path there, or names its own location in `CLAUDE.md`.
+names the gap. A project with a root `product/` folder moves each file to the same sub-path under
+`.agents_workspace/product/`, or names its own location in `CLAUDE.md`.

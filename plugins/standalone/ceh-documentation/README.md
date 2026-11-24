@@ -96,5 +96,6 @@ metadata are expressed in frontmatter or nav config, never by renaming a file ou
 ## Where its files live
 
 The docs go to the project's `docs/` and the examples to its `examples/`. The plugin saves and reads
-product files in `.agents_workspace/product/`. A project with a root
-`product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.
+product files in `.agents_workspace/product/`. A project with a root `product/` folder moves each
+file to the same sub-path under `.agents_workspace/product/`, or names its own location in
+`CLAUDE.md`.

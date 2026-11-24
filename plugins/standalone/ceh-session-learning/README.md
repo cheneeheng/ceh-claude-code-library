@@ -21,7 +21,7 @@ See [Getting started](../../../docs/GETTING_STARTED.md). Some parts need more in
 | Needs                                       | For                                                      | Without it                                                                    |
 | ------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | The transcripts under `~/.claude/projects/` | Both skills, on the machine that ran the session         | A session from another machine needs its `.jsonl` copied over first           |
-| `python3` on PATH                           | A condensed timeline of large transcripts, and the hooks | The analysts fall back to Grep, and the hooks do nothing                      |
+| `python3` on PATH                           | A condensed timeline of large transcripts, and the hooks | The analysts fall back to Grep. The hooks need it too                         |
 | [uv](https://docs.astral.sh/uv/)            | Checking the saved diagnosis and rendering its Markdown  | The YAML is saved unchecked, and the agent says the Markdown was not rendered |
 
 uv installs pydantic and PyYAML on first use.
@@ -77,5 +77,5 @@ Nothing beyond the skills above.
 
 `diagnose-session` saves its diagnosis in `.agents_workspace/product/retro/`, as a YAML file with
 its Markdown copy and an optional `-shareable.md` copy beside it. `turn-session-into-skill` writes
-to the target repo's `.claude/skills/`. A project that keeps product files in a root `product/`
-folder moves each file to the same sub-path there, or names its own location in `CLAUDE.md`.
+to the target repo's `.claude/skills/`. A project with a root `product/` folder moves each file to
+the same sub-path under `.agents_workspace/product/`, or names its own location in `CLAUDE.md`.

@@ -32,8 +32,8 @@ Skills, Agents, Hooks, Settings, How it works, Not this plugin, Where its files 
 with nothing to say keeps its heading and one line, so a reader finds each part in the same place
 on every page. Install links to Getting started instead of repeating an install command.
 Maintainer detail (hook wiring, schema names, measurements, incidents, history) moved word for
-word to a new `docs/DESIGN_NOTES.md` in each plugin, or to an existing file in that plugin's
-`docs/`, which the site does not publish. A new rule, `decision-plugin-readme-sections.md`, holds
+word to a new `docs/DESIGN_NOTES.md` in 19 of the plugins, or to `docs/ARCHITECTURE.md` in
+`ceh-workflow-builder`, which the site does not publish. A new rule, `decision-plugin-readme-sections.md`, holds
 the section set. The site now uses the root `README.md` as its home page in place of a
 hand-written copy, and no longer publishes `docs/VISION.md` or `docs/STRATEGY.md`, which stay in
 the repo for maintainers.

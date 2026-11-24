@@ -1,6 +1,7 @@
 # ceh-coding-conduct design notes
 
-Maintainer detail moved out of the plugin README, word for word.
+Maintainer detail moved out of the plugin README on 2026-11-24, when the README was rewritten for
+the person installing the plugin. The site does not publish this file.
 
 ## Skills that moved out
 

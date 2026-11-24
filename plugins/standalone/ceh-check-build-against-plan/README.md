@@ -25,7 +25,7 @@ This plugin has no agents.
 
 ## Hooks
 
-Two hooks run by themselves while the plugin is enabled. They act only on `plan/v2` plans, and are
+Two hooks run by themselves while the plugin is enabled. They act only on YAML plans, and are
 the same hooks `ceh-build-plan` ships, so the check works with this plugin installed alone.
 [Settings](#settings) turns them off.
 
@@ -63,6 +63,6 @@ required to pass, for up to three rounds.
 
 The plugin saves and reads product files in `.agents_workspace/product/`. Each check appends a
 Checked line to the plan's append-only `## Record` in `.agents_workspace/product/plan/`. A project
-with a root `product/` moves each file to the same sub-path there, or names its location in
-`CLAUDE.md`. A linked worktree gets a workspace only when `.agents_workspace/` is a git repo, so
+with a root `product/` folder moves each file to the same sub-path under
+`.agents_workspace/product/`, or names its own location in `CLAUDE.md`. A linked worktree gets a workspace only when `.agents_workspace/` is a git repo, so
 building in a worktree without one needs the plan's path passed by hand.

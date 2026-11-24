@@ -1,5 +1,8 @@
 # ceh-documentation design notes
 
+Maintainer detail moved out of the plugin README on 2026-11-24, when the README was rewritten for
+the person installing the plugin. The site does not publish this file.
+
 ## Where the docs format lives
 
 The format lives in `references/docs-standard.md`, copied into each of the four writing skills,

@@ -58,13 +58,9 @@ The three testers preload `ceh-python-service:write-pytest-service-tests` and
 `ceh-testing:design-test-cases`. `python-service-reviewer` preloads nothing: it loads only the
 skills whose files the diff touches.
 
-The testers run the suites through the plugin's scripts:
-
-| Script                                     | Usage                                                |
-| ------------------------------------------ | ---------------------------------------------------- |
-| `run-unit-tests.sh [path]`                 | Run unit tests only (excludes integration/system)    |
-| `run-integration-tests.sh [path]`          | Run integration tests (requires `TEST_DATABASE_URL`) |
-| `run-system-tests.sh [path] [--no-docker]` | Run system tests with optional Docker orchestration  |
+The testers run the suites with `uv run pytest` from a bash script, so they need bash and `uv` on
+`PATH`. Unit tests run with nothing else. Integration tests need `TEST_DATABASE_URL`. System tests
+start the services from `docker-compose.test.yml` with Docker when the project has that file.
 
 ## Not this plugin
 
@@ -73,4 +69,5 @@ The testers run the suites through the plugin's scripts:
 ## Where its files live
 
 The plugin saves and reads product files in `.agents_workspace/product/`. A project with a root
-`product/` moves each file to the same sub-path there, or names its location in `CLAUDE.md`.
+`product/` folder moves each file to the same sub-path under `.agents_workspace/product/`, or names
+its own location in `CLAUDE.md`.

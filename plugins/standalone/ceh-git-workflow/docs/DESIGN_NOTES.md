@@ -1,5 +1,8 @@
 # ceh-git-workflow design notes
 
+Maintainer detail moved out of the plugin README on 2026-11-24, when the README was rewritten for
+the person installing the plugin. The site does not publish this file.
+
 ## Where update-changelog and update-readme live
 
 > `update-changelog` and `update-readme` live here because both fire at the same git moment, a

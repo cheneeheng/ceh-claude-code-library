@@ -68,6 +68,4 @@ Nothing beyond the skills above.
 
 Each audit is saved as a new file in `.agents_workspace/product/audit/security/`, with its
 Markdown beside it, so a second audit keeps the first. The report stays in `.agents_workspace/`,
-because a committed audit of an unfixed hole publishes it. A project that keeps product files in a
-root `product/` folder moves each file to the same sub-path there, or names its own location in
-`CLAUDE.md`.
+because a committed audit of an unfixed hole publishes it.

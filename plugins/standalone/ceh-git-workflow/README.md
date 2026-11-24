@@ -133,5 +133,5 @@ undo it.
 ## Where its files live
 
 The plugin saves code reviews in `.agents_workspace/product/review/code/` and retros in
-`.agents_workspace/product/retro/`. A project that keeps them in a root `product/` folder moves each file to the same
-sub-path there, or names its own location in `CLAUDE.md`.
+`.agents_workspace/product/retro/`. A project with a root `product/` folder moves each file to the
+same sub-path under `.agents_workspace/product/`, or names its own location in `CLAUDE.md`.

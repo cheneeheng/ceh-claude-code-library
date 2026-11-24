@@ -1,5 +1,8 @@
 # ceh-python-library design notes
 
+Maintainer detail moved out of the plugin README on 2026-11-24, when the README was rewritten for
+the person installing the plugin. The site does not publish this file.
+
 ## Shared standards
 
 `configure-python-library-env` and `write-pytest-library-tests` are duplicated from

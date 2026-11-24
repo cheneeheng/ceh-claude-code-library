@@ -250,6 +250,15 @@ verified only there.
 | Two directory variables, `CEH_WORKFLOW_BUILD_DIR` and `CEH_WORKFLOW_RUN_DIR`                                                                | Two variables on purpose. Building one workflow must not collide with running another.                                                                                                    |
 | No copy script for packaging a generated workflow as a plugin (the four steps in the README's "Packaging a generated workflow as a plugin") | A copy script was considered and rejected: steps 1 and 2 are a few shell commands, and step 3 needs to tell a call from a mention, which the agent that built the workflow already knows. |
 
+### Internals moved from the README
+
+The interview spec: `$CEH_WORKFLOW_BUILD_DIR/<name>-workflow-spec.yaml` (`workflow-spec/v2`), nine
+fixed rows checked by a model, with the Markdown rendered beside it under the nine headings the
+builder gates on by name.
+
+Packaging step 2: Move every `<name>-*` skill directory into `<plugin>/skills/`. Script paths
+through `${CLAUDE_SKILL_DIR}` keep resolving, because `skills/` stays flat.
+
 ## Risks
 
 - **`enableWorkflows` is undocumented** (F8) and may change. The version floor and the runner's

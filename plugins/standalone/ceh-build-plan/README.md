@@ -11,12 +11,12 @@ session that a file went unchecked.
 
 ## Skills
 
-| Skill                    | Say or type                                                                                                       | What it does                                                                                                                                                              |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `write-technical-design` | "write the technical design", "pick the stack", `/ceh-build-plan:write-technical-design`                          | Writes the shared decisions (stack, data model, components, interfaces, ownership, deployment) into `ARCHITECTURE.yaml`, each with its reason and the option it rejected. |
-| `write-build-plan`       | "plan this app", "plan the next feature", `/ceh-build-plan:write-build-plan [what to build \| <draft plan path>]` | Sizes the work, draws what is in and out of scope, and writes phases that each end in a check you can run. Given a draft plan, it completes that plan in place.           |
-| `review-build-plan`      | "review this plan", `/ceh-build-plan:review-build-plan [plan-file]`                                               | Reviews the plan on scope, engineering, content, design and developer experience, and quotes the plan line behind each finding. It changes nothing unless asked to fix.   |
-| `implement-from-plan`    | "build from the plan", "build phase 2", `/ceh-build-plan:implement-from-plan [plan-file] [phase]`                 | Per phase: writes the failing check first, builds only what the phase names, runs the check, and records the evidence. It stops after two failed fixes of one failure.    |
+| Skill                    | Say or type                                                                                                                                                                                             | What it does                                                                                                                                                              |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `write-technical-design` | "write the technical design", "pick the stack", `/ceh-build-plan:write-technical-design`                                                                                                                | Writes the shared decisions (stack, data model, components, interfaces, ownership, deployment) into `ARCHITECTURE.yaml`, each with its reason and the option it rejected. |
+| `write-build-plan`       | Loads by itself before the first edit of a change with no plan, such as "build me X" or "add X to the app". Or "plan this app", `/ceh-build-plan:write-build-plan [what to build \| <draft plan path>]` | Sizes the work, draws what is in and out of scope, and writes phases that each end in a check you can run. Given a draft plan, it completes that plan in place.           |
+| `review-build-plan`      | "review this plan", `/ceh-build-plan:review-build-plan [plan-file]`                                                                                                                                     | Reviews the plan on scope, engineering, content, design and developer experience, and quotes the plan line behind each finding. It changes nothing unless asked to fix.   |
+| `implement-from-plan`    | "build from the plan", "build phase 2", `/ceh-build-plan:implement-from-plan [plan-file] [phase]`                                                                                                       | Per phase: writes the failing check first, builds only what the phase names, runs the check, and records the evidence. It stops after two failed fixes of one failure.    |
 
 ## Agents
 
@@ -50,7 +50,8 @@ undo it.
 
 1. `write-technical-design` settles the decisions several features share, once per product. Skip
    it for a single feature.
-2. `write-build-plan` writes one plan file an agent can build from without asking again.
+2. `write-build-plan` writes one plan file an agent can build from without asking again, then
+   starts the review by itself.
 3. `review-build-plan` reads the plan from a fresh context and gives a verdict before anyone
    builds.
 4. `implement-from-plan` builds the plan phase by phase and proves each phase with its own check
@@ -88,7 +89,7 @@ skill.
 ## Where its files live
 
 The plugin saves and reads its files in `.agents_workspace/product/`, and a built plan stays in
-`.agents_workspace/product/plan/` with its history. A project that keeps them in a root `product/` folder moves each
-file to the same sub-path there, or names its own location in `CLAUDE.md`. A git worktree has a
-workspace only when `.agents_workspace/` is a git repo. Otherwise pass the plan's path by hand when
-building in a worktree.
+`.agents_workspace/product/plan/` with its history. A project with a root `product/` folder moves
+each file to the same sub-path under `.agents_workspace/product/`, or names its own location in
+`CLAUDE.md`. A git worktree has a workspace only when `.agents_workspace/` is a git repo. Otherwise
+pass the plan's path by hand when building in a worktree.

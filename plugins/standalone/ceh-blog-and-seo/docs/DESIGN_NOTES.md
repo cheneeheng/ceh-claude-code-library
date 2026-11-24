@@ -1,5 +1,8 @@
 # ceh-blog-and-seo design notes
 
+Maintainer detail moved out of the plugin README on 2026-11-24, when the README was rewritten for
+the person installing the plugin. The site does not publish this file.
+
 ## Ask-the-author rules
 
 The rules live in `references/ask-the-author.md`, copied into each of the three blog skills.
