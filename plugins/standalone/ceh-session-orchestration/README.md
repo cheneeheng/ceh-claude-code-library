@@ -67,9 +67,10 @@ itself and starts no worker.
 
 ### Reusing a worker
 
-A follow-up in the same area goes to the same worker while its prompt cache is warm: 60 minutes on
-a subscription, or 5 if you tell it the account runs on an API key, usage credits or a cloud
-provider. After that a fresh worker is cheaper.
+A follow-up in the same area, such as a change you ask for before accepting a report, goes to the
+same worker while its prompt cache is warm: 60 minutes on a subscription, or 5 if you tell it the
+account runs on an API key, usage credits or a cloud provider. After that, or once you have
+accepted and the worker is closed, a fresh worker is cheaper.
 
 ## Not this plugin
 

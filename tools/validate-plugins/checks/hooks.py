@@ -1225,6 +1225,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "dup-task": good_oi + oi_task,
         "dup-worker": good_oi + oi_worker,
         "closed": good_oi.replace("status: open", "status: closed"),
+        "closed-busy": good_oi.replace("status: open", "status: closed").replace(
+            "status: idle", "status: busy"
+        ),
         "no-report": good_oi.split("        report:\n")[0],
     }
     for name, text in oi_bad.items():
@@ -1235,6 +1238,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-dup-task" / f"{oi_stem}.yaml"), "out": "task id t1 is used twice"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-dup-worker" / f"{oi_stem}.yaml"), "out": "worker name docs-sweep-w1 is used twice"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-closed" / f"{oi_stem}.yaml"), "out": "closed while docs-sweep-w1 is idle"},
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-closed-busy" / f"{oi_stem}.yaml"), "out": "closed while docs-sweep-w1 is busy"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-no-report" / f"{oi_stem}.yaml"), "out": "t1 is reported with no report"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "report-orchestration" / "bad" / f"{oi_stem}.yaml"), "env": no_uv, "out": "uv is not installed"},
         # ceh-session-orchestration holds no plan model, so a plan YAML is not its to check.

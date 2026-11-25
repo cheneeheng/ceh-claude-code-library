@@ -11,7 +11,8 @@ strategy, architecture, evidence, fix records, retros, reviews, audits, and the 
 in `business/`. Reviews, audits and evals go one folder per kind, in `product/review/<kind>/`,
 `product/audit/<kind>/` and `product/eval/<kind>/`. Workflow specs and runs go under
 `.agents_workspace/workflow/`, experiments such as orchestration-lab runs under
-`.agents_workspace/experiment/`, and the session tools' files (decision log, handoffs, research
+`.agents_workspace/experiment/`, orchestration instances under
+`.agents_workspace/orchestration/` (agreed by the user on 2026-11-25), and the session tools' files (decision log, handoffs, research
 notes, questionnaires, `CODEBASE_EXPLAINED.md`, competitor analyses) at the top of
 `.agents_workspace/`, in the layout of the shared workspace `AGENTS.md`. A reference to a
 format with a YAML source names the `.yaml`, never its generated `.md`. A repo whose `CLAUDE.md`
