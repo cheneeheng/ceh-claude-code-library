@@ -35,7 +35,8 @@ Each required unless marked optional, and no other key allowed:
 - `worker_model`: the model every worker starts on, or `inherit` for no `--model` flag.
 - `workers`: a list, `[]` when none. Each worker has:
   - `name`: `<instance name>-w<n>`, n counting from 1 and never reused.
-  - `session_id` (optional): the id the start command printed. Absent while `starting`.
+  - `session_id` (optional): the id the start command printed, double-quoted, since an id such as
+    `12345678` is otherwise read as a number. Absent while `starting`.
   - `worktree`: the worker's worktree as a repo-relative path, or `none` outside a git repo.
   - `branch`: the worktree's branch, or `none`.
   - `status`: `starting` (written before the start command runs), `busy` (a task is out),
@@ -66,8 +67,8 @@ Across keys, these four and only these:
 4. An instance with `status: closed` has no worker whose `status` is `starting`, `busy` or
    `idle`.
 
-The model cannot see whether a worker's session still exists. A worker recorded as `busy` whose
-session is gone is corrected to `lost` when the instance is restored.
+The model cannot see whether a worker's session still exists. The orchestrator sets a worker
+`lost` when `claude agents --json` no longer lists it.
 
 ## Quoting
 

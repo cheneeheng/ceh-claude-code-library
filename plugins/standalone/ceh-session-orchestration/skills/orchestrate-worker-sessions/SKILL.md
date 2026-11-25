@@ -18,7 +18,9 @@ full worker session, which does the work in its own worktree and reports back. T
 keeps the user's intent, the briefs and the verdicts, and records every event in one instance
 file. A task is done when the user has accepted the worker's report and the worker is closed.
 
-## Rules
+## Procedure
+
+### 1. Decide whether this session orchestrates
 
 - **A worker ignores this standard.** A session whose start prompt says it is a worker session,
   or whose `CEH_ORCHESTRATION_WORKER` variable is set, follows its start prompt instead, starts
@@ -26,22 +28,9 @@ file. A task is done when the user has accepted the worker's report and the work
 - **When no user is present** (the prompt or the caller says so, as in a scheduled `claude -p`
   run), do the work directly and start no worker: a worker's approval request would reach
   nobody.
-- **The orchestrator edits no project file and starts no subagent.** It talks to the user,
-  decides what is delegated, writes briefs, reads reports, and keeps the instance file. It
-  answers questions and reads the files a brief needs. Work that edits files, or reads across
-  many files, goes to a worker.
 - **A session that only answers questions opens no instance** and writes no file.
-- **A new task gets a fresh worker.** A follow-up goes to an existing worker only when it is in
-  the same area as that worker's last task and the worker's `last_active` is inside the reuse
-  window: 60 minutes, or 5 minutes when the user has said the account runs on an API key, usage
-  credits or a cloud provider. Do not try to detect the account type. Past the window, a kept
-  worker re-reads its whole conversation uncached, so a fresh worker with a short brief costs
-  less.
-- **Never poll.** Wait for the worker's message or the idle notice. Do not call `ListAgents` in a
-  loop.
-- **Deleting a worker's uncommitted work is the user's act.** Never force a removal.
 
-## Open the instance
+### 2. Open the instance
 
 Before the first worker is started, as a step of its own:
 
@@ -54,22 +43,9 @@ Before the first worker is started, as a step of its own:
 5. Write `.agents_workspace/orchestration/<YYYYMMDD-HHMMSS>-<instance name>.yaml`, a copy of
    `${CLAUDE_SKILL_DIR}/assets/orchestration-instance.template.yaml` with `status: open`, the
    `orchestrator` block, `workers: []`, and `worker_model` set to the model the user named, or
-   `inherit` when they named none. The keys, the rules the model checks, and the quoting rule are
-   in `${CLAUDE_SKILL_DIR}/references/orchestration-instance-schema.md`.
+   `inherit` when they named none.
 
-## Keep the instance file
-
-- Write it after every event: worker started, task sent, report received, report accepted or
-  rejected, worker closed, instance closed. Set `updated` each time.
-- Before appending a worker or a task, look for its `name` or `id` in the file, and skip the
-  append when it is there, so recording one event twice adds nothing.
-- The plugin's hook checks the YAML on every write and renders its Markdown. When it reports
-  errors, fix the YAML before doing anything else. When it says the check could not run, tell the
-  user once that the file went unchecked. Without the hook, run
-  `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`.
-- The file is the orchestrator's memory. After compaction, read it before acting on any worker.
-
-## Start a worker
+### 3. Start a worker
 
 1. Name it `<instance name>-w<n>`, n counting from 1 and never reused.
 2. Write the worker and its first task to the instance file first: the worker with
@@ -98,9 +74,8 @@ Before the first worker is started, as a step of its own:
    user that the worker may ask them for an approval through Claude Code's own notification,
    since the orchestrator gets no signal for that.
 
-### The start prompt
-
-Fill in the names, keep the parts in this order, and end with the first task block:
+The start prompt: fill in the names, keep the parts in this order, and end with the first task
+block.
 
 ```text
 You are a worker session in an orchestrator setup. The user talks only to the orchestrator
@@ -129,7 +104,7 @@ commit: true.
 <the first task block>
 ```
 
-## Send a task
+### 4. Send a task
 
 A task message is one YAML block and nothing else:
 
@@ -143,10 +118,11 @@ done_when: <the check that proves it>
 commit: <true to commit on its branch, false to leave the changes uncommitted>
 ```
 
-Record the task in the worker's `tasks` with `sent` and `status: sent` before sending it, and set
-the worker `busy`.
+Record the task in the worker's `tasks` with `sent` and `status: sent`, and set the worker `busy`,
+before sending it. After sending a follow-up to an existing worker, subscribe again with
+`SendMessage` `notify_when_idle: true`, because each subscription brings one idle notice.
 
-## Read a report
+### 5. Read a report
 
 - A message holding `kind: report` that parses as YAML and names a known task id is the done
   signal. Copy its fields into that task's `report` with `received`, set the task `reported`, the
@@ -156,17 +132,53 @@ the worker `busy`.
 - Any other message from a worker is a progress note: relay it if it helps the user, and record
   nothing.
 - An idle notice with no report means the worker's turn ended without one. Read
-  `claude agents --json` for the worker's state and ask it once for its report.
+  `claude agents --json` for the worker's state and ask it once for its report. When the worker
+  is not listed there, its session is gone: set it `lost` and tell the user.
 
-## Close
+### 6. Close
 
 - When the user accepts a report, set the task `accepted`, stop the worker with
   `claude stop <id>`, and set it `closed`. When the user rejects it, set the task `rejected` and
   send a follow-up task or close the worker, as the user says.
 - Report the worker's branch and leave it: landing it belongs to `ceh-git-workflow:pull-request`.
 - Run `claude rm <id>` only after the worker's branch is merged or the user says to discard it.
-  Claude Code refuses to remove a worktree with uncommitted changes. When the user wants such a
-  worktree discarded, show `git -C <worktree> status --short` and give them the removal command
-  to run themselves.
+  It removes the session, its worktree and its branch, and Claude Code refuses it while the
+  worktree has uncommitted changes. When the user wants such a worktree discarded, show
+  `git -C <worktree> status --short` and give them
+  `git -C <worktree> reset --hard && git -C <worktree> clean -fd` to run themselves, then run
+  `claude rm <id>`.
 - When no worker is `starting`, `busy` or `idle` and the user says the work is finished, set the
   instance `closed`.
+
+## Rules
+
+- **The orchestrator edits no project file and starts no subagent.** It talks to the user,
+  decides what is delegated, writes briefs, reads reports, and keeps the instance file. It
+  answers questions and reads the files a brief needs. Work that edits files, or reads across
+  many files, goes to a worker. The one exception is the `.gitignore` line of step 2.
+- **Write the instance file after every event**: worker started, task sent, report received,
+  report accepted or rejected, worker closed or lost, instance closed. Set `updated` each time.
+- **Record an event once.** Before appending a worker or a task, look for its `name` or `id` in
+  the file, and skip the append when it is there.
+- **The plugin's hook checks the file on every write** and renders its Markdown. When it reports
+  errors, fix the YAML before doing anything else. When it says the check could not run, tell the
+  user once that the file went unchecked. Without the hook, run
+  `uv run --script ${CLAUDE_SKILL_DIR}/scripts/artifact.py render <file>.yaml`.
+- **The file is the orchestrator's memory.** After compaction, read it before acting on any
+  worker.
+- **A new task gets a fresh worker.** A follow-up goes to an existing worker only when it is in
+  the same area as that worker's last task and the worker's `last_active` is inside the reuse
+  window: 60 minutes, or 5 minutes when the user has said the account runs on an API key, usage
+  credits or a cloud provider. Do not try to detect the account type. Past the window, a kept
+  worker re-reads its whole conversation uncached, so a fresh worker with a short brief costs
+  less.
+- **Never poll.** Wait for the worker's message or the idle notice. Do not call `ListAgents` in a
+  loop.
+- **Deleting a worker's uncommitted work is the user's act.** Never force a removal.
+
+## Output
+
+One instance file, `.agents_workspace/orchestration/<YYYYMMDD-HHMMSS>-<instance name>.yaml`, a copy
+of `${CLAUDE_SKILL_DIR}/assets/orchestration-instance.template.yaml`, with its Markdown rendered
+beside it. Its keys, the four rules its model checks, and the quoting rule are in
+`${CLAUDE_SKILL_DIR}/references/orchestration-instance-schema.md`.

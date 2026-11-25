@@ -9,7 +9,7 @@ orchestrator:
 worker_model: <model | inherit>
 workers:
   - name: <instance-name>-w<n>
-    session_id: <worker id>
+    session_id: "<worker id>"
     worktree: <worktree path | none>
     branch: <branch | none>
     status: <starting | busy | idle | closed | lost>

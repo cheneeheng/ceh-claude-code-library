@@ -53,7 +53,7 @@ The vision's On demand row now also covers splitting a session's work across wor
 the strategy's sentence on the On demand plugins names the same three activities. This makes room
 for a planned plugin in which one main session starts, briefs and closes full worker sessions, so
 the person talks to one session only. The vision's "Changing this file" asks for that widening in
-its own PR before the plugin lands. No plugin version moves.
+its own PR before the plugin lands. That change moves no plugin version.
 
 The new On demand plugin `ceh-session-orchestration` lets a person talk to one Claude Code session
 while full worker sessions do the work. Its model-only standard, `orchestrate-worker-sessions`,
