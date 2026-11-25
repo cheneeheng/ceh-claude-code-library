@@ -39,11 +39,11 @@ Set a variable under `env` in a Claude Code settings file. The
 [environment variables page](../../../docs/ENVIRONMENT_VARIABLES.md) shows which file and how to
 undo it.
 
-| Variable                   | Default              | Effect                                                                                                                                                                          |
-| -------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CEH_ARTIFACT_CHECK`       | unset (check on)     | `off` turns the instance file check and the generated-file guard off                                                                                                            |
-| `CEH_DISABLED_HOOKS`       | unset (all hooks on) | Comma-separated hook names to skip: `load-orchestrator`, `artifact-render-hook`, `generated-md-guard`. `load-orchestrator` keeps the session from becoming an orchestrator      |
-| `CEH_ORCHESTRATION_WORKER` | unset                | Set by the orchestrator on each worker it starts, to the instance name. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set |
+| Variable                   | Default              | Effect                                                                                                                                                                                                                                                                           |
+| -------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CEH_ARTIFACT_CHECK`       | unset (check on)     | `off` turns the instance file check and the generated-file guard off                                                                                                                                                                                                             |
+| `CEH_DISABLED_HOOKS`       | unset (all hooks on) | Comma-separated hook names to skip: `load-orchestrator`, `artifact-render-hook`, `generated-md-guard`. `load-orchestrator` keeps the session from becoming an orchestrator. Set it for a headless `claude -p` run, such as a scheduled job, so the standard does not load at all |
+| `CEH_ORCHESTRATION_WORKER` | unset                | Set by the orchestrator on each worker it starts, to the instance name. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set                                                                                                  |
 
 ## How it works
 
