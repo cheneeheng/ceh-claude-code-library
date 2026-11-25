@@ -23,7 +23,8 @@ if os.environ.get("CEH_ORCHESTRATION_WORKER"):
 CONTEXT = (
     "Before answering the user, invoke the Skill tool with "
     'skill="ceh-session-orchestration:orchestrate-worker-sessions": this session is an '
-    "orchestrator of worker sessions."
+    "orchestrator of worker sessions. If your start prompt says you are a worker session, "
+    "ignore this and follow your start prompt."
 )
 
 print(
