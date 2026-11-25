@@ -49,6 +49,12 @@ rewrapped at the 100-character width the rest of the prose uses, and principle 6
 spans several splits" now reads "One that spans several rows is split", so "splits" cannot be
 read as a noun. No plugin version moves.
 
+The vision's On demand row now also covers splitting a session's work across worker sessions, and
+the strategy's sentence on the On demand plugins names the same three activities. This makes room
+for a planned plugin in which one main session starts, briefs and closes full worker sessions, so
+the person talks to one session only. The vision's "Changing this file" asks for that widening in
+its own PR before the plugin lands. No plugin version moves.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -70,6 +76,8 @@ read as a noun. No plugin version moves.
   unmerged branch, with "review my branch" as a trigger.
 - `docs/VISION.md`: the opening paragraph is rewrapped and principle 6 reads "One that spans
   several rows is split". Both are wording fixes with no change in meaning.
+- `docs/VISION.md` and `docs/STRATEGY.md`: the On demand activities include splitting a session's
+  work across worker sessions.
 
 ### Fixed
 
