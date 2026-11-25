@@ -197,6 +197,12 @@ its prerequisites, hooks, and environment variables.
 | [Diagnose Session](../plugins/standalone/ceh-session-learning/skills/diagnose-session/SKILL.md)               | `/ceh-session-learning:diagnose-session`        | A session went wrong: four analysts read its transcript in parallel, root causes cited to transcript lines, each routed to the skill that fixes it                        |
 | [Turn Session Into Skill](../plugins/standalone/ceh-session-learning/skills/turn-session-into-skill/SKILL.md) | `/ceh-session-learning:turn-session-into-skill` | A task was just done in this session and should be repeatable: one `SKILL.md` from the steps that worked, corrections as rules, per-run values as arguments, no interview |
 
+### [Session Orchestration (`ceh-session-orchestration`)](../plugins/standalone/ceh-session-orchestration/)
+
+| Skill                                                                                                                      | Invoke                       | When                                                                                                                                                       |
+| -------------------------------------------------------------------------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Orchestrate Worker Sessions](../plugins/standalone/ceh-session-orchestration/skills/orchestrate-worker-sessions/SKILL.md) | Model-only, no slash command | The main session starts one worker session per task, briefs it by message, reads its YAML report, closes it on the user's yes, and keeps the instance file |
+
 ### [Security Audit (`ceh-security-audit`)](../plugins/standalone/ceh-security-audit/)
 
 | Skill                                                                                                       | Invoke                                        | When                                                                                                                          |

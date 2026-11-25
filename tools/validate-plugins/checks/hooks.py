@@ -1195,6 +1195,52 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{wr}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{wr}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
+    # The orchestration instance: orchestrate-worker-sessions writes it after every event. Each bad
+    # file breaks one cross-key rule only.
+    good_oi = (
+        'schema: orchestration-instance/v1\nname: docs-sweep\nstatus: open\ncreated: "2026-11-25 12:00"\n'
+        'updated: "2026-11-25 12:30"\norchestrator: {session_id: 5b02fe58-6e45-4500-af0b-0216256b9cdc, session_name: main-1}\n'
+        "worker_model: inherit\nworkers:\n"
+        "  - name: docs-sweep-w1\n    session_id: 2a219246\n    worktree: .claude/worktrees/docs-sweep-w1\n"
+        '    branch: worktree-docs-sweep-w1\n    status: idle\n    started: "2026-11-25 12:01"\n'
+        '    last_active: "2026-11-25 12:20"\n    tasks:\n'
+        "      - id: t1\n        goal: Fix the typo in docs/a.md\n        scope: docs/a.md only\n"
+        "        inputs: [docs/a.md]\n        done_when: grep finds no typo\n        commit: true\n"
+        '        sent: "2026-11-25 12:02"\n        status: reported\n        report:\n'
+        '          received: "2026-11-25 12:20"\n          status: done\n          summary: Fixed it\n'
+        "          files: [docs/a.md]\n          checks: [{command: grep -c teh docs/a.md, result: '0'}]\n"
+        "          needs_user: none\n"
+    )
+    oi_stem = "20261125-120000-docs-sweep"
+    oi = "ceh-session-orchestration"
+    oi_task = (
+        "      - {id: t1, goal: Again, scope: docs, inputs: [], done_when: x, commit: false,"
+        ' sent: "2026-11-25 12:21", status: sent}\n'
+    )
+    oi_worker = (
+        "  - {name: docs-sweep-w1, worktree: none, branch: none, status: closed,"
+        ' started: "2026-11-25 12:21", last_active: "2026-11-25 12:21", tasks: []}\n'
+    )
+    oi_bad = {
+        "dup-task": good_oi + oi_task,
+        "dup-worker": good_oi + oi_worker,
+        "closed": good_oi.replace("status: open", "status: closed"),
+        "no-report": good_oi.split("        report:\n")[0],
+    }
+    for name, text in oi_bad.items():
+        (tmp / f"oi-{name}").mkdir()
+        (tmp / f"oi-{name}" / f"{oi_stem}.yaml").write_text(text, encoding="utf-8")
+    orchestration_fixtures = [
+        *report_fixtures(oi, oi_stem, good_oi, good_oi.replace("status: reported", "status: sent"), "t1 has a report while sent", "| docs-sweep-w1 | idle | worktree-docs-sweep-w1 | t1: Fix the typo in docs/a.md | reported |", "orchestration"),
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-dup-task" / f"{oi_stem}.yaml"), "out": "task id t1 is used twice"},
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-dup-worker" / f"{oi_stem}.yaml"), "out": "worker name docs-sweep-w1 is used twice"},
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-closed" / f"{oi_stem}.yaml"), "out": "closed while docs-sweep-w1 is idle"},
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-no-report" / f"{oi_stem}.yaml"), "out": "t1 is reported with no report"},
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "report-orchestration" / "bad" / f"{oi_stem}.yaml"), "env": no_uv, "out": "uv is not installed"},
+        # ceh-session-orchestration holds no plan model, so a plan YAML is not its to check.
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
+        {"script": f"{oi}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
+    ]  # fmt: skip
     # The competitor report: analyze-competitor writes it, compare-competitors reads it.
     good_cr = (
         "schema: competitor-report/v2\ncompetitor: Acme\nsource: https://github.com/acme/kit\n"
@@ -1643,6 +1689,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         *handoff_fixtures,
         *workflow_spec_fixtures,
         *run_state_fixtures,
+        *orchestration_fixtures,
         *competitor_report_fixtures,
         *markdown_format_fixtures,
         # ceh-testing holds no plan model, so a plan YAML is not its to check.

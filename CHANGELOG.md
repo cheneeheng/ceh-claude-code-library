@@ -55,18 +55,33 @@ for a planned plugin in which one main session starts, briefs and closes full wo
 the person talks to one session only. The vision's "Changing this file" asks for that widening in
 its own PR before the plugin lands. No plugin version moves.
 
+The new On demand plugin `ceh-session-orchestration` lets a person talk to one Claude Code session
+while full worker sessions do the work. Its model-only standard, `orchestrate-worker-sessions`,
+tells the main session to start one worker per task with `claude --bg --worktree`, brief it with a
+YAML task block by cross-session message, read the worker's YAML report block, and stop the worker
+once the user accepts the report. The start prompt lets the orchestrator assign and narrow a
+worker's tasks inside its own folder, never widen them, because the first trial worker refused a
+task until its prompt allowed it. Every event goes to one instance file,
+`orchestration-instance/v1`, checked by a pydantic model on every write with its Markdown
+rendered beside it, so the orchestrator still knows its workers after compaction. The root
+`README.md` On demand row now uses the vision's wording.
+
 ### Plugin versions
 
-| Plugin              | Version |
-| ------------------- | ------- |
-| `ceh-every-session` | 2.11.0  |
-| `ceh-git-workflow`  | 3.0.7   |
+| Plugin                      | Version |
+| --------------------------- | ------- |
+| `ceh-every-session`         | 2.11.0  |
+| `ceh-git-workflow`          | 3.0.7   |
+| `ceh-session-orchestration` | 1.0.0   |
 
 ### Added
 
 - `ceh-every-session` 2.11.0: the `explain-action` skill, which answers why the agent did or did
   not do something in one turn of the current session. The description budget in `validate.py`
   rises by its 297 characters.
+- `ceh-session-orchestration` 1.0.0: the `orchestrate-worker-sessions` standard, the
+  `orchestration-instance/v1` format with its template, schema, model and `artifact.py`, and the
+  artifact check and generated-file guard hooks.
 
 ### Changed
 

@@ -1,0 +1,37 @@
+schema: orchestration-instance/v1
+name: <instance-name>
+status: <open | closed>
+created: "<YYYY-MM-DD HH:MM>"
+updated: "<YYYY-MM-DD HH:MM>"
+orchestrator:
+  session_id: <session id>
+  session_name: <session name>
+worker_model: <model | inherit>
+workers:
+  - name: <instance-name>-w<n>
+    session_id: <worker id>
+    worktree: <worktree path | none>
+    branch: <branch | none>
+    status: <starting | busy | idle | closed | lost>
+    started: "<YYYY-MM-DD HH:MM>"
+    last_active: "<YYYY-MM-DD HH:MM>"
+    tasks:
+      - id: t<n>
+        goal: <goal>
+        scope: <scope>
+        inputs:
+          - <repo-relative path>
+        done_when: <check>
+        commit: <true | false>
+        sent: "<YYYY-MM-DD HH:MM>"
+        status: <sent | reported | accepted | rejected>
+        report:
+          received: "<YYYY-MM-DD HH:MM>"
+          status: <done | blocked | failed>
+          summary: <summary>
+          files:
+            - <path>
+          checks:
+            - command: <command>
+              result: <result>
+          needs_user: <question | none>
