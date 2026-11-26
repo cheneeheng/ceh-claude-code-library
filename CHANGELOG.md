@@ -76,13 +76,23 @@ The root `README.md`, `docs/TESTING_WORKFLOW.md`, `docs/RETRO_WORKFLOW.md` and
 `tools/setup/README.md` named counts, triggers and behaviour their sources no longer have. Each now
 matches what the plugins and the setup script ship. No plugin version moves.
 
+A new main session can now restore an open orchestration instance after a crash. When the earlier
+orchestrator is no longer running, the standard names the instance and asks the user. On a yes it
+resumes each stopped worker that still has a task out with `claude --bg --resume <full sessionId>`
+and no other flag, and sends it a handover message that quotes the user. A live trial showed that
+a short id or any flag starts a copy instead, and that a worker started with the 1.0.0 start
+prompt refuses a handover, so the start prompt gains a sentence that accepts one. A worker that is
+gone or refuses is marked lost, and its unfinished task can go to a fresh worker. The instance now
+records each worker's full session id, and a worker is lost only when `claude agents --json --all`
+no longer lists it.
+
 ### Plugin versions
 
 | Plugin                      | Version |
 | --------------------------- | ------- |
 | `ceh-every-session`         | 2.11.0  |
 | `ceh-git-workflow`          | 3.0.7   |
-| `ceh-session-orchestration` | 1.0.0   |
+| `ceh-session-orchestration` | 1.0.1   |
 
 ### Added
 
@@ -96,6 +106,9 @@ matches what the plugins and the setup script ship. No plugin version moves.
 
 ### Changed
 
+- `ceh-session-orchestration` 1.0.1: `orchestrate-worker-sessions` restores an open instance in a
+  new main session, its start prompt accepts a handover, and a worker is `lost` only when
+  `claude agents --json --all` no longer lists it.
 - `ceh-every-session` `review-anything` and `audit-anything`: the "Not for" pointer is removed
   from each description, and the audit description takes a colon before its second clause.
 - `ceh-git-workflow` 3.0.7: `write-code-review`'s description covers a review of your own

@@ -71,8 +71,15 @@ never merges a worker's branch and never deletes a worktree with uncommitted cha
 leaves to you. In a run with no user present, such as a scheduled `claude -p`, it does the work
 itself and starts no worker.
 
-A new main session does not take over an earlier session's open instance. It names that
-instance's workers that may still be running, and you stop each with `claude stop <id>`.
+### Restoring after a crash
+
+When a new main session starts and finds an open instance whose orchestrator is no longer
+running, it names the instance and its workers and asks whether to restore it. On your yes, it
+takes the instance over, resumes each stopped worker that still has a task out, and sends it a
+handover message quoting your words, so later reports come to the new session. A worker that is
+gone, or one started before 1.0.1 that refuses the handover, is marked lost, and it offers to send
+that worker's unfinished task to a fresh worker. While the earlier orchestrator is still running,
+it restores nothing.
 
 ### Reusing a worker
 
