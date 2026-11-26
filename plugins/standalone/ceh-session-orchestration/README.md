@@ -13,6 +13,10 @@ it depends on none. It needs Claude Code v2.1.236+ for cross-session messaging, 
 worker worktrees, `python3` on `PATH` for the hooks, and `uv` to check and render the instance
 file. Without uv the agent is told once per session that the file went unchecked.
 
+Every session you start where the plugin is enabled becomes an orchestrator, so enable it in the
+scope where you want that, such as one project. To start one ordinary session there, set
+`CEH_DISABLED_HOOKS=load-orchestrator` for it, as [Settings](#settings) says.
+
 ## Skills
 
 | Skill                         | Say or type                        | What it does                                                                                                                         |
@@ -66,6 +70,9 @@ It edits no project file and starts no subagent: anything that edits files goes 
 never merges a worker's branch and never deletes a worktree with uncommitted changes, which it
 leaves to you. In a run with no user present, such as a scheduled `claude -p`, it does the work
 itself and starts no worker.
+
+A new main session does not take over an earlier session's open instance. It names that
+instance's workers that may still be running, and you stop each with `claude stop <id>`.
 
 ### Reusing a worker
 

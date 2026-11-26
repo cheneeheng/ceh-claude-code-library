@@ -45,6 +45,9 @@ Before the first worker is started, as a step of its own:
    `${CLAUDE_SKILL_DIR}/assets/orchestration-instance.template.yaml` with `status: open`, the
    `orchestrator` block, `workers: []`, and `worker_model` set to the model the user named, or
    `inherit` when they named none.
+6. When another file in that folder has `status: open`, it is an earlier session's instance, which
+   this session does not take over. Tell the user its name and each worker that is not `closed` or
+   `lost`, since those may still be running, and that `claude stop <id>` stops one.
 
 ### 3. Start a worker
 
@@ -71,7 +74,9 @@ Before the first worker is started, as a step of its own:
    once and accept the prompt, then retry. Never start the worker somewhere else to get around
    it.
 6. The command prints `backgrounded · <id> · <name>`. Confirm the worker in `ListAgents`, then set
-   its `session_id` to `<id>` and its `status` to `busy`.
+   its `session_id` to `<id>` and its `status` to `busy`. When the command fails for any other
+   reason, or the worker never appears in `ListAgents`, set it `lost` and tell the user what the
+   command printed.
 7. Compare `git -C <worktree> rev-parse HEAD` with `git rev-parse HEAD` in the main checkout.
    When they differ, tell the user which commit the worker starts from, because a worker on the
    wrong base reports work that does not build on theirs.
@@ -122,7 +127,7 @@ goal: <one line>
 scope: <what the worker may touch>
 inputs: [<repo-relative paths to read>]
 done_when: <the check that proves it>
-commit: <true to commit on its branch, false to leave the changes uncommitted>
+commit: <true, unless the user asked to keep the changes uncommitted>
 ```
 
 Record the task in the worker's `tasks` with `sent` and `status: sent`, and set the worker `busy`,

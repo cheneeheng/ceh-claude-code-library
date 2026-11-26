@@ -66,8 +66,7 @@ task until its prompt allowed it. Every event goes to one instance file,
 rendered beside it, so the orchestrator still knows its workers after compaction. The root
 `README.md` On demand row now uses the vision's wording.
 
-With the plugin installed, a session a person starts now loads the orchestrator standard by
-itself, at start and again after compaction, through a `SessionStart` hook. A worker does not: the
+With the plugin installed, a session a person starts loads the orchestrator standard by itself, at start and again after compaction, through a `SessionStart` hook. A worker does not: the
 orchestrator starts each one with `CEH_ORCHESTRATION_WORKER` set through `--settings`, and the
 hook stays silent when that variable has any value. The worker's start prompt says it is a worker
 too, so a worker whose variable never arrives still ignores the standard. Listing
