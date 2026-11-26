@@ -1,7 +1,8 @@
 # Retro Workflow
 
 How the three retro skills fit together: which one to start, what each reads, where its issues go
-next, and where its report is saved.
+next, and where its report is saved. It also places `ceh-every-session:explain-action`, which
+answers about one turn before any of them runs.
 
 Per-skill detail lives in each skill's `SKILL.md` and its plugin's README. This guide covers only
 what no single skill can document: the routing _between_ them and the files they share.
@@ -18,6 +19,10 @@ The first two find issues and route them. The third fixes one kind of issue, an 
 is also a route the first two hand work to. Each retro names the issue and its evidence, not the
 fix, because the routed skill finds the cause and designs the fix.
 
+`explain-action` is not a retro. It answers why the agent did or did not do something in one turn
+of the current session, saves no report, and asks before `prevent-repeat-mistake` runs, because
+the answer may show there was no error.
+
 ## Routing: what you say to what runs
 
 | Moment                                                                     | Loads                                                          |
@@ -26,6 +31,7 @@ fix, because the routed skill finds the cause and designs the fix.
 | "diagnose this session", "why did that session go wrong"                   | `diagnose-session`, which dispatches four `transcript-analyst` |
 | "the agent kept doing X", with a session to read                           | `diagnose-session`                                             |
 | "you did X again", "make sure this never happens again"                    | `prevent-repeat-mistake`                                       |
+| "why didn't you use X", "why did you do that", about this session          | `explain-action`                                               |
 
 `write-period-retro` starts the day after the newest `.agents_workspace/product/retro/*-period.yaml`, or an older `*-period.md`, when no dates are
 given, otherwise the last 14 days. `diagnose-session` reads `~/.claude/projects/<project>/`: "this

@@ -155,6 +155,7 @@ PLUGINS = {
         "skills": [
             "audit-anything",
             "delegate-bulk-reads",
+            "explain-action",
             "find-available-guide",
             "hand-off-session",
             "prevent-repeat-mistake",

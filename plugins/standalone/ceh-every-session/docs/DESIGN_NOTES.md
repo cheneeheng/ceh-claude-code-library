@@ -18,6 +18,8 @@ What each skill's run looks like when it works, from the README's old Skills tab
 - `audit-anything`: the reply lists the subject, its boundary and the criteria before the reader
   runs, and ends with findings worst first and a file name holding the session id.
 - `prevent-repeat-mistake`: the report quotes the mistake and says why each higher rung did not fit.
+- `explain-action`: the reply cites a `<transcript>:<line>`, quotes the instruction and the action,
+  names one cause class, and ends on the prevent-repeat-mistake question, with no file written.
 - `whats-next`: the answer is a table of suggestions whose reasons cite files it read, and nothing
   ran.
 - `find-available-guide`: a hit shows a note under `---` with an install command copied word for

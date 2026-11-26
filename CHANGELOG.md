@@ -36,12 +36,26 @@ Switching to a branch that lacks a plugin left that plugin's git-ignored `__pyca
 disk, and `validate.py` read the leftover folder as a plugin and failed locally with seven
 problems. It now skips a plugin folder whose files git all ignores. No plugin version moves.
 
+A question such as "why didn't you use X" had no skill. `diagnose-session` covers a whole session
+with four analysts and a saved report, and `prevent-repeat-mistake` starts once the cause is
+known, so a session asked about one turn answered from hand greps and went straight to proposing
+fixes. `explain-action` owns that moment: it finds the turn in the transcript, quotes the
+instruction that applied and what was done instead, names the cause, changes nothing, and asks
+before any fix, because the answer may show there was no error. It sits in `ceh-every-session`
+because the question can come in any session.
+
 ### Plugin versions
 
 | Plugin              | Version |
 | ------------------- | ------- |
-| `ceh-every-session` | 2.10.8  |
+| `ceh-every-session` | 2.11.0  |
 | `ceh-git-workflow`  | 3.0.7   |
+
+### Added
+
+- `ceh-every-session` 2.11.0: the `explain-action` skill, which answers why the agent did or did
+  not do something in one turn of the current session. The description budget in `validate.py`
+  rises by its 297 characters.
 
 ### Changed
 

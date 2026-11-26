@@ -955,6 +955,18 @@ one-file save: every issue, in the repo or outside it, in
 rendered beside it. Each skill keeps its own report template (`period-retro/v3`,
 `session-retro/v3`, `repeat-mistake/v2`), because the three reports differ.
 
+## Root cause classes
+
+**Canonical:** `plugins/standalone/ceh-session-learning/skills/diagnose-session/SKILL.md` — § Procedure step 5, the root cause table
+
+| Copy                                                                  | Section            | Diverges                                                                                         |
+| --------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------ |
+| `plugins/standalone/ceh-every-session/skills/explain-action/SKILL.md` | § Procedure step 5 | no "Fix goes to" column, because the skill designs no fix; second person ("your reading", "you") |
+
+**Shared:** the five classes and their meanings (Request, Guidance, Environment, Model, Claude
+Code), so an answer from `explain-action` uses the words `diagnose-session` and
+`prevent-repeat-mistake` read later.
+
 The audit skills carry the same route table minus the agent-mistake row, in
 "Audit finding routing" below. An edit to a row both tables share is mirrored there in the same
 session.
