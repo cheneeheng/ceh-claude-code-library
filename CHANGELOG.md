@@ -97,12 +97,17 @@ out. A worker leaves the file once `claude rm` removes it, its closed session is
 has been told it is lost. An open `v1` instance is no longer restored, and `v1` files stay as
 written.
 
-A live check found two gaps in that change. The session's name changes after it starts, when its
-title lands, so a worker briefed in the first turn reported to a name the session no longer held.
+A live check found two gaps in that change. The session's name can change after a worker is
+briefed, so a worker could report to a name the session no longer held.
 The orchestrator now reads its name from `ListAgents` again before starting a worker, before
 sending a task, on a report and on an idle notice, and sends the handover on a mismatch, and a
 worker whose report cannot be sent waits for one. The loader hook also prints a startup line for the
 user, so the user sees that the session is the orchestrator, not only the model.
+
+`orchestrate-worker-sessions` gave the wrong reason for that re-read. A session's messaging name
+does not change while it runs: it changes when the session is resumed, taking its title as its
+name, and right after `/rename`. The skill now says so, and its takeover step says compaction
+keeps the name while a resume can change it. The mechanism is unchanged.
 
 ### Plugin versions
 
@@ -110,7 +115,7 @@ user, so the user sees that the session is the orchestrator, not only the model.
 | --------------------------- | ------- |
 | `ceh-every-session`         | 2.11.0  |
 | `ceh-git-workflow`          | 3.0.7   |
-| `ceh-session-orchestration` | 1.0.2   |
+| `ceh-session-orchestration` | 1.0.3   |
 
 ### Added
 
@@ -160,6 +165,8 @@ user, so the user sees that the session is the orchestrator, not only the model.
   `write-code-review` or `address-review-comments` has started.
 - `validate.py`: a plugin folder holding only git-ignored files, such as `__pycache__` left by a
   branch switch, is no longer checked as a plugin.
+- `ceh-session-orchestration` 1.0.3: `orchestrate-worker-sessions` says the session's name changes
+  on resume and right after `/rename`.
 
 ## 2026-11-24
 
