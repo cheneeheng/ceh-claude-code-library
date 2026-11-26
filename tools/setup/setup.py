@@ -548,6 +548,18 @@ PLUGINS = {
         "requires": [],
         "degrades": {"python3": ["hooks"], "uv": ["hooks"]},
     },
+    "ceh-session-orchestration": {
+        "group": "later",
+        "dependencies": [],
+        "skills": ["orchestrate-worker-sessions"],
+        "requires": [],
+        "degrades": {
+            "python3": ["hooks"],
+            "uv": ["hooks", "orchestrate-worker-sessions"],
+            "git": ["orchestrate-worker-sessions"],
+        },
+        "min_claude": {"2.1.236": ["orchestrate-worker-sessions"]},
+    },
 }
 
 

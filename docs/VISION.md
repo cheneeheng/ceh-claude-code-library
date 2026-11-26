@@ -84,7 +84,7 @@ at any stage.
 | Prove     | Show it works and that a person can use it                                                                            | `ceh-testing`, `ceh-usability-audit`, `ceh-check-build-against-plan`, `ceh-security-audit`                                                                      |
 | Tell      | Get it in front of the people who should find it                                                                      | `ceh-blog-and-seo`                                                                                                                                              |
 | Core      | How the agent behaves, commits, tests, and spends context                                                             | `ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`, `ceh-testing`                                                                                    |
-| On demand | Turn repeated work into a workflow and run it, split a session's work across worker sessions, or learn from a session | `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`                                                                                           |
+| On demand | Turn repeated work into a workflow and run it, split a session's work across worker sessions, or learn from a session | `ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`, `ceh-session-orchestration`                                                              |
 
 The stages are a route, not only a filing system: each one writes handoff files the next
 one reads, so installed plugins chain without a router. How they chain, and how the next piece of

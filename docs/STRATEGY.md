@@ -38,7 +38,8 @@ at once. This repo keeps its granularity and adds the second kind of idea withou
 
 The vision's Core plugins (`ceh-every-session`, `ceh-coding-conduct`, `ceh-git-workflow`,
 `ceh-testing`) apply at every stage, and `ceh-testing` also sits on the route in Prove. The
-On demand plugins (`ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`) sit
+On demand plugins (`ceh-workflow-builder`, `ceh-workflow-runner`, `ceh-session-learning`,
+`ceh-session-orchestration`) sit
 outside the route, installed for an activity that can come at any stage: turning repeated work
 into a workflow and running it, splitting a session's work across worker sessions, or learning
 from a session. How a stage, a plugin
@@ -228,7 +229,9 @@ The likely order next, judged from the current gaps and not yet confirmed by a r
    names it, and `ceh-session-learning:diagnose-session` finds one inside a session, but nothing
    notices one recurring across sessions.
 2. **Parallel builds.** Only what Claude Code's native worktrees and subagents lack, per the
-   vision's non-goal on rebuilding Claude Code.
+   vision's non-goal on rebuilding Claude Code. `ceh-session-orchestration` started it, with
+   worker sessions in their own worktrees. Restoring an open instance in a new main session is
+   still to come.
 
 ## Measuring progress: the reference run
 

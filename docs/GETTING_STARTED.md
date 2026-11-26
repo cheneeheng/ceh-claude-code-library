@@ -294,14 +294,15 @@ which claims rest on nothing proven.
 
 ## 4. Add these only when the moment arrives
 
-| Plugin                     | Install when                                                                               |
-| -------------------------- | ------------------------------------------------------------------------------------------ |
-| `ceh-codebase-explanation` | you inherit a repo, or need an architecture doc, a glossary, or why code is the way it is  |
-| `ceh-ui-design`            | you design a UI or HTML page without `ceh-web-frontend`                                    |
-| `ceh-ag-ui`                | you build a generative-UI canvas for an AG-UI agent                                        |
-| `ceh-workflow-builder`     | the same product work repeats and an agent should run it                                   |
-| `ceh-workflow-runner`      | a built `flow.yaml` must run, here or headless                                             |
-| `ceh-session-learning`     | a session went wrong and you want to know why, or one went well and you want it as a skill |
+| Plugin                      | Install when                                                                               |
+| --------------------------- | ------------------------------------------------------------------------------------------ |
+| `ceh-codebase-explanation`  | you inherit a repo, or need an architecture doc, a glossary, or why code is the way it is  |
+| `ceh-ui-design`             | you design a UI or HTML page without `ceh-web-frontend`                                    |
+| `ceh-ag-ui`                 | you build a generative-UI canvas for an AG-UI agent                                        |
+| `ceh-workflow-builder`      | the same product work repeats and an agent should run it                                   |
+| `ceh-workflow-runner`       | a built `flow.yaml` must run, here or headless                                             |
+| `ceh-session-learning`      | a session went wrong and you want to know why, or one went well and you want it as a skill |
+| `ceh-session-orchestration` | you want to talk to one session while worker sessions do the work in their own worktrees   |
 
 ## 5. Check it worked
 

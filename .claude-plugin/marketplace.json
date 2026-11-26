@@ -117,6 +117,12 @@
       "description": "CEH session learning: turn one Claude Code session's transcript into something durable. When the session went wrong, parallel analysts find why, every finding citing a transcript line and each root cause routed to a fix, with a scrubbed copy for sharing. When it went right, the steps that worked become a reusable SKILL.md, with the user's corrections as rules and per-run values as arguments."
     },
     {
+      "name": "ceh-session-orchestration",
+      "source": "./plugins/standalone/ceh-session-orchestration",
+      "version": "1.0.0",
+      "description": "CEH session orchestration: talk to one main session that starts a full worker session per task, briefs it by cross-session message, takes its report back, and keeps a checked instance file of every worker, so the state survives compaction."
+    },
+    {
       "name": "ceh-security-audit",
       "source": "./plugins/standalone/ceh-security-audit",
       "version": "1.1.20",
