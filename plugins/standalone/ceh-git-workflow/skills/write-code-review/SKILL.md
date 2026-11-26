@@ -1,9 +1,10 @@
 ---
 name: write-code-review
 description: >-
-  Load this skill when reviewing a pull request or someone else's diff: what to review first,
-  blocking versus advisory comments, and the verdict. Trigger on "review this PR", "is this ready
-  to approve". Not for finding defects (use the built-in /code-review).
+  Load this skill when reviewing a diff before it lands, a pull request or your own unmerged
+  branch: review order, blocking versus advisory comments, the verdict, and the saved review
+  file. Trigger on "review this PR", "review my branch". Not for finding defects (use the built-in
+  /code-review).
 disable-model-invocation: false
 user-invocable: true
 license: Apache-2.0
