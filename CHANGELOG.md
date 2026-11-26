@@ -26,17 +26,25 @@ that never loaded `write-code-review`, which left the file unchecked. The skill-
 holds a write under `.agents_workspace/product/review/code/` until `write-code-review` or
 `address-review-comments` has started, as it already does for the changelog and the README.
 
+`write-code-review`'s description said "a pull request or someone else's diff", while its body
+already saves a review of a local diff and has a gate mode for a change no human reviews before it
+lands. A session reviewing its own unmerged branch therefore never loaded it and briefed review
+subagents by hand. The description now names a diff before it lands, a pull request or your own
+unmerged branch, and the saved review file.
+
 ### Plugin versions
 
 | Plugin              | Version |
 | ------------------- | ------- |
 | `ceh-every-session` | 2.10.8  |
-| `ceh-git-workflow`  | 3.0.6   |
+| `ceh-git-workflow`  | 3.0.7   |
 
 ### Changed
 
 - `ceh-every-session` `review-anything` and `audit-anything`: the "Not for" pointer is removed
   from each description, and the audit description takes a colon before its second clause.
+- `ceh-git-workflow` 3.0.7: `write-code-review`'s description covers a review of your own
+  unmerged branch, with "review my branch" as a trigger.
 
 ### Fixed
 
