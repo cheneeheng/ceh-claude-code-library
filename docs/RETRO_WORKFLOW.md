@@ -33,7 +33,7 @@ the answer may show there was no error.
 | "you did X again", "make sure this never happens again"                    | `prevent-repeat-mistake`                                       |
 | "why didn't you use X", "why did you do that", about this session          | `explain-action`                                               |
 
-`write-period-retro` starts the day after the newest `.agents_workspace/product/retro/*-period.yaml`, or an older `*-period.md`, when no dates are
+`write-period-retro` starts the day after the newest `.agents_workspace/product/retro/*-period.yaml` (or in the older `retros/` beside it), or an older `*-period.md`, when no dates are
 given, otherwise the last 14 days. `diagnose-session` reads `~/.claude/projects/<project>/`: "this
 session" is the current one, "the last session" the newest other transcript.
 
@@ -42,14 +42,14 @@ session" is the current one, "the last session" the newest other transcript.
 `write-period-retro` and `diagnose-session` share one route table (registered in
 `docs/CROSS_REFERENCES.md`, "Retro routing and report location"):
 
-| Issue is                                                              | Route                                                     |
-| --------------------------------------------------------------------- | --------------------------------------------------------- |
-| A bug in this repo's code or config                                   | `ceh-coding-conduct:find-root-cause`, writes a fix record |
-| A feature or design change in this repo                               | `ceh-build-plan:write-build-plan`                         |
-| An agent mistake a check or guidance in this repo should have stopped | `ceh-every-session:prevent-repeat-mistake`                |
-| A rule for how work is done in this repo                              | `ceh-every-session:record-project-decisions`              |
-| Anything else in this repo                                            | Fixed directly, with the check that proves it             |
-| Outside this repo: user settings, an installed plugin, Claude Code    | Left in the report for the user                           |
+| Issue is                                                                                          | Route                                                     |
+| ------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| A bug in this repo's code or config                                                               | `ceh-coding-conduct:find-root-cause`, writes a fix record |
+| A feature or design change in this repo                                                           | `ceh-build-plan:write-build-plan`                         |
+| An agent mistake a check or guidance in this repo should have stopped                             | `ceh-every-session:prevent-repeat-mistake`                |
+| A rule for how work is done in this repo                                                          | `ceh-every-session:record-project-decisions`              |
+| Anything else in this repo                                                                        | Fixed directly, with the check that proves it             |
+| Outside this repo: user settings or memory, an installed plugin, Claude Code itself, another repo | Left in the report for the user                           |
 
 The agent acts on every in-repo route in the same session. Each issue ends handed off or
 dropped with a reason, and stays open only while it waits on a user decision: one outside the
@@ -59,8 +59,9 @@ always left for the user, because filing its bug report is outward-facing.
 
 `prevent-repeat-mistake` has no route table. It climbs its own ladder, strongest rung first: remove
 the cause, a Claude Code setting, a check at write time, a check before landing, written guidance.
-It builds a check that lives in the current repo, and drafts anything that changes how later
-sessions behave (`CLAUDE.md`, memory, a skill, a hook) for the user to approve.
+It builds a check (rungs 3 and 4) that lives in the current repo, and drafts for the user to
+approve anything that changes how later sessions behave or rewrites the user's content: rungs 1
+and 2, a hook, and every written-guidance edit (`CLAUDE.md`, memory, a skill, a plugin).
 
 ## Where reports are saved
 

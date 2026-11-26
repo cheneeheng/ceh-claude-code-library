@@ -47,8 +47,8 @@ Each step prints a section, and a second run changes nothing already in place.
 4. **Tools.** Checks `python3`, `bash`, `git`, `gh`, `uv`, Bun and Node.js, only those the picks
    need, and offers each missing one's install command. Then it reports whether `gh` is logged
    in and git's name and email are set. It never logs in or sets them for you.
-5. **Plugins.** A picked plugin that is off is enabled, and one not installed is installed at
-   `--scope`, after one yes. A plugin whose required tool is still missing is skipped, with a
+5. **Plugins.** A picked plugin that is off is enabled at the scope it is installed at, with the
+   pick as the yes. Those not installed are installed at `--scope`, after one yes. A plugin whose required tool is still missing is skipped, with a
    warning naming its skills. A plugin that only loses part of its function is installed, with a
    warning naming what it loses.
 6. **Skill listing budget.** Raises `skillListingBudgetFraction` to `0.02` in your Claude Code
@@ -65,8 +65,10 @@ each tool's own uninstaller. The summary names everything the script changed.
 
 ## Platforms
 
-Windows is tested. Linux and macOS are built but untested. Linux installs use `apt-get` through
-`sudo`, and other distributions get each tool's install page instead. Node.js has no Linux
+Windows is tested. Linux and macOS are built but untested. `uv` and Bun install through their
+own install scripts. The other tools install with `winget` on Windows, `brew` on macOS, and
+`apt-get` through `sudo` on Linux. When that installer is not on `PATH`, the script names the
+tool's install page instead. Node.js has no Linux
 installer here, because Ubuntu's `nodejs` package is older than the 20 the web skills need. The
 Linux statusline needs `jq`.
 
