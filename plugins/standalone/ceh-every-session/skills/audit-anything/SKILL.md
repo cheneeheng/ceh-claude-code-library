@@ -2,9 +2,8 @@
 name: audit-anything
 description: >-
   Load this skill when asked to audit work already marked done or shipped that no other audit
-  skill owns (merged docs, a plugin), an independent reader checks it, and the findings are
-  saved. Trigger on "audit this", "audit X against Y". Not for unfinished work (use
-  ceh-every-session:review-anything).
+  skill owns (merged docs, a plugin): an independent reader checks it, and the findings are
+  saved. Trigger on "audit this", "audit X against Y".
 argument-hint: "[subject] [criteria]"
 disable-model-invocation: false
 user-invocable: true
