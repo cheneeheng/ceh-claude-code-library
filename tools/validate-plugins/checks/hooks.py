@@ -1195,13 +1195,12 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": f"{wr}/artifact-render-hook.py", "stdin": write("broken.yaml"), "env": no_uv, "out": ""},
         {"script": f"{wr}/generated-md-guard.py", "stdin": edit(generated.as_posix()), "out": "gen.yaml"},
     ]  # fmt: skip
-    # The orchestration instance: orchestrate-worker-sessions writes it after every event. Each bad
-    # file breaks one cross-key rule only.
+    # The orchestration file, one per repo per machine: orchestrate-worker-sessions writes it after
+    # every event. Each bad file breaks one rule only.
     good_oi = (
-        'schema: orchestration-instance/v1\nname: docs-sweep\nstatus: open\ncreated: "2026-11-25 12:00"\n'
-        'updated: "2026-11-25 12:30"\norchestrator: {session_id: 5b02fe58-6e45-4500-af0b-0216256b9cdc, session_name: main-1}\n'
-        "worker_model: inherit\nworkers:\n"
-        "  - name: docs-sweep-w1\n    session_id: 2a219246\n    worktree: .claude/worktrees/docs-sweep-w1\n"
+        "schema: orchestration-instance/v2\nworkers_started: 1\nworkers:\n"
+        "  - name: docs-sweep-w1\n    session_id: 2a219246\n    reports_to: main-1\n    model: inherit\n"
+        "    worktree: .claude/worktrees/docs-sweep-w1\n"
         '    branch: worktree-docs-sweep-w1\n    status: idle\n    started: "2026-11-25 12:01"\n'
         '    last_active: "2026-11-25 12:20"\n    tasks:\n'
         "      - id: t1\n        goal: Fix the typo in docs/a.md\n        scope: docs/a.md only\n"
@@ -1211,34 +1210,36 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "          files: [docs/a.md]\n          checks: [{command: grep -c teh docs/a.md, result: '0'}]\n"
         "          needs_user: none\n"
     )
-    oi_stem = "20261125-120000-docs-sweep"
+    oi_stem = "my-machine"
     oi = "ceh-session-orchestration"
     oi_task = (
         "      - {id: t1, goal: Again, scope: docs, inputs: [], done_when: x, commit: false,"
         ' sent: "2026-11-25 12:21", status: sent}\n'
     )
-    oi_worker = (
-        "  - {name: docs-sweep-w1, worktree: none, branch: none, status: closed,"
-        ' started: "2026-11-25 12:21", last_active: "2026-11-25 12:21", tasks: []}\n'
-    )
+
+    def oi_worker(name: str) -> str:
+        return (
+            f"  - {{name: {name}, reports_to: main-1, model: inherit, worktree: none, branch: none,"
+            ' status: closed, started: "2026-11-25 12:21", last_active: "2026-11-25 12:21", tasks: []}\n'
+        )
+
     oi_bad = {
         "dup-task": good_oi + oi_task,
-        "dup-worker": good_oi + oi_worker,
-        "closed": good_oi.replace("status: open", "status: closed"),
-        "closed-busy": good_oi.replace("status: open", "status: closed").replace(
-            "status: idle", "status: busy"
-        ),
+        "dup-worker": good_oi + oi_worker("docs-sweep-w1"),
+        "over-count": good_oi + oi_worker("docs-sweep-w2"),
+        "bad-name": good_oi.replace("workers_started: 1", "workers_started: 2")
+        + oi_worker("docs-sweep"),
         "no-report": good_oi.split("        report:\n")[0],
     }
     for name, text in oi_bad.items():
         (tmp / f"oi-{name}").mkdir()
         (tmp / f"oi-{name}" / f"{oi_stem}.yaml").write_text(text, encoding="utf-8")
     orchestration_fixtures = [
-        *report_fixtures(oi, oi_stem, good_oi, good_oi.replace("status: reported", "status: sent"), "t1 has a report while sent", "| docs-sweep-w1 | idle | worktree-docs-sweep-w1 | t1: Fix the typo in docs/a.md | reported |", "orchestration"),
-        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-dup-task" / f"{oi_stem}.yaml"), "out": "task id t1 is used twice"},
+        *report_fixtures(oi, oi_stem, good_oi, good_oi.replace("status: reported", "status: sent"), "t1 has a report while sent", "| docs-sweep-w1 | idle | main-1 | inherit | worktree-docs-sweep-w1 | t1: Fix the typo in docs/a.md | reported |", "orchestration"),
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-dup-task" / f"{oi_stem}.yaml"), "out": "docs-sweep-w1 uses task id t1 twice"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-dup-worker" / f"{oi_stem}.yaml"), "out": "worker name docs-sweep-w1 is used twice"},
-        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-closed" / f"{oi_stem}.yaml"), "out": "closed while docs-sweep-w1 is idle"},
-        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-closed-busy" / f"{oi_stem}.yaml"), "out": "closed while docs-sweep-w1 is busy"},
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-over-count" / f"{oi_stem}.yaml"), "out": "docs-sweep-w2 is numbered above workers_started 1"},
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-bad-name" / f"{oi_stem}.yaml"), "out": "workers.1.name: String should match pattern"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-no-report" / f"{oi_stem}.yaml"), "out": "t1 is reported with no report"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "report-orchestration" / "bad" / f"{oi_stem}.yaml"), "env": no_uv, "out": "uv is not installed"},
         # ceh-session-orchestration holds no plan model, so a plan YAML is not its to check.

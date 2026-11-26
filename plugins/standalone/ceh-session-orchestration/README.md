@@ -3,25 +3,28 @@
 Talk to one Claude Code session and let it run the others. With this plugin, the session you
 start becomes an orchestrator: it starts a full worker session for each piece of work, in its own
 git worktree, sends it a task, takes its report back, and closes it once you accept the result.
-Every worker, task and report is written to one checked instance file, so the orchestrator still
-knows its workers after compaction.
+A repository on a machine has one long-running orchestrator, and every worker, task and report is
+written to one checked file for that machine, so the orchestrator still knows its workers after
+compaction or in a new session.
 
 ## Install
 
 See [Getting started](../../../docs/GETTING_STARTED.md). No other plugin depends on this one, and
 it depends on none. It needs Claude Code v2.1.236+ for cross-session messaging, git for the
-worker worktrees, `python3` on `PATH` for the hooks, and `uv` to check and render the instance
-file. Without uv the agent is told once per session that the file went unchecked.
+worker worktrees, `python3` on `PATH` for the hooks, and `uv` to check and render the
+orchestration file. Without uv the agent is told once per session that the file went unchecked.
 
 Every session you start where the plugin is enabled becomes an orchestrator, so enable it in the
-scope where you want that, such as one project. To start one ordinary session there, set
+scope where you want that, such as one project. The plugin expects you to talk to one
+orchestrator per repository on a machine: a second session there takes over every worker's
+reports, without asking. To start one ordinary session there, set
 `CEH_DISABLED_HOOKS=load-orchestrator` for it, as [Settings](#settings) says.
 
 ## Skills
 
-| Skill                         | Say or type                        | What it does                                                                                                                         |
-| ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `orchestrate-worker-sessions` | Nothing: it loads at session start | The orchestrator standard: when to delegate, how to start and brief a worker, the task and report blocks, the instance file, closing |
+| Skill                         | Say or type                        | What it does                                                                                                                              |
+| ----------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `orchestrate-worker-sessions` | Nothing: it loads at session start | The orchestrator standard: when to delegate, how to start and brief a worker, the task and report blocks, the orchestration file, closing |
 
 ## Agents
 
@@ -34,7 +37,7 @@ Three hooks run by themselves while the plugin is enabled. [Settings](#settings)
 | Hook                 | What it does for you                                                                                               |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | Orchestrator loader  | At session start and after compaction, makes the session load the orchestrator standard. A worker session skips it |
-| Instance file check  | Checks each written instance file and renders its Markdown beside it                                               |
+| File check           | Checks each written orchestration file and renders its Markdown beside it                                          |
 | Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite                                 |
 
 ## Settings
@@ -45,17 +48,17 @@ undo it.
 
 | Variable                   | Default              | Effect                                                                                                                                                                                                                                                                           |
 | -------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CEH_ARTIFACT_CHECK`       | unset (check on)     | `off` turns the instance file check and the generated-file guard off                                                                                                                                                                                                             |
+| `CEH_ARTIFACT_CHECK`       | unset (check on)     | `off` turns the file check and the generated-file guard off                                                                                                                                                                                                                      |
 | `CEH_DISABLED_HOOKS`       | unset (all hooks on) | Comma-separated hook names to skip: `load-orchestrator`, `artifact-render-hook`, `generated-md-guard`. `load-orchestrator` keeps the session from becoming an orchestrator. Set it for a headless `claude -p` run, such as a scheduled job, so the standard does not load at all |
-| `CEH_ORCHESTRATION_WORKER` | unset                | Set by the orchestrator on each worker it starts, to the instance name. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set                                                                                                  |
+| `CEH_ORCHESTRATION_WORKER` | unset                | Set by the orchestrator on each worker it starts, to the repository name. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set                                                                                                |
 
 ## How it works
 
 ### One task, start to finish
 
-1. You give the orchestrator a task. It opens an instance file, then starts a worker with
-   `claude --bg --worktree`, named `<instance>-w1`, whose start prompt says it is a worker and
-   what the orchestrator may ask of it.
+1. You give the orchestrator a task. It adds a worker to the machine's orchestration file, then
+   starts it with `claude --bg --worktree`, named `<repo>-w<n>`, whose start prompt says it is a
+   worker and what the orchestrator may ask of it.
 2. The worker does the task in `.claude/worktrees/<worker>` and sends back a YAML report: status,
    summary, files changed, checks run, and anything only you can answer.
 3. The orchestrator relays the report. When you accept it, the worker is stopped with
@@ -71,15 +74,14 @@ never merges a worker's branch and never deletes a worktree with uncommitted cha
 leaves to you. In a run with no user present, such as a scheduled `claude -p`, it does the work
 itself and starts no worker.
 
-### Restoring after a crash
+### Starting a new session
 
-When a new main session starts and finds an open instance whose orchestrator is no longer
-running, it names the instance and its workers and asks whether to restore it. On your yes, it
-takes the instance over, resumes each stopped worker that still has a task out, and sends it a
-handover message quoting your words, so later reports come to the new session. A worker that is
-gone, or one started before 1.0.1 that refuses the handover, is marked lost, and it offers to send
-that worker's unfinished task to a fresh worker. While the earlier orchestrator is still running,
-it restores nothing.
+When a new session starts in the repository, it reads the machine's file and takes over every
+worker that reports to another session. It resumes each stopped worker that still has a task out
+and sends it a handover message, so later reports come to the new session, then lists the
+workers it took over. A worker that is gone is marked lost, and it offers to send that worker's
+unfinished task to a fresh worker. A worker leaves the file once it is removed or reported lost,
+so the file holds only workers that still exist.
 
 ### Reusing a worker
 
@@ -96,7 +98,7 @@ accepted and the worker is closed, a fresh worker is cheaper.
 
 ## Where its files live
 
-Each instance is `.agents_workspace/orchestration/<YYYYMMDD-HHMMSS>-<instance>.yaml`, with its
-Markdown rendered beside it. The orchestrator adds `.agents_workspace/` to `.gitignore` when the
+Each machine's file is `.agents_workspace/orchestration/<machine>.yaml`, named by the machine's
+hostname, with its Markdown rendered beside it. The orchestrator adds `.agents_workspace/` to `.gitignore` when the
 repo does not ignore it. Workers live in `.claude/worktrees/<worker>`, on the branch
 `worktree-<worker>`.
