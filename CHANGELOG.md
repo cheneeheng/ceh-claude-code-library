@@ -101,8 +101,8 @@ A live check found two gaps in that change. The session's name changes after it 
 title lands, so a worker briefed in the first turn reported to a name the session no longer held.
 The orchestrator now reads its name from `ListAgents` again before starting a worker, before
 sending a task, on a report and on an idle notice, and sends the handover on a mismatch, and a
-worker whose report cannot be sent waits for one. The loader hook also prints a startup line, so
-the user sees that the session is the orchestrator before the first prompt.
+worker whose report cannot be sent waits for one. The loader hook also prints a startup line for the
+user, so the user sees that the session is the orchestrator, not only the model.
 
 ### Plugin versions
 
