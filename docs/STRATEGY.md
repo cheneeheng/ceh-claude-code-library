@@ -230,8 +230,7 @@ The likely order next, judged from the current gaps and not yet confirmed by a r
    notices one recurring across sessions.
 2. **Parallel builds.** Only what Claude Code's native worktrees and subagents lack, per the
    vision's non-goal on rebuilding Claude Code. `ceh-session-orchestration` started it, with
-   worker sessions in their own worktrees. Restoring an open instance in a new main session is
-   still to come.
+   worker sessions in their own worktrees, and a new main session can restore an open instance.
 
 ## Measuring progress: the reference run
 
