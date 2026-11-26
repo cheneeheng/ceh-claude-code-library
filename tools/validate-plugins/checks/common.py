@@ -6,10 +6,12 @@ runs them all. A check also runs alone: `python tools/validate-plugins/checks/<n
 
 from __future__ import annotations
 
+import functools
 import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 from typing import Callable
@@ -102,8 +104,38 @@ def main(check: Callable[[], None]) -> int:
     return report({Path(sys.argv[0]).stem.replace("_", "-"): run_check(check)})
 
 
+@functools.lru_cache(maxsize=None)
+def _unignored_plugin_dirs(repo: Path) -> frozenset[str] | None:
+    """`plugins/<group>/<plugin>` of every file git tracks or would track, or None without git."""
+    try:
+        out = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(repo),
+                "ls-files",
+                "-co",
+                "--exclude-standard",
+                "--",
+                "plugins",
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return frozenset("/".join(line.split("/")[:3]) for line in out.splitlines())
+
+
 def plugin_dirs() -> list[Path]:
-    return sorted(p for p in REPO.glob("plugins/*/ceh-*") if p.is_dir())
+    """Every plugin folder, skipping one whose files git all ignores, such as the `__pycache__` a
+    branch switch leaves behind (fix/20261126-122800-validator-plugin-folders)."""
+    dirs = sorted(p for p in REPO.glob("plugins/*/ceh-*") if p.is_dir())
+    kept = _unignored_plugin_dirs(REPO)
+    if kept is None:  # less-code: without git every folder counts, as before
+        return dirs
+    return [p for p in dirs if p.relative_to(REPO).as_posix() in kept]
 
 
 def skill_files() -> list[Path]:

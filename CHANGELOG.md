@@ -32,6 +32,10 @@ lands. A session reviewing its own unmerged branch therefore never loaded it and
 subagents by hand. The description now names a diff before it lands, a pull request or your own
 unmerged branch, and the saved review file.
 
+Switching to a branch that lacks a plugin left that plugin's git-ignored `__pycache__` folders on
+disk, and `validate.py` read the leftover folder as a plugin and failed locally with seven
+problems. It now skips a plugin folder whose files git all ignores. No plugin version moves.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -54,6 +58,8 @@ unmerged branch, and the saved review file.
   or Write.
 - `ceh-git-workflow` 3.0.6: the skill-started guard holds a write to a code review file until
   `write-code-review` or `address-review-comments` has started.
+- `validate.py`: a plugin folder holding only git-ignored files, such as `__pycache__` left by a
+  branch switch, is no longer checked as a plugin.
 
 ## 2026-11-24
 
