@@ -30,8 +30,9 @@ CONTEXT = (
 print(
     json.dumps(
         {
-            # additionalContext reaches only the model, at its first request, so the user is told here.
-            "systemMessage": "ceh-session-orchestration: this session is the orchestrator, loading orchestrate-worker-sessions.",
+            # additionalContext reaches only the model, at its first request, so the user is told
+            # here, and told that the takeover of running workers waits for that first message.
+            "systemMessage": "ceh-session-orchestration: this session is the orchestrator. Send any message to load it and take over running workers.",
             "hookSpecificOutput": {
                 "hookEventName": "SessionStart",
                 "additionalContext": CONTEXT,

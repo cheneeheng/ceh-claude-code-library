@@ -1938,7 +1938,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         # load-orchestrator: a session a person starts loads the standard, a worker does not.
         {"script": "load-orchestrator.py", "stdin": {}, "out": "ceh-session-orchestration:orchestrate-worker-sessions"},
         # The hook prints a startup line for the user, not only context for the model.
-        {"script": "load-orchestrator.py", "stdin": {}, "out": '"systemMessage": "ceh-session-orchestration: this session is the orchestrator'},
+        {"script": "load-orchestrator.py", "stdin": {}, "out": '"systemMessage": "ceh-session-orchestration: this session is the orchestrator. Send any message to load it'},
         {"script": "load-orchestrator.py", "stdin": {}, "env": {"CEH_ORCHESTRATION_WORKER": "x"}, "out": ""},
         {"script": "load-orchestrator.py", "stdin": {}, "env": {"CEH_DISABLED_HOOKS": "x, load-orchestrator"}, "out": ""},
     ]  # fmt: skip

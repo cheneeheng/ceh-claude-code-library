@@ -76,8 +76,9 @@ itself and starts no worker.
 
 ### Starting a new session
 
-When a new session starts in the repository, it reads the machine's file and takes over every
-worker that reports to another session. It resumes each stopped worker that still has a task out
+When a new session starts in the repository, it reads the machine's file at your first message,
+of any kind, and takes over every worker that reports to another session. Until then a worker
+whose report could not be sent waits for the handover. It resumes each stopped worker that still has a task out
 and sends it a handover message, so later reports come to the new session, then lists the
 workers it took over. A worker that is gone is marked lost, and it offers to send that worker's
 unfinished task to a fresh worker. A worker leaves the file once it is removed or reported lost,
