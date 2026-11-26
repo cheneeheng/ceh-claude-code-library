@@ -110,6 +110,23 @@ class BashTests(unittest.TestCase):
                     self.assertEqual(bool(r.stdout.strip()), not bool(disabled))
 
 
+class PluginDirsTests(unittest.TestCase):
+    def test_folder_holding_only_ignored_files_is_not_a_plugin(self):
+        # A branch switch leaves git-ignored __pycache__ behind a plugin that main lacks.
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            subprocess.run(["git", "init", "-q", str(repo)], check=True)
+            (repo / ".gitignore").write_text("__pycache__/\n", encoding="utf-8")
+            new = repo / "plugins/standalone/ceh-new"
+            new.mkdir(parents=True)
+            (new / "README.md").write_text("x\n", encoding="utf-8")
+            cache = repo / "plugins/standalone/ceh-gone/scripts/__pycache__"
+            cache.mkdir(parents=True)
+            (cache / "a.cpython-313.pyc").write_bytes(b"")
+            with patch.object(common, "REPO", repo):
+                self.assertEqual(common.plugin_dirs(), [new])
+
+
 class ProcessTests(unittest.TestCase):
     def test_spawned_groups_keep_errors_separate_and_ordered(self):
         from concurrent.futures import ProcessPoolExecutor
