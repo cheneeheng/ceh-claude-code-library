@@ -72,6 +72,10 @@ hook stays silent when that variable has any value. The worker's start prompt sa
 too, so a worker whose variable never arrives still ignores the standard. Listing
 `load-orchestrator` in `CEH_DISABLED_HOOKS` stops the hook.
 
+The root `README.md`, `docs/TESTING_WORKFLOW.md`, `docs/RETRO_WORKFLOW.md` and
+`tools/setup/README.md` named counts, triggers and behaviour their sources no longer have. Each now
+matches what the plugins and the setup script ship. No plugin version moves.
+
 ### Plugin versions
 
 | Plugin                      | Version |
@@ -102,6 +106,16 @@ too, so a worker whose variable never arrives still ignores the standard. Listin
   work across worker sessions.
 
 ### Fixed
+
+- `README.md`: the Every Session row lists `record-project-decisions` and `find-available-guide`,
+  the Python Service and Web Frontend rows name their reviewer agents, and Prerequisites counts
+  two plan plugins that use uv.
+- `docs/TESTING_WORKFLOW.md`: `ceh-testing` has 9 skills, "shrink the diff" triggers
+  `shrink-diff` only, and a report-only audit skips check 2.
+- `docs/RETRO_WORKFLOW.md`: the out-of-repo route covers memory and other repos, the older
+  `retros/` folder is read, and `prevent-repeat-mistake` also drafts rungs 1 and 2.
+- `tools/setup/README.md`: enabling a plugin needs no extra yes, and the install-page fallback
+  applies when the installer is not on PATH.
 
 - `ceh-git-workflow` 3.0.5: `write-code-review` no longer disallows Edit and Write, so it can
   write its review file.
