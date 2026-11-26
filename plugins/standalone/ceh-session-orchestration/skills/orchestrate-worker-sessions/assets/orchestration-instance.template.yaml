@@ -1,15 +1,10 @@
-schema: orchestration-instance/v1
-name: <instance-name>
-status: <open | closed>
-created: "<YYYY-MM-DD HH:MM>"
-updated: "<YYYY-MM-DD HH:MM>"
-orchestrator:
-  session_id: <session id>
-  session_name: <session name>
-worker_model: <model | inherit>
+schema: orchestration-instance/v2
+workers_started: <n>
 workers:
-  - name: <instance-name>-w<n>
+  - name: <repo>-w<n>
     session_id: "<worker id>"
+    reports_to: <orchestrator session name>
+    model: <model | inherit>
     worktree: <worktree path | none>
     branch: <branch | none>
     status: <starting | busy | idle | closed | lost>

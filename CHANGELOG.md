@@ -86,13 +86,31 @@ gone or refuses is marked lost, and its unfinished task can go to a fresh worker
 records each worker's full session id, and a worker is lost only when `claude agents --json --all`
 no longer lists it.
 
+The orchestrator is now one long-running session per repository on a machine, not a task-based
+instance. Its file, `orchestration-instance/v2`, is `.agents_workspace/orchestration/<machine>.yaml`,
+named by the hostname so a file synced in from another machine is never read as this one's. It
+holds only the workers: each records the session it reports to and the model it started on, and
+the file counts the workers started so a name is never reused. The instance name, its open and
+closed status and the orchestrator block are gone. A new session takes over every worker that
+reports to another session, without asking, and sends a handover message to each one with a task
+out. A worker leaves the file once `claude rm` removes it, its closed session is gone, or the user
+has been told it is lost. An open `v1` instance is no longer restored, and `v1` files stay as
+written.
+
+A live check found two gaps in that change. The session's name changes after it starts, when its
+title lands, so a worker briefed in the first turn reported to a name the session no longer held.
+The orchestrator now reads its name from `ListAgents` again before starting a worker, before
+sending a task, on a report and on an idle notice, and sends the handover on a mismatch, and a
+worker whose report cannot be sent waits for one. The loader hook also prints a startup line for the
+user, so the user sees that the session is the orchestrator, not only the model.
+
 ### Plugin versions
 
 | Plugin                      | Version |
 | --------------------------- | ------- |
 | `ceh-every-session`         | 2.11.0  |
 | `ceh-git-workflow`          | 3.0.7   |
-| `ceh-session-orchestration` | 1.0.1   |
+| `ceh-session-orchestration` | 1.0.2   |
 
 ### Added
 
@@ -109,6 +127,10 @@ no longer lists it.
 - `ceh-session-orchestration` 1.0.1: `orchestrate-worker-sessions` restores an open instance in a
   new main session, its start prompt accepts a handover, and a worker is `lost` only when
   `claude agents --json --all` no longer lists it.
+- `ceh-session-orchestration` 1.0.2: one orchestration file per repository per machine,
+  `orchestration-instance/v2`, with state kept only for the workers, a takeover at load that asks
+  nothing, workers removed from the file once they are gone, the session's name read fresh at
+  each worker event, and a startup line from the loader hook.
 - `ceh-every-session` `review-anything` and `audit-anything`: the "Not for" pointer is removed
   from each description, and the audit description takes a colon before its second clause.
 - `ceh-git-workflow` 3.0.7: `write-code-review`'s description covers a review of your own

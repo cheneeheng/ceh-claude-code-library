@@ -1,8 +1,8 @@
-"""orchestration-instance/v1: the orchestration instance's model and its Markdown renderer.
+"""orchestration-instance/v2: the orchestration file's model and its Markdown renderer.
 
 The format in code, per orchestration-instance-schema.md beside this file: `artifact.py`
-validates a `.agents_workspace/orchestration/<YYYYMMDD-HHMMSS>-<name>.yaml` with `MODEL` and
-writes `render(doc, source)` beside it.
+validates a `.agents_workspace/orchestration/<machine>.yaml` with `MODEL` and writes
+`render(doc, source)` beside it.
 """
 
 from __future__ import annotations
@@ -14,23 +14,20 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 NAME = "orchestration-instance"
-VERSION = 1
+VERSION = 2
 
 Line = Annotated[
     str, StringConstraints(strip_whitespace=True, min_length=1, pattern=r"^[^\n]*$")
 ]
-Slug = Annotated[str, StringConstraints(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$")]
+WorkerName = Annotated[
+    str, StringConstraints(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*-w[1-9]\d*$")
+]
 Time = Annotated[str, StringConstraints(pattern=r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$")]
 TaskId = Annotated[str, StringConstraints(pattern=r"^t[1-9]\d*$")]
 
 
 class _Strict(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
-
-
-class Orchestrator(_Strict):
-    session_id: Line
-    session_name: Line
 
 
 class Check(_Strict):
@@ -60,9 +57,11 @@ class Task(_Strict):
 
 
 class Worker(_Strict):
-    name: Slug
+    name: WorkerName
     # Absent until the start command has printed the worker's id.
     session_id: Optional[Line] = None
+    reports_to: Line
+    model: Line
     worktree: Line
     branch: Line
     status: Literal["starting", "busy", "idle", "closed", "lost"]
@@ -72,35 +71,31 @@ class Worker(_Strict):
 
 
 class Instance(_Strict):
-    schema_: Literal["orchestration-instance/v1"] = Field(alias="schema")
-    name: Slug
-    status: Literal["open", "closed"]
-    created: Time
-    updated: Time
-    orchestrator: Orchestrator
-    worker_model: Line
+    schema_: Literal["orchestration-instance/v2"] = Field(alias="schema")
+    workers_started: int = Field(ge=0)
     workers: list[Worker]
 
     @model_validator(mode="after")
     def _agree(self):
         # The four cross-key rules of orchestration-instance-schema.md, and the only ones.
-        tasks = [t for w in self.workers for t in w.tasks]
-        for t in tasks:
-            if t.status == "sent" and t.report is not None:
-                raise ValueError(f"{t.id} has a report while sent")
-            if t.status != "sent" and t.report is None:
-                raise ValueError(f"{t.id} is {t.status} with no report")
-        for kind, names in (
-            ("task id", [t.id for t in tasks]),
-            ("worker name", [w.name for w in self.workers]),
-        ):
-            dupes = sorted({n for n in names if names.count(n) > 1})
+        for w in self.workers:
+            for t in w.tasks:
+                if t.status == "sent" and t.report is not None:
+                    raise ValueError(f"{t.id} has a report while sent")
+                if t.status != "sent" and t.report is None:
+                    raise ValueError(f"{t.id} is {t.status} with no report")
+            ids = [t.id for t in w.tasks]
+            dupes = sorted({i for i in ids if ids.count(i) > 1})
             if dupes:
-                raise ValueError(f"{kind} {', '.join(dupes)} is used twice")
-        if self.status == "closed":
-            for w in self.workers:
-                if w.status in ("starting", "busy", "idle"):
-                    raise ValueError(f"closed while {w.name} is {w.status}")
+                raise ValueError(f"{w.name} uses task id {', '.join(dupes)} twice")
+            if int(w.name.rsplit("-w", 1)[1]) > self.workers_started:
+                raise ValueError(
+                    f"{w.name} is numbered above workers_started {self.workers_started}"
+                )
+        names = [w.name for w in self.workers]
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        if dupes:
+            raise ValueError(f"worker name {', '.join(dupes)} is used twice")
         return self
 
 
@@ -121,13 +116,13 @@ def _cell(text: str) -> str:
 
 
 def render(doc: Instance, source: str) -> str:
-    """The instance header and one row per worker. The same YAML always renders to the same text."""
+    """The file header and one row per worker. The same YAML always renders to the same text."""
     note = f"Do not edit. artifact.py renders this file from {source}: edit the YAML, then run artifact.py render."
     rows = []
     for w in doc.workers:
         task = w.tasks[-1] if w.tasks else None
         rows.append(
-            f"| {w.name} | {w.status} | {_cell(w.branch)} | "
+            f"| {w.name} | {w.status} | {_cell(w.reports_to)} | {_cell(w.model)} | {_cell(w.branch)} | "
             + (
                 f"{task.id}: {_cell(task.goal)} | {task.status} |"
                 if task
@@ -143,23 +138,20 @@ def render(doc: Instance, source: str) -> str:
         "",
         "<!-- prettier-ignore-start -->",
         "",
-        f"# Orchestration instance: {doc.name}",
+        f"# Orchestration: {source.rsplit('.', 1)[0]}",
         "",
-        f"**Status:** {doc.status}",
-        f"**Created / updated:** {doc.created} / {doc.updated}",
-        f"**Orchestrator:** {doc.orchestrator.session_name} ({doc.orchestrator.session_id})",
-        f"**Worker model:** {doc.worker_model}",
+        f"**Workers started:** {doc.workers_started}",
         "",
         "## Workers",
         "",
     ]
     if rows:
         out += [
-            "| Worker | Status | Branch | Newest task | Task status |",
-            "| --- | --- | --- | --- | --- |",
+            "| Worker | Status | Reports to | Model | Branch | Newest task | Task status |",
+            "| --- | --- | --- | --- | --- | --- | --- |",
             *rows,
         ]
     else:
-        out.append("No workers yet.")
+        out.append("No workers.")
     out += ["", "<!-- prettier-ignore-end -->"]
     return "\n".join(out) + "\n"
