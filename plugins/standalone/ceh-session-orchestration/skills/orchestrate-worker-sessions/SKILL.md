@@ -118,8 +118,8 @@ missing:
 6. The command prints `backgrounded · <id> · <name>`. Confirm the worker in `ListAgents`, then set
    its `session_id` to the full `sessionId` that `claude agents --json` lists for its `name`,
    because resuming it needs the full id, and its `status` to `busy`. When the command fails for
-   any other reason, or the worker never appears in `ListAgents`, set it `lost` and tell the user
-   what the command printed.
+   any other reason, or the worker never appears in `ListAgents`, set it `lost`, tell the user
+   what the command printed, and handle it as step 7 says.
 7. Compare `git -C <worktree> rev-parse HEAD` with `git rev-parse HEAD` in the main checkout.
    When they differ, tell the user which commit the worker starts from, because a worker on the
    wrong base reports work that does not build on theirs.
@@ -208,10 +208,11 @@ one idle notice, and tell the user again that an approval request may arrive fro
   `git -C <worktree> reset --hard && git -C <worktree> clean -fd` to run themselves, then run
   `claude rm <id>`. Delete the worker from the file once `claude rm` succeeds.
 - A worker set `lost`, at load or mid-session: tell the user its worktree and branch. When its
-  newest task is `sent`, offer a re-brief, and on yes start a fresh worker as step 4 says with the
-  same task block as its `t1`, its `inputs` naming the old branch when it exists. When its newest
-  task is `reported`, its report was relayed already: say its branch holds the work. Then delete
-  the lost worker from the file.
+  newest task is `sent`, offer a re-brief and wait for the answer, and on yes start a fresh worker
+  as step 4 says with the same task block as its `t1`, its `inputs` naming the old branch when it
+  exists. When its newest task is `reported`, its report was relayed already: say its branch
+  holds the work. With any other newest task, or none, say only that the worker is gone. Then
+  delete the lost worker from the file.
 
 ## Rules
 
