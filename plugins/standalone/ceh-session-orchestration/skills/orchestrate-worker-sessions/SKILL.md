@@ -75,8 +75,9 @@ The handover message, plain text and not a task block, with the names filled in:
 Handover: the orchestrator session for <repo> on this machine is now <this session's name>. Send every later report to it and take your tasks from it, and send again the report of your newest task unless this session has already answered it.
 ```
 
-On the same session after compaction or `claude --resume`, every `reports_to` matches and nothing
-is sent, unless the session's name changed meanwhile.
+On the same session after compaction, the name is kept, every `reports_to` matches and nothing is
+sent. A `claude --resume` can change the name, and this step's `reports_to` check then hands the
+workers over.
 
 ### 3. Create the file
 
@@ -235,8 +236,9 @@ one idle notice, and tell the user again that an approval request may arrive fro
   reuse window compares `last_active` with now.
 - **Read this session's name fresh.** Before starting a worker, before sending a task, on a
   report and on an idle notice, read it from the first line of `ListAgents`, "This session is
-  <name> [<ref>]", never from memory or the file. A session's name changes after it starts,
-  when its title lands or the user renames it, and a worker reports only to the name it holds.
+  <name> [<ref>]", never from memory or the file. A session's name changes when the session is
+  resumed, taking its title as its name, and right after the user runs `/rename`, and a worker
+  reports only to the name it holds.
 - **Record an event once.** Before appending a worker or a task, look for its `name` or `id` in
   the file, and skip the append when it is there. `workers_started` never goes down.
 - **The plugin's hook checks the file on every write** and renders its Markdown. When it reports
