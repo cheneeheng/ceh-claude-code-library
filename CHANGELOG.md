@@ -44,6 +44,11 @@ instruction that applied and what was done instead, names the cause, changes not
 before any fix, because the answer may show there was no error. It sits in `ceh-every-session`
 because the question can come in any session.
 
+`docs/VISION.md` gets two wording fixes with no change in meaning. Its opening paragraph is
+rewrapped at the 100-character width the rest of the prose uses, and principle 6's "One that
+spans several splits" now reads "One that spans several rows is split", so "splits" cannot be
+read as a noun. No plugin version moves.
+
 ### Plugin versions
 
 | Plugin              | Version |
@@ -63,6 +68,8 @@ because the question can come in any session.
   from each description, and the audit description takes a colon before its second clause.
 - `ceh-git-workflow` 3.0.7: `write-code-review`'s description covers a review of your own
   unmerged branch, with "review my branch" as a trigger.
+- `docs/VISION.md`: the opening paragraph is rewrapped and principle 6 reads "One that spans
+  several rows is split". Both are wording fixes with no change in meaning.
 
 ### Fixed
 

@@ -2,8 +2,8 @@
 
 What this library is, what it is for, and the principles that settle a decision when the rules
 elsewhere do not. `CLAUDE.md` and the decision rules in `.claude/rules/` say how the repo works,
-and this file says why, so every change must hold up against it. If the two disagree, fix one on purpose, as described in Changing this
-file, never by quietly ignoring one.
+and this file says why, so every change must hold up against it. If the two disagree, fix one on
+purpose, as described in Changing this file, never by quietly ignoring one.
 
 ## Identity
 
@@ -219,11 +219,11 @@ every session that loads it.
 Each plugin stands alone. A standard needed by two plugins is copied into both and registered in
 `docs/CROSS_REFERENCES.md`, rather than pulled into a shared base that must also be installed.
 Duplication costs the author effort, and a forced extra install costs every run. A plugin is one
-use case, and a use case sits in one row of the stage table. One that spans several splits, so a
-user who enters at one stage installs only that stage. A dependency is declared only when a skill
-calls the other plugin on every run (`decision-plugin-dependencies.md`), and it stays within the
-plugin's own stage or reaches a Core plugin, which the user has installed already. One that
-reaches another stage is a gap, listed below. The edges are in `docs/PLUGIN_DEPENDENCIES.md`.
+use case, and a use case sits in one row of the stage table. One that spans several rows is
+split, so a user who enters at one stage installs only that stage. A dependency is declared only
+when a skill calls the other plugin on every run (`decision-plugin-dependencies.md`), and it stays
+within the plugin's own stage or reaches a Core plugin, which the user has installed already. One
+that reaches another stage is a gap, listed below. The edges are in `docs/PLUGIN_DEPENDENCIES.md`.
 **Ask:** can this situation be equipped with exactly this and nothing more?
 
 ### 7. Guide first, enforce on evidence
