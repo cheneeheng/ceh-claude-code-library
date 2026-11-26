@@ -34,11 +34,11 @@ This plugin has no agents.
 
 Three hooks run by themselves while the plugin is enabled. [Settings](#settings) turns them off.
 
-| Hook                 | What it does for you                                                                                               |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Orchestrator loader  | At session start and after compaction, makes the session load the orchestrator standard. A worker session skips it |
-| File check           | Checks each written orchestration file and renders its Markdown beside it                                          |
-| Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite                                 |
+| Hook                 | What it does for you                                                                                                                           |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Orchestrator loader  | At session start and after compaction, makes the session load the orchestrator standard and prints a line saying so. A worker session skips it |
+| File check           | Checks each written orchestration file and renders its Markdown beside it                                                                      |
+| Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite                                                             |
 
 ## Settings
 

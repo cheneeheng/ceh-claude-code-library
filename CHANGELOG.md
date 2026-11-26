@@ -97,6 +97,13 @@ out. A worker leaves the file once `claude rm` removes it, its closed session is
 has been told it is lost. An open `v1` instance is no longer restored, and `v1` files stay as
 written.
 
+A live check found two gaps in that change. The session's name changes after it starts, when its
+title lands, so a worker briefed in the first turn reported to a name the session no longer held.
+The orchestrator now reads its name from `ListAgents` again before starting a worker, before
+sending a task, on a report and on an idle notice, and sends the handover on a mismatch, and a
+worker whose report cannot be sent waits for one. The loader hook also prints a startup line, so
+the user sees that the session is the orchestrator before the first prompt.
+
 ### Plugin versions
 
 | Plugin                      | Version |
@@ -122,7 +129,8 @@ written.
   `claude agents --json --all` no longer lists it.
 - `ceh-session-orchestration` 1.0.2: one orchestration file per repository per machine,
   `orchestration-instance/v2`, with state kept only for the workers, a takeover at load that asks
-  nothing, and workers removed from the file once they are gone.
+  nothing, workers removed from the file once they are gone, the session's name read fresh at
+  each worker event, and a startup line from the loader hook.
 - `ceh-every-session` `review-anything` and `audit-anything`: the "Not for" pointer is removed
   from each description, and the audit description takes a colon before its second clause.
 - `ceh-git-workflow` 3.0.7: `write-code-review`'s description covers a review of your own
