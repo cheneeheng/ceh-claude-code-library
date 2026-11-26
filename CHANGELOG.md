@@ -21,12 +21,17 @@ listed `disallowed-tools: Edit Write` from before it saved anything, so loading 
 away the tools its own save step needs. The line is gone, and `validate.py`'s `templates` check
 now fails any skill that cites a template while disallowing Edit or Write.
 
+A code review could still be saved by hand, as plain Markdown in the review folder, by a session
+that never loaded `write-code-review`, which left the file unchecked. The skill-started guard now
+holds a write under `.agents_workspace/product/review/code/` until `write-code-review` or
+`address-review-comments` has started, as it already does for the changelog and the README.
+
 ### Plugin versions
 
 | Plugin              | Version |
 | ------------------- | ------- |
 | `ceh-every-session` | 2.10.8  |
-| `ceh-git-workflow`  | 3.0.5   |
+| `ceh-git-workflow`  | 3.0.6   |
 
 ### Changed
 
@@ -39,6 +44,8 @@ now fails any skill that cites a template while disallowing Edit or Write.
   write its review file.
 - `validate.py`: the `templates` check rejects a skill that cites a template and disallows Edit
   or Write.
+- `ceh-git-workflow` 3.0.6: the skill-started guard holds a write to a code review file until
+  `write-code-review` or `address-review-comments` has started.
 
 ## 2026-11-24
 

@@ -35,6 +35,14 @@ RULES = [
         ("path", re.compile(r"(^|/)README\.md$")),
         ["ceh-git-workflow:update-readme"],
     ),
+    (
+        {"Edit", "Write", "MultiEdit"},
+        ("path", re.compile(r"(^|/)\.agents_workspace/product/review/code/")),
+        [
+            "ceh-git-workflow:write-code-review",
+            "ceh-git-workflow:address-review-comments",
+        ],
+    ),
 ]
 
 
