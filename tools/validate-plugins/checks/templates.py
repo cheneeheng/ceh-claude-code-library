@@ -1,5 +1,6 @@
 """templates: every output template declares its versioned schema, is cited by its plugin, and has
-a cited schema file beside it; a skill whose Output section names a saved file cites a template.
+a cited schema file beside it; a skill whose Output section names a saved file cites a template,
+and a skill citing a template does not disallow Edit or Write.
 That copies match is the `copies` check's job."""
 
 from __future__ import annotations
@@ -22,6 +23,10 @@ YAML_COMMENT_PAT = re.compile(r"^[a-z_]+: .* #", re.M)
 SAVED_FILE_PAT = re.compile(
     r"(?:\.agents_workspace|product)/[^`\s]*\.(?:md|ya?ml|json)"
 )
+# A skill that fills a template saves a file, so its frontmatter may not take away the tools that
+# write it: loading write-code-review once retracted Edit and Write mid-save
+# (fix/20261126-105801-code-review-save).
+DISALLOWED_WRITE_PAT = re.compile(r"^disallowed-tools:.*\b(?:Edit|Write)\b", re.M)
 
 
 def schema_line(text: str, yaml: bool) -> str:
@@ -81,6 +86,11 @@ def check() -> None:
         saved = SAVED_FILE_PAT.search(output_section(text))
         if saved and not any(s in text for s in SUFFIXES):
             fail(rel(skill), f"Output names '{saved.group()}' but cites no template")
+        frontmatter = text.split("---", 2)[1] if text.startswith("---") else ""
+        if any(s in text for s in SUFFIXES) and DISALLOWED_WRITE_PAT.search(
+            frontmatter
+        ):
+            fail(rel(skill), "cites a template it saves but disallows Edit or Write")
 
 
 if __name__ == "__main__":

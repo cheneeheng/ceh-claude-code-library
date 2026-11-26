@@ -16,16 +16,29 @@ Step 1 of each skill already routes a subject another skill owns, and hands work
 state to the other of the two after a git check, so the pointer repeated in the description a
 job the body does. No misroute was observed: this is a consistency cleanup, not a measured fix.
 
+`write-code-review` saves each review as a round of a review file, but its frontmatter still
+listed `disallowed-tools: Edit Write` from before it saved anything, so loading the skill took
+away the tools its own save step needs. The line is gone, and `validate.py`'s `templates` check
+now fails any skill that cites a template while disallowing Edit or Write.
+
 ### Plugin versions
 
 | Plugin              | Version |
 | ------------------- | ------- |
 | `ceh-every-session` | 2.10.8  |
+| `ceh-git-workflow`  | 3.0.5   |
 
 ### Changed
 
 - `ceh-every-session` `review-anything` and `audit-anything`: the "Not for" pointer is removed
   from each description, and the audit description takes a colon before its second clause.
+
+### Fixed
+
+- `ceh-git-workflow` 3.0.5: `write-code-review` no longer disallows Edit and Write, so it can
+  write its review file.
+- `validate.py`: the `templates` check rejects a skill that cites a template and disallows Edit
+  or Write.
 
 ## 2026-11-24
 
