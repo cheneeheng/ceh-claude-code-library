@@ -10,7 +10,7 @@ This guide covers only what no single plugin can document: the routing _between_
 
 | Plugin               | Stage         | Owns                                                                   | Surface                                                            |
 | -------------------- | ------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| `ceh-testing`        | Core          | **Technique**: which inputs, which scenarios, is the suite trustworthy | 5 skills, no agents                                                |
+| `ceh-testing`        | Core          | **Technique**: which inputs, which scenarios, is the suite trustworthy | 9 skills, no agents                                                |
 | `ceh-python-service` | Build (stack) | **Tooling**: pytest, test DB, httpx, fixtures                          | `write-pytest-service-tests` + 3 tester agents + runner scripts    |
 | `ceh-python-library` | Build (stack) | **Tooling**: pytest, public-API surface                                | `write-pytest-library-tests` (skill only)                          |
 | `ceh-web-frontend`   | Build (stack) | **Tooling**: Vitest, Testing Library, MSW, Playwright                  | `write-vitest-playwright-tests` + 3 tester agents + runner scripts |
@@ -37,21 +37,21 @@ dependency (see `docs/PLUGIN_DEPENDENCIES.md`), so the technique skill is always
 
 ## Routing: what you say to what runs
 
-| Moment                                                                              | Loads                                                                    |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| Opening or creating a test file                                                     | Stack testing skill (passive)                                            |
-| "write tests for this", "what should I test", "cover the edge cases"                | `design-test-cases` + stack skill                                        |
-| "write unit/integration/system tests" (many at once)                                | Tester agents + stack skill + `design-test-cases`                        |
-| "fix this bug", a pasted stack trace, "this worked last week"                       | `test-a-bug-fix`                                                         |
-| "debug this", "why is this failing", a fix that did not hold                        | `ceh-coding-conduct:find-root-cause`, then `test-a-bug-fix`              |
-| "implement this", "add a feature", "TDD"                                            | `write-test-first` + `design-test-cases` + stack skill                   |
-| "refactor this", "extract this", "upgrade this dependency"                          | `verify-behavior-preserved`                                              |
-| "shrink the diff", "simplify the branch before the PR"                              | `verify-behavior-preserved` **and** `ceh-coding-conduct:shrink-diff`     |
-| "is this ready", "before I open the PR", "race condition", "is this migration safe" | `close-test-risk-gaps`                                                   |
-| "are these tests any good", "why didn't the tests catch this", "flaky test"         | `audit-test-suite`, in report-only mode when the run is slow             |
-| "QA this", "click through the app and find bugs", "try to break it"                 | `explore-app-for-bugs`, report-only unless fix mode is asked for         |
-| "make sure it looks the same", "visual regression check"                            | `ceh-web-frontend:check-visual-parity`                                   |
-| "are we ready to launch", "what have we proven", before a post about the product    | `write-evidence-report`, which rolls up the reports the rows above leave |
+| Moment                                                                              | Loads                                                                     |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Opening or creating a test file                                                     | Stack testing skill (passive)                                             |
+| "write tests for this", "what should I test", "cover the edge cases"                | `design-test-cases` + stack skill                                         |
+| "write unit/integration/system tests" (many at once)                                | Tester agents + stack skill + `design-test-cases`                         |
+| "fix this bug", a pasted stack trace, "this worked last week"                       | `test-a-bug-fix`                                                          |
+| "debug this", "why is this failing", a fix that did not hold                        | `ceh-coding-conduct:find-root-cause`, then `test-a-bug-fix`               |
+| "implement this", "add a feature", "TDD"                                            | `write-test-first` + `design-test-cases` + stack skill                    |
+| "refactor this", "clean this up", "upgrade this dependency"                         | `verify-behavior-preserved`                                               |
+| "shrink the diff", "consolidate the branch"                                         | `ceh-coding-conduct:shrink-diff`, which names `verify-behavior-preserved` |
+| "is this ready", "before I open the PR", "race condition", "is this migration safe" | `close-test-risk-gaps`                                                    |
+| "are these tests any good", "why didn't the tests catch this", "flaky test"         | `audit-test-suite`, in report-only mode when the run is slow              |
+| "QA this", "click through the app and find bugs", "try to break it"                 | `explore-app-for-bugs`, report-only unless fix mode is asked for          |
+| "make sure it looks the same", "visual regression check"                            | `ceh-web-frontend:check-visual-parity`                                    |
+| "are we ready to launch", "what have we proven", before a post about the product    | `write-evidence-report`, which rolls up the reports the rows above leave  |
 
 ## Scenario A: tests for a new feature
 
@@ -104,18 +104,17 @@ The stack skill supplies the fixture and runner underneath, the technique skill 
 
 ## Scenario D: a refactor, and shrinking a branch
 
-"shrink the diff" is listed as a trigger by **both** `verify-behavior-preserved` and
-`ceh-coding-conduct:shrink-diff`. That is deliberate: both skills change working code with no behavior
-change intended, and the shrink side carries no verification step of its own. The
-`Behavior preservation` block in `shrink-diff` and `refactor-repo` points back at the pinning step
-for anything past a mechanical transform.
+"shrink the diff" is a trigger of `ceh-coding-conduct:shrink-diff` only, not of
+`verify-behavior-preserved`. The two still pair: `verify-behavior-preserved` names `shrink-diff`
+and `refactor-repo` as changes to working code with no behavior change intended, neither of which
+carries a verification step of its own, and the `Behavior preservation` block in `shrink-diff` and
+`refactor-repo` points back at the pinning step for anything past a mechanical transform.
 
-| You say                                                                               | Loads                                                                                        |
-| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| "refactor this", "extract this", "upgrade this dependency", "make sure nothing broke" | `verify-behavior-preserved` only                                                             |
-| "shrink the diff", "simplify the branch before the PR"                                | both                                                                                         |
-| "consolidate the branch", "can this diff be smaller"                                  | `shrink-diff` primarily                                                                      |
-| `/ceh-coding-conduct:refactor-repo`                                                   | `refactor-repo`, which is manual only, and it names `verify-behavior-preserved` for the pins |
+| You say                                                                                | Loads                                                                                        |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| "refactor this", "clean this up", "upgrade this dependency", "make sure nothing broke" | `verify-behavior-preserved` only                                                             |
+| "shrink the diff", "consolidate the branch", "can this diff be smaller"                | `shrink-diff`, whose Behavior preservation block names `verify-behavior-preserved`           |
+| `/ceh-coding-conduct:refactor-repo`                                                    | `refactor-repo`, which is manual only, and it names `verify-behavior-preserved` for the pins |
 
 **Ordering is the thing to watch.** The two want opposite ends of the timeline: pinning must happen
 _before_ the edit, but "shrink the diff" is said _after_ the branch is functionally complete. That
@@ -147,8 +146,9 @@ mutation testing scoped to the diff, flakiness and order dependence, level and s
 coverage last.
 
 When the suite is large, the run is slow, or mutation output would flood the session, hand the audit
-to a background subagent with the skill loaded and tell it to use **report-only mode**. It edits
-nothing, caps the mutation run, and hands back about 15 ranked findings. Writing the missing tests
+to a background subagent with the skill loaded and tell it to use **report-only mode**. It skips
+the delete-the-code check, edits nothing, and hands back its findings ranked worst-first, with the
+commands run and the two or three fixes worth making first. Writing the missing tests
 goes back to the stack's tester agents.
 
 The highest-value defect, a test computing its expectation with the same logic as the code under
@@ -157,7 +157,7 @@ test, is invisible to every automated check and has to be read for.
 ## What waits for a request
 
 Proof is part of the task, so a `ceh-testing` skill writes and runs the tests that prove the change
-without being asked. Four skills carry a "What waits for a request" block naming the slow or paid
+without being asked. Five skills carry a "What waits for a request" block naming the slow or paid
 runs that still need one: the full suite, coverage, mutation testing, and repeated passes over the
 whole suite. For those, the skill names the command, what it would reveal, and what stays
 unverified, so you can ask for it. The block is registered in `docs/CROSS_REFERENCES.md` ("What
