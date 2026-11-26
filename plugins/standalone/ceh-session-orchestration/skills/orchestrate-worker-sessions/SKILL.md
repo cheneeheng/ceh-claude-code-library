@@ -67,7 +67,8 @@ lowercased. With no such file, skip this step.
 
 6. Tell the user, in one short list, each worker that did not report to this session's current
    name, marked handed over or not yet, and each worker set `lost`, handled as step 7 says. When
-   this is the same session under a new name, say it was renamed.
+   this is the same session under a new name, say it was renamed. When any task is `reported`,
+   show the list of reports awaiting the user's verdict, as step 6 says.
 
 The handover message, plain text and not a task block, with the names filled in:
 
@@ -90,6 +91,16 @@ missing:
    with `workers_started: 0` and `workers: []`.
 
 ### 4. Start a worker
+
+First split the user's request into tasks. Two tasks run in sequence when one needs the other's
+result or both edit the same files, since parallel edits to one file conflict on merge. A chain
+of tasks in sequence goes to one worker, one task at a time: the first in its start prompt, each
+next one as step 7 says. Every other task gets its own worker, and all of them start in the same
+turn, one pass of the steps below each. The limit is the number of workers the session-start
+context names (`CEH_ORCHESTRATION_MAX_WORKERS`), or 5 when it names none, counting every worker
+whose `status` is `starting`, `busy` or `idle`. At the limit, start no more: name the held tasks
+to the user and say a slot frees when a worker closes, which accepting its report does. Start a
+held task as soon as a worker closes.
 
 1. Take `<repo>` from the basename of `git rev-parse --show-toplevel`, or of the current folder
    outside git: lowercased, each run of characters other than a-z and 0-9 turned into one `-`,
@@ -188,8 +199,7 @@ one idle notice, and tell the user again that an approval request may arrive fro
 
 - A message holding `kind: report` that parses as YAML and names a task id its sender holds is
   the done signal. Copy its fields into that task's `report` with `received`, set the task
-  `reported`, the worker `idle` and its `last_active`, and relay the summary and any `needs_user`
-  to the user. Then read this session's name as the Rules say, and send the handover message to
+  `reported`, the worker `idle` and its `last_active`, and relay it in the list below. Then read this session's name as the Rules say, and send the handover message to
   each other worker whose newest task is `sent` and whose `reports_to` differs, setting its
   `reports_to`.
 - A message that holds `kind: report` but does not parse, or names no task its sender holds, is
@@ -204,9 +214,17 @@ one idle notice, and tell the user again that an approval request may arrive fro
   report, set `reports_to`, and subscribe again. Otherwise ask the worker once for its report,
   unless a handover already went to it since its task was sent, which asked for it.
 
+Relay reports as one list of the reports awaiting the user's verdict: every reply that relays a
+report opens with every task whose `status` is `reported`, across all workers, oldest `received`
+first and ties in file order, numbered from 1, each with its worker, task id, summary and
+`needs_user`. The new report is last. A task leaves the list once the user accepts or rejects it,
+so after the last verdict the next report is item 1 of a new list.
+
 ### 7. Close and remove
 
-- When the user accepts a report, set the task `accepted`, stop the worker with
+- When the user accepts a report and the worker has the next task of a chain from step 4, set
+  the task `accepted` and send the next task as step 5 says, keeping the worker. Otherwise, when
+  the user accepts a report, set the task `accepted`, stop the worker with
   `claude stop <id>`, and set it `closed`. When the user rejects it, set the task `rejected` and
   send a follow-up task or close the worker, as the user says.
 - Report the worker's branch and leave it: landing it belongs to `ceh-git-workflow:pull-request`.
@@ -229,6 +247,9 @@ one idle notice, and tell the user again that an approval request may arrive fro
   decides what is delegated, writes briefs, reads reports, and keeps the orchestration file. It
   answers questions and reads the files a brief needs. Work that edits files, or reads across
   many files, goes to a worker. The one exception is the `.gitignore` line of step 3.
+- **One worker per parallel task.** Tasks that can run side by side each get their own worker,
+  up to the limit of step 4. Tasks go to the same worker only when they must run in sequence,
+  never to save starting a worker.
 - **Write the file after every event**: worker started, task sent, handover sent, message or
   report received, report accepted or rejected, worker closed, lost or removed.
 - **Take every time from the clock.** Each time in the file (`started`, `last_active`, `sent`,

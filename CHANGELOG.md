@@ -109,13 +109,24 @@ does not change while it runs: it changes when the session is resumed, taking it
 name, and right after `/rename`. The skill now says so, and its takeover step says compaction
 keeps the name while a resume can change it. The mechanism is unchanged.
 
+Four changes the user asked for in the orchestrator. A second session in a repository whose
+orchestrator still runs no longer becomes an orchestrator and takes over its workers: the loader
+hook keeps a lock file in the temp folder naming the orchestrator, checks it against
+`claude agents --json`, and on a live lock loads no standard and names the orchestrator in its
+startup line. When the sessions cannot be listed, it loads the standard anyway and says the check
+could not run. The orchestrator now starts one worker per task that can run in parallel, and
+gives tasks that must run in order to one worker, one task after another. The new
+`CEH_ORCHESTRATION_MAX_WORKERS`, default 5, caps the workers it runs at once, and tasks past the
+cap wait for a worker to close. Every reply that relays a report lists all reports still awaiting
+the user's verdict, so reports from several workers no longer scatter across the session.
+
 ### Plugin versions
 
 | Plugin                      | Version |
 | --------------------------- | ------- |
 | `ceh-every-session`         | 2.11.0  |
 | `ceh-git-workflow`          | 3.0.7   |
-| `ceh-session-orchestration` | 1.0.3   |
+| `ceh-session-orchestration` | 1.0.4   |
 
 ### Added
 
@@ -136,6 +147,9 @@ keeps the name while a resume can change it. The mechanism is unchanged.
   `orchestration-instance/v2`, with state kept only for the workers, a takeover at load that asks
   nothing, workers removed from the file once they are gone, the session's name read fresh at
   each worker event, and a startup line from the loader hook.
+- `ceh-session-orchestration` 1.0.4: one orchestrator per repository, enforced by the loader
+  hook's lock file, one worker per parallel task up to `CEH_ORCHESTRATION_MAX_WORKERS` (default
+  5), and pending reports relayed as one list until the user's verdict.
 - `ceh-every-session` `review-anything` and `audit-anything`: the "Not for" pointer is removed
   from each description, and the audit description takes a colon before its second clause.
 - `ceh-git-workflow` 3.0.7: `write-code-review`'s description covers a review of your own

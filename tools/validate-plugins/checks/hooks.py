@@ -26,7 +26,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     """Build the files the fixtures read, then return one dict per fixture.
 
     Keys: script, stdin (dict), env, args, repeat (runs on one session; the last is checked),
-    code (exit code), out (substring of stdout; "" means stdout must be empty), err (substring
+    code (exit code), out (substring of stdout; "" means stdout must be empty), absent (substring
+    stdout must not hold), err (substring
     of stderr), before (called just before the script), after (called just after it; returns an
     error message or None). Fixtures run in list order, so a sequence can share one tmp repo.
     """
@@ -1751,6 +1752,121 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         }
         return {"tool_name": "Edit", "tool_input": ti, "transcript_path": tx[t]}
 
+    # load-orchestrator: each case has its own repository folder, a fake `claude` whose
+    # `agents --json` prints the case's listing, and an explicit CLAUDE_PID, so the developer's
+    # real sessions never reach a case.
+    orc = tmp / "orchestrator"
+    claude_stub = orc / "bin"
+    claude_stub.mkdir(parents=True)
+    (claude_stub / "claude").write_text(
+        '#!/bin/sh\ncat "$CLAUDE_STUB_OUT"\nexit "${CLAUDE_STUB_CODE:-0}"\n',
+        encoding="utf-8",
+        newline="\n",
+    )
+    (claude_stub / "claude").chmod(0o755)
+    (claude_stub / "claude.cmd").write_text(
+        '@echo off\ntype "%CLAUDE_STUB_OUT%"\nif defined CLAUDE_STUB_CODE exit /b %CLAUDE_STUB_CODE%\n',
+        encoding="utf-8",
+    )
+    (orc / "empty-bin").mkdir()
+    orc_locks = tmp / "state" / "ceh-session-orchestration"
+    loads = "Before answering the user, invoke the Skill tool"
+    # The startup line of a session that loads, then the note: proves both at once.
+    unchecked = "take over running workers. The check for another orchestrator in this repository could not run"
+
+    def orc_lock(root: Path) -> Path:
+        key = os.path.normcase(str(root.resolve())).encode()
+        return orc_locks / f"{hashlib.sha256(key).hexdigest()[:16]}.json"
+
+    def orc_case(
+        name: str,
+        listing: object = (),
+        lock: dict | None = None,
+        cwd: str = "",
+        env: dict | None = None,
+        **checks,
+    ) -> dict:
+        root = orc / name
+        (root / cwd).mkdir(parents=True)
+        (root / ".git").mkdir()
+        out_file = orc / f"{name}.json"
+        out_file.write_text(
+            listing if isinstance(listing, str) else json.dumps(list(listing)),
+            encoding="utf-8",
+        )
+
+        def before() -> None:
+            if lock is not None:
+                orc_locks.mkdir(exist_ok=True)
+                orc_lock(root).write_text(json.dumps(lock), encoding="utf-8")
+
+        return {
+            "script": "load-orchestrator.py",
+            "stdin": {"cwd": str(root / cwd), "session_id": "me"},
+            "env": {
+                "PATH": str(claude_stub) + os.pathsep + os.environ.get("PATH", ""),
+                "CLAUDE_PID": "",
+                "CLAUDE_STUB_OUT": str(out_file),
+                **(env or {}),
+            },
+            "before": before,
+            **checks,
+        }
+
+    def held_by(root: str, pid: object) -> callable:
+        def after() -> str | None:
+            held = json.loads(orc_lock(orc / root).read_text(encoding="utf-8"))
+            return (
+                None if held.get("pid") == pid else f"lock holds {held}, not pid {pid}"
+            )
+
+        return after
+
+    other = {"pid": 101, "startedAt": 1000, "sessionId": "other", "name": "orch"}
+    other_live = dict(other)
+    worktree_case = orc_case(
+        "worktree", [other_live], other, cwd=".claude/worktrees/w1", out=loads
+    )
+    (orc / "worktree" / ".claude/worktrees/w1/.git").write_text(
+        "gitdir: x", encoding="utf-8"
+    )
+    orchestrator_fixtures = [
+        # A session a person starts loads the standard, and prints a startup line for the user.
+        orc_case("fresh", out="ceh-session-orchestration:orchestrate-worker-sessions"),
+        orc_case("fresh-line", out='"systemMessage": "ceh-session-orchestration: this session is the orchestrator. Send any message to load it'),
+        orc_case("worker", env={"CEH_ORCHESTRATION_WORKER": "x"}, out=""),
+        orc_case("disabled", env={"CEH_DISABLED_HOOKS": "x, load-orchestrator"}, out=""),
+        # Another live orchestrator blocks: the user is told who, and the model not to load it.
+        orc_case("blocked", [other_live], other, out="orch (pid 101) is already the orchestrator of this repository", absent=loads),
+        orc_case("blocked-context", [other_live], other, out="do not invoke ceh-session-orchestration:orchestrate-worker-sessions", absent=loads),
+        orc_case("blocked-subfolder", [other_live], other, cwd="src/deep", out="is already the orchestrator", absent=loads),
+        # A lock written before its session was listed, with no CLAUDE_PID, matches by session id.
+        orc_case("blocked-no-pid", [other_live], {**other, "pid": None}, out="is already the orchestrator", absent=loads),
+        # A reused pid started after the lock was written is another process: not live.
+        orc_case("reused-pid", [{**other_live, "startedAt": 2000}], other, out=loads, after=held_by("reused-pid", None)),
+        # This session holds the lock: by CLAUDE_PID after /clear, or by session id.
+        orc_case("self-pid", [other_live], other, env={"CLAUDE_PID": "101"}, out=loads),
+        orc_case("self-session", [{**other_live, "sessionId": "me"}], other, out=loads),
+        # The lock's process is gone, as after `claude --resume`: this session takes it over.
+        orc_case("resumed", [{"pid": 500, "startedAt": 3000, "sessionId": "me", "name": "new"}], other, env={"CLAUDE_PID": "500"}, out=loads, after=held_by("resumed", 500)),
+        # A worktree holds its own .git file, so it is its own repository root.
+        worktree_case,
+        # An older session that never took the lock (an ordinary or a blocked one) does not block.
+        orc_case("no-lock", [{**other_live, "startedAt": 1}], out=loads),
+        # The listing cannot be read: load anyway, and say the check could not run.
+        orc_case("no-claude", env={"PATH": str(orc / "empty-bin")}, out=f"{unchecked}: claude is not on PATH"),
+        orc_case("exit-1", env={"CLAUDE_STUB_CODE": "1"}, out=unchecked),
+        orc_case("not-json", "not json", out=unchecked),
+        orc_case("not-list", '{"pid": 1}', out=unchecked),
+        # The worker limit: 5 by default, set by CEH_ORCHESTRATION_MAX_WORKERS, 5 on a bad value.
+        orc_case("limit-default", out="at most 5 workers at once"),
+        orc_case("limit-3", env={"CEH_ORCHESTRATION_MAX_WORKERS": "3"}, out="at most 3 workers at once", absent="so the limit is 5"),
+        *(
+            orc_case(f"limit-bad-{n}", env={"CEH_ORCHESTRATION_MAX_WORKERS": v}, out=f"{v} is not a whole number of at least 1, so the limit is 5")
+            for n, v in enumerate(("zero", "0", "-1"))
+        ),
+    ]  # fmt: skip
+
     return [
         # artifact-render-hook: block an invalid plan YAML, render a valid one, skip other files,
         # and warn once when uv is missing. generated-md-guard: deny an edit to a generated .md,
@@ -1935,12 +2051,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "load-contract.sh", "stdin": {}, "env": {"CEH_DISABLED_HOOKS": "load-contract"}, "out": ""},
         {"script": "inject-less-code-reminder.sh", "stdin": {}, "out": "WRITE LESS CODE"},
         {"script": "inject-less-code-reminder.sh", "stdin": {}, "env": {"CEH_DISABLED_HOOKS": "inject-less-code-reminder"}, "out": ""},
-        # load-orchestrator: a session a person starts loads the standard, a worker does not.
-        {"script": "load-orchestrator.py", "stdin": {}, "out": "ceh-session-orchestration:orchestrate-worker-sessions"},
-        # The hook prints a startup line for the user, not only context for the model.
-        {"script": "load-orchestrator.py", "stdin": {}, "out": '"systemMessage": "ceh-session-orchestration: this session is the orchestrator. Send any message to load it'},
-        {"script": "load-orchestrator.py", "stdin": {}, "env": {"CEH_ORCHESTRATION_WORKER": "x"}, "out": ""},
-        {"script": "load-orchestrator.py", "stdin": {}, "env": {"CEH_DISABLED_HOOKS": "x, load-orchestrator"}, "out": ""},
+        *orchestrator_fixtures,
     ]  # fmt: skip
 
 
@@ -2052,6 +2163,8 @@ def run_batch(batch: int, batches: int, bash: str | None) -> list[tuple[int, str
                 fail(where, f"expected no output, got: {r.stdout.strip()[:200]}")
             elif f.get("out") and f["out"] not in r.stdout:
                 fail(where, f"stdout lacks {f['out']!r}: {r.stdout.strip()[:200]}")
+            if f.get("absent") and f["absent"] in r.stdout:
+                fail(where, f"stdout holds {f['absent']!r}: {r.stdout.strip()[:200]}")
             if f.get("err") and f["err"] not in r.stderr:
                 fail(where, f"stderr lacks {f['err']!r}: {r.stderr.strip()[:200]}")
             if "after" in f and (problem := f["after"]()):
