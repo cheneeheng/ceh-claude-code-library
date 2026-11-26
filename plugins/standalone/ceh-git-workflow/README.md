@@ -50,7 +50,7 @@ turns them off.
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Branch guard](#branch-guard)               | Stops a file edit while the default branch is checked out, and tells the agent to create a feature branch first.                             |
 | [Workspace sync](#workspace-sync)           | Commits your `.agents_workspace` notes after every turn, and gives a git worktree the same workspace.                                        |
-| [Skill-started guard](#skill-started-guard) | Stops a commit, a changelog edit or a README edit until the skill that owns it has started, so its steps are not skipped.                    |
+| [Skill-started guard](#skill-started-guard) | Stops a commit, a changelog, README or code review file edit until the skill that owns it has started, so its steps are not skipped.         |
 | Review and retro check                      | Checks each saved code review or retro, renders its Markdown, and stops a hand edit to that Markdown, which the next render would overwrite. |
 
 ### Branch guard
@@ -97,11 +97,12 @@ completion notice arrives. An edit made during that merge can stay in a stash, w
 
 ### Skill-started guard
 
-| Call                                 | Skill that must start first     |
-| ------------------------------------ | ------------------------------- |
-| `git commit` in a shell command      | `commit`                        |
-| An edit or write of a `CHANGELOG.md` | `update-changelog` or `release` |
-| An edit or write of a `README.md`    | `update-readme`                 |
+| Call                                                   | Skill that must start first                      |
+| ------------------------------------------------------ | ------------------------------------------------ |
+| `git commit` in a shell command                        | `commit`                                         |
+| An edit or write of a `CHANGELOG.md`                   | `update-changelog` or `release`                  |
+| An edit or write of a `README.md`                      | `update-readme`                                  |
+| A write under `.agents_workspace/product/review/code/` | `write-code-review` or `address-review-comments` |
 
 A skill counts as started through the Skill tool or its slash command. A skill another skill only
 names still has to be started. Files outside the session's project pass, and so does
@@ -117,7 +118,7 @@ undo it.
 | Variable                  | Default              | Effect                                                                                                                                                             |
 | ------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `CEH_BRANCH_GUARD`        | unset (guard on)     | `off` allows edits on the default branch, for when you asked to edit it in place                                                                                   |
-| `CEH_SKILL_STARTED_GUARD` | unset (guard on)     | `off` allows a commit, changelog edit or README edit before its skill started                                                                                      |
+| `CEH_SKILL_STARTED_GUARD` | unset (guard on)     | `off` allows a commit, or a changelog, README or code review file edit, before its skill started                                                                   |
 | `CEH_ARTIFACT_CHECK`      | unset (check on)     | `off` turns the review and retro check off                                                                                                                         |
 | `CEH_DISABLED_HOOKS`      | unset (all hooks on) | Comma-separated hook names to skip: `branch-guard`, `sync-agents-workspace`, `skill-started-guard`, `artifact-render-hook`, `generated-md-guard`                   |
 | `CLAUDE_CONFIG_DIR`       | `~/.claude`          | Claude Code's own variable, not one this plugin adds. Workspace sync reads your `attribution.commit` line from `settings.json` there, after the project's settings |

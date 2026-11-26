@@ -141,6 +141,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         "new_string": "b",
     }
     readme = {"file_path": f"{guarded}/docs/README.md", "content": "x"}
+    review = {
+        "file_path": f"{guarded}/.agents_workspace/product/review/code/x.yaml",
+        "content": "x",
+    }
     tst = "ceh-testing"
     test_file = {"file_path": f"{guarded}/tests/test_check.py", "content": "x"}
 
@@ -1765,7 +1769,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "env": {"CEH_BUILD_RECORD_GUARD": "off"}, "out": ""},
         {"script": "build-record-guard.py", "stdin": record("Edit", add_built), "env": {"CEH_DISABLED_HOOKS": "build-record-guard"}, "out": ""},
         {"script": "ask-user-question-guard.py", "stdin": {"tool_name": "AskUserQuestion", "tool_input": {}}, "env": {"CEH_DISABLED_HOOKS": "ask-user-question-guard"}, "out": ""},
-        # skill-started-guard (ceh-git-workflow): commit, CHANGELOG.md and README.md need their skill started.
+        # skill-started-guard (ceh-git-workflow): commit, CHANGELOG.md, README.md and a code review file need their skill started.
         {**guard(gw, "Bash", commit), "out": "ceh-git-workflow:commit"},
         {**guard(gw, "Bash", commit, started("ceh-git-workflow:commit")), "out": ""},
         {**guard(gw, "Bash", commit, started("ceh-git-workflow:commit", "slash")), "out": ""},
@@ -1780,6 +1784,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {**guard(gw, "Write", readme), "out": "ceh-git-workflow:update-readme"},
         {**guard(gw, "Write", readme, started("ceh-git-workflow:update-readme")), "out": ""},
         {**guard(gw, "Write", {**readme, "file_path": (tmp / "elsewhere" / "README.md").as_posix()}), "out": ""},
+        {**guard(gw, "Write", review), "out": "ceh-git-workflow:write-code-review"},
+        {**guard(gw, "Write", review, started("ceh-git-workflow:write-code-review")), "out": ""},
+        {**guard(gw, "Write", review, started("ceh-git-workflow:address-review-comments")), "out": ""},
+        {**guard(gw, "Write", {**review, "file_path": review["file_path"].replace("/code/", "/plan/")}), "out": ""},
         {**guard(gw, "Bash", commit), "env": {"CEH_SKILL_STARTED_GUARD": "off"}, "out": ""},
         {**guard(gw, "Bash", commit), "env": {"CEH_DISABLED_HOOKS": "skill-started-guard"}, "out": ""},
         # skill-started-guard (ceh-testing): a test file needs a testing skill started.
