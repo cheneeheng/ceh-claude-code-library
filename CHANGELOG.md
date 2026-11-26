@@ -9,6 +9,24 @@ before this repo live in
 
 ---
 
+## 2026-11-26
+
+The descriptions of `review-anything` and `audit-anything` no longer carry a "Not for" pointer.
+Step 1 of each skill already routes a subject another skill owns, and hands work in the wrong
+state to the other of the two after a git check, so the pointer repeated in the description a
+job the body does. No misroute was observed: this is a consistency cleanup, not a measured fix.
+
+### Plugin versions
+
+| Plugin              | Version |
+| ------------------- | ------- |
+| `ceh-every-session` | 2.10.8  |
+
+### Changed
+
+- `ceh-every-session` `review-anything` and `audit-anything`: the "Not for" pointer is removed
+  from each description, and the audit description takes a colon before its second clause.
+
 ## 2026-11-24
 
 `analyze-competitor` now builds each competitor's HTML page with a script instead of by hand. Its

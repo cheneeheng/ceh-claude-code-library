@@ -3,8 +3,7 @@ name: review-anything
 description: >-
   Load this skill when asked to review work not yet marked done that no other review skill owns
   (a doc, a design, a rule file, a draft): an independent reader checks it, and the verdict is
-  saved. Trigger on "review this", "review X against Y". Not for a diff (use
-  ceh-git-workflow:write-code-review).
+  saved. Trigger on "review this", "review X against Y".
 argument-hint: "[subject] [criteria]"
 disable-model-invocation: false
 user-invocable: true
