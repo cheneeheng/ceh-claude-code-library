@@ -15,9 +15,9 @@ file. Without uv the agent is told once per session that the file went unchecked
 
 ## Skills
 
-| Skill                         | Say or type                          | What it does                                                                                                                         |
-| ----------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `orchestrate-worker-sessions` | Model-only: there is nothing to type | The orchestrator standard: when to delegate, how to start and brief a worker, the task and report blocks, the instance file, closing |
+| Skill                         | Say or type                        | What it does                                                                                                                         |
+| ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `orchestrate-worker-sessions` | Nothing: it loads at session start | The orchestrator standard: when to delegate, how to start and brief a worker, the task and report blocks, the instance file, closing |
 
 ## Agents
 
@@ -25,12 +25,13 @@ This plugin has no agents.
 
 ## Hooks
 
-Two hooks run by themselves while the plugin is enabled. [Settings](#settings) turns them off.
+Three hooks run by themselves while the plugin is enabled. [Settings](#settings) turns them off.
 
-| Hook                 | What it does for you                                                               |
-| -------------------- | ---------------------------------------------------------------------------------- |
-| Instance file check  | Checks each written instance file and renders its Markdown beside it               |
-| Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite |
+| Hook                 | What it does for you                                                                                               |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Orchestrator loader  | At session start and after compaction, makes the session load the orchestrator standard. A worker session skips it |
+| Instance file check  | Checks each written instance file and renders its Markdown beside it                                               |
+| Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite                                 |
 
 ## Settings
 
@@ -38,10 +39,11 @@ Set a variable under `env` in a Claude Code settings file. The
 [environment variables page](../../../docs/ENVIRONMENT_VARIABLES.md) shows which file and how to
 undo it.
 
-| Variable             | Default              | Effect                                                                           |
-| -------------------- | -------------------- | -------------------------------------------------------------------------------- |
-| `CEH_ARTIFACT_CHECK` | unset (check on)     | `off` turns the instance file check and the generated-file guard off             |
-| `CEH_DISABLED_HOOKS` | unset (all hooks on) | Comma-separated hook names to skip: `artifact-render-hook`, `generated-md-guard` |
+| Variable                   | Default              | Effect                                                                                                                                                                          |
+| -------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CEH_ARTIFACT_CHECK`       | unset (check on)     | `off` turns the instance file check and the generated-file guard off                                                                                                            |
+| `CEH_DISABLED_HOOKS`       | unset (all hooks on) | Comma-separated hook names to skip: `load-orchestrator`, `artifact-render-hook`, `generated-md-guard`. `load-orchestrator` keeps the session from becoming an orchestrator      |
+| `CEH_ORCHESTRATION_WORKER` | unset                | Set by the orchestrator on each worker it starts, to the instance name. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set |
 
 ## How it works
 

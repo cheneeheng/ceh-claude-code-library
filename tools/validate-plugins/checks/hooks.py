@@ -1934,6 +1934,10 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "load-contract.sh", "stdin": {}, "env": {"CEH_DISABLED_HOOKS": "load-contract"}, "out": ""},
         {"script": "inject-less-code-reminder.sh", "stdin": {}, "out": "WRITE LESS CODE"},
         {"script": "inject-less-code-reminder.sh", "stdin": {}, "env": {"CEH_DISABLED_HOOKS": "inject-less-code-reminder"}, "out": ""},
+        # load-orchestrator: a session a person starts loads the standard, a worker does not.
+        {"script": "load-orchestrator.py", "stdin": {}, "out": "ceh-session-orchestration:orchestrate-worker-sessions"},
+        {"script": "load-orchestrator.py", "stdin": {}, "env": {"CEH_ORCHESTRATION_WORKER": "x"}, "out": ""},
+        {"script": "load-orchestrator.py", "stdin": {}, "env": {"CEH_DISABLED_HOOKS": "x, load-orchestrator"}, "out": ""},
     ]  # fmt: skip
 
 

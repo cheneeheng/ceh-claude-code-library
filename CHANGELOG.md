@@ -66,6 +66,13 @@ task until its prompt allowed it. Every event goes to one instance file,
 rendered beside it, so the orchestrator still knows its workers after compaction. The root
 `README.md` On demand row now uses the vision's wording.
 
+With the plugin installed, a session a person starts now loads the orchestrator standard by
+itself, at start and again after compaction, through a `SessionStart` hook. A worker does not: the
+orchestrator starts each one with `CEH_ORCHESTRATION_WORKER` set through `--settings`, and the
+hook stays silent when that variable has any value. The worker's start prompt says it is a worker
+too, so a worker whose variable never arrives still ignores the standard. Listing
+`load-orchestrator` in `CEH_DISABLED_HOOKS` stops the hook.
+
 ### Plugin versions
 
 | Plugin                      | Version |
@@ -80,8 +87,9 @@ rendered beside it, so the orchestrator still knows its workers after compaction
   not do something in one turn of the current session. The description budget in `validate.py`
   rises by its 297 characters.
 - `ceh-session-orchestration` 1.0.0: the `orchestrate-worker-sessions` standard, the
-  `orchestration-instance/v1` format with its template, schema, model and `artifact.py`, and the
-  artifact check and generated-file guard hooks.
+  `orchestration-instance/v1` format with its template, schema, model and `artifact.py`, the
+  artifact check and generated-file guard hooks, `scripts/load-orchestrator.py` on `SessionStart`,
+  and the `CEH_ORCHESTRATION_WORKER` variable that marks a worker.
 
 ### Changed
 
