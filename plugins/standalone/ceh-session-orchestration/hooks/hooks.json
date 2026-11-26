@@ -64,7 +64,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/load-orchestrator.py\""
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/load-orchestrator.py\"",
+            "timeout": 15
           }
         ]
       }

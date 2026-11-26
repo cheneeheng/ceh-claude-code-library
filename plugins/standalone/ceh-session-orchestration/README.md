@@ -15,10 +15,11 @@ worker worktrees, `python3` on `PATH` for the hooks, and `uv` to check and rende
 orchestration file. Without uv the agent is told once per session that the file went unchecked.
 
 Every session you start where the plugin is enabled becomes an orchestrator, so enable it in the
-scope where you want that, such as one project. The plugin expects you to talk to one
-orchestrator per repository on a machine: a second session there takes over every worker's
-reports, without asking. To start one ordinary session there, set
-`CEH_DISABLED_HOOKS=load-orchestrator` for it, as [Settings](#settings) says.
+scope where you want that, such as one project. A repository on a machine has only one
+orchestrator: while it runs, a second session there does not become one, and its startup line
+names the orchestrator. To make the second session the orchestrator, close the first, then run
+`/clear` in the second. An ordinary session, with `CEH_DISABLED_HOOKS=load-orchestrator` set for
+it as [Settings](#settings) says, never counts as the orchestrator.
 
 ## Skills
 
@@ -34,11 +35,11 @@ This plugin has no agents.
 
 Three hooks run by themselves while the plugin is enabled. [Settings](#settings) turns them off.
 
-| Hook                 | What it does for you                                                                                                                           |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| Orchestrator loader  | At session start and after compaction, makes the session load the orchestrator standard and prints a line saying so. A worker session skips it |
-| File check           | Checks each written orchestration file and renders its Markdown beside it                                                                      |
-| Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite                                                             |
+| Hook                 | What it does for you                                                                                                                                                                                                                  |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Orchestrator loader  | At session start and after compaction, makes the session load the orchestrator standard and prints a line saying so, unless another orchestrator already runs in the repository, which the line then names. A worker session skips it |
+| File check           | Checks each written orchestration file and renders its Markdown beside it                                                                                                                                                             |
+| Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite                                                                                                                                                    |
 
 ## Settings
 
@@ -46,11 +47,12 @@ Set a variable under `env` in a Claude Code settings file. The
 [environment variables page](../../../docs/ENVIRONMENT_VARIABLES.md) shows which file and how to
 undo it.
 
-| Variable                   | Default              | Effect                                                                                                                                                                                                                                                                           |
-| -------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CEH_ARTIFACT_CHECK`       | unset (check on)     | `off` turns the file check and the generated-file guard off                                                                                                                                                                                                                      |
-| `CEH_DISABLED_HOOKS`       | unset (all hooks on) | Comma-separated hook names to skip: `load-orchestrator`, `artifact-render-hook`, `generated-md-guard`. `load-orchestrator` keeps the session from becoming an orchestrator. Set it for a headless `claude -p` run, such as a scheduled job, so the standard does not load at all |
-| `CEH_ORCHESTRATION_WORKER` | unset                | Set by the orchestrator on each worker it starts, to the repository name. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set                                                                                                |
+| Variable                        | Default              | Effect                                                                                                                                                                                                                                                                           |
+| ------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CEH_ARTIFACT_CHECK`            | unset (check on)     | `off` turns the file check and the generated-file guard off                                                                                                                                                                                                                      |
+| `CEH_DISABLED_HOOKS`            | unset (all hooks on) | Comma-separated hook names to skip: `load-orchestrator`, `artifact-render-hook`, `generated-md-guard`. `load-orchestrator` keeps the session from becoming an orchestrator. Set it for a headless `claude -p` run, such as a scheduled job, so the standard does not load at all |
+| `CEH_ORCHESTRATION_MAX_WORKERS` | `5`                  | The most workers one orchestrator runs at once. A value that is not a whole number of at least 1 gives 5, and the startup line says so                                                                                                                                           |
+| `CEH_ORCHESTRATION_WORKER`      | unset                | Set by the orchestrator on each worker it starts, to the repository name. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set                                                                                                |
 
 ## How it works
 
@@ -64,6 +66,18 @@ undo it.
 3. The orchestrator relays the report. When you accept it, the worker is stopped with
    `claude stop` and marked closed. Its branch stays for you to land.
 
+### Several tasks at once
+
+The orchestrator splits a request into tasks and starts one worker per task that can run in
+parallel, up to `CEH_ORCHESTRATION_MAX_WORKERS`. Tasks that must run in order, because one needs
+another's result or both edit the same files, go to one worker, one task after another, each with
+its own report. At the limit, the orchestrator names the tasks it holds and starts each as a
+worker closes.
+
+Each reply that relays a report lists every report still awaiting your verdict, oldest first, so
+reports from several workers never scatter across the session. A report leaves the list once you
+accept or reject it.
+
 A worker may ask you for a permission approval directly, through Claude Code's notification. The
 orchestrator tells you when that can happen, because it gets no signal for it.
 
@@ -76,7 +90,8 @@ itself and starts no worker.
 
 ### Starting a new session
 
-When a new session starts in the repository, it reads the machine's file at your first message,
+When a new session becomes the orchestrator, because no other orchestrator runs in the repository,
+it reads the machine's file at your first message,
 of any kind, and takes over every worker that reports to another session. Until then a worker
 whose report could not be sent waits for the handover. It resumes each stopped worker that still has a task out
 and sends it a handover message, so later reports come to the new session, then lists the
