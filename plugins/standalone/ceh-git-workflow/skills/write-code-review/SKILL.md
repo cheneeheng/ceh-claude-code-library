@@ -6,7 +6,6 @@ description: >-
   to approve". Not for finding defects (use the built-in /code-review).
 disable-model-invocation: false
 user-invocable: true
-disallowed-tools: Edit Write
 license: Apache-2.0
 ---
 
