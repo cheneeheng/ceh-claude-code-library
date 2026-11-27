@@ -1224,7 +1224,26 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             ' status: closed, started: "2026-11-25 12:21", last_active: "2026-11-25 12:21", tasks: []}\n'
         )
 
+    # Held tasks: one queued for a worker with a named model, one fresh, one that follows it. The
+    # task is `answered`, which keeps its report.
+    oi_held = (
+        "held:\n"
+        '  - {goal: Land it, scope: x, inputs: [], done_when: x, commit: true, held: "2026-11-25 12:22", model: sonnet, worker: docs-sweep-w1}\n'
+        '  - {goal: Next, scope: x, inputs: [], done_when: x, commit: true, held: "2026-11-25 12:23"}\n'
+        '  - {goal: After, scope: x, inputs: [], done_when: x, commit: true, held: "2026-11-25 12:23", follows: true}\n'
+    )
+    good_held = good_oi.replace("status: reported", "status: answered") + oi_held
     oi_bad = {
+        "held-first-follows": good_oi
+        + oi_held.replace(
+            "held:\n",
+            'held:\n  - {goal: First, scope: x, inputs: [], done_when: x, commit: true, held: "2026-11-25 12:21", follows: true}\n',
+            1,
+        ),
+        "held-both": good_oi
+        + oi_held.replace(
+            "worker: docs-sweep-w1}", "worker: docs-sweep-w1, follows: true}"
+        ),
         "dup-task": good_oi + oi_task,
         "dup-worker": good_oi + oi_worker("docs-sweep-w1"),
         "over-count": good_oi + oi_worker("docs-sweep-w2"),
@@ -1237,6 +1256,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         (tmp / f"oi-{name}" / f"{oi_stem}.yaml").write_text(text, encoding="utf-8")
     orchestration_fixtures = [
         *report_fixtures(oi, oi_stem, good_oi, good_oi.replace("status: reported", "status: sent"), "t1 has a report while sent", "| docs-sweep-w1 | idle | main-1 | inherit | worktree-docs-sweep-w1 | t1: Fix the typo in docs/a.md | reported |", "orchestration"),
+        *report_fixtures(oi, oi_stem, good_held, good_held.replace("worker: docs-sweep-w1}", "worker: docs-sweep-w9}"), "held.0 names worker docs-sweep-w9, which is not in the file", "| 2026-11-25 12:22 | Land it | sonnet | docs-sweep-w1 |", "orchestration-held"),
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-held-first-follows" / f"{oi_stem}.yaml"), "out": "held.0 has follows with no entry before it"},
+        {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-held-both" / f"{oi_stem}.yaml"), "out": "held.0 has both worker and follows"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-dup-task" / f"{oi_stem}.yaml"), "out": "docs-sweep-w1 uses task id t1 twice"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-dup-worker" / f"{oi_stem}.yaml"), "out": "worker name docs-sweep-w1 is used twice"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-over-count" / f"{oi_stem}.yaml"), "out": "docs-sweep-w2 is numbered above workers_started 1"},

@@ -11,7 +11,8 @@ another machine's file can arrive with a pull. A new file is a copy of
 
 The YAML is the source. The `.md` of the same stem is generated beside it, opens with
 `generated_from: <file>.yaml` and a do-not-edit `generated_note`, and shows the count of workers
-started and one table of workers with each one's newest task and its status. Nobody edits the
+started, one table of workers with each one's newest task and its status, and, when any task is
+held, a table of the held tasks. Nobody edits the
 Markdown. The format in code is `orchestration-instance-model.py` beside this file, and
 `scripts/artifact.py` in the skill checks and renders it through uv:
 
@@ -55,11 +56,22 @@ Each required unless marked optional, and no other key allowed:
   `false`), plus:
   - `sent`: the time the task message went out.
   - `status`: `sent`, `reported` (a report came back), `accepted` or `rejected` (the user's
-    verdict on the report).
+    verdict on the report), or `answered` (the user replied to a `blocked` report, and the reply
+    went to the worker as its next task).
   - `report` (optional): `received` (time), and the report block's `status` (`done`, `blocked` or
     `failed`), `summary`, `files` (paths changed, `[]` when none), `checks` (each `command` and
     `result`, `[]` when none) and `needs_user` (the question or approval only the user can give,
     or `none`).
+- `held` (optional): a list, absent or `[]` when nothing is held, of tasks not yet sent, kept
+  here so a new orchestrator session still has them. Each entry has the task block's `goal`,
+  `scope`, `inputs`, `done_when` and `commit`, plus:
+  - `held`: the time the task was held. It shares the list's name on purpose, as a task's time
+    is named `sent`.
+  - `model` (optional): the model the user named for the task.
+  - `worker` (optional): the worker it is queued for, a land or the next task of its chain.
+  - `follows` (optional): `true` only, for a task that goes to the same worker as the entry
+    before it, in a chain held before its worker started.
+  - With neither `worker` nor `follows`, the entry waits for a fresh worker.
 
 Every value and list item is one line. A worker leaves the list when `claude rm` removes it, when
 it is `closed` and `claude agents --json --all` no longer lists it, or once the user has been told
@@ -67,12 +79,14 @@ it is `lost`. Its history stays in the workspace repo's git log.
 
 ## Rules the model checks
 
-Across keys, these four and only these:
+Across keys, these five and only these:
 
 1. A task's `report` is present exactly when its `status` is not `sent`.
 2. Task ids are unique within a worker.
 3. Worker names are unique.
 4. Each worker's number n is at most `workers_started`.
+5. A held entry's `worker` names a worker in the file, an entry never has both `worker` and
+   `follows`, and the first entry has no `follows`.
 
 The model cannot see whether a worker's session still exists. The orchestrator sets a worker
 `lost` when `claude agents --json --all` no longer lists it. Listed there without a `pid`, the
