@@ -57,12 +57,22 @@ when they ask again. Each rule carries its own length limit, because longer repl
 aim, and the decision block keeps its lines, so the folded-reply mod still draws its options. A
 rerun of the transcript mining after some weeks of use is the planned check.
 
+The user keeps many nested repositories, git-ignored, inside one folder, and wanted one
+orchestrator there to hand out work in each. Every worker used to start in a worktree of the
+orchestrator's own repository, which holds none of the git-ignored ones. Now the orchestrator
+picks each task's repository, the nearest folder above its files with a `.git` entry, never a
+`.agents_workspace` one, and starts the worker there, with its git checks run in that repository.
+The orchestration file records it as the worker's optional `repo`, so every existing file stays
+valid. A task across two repositories is split into one worker each. When the second needs the
+first's result, it waits in the file with `after` until the first has landed, and the user is
+asked about it if the first ends any other way. A hub's live check by the user is still to come.
+
 ### Plugin versions
 
 | Plugin                      | Version |
 | --------------------------- | ------- |
 | `ceh-every-session`         | 2.11.1  |
-| `ceh-session-orchestration` | 1.0.7   |
+| `ceh-session-orchestration` | 1.0.8   |
 
 ### Added
 
@@ -73,6 +83,10 @@ rerun of the transcript mining after some weeks of use is the planned check.
   its fixtures.
 - `ceh-session-orchestration` 1.0.7: the `role-label.tsx` mod, its state contract and its
   `claude plugin test` cases.
+- `ceh-session-orchestration` 1.0.8: the optional `repo` key on a worker and a held entry, the
+  `after` key on a held entry, a sixth model rule and more rule-5 clauses with their fixtures, a
+  Repo column in both rendered tables, and a scope-guard fixture for a hub, all in
+  `orchestration-instance/v2`, and the README's "Running from a hub".
 
 ### Changed
 
@@ -88,6 +102,10 @@ rerun of the transcript mining after some weeks of use is the planned check.
   compaction, summarises a split request at its last report, runs tasks that need no plan on
   `haiku` or `sonnet`, and runs one worker at a time outside git. `orchestrator-scope-guard`
   allows `.agents_workspace/BACKLOG.md`.
+- `ceh-session-orchestration` 1.0.8: `orchestrate-worker-sessions` starts each worker from its
+  task's repository in a subshell, runs every git check there, names workers and the handover
+  after the hub, runs one worker at a time only in a hub folder that is no git repository, and
+  settles a waiting entry when its worker lands or ends.
 
 ## 2026-11-26
 
