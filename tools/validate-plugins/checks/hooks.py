@@ -1806,6 +1806,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
             "env": {
                 "PATH": str(claude_stub) + os.pathsep + os.environ.get("PATH", ""),
                 "CLAUDE_PID": "",
+                # The runner passes the developer's environment through, and a headless run's
+                # CLAUDE_CODE_SESSION_ATTENDED=0 would make every case exit silently.
+                "CLAUDE_CODE_SESSION_ATTENDED": "",
                 "CLAUDE_STUB_OUT": str(out_file),
                 **(env or {}),
             },
@@ -1836,6 +1839,9 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         orc_case("fresh-line", out='"systemMessage": "ceh-session-orchestration: this session is the orchestrator. Send any message to load it'),
         orc_case("worker", env={"CEH_ORCHESTRATION_WORKER": "x"}, out=""),
         orc_case("disabled", env={"CEH_DISABLED_HOOKS": "x, load-orchestrator"}, out=""),
+        # A headless `claude -p` run is marked CLAUDE_CODE_SESSION_ATTENDED=0: no standard, no lock.
+        orc_case("headless", env={"CLAUDE_CODE_SESSION_ATTENDED": "0"}, out="", after=lambda: "headless run wrote a lock" if orc_lock(orc / "headless").exists() else None),
+        orc_case("attended", env={"CLAUDE_CODE_SESSION_ATTENDED": "1"}, out=loads),
         # Another live orchestrator blocks: the user is told who, and the model not to load it.
         orc_case("blocked", [other_live], other, out="orch (pid 101) is already the orchestrator of this repository", absent=loads),
         orc_case("blocked-context", [other_live], other, out="do not invoke ceh-session-orchestration:orchestrate-worker-sessions", absent=loads),

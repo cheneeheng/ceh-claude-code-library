@@ -2,7 +2,8 @@
 """SessionStart hook: make the session an orchestrator by loading its standard.
 
 Wired on startup|resume|clear|compact, so the standard is loaded again after compaction.
-SessionStart never fires inside a subagent, so a subagent is never made an orchestrator.
+SessionStart never fires inside a subagent, so a subagent is never made an orchestrator. A
+headless run, which has no user to accept a worker's report, is skipped too.
 
 One orchestrator per repository: the session this hook makes an orchestrator writes a lock file
 naming it, and while that session runs, the hook loads no standard in another session there and
@@ -27,6 +28,10 @@ if Path(__file__).stem in os.environ.get("CEH_DISABLED_HOOKS", "").replace(
     sys.exit(0)
 # A worker session: the orchestrator starts every worker with this variable set.
 if os.environ.get("CEH_ORCHESTRATION_WORKER"):
+    sys.exit(0)
+# A headless `claude -p` run: Claude Code sets CLAUDE_CODE_SESSION_ATTENDED=0 (observed on
+# 2.1.332, not documented). Missing or any other value counts as attended.
+if os.environ.get("CLAUDE_CODE_SESSION_ATTENDED") == "0":
     sys.exit(0)
 
 SKILL = "ceh-session-orchestration:orchestrate-worker-sessions"
