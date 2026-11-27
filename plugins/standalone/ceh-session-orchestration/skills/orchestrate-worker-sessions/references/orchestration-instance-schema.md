@@ -42,14 +42,16 @@ Each required unless marked optional, and no other key allowed:
     worker, double-quoted. Absent while `starting`.
   - `reports_to`: the orchestrator session name the worker sends its reports to, from its start
     prompt or its last handover message.
-  - `model`: the model the user named for this worker's task, or `inherit` for no `--model` flag.
+  - `model`: the model the user named for this worker's task, else `haiku` for a task that only
+    moves or renames files or makes a one-line edit, else `sonnet` for any other task that needs
+    no plan first, else `inherit` for no `--model` flag.
   - `worktree`: the worker's worktree as a repo-relative path, or `none` outside a git repo.
   - `branch`: the worktree's branch, or `none`.
   - `status`: `starting` (written before the start command runs), `busy` (a task is out),
     `idle` (its turn ended), `closed` (stopped with `claude stop`) or `lost` (its session no
     longer exists, or never started).
   - `started` and `last_active`: `"YYYY-MM-DD HH:MM"`, quoted. `last_active` is the time of the
-    worker's last message or report, and decides whether it may take a follow-up.
+    worker's last message or report.
   - `tasks`: a list, `[]` allowed, each task sent to this worker.
 - `workers[].tasks[]`: the task block's `id` (`t<n>`, counting from 1 within the worker), `goal`,
   `scope`, `inputs` (repo-relative paths, `[]` when none), `done_when` and `commit` (`true` or
