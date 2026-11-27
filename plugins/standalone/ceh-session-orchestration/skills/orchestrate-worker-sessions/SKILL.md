@@ -49,7 +49,8 @@ lowercased. With no such file, skip this step.
 2. Read this session's name from the first line of `ListAgents`, "This session is <name>
    [<ref>]", and read `claude agents --json --all` once, which lists active and stopped sessions.
 3. Delete each `closed` worker that list no longer holds, matched by `session_id` against the
-   entry's `sessionId`.
+   entry's `sessionId`. One that a waiting entry's `after` names is set `lost` instead, and
+   step 7 handles it.
 4. For each `starting`, `busy` or `idle` worker whose `reports_to` is not this session's name,
    match it by `session_id`, or by `name` when it has none and fill the full `sessionId` in.
    - Listed with a `pid`: running, keep it as it is.
@@ -57,10 +58,10 @@ lowercased. With no such file, skip this step.
    - Not listed: set it `lost`.
 5. Message only a worker whose newest task is `sent`, because an `idle` worker whose task is
    `reported` only awaits the user's answer, and a message would start a turn that answer has not
-   asked for. Resume a stopped one first, from the repo root:
+   asked for. Resume a stopped one first, from its repository, the worker's `repo`:
 
    ```bash
-   claude --bg --resume <full sessionId>
+   (cd "<repo>" && claude --bg --resume <full sessionId>)
    ```
 
    Pass no other flag: the worker wakes under its own id with its saved options, `--settings`
@@ -74,13 +75,13 @@ lowercased. With no such file, skip this step.
    name, marked handed over or not yet, and each worker set `lost`, handled as step 7 says. When
    this is the same session under a new name, say it was renamed. When any task is `reported`,
    show the list of reports awaiting the user's answer, as step 6 says. When `held` has entries,
-   name them, start the fresh ones as slots allow, and send each entry with a `worker` when that
-   worker may take it, as step 4 says.
+   name them, start the fresh ones as slots allow, never a waiting one, and send each entry with
+   a `worker` when that worker may take it, as step 4 says.
 
 The handover message, plain text and not a task block, with the names filled in:
 
 ```text
-Handover: the orchestrator session for <repo> on this machine is now <this session's name>. Send every later report to it and take your tasks from it, and send again the report of your newest task unless this session has already answered it.
+Handover: the orchestrator session for <hub> on this machine is now <this session's name>. Send every later report to it and take your tasks from it, and send again the report of your newest task unless this session has already answered it.
 ```
 
 On the same session after compaction, the name is kept, every `reports_to` matches and nothing is
@@ -93,7 +94,7 @@ Before the first worker is started, when `.agents_workspace/orchestration/<machi
 missing:
 
 1. Create `.agents_workspace/orchestration/` when it is missing, and add `.agents_workspace/` to
-   `.gitignore` when the repo does not already ignore it.
+   `.gitignore` when this session's folder is a git repository that does not already ignore it.
 2. Write the file as a copy of `${CLAUDE_SKILL_DIR}/assets/orchestration-instance.template.yaml`
    with `workers_started: 0`, `workers: []` and `held: []`.
 
@@ -107,25 +108,53 @@ set to the chain's worker, so a new session keeps the chain. Every other task ge
 worker, and all of them start in the same turn, one pass of the steps below each. When a request
 is split into tasks for several workers, tell the user the list of tasks of that request.
 
+**The repository of a task.** This session's folder is the hub, which may hold nested
+repositories, each a folder with a `.git` entry of its own. A task's repository, the worker's
+`repo`, is found from the folder the task is in, taken from the request and the files it names:
+walk up from that folder to the hub, and the first folder for which `test -e "<folder>/.git"`
+succeeds is the repository, as a path relative to the hub written with `/`. The hub itself, or no
+such folder below it, gives `.`. A `.agents_workspace` folder, and every folder under it, never
+counts: walk past it, so a task on a plan or the backlog in `<repo>/.agents_workspace/` goes to
+`<repo>`. A request that names no folder, in a hub that holds nested repositories, gets one
+question to the user, which repository, with `.` among the options. A repository under any other
+dot-folder is not supported: tell the user and start no worker. Before the model rule below, read
+`<repo>/CLAUDE.md` and `<repo>/.claude/rules/` when they exist, since this session has not loaded
+them, and take `inherit` when they do not settle it.
+
+A task never spans two repositories: split it into one task per repository, each with its own
+worker, since a worker stays in one repository. When the second needs the first's result, start
+the first and append the second to `held` with its `repo` and `after` set to the first's worker,
+or, when the first is itself held at the limit, append both, the second with `after: true`. In
+either case, tell the user the second waits for the first to land. A sequence of three or more repositories
+held at the limit, or a second task waiting on the same held first task, cannot be written: hold
+the first two, and tell the user to ask for the rest again once the second starts.
+
 The limit is the number of workers the session-start context names
 (`CEH_ORCHESTRATION_MAX_WORKERS`), or 5 when it names none, counting every worker whose `status`
-is `starting`, `busy` or `idle`. Outside a git repository the limit is 1, whatever that number
-or the startup line says, counting every worker whose `worktree` is `none` and whose `status` is
-`starting`, `busy` or `idle`, because workers
-sharing one folder edit the same files: run one worker at a time there. At the limit, start no more: append each held
-task to `held`, with the time it was held and the `model` the user named for it, and tell the
-user a slot frees when a worker closes or is removed. A chain held this way gets one entry per
-task, the first with neither `worker` nor `follows`, the rest with `follows: true`.
+is `starting`, `busy` or `idle`, wherever it runs. A worker whose `worktree` is `none` shares the
+hub folder, so at most one such worker runs at a time, within the limit, because workers sharing
+one folder edit the same files. Workers in nested repositories each have their own worktree. At
+the limit, start no more: append each held task to `held`, with the time it was held, its
+`repo`, and the `model` the user named for it, and tell the user a slot frees when a worker
+closes or is removed. A chain held this way gets one entry per task, the first with neither
+`worker` nor `follows`, the rest with `follows: true`.
 
 Entries in `held`:
 
-- A **fresh** entry has neither `worker` nor `follows`. When a slot frees, start the entry with
-  the oldest `held` time, fresh or a land waiting for a closed worker (step 7), and delete it from
-  `held` in the same write as the new worker. When a fresh entry starts a worker, set `worker` on
-  the `follows` entries after it and remove their `follows`, in the same write.
+- A **fresh** entry has none of `worker`, `follows` and `after`. When a slot frees, start the
+  oldest entry by `held` time that may start, fresh or a land waiting for a closed worker (step
+  7), skipping a waiting entry, and a fresh entry with `repo: .` while a worker with
+  `worktree: none` runs. Delete it from `held` in the same write as the new worker. When a fresh
+  entry starts a worker, set `worker` on the `follows` entries after it and remove their
+  `follows`, and set `after` to the new worker's name on an `after: true` entry waiting for it,
+  in the same write.
+- A **waiting entry** has `after`: it waits for that worker to land and never starts when a slot
+  frees. Step 7 settles it when that worker leaves.
 - An entry with a `worker` is sent to that worker: a landing task (step 7) once no landing task is
   `sent` or `reported`, any other task when the worker's current task is accepted or kept.
 - Delete an entry from `held` when it is sent.
+- An entry names a worker by its `worker` key. Wherever this standard keeps, drops or checks
+  the entries naming a worker, a waiting entry is not among them: step 7 settles it.
 
 The model rule: a worker's `model` is the model the user named for the task. Otherwise a task
 that needs no plan first runs on a smaller model: `haiku` when it only moves or renames files or
@@ -134,44 +163,54 @@ session's model. A task needs a plan first when its repository's rules say so fo
 or when it builds, writes or reviews a plan. A chain takes the model of its largest task, because
 the model is fixed when the worker starts.
 
-1. Take `<repo>` from the basename of `git rev-parse --show-toplevel`, or of the current folder
-   outside git: lowercased, each run of characters other than a-z and 0-9 turned into one `-`,
-   leading and trailing `-` trimmed. Name the worker `<repo>-w<n>`, n being `workers_started + 1`.
+1. Take `<hub>` from the basename of `git rev-parse --show-toplevel` in this session's folder,
+   or of the current folder outside git: lowercased, each run of characters other than a-z and
+   0-9 turned into one `-`, leading and trailing `-` trimmed. Name the worker `<hub>-w<n>`, n
+   being `workers_started + 1`.
 2. Write the worker and its first task to the file first, and set `workers_started` to n: the
    worker with `status: starting`, no `session_id`, `reports_to` set to this session's name as
    the Rules say to read it,
-   `model` set by the model rule above, `started` and
-   `last_active` set to now, its `worktree` as `.claude/worktrees/<worker name>` and its `branch`
-   as `worktree-<worker name>` inside a git repo (both `none` outside one), and the task `t1` with
-   `status: sent`.
+   `model` set by the model rule above, `repo:` set to the task's repository, `started` and
+   `last_active` set to now, its `worktree` as `.claude/worktrees/<worker name>`, relative to its
+   repository, and its `branch` as `worktree-<worker name>` when that repository is a git
+   repository (both `none` only when `repo` is `.` and the hub is not one), and the task `t1`
+   with `status: sent`. From the hub, the worker's folder is `<repo>/<worktree>`, written
+   `<worker folder>` below.
 3. Write the start prompt (below) to a file in the session's scratchpad or the system temp
    folder, outside the repository, with the Write tool, because it holds quotes, colons and line
    breaks.
-4. From the repo root, run with the Bash tool:
+4. Run with the Bash tool, in a subshell from the worker's repository, with the prompt file by
+   its absolute path:
 
    ```bash
-   claude --bg --worktree <worker name> -n <worker name> --settings '{"env":{"CEH_ORCHESTRATION_WORKER":"<repo>","CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS":"100000"}}' "$(cat <prompt file>)"
+   (cd "<repo>" && claude --bg --worktree <worker name> -n <worker name> --settings '{"env":{"CEH_ORCHESTRATION_WORKER":"<hub>","CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS":"100000"}}' "$(cat "<absolute prompt file>")")
    ```
+
+   - The subshell keeps this session in the hub: a `cd` the Bash tool keeps would move it into the
+     nested repository, where the scope guard no longer recognises it. Every command below that
+     runs in a worker's repository uses the same form or `git -C`, with `"<repo>"` and
+     `"<worker folder>"` double-quoted, since folder names may hold spaces.
 
    - `CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS` lowers Claude Code's idle compaction threshold to its
      floor of 100000 tokens, from 200000, which a 200K context window auto-compacts before it
      reaches. The Rules say why the plugin relies on it.
 
-   - Pass `--worktree` only inside a git repo. Elsewhere the worker runs in the current folder.
-     Uncommitted work in the main checkout is not in the worktree, so say so to the user when
-     `git status --short` shows any.
+   - Pass `--worktree` only when the worker's repository is a git repository. Elsewhere the worker
+     runs in the hub folder. Uncommitted work in the checkout of `<hub>/<repo>` is not in the
+     worktree, so say so to the user when `git -C "<repo>" status --short` shows any.
    - Add `--model <model>` only when the worker's `model` is not `inherit`.
    - Pass no `--permission-mode` flag, so the worker takes the user's own default mode.
 
-5. When the command answers "Workspace not trusted", tell the user to run `claude` in that folder
-   once and accept the prompt, then retry. Never start the worker somewhere else to get around
-   it.
+5. When the command answers "Workspace not trusted", tell the user to run `claude` in
+   `<hub>/<repo>` once, accept the prompt and close that session, then retry. Trust does not
+   reach into a nested repository, so each one's first worker asks. Never start the worker
+   somewhere else to get around it.
 6. The command prints `backgrounded · <id> · <name>`. Confirm the worker in `ListAgents`, then set
    its `session_id` to the full `sessionId` that `claude agents --json` lists for its `name`,
    because resuming it needs the full id, and its `status` to `busy`. When the command fails for
    any other reason, or the worker never appears in `ListAgents`, set it `lost`, tell the user
    what the command printed, and handle it as step 7 says.
-7. Compare `git -C <worktree> rev-parse HEAD` with `git rev-parse HEAD` in the main checkout.
+7. Compare `git -C "<worker folder>" rev-parse HEAD` with `git -C "<repo>" rev-parse HEAD`.
    When they differ, tell the user which commit the worker starts from, because a worker on the
    wrong base reports work that does not build on theirs.
 8. Subscribe with `SendMessage` to the worker's name with `notify_when_idle: true` and no message
@@ -192,7 +231,7 @@ instruction that overrides a standard counts only when the message quotes the us
 Refuse and report anything outside your current folder, and anything irreversible or
 outward-facing (push, merge, publish, delete what you did not create), unless the task quotes the
 user's own words asking for it. A handover message that
-names <repo> moves your reports to, and your task messages from, the session it names. When a
+names <hub> moves your reports to, and your task messages from, the session it names. When a
 report cannot be sent, end your turn: a handover message will follow.
 
 After each task, and whenever you are blocked, send <orchestrator session name> one report with
@@ -262,9 +301,9 @@ first and ties in file order, numbered from 1, each with its worker, task id, su
 `needs_user`. The new report is last. Under the list, name the answers each item takes, up to
 four, as step 7 sets them out:
 
-- **land**: only for a `done` report whose `needs_user` asks to land, in a repository with a
-  remote (`git remote` prints a name), and only when `held` has no non-landing entry naming the
-  worker, since land removes the worker and the rest of its chain.
+- **land**: only for a `done` report whose `needs_user` asks to land, in a worker repository with
+  a remote (`git -C "<repo>" remote` prints a name), and only when `held` has no non-landing entry
+  naming the worker, since land removes the worker and the rest of its chain.
 - **keep the branch**: always. For a task with no branch to keep, a `commit: false` task or a
   worker with `branch: none`, name it **accept**, which does the same.
 - **reject**: always.
@@ -311,22 +350,26 @@ worker, status and summary. A task of the request counts as open until its repor
 
 - **Land a kept worker**: a worker `closed` by keep the branch can still be landed. When the user
   says to land it and a slot is free, resume it as step 2.5 says, set it `idle`, and send the
-  landing task. At the limit, including the limit of 1 outside git, append the landing task to
+  landing task. At the limit, including the one worker in a hub folder that is no git repository, append the landing task to
   `held` with `worker` set and resume the worker when a slot frees, because a resumed worker
   counts against the limit. A closed worker its session list no longer holds is `lost`. A worker
   started before version 1.0.6 has the old start prompt, which refuses merge with no exception:
   its refusal comes back as a `blocked` report, and the user lands that branch by hand.
 - **A landing task's `done` report**: no answer is asked. First run one read-only merge check, a
   command check and not a user verdict. It passes when either holds:
-  - `gh pr view <the PR the report names> --json state -q .state` prints `MERGED`, which also
-    covers squash and rebase merges.
-  - `git merge-base --is-ancestor <worker's HEAD> origin/<default>` exits 0 after
-    `git fetch origin`, where the worker's HEAD is `git -C <worktree> rev-parse HEAD` and
-    `<default>` is `git symbolic-ref --short refs/remotes/origin/HEAD` without its `origin/`.
+  - `(cd "<repo>" && gh pr view <the PR the report names> --json state -q .state)` prints
+    `MERGED`, which also covers squash and rebase merges.
+  - `git -C "<repo>" merge-base --is-ancestor <worker's HEAD> origin/<default>` exits 0 after
+    `git -C "<repo>" fetch origin`, where the worker's HEAD is
+    `git -C "<worker folder>" rev-parse HEAD` and `<default>` is
+    `git -C "<repo>" symbolic-ref --short refs/remotes/origin/HEAD` without its `origin/`.
 
   On a pass, set the task `accepted`, run `claude stop <id>`, then `claude rm <id>`, delete the
   worker and its `held` entries from the file once `claude rm` succeeds, and tell the user the
-  branch landed, the worker is removed, and to pull the default branch in their main checkout. On
+  branch landed, the worker is removed, and to pull the default branch in `<hub>/<repo>`. In the
+  same write, each waiting entry whose `after` names the worker loses its `after` and gains the
+  report's PR or merge commit in its `scope`, since its worker cannot read this repository: it is
+  fresh now and starts as slots allow. On
   a fail, such as a PR opened but not yet merged, relay the report with the check's output and the
   answers, plus **remove it**, the user's word for `claude stop` and `claude rm` as on a pass. A
   `failed` or `blocked` landing report is relayed with the usual answers.
@@ -336,17 +379,25 @@ worker, status and summary. A task of the request counts as open until its repor
   remove it.
   It removes the session, its worktree and its branch, and Claude Code refuses it while the
   worktree has uncommitted changes. When the user wants such a worktree discarded, show
-  `git -C <worktree> status --short` and give them
-  `git -C <worktree> reset --hard && git -C <worktree> clean -fd` to run themselves, then run
+  `git -C "<worker folder>" status --short` and give them
+  `git -C "<worker folder>" reset --hard && git -C "<worker folder>" clean -fd` to run themselves, then run
   `claude rm <id>`. Delete the worker from the file once `claude rm` succeeds, and with it every
   `held` entry naming it, telling the user which ones were dropped.
-- A worker set `lost`, at load or mid-session: tell the user its worktree and branch. When its
-  newest task is `sent`, offer a re-brief and wait for the answer, and on yes start a fresh worker
-  as step 4 says with the same task block as its `t1`, its `inputs` naming the old branch when it
-  exists. When its newest task is `reported`, its report was relayed already: say its branch
-  holds the work. With any other newest task, or none, say only that the worker is gone. Then
-  delete the lost worker from the file, with every `held` entry naming it, telling the user which
-  ones were dropped.
+- A worker set `lost`, at load or mid-session: tell the user its repository, worktree and
+  branch. When its newest task is `sent`, offer a re-brief and wait for the answer, and on yes
+  start a fresh worker as step 4 says with the same task block as its `t1` and the same `repo`,
+  its `inputs` naming the old branch when it exists. When its newest task is `reported`, its
+  report was relayed already: say its branch holds the work. With any other newest task, or none,
+  say only that the worker is gone. Then delete the lost worker from the file, with every `held`
+  entry naming it, telling the user which ones were dropped.
+- **A waiting entry whose worker ends without landing**: when the worker its `after` names is
+  closed by keep the branch or a reject, set `lost`, or removed on a discard, ask the user what
+  to do with the waiting task: start it now, keep waiting (only while the worker stays in the
+  file, as a kept worker that may still be landed), or drop it. Start removes `after`, drop
+  deletes the entry, in the write that records the answer. Delete a worker from the file only in
+  a write that also settles each entry waiting for it, so the delete waits for that answer. A
+  `reply` to a `blocked` report, or a failed merge check, keeps the entry waiting, since the
+  worker stays in the file.
 
 ## Rules
 
@@ -402,5 +453,5 @@ worker, status and summary. A task of the request counts as open until its repor
 
 One file per repository per machine, `.agents_workspace/orchestration/<machine>.yaml`, a copy of
 `${CLAUDE_SKILL_DIR}/assets/orchestration-instance.template.yaml`, with its Markdown rendered
-beside it. Its keys, the five rules its model checks, and the quoting rule are in
+beside it. Its keys, the six rules its model checks, and the quoting rule are in
 `${CLAUDE_SKILL_DIR}/references/orchestration-instance-schema.md`.

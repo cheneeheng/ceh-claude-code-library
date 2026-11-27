@@ -1233,7 +1233,56 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         '  - {goal: After, scope: x, inputs: [], done_when: x, commit: true, held: "2026-11-25 12:23", follows: true}\n'
     )
     good_held = good_oi.replace("status: reported", "status: answered") + oi_held
+    # A worker in a hub's nested repository, and held entries that carry a repository or wait for
+    # a worker: a fresh one, its chain, one waiting for the worker that fresh entry will start,
+    # and one waiting for a named worker.
+    oi_repo = good_oi.replace(
+        "    model: inherit\n", "    model: inherit\n    repo: apps/billing\n", 1
+    )
+    oi_wait = (
+        "held:\n"
+        '  - {goal: First, scope: x, inputs: [], done_when: x, commit: true, held: "2026-11-25 12:21", repo: apps/billing}\n'
+        '  - {goal: Chain, scope: x, inputs: [], done_when: x, commit: true, held: "2026-11-25 12:22", follows: true}\n'
+        '  - {goal: Second, scope: x, inputs: [], done_when: x, commit: true, held: "2026-11-25 12:23", repo: apps/web, after: true}\n'
+        '  - {goal: Third, scope: x, inputs: [], done_when: x, commit: true, held: "2026-11-25 12:24", repo: apps/billing, after: docs-sweep-w1}\n'
+    )
+
+    def oi_one(entry: str) -> str:
+        return f'  - {{goal: A, scope: x, inputs: [], done_when: x, commit: true, held: "2026-11-25 12:21"{entry}}}\n'
+
     oi_bad = {
+        **{
+            f"repo-{n}": oi_repo.replace("repo: apps/billing", f"repo: {v}")
+            for n, v in (
+                ("root", "/x"),
+                ("drive", "C:/x"),
+                ("backslash", "a\\b"),
+                ("dot", ".claude/worktrees"),
+            )
+        },
+        "repo-no-worktree": oi_repo.replace(
+            "worktree: .claude/worktrees/docs-sweep-w1", "worktree: none"
+        ),
+        "held-worker-repo": good_oi
+        + oi_held.replace("worker: docs-sweep-w1}", "worker: docs-sweep-w1, repo: a}"),
+        "held-follows-repo": good_oi
+        + oi_held.replace("follows: true}", "follows: true, repo: a}"),
+        "after-worker": good_oi
+        + oi_held.replace(
+            "worker: docs-sweep-w1}", "worker: docs-sweep-w1, after: docs-sweep-w1}"
+        ),
+        "after-first": good_oi + "held:\n" + oi_one(", after: true"),
+        "after-past-worker": good_oi
+        + "held:\n"
+        + oi_one(", worker: docs-sweep-w1")
+        + oi_one(", after: true"),
+        "after-past-waiting": good_oi
+        + "held:\n"
+        + oi_one("")
+        + oi_one(", after: docs-sweep-w1")
+        + oi_one(", after: true"),
+        # Valid, among the bad ones: after: true right after a fresh entry.
+        "after-past-fresh": good_oi + "held:\n" + oi_one("") + oi_one(", after: true"),
         "held-first-follows": good_oi
         + oi_held.replace(
             "held:\n",
@@ -1255,8 +1304,24 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         (tmp / f"oi-{name}").mkdir()
         (tmp / f"oi-{name}" / f"{oi_stem}.yaml").write_text(text, encoding="utf-8")
     orchestration_fixtures = [
-        *report_fixtures(oi, oi_stem, good_oi, good_oi.replace("status: reported", "status: sent"), "t1 has a report while sent", "| docs-sweep-w1 | idle | main-1 | inherit | worktree-docs-sweep-w1 | t1: Fix the typo in docs/a.md | reported |", "orchestration"),
-        *report_fixtures(oi, oi_stem, good_held, good_held.replace("worker: docs-sweep-w1}", "worker: docs-sweep-w9}"), "held.0 names worker docs-sweep-w9, which is not in the file", "| 2026-11-25 12:22 | Land it | sonnet | docs-sweep-w1 |", "orchestration-held"),
+        *report_fixtures(oi, oi_stem, good_oi, good_oi.replace("status: reported", "status: sent"), "t1 has a report while sent", "| docs-sweep-w1 | . | idle | main-1 | inherit | worktree-docs-sweep-w1 | t1: Fix the typo in docs/a.md | reported |", "orchestration"),
+        *report_fixtures(oi, oi_stem, good_held, good_held.replace("worker: docs-sweep-w1}", "worker: docs-sweep-w9}"), "held.0 names worker docs-sweep-w9, which is not in the file", "| 2026-11-25 12:22 | Land it | sonnet | docs-sweep-w1 | - |", "orchestration-held"),
+        *report_fixtures(oi, oi_stem, oi_repo, oi_repo.replace("repo: apps/billing", "repo: ../x"), "workers.0.repo: String should match pattern", "| docs-sweep-w1 | apps/billing | idle |", "orchestration-repo"),
+        *report_fixtures(oi, oi_stem, good_oi + oi_wait, good_oi + oi_wait.replace("after: docs-sweep-w1}", "after: docs-sweep-w9}"), "held.3 waits for worker docs-sweep-w9, which is not in the file", "| 2026-11-25 12:21 | First | by task | fresh | apps/billing |\n| 2026-11-25 12:22 | Chain | by task | follows | - |\n| 2026-11-25 12:23 | Second | by task | after previous | apps/web |\n| 2026-11-25 12:24 | Third | by task | after docs-sweep-w1 | apps/billing |", "orchestration-wait"),
+        *(
+            {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / f"oi-{name}" / f"{oi_stem}.yaml"), "out": out}
+            for name, out in (
+                *((f"repo-{n}", "workers.0.repo: String should match pattern") for n in ("root", "drive", "backslash", "dot")),
+                ("repo-no-worktree", "docs-sweep-w1 has repo apps/billing with worktree none"),
+                ("held-worker-repo", "held.0 has repo with worker or follows"),
+                ("held-follows-repo", "held.2 has repo with worker or follows"),
+                ("after-worker", "held.0 has after with worker or follows"),
+                ("after-first", "held.0 has after true with no fresh entry before it"),
+                ("after-past-worker", "held.1 has after true with no fresh entry before it"),
+                ("after-past-waiting", "held.2 has after true with no fresh entry before it"),
+                ("after-past-fresh", ""),
+            )
+        ),
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-held-first-follows" / f"{oi_stem}.yaml"), "out": "held.0 has follows with no entry before it"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-held-both" / f"{oi_stem}.yaml"), "out": "held.0 has both worker and follows"},
         {"script": f"{oi}/artifact-render-hook.py", "stdin": write_at(tmp / "oi-dup-task" / f"{oi_stem}.yaml"), "out": "docs-sweep-w1 uses task id t1 twice"},
@@ -1909,11 +1974,13 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         cwd: str = "",
         session_id: str = "me",
         env: dict | None = None,
+        hub: bool = False,
         **checks,
     ) -> dict:
+        # hub: a plain-folder hub, with no .git of its own and a nested repository at nested/.
         root = orc / f"guard-{name}"
         (root / cwd).mkdir(parents=True)
-        (root / ".git").mkdir()
+        (root / "nested" / ".git" if hub else root / ".git").mkdir(parents=True)
 
         def before() -> None:
             if lock is not None:
@@ -1961,6 +2028,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         guard_case("notebook", "NotebookEdit", lambda root: {"notebook_path": str(root / "a.ipynb")}, me, out=deny),
         guard_case("worktree", "Write", at(".claude/worktrees/w1/a.md"), me, out=deny),
         guard_case("agent", "Agent", {"prompt": "x"}, me, out=deny),
+        # A hub's orchestrator editing inside a nested repository of the hub.
+        guard_case("hub-nested", "Write", at("nested/a.py"), me, hub=True, out=deny),
         # Allow: the orchestrator's own files, and paths outside its repository.
         guard_case("orch-file", "Write", at(".agents_workspace/orchestration/m.yaml"), me, out=""),
         guard_case("handoff", "Write", at(".agents_workspace/handoff/h.md"), me, out=""),

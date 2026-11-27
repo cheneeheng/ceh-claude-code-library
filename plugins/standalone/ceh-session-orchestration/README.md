@@ -58,16 +58,17 @@ undo it.
 | `CEH_ARTIFACT_CHECK`            | unset (check on)     | `off` turns the file check and the generated-file guard off                                                                                                                                                                                           |
 | `CEH_DISABLED_HOOKS`            | unset (all hooks on) | Comma-separated hook names to skip: `load-orchestrator`, `orchestrator-scope-guard`, `artifact-render-hook`, `generated-md-guard`. `load-orchestrator` keeps the session from becoming an orchestrator. A headless `claude -p` run skips it by itself |
 | `CEH_ORCHESTRATION_MAX_WORKERS` | `5`                  | The most workers one orchestrator runs at once. A value that is not a whole number of at least 1 gives 5, and the startup line says so                                                                                                                |
-| `CEH_ORCHESTRATION_WORKER`      | unset                | Set by the orchestrator on each worker it starts, to the repository name. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set                                                                     |
+| `CEH_ORCHESTRATION_WORKER`      | unset                | Set by the orchestrator on each worker it starts, to the name of its own folder. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set                                                              |
 
 ## How it works
 
 ### One task, start to finish
 
 1. You give the orchestrator a task. It adds a worker to the machine's orchestration file, then
-   starts it with `claude --bg --worktree`, named `<repo>-w<n>`, whose start prompt says it is a
-   worker and what the orchestrator may ask of it.
-2. The worker does the task in `.claude/worktrees/<worker>` and sends back a YAML report: status,
+   starts it with `claude --bg --worktree`, named `<hub>-w<n>` after the orchestrator's folder,
+   whose start prompt says it is a worker and what the orchestrator may ask of it.
+2. The worker does the task in `.claude/worktrees/<worker>` of its repository and sends back a
+   YAML report: status,
    summary, files changed, checks run, and anything only you can answer.
 3. The orchestrator relays the report, and when the worker's branch has new commits the report
    asks whether to land it. You answer by item number:
@@ -91,9 +92,9 @@ The orchestrator splits a request into tasks and starts one worker per task that
 parallel, up to `CEH_ORCHESTRATION_MAX_WORKERS`. Tasks that must run in order, because one needs
 another's result or both edit the same files, go to one worker, one task after another, each with
 its own report. At the limit, the orchestrator writes the tasks it holds to the file, so a new
-session still has them, and starts each as a worker closes. Outside a git repository it runs one
-worker at a time, since workers there share one folder. Two workers that finish together land one
-after the other.
+session still has them, and starts each as a worker closes. In a folder that is no git repository
+it runs one worker there at a time, since those workers share one folder. Two workers that finish
+together land one after the other.
 
 Each reply that relays a report lists every report still awaiting your answer, oldest first, so
 reports from several workers never scatter across the session. A report leaves the list once you
@@ -102,6 +103,30 @@ says the request is complete and sums up each task.
 
 A worker may ask you for a permission approval directly, through Claude Code's notification. The
 orchestrator tells you when that can happen, because it gets no signal for it.
+
+### Running from a hub
+
+A hub is a folder, a git repository or a plain one, that holds the nested repositories you work
+on, git-ignored by the hub. Start the orchestrator in the hub, and it starts each worker inside
+the repository its task belongs to: the nearest folder above the task's files that holds a `.git`
+entry, or the hub itself. A `.agents_workspace` folder never counts, so a task on a plan goes to
+the code repository around it. The worker's worktree and branch are made in that repository, its
+git checks run there, and the orchestration file records it as the worker's `repo`. A request
+that names no repository gets one question. A task that spans two repositories is split into one
+worker each, and when the second needs the first's result, it waits in the file and starts once
+the first has landed. If the first ends any other way, the orchestrator asks you what to do with
+the second.
+
+- Keep no `CLAUDE.md` in the hub: a session in a nested repository loads every `CLAUDE.md` above
+  it. Keep the hub free of `.claude/rules/` too, since whether those load in a nested repository
+  is unverified.
+- Each nested repository's first worker stops at "Workspace not trusted", because trust does not
+  reach into a nested repository. Run `claude` in that repository once, accept, and close that
+  session, since with the plugin on it becomes that repository's orchestrator.
+- A nested worker gets its own repository's settings and plugins and your user-level ones,
+  never the hub's.
+- The orchestrator's scope guard covers the nested repositories too, so their edits always go to a
+  worker.
 
 ### What the orchestrator does not do
 
@@ -150,5 +175,5 @@ interactive session, and, before Claude Code v2.1.314, only where it can fetch i
 
 Each machine's file is `.agents_workspace/orchestration/<machine>.yaml`, named by the machine's
 hostname, with its Markdown rendered beside it. The orchestrator adds `.agents_workspace/` to `.gitignore` when the
-repo does not ignore it. Workers live in `.claude/worktrees/<worker>`, on the branch
-`worktree-<worker>`.
+repo does not ignore it. Workers live in `<repo>/.claude/worktrees/<worker>`, `<repo>` being the
+worker's repository inside the hub, on the branch `worktree-<worker>`.
