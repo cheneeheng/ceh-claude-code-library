@@ -8,7 +8,7 @@ validates a `.agents_workspace/orchestration/<machine>.yaml` with `MODEL` and wr
 from __future__ import annotations
 
 import json
-from typing import Annotated, Literal, Optional
+from typing import Annotated, Literal, Optional, Union
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
@@ -24,6 +24,16 @@ WorkerName = Annotated[
 ]
 Time = Annotated[str, StringConstraints(pattern=r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$")]
 TaskId = Annotated[str, StringConstraints(pattern=r"^t[1-9]\d*$")]
+# "." or /-joined segments inside the hub: no leading /, drive letter, backslash, or segment
+# starting with "." (so no "..", and no .claude/worktrees).
+RepoPath = Annotated[
+    str,
+    StringConstraints(
+        strip_whitespace=True,
+        min_length=1,
+        pattern=r"^(\.|[^/\\:.\n][^/\\:\n]*(/[^/\\:.\n][^/\\:\n]*)*)$",
+    ),
+]
 
 
 class _Strict(BaseModel):
@@ -62,6 +72,8 @@ class Worker(_Strict):
     session_id: Optional[Line] = None
     reports_to: Line
     model: Line
+    # The worker's repository, relative to the hub. Absent reads as ".".
+    repo: Optional[RepoPath] = None
     worktree: Line
     branch: Line
     status: Literal["starting", "busy", "idle", "closed", "lost"]
@@ -82,6 +94,11 @@ class Held(_Strict):
     worker: Optional[WorkerName] = None
     # Goes to the same worker as the entry before it.
     follows: Optional[Literal[True]] = None
+    # A fresh or waiting entry's repository, relative to the hub. Absent reads as ".".
+    repo: Optional[RepoPath] = None
+    # Waits for this worker to land, or with true for the worker the nearest fresh entry before
+    # it will start.
+    after: Optional[Union[WorkerName, Literal[True]]] = None
 
 
 class Instance(_Strict):
@@ -92,8 +109,10 @@ class Instance(_Strict):
 
     @model_validator(mode="after")
     def _agree(self):
-        # The five cross-key rules of orchestration-instance-schema.md, and the only ones.
+        # The six cross-key rules of orchestration-instance-schema.md, and the only ones.
         for w in self.workers:
+            if (w.repo or ".") != "." and w.worktree == "none":
+                raise ValueError(f"{w.name} has repo {w.repo} with worktree none")
             for t in w.tasks:
                 if t.status == "sent" and t.report is not None:
                     raise ValueError(f"{t.id} has a report while sent")
@@ -120,6 +139,25 @@ class Instance(_Strict):
                 raise ValueError(
                     f"held.{i} names worker {h.worker}, which is not in the file"
                 )
+            if h.repo and (h.worker or h.follows):
+                raise ValueError(f"held.{i} has repo with worker or follows")
+            if h.after is None:
+                continue
+            if h.worker or h.follows:
+                raise ValueError(f"held.{i} has after with worker or follows")
+            if h.after is True:
+                # The nearest entry before it that is no follows entry must be fresh.
+                j = i - 1
+                while j >= 0 and self.held[j].follows:
+                    j -= 1
+                if j < 0 or self.held[j].worker or self.held[j].after is not None:
+                    raise ValueError(
+                        f"held.{i} has after true with no fresh entry before it"
+                    )
+            elif h.after not in names:
+                raise ValueError(
+                    f"held.{i} waits for worker {h.after}, which is not in the file"
+                )
         return self
 
 
@@ -139,6 +177,13 @@ def _cell(text: str) -> str:
     return text.replace("|", "\\|")
 
 
+def _waits(h: Held) -> str:
+    """The held table's Worker cell: whom the entry goes to, or waits for."""
+    if h.after is not None:
+        return f"after {'previous' if h.after is True else h.after}"
+    return h.worker or ("follows" if h.follows else "fresh")
+
+
 def render(doc: Instance, source: str) -> str:
     """The file header and one row per worker. The same YAML always renders to the same text."""
     note = f"Do not edit. artifact.py renders this file from {source}: edit the YAML, then run artifact.py render."
@@ -146,7 +191,7 @@ def render(doc: Instance, source: str) -> str:
     for w in doc.workers:
         task = w.tasks[-1] if w.tasks else None
         rows.append(
-            f"| {w.name} | {w.status} | {_cell(w.reports_to)} | {_cell(w.model)} | {_cell(w.branch)} | "
+            f"| {w.name} | {_cell(w.repo or '.')} | {w.status} | {_cell(w.reports_to)} | {_cell(w.model)} | {_cell(w.branch)} | "
             + (
                 f"{task.id}: {_cell(task.goal)} | {task.status} |"
                 if task
@@ -171,8 +216,8 @@ def render(doc: Instance, source: str) -> str:
     ]
     if rows:
         out += [
-            "| Worker | Status | Reports to | Model | Branch | Newest task | Task status |",
-            "| --- | --- | --- | --- | --- | --- | --- |",
+            "| Worker | Repo | Status | Reports to | Model | Branch | Newest task | Task status |",
+            "| --- | --- | --- | --- | --- | --- | --- | --- |",
             *rows,
         ]
     else:
@@ -182,11 +227,11 @@ def render(doc: Instance, source: str) -> str:
             "",
             "## Held tasks",
             "",
-            "| Held | Goal | Model | Worker |",
-            "| --- | --- | --- | --- |",
+            "| Held | Goal | Model | Worker | Repo |",
+            "| --- | --- | --- | --- | --- |",
             *(
-                f"| {h.held} | {_cell(h.goal)} | {_cell(h.model or 'by task')} | "
-                f"{h.worker or ('follows' if h.follows else 'fresh')} |"
+                f"| {h.held} | {_cell(h.goal)} | {_cell(h.model or 'by task')} | {_waits(h)} | "
+                f"{'-' if h.worker or h.follows else _cell(h.repo or '.')} |"
                 for h in doc.held
             ),
         ]

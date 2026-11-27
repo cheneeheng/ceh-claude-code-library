@@ -34,10 +34,14 @@ Each required unless marked optional, and no other key allowed:
 - `workers_started`: how many workers this file has ever started, 0 or more. It never goes down,
   so a worker name is never reused after its worker leaves the file.
 - `workers`: a list, `[]` when none. Each worker has:
-  - `name`: `<repo>-w<n>`. `<repo>` is the basename of `git rev-parse --show-toplevel`, or of the
-    current folder outside git, lowercased, each run of characters other than a-z and 0-9 turned
-    into one `-`, and leading and trailing `-` trimmed. n is `workers_started + 1` when the worker
-    is added.
+  - `name`: `<hub>-w<n>`. `<hub>` is the basename of the orchestrator's own folder, from
+    `git rev-parse --show-toplevel`, or the current folder outside git, lowercased, each run of
+    characters other than a-z and 0-9 turned into one `-`, and leading and trailing `-` trimmed.
+    n is `workers_started + 1` when the worker is added.
+  - `repo` (optional): the worker's repository, relative to the orchestrator's folder (the
+    hub), written with `/`, such as `apps/billing`, or `.` for the hub itself. Absent reads as
+    `.`. The orchestrator writes it on every new worker. It never starts with `/`, holds no
+    drive letter or backslash, and no segment starts with `.`, so it cannot leave the hub.
   - `session_id` (optional): the full `sessionId` that `claude agents --json` lists for the
     worker, double-quoted. Absent while `starting`.
   - `reports_to`: the orchestrator session name the worker sends its reports to, from its start
@@ -45,7 +49,8 @@ Each required unless marked optional, and no other key allowed:
   - `model`: the model the user named for this worker's task, else `haiku` for a task that only
     moves or renames files or makes a one-line edit, else `sonnet` for any other task that needs
     no plan first, else `inherit` for no `--model` flag.
-  - `worktree`: the worker's worktree as a repo-relative path, or `none` outside a git repo.
+  - `worktree`: the worker's worktree as a path relative to the worker's repository, or `none`
+    when that repository is the hub and the hub is not a git repository.
   - `branch`: the worktree's branch, or `none`.
   - `status`: `starting` (written before the start command runs), `busy` (a task is out),
     `idle` (its turn ended), `closed` (stopped with `claude stop`) or `lost` (its session no
@@ -54,7 +59,8 @@ Each required unless marked optional, and no other key allowed:
     worker's last message or report.
   - `tasks`: a list, `[]` allowed, each task sent to this worker.
 - `workers[].tasks[]`: the task block's `id` (`t<n>`, counting from 1 within the worker), `goal`,
-  `scope`, `inputs` (repo-relative paths, `[]` when none), `done_when` and `commit` (`true` or
+  `scope`, `inputs` (paths relative to the worker's repository, `[]` when none), `done_when`
+  and `commit` (`true` or
   `false`), plus:
   - `sent`: the time the task message went out.
   - `status`: `sent`, `reported` (a report came back), `accepted` or `rejected` (the user's
@@ -73,7 +79,14 @@ Each required unless marked optional, and no other key allowed:
   - `worker` (optional): the worker it is queued for, a land or the next task of its chain.
   - `follows` (optional): `true` only, for a task that goes to the same worker as the entry
     before it, in a chain held before its worker started.
-  - With neither `worker` nor `follows`, the entry waits for a fresh worker.
+  - `repo` (optional): as on a worker, the repository a fresh or waiting entry's worker starts
+    in. An entry with `worker` or `follows` carries none, since its worker decides.
+  - `after` (optional): a worker name, for an entry that waits for that worker to land, or
+    `true`, for one that waits for the worker the nearest fresh entry before it will start,
+    skipping that entry's `follows` entries. When that entry starts its worker, `after` becomes
+    the worker's name.
+  - With `after`, the entry is a **waiting** entry: it never starts when a slot frees. With none
+    of `worker`, `follows` and `after`, it is a **fresh** entry and waits for a fresh worker.
 
 Every value and list item is one line. A worker leaves the list when `claude rm` removes it, when
 it is `closed` and `claude agents --json --all` no longer lists it, or once the user has been told
@@ -81,14 +94,18 @@ it is `lost`. Its history stays in the workspace repo's git log.
 
 ## Rules the model checks
 
-Across keys, these five and only these:
+Across keys, these six and only these:
 
 1. A task's `report` is present exactly when its `status` is not `sent`.
 2. Task ids are unique within a worker.
 3. Worker names are unique.
 4. Each worker's number n is at most `workers_started`.
 5. A held entry's `worker` names a worker in the file, an entry never has both `worker` and
-   `follows`, and the first entry has no `follows`.
+   `follows`, and the first entry has no `follows`. An entry with `worker` or `follows` has no
+   `repo` and no `after`. An `after` that is a name names a worker in the file, and an
+   `after: true` entry has a fresh entry before it, past any `follows` entries.
+6. A worker whose `repo` is not `.` has a `worktree` other than `none`, since a nested
+   repository is a git repository.
 
 The model cannot see whether a worker's session still exists. The orchestrator sets a worker
 `lost` when `claude agents --json --all` no longer lists it. Listed there without a `pid`, the
