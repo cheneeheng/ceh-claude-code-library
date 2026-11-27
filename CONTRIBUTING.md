@@ -23,7 +23,9 @@ python -m unittest tools/setup/test_setup.py
 
 The mod tests are not in CI, because they need Claude Code on the runner. Run them before you push
 a change to `plugins/standalone/ceh-every-session/hooks/`:
-`claude plugin test plugins/standalone/ceh-every-session`.
+`claude plugin test plugins/standalone/ceh-every-session`, and before you push a change to
+`plugins/standalone/ceh-session-orchestration/hooks/`:
+`claude plugin test plugins/standalone/ceh-session-orchestration`.
 
 ## Formatting
 
