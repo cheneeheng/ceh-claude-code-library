@@ -61,6 +61,20 @@ test('a session the loader refused, as another session orchestrates, shows no la
   await ui.unmount()
 })
 
+test('an unreadable lock beside the one naming the session still gives the orchestrator label', async ($, on) => {
+  mock.env(on, { TEMP: '/tmp' })
+  on('classic.SessionStart', () => ({}))
+  on('fs.list', () => ({
+    value: ['bad.json', 'good.json'].map(name => ({ name, kind: 'file' as const, size: 1, mtimeMs: 0, isLink: false })),
+  }))
+  on('fs.read', (_$, e) => ({ value: e.path.endsWith('bad.json') ? 'not json' : JSON.stringify({ sessionId: 's1' }) }))
+  engineDraws(on)
+  await $.classic.SessionStart(startup)
+  const ui = await $.ui.mount({ surface: 'terminal', ...footer })
+  expect((await ui.find({ type: 'Text' }))?.text).toBe('orchestrator')
+  await ui.unmount()
+})
+
 test('with no lock folder no label shows', async ($, on) => {
   mock.env(on, { TEMP: '/tmp' })
   on('classic.SessionStart', () => ({}))
@@ -103,7 +117,7 @@ test('after /clear a lock left on the old session id gives no label', async ($, 
   await ui.unmount()
 })
 
-test('with ceh-every-session beneath, both labels show in one row', async ($, on) => {
+test('with ceh-every-session, both labels show in one row beside the modes already there', async ($, on) => {
   mock.env(on, { CEH_ORCHESTRATION_WORKER: 'repo' })
   loader(on, () => undefined)
   // Stands for ceh-every-session's footer hook, as fold-replies.tsx appends its label.
@@ -112,9 +126,8 @@ test('with ceh-every-session beneath, both labels show in one row', async ($, on
   )
   engineDraws(on)
   await $.classic.SessionStart(startup)
-  const ui = await $.ui.mount({ surface: 'terminal', ...footer })
-  const text = (await ui.find({ type: 'Text' }))?.text ?? ''
-  expect(text).toMatch(/(^| & )worker( & |$)/)
-  expect(text).toMatch(/folded replies \(mod\)/)
+  // `focus` stands for a mode the engine or a plugin above this one already added.
+  const ui = await $.ui.mount({ surface: 'terminal', ...footer, props: { modes: ['focus'] } })
+  expect((await ui.find({ type: 'Text' }))?.text).toBe('focus & worker & folded replies (mod)')
   await ui.unmount()
 })

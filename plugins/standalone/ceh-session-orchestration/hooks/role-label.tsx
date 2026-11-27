@@ -22,7 +22,11 @@ async function findRole($: EngineInterface, sessionId: string): Promise<Role> {
       (await $.env.get('TMPDIR')) || (await $.env.get('TEMP')) || (await $.env.get('TMP')) || '/tmp'
     const dir = `${temp}/ceh-session-orchestration`
     for (const entry of await $.fs.list(dir)) {
-      const held = await $.fs.read(`${dir}/${entry.name}`).then(JSON.parse, () => undefined)
+      // A lock that cannot be read or parsed, such as one half written, is skipped, not the scan.
+      const held = await $.fs
+        .read(`${dir}/${entry.name}`)
+        .then(JSON.parse)
+        .catch(() => undefined)
       if (held?.sessionId === sessionId) return 'orchestrator'
     }
   } catch {
