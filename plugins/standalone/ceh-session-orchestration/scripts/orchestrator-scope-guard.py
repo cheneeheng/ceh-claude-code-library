@@ -4,7 +4,7 @@
 Matches Edit|Write|MultiEdit|NotebookEdit|Agent. The session is the orchestrator only when the
 lock file `load-orchestrator.py` writes names it, by CLAUDE_PID or by session id. Then it denies
 an Agent call, and a file edit inside the repository other than the orchestration file, a
-handoff, the decision log and `.gitignore`. Every other session is left alone.
+handoff, the decision log, the backlog and `.gitignore`. Every other session is left alone.
 
 Fails open: anything unexpected allows the call, because a guard that blocked ordinary sessions
 on a bad temp file would cost more than it saves.
@@ -85,7 +85,12 @@ def main() -> None:
             not inside(target, root)
             or inside(target, at(".agents_workspace", "orchestration"))
             or inside(target, at(".agents_workspace", "handoff"))
-            or target in (at(".agents_workspace", "DECISION_LOG.md"), at(".gitignore"))
+            or target
+            in (
+                at(".agents_workspace", "DECISION_LOG.md"),
+                at(".agents_workspace", "BACKLOG.md"),
+                at(".gitignore"),
+            )
         ):
             return
     print(

@@ -199,9 +199,9 @@ its prerequisites, hooks, and environment variables.
 
 ### [Session Orchestration (`ceh-session-orchestration`)](../plugins/standalone/ceh-session-orchestration/)
 
-| Skill                                                                                                                      | Invoke                       | When                                                                                                                                                                                                           |
-| -------------------------------------------------------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Orchestrate Worker Sessions](../plugins/standalone/ceh-session-orchestration/skills/orchestrate-worker-sessions/SKILL.md) | Model-only, no slash command | The main session starts one worker session per task, briefs it by message, reads its YAML report, closes it on the user's yes, and keeps the orchestration file of its workers, one per repository per machine |
+| Skill                                                                                                                      | Invoke                       | When                                                                                                                                                                                                                                  |
+| -------------------------------------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Orchestrate Worker Sessions](../plugins/standalone/ceh-session-orchestration/skills/orchestrate-worker-sessions/SKILL.md) | Model-only, no slash command | The main session starts one worker session per task, briefs it by message, reads its YAML report, has it land its own branch when the user says land, and keeps the orchestration file of its workers, one per repository per machine |
 
 ### [Security Audit (`ceh-security-audit`)](../plugins/standalone/ceh-security-audit/)
 

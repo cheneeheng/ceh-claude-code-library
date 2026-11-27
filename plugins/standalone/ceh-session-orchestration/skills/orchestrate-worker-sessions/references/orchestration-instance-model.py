@@ -52,7 +52,7 @@ class Task(_Strict):
     done_when: Line
     commit: bool
     sent: Time
-    status: Literal["sent", "reported", "accepted", "rejected"]
+    status: Literal["sent", "reported", "accepted", "rejected", "answered"]
     report: Optional[Report] = None
 
 
@@ -70,14 +70,29 @@ class Worker(_Strict):
     tasks: list[Task]
 
 
+class Held(_Strict):
+    goal: Line
+    scope: Line
+    inputs: list[Line]
+    done_when: Line
+    commit: bool
+    held: Time
+    model: Optional[Line] = None
+    # Queued for this worker: a land, or the next task of its chain.
+    worker: Optional[WorkerName] = None
+    # Goes to the same worker as the entry before it.
+    follows: Optional[Literal[True]] = None
+
+
 class Instance(_Strict):
     schema_: Literal["orchestration-instance/v2"] = Field(alias="schema")
     workers_started: int = Field(ge=0)
     workers: list[Worker]
+    held: list[Held] = []
 
     @model_validator(mode="after")
     def _agree(self):
-        # The four cross-key rules of orchestration-instance-schema.md, and the only ones.
+        # The five cross-key rules of orchestration-instance-schema.md, and the only ones.
         for w in self.workers:
             for t in w.tasks:
                 if t.status == "sent" and t.report is not None:
@@ -96,6 +111,15 @@ class Instance(_Strict):
         dupes = sorted({n for n in names if names.count(n) > 1})
         if dupes:
             raise ValueError(f"worker name {', '.join(dupes)} is used twice")
+        for i, h in enumerate(self.held):
+            if h.worker and h.follows:
+                raise ValueError(f"held.{i} has both worker and follows")
+            if h.follows and i == 0:
+                raise ValueError(f"held.{i} has follows with no entry before it")
+            if h.worker and h.worker not in names:
+                raise ValueError(
+                    f"held.{i} names worker {h.worker}, which is not in the file"
+                )
         return self
 
 
@@ -153,5 +177,18 @@ def render(doc: Instance, source: str) -> str:
         ]
     else:
         out.append("No workers.")
+    if doc.held:
+        out += [
+            "",
+            "## Held tasks",
+            "",
+            "| Held | Goal | Model | Worker |",
+            "| --- | --- | --- | --- |",
+            *(
+                f"| {h.held} | {_cell(h.goal)} | {_cell(h.model or 'by task')} | "
+                f"{h.worker or ('follows' if h.follows else 'fresh')} |"
+                for h in doc.held
+            ),
+        ]
     out += ["", "<!-- prettier-ignore-end -->"]
     return "\n".join(out) + "\n"

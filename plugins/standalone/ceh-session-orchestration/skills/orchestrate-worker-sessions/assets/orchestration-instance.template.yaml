@@ -19,7 +19,7 @@ workers:
         done_when: <check>
         commit: <true | false>
         sent: "<YYYY-MM-DD HH:MM>"
-        status: <sent | reported | accepted | rejected>
+        status: <sent | reported | accepted | rejected | answered>
         report:
           received: "<YYYY-MM-DD HH:MM>"
           status: <done | blocked | failed>
@@ -30,3 +30,14 @@ workers:
             - command: <command>
               result: <result>
           needs_user: <question | none>
+held:
+  - goal: <goal>
+    scope: <scope>
+    inputs:
+      - <repo-relative path>
+    done_when: <check>
+    commit: <true | false>
+    held: "<YYYY-MM-DD HH:MM>"
+    model: <model>
+    worker: <worker name>
+    follows: true
