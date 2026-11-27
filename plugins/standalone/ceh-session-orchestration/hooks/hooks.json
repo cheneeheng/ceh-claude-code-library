@@ -27,6 +27,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit|Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/orchestrator-scope-guard.py\"",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PostToolUse": [

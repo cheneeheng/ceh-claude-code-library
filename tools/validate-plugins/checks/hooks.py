@@ -1873,6 +1873,95 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         ),
     ]  # fmt: skip
 
+    # orchestrator-scope-guard: each case has its own repository folder and writes its lock
+    # through orc_lock(), the path the loader cases above prove the loader writes.
+    me = {"pid": 101, "startedAt": 1000, "sessionId": "me"}
+    not_me = {"pid": 202, "startedAt": 1000, "sessionId": "other"}
+    deny = '"permissionDecision": "deny"'
+
+    def guard_case(
+        name: str,
+        tool: str,
+        tool_input: object,
+        lock: object = None,
+        cwd: str = "",
+        session_id: str = "me",
+        env: dict | None = None,
+        **checks,
+    ) -> dict:
+        root = orc / f"guard-{name}"
+        (root / cwd).mkdir(parents=True)
+        (root / ".git").mkdir()
+
+        def before() -> None:
+            if lock is not None:
+                orc_locks.mkdir(exist_ok=True)
+                orc_lock(root).write_text(
+                    lock if isinstance(lock, str) else json.dumps(lock),
+                    encoding="utf-8",
+                )
+
+        return {
+            "script": "orchestrator-scope-guard.py",
+            "stdin": {
+                "cwd": str(root / cwd),
+                "session_id": session_id,
+                "tool_name": tool,
+                "tool_input": tool_input(root) if callable(tool_input) else tool_input,
+            },
+            "env": {
+                "CLAUDE_PID": "",
+                "CLAUDE_CODE_SESSION_ATTENDED": "",
+                **(env or {}),
+            },
+            "before": before,
+            **checks,
+        }
+
+    def at(rel_path: str) -> callable:
+        return lambda root: {"file_path": str(root / rel_path)}
+
+    plan_write = at(".agents_workspace/product/plan/x.yaml")
+    guard_fixtures = [
+        # Deny: the real mistake replayed, matched by session id, then by CLAUDE_PID after /clear.
+        guard_case("plan", "Write", plan_write, me, out="goes into the worker's brief"),
+        guard_case("plan-pid", "Write", plan_write, {**me, "sessionId": "other"}, session_id="new", env={"CLAUDE_PID": "101"}, out=deny),
+        guard_case("relative", "Edit", {"file_path": "src/a.py"}, me, out=deny),
+        guard_case("subfolder", "Edit", {"file_path": "a.py"}, me, cwd="src/deep", out=deny),
+        # The prefix tests need the separator, and the file tests need equality.
+        guard_case("orch-prefix", "Write", at(".agents_workspace/orchestration-x/a.yaml"), me, out=deny),
+        guard_case("handoff-prefix", "Write", at(".agents_workspace/handoff-x/a.md"), me, out=deny),
+        guard_case("log-suffix", "Write", at(".agents_workspace/DECISION_LOG.md.bak"), me, out=deny),
+        guard_case("gitignore-suffix", "Write", at(".gitignore.bak"), me, out=deny),
+        guard_case("multiedit", "MultiEdit", at("src/a.py"), me, out=deny),
+        guard_case("notebook", "NotebookEdit", lambda root: {"notebook_path": str(root / "a.ipynb")}, me, out=deny),
+        guard_case("worktree", "Write", at(".claude/worktrees/w1/a.md"), me, out=deny),
+        guard_case("agent", "Agent", {"prompt": "x"}, me, out=deny),
+        # Allow: the orchestrator's own files, and paths outside its repository.
+        guard_case("orch-file", "Write", at(".agents_workspace/orchestration/m.yaml"), me, out=""),
+        guard_case("handoff", "Write", at(".agents_workspace/handoff/h.md"), me, out=""),
+        guard_case("log", "Edit", at(".agents_workspace/DECISION_LOG.md"), me, out=""),
+        guard_case("gitignore", "Write", at(".gitignore"), me, out=""),
+        guard_case("outside", "Write", lambda root: {"file_path": str(orc / "scratch" / "prompt.txt")}, me, out=""),
+        guard_case("sibling", "Write", lambda root: {"file_path": str(orc / "guard-sibling-x" / "a.md")}, me, out=""),
+        # Allow: input the guard cannot read fails open.
+        guard_case("no-path", "Write", {"content": "x"}, me, out=""),
+        guard_case("list-input", "Write", ["x"], me, out=""),
+        # Allow: every session that is not this repository's orchestrator.
+        guard_case("agent-no-lock", "Agent", {"prompt": "x"}, out=""),
+        guard_case("agent-worker", "Agent", {"prompt": "x"}, me, env={"CEH_ORCHESTRATION_WORKER": "x"}, out=""),
+        guard_case("other", "Write", plan_write, not_me, env={"CLAUDE_PID": "101"}, out=""),
+        guard_case("no-lock", "Write", plan_write, out=""),
+        guard_case("null-pid", "Write", plan_write, {**not_me, "pid": None}, out=""),
+        guard_case("empty-id", "Write", plan_write, {**not_me, "sessionId": ""}, session_id="", out=""),
+        guard_case("bad-lock", "Write", plan_write, "not json", out=""),
+        guard_case("list-lock", "Write", plan_write, "[]", out=""),
+        guard_case("worker", "Write", plan_write, me, env={"CEH_ORCHESTRATION_WORKER": "x"}, out=""),
+        guard_case("disabled", "Write", plan_write, me, env={"CEH_DISABLED_HOOKS": "x, orchestrator-scope-guard"}, out=""),
+        guard_case("loader-off", "Write", plan_write, me, env={"CEH_DISABLED_HOOKS": "load-orchestrator"}, out=""),
+        guard_case("headless", "Write", plan_write, me, env={"CLAUDE_CODE_SESSION_ATTENDED": "0"}, out=""),
+    ]  # fmt: skip
+
     return [
         # artifact-render-hook: block an invalid plan YAML, render a valid one, skip other files,
         # and warn once when uv is missing. generated-md-guard: deny an edit to a generated .md,
@@ -2058,6 +2147,7 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         {"script": "inject-less-code-reminder.sh", "stdin": {}, "out": "WRITE LESS CODE"},
         {"script": "inject-less-code-reminder.sh", "stdin": {}, "env": {"CEH_DISABLED_HOOKS": "inject-less-code-reminder"}, "out": ""},
         *orchestrator_fixtures,
+        *guard_fixtures,
     ]  # fmt: skip
 
 
