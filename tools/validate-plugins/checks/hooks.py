@@ -1924,7 +1924,8 @@ def hook_fixtures(tmp: Path) -> list[dict]:
     plan_write = at(".agents_workspace/product/plan/x.yaml")
     guard_fixtures = [
         # Deny: the real mistake replayed, matched by session id, then by CLAUDE_PID after /clear.
-        guard_case("plan", "Write", plan_write, me, out="goes into the worker's brief"),
+        guard_case("plan", "Write", plan_write, me, out=deny),
+        guard_case("plan-reason", "Write", plan_write, me, out="goes into the worker's brief"),
         guard_case("plan-pid", "Write", plan_write, {**me, "sessionId": "other"}, session_id="new", env={"CLAUDE_PID": "101"}, out=deny),
         guard_case("relative", "Edit", {"file_path": "src/a.py"}, me, out=deny),
         guard_case("subfolder", "Edit", {"file_path": "a.py"}, me, cwd="src/deep", out=deny),
