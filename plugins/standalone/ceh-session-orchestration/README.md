@@ -33,13 +33,14 @@ This plugin has no agents.
 
 ## Hooks
 
-Three hooks run by themselves while the plugin is enabled. [Settings](#settings) turns them off.
+Four hooks run by themselves while the plugin is enabled. [Settings](#settings) turns them off.
 
-| Hook                 | What it does for you                                                                                                                                                                                                                  |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Orchestrator loader  | At session start and after compaction, makes the session load the orchestrator standard and prints a line saying so, unless another orchestrator already runs in the repository, which the line then names. A worker session skips it |
-| File check           | Checks each written orchestration file and renders its Markdown beside it                                                                                                                                                             |
-| Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite                                                                                                                                                    |
+| Hook                 | What it does for you                                                                                                                                                                                                                                                                                                                                                      |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Orchestrator loader  | At session start and after compaction, makes the session load the orchestrator standard and prints a line saying so, unless another orchestrator already runs in the repository, which the line then names. A worker session skips it. A headless `claude -p` run, which Claude Code marks with `CLAUDE_CODE_SESSION_ATTENDED=0` (observed, not documented), skips it too |
+| Scope guard          | Stops the orchestrator editing project files or starting subagents itself, and says to start a worker. Workers and other sessions are not affected                                                                                                                                                                                                                        |
+| File check           | Checks each written orchestration file and renders its Markdown beside it                                                                                                                                                                                                                                                                                                 |
+| Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite                                                                                                                                                                                                                                                                                        |
 
 ## Settings
 
@@ -47,12 +48,12 @@ Set a variable under `env` in a Claude Code settings file. The
 [environment variables page](../../../docs/ENVIRONMENT_VARIABLES.md) shows which file and how to
 undo it.
 
-| Variable                        | Default              | Effect                                                                                                                                                                                                                                                                           |
-| ------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CEH_ARTIFACT_CHECK`            | unset (check on)     | `off` turns the file check and the generated-file guard off                                                                                                                                                                                                                      |
-| `CEH_DISABLED_HOOKS`            | unset (all hooks on) | Comma-separated hook names to skip: `load-orchestrator`, `artifact-render-hook`, `generated-md-guard`. `load-orchestrator` keeps the session from becoming an orchestrator. Set it for a headless `claude -p` run, such as a scheduled job, so the standard does not load at all |
-| `CEH_ORCHESTRATION_MAX_WORKERS` | `5`                  | The most workers one orchestrator runs at once. A value that is not a whole number of at least 1 gives 5, and the startup line says so                                                                                                                                           |
-| `CEH_ORCHESTRATION_WORKER`      | unset                | Set by the orchestrator on each worker it starts, to the repository name. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set                                                                                                |
+| Variable                        | Default              | Effect                                                                                                                                                                                                                                                |
+| ------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CEH_ARTIFACT_CHECK`            | unset (check on)     | `off` turns the file check and the generated-file guard off                                                                                                                                                                                           |
+| `CEH_DISABLED_HOOKS`            | unset (all hooks on) | Comma-separated hook names to skip: `load-orchestrator`, `orchestrator-scope-guard`, `artifact-render-hook`, `generated-md-guard`. `load-orchestrator` keeps the session from becoming an orchestrator. A headless `claude -p` run skips it by itself |
+| `CEH_ORCHESTRATION_MAX_WORKERS` | `5`                  | The most workers one orchestrator runs at once. A value that is not a whole number of at least 1 gives 5, and the startup line says so                                                                                                                |
+| `CEH_ORCHESTRATION_WORKER`      | unset                | Set by the orchestrator on each worker it starts, to the repository name. Any value makes the session a worker, which does not load the orchestrator standard. Not for you to set                                                                     |
 
 ## How it works
 
@@ -85,8 +86,10 @@ orchestrator tells you when that can happen, because it gets no signal for it.
 
 It edits no project file and starts no subagent: anything that edits files goes to a worker. It
 never merges a worker's branch and never deletes a worktree with uncommitted changes, which it
-leaves to you. In a run with no user present, such as a scheduled `claude -p`, it does the work
-itself and starts no worker.
+leaves to you. A headless `claude -p` run, such as a scheduled job, never becomes the
+orchestrator, so it does its work as an ordinary session. The `orchestrator-scope-guard` hook
+enforces this section: it denies the orchestrator's own edits in the repository and its subagent
+calls.
 
 ### Starting a new session
 

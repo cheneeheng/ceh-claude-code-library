@@ -9,6 +9,42 @@ before this repo live in
 
 ---
 
+## 2026-11-27
+
+An orchestrator session read a user's request for review subagents as leave to write, review and
+land a plan itself, though its standard says it edits no project file and starts no subagent.
+Written guidance had already failed there, so `ceh-session-orchestration` now enforces it with a
+PreToolUse hook. `orchestrator-scope-guard` denies the orchestrator's own edits inside its
+repository, except its orchestration file, handoffs, the decision log and `.gitignore`. It also
+denies the orchestrator's subagent calls. Its reason says to start a worker and to put any
+subagent request in the worker's brief. It knows the orchestrator by the lock file the loader
+writes, so workers, other sessions and headless runs are left alone, and any input it cannot
+read lets the call through.
+
+A headless `claude -p` run used to become the orchestrator whenever the loader was on, unless it
+set `CEH_DISABLED_HOOKS=load-orchestrator`. The loader now skips such a run by itself, through
+`CLAUDE_CODE_SESSION_ATTENDED=0`, which Claude Code 2.1.332 sets in headless runs. That variable
+is observed, not documented, so a missing value keeps the old behaviour and the kill switch stays
+the manual override.
+
+### Plugin versions
+
+| Plugin                      | Version |
+| --------------------------- | ------- |
+| `ceh-session-orchestration` | 1.0.5   |
+
+### Added
+
+- `ceh-session-orchestration` 1.0.5: the `orchestrator-scope-guard` PreToolUse hook and its
+  fixtures in `validate.py`.
+
+### Changed
+
+- `ceh-session-orchestration` 1.0.5: `load-orchestrator` skips a headless run. In
+  `orchestrate-worker-sessions`, the no-user rule and the start-prompt step now agree with the
+  guard, and the rules name the handoff and decision-log exceptions and say that a subagent
+  request goes into the worker's brief.
+
 ## 2026-11-26
 
 The descriptions of `review-anything` and `audit-anything` no longer carry a "Not for" pointer.

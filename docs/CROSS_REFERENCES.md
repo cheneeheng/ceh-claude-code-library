@@ -1176,6 +1176,19 @@ skill that edits the target.
 also accepts an older name with a session id, converting an older YAML version in place, the cold
 round, re-checking open findings, merging a round, and ticking a finding off.
 
+## Orchestrator repository root and lock path
+
+**Canonical:** `plugins/standalone/ceh-session-orchestration/scripts/load-orchestrator.py` — `repo_root()` and the `lock` path
+
+| Copy                                                                               | Section                                       | Diverges |
+| ---------------------------------------------------------------------------------- | --------------------------------------------- | -------- |
+| `plugins/standalone/ceh-session-orchestration/scripts/orchestrator-scope-guard.py` | `repo_root()` and the `lock` path in `main()` | none     |
+
+**Shared:** the nearest folder holding a `.git` entry as the root, and the lock at
+`<temp>/ceh-session-orchestration/<sha256 of the normcased root, 16 hex>.json`. The guard reads
+the lock the loader writes, so a change to either side alone makes the guard find no lock and
+guard nothing. Each hook is a standalone script run with `-I -S`, so the code is duplicated.
+
 ## Update protocol
 
 When changing a shared block:
