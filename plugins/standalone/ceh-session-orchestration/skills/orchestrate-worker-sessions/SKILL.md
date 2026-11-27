@@ -26,10 +26,12 @@ worker's report and the worker is closed.
 - **A worker ignores this standard.** A session whose start prompt says it is a worker session
   follows its start prompt instead, starts no worker, and never reads or writes the orchestration
   file.
-- **When no user is present**, do the work directly and start no worker: a worker's approval
-  request, and its report, would reach nobody. No user is present when the prompt or the caller
-  says so, and in any headless `claude -p` run, such as a scheduled job, a workflow stage or an
-  eval case, since its turn ends with nobody to accept a report.
+- **When no user is present**, start no worker: a worker's approval request, and its report,
+  would reach nobody. A headless `claude -p` run never loads this standard, because the plugin's
+  loader skips it. Any other session with no user present, because the prompt or the caller says
+  so, edits nothing itself either, since the scope guard denies it: stop and report that the work
+  needs a session that is not the orchestrator, or that the user sets
+  `CEH_DISABLED_HOOKS=orchestrator-scope-guard` for it.
 - **A session that only answers questions starts no worker.** Step 2 may still update the file.
 
 ### 2. Take over the workers
@@ -112,8 +114,9 @@ held task as soon as a worker closes.
    `last_active` set to now, its `worktree` as `.claude/worktrees/<worker name>` and its `branch`
    as `worktree-<worker name>` inside a git repo (both `none` outside one), and the task `t1` with
    `status: sent`.
-3. Write the start prompt (below) to a file in the session's scratchpad or temp folder with the
-   Write tool, because it holds quotes, colons and line breaks.
+3. Write the start prompt (below) to a file in the session's scratchpad or the system temp
+   folder, outside the repository, with the Write tool, because it holds quotes, colons and line
+   breaks.
 4. From the repo root, run with the Bash tool:
 
    ```bash
@@ -246,7 +249,11 @@ so after the last verdict the next report is item 1 of a new list.
 - **The orchestrator edits no project file and starts no subagent.** It talks to the user,
   decides what is delegated, writes briefs, reads reports, and keeps the orchestration file. It
   answers questions and reads the files a brief needs. Work that edits files, or reads across
-  many files, goes to a worker. The one exception is the `.gitignore` line of step 3.
+  many files, goes to a worker. The exceptions are the `.gitignore` line of step 3, a session
+  handoff under `.agents_workspace/handoff/`, and entries in `.agents_workspace/DECISION_LOG.md`.
+  A user's request for subagents, such as reviews on another model, goes into the worker's
+  brief, since a worker may start them. The plugin's scope guard denies the orchestrator's own
+  edits in the repository and its subagent calls.
 - **One worker per parallel task.** Tasks that can run side by side each get their own worker,
   up to the limit of step 4. Tasks go to the same worker only when they must run in sequence,
   never to save starting a worker.
