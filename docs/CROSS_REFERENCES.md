@@ -1180,14 +1180,17 @@ round, re-checking open findings, merging a round, and ticking a finding off.
 
 **Canonical:** `plugins/standalone/ceh-session-orchestration/scripts/load-orchestrator.py` — `repo_root()` and the `lock` path
 
-| Copy                                                                               | Section                                       | Diverges |
-| ---------------------------------------------------------------------------------- | --------------------------------------------- | -------- |
-| `plugins/standalone/ceh-session-orchestration/scripts/orchestrator-scope-guard.py` | `repo_root()` and the `lock` path in `main()` | none     |
+| Copy                                                                               | Section                                       | Diverges                                                                                                                |
+| ---------------------------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-session-orchestration/scripts/orchestrator-scope-guard.py` | `repo_root()` and the `lock` path in `main()` | none                                                                                                                    |
+| `plugins/standalone/ceh-session-orchestration/hooks/role-label.tsx`                | `findRole()`                                  | reads every lock in the `<temp>/ceh-session-orchestration/` folder and matches its `sessionId` key, not the hashed name |
 
 **Shared:** the nearest folder holding a `.git` entry as the root, and the lock at
 `<temp>/ceh-session-orchestration/<sha256 of the normcased root, 16 hex>.json`. The guard reads
 the lock the loader writes, so a change to either side alone makes the guard find no lock and
-guard nothing. Each hook is a standalone script run with `-I -S`, so the code is duplicated.
+guard nothing. Each hook is a standalone script run with `-I -S`, so the code is duplicated. The
+role label, a hooks module, reads the same folder and the lock's `sessionId`, so a change to the
+folder or that key makes it show no `orchestrator` label.
 
 ## Update protocol
 

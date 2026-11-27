@@ -14,6 +14,7 @@ it depends on none. It needs Claude Code v2.1.236+ for cross-session messaging a
 the idle compaction threshold it sets on each worker, git for the worker worktrees, `python3` on
 `PATH` for the hooks, and `uv` to check and render the orchestration file. The merge check after
 a land needs `gh` when the repository merges by squash or rebase. Without uv the agent is told once per session that the file went unchecked.
+The role label needs a Claude Code build with mods, and without one no label shows.
 
 Every session you start where the plugin is enabled becomes an orchestrator, so enable it in the
 scope where you want that, such as one project. A repository on a machine has only one
@@ -34,7 +35,9 @@ This plugin has no agents.
 
 ## Hooks
 
-Four hooks run by themselves while the plugin is enabled. [Settings](#settings) turns them off.
+Five hooks run by themselves while the plugin is enabled. [Settings](#settings) turns them off,
+except the role label, which has no switch of its own: the `orchestrator` label goes with
+`load-orchestrator` off, and a worker keeps its label.
 
 | Hook                 | What it does for you                                                                                                                                                                                                                                                                                                                                                      |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -42,6 +45,7 @@ Four hooks run by themselves while the plugin is enabled. [Settings](#settings) 
 | Scope guard          | Stops the orchestrator editing project files, other than its own workspace files and the backlog, or starting subagents itself, and says to start a worker. Workers and other sessions are not affected                                                                                                                                                                   |
 | File check           | Checks each written orchestration file and renders its Markdown beside it                                                                                                                                                                                                                                                                                                 |
 | Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite                                                                                                                                                                                                                                                                                        |
+| Role label           | On a Claude Code build with mods, the footer shows `orchestrator` in the orchestrator session and `worker` in a worker session, beside any other mode labels, so you can tell which session to talk to. A session with neither role, such as one the loader refused because another session orchestrates the repository, shows no label. Terminal and desktop only        |
 
 ## Settings
 

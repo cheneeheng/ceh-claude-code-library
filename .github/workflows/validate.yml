@@ -22,8 +22,9 @@ jobs:
       # shellcheck is preinstalled on GitHub-hosted ubuntu runners.
       - name: Validate plugins, skills, references, and scripts
         run: python tools/validate-plugins/validate.py
-      # The mod tests (claude plugin test plugins/standalone/ceh-every-session) need Claude Code
-      # on the runner, so they stay a local check.
+      # The mod tests (claude plugin test plugins/standalone/ceh-every-session and
+      # claude plugin test plugins/standalone/ceh-session-orchestration) need Claude Code on the
+      # runner, so they stay a local check.
       - name: Validator unit tests
         run: python -m unittest discover -s tools/validate-plugins/tests
       - name: Setup script unit tests

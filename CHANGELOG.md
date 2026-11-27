@@ -37,11 +37,19 @@ orchestration file, so a new orchestrator session still has them. The 60 and 5 m
 window is gone: each worker starts with `CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS=100000`, and the
 plugin relies on Claude Code's idle compaction, not yet verified for a background worker.
 
+With several sessions open in one repository, nothing showed which one was the orchestrator, the
+one session the user talks to. `ceh-session-orchestration` now carries a mod of its own,
+`role-label.tsx`, that adds `orchestrator` or `worker` to the footer's mode labels, beside
+`ceh-every-session`'s `folded replies (mod)` when both are installed. It reads the role after the
+loader has run at each SessionStart: a worker by `CEH_ORCHESTRATION_WORKER`, the orchestrator by
+a lock the loader wrote naming this session. A session with neither role, or with
+`load-orchestrator` turned off, shows no label. `ceh-every-session` is unchanged.
+
 ### Plugin versions
 
 | Plugin                      | Version |
 | --------------------------- | ------- |
-| `ceh-session-orchestration` | 1.0.6   |
+| `ceh-session-orchestration` | 1.0.7   |
 
 ### Added
 
@@ -50,6 +58,8 @@ plugin relies on Claude Code's idle compaction, not yet verified for a backgroun
 - `ceh-session-orchestration` 1.0.6: the landing flow, the four report answers, and the `held`
   list and `answered` task status in `orchestration-instance/v2`, with a fifth model rule and
   its fixtures.
+- `ceh-session-orchestration` 1.0.7: the `role-label.tsx` mod, its state contract and its
+  `claude plugin test` cases.
 
 ### Changed
 
