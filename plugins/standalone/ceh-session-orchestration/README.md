@@ -2,17 +2,18 @@
 
 Talk to one Claude Code session and let it run the others. With this plugin, the session you
 start becomes an orchestrator: it starts a full worker session for each piece of work, in its own
-git worktree, sends it a task, takes its report back, and closes it once you accept the result.
-A repository on a machine has one long-running orchestrator, and every worker, task and report is
-written to one checked file for that machine, so the orchestrator still knows its workers after
-compaction or in a new session.
+git worktree, sends it a task, takes its report back, and, when you say land, has the worker land
+its own branch and then removes it. A repository on a machine has one long-running orchestrator,
+and every worker, task, report and held task is written to one checked file for that machine, so
+the orchestrator still knows its workers after compaction or in a new session.
 
 ## Install
 
 See [Getting started](../../../docs/GETTING_STARTED.md). No other plugin depends on this one, and
-it depends on none. It needs Claude Code v2.1.236+ for cross-session messaging, git for the
-worker worktrees, `python3` on `PATH` for the hooks, and `uv` to check and render the
-orchestration file. Without uv the agent is told once per session that the file went unchecked.
+it depends on none. It needs Claude Code v2.1.236+ for cross-session messaging and v2.1.290+ for
+the idle compaction threshold it sets on each worker, git for the worker worktrees, `python3` on
+`PATH` for the hooks, and `uv` to check and render the orchestration file. The merge check after
+a land needs `gh` when the repository merges by squash or rebase. Without uv the agent is told once per session that the file went unchecked.
 
 Every session you start where the plugin is enabled becomes an orchestrator, so enable it in the
 scope where you want that, such as one project. A repository on a machine has only one
@@ -23,9 +24,9 @@ it as [Settings](#settings) says, never counts as the orchestrator.
 
 ## Skills
 
-| Skill                         | Say or type                        | What it does                                                                                                                              |
-| ----------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `orchestrate-worker-sessions` | Nothing: it loads at session start | The orchestrator standard: when to delegate, how to start and brief a worker, the task and report blocks, the orchestration file, closing |
+| Skill                         | Say or type                        | What it does                                                                                                                                          |
+| ----------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `orchestrate-worker-sessions` | Nothing: it loads at session start | The orchestrator standard: when to delegate, how to start and brief a worker, the task and report blocks, the orchestration file, landing and closing |
 
 ## Agents
 
@@ -38,7 +39,7 @@ Four hooks run by themselves while the plugin is enabled. [Settings](#settings) 
 | Hook                 | What it does for you                                                                                                                                                                                                                                                                                                                                                      |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Orchestrator loader  | At session start and after compaction, makes the session load the orchestrator standard and prints a line saying so, unless another orchestrator already runs in the repository, which the line then names. A worker session skips it. A headless `claude -p` run, which Claude Code marks with `CLAUDE_CODE_SESSION_ATTENDED=0` (observed, not documented), skips it too |
-| Scope guard          | Stops the orchestrator editing project files or starting subagents itself, and says to start a worker. Workers and other sessions are not affected                                                                                                                                                                                                                        |
+| Scope guard          | Stops the orchestrator editing project files, other than its own workspace files and the backlog, or starting subagents itself, and says to start a worker. Workers and other sessions are not affected                                                                                                                                                                   |
 | File check           | Checks each written orchestration file and renders its Markdown beside it                                                                                                                                                                                                                                                                                                 |
 | Generated-file guard | Stops a hand edit to the generated Markdown, which the next render would overwrite                                                                                                                                                                                                                                                                                        |
 
@@ -64,29 +65,47 @@ undo it.
    worker and what the orchestrator may ask of it.
 2. The worker does the task in `.claude/worktrees/<worker>` and sends back a YAML report: status,
    summary, files changed, checks run, and anything only you can answer.
-3. The orchestrator relays the report. When you accept it, the worker is stopped with
-   `claude stop` and marked closed. Its branch stays for you to land.
+3. The orchestrator relays the report, and when the worker's branch has new commits the report
+   asks whether to land it. You answer by item number:
+   - **land**: the orchestrator sends the same worker a landing task that quotes your words, and
+     the worker lands its branch with the repository's own landing procedure. Once a merge check
+     confirms the branch is in the default branch, the orchestrator stops the worker, removes it
+     with `claude rm`, deletes it from the file and tells you to pull, with no second question.
+     Land needs a remote, and is offered only on the last task of a chain.
+   - **keep the branch** (**accept** when there is no branch): the worker is stopped with
+     `claude stop` and marked closed, its branch left for later. Saying land later resumes it.
+   - **reject**: you say whether a follow-up goes to the worker or it closes.
+   - **reply**, for a blocked report: your answer goes to the same worker as its next task.
+
+A worker runs on the orchestrator's own model unless you name one for the task. A task that needs
+no plan first runs on a smaller model: `haiku` for moves, renames and one-line edits, `sonnet` for
+the rest.
 
 ### Several tasks at once
 
 The orchestrator splits a request into tasks and starts one worker per task that can run in
 parallel, up to `CEH_ORCHESTRATION_MAX_WORKERS`. Tasks that must run in order, because one needs
 another's result or both edit the same files, go to one worker, one task after another, each with
-its own report. At the limit, the orchestrator names the tasks it holds and starts each as a
-worker closes.
+its own report. At the limit, the orchestrator writes the tasks it holds to the file, so a new
+session still has them, and starts each as a worker closes. Outside a git repository it runs one
+worker at a time, since workers there share one folder. Two workers that finish together land one
+after the other.
 
-Each reply that relays a report lists every report still awaiting your verdict, oldest first, so
+Each reply that relays a report lists every report still awaiting your answer, oldest first, so
 reports from several workers never scatter across the session. A report leaves the list once you
-accept or reject it.
+answer it. When the last report of a request split over several workers is in, the orchestrator
+says the request is complete and sums up each task.
 
 A worker may ask you for a permission approval directly, through Claude Code's notification. The
 orchestrator tells you when that can happen, because it gets no signal for it.
 
 ### What the orchestrator does not do
 
-It edits no project file and starts no subagent: anything that edits files goes to a worker. It
-never merges a worker's branch and never deletes a worktree with uncommitted changes, which it
-leaves to you. A headless `claude -p` run, such as a scheduled job, never becomes the
+It edits no project file and starts no subagent: anything that edits files goes to a worker. Its
+own files are the exceptions: the orchestration file, handoffs, the decision log, the backlog
+(`.agents_workspace/BACKLOG.md`) and its `.gitignore` line. It never lands a branch itself, since
+a worker lands its own on your word, and it never deletes a worktree with uncommitted changes,
+which it leaves to you. A headless `claude -p` run, such as a scheduled job, never becomes the
 orchestrator, so it does its work as an ordinary session. The `orchestrator-scope-guard` hook
 enforces this section: it denies the orchestrator's own edits in the repository and its subagent
 calls.
@@ -104,16 +123,24 @@ so the file holds only workers that still exist.
 
 ### Reusing a worker
 
-A follow-up in the same area, such as a change you ask for before accepting a report, goes to the
-same worker while its prompt cache is warm: 60 minutes on a subscription, or 5 if you tell it the
-account runs on an API key, usage credits or a cloud provider. After that, or once you have
-accepted and the worker is closed, a fresh worker is cheaper.
+A follow-up in the same area, such as a change you ask for before answering a report, goes to the
+same worker while it is idle. A new unrelated task still gets a fresh worker.
+
+The plugin relies on Claude Code's idle compaction so that a late follow-up does not re-read the
+worker's whole conversation uncached. Each worker starts with
+`CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS` set to 100000 in its `--settings`, the lowest value Claude
+Code accepts, so an idle worker past that size is compacted about an hour after its last request,
+before its one-hour prompt cache expires. Claude Code does this only with auto-compaction on, on
+the one-hour cache, which is the default on a Claude subscription within plan usage while an API
+key, usage credits or a cloud provider get the five-minute cache, with the machine awake, and in
+an interactive session. This is not yet verified for a background worker.
 
 ## Not this plugin
 
 - Delegating to subagents inside one session: Claude Code's own `Agent` tool.
 - Running a repeatable multi-stage flow: `ceh-workflow-runner`.
-- Landing a worker's branch: `ceh-git-workflow:pull-request`.
+- The landing procedure itself: the worker follows its repository's own, such as
+  `ceh-git-workflow:pull-request`.
 
 ## Where its files live
 

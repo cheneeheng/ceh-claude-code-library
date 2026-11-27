@@ -27,16 +27,29 @@ set `CEH_DISABLED_HOOKS=load-orchestrator`. The loader now skips such a run by i
 is observed, not documented, so a missing value keeps the old behaviour and the kill switch stays
 the manual override.
 
+A worker's branch used to stay behind for the user to land, and nothing told the orchestrator
+when it was merged. Now a worker whose branch has new commits asks in its report whether to land,
+and on the user's "land" the same worker lands its own branch, on a task that quotes the user's
+words. Once a read-only merge check confirms it, the orchestrator removes the worker with
+`claude rm`, with no second question. A report now takes up to four answers: land, keep the
+branch, reject, and reply for a blocked report. Tasks held at the worker limit are written to the
+orchestration file, so a new orchestrator session still has them. The 60 and 5 minute reuse
+window is gone: each worker starts with `CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS=100000`, and the
+plugin relies on Claude Code's idle compaction, not yet verified for a background worker.
+
 ### Plugin versions
 
 | Plugin                      | Version |
 | --------------------------- | ------- |
-| `ceh-session-orchestration` | 1.0.5   |
+| `ceh-session-orchestration` | 1.0.6   |
 
 ### Added
 
 - `ceh-session-orchestration` 1.0.5: the `orchestrator-scope-guard` PreToolUse hook and its
   fixtures in `validate.py`.
+- `ceh-session-orchestration` 1.0.6: the landing flow, the four report answers, and the `held`
+  list and `answered` task status in `orchestration-instance/v2`, with a fifth model rule and
+  its fixtures.
 
 ### Changed
 
@@ -44,6 +57,10 @@ the manual override.
   `orchestrate-worker-sessions`, the no-user rule and the start-prompt step now agree with the
   guard, and the rules name the handoff and decision-log exceptions and say that a subagent
   request goes into the worker's brief.
+- `ceh-session-orchestration` 1.0.6: `orchestrate-worker-sessions` drops the reuse window for idle
+  compaction, summarises a split request at its last report, runs tasks that need no plan on
+  `haiku` or `sonnet`, and runs one worker at a time outside git. `orchestrator-scope-guard`
+  allows `.agents_workspace/BACKLOG.md`.
 
 ## 2026-11-26
 
