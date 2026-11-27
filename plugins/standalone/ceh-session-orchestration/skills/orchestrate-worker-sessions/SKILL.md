@@ -110,7 +110,8 @@ is split into tasks for several workers, tell the user the list of tasks of that
 The limit is the number of workers the session-start context names
 (`CEH_ORCHESTRATION_MAX_WORKERS`), or 5 when it names none, counting every worker whose `status`
 is `starting`, `busy` or `idle`. Outside a git repository the limit is 1, whatever that number
-or the startup line says, counting every worker whose `worktree` is `none`, because workers
+or the startup line says, counting every worker whose `worktree` is `none` and whose `status` is
+`starting`, `busy` or `idle`, because workers
 sharing one folder edit the same files: run one worker at a time there. At the limit, start no more: append each held
 task to `held`, with the time it was held and the `model` the user named for it, and tell the
 user a slot frees when a worker closes or is removed. A chain held this way gets one entry per
@@ -139,7 +140,7 @@ the model is fixed when the worker starts.
 2. Write the worker and its first task to the file first, and set `workers_started` to n: the
    worker with `status: starting`, no `session_id`, `reports_to` set to this session's name as
    the Rules say to read it,
-   `model` set by the model rule below, `started` and
+   `model` set by the model rule above, `started` and
    `last_active` set to now, its `worktree` as `.claude/worktrees/<worker name>` and its `branch`
    as `worktree-<worker name>` inside a git repo (both `none` outside one), and the task `t1` with
    `status: sent`.
@@ -239,7 +240,8 @@ one idle notice, and tell the user again that an approval request may arrive fro
 - A message holding `kind: report` that parses as YAML and names a task id its sender holds is
   the done signal. Copy its fields into that task's `report` with `received`, set the task
   `reported`, the worker `idle` and its `last_active`, and relay it in the list below, unless it
-  is a `done` report on a landing task, which step 7 handles without a list entry. Then read this session's name as the Rules say, and send the handover message to
+  is a `done` report on a landing task, which step 7 handles without a list entry when its merge
+  check passes. Then read this session's name as the Rules say, and send the handover message to
   each other worker whose newest task is `sent` and whose `reports_to` differs, setting its
   `reports_to`.
 - A message that holds `kind: report` but does not parse, or names no task its sender holds, is
@@ -343,7 +345,8 @@ worker, status and summary. A task of the request counts as open until its repor
   as step 4 says with the same task block as its `t1`, its `inputs` naming the old branch when it
   exists. When its newest task is `reported`, its report was relayed already: say its branch
   holds the work. With any other newest task, or none, say only that the worker is gone. Then
-  delete the lost worker from the file, with every `held` entry naming it.
+  delete the lost worker from the file, with every `held` entry naming it, telling the user which
+  ones were dropped.
 
 ## Rules
 
@@ -389,8 +392,8 @@ worker, status and summary. A task of the request counts as open until its repor
   expires, so the follow-up starts from the summary. Claude Code does this only with
   auto-compaction on, on the one-hour cache, which is the default on a Claude subscription within
   plan usage while an API key, usage credits or a cloud provider get five minutes, with the
-  machine awake, and in an interactive session. Whether a background worker counts as interactive
-  is not yet verified.
+  machine awake, in an interactive session, and, before v2.1.314, only where Claude Code can fetch
+  its feature flags. Whether a background worker counts as interactive is not yet verified.
 - **Never poll.** Wait for the worker's message or the idle notice. Do not call `ListAgents` in a
   loop.
 - **Deleting a worker's uncommitted work is the user's act.** Never force a removal.

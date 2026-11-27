@@ -132,8 +132,8 @@ worker's whole conversation uncached. Each worker starts with
 Code accepts, so an idle worker past that size is compacted about an hour after its last request,
 before its one-hour prompt cache expires. Claude Code does this only with auto-compaction on, on
 the one-hour cache, which is the default on a Claude subscription within plan usage while an API
-key, usage credits or a cloud provider get the five-minute cache, with the machine awake, and in
-an interactive session. This is not yet verified for a background worker.
+key, usage credits or a cloud provider get the five-minute cache, with the machine awake, in an
+interactive session, and, before Claude Code v2.1.314, only where it can fetch its feature flags. This is not yet verified for a background worker.
 
 ## Not this plugin
 

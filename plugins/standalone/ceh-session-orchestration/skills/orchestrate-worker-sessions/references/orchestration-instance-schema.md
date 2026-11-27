@@ -7,7 +7,7 @@ lowercased. It is a singleton, found by that fixed name and edited in place, so 
 prefix and no session id. The machine is in the name because the workspace syncs to its remote, so
 another machine's file can arrive with a pull. A new file is a copy of
 `../assets/orchestration-instance.template.yaml`, relative to this file, with
-`workers_started: 0` and `workers: []`.
+`workers_started: 0`, `workers: []` and `held: []`.
 
 The YAML is the source. The `.md` of the same stem is generated beside it, opens with
 `generated_from: <file>.yaml` and a do-not-edit `generated_note`, and shows the count of workers
