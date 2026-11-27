@@ -43,12 +43,25 @@ one session the user talks to. `ceh-session-orchestration` now carries a mod of 
 `ceh-every-session`'s `folded replies (mod)` when both are installed. It reads the role after the
 loader has run at each SessionStart: a worker by `CEH_ORCHESTRATION_WORKER`, the orchestrator by
 a lock the loader wrote naming this session. A session with neither role, or with
-`load-orchestrator` turned off, shows no label. `ceh-every-session` is unchanged.
+`load-orchestrator` turned off, shows no label. The role label needs no change to
+`ceh-every-session`.
+
+The user found `ceh-every-session`'s summary replies too abstract and kept asking to have points
+explained. A read of 70 such requests in past transcripts grouped them by what the reply lacked:
+a claim with no mechanism, a decision question with no stakes, an undefined term, a pointer such
+as "item 5" in place of the thing, and a second explanation that failed again. The output style
+now asks for each of these: a plain definition on first use, a short name for anything pointed
+at, one clause of how a problem happens with one concrete instance, a decision question and
+options that say what they change, and the explanation the user asked for first, in a new form
+when they ask again. Each rule carries its own length limit, because longer replies are not the
+aim, and the decision block keeps its lines, so the folded-reply mod still draws its options. A
+rerun of the transcript mining after some weeks of use is the planned check.
 
 ### Plugin versions
 
 | Plugin                      | Version |
 | --------------------------- | ------- |
+| `ceh-every-session`         | 2.11.1  |
 | `ceh-session-orchestration` | 1.0.7   |
 
 ### Added
@@ -63,6 +76,10 @@ a lock the loader wrote naming this session. A session with neither role, or wit
 
 ### Changed
 
+- `ceh-every-session` 2.11.1: the output style defines terms on first use, names what a reply
+  points at, gives a problem's mechanism and one instance, says what a decision and each option
+  change, and puts an asked-for explanation first, each rule with a length limit. The example
+  decision block shows the new wording.
 - `ceh-session-orchestration` 1.0.5: `load-orchestrator` skips a headless run. In
   `orchestrate-worker-sessions`, the no-user rule and the start-prompt step now agree with the
   guard, and the rules name the handoff and decision-log exceptions and say that a subagent
