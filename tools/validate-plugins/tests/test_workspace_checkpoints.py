@@ -337,5 +337,68 @@ class WorkspacePushTests(unittest.TestCase):
         self.assertIn("is 1 ahead and 0 behind origin/main", out)
 
 
+class WorktreeCwdInsideWorkspaceTests(unittest.TestCase):
+    """A worktree session whose cwd moved into its own nested .agents_workspace
+    (fix/20261128-115700-workspace-sync-nested-cwd)."""
+
+    def setUp(self):
+        self.scratch = tempfile.TemporaryDirectory()
+        self.addCleanup(self.scratch.cleanup)
+        main = Path(self.scratch.name) / "project"
+        main.mkdir()
+        run_git(main, "init", "-q", "-b", "main")
+        run_git(main, "commit", "-q", "--allow-empty", "-m", "root")
+        self.workspace = main / ".agents_workspace"
+        self.workspace.mkdir()
+        run_git(self.workspace, "init", "-q", "-b", "project")
+        run_git(self.workspace, "config", "user.email", "test@example.com")
+        run_git(self.workspace, "config", "user.name", "test")
+        run_git(self.workspace, "commit", "-q", "--allow-empty", "-m", "root")
+        worktree = main / ".claude" / "worktrees" / "w1"
+        run_git(main, "worktree", "add", "-q", "-b", "worktree-w1", str(worktree))
+        self.branch = "ceh-ws/project/w1"
+        self.nested = worktree / ".agents_workspace"
+        run_git(
+            self.workspace, "worktree", "add", "-q", "-b", self.branch, str(self.nested)
+        )
+        (self.nested / "doc.md").write_text("worker edit\n")
+
+    def run_main(self, event, payload=None):
+        argv = ["sync", event] + ([str(self.nested)] if event == "end-worker" else [])
+        stdin = io.StringIO(json.dumps(payload or {}))
+        with (
+            patch.object(sync.sys, "argv", argv),
+            patch.object(sync.sys, "stdin", stdin),
+            patch.object(sync, "detach"),
+        ):
+            sync.main()
+
+    def test_session_end_merges_the_branch_when_cwd_is_the_nested_workspace(self):
+        run_git(self.nested, "add", "doc.md")
+        run_git(self.nested, "commit", "-q", "-m", "worker edit")
+        head = run_git(self.nested, "rev-parse", "HEAD")
+        self.run_main("end-worker")
+        merged = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(self.workspace),
+                "merge-base",
+                "--is-ancestor",
+                head,
+                "project",
+            ]
+        )
+        self.assertEqual(merged.returncode, 0)
+
+    def test_stop_commits_the_change_when_cwd_is_the_nested_workspace(self):
+        self.run_main("commit", {"cwd": str(self.nested), "hook_event_name": "Stop"})
+        self.assertEqual(run_git(self.nested, "status", "--porcelain"), "")
+        self.assertEqual(
+            run_git(self.nested, "log", "-1", "--format=%s"),
+            "chore(workspace): sync worktree w1",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

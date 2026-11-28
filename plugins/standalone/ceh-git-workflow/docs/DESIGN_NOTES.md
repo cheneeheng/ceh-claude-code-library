@@ -39,7 +39,9 @@ the model into loops.
 Brings a project's nested `.agents_workspace` git repo (decision log, handoffs, notes) into a git
 worktree. A worktree is a fresh checkout of tracked files, so without it a worktree session sees no
 workspace. A link would not do: Claude Code's worktree isolation refuses Edit and Write through a
-link to a folder outside the worktree.
+link to a folder outside the worktree. Every event takes the session's checkout from the hook's
+`cwd`, and a `cwd` inside a checkout's own `.agents_workspace`, where a `cd` in Bash leaves a
+session, counts as that checkout.
 
 - **Session start in a worktree, or `EnterWorktree`:** adds `<worktree>/.agents_workspace` as a git worktree of the main
   checkout's workspace repo, on the branch `ceh-ws/<X>/<worktree folder>`, where `<X>` is the branch

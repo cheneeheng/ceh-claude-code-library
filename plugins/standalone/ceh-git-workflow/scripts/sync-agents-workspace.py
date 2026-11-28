@@ -38,7 +38,7 @@ agent-<agent_id>, and return before any git call otherwise. There, a step anothe
 may hold the index for is retried.
 
 Reads cwd from the hook payload (end-worker: from argv), never os.getcwd(), and does nothing
-without it. Every commit ends with the user's attribution.commit line, see attribution(). Fails open: anything unexpected exits 0. Checkpoint lookup and commit failures print
+without it. A cwd inside a checkout's own .agents_workspace counts as that checkout. Every commit ends with the user's attribution.commit line, see attribution(). Fails open: anything unexpected exits 0. Checkpoint lookup and commit failures print
 one systemMessage per session and reason, because a convenience hook must never stop a session.
 """
 
@@ -705,6 +705,8 @@ def main():
     if not cwd or not os.path.isdir(cwd):
         return
     found = checkouts(cwd)
+    if found and found[0].name == WORKSPACE:  # cwd inside a checkout's own workspace
+        found = checkouts(found[0].parent)
     if not found:
         return
     top, main_checkout = found

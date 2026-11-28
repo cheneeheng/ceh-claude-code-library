@@ -24,10 +24,17 @@ count again. A call a subagent makes is not counted, and the orchestrator is als
 its lock's session id when its shell sits in `.agents_workspace`, which is a repository of its
 own.
 
+A worker whose shell had moved into its worktree's `.agents_workspace` never had its workspace
+branch merged when it was stopped, and its per-turn workspace commits were skipped too: the sync
+hook took the nested workspace for the checkout, found no workspace repo inside it and did
+nothing. Spotboard's worker and two workers here ended that way, and each branch was merged by
+hand. A `cwd` inside a checkout's own `.agents_workspace` now counts as that checkout.
+
 ### Plugin versions
 
 | Plugin                      | Version |
 | --------------------------- | ------- |
+| `ceh-git-workflow`          | 3.0.9   |
 | `ceh-session-orchestration` | 1.0.9   |
 
 ### Changed
@@ -36,6 +43,13 @@ own.
   Glob, Bash and PowerShell calls per incoming message and denies each past 10 unless it is run
   again, which passes once, and a new `UserPromptSubmit` entry resets the count. The standard's Rules and the README
   say so.
+
+### Fixed
+
+- `ceh-git-workflow`: the workspace sync hook commits and merges a worktree session's workspace
+  branch when the session's `cwd` is inside its own `.agents_workspace`, where it did nothing
+  before. Two regression tests cover the session-end merge and the Stop commit
+  (`fix/20261128-115700-workspace-sync-nested-cwd`).
 
 ## 2026-11-27
 
