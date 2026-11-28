@@ -25,6 +25,8 @@ into each review format's schema, and only the Targets line differs.
   its content becoming round 1 and each of its findings `open`, keeping its name.
 - **Cold round:** the reviewer reads the target before the review file, and a subagent reviewer
   gets the target and never the file, so earlier rounds cannot anchor it.
+  A fix-check round, in a skill that has one, gets the previous round's blocking findings and the
+  lines each fix changed, never the file.
 - **Re-check:** before a round is merged, each `open` finding is read against the current target
   and set `fixed`, with the resolution `found fixed in round <n>`, where the target no longer has
   the defect.
