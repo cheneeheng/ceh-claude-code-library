@@ -243,8 +243,10 @@ summary: <one line>
 files: [<paths changed>]
 checks: [{command: <command>, result: <result>}]
 needs_user: <a question or approval only the user can give, or none>
-When a task that says commit: true is done and your branch has commits not yet in the default
+When a task that says commit: true is done and your code branch has commits not yet in the default
 branch, add to needs_user a question whether to land your branch, after any other question.
+Your `.agents_workspace` branch is never landed by you: the orchestrator sees to it after your
+session is stopped.
 A short plain-text progress note before the report is fine.
 
 You may start subagents for your own task. Commit on your branch only when the task says
@@ -311,9 +313,13 @@ item takes, up to four, as step 7 sets them out:
 
 - **land**: only for a `done` report whose `needs_user` asks to land, in a worker repository with
   a remote (`git -C "<repo>" remote` prints a name), and only when `held` has no non-landing entry
-  naming the worker, since land removes the worker and the rest of its chain.
-- **keep the branch**: always. For a task with no branch to keep, a `commit: false` task or a
-  worker with `branch: none`, name it **accept**, which does the same.
+  naming the worker, since land removes the worker and the rest of its chain. And
+  only when the worker's code branch has commits not in the default branch:
+  `git -C "<repo>" rev-list --count origin/<default>..<branch>` prints other than 0, with
+  `<default>` as step 7's merge check defines it and `<branch>` the worker's `branch`.
+- **keep the branch**: always. For a task with no branch to keep, a `commit: false` task, a
+  worker with `branch: none`, or a report whose
+  commits sit only on the worker's workspace branch, name it **accept**, which does the same.
 - **reject**: always.
 - **reply**: only for a `blocked` report.
 
@@ -328,10 +334,12 @@ worker, status and summary. A task of the request counts as open until its repor
 
 - **Keep the branch** (or accept): set the task `accepted`. When `held` has the worker's next
   chain task, send it as step 5 says, keeping the worker. Otherwise stop the worker with
-  `claude stop <id>` and set it `closed`, its branch left as it is.
+  `claude stop <id>`, run **The worker's workspace branch** below, and set it `closed`, its code
+  branch left as it is.
 - **Reject**: set the task `rejected`, then send a follow-up task or close the worker, as the
-  user says. On a close, delete the worker's non-landing entries from `held` in the same write and
-  tell the user which ones.
+  user says. On a close, stop it with `claude stop <id>`, run **The worker's workspace branch**
+  below, and set it `closed`. Delete the worker's non-landing entries from `held` in the same
+  write and tell the user which ones.
 - **Reply**: set the task `answered`, and send the user's answer to the same worker as a
   follow-up task, as step 5 says, its `goal` quoting the answer.
 - **Land**: set the task `accepted` and send the landing task as step 5 says, keeping the worker.
@@ -372,17 +380,54 @@ worker, status and summary. A task of the request counts as open until its repor
     `git -C "<worker folder>" rev-parse HEAD` and `<default>` is
     `git -C "<repo>" symbolic-ref --short refs/remotes/origin/HEAD` without its `origin/`.
 
-  On a pass, set the task `accepted`, run `claude stop <id>`, then `claude rm <id>`, delete the
+  On a pass, set the task `accepted`, run `claude stop <id>`, then **The worker's workspace
+  branch** below, then `claude rm <id>`, delete the
   worker and its `held` entries from the file once `claude rm` succeeds, and tell the user the
   branch landed, the worker is removed, and to pull the default branch in `<hub>/<repo>`. In the
   same write, each waiting entry whose `after` names the worker loses its `after` and gains the
   report's PR or merge commit in its `scope`, since its worker cannot read this repository: it is
   fresh now and starts as slots allow. On
   a fail, such as a PR opened but not yet merged, relay the report with the check's output and the
-  answers, plus **remove it**, the user's word for `claude stop` and `claude rm` as on a pass. A
-  `failed` or `blocked` landing report is relayed with the usual answers.
+  answers, plus **remove it**, the user's word for `claude stop`, the workspace branch item and
+  `claude rm` as on a pass. A `failed` or `blocked` landing report is relayed with the usual
+  answers.
 
-- Never land a branch yourself: a worker lands its own, on the user's word.
+- **The worker's workspace branch**: run after every `claude stop <id>` in this step, before any
+  `claude rm <id>`, because it reads the worker's entry and its folder. It is the orchestrator's
+  own bookkeeping: a call the scope guard's per-message limit denies passes on its identical
+  retry. A worker resumed and stopped again runs it again, which does nothing once the branch is
+  in. Names: `<repo>` is the worker's `repo` (`.` when absent), `<ws>` is
+  `<repo>/.agents_workspace`, `<wf>` the worker's `worktree`, `<worker>` the basename of `<wf>`,
+  which the sync hook names the branch by, `<X>` is `git -C "<ws>" branch --show-current`, and
+  `<b>` is `ceh-ws/<X>/<worker>`. A worker with `worktree: none` has no workspace branch: skip.
+  1. Read the state in one chained Bash call: `git -C "<ws>" rev-parse --show-toplevel`,
+     `git -C "<ws>" branch --show-current`, `git -C "<ws>" branch --list "<b>"`,
+     `git -C "<ws>" rev-parse -q --verify MERGE_HEAD`,
+     `git -C "<repo>/<wf>/.agents_workspace" status --short` when that folder exists, and
+     `git -C "<ws>" merge-base --is-ancestor "<b>" "<X>"; echo $?`. Skip the item when the top
+     level is not `<ws>` itself (no workspace repository of its own), `<X>` is empty, or the
+     branch list is empty.
+  2. When the worker's `.agents_workspace` shows uncommitted files, tell the user they are not in
+     the branch and `claude rm` would delete them, and never say the changes are in.
+  3. When `merge-base` printed 0, the workspace changes are in: say so, and stop here.
+  4. When MERGE_HEAD exists in `<ws>`, a merge is already open there, the user's own: touch
+     nothing and tell the user the branch is still unmerged.
+  5. Otherwise write the one line `DECISION_LOG.md merge=union` to `union.attributes` in the
+     session's scratchpad with the Write tool, as step 4 writes the prompt file, and run
+     `git -C "<ws>" -c core.attributesFile="<absolute union.attributes>" merge --autostash --no-edit "<b>"`,
+     the merge the sync hook makes, so both sides' decision-log lines are kept. On exit 0, name
+     the merge commit (`git -C "<ws>" rev-parse --short HEAD`). On a failure it is a conflict
+     when `git -C "<ws>" rev-parse -q --verify MERGE_HEAD` now exits 0, since step 4 saw none:
+     run `git -C "<ws>" merge --abort` and give the user the conflicting files and the same merge
+     command to finish by hand. Any other failure, such as the sync hook's own merge holding the
+     index, reruns the `merge-base` check once and tells the user if the branch is still not in.
+
+  This merge is local and moves only the main workspace branch. The user's standing word allows
+  it with no question each time. Pushing that branch stays the sync hook's, and the orchestrator
+  never pushes it.
+
+- Never land a code branch yourself: a worker lands its own, on the user's word. A worker's
+  workspace branch is never landed by a task: **The worker's workspace branch** covers it.
 - Run `claude rm <id>` only after the worker's branch is merged or the user says to discard or
   remove it.
   It removes the session, its worktree and its branch, and Claude Code refuses it while the
@@ -413,8 +458,8 @@ worker, status and summary. A task of the request counts as open until its repor
   decides what is delegated, writes briefs, reads reports, and keeps the orchestration file. It
   answers questions and reads the files a brief needs. Work that edits files, or reads across
   many files, goes to a worker. The exceptions are the `.gitignore` line of step 3, a session
-  handoff under `.agents_workspace/handoff/`, entries in `.agents_workspace/DECISION_LOG.md`, and
-  rows in `.agents_workspace/BACKLOG.md`.
+  handoff under `.agents_workspace/handoff/`, entries in `.agents_workspace/DECISION_LOG.md`,
+  rows in `.agents_workspace/BACKLOG.md`, and the merge of a worker's workspace branch, step 7.
   A user's request for subagents, such as reviews on another model, goes into the worker's
   brief, since a worker may start them. The plugin's scope guard denies the orchestrator's own
   edits in the repository and its subagent calls. It also counts the orchestrator's Read, Grep,

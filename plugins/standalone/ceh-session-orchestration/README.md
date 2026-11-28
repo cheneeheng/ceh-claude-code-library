@@ -79,6 +79,9 @@ undo it.
      Land needs a remote, and is offered only on the last task of a chain.
    - **keep the branch** (**accept** when there is no branch): the worker is stopped with
      `claude stop` and marked closed, its branch left for later. Saying land later resumes it.
+     A report whose commits sit only in `.agents_workspace` is answered accept, and the
+     orchestrator then checks the worker's workspace branch and merges that workspace branch itself
+     when it is not in yet. It does the same after every stop of a worker.
    - **reject**: you say whether a follow-up goes to the worker or it closes.
    - **reply**, for a blocked report: your answer goes to the same worker as its next task.
 
@@ -132,8 +135,9 @@ the second.
 
 It edits no project file and starts no subagent: anything that edits files goes to a worker. Its
 own files are the exceptions: the orchestration file, handoffs, the decision log, the backlog
-(`.agents_workspace/BACKLOG.md`) and its `.gitignore` line. It never lands a branch itself, since
-a worker lands its own on your word, and it never deletes a worktree with uncommitted changes,
+(`.agents_workspace/BACKLOG.md`), its `.gitignore` line, and the merge of a stopped worker's
+workspace branch into the main workspace branch, which it never pushes.
+It never lands a code branch itself, since a worker lands its own on your word, and it never deletes a worktree with uncommitted changes,
 which it leaves to you. A headless `claude -p` run, such as a scheduled job, never becomes the
 orchestrator, so it does its work as an ordinary session. The `orchestrator-scope-guard` hook
 enforces this section: it denies the orchestrator's own edits in the repository and its subagent
