@@ -1176,6 +1176,19 @@ skill that edits the target.
 also accepts an older name with a session id, converting an older YAML version in place, the cold
 round, re-checking open findings, merging a round, and ticking a finding off.
 
+## Review rounds
+
+**Canonical:** `plugins/standalone/ceh-build-plan/skills/review-build-plan/SKILL.md` — § Rounds
+
+| Copy                                                                   | Section  | Diverges                                                                                                                                                                                                                                                                                                                                                               |
+| ---------------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plugins/standalone/ceh-every-session/skills/review-anything/SKILL.md` | § Rounds | Verdict names (Done and Cannot judge for Ready to build and Rethink), the fix checker (`independent-reader`, marked by a `summary` opening "Fix check:", whose brief also holds the kind `review` and the criteria), round 1 as step 3 for step 2, "leave the subject not done" for "set the plan to `status: draft`", and "subject" and "ship" for "plan" and "build" |
+
+**Shared:** the round rule, word for word otherwise: a full cold round 1, blocking fixes only
+before round 2, a fix check as round 2 that gets the previous round's blocking findings and the
+changed lines but never the review file, advisory fixes after a passing verdict with no further
+round, and one question to the owner before any round 3, with the no-owner path and the reason.
+
 ## Orchestrator repository root and lock path
 
 **Canonical:** `plugins/standalone/ceh-session-orchestration/scripts/load-orchestrator.py` — `repo_root()` and the `lock` path

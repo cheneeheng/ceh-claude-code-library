@@ -18,7 +18,8 @@ one fix check that gets only the previous round's blocking findings and the line
 changed. Advisory fixes wait for a passing verdict. When the fix check still blocks, the session
 asks the plan's owner before a third round, because a further round spends money the owner
 decides on. The shared Review lifecycle's cold-round rule names the fix-check exception in all
-five of its copies.
+five of its copies. `review-anything` follows the same round rule, and the independent reader
+agent takes a fix-check brief.
 
 An orchestrator session took a request to analyse a worker's transcript as a quick look, then read
 three transcripts itself with ten scripts on one message, and its scope guard stopped it only
@@ -38,7 +39,7 @@ own.
 | Plugin                      | Version |
 | --------------------------- | ------- |
 | `ceh-build-plan`            | 2.1.9   |
-| `ceh-every-session`         | 2.11.2  |
+| `ceh-every-session`         | 2.11.3  |
 | `ceh-git-workflow`          | 3.0.8   |
 | `ceh-product-direction`     | 2.1.11  |
 | `ceh-session-orchestration` | 1.0.9   |
@@ -52,6 +53,10 @@ own.
 - `ceh-every-session` 2.11.2, `ceh-git-workflow` 3.0.8 and `ceh-product-direction` 2.1.11: the
   cold-round rule in the general-review, stress-test, code-review and business-plan review schemas
   names the fix-check round, word for word with the plan-review schema.
+- `ceh-every-session` 2.11.3: `review-anything` gains the same Rounds section, with Done and
+  Cannot judge as its verdicts and the independent reader as its fix checker, and blocking fixes
+  first in fix mode. The independent reader takes a fix-check brief, and `docs/CROSS_REFERENCES.md`
+  registers the duplicated Rounds section.
 - `ceh-session-orchestration`: `orchestrator-scope-guard` counts the orchestrator's Read, Grep,
   Glob, Bash and PowerShell calls per incoming message and denies each past 10 unless it is run
   again, which passes once, and a new `UserPromptSubmit` entry resets the count. The standard's Rules and the README
