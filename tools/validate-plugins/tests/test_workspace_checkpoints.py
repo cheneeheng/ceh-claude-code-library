@@ -347,6 +347,8 @@ class WorktreeCwdInsideWorkspaceTests(unittest.TestCase):
         main = Path(self.scratch.name) / "project"
         main.mkdir()
         run_git(main, "init", "-q", "-b", "main")
+        run_git(main, "config", "user.email", "test@example.com")
+        run_git(main, "config", "user.name", "test")
         run_git(main, "commit", "-q", "--allow-empty", "-m", "root")
         self.workspace = main / ".agents_workspace"
         self.workspace.mkdir()
