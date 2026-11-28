@@ -1,6 +1,6 @@
 {
   "name": "ceh-session-orchestration",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "CEH session orchestration: talk to one long-running main session per repository that starts a full worker session per task, briefs it by cross-session message, takes its report back, and keeps a checked file of its workers per machine, so the state survives compaction and a new session.",
   "types": "./types/index.d.ts",
   "author": { "name": "cheneeheng", "email": "eeheng.chen@gmail.com" },

@@ -19,7 +19,10 @@ changed. Advisory fixes wait for a passing verdict. When the fix check still blo
 asks the plan's owner before a third round, because a further round spends money the owner
 decides on. The shared Review lifecycle's cold-round rule names the fix-check exception in all
 five of its copies. `review-anything` follows the same round rule, and the independent reader
-agent takes a fix-check brief.
+agent takes a fix-check brief. Every extra round a worker started on its own came from a brief
+asking for "a done verdict with every finding fixed", so the orchestrator standard now words a
+review task's `done_when` as the review skill's own end. Its relay list also restates each open
+decision block in full, because an earlier report cut to one line left a short answer ambiguous.
 
 An orchestrator session took a request to analyse a worker's transcript as a quick look, then read
 three transcripts itself with ten scripts on one message, and its scope guard stopped it only
@@ -42,7 +45,7 @@ own.
 | `ceh-every-session`         | 2.11.3  |
 | `ceh-git-workflow`          | 3.0.8   |
 | `ceh-product-direction`     | 2.1.11  |
-| `ceh-session-orchestration` | 1.0.9   |
+| `ceh-session-orchestration` | 1.0.10  |
 
 ### Changed
 
@@ -61,6 +64,9 @@ own.
   Glob, Bash and PowerShell calls per incoming message and denies each past 10 unless it is run
   again, which passes once, and a new `UserPromptSubmit` entry resets the count. The standard's Rules and the README
   say so.
+- `ceh-session-orchestration` 1.0.10: `orchestrate-worker-sessions` step 5 words a review task's
+  `done_when` as the review skill's own end, never "a done verdict with every finding fixed", and
+  step 4's first task follows it. Step 6's relay list restates every open decision block in full.
 
 ## 2026-11-27
 
