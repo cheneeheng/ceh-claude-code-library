@@ -65,7 +65,8 @@ findings checked against their cited places, and the reply gives the verdict and
    subject and the criteria in the reply before dispatching.
 3. **Dispatch one `ceh-every-session:independent-reader`** in the background, on every run, also
    when this session did not write the subject, so there is one path. The brief holds the kind
-   `review`, the subject paths and the criteria, and never an earlier review file.
+   `review`, the subject paths and the criteria, and never an earlier review file. A later round
+   is a fix check, per Rounds below.
 4. **Check what came back before saving.** Read the cited place of every `blocking` finding, and
    drop a finding whose place does not say what it claims. Record each dropped finding in the
    round's `not_covered` with the reason, and name it in the reply. Then set the verdict from what
@@ -86,16 +87,50 @@ findings checked against their cited places, and the reply gives the verdict and
    review went unchecked and unrendered. Reply with the verdict, the findings, what was not
    covered, and the file path.
 
-6. **Fix nothing unless asked.** When asked, fix, then set each fixed finding's `status` and
-   `resolution` and render again.
+6. **Fix nothing unless asked.** When asked, fix blocking findings first and advisory ones only
+   after a passing verdict, per Rounds, then set each fixed finding's `status` and `resolution`
+   and render again.
 
 ## Rules
 
 - The reader judges cold: it gets the subject and the criteria, never this session's reasoning or
-  an earlier review, so its findings are its own.
+  an earlier review, so its findings are its own, except in a fix check, per Rounds.
 - Every saved finding cites a place: `path:line`, or for something missing, the file or folder
   it belongs in.
-- With no human present the skill still runs whole, since it asks nothing.
+- With no human present the skill still runs whole: in place of the round-3 question it reports
+  the open blocking findings, per Rounds.
+
+## Rounds
+
+A review loop runs at most two rounds without asking: a full cold review, then one fix check.
+
+- Round 1 is the full cold review of step 3. A round 1 with no blocking finding ends the loop: the
+  author fixes the advisory findings and runs no round 2.
+- After a round with blocking findings, the author fixes the blocking findings only. Advisory
+  fixes wait for a passing verdict, because a fix made before the next round can add the defect
+  that round finds.
+- A later round is a fix check only when the previous round raised blocking findings and this
+  session made the fixes, so it can quote the changed lines. A session that did not make them runs
+  a full cold round instead.
+- The fix check is one `ceh-every-session:independent-reader`. Its brief holds the kind `review`,
+  the subject paths, the criteria, and each blocking finding of the previous round, quoted from
+  that round's Output, with the subject's lines as they now read after its fix under it. It never gets the
+  review file. It checks only that each finding is fixed and that the changed lines add no
+  blocking finding, and returns the same Output as a full round. The round's `summary` opens with
+  "Fix check:".
+- After a passing verdict, Done, the author fixes the advisory findings with no further round, and
+  the reply says they were not re-reviewed.
+- When the fix check still has a blocking finding, start no round 3. Report the open blocking
+  findings and ask the owner once: run one more full round, fix them and ship without a round, or
+  rethink. With no owner present, start no round, leave the subject not done, and report the open
+  findings. A later run on a review file whose last round is a fix check that still blocks asks
+  the same question first, unless the owner's own request is to review again, which is the yes
+  and runs a full cold round.
+- A Cannot judge verdict ends the loop.
+
+Why ask before round 3: a further round spends money, which the owner decides. Rounds 1 and 2 are
+the review and its fix check that the request already covers, and how many rounds a subject needs
+is not known up front, so asking once at that point is still asking once.
 
 ## Output
 

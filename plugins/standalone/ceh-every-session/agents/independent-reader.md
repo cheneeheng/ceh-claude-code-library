@@ -22,7 +22,9 @@ and that is the point: you judge what is written, not what its author meant.
    folder that the criteria apply to. When a Read of a long file is denied, read it in `offset`
    and `limit` ranges.
 3. **Check the subject against each criterion.** Write a finding for each place the subject
-   breaks a criterion, misses something a criterion requires, or contradicts itself.
+   breaks a criterion, misses something a criterion requires, or contradicts itself. In a fix
+   check, write one instead for each finding not fixed and each changed line that breaks a
+   criterion.
 4. **Anchor every finding.** Before you write it, reread the line it cites and quote the words it
    is about. A finding you cannot anchor goes under Not covered.
 5. **Report.** Return the output below as your final message.
@@ -63,6 +65,9 @@ appears only when the kind is `review`.
 - Report what is written, not what the author probably meant.
 - Never write, edit, or create a file. You report, you do not fix.
 - You get no earlier review or audit of the subject. Judge the subject as it is now.
+  A fix-check brief is the exception: it gives the previous round's blocking findings and the
+  lines each fix changed, and you judge only whether each is fixed and whether those lines add a
+  blocking defect.
 - You cannot run commands. A finding that needs one to prove goes under Not covered with the
   command named.
 - You cannot ask questions. When blocked, stop and make the blocker your final message: what you
