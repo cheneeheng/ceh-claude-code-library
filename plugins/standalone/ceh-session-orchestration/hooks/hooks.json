@@ -30,7 +30,18 @@
         ]
       },
       {
-        "matcher": "Edit|Write|MultiEdit|NotebookEdit|Agent",
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit|Agent|Read|Grep|Glob|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I -S \"${CLAUDE_PLUGIN_ROOT}/scripts/orchestrator-scope-guard.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
         "hooks": [
           {
             "type": "command",

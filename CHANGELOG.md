@@ -9,6 +9,34 @@ before this repo live in
 
 ---
 
+## 2026-11-28
+
+An orchestrator session took a request to analyse a worker's transcript as a quick look, then read
+three transcripts itself with ten scripts on one message, and its scope guard stopped it only
+when it tried to write the retro. Nothing counted reads. The guard now counts the orchestrator's
+Read, Grep, Glob, Bash and PowerShell calls on each incoming message, and past a limit of 10
+denies each one, telling it to stop and start a worker with what it has found. The same call run
+again passes once, so a worker start or the orchestrator's own bookkeeping still goes through
+without a list of exempt commands. The limit comes from 124 turns of 13 past orchestrator
+sessions: every turn that did a worker's task passed 10, and every worker start came within 5
+calls. A typed prompt, a message from another session and a subagent's report each start the
+count again. A call a subagent makes is not counted, and the orchestrator is also recognised by
+its lock's session id when its shell sits in `.agents_workspace`, which is a repository of its
+own.
+
+### Plugin versions
+
+| Plugin                      | Version |
+| --------------------------- | ------- |
+| `ceh-session-orchestration` | 1.0.9   |
+
+### Changed
+
+- `ceh-session-orchestration`: `orchestrator-scope-guard` counts the orchestrator's Read, Grep,
+  Glob, Bash and PowerShell calls per incoming message and denies each past 10 unless it is run
+  again, which passes once, and a new `UserPromptSubmit` entry resets the count. The standard's Rules and the README
+  say so.
+
 ## 2026-11-27
 
 An orchestrator session read a user's request for review subagents as leave to write, review and
