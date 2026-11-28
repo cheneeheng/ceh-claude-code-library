@@ -43,6 +43,13 @@ hook took the nested workspace for the checkout, found no workspace repo inside 
 nothing. Spotboard's worker and two workers here ended that way, and each branch was merged by
 hand. A `cwd` inside a checkout's own `.agents_workspace` now counts as that checkout.
 
+The orchestrator standard had no route for that workspace branch at all. A worker whose task
+edited only `.agents_workspace` files asked to land it, spotboard's orchestrator improvised a
+landing task the worker could not carry out, then refused to merge the branch itself, and the user
+had to type the merge. Such a report is now answered accept, and after every stop of a worker the
+orchestrator checks the worker's workspace branch and merges it into the main workspace branch
+itself when it is not in yet, keeping both sides' decision-log lines, as the user chose.
+
 ### Plugin versions
 
 | Plugin                      | Version |
@@ -51,7 +58,7 @@ hand. A `cwd` inside a checkout's own `.agents_workspace` now counts as that che
 | `ceh-every-session`         | 2.11.3  |
 | `ceh-git-workflow`          | 3.0.9   |
 | `ceh-product-direction`     | 2.1.11  |
-| `ceh-session-orchestration` | 1.0.10  |
+| `ceh-session-orchestration` | 1.0.11  |
 
 ### Changed
 
@@ -73,6 +80,12 @@ hand. A `cwd` inside a checkout's own `.agents_workspace` now counts as that che
 - `ceh-session-orchestration` 1.0.10: `orchestrate-worker-sessions` step 5 words a review task's
   `done_when` as the review skill's own end, never "a done verdict with every finding fixed", and
   step 4's first task follows it. Step 6's relay list restates every open decision block in full.
+- `ceh-session-orchestration` 1.0.11: `orchestrate-worker-sessions` gives a worker's workspace
+  branch a route. The start prompt asks to land only the code branch, step 6 offers land only when
+  the code branch has commits not in the default branch and names a workspace-only report accept,
+  and step 7's new item **The worker's workspace branch** checks and merges that branch after
+  every `claude stop`. The Rules and the README name the merge among the orchestrator's own
+  actions.
 
 ### Fixed
 
