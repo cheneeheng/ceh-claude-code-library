@@ -1975,9 +1975,15 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         session_id: str = "me",
         env: dict | None = None,
         hub: bool = False,
+        event: str = "",
+        extra: object = None,
+        setup: callable | None = None,
         **checks,
     ) -> dict:
         # hub: a plain-folder hub, with no .git of its own and a nested repository at nested/.
+        # event: hook_event_name, and with an event tool may be None, as in a UserPromptSubmit
+        # payload. extra: merged into the stdin, a dict or a function of the root. setup: runs
+        # with the root after the lock write, so a case's setup never replaces it.
         root = orc / f"guard-{name}"
         (root / cwd).mkdir(parents=True)
         (root / "nested" / ".git" if hub else root / ".git").mkdir(parents=True)
@@ -1989,15 +1995,22 @@ def hook_fixtures(tmp: Path) -> list[dict]:
                     lock if isinstance(lock, str) else json.dumps(lock),
                     encoding="utf-8",
                 )
+            if setup:
+                setup(root)
 
+        stdin = {"cwd": str(root / cwd), "session_id": session_id}
+        if tool is not None:
+            stdin["tool_name"] = tool
+            stdin["tool_input"] = (
+                tool_input(root) if callable(tool_input) else tool_input
+            )
+        if event:
+            stdin["hook_event_name"] = event
+        if extra:
+            stdin.update(extra(root) if callable(extra) else extra)
         return {
             "script": "orchestrator-scope-guard.py",
-            "stdin": {
-                "cwd": str(root / cwd),
-                "session_id": session_id,
-                "tool_name": tool,
-                "tool_input": tool_input(root) if callable(tool_input) else tool_input,
-            },
+            "stdin": stdin,
             "env": {
                 "CLAUDE_PID": "",
                 "CLAUDE_CODE_SESSION_ATTENDED": "",
@@ -2054,6 +2067,119 @@ def hook_fixtures(tmp: Path) -> list[dict]:
         guard_case("disabled", "Write", plan_write, me, env={"CEH_DISABLED_HOOKS": "x, orchestrator-scope-guard"}, out=""),
         guard_case("loader-off", "Write", plan_write, me, env={"CEH_DISABLED_HOOKS": "load-orchestrator"}, out=""),
         guard_case("headless", "Write", plan_write, me, env={"CLAUDE_CODE_SESSION_ATTENDED": "0"}, out=""),
+    ]  # fmt: skip
+
+    # The guard's tool-call counter. Its files are named by session id alone, and the cases of
+    # one batch share orc_locks in sequence, so each case has its own session id, c-<case name>,
+    # and no case name is a prefix of another, since the reset deletes denied-<session id>-*.
+    guard_script = (
+        REPO
+        / "plugins/standalone/ceh-session-orchestration/scripts/orchestrator-scope-guard.py"
+    )
+    # As run_batch builds base_env: the developer's CEH_* settings never reach a setup run.
+    guard_env = {
+        **{
+            k: v
+            for k, v in os.environ.items()
+            if not k.startswith(("CEH_", "BULK_READER_"))
+        },
+        **{v: str(tmp / "state") for v in ("TMP", "TEMP", "TMPDIR")},
+        "CLAUDE_PID": "",
+        "CLAUDE_CODE_SESSION_ATTENDED": "",
+    }
+    denial = "start a worker with what you have found"
+    ls = {"command": "ls"}
+
+    def seed(sid: str, n: int) -> None:
+        orc_locks.mkdir(exist_ok=True)
+        (orc_locks / f"calls-{sid}").write_bytes(b"x" * n)
+
+    def run_guard(root: Path, sid: str, payload: dict) -> None:
+        """Put the guard in a state through its own code, so no case computes its paths."""
+        subprocess.run(
+            [sys.executable, "-I", "-S", str(guard_script)],
+            input=json.dumps({"cwd": str(root), "session_id": sid, **payload}),
+            capture_output=True, text=True, env=guard_env, timeout=30,
+        )  # fmt: skip
+
+    def deny_ls(root: Path, sid: str) -> None:
+        run_guard(root, sid, {"tool_name": "Bash", "tool_input": ls})
+
+    def nest(root: Path, sid: str = "") -> None:
+        (root / ".agents_workspace" / ".git").mkdir(parents=True, exist_ok=True)
+
+    def nested_cwd(root: Path) -> dict:
+        return {"cwd": str(root / ".agents_workspace")}
+
+    def gone(sid: str) -> callable:
+        def check() -> str:
+            left = [
+                p.name
+                for p in orc_locks.glob(f"*-{sid}*")
+                if p.name.startswith(("calls-", "denied-"))
+            ]
+            return f"the reset left {left}" if left else ""
+
+        return check
+
+    def still(sid: str, n: int) -> callable:
+        def check() -> str:
+            size = (orc_locks / f"calls-{sid}").stat().st_size
+            return "" if size == n else f"calls-{sid} holds {size} bytes, not {n}"
+
+        return check
+
+    def count_case(
+        name: str,
+        tool: str | None,
+        tool_input: object,
+        n: int = 0,
+        then=None,
+        lock: dict = me,
+        **kw,
+    ) -> dict:
+        sid = f"c-count-{name}"
+
+        def setup(root: Path) -> None:
+            if n:
+                seed(sid, n)
+            if then:
+                then(root, sid)
+
+        own = {**lock, "sessionId": sid} if lock is me else lock
+        return guard_case(
+            f"count-{name}", tool, tool_input, own, session_id=sid, setup=setup, **kw
+        )
+
+    guard_fixtures += [
+        count_case("10", "Bash", ls, repeat=10, out=""),
+        count_case("11", "Bash", ls, repeat=11, out=denial),
+        # The 11th is denied and its identical retry passes, once.
+        count_case("retry-once", "Bash", ls, repeat=12, out=""),
+        count_case("retry-twice", "Bash", ls, repeat=13, out=denial),
+        # A retry that rewords only its description still passes.
+        count_case("reworded", "Bash", {"command": "ls", "description": "b"}, 10,
+                   lambda root, sid: run_guard(root, sid, {"tool_name": "Bash", "tool_input": {"command": "ls", "description": "a"}}), out=""),
+        # A different call of the same tool past the limit is denied.
+        count_case("next", "Bash", {"command": "pwd"}, 10, deny_ls, out=denial),
+        # A counted Read never reaches the edit branch.
+        count_case("read", "Read", at("src/a.py"), out=""),
+        count_case("glob", "Glob", {"pattern": "*.py"}, 10, out=denial),
+        count_case("powershell", "PowerShell", ls, 10, out=denial),
+        count_case("reset", None, None, 10, deny_ls, event="UserPromptSubmit", out="", after=gone("c-count-reset")),
+        count_case("nested-reset", None, None, 10, lambda root, sid: (nest(root), deny_ls(root, sid)),
+                   event="UserPromptSubmit", extra=nested_cwd, out="", after=gone("c-count-nested-reset")),
+        # A call from a nested cwd is still counted, through the lock's session id.
+        count_case("nested-call", "Bash", ls, 10, nest, extra=nested_cwd, out=denial),
+        count_case("after-reset", "Bash", ls, 10, lambda root, sid: run_guard(root, sid, {"hook_event_name": "UserPromptSubmit"}), out=""),
+        # Sessions left alone: one the lock does not name, which must not even count, and the env cases.
+        count_case("other", "Bash", ls, 10, lock=not_me, out="", after=still("c-count-other", 10)),
+        count_case("worker", "Bash", ls, 10, env={"CEH_ORCHESTRATION_WORKER": "x"}, out=""),
+        count_case("disabled", "Bash", ls, 10, env={"CEH_DISABLED_HOOKS": "orchestrator-scope-guard"}, out=""),
+        count_case("headless", "Bash", ls, 10, env={"CLAUDE_CODE_SESSION_ATTENDED": "0"}, out=""),
+        count_case("subagent", "Bash", ls, 10, extra={"agent_id": "a1"}, out=""),
+        # The edit branch keeps its own lock test, so the session-id scan never widens an edit's denial.
+        count_case("nested-edit", "Write", lambda root: {"file_path": str(root / ".agents_workspace" / "a.md")}, then=nest, extra=nested_cwd, out=""),
     ]  # fmt: skip
 
     return [
