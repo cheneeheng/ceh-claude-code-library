@@ -10,8 +10,7 @@ the orchestrator still knows its workers after compaction or in a new session.
 ## Install
 
 See [Getting started](../../../docs/GETTING_STARTED.md). No other plugin depends on this one, and
-it depends on none. It needs Claude Code v2.1.236+ for cross-session messaging and v2.1.290+ for
-the idle compaction threshold it sets on each worker, git for the worker worktrees, `python3` on
+it depends on none. It needs Claude Code v2.1.236+ for cross-session messaging, git for the worker worktrees, `python3` on
 `PATH` for the hooks, and `uv` to check and render the orchestration file. The merge check after
 a land needs `gh` when the repository merges by squash or rebase. Without uv the agent is told once per session that the file went unchecked.
 The role label needs a Claude Code build with mods, and without one no label shows.
@@ -78,7 +77,8 @@ undo it.
      with `claude rm`, deletes it from the file and tells you to pull, with no second question.
      Land needs a remote, and is offered only on the last task of a chain.
    - **keep the branch** (**accept** when there is no branch): the worker is stopped with
-     `claude stop` and marked closed, its branch left for later. Saying land later resumes it.
+     `claude stop` and marked closed, its branch left for later. Saying land later resumes it, or, more than 55 minutes
+     after it last spoke, starts a new session in its worktree, as Reusing a worker says.
      A report whose commits sit only in `.agents_workspace` is answered accept, and the
      orchestrator then checks the worker's workspace branch and merges that workspace branch itself
      when it is not in yet. It does the same after every stop of a worker.
@@ -162,14 +162,14 @@ so the file holds only workers that still exist.
 A follow-up in the same area, such as a change you ask for before answering a report, goes to the
 same worker while it is idle. A new unrelated task still gets a fresh worker.
 
-The plugin relies on Claude Code's idle compaction so that a late follow-up does not re-read the
-worker's whole conversation uncached. Each worker starts with
-`CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS` set to 100000 in its `--settings`, the lowest value Claude
-Code accepts, so an idle worker past that size is compacted about an hour after its last request,
-before its one-hour prompt cache expires. Claude Code does this only with auto-compaction on, on
-the one-hour cache, which is the default on a Claude subscription within plan usage while an API
-key, usage credits or a cloud provider get the five-minute cache, with the machine awake, in an
-interactive session, and, before Claude Code v2.1.314, only where it can fetch its feature flags. This is not yet verified for a background worker.
+A follow-up more than 55 minutes after the worker last spoke goes to a new session instead, started
+in the same worktree and branch, under the same name, with the earlier report and the new task.
+Claude Code documents idle compaction only for interactive sessions, and it was never seen in a
+background worker, so once the worker's one-hour prompt cache expires, a message to it would read
+its whole conversation again uncached. The new
+session pays for its own start and knows the earlier work only through the report. When the
+worker is removed, the orchestrator removes each of its sessions, and the first one's removal
+takes the worktree and branch with it.
 
 ## Not this plugin
 
