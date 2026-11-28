@@ -420,7 +420,8 @@ worker, status and summary. A task of the request counts as open until its repor
      when `git -C "<ws>" rev-parse -q --verify MERGE_HEAD` now exits 0, since step 4 saw none:
      run `git -C "<ws>" merge --abort` and give the user the conflicting files and the same merge
      command to finish by hand. Any other failure, such as the sync hook's own merge holding the
-     index, reruns the `merge-base` check once and tells the user if the branch is still not in.
+     index, reruns the `merge-base` check once and, if the branch is still not in, relays the
+     failure's output to the user.
 
   This merge is local and moves only the main workspace branch. The user's standing word allows
   it with no question each time. Pushing that branch stays the sync hook's, and the orchestrator

@@ -136,8 +136,8 @@ the second.
 It edits no project file and starts no subagent: anything that edits files goes to a worker. Its
 own files are the exceptions: the orchestration file, handoffs, the decision log, the backlog
 (`.agents_workspace/BACKLOG.md`), its `.gitignore` line, and the merge of a stopped worker's
-workspace branch into the main workspace branch, which it never pushes.
-It never lands a code branch itself, since a worker lands its own on your word, and it never deletes a worktree with uncommitted changes,
+workspace branch into the main workspace branch, which it never pushes. It
+never lands a code branch itself, since a worker lands its own on your word, and it never deletes a worktree with uncommitted changes,
 which it leaves to you. A headless `claude -p` run, such as a scheduled job, never becomes the
 orchestrator, so it does its work as an ordinary session. The `orchestrator-scope-guard` hook
 enforces this section: it denies the orchestrator's own edits in the repository and its subagent
