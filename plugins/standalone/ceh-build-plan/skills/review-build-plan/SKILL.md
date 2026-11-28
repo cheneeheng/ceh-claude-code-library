@@ -46,6 +46,7 @@ quotes the plan, and the verdict is delivered.
    plan, and never give it a review file, so earlier rounds cannot anchor it. One subagent reads
    the shared repo once, where one per plan would read it again for each. The author reads what
    they meant, a fresh reader reads what is written, and only the second is what the builder gets.
+   A later round is a fix check, per Rounds below.
 3. **Read what the plan rests on**: every file, route, model, and dependency it names in the
    repo. Read no business plan, even when an older plan links to one: the review judges
    the plan against the repo, the vision and the strategy only. A plan claim the repo contradicts
@@ -79,7 +80,8 @@ quotes the plan, and the verdict is delivered.
    to its author. It appends one Reviewed entry to the plan's Record (format in the plan format
    file), as a `record` entry in a `plan/v2` YAML or a line under `## Record` in a `plan/v1`
    Markdown plan, so the review stays part of the plan's trail. A spec that is not a plan gets no
-   Record line. When asked to fix, edit the plan for each blocking finding whose fix the
+   Record line. When asked to fix, fix blocking findings first and advisory ones only after a
+   passing verdict, per Rounds. Edit the plan for each blocking finding whose fix the
    plan or the repo already settles, put a finding that would change In or Out under Open as a
    question with a recommended answer, and set `status: draft` while any blocking finding is open.
    In the review file, set each finding it fixed to `fixed` with the edit as its resolution.
@@ -95,6 +97,38 @@ quotes the plan, and the verdict is delivered.
   `ceh-check-build-against-plan:check-build-against-plan`, not reviewed.
 - During the review, turn a question only the plan's owner can answer into a finding with a
   recommended answer.
+
+## Rounds
+
+A review loop runs at most two rounds without asking: a full cold review, then one fix check.
+
+- Round 1 is the full cold review of step 2. A round 1 with no blocking finding ends the loop: the
+  author fixes the advisory findings and runs no round 2.
+- After a round with blocking findings, the author fixes the blocking findings only. Advisory
+  fixes wait for a passing verdict, because a fix made before the next round can add the defect
+  that round finds.
+- A later round is a fix check only when the previous round raised blocking findings and this
+  session made the fixes, so it can quote the changed lines. A session that did not make them runs
+  a full cold round instead.
+- The fix check is one fresh subagent on the session's own model. Its brief holds the plan path
+  and each blocking finding of the previous round, quoted from that round's Output, with the plan
+  lines as they now read after its fix under it. It never gets the review file. It checks only
+  that each finding is fixed and that the changed lines add no blocking finding, and returns the
+  same Output as a full round. The round is recorded with `lenses: [Fix check]` and an empty
+  `skipped`.
+- After a passing verdict, Ready to build, the author fixes the advisory findings with no further
+  round, and the reply says they were not re-reviewed.
+- When the fix check still has a blocking finding, start no round 3. Report the open blocking
+  findings and ask the owner once: run one more full round, fix them and build without a round, or
+  rethink. With no owner present, start no round, set the plan to `status: draft`, and report the
+  open findings. A later run on a review file whose last round is a fix check that still blocks
+  asks the same question first, unless the owner's own request is to review again, which is the
+  yes and runs a full cold round.
+- A Rethink verdict ends the loop.
+
+Why ask before round 3: a further round spends money, which the owner decides. Rounds 1 and 2 are
+the review and its fix check that the request already covers, and how many rounds a plan needs is
+not known up front, so asking once at that point is still asking once.
 
 ## Output
 
@@ -131,3 +165,5 @@ verdict, the blocking findings, the findings still open from earlier rounds, and
 ## Hands off to
 
 - On **Ready to build**, `ceh-build-plan:implement-from-plan` builds the plan phase by phase.
+- On **Revise first** after a fix check, the owner decides whether a further round runs, per
+  Rounds.

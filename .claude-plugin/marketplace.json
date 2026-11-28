@@ -11,7 +11,7 @@
     {
       "name": "ceh-every-session",
       "source": "./plugins/standalone/ceh-every-session",
-      "version": "2.11.1",
+      "version": "2.11.3",
       "description": "CEH every-session: standards every session loads, however Claude Code is used — session handoff (save and load, and at the usage limit), questionnaires for people outside the session, context economy via delegated bulk reads, and replies folded to their summary."
     },
     {
@@ -71,7 +71,7 @@
     {
       "name": "ceh-build-plan",
       "source": "./plugins/standalone/ceh-build-plan",
-      "version": "2.1.8",
+      "version": "2.1.9",
       "description": "CEH build plan: plan a change and build it from the plan. Settle the technical design several features share, as decisions and planned diagrams in ARCHITECTURE.yaml. Decide how to build a new app or one feature before any code, as one committed plan file with scope, the design decisions the build needs, and phases that each end in a runnable check, and review the plan before anyone builds from it. Then build it phase by phase, test first, implementing only what each phase names and proving it with the phase's own check, with the evidence recorded in the plan."
     },
     {
@@ -101,7 +101,7 @@
     {
       "name": "ceh-product-direction",
       "source": "./plugins/standalone/ceh-product-direction",
-      "version": "2.1.10",
+      "version": "2.1.11",
       "description": "CEH product direction: decide what to build and whether it is worth it. Write a repo's VISION.yaml and STRATEGY.yaml, so agents and people can settle later decisions from them, drafted from what the repo shows and confirmed with its owner. Break the product into features in PRD.yaml, each with its requirements and acceptance criteria. And turn a product idea or an existing app plan into a validated business plan via a rigorous product-market-fit interview loop: draft, interrogate the weakest assumption, revise, repeat until a PMF readiness gate passes. Then harden it: a report-only board review, and specialist passes on strategy, unit economics, go-to-market, premortem, the 90-day operating plan, and investor materials."
     },
     {
@@ -119,7 +119,7 @@
     {
       "name": "ceh-session-orchestration",
       "source": "./plugins/standalone/ceh-session-orchestration",
-      "version": "1.0.9",
+      "version": "1.0.10",
       "description": "CEH session orchestration: talk to one long-running main session per repository that starts a full worker session per task, briefs it by cross-session message, takes its report back, and keeps a checked file of its workers per machine, so the state survives compaction and a new session."
     },
     {
