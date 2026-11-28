@@ -409,7 +409,10 @@ worker, status and summary. A task of the request counts as open until its repor
   rows in `.agents_workspace/BACKLOG.md`.
   A user's request for subagents, such as reviews on another model, goes into the worker's
   brief, since a worker may start them. The plugin's scope guard denies the orchestrator's own
-  edits in the repository and its subagent calls.
+  edits in the repository and its subagent calls. It also counts the orchestrator's Read, Grep,
+  Glob, Bash and PowerShell calls on each incoming message and, past its limit, denies each one
+  unless it is run again, which passes once, so a look that grows into a task is handed to a
+  worker. The limit was set from 124 turns of 13 past orchestrator sessions.
 - **One worker per parallel task.** Tasks that can run side by side each get their own worker,
   up to the limit of step 4. Tasks go to the same worker only when they must run in sequence,
   never to save starting a worker.
