@@ -219,7 +219,7 @@ the model is fixed when the worker starts.
    signal for that.
 
 The start prompt: fill in the names, keep the parts in this order, and end with the first task
-block.
+block, whose `done_when` follows step 5's wording for a review.
 
 ```text
 You are a worker session in an orchestrator setup. The user talks only to the orchestrator
@@ -268,6 +268,12 @@ done_when: <the check that proves it>
 commit: <true, unless the user asked to keep the changes uncommitted>
 ```
 
+In every task block, the first one in step 4's start prompt included, a task that reviews a plan
+or other work gets a `done_when` that names the review skill's own end, such as "the review ends
+Ready to build, or its fix check still blocks and the report asks the user". Never write
+"a done verdict with every finding fixed", because only another review round can show that
+verdict, and that wording set off every extra round workers started on their own.
+
 Read this session's name as the Rules say, and when the worker's `reports_to` differs, send it the
 handover message of step 2 and set `reports_to` first. Record the task in the worker's `tasks` with `sent` and
 `status: sent`, and set the worker `busy`, before sending it. After sending it, subscribe again
@@ -298,8 +304,10 @@ one idle notice, and tell the user again that an approval request may arrive fro
 Relay reports as one list of the reports awaiting the user's answer: every reply that relays a
 report opens with every task whose `status` is `reported`, across all workers, oldest `received`
 first and ties in file order, numbered from 1, each with its worker, task id, summary and
-`needs_user`. The new report is last. Under the list, name the answers each item takes, up to
-four, as step 7 sets them out:
+`needs_user`. The new report is last. Each item restates its open decision block in full, the
+question and every option, never one summary line, because a list that gave an earlier report one
+line left the user's short answer, such as "1", ambiguous. Under the list, name the answers each
+item takes, up to four, as step 7 sets them out:
 
 - **land**: only for a `done` report whose `needs_user` asks to land, in a worker repository with
   a remote (`git -C "<repo>" remote` prints a name), and only when `held` has no non-landing entry
