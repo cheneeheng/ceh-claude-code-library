@@ -53,7 +53,7 @@ undo it.
 2. `write-build-plan` writes one plan file an agent can build from without asking again, then
    starts the review by itself.
 3. `review-build-plan` reads the plan from a fresh context and gives a verdict before anyone
-   builds.
+   builds, checks only the fixes in a second round, and asks before a third.
 4. `implement-from-plan` builds the plan phase by phase and proves each phase with its own check
    before starting the next. Without a plan, it writes a minimal one from the request first.
 

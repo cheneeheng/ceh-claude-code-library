@@ -11,6 +11,15 @@ before this repo live in
 
 ## 2026-11-28
 
+Plan reviews in worker sessions ran two to four full rounds per loop, and one session ran six. Ten
+of the fourteen blocking findings that later rounds found came from the previous round's own
+fixes. `review-build-plan` now runs at most two rounds without asking: a full cold review, then
+one fix check that gets only the previous round's blocking findings and the lines each fix
+changed. Advisory fixes wait for a passing verdict. When the fix check still blocks, the session
+asks the plan's owner before a third round, because a further round spends money the owner
+decides on. The shared Review lifecycle's cold-round rule names the fix-check exception in all
+five of its copies.
+
 An orchestrator session took a request to analyse a worker's transcript as a quick look, then read
 three transcripts itself with ten scripts on one message, and its scope guard stopped it only
 when it tried to write the retro. Nothing counted reads. The guard now counts the orchestrator's
@@ -28,10 +37,21 @@ own.
 
 | Plugin                      | Version |
 | --------------------------- | ------- |
+| `ceh-build-plan`            | 2.1.9   |
+| `ceh-every-session`         | 2.11.2  |
+| `ceh-git-workflow`          | 3.0.8   |
+| `ceh-product-direction`     | 2.1.11  |
 | `ceh-session-orchestration` | 1.0.9   |
 
 ### Changed
 
+- `ceh-build-plan` 2.1.9: `review-build-plan` gains a Rounds section, blocking fixes first in fix
+  mode, and a hand-off for a fix check that still blocks. The plan-review schema's cold-round rule
+  names the fix-check round, and the README says the review checks the fixes once and asks before
+  a third round.
+- `ceh-every-session` 2.11.2, `ceh-git-workflow` 3.0.8 and `ceh-product-direction` 2.1.11: the
+  cold-round rule in the general-review, stress-test, code-review and business-plan review schemas
+  names the fix-check round, word for word with the plan-review schema.
 - `ceh-session-orchestration`: `orchestrator-scope-guard` counts the orchestrator's Read, Grep,
   Glob, Bash and PowerShell calls per incoming message and denies each past 10 unless it is run
   again, which passes once, and a new `UserPromptSubmit` entry resets the count. The standard's Rules and the README
