@@ -50,6 +50,15 @@ had to type the merge. Such a report is now answered accept, and after every sto
 orchestrator checks the worker's workspace branch and merges it into the main workspace branch
 itself when it is not in yet, keeping both sides' decision-log lines, as the user chose.
 
+Two idle workers, at 530K and 348K tokens, were never compacted, though the standard relied on
+idle compaction for a late follow-up. Claude Code documents it only for an interactive terminal,
+the VS Code chat panel and the desktop app's Code tab, and a worker is a `claude --bg` session,
+so the threshold the start command set most likely did nothing (inferred, not reproduced). A
+`/compact` sent by message does not run either: a probe session got it as text. Past 55 idle
+minutes, a follow-up now goes to a new session started in the worker's own worktree and branch,
+under its name, with the earlier report. Removing the worker removes each of its sessions, newest
+first, the order a live check on stopped sessions tried.
+
 ### Plugin versions
 
 | Plugin                      | Version |
@@ -58,7 +67,7 @@ itself when it is not in yet, keeping both sides' decision-log lines, as the use
 | `ceh-every-session`         | 2.11.3  |
 | `ceh-git-workflow`          | 3.0.9   |
 | `ceh-product-direction`     | 2.1.11  |
-| `ceh-session-orchestration` | 1.0.11  |
+| `ceh-session-orchestration` | 1.0.12  |
 
 ### Changed
 
@@ -93,6 +102,12 @@ itself when it is not in yet, keeping both sides' decision-log lines, as the use
   branch when the session's `cwd` is inside its own `.agents_workspace`, where it did nothing
   before. Two regression tests cover the session-end merge and the Stop commit
   (`fix/20261128-115700-workspace-sync-nested-cwd`).
+- `ceh-session-orchestration` 1.0.12: `orchestrate-worker-sessions` step 5 gains **A late
+  follow-up**: past 55 idle minutes the orchestrator stops the worker and starts a new session in
+  its worktree with the earlier report, a landing task included. Step 7 runs `claude rm` on every
+  session under the worker's name, newest first. The start command drops
+  `CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS`, and the Rules, the README and the compatibility line drop
+  the idle-compaction claim (`fix/20261128-140657-worker-idle-compaction`).
 
 ## 2026-11-27
 

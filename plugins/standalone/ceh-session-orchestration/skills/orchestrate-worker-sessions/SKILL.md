@@ -6,8 +6,7 @@ disable-model-invocation: false
 user-invocable: false
 compatibility: >-
   Claude Code v2.1.236+ for cross-session messaging with notify_when_idle, without which no worker
-  can be messaged, and v2.1.290+ for the idle compaction threshold, without which a late
-  follow-up re-reads the whole conversation uncached. git for worker worktrees, without which
+  can be messaged. git for worker worktrees, without which
   workers run one at a time in the current folder. uv for the orchestration file check, without
   which the file goes unchecked and unrendered.
 license: Apache-2.0
@@ -69,7 +68,8 @@ lowercased. With no such file, skip this step.
    stop and remove the copy and tell the user. Then send the handover message below, set the
    worker's `reports_to` to this session's name, and subscribe with `SendMessage`
    `notify_when_idle: true` and no message text, as for a task. Any other worker keeps its
-   `reports_to` until a follow-up is about to be sent to it, when it gets the handover first.
+   `reports_to` until a follow-up is about to be sent to it, when it gets the handover first,
+   unless step 5's **A late follow-up** applies, which sends none.
 
 6. Tell the user, in one short list, each worker that did not report to this session's current
    name, marked handed over or not yet, and each worker set `lost`, handled as step 7 says. When
@@ -183,17 +183,13 @@ the model is fixed when the worker starts.
    its absolute path:
 
    ```bash
-   (cd "<repo>" && claude --bg --worktree <worker name> -n <worker name> --settings '{"env":{"CEH_ORCHESTRATION_WORKER":"<hub>","CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS":"100000"}}' "$(cat "<absolute prompt file>")")
+   (cd "<repo>" && claude --bg --worktree <worker name> -n <worker name> --settings '{"env":{"CEH_ORCHESTRATION_WORKER":"<hub>"}}' "$(cat "<absolute prompt file>")")
    ```
 
    - The subshell keeps this session in the hub: a `cd` the Bash tool keeps would move it into the
      nested repository, where the scope guard no longer recognises it. Every command below that
      runs in a worker's repository uses the same form or `git -C`, with `"<repo>"` and
      `"<worker folder>"` double-quoted, since folder names may hold spaces.
-
-   - `CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS` lowers Claude Code's idle compaction threshold to its
-     floor of 100000 tokens, from 200000, which a 200K context window auto-compacts before it
-     reaches. The Rules say why the plugin relies on it.
 
    - Pass `--worktree` only when the worker's repository is a git repository. Elsewhere the worker
      runs in the hub folder. Uncommitted work in the checkout of `<hub>/<repo>` is not in the
@@ -276,11 +272,47 @@ Ready to build, or its fix check still blocks and the report asks the user". Nev
 "a done verdict with every finding fixed", because only another review round can show that
 verdict, and that wording set off every extra round workers started on their own.
 
-Read this session's name as the Rules say, and when the worker's `reports_to` differs, send it the
-handover message of step 2 and set `reports_to` first. Record the task in the worker's `tasks` with `sent` and
+First, before any task goes to an existing worker, a landing task included, compare its
+`last_active` with `date "+%Y-%m-%d %H:%M"`. Past 55 minutes, follow **A late follow-up** below
+instead of the rest of this paragraph, handover message included. Otherwise read this session's
+name as the Rules say, and when the worker's `reports_to` differs, send it the handover message
+of step 2 and set `reports_to` first. Record the task in the worker's `tasks` with `sent` and
 `status: sent`, and set the worker `busy`, before sending it. After sending it, subscribe again
 with `SendMessage` `notify_when_idle: true` and no message text, because each subscription brings
 one idle notice, and tell the user again that an approval request may arrive from the worker.
+
+**A late follow-up.** The 55 minutes leave a margin before the worker's one-hour prompt cache
+expires, since `last_active` is when this session last heard from the worker, not the worker's
+last request. Claude Code's idle compaction is documented only for an interactive terminal, the VS
+Code chat panel and the desktop app's Code tab, and was never seen in a `claude --bg` worker, so
+a message or a resume after that would read the worker's whole conversation again uncached.
+Start a new session in the worker's own folder instead:
+
+1. When `claude agents --json --all` lists the worker with a `pid`, stop it with
+   `claude stop <id>`. Skip **The worker's workspace branch** here: the new session keeps
+   working in the same `.agents_workspace`. A stopped worker is not resumed.
+2. Record the task and set the worker `busy` as above, and set `reports_to` to this session's
+   name: the start prompt names it, so no handover message is sent.
+3. Write a prompt file as step 4.3 says: the start prompt with the task block, and before the
+   task block the line `You continue the work of an earlier session of this worker, in the same worktree and branch. Its last report:`
+   followed by the newest report in the worker's `tasks` as a YAML block.
+4. Run it from the worker's folder, `<repo>` itself for a worker with `worktree: none`, with no
+   `--worktree`, adding `--model` as step 4.4 says:
+
+   ```bash
+   (cd "<worker folder>" && claude --bg -n <worker name> --settings '{"env":{"CEH_ORCHESTRATION_WORKER":"<hub>"}}' "$(cat "<absolute prompt file>")")
+   ```
+
+5. Keep the worker's entry, with its name, worktree, branch and tasks, and go on with steps 4.5,
+   4.6 and 4.8. Step 4.6 takes the `sessionId` of the entry under the name that has a `pid`, the
+   new session.
+
+The new session pays for its own start, and it knows the earlier conversation only through the
+report. The stopped session stays listed under the same name with no `pid`, and `ListAgents` and
+`SendMessage` reach only the running one. So wherever this standard reads a worker in
+`claude agents --json --all`, take the entry whose `sessionId` is the worker's `session_id`,
+except that when that entry has no `pid` and another entry under the name has one, the other is
+the worker: set `session_id` to it. Step 7's `claude rm` removes every session under the name.
 
 ### 6. Read a report
 
@@ -365,10 +397,11 @@ worker, status and summary. A task of the request counts as open until its repor
   whose `goal` equals `Land branch <the worker's own branch> into the default branch` exactly.
 
 - **Land a kept worker**: a worker `closed` by keep the branch can still be landed. When the user
-  says to land it and a slot is free, resume it as step 2.5 says, set it `idle`, and send the
-  landing task. At the limit, including the one worker in a hub folder that is no git repository, append the landing task to
-  `held` with `worker` set and resume the worker when a slot frees, because a resumed worker
-  counts against the limit. A closed worker its session list no longer holds is `lost`. A worker
+  says to land it and a slot is free: within 55 minutes of its `last_active`, resume it as step
+  2.5 says, set it `idle`, and send the landing task, and past them, skip the resume and start a
+  new session for the landing task as step 5's **A late follow-up** says. At the limit, including the one worker in a hub folder that is no git repository, append the landing task to
+  `held` with `worker` set, and when a slot frees, resume the worker or start the new session by
+  the same 55 minutes, because either counts against the limit. A closed worker its session list no longer holds is `lost`. A worker
   started before version 1.0.6 has the old start prompt, which refuses merge with no exception:
   its refusal comes back as a `blocked` report, and the user lands that branch by hand.
 - **A landing task's `done` report**: no answer is asked. First run one read-only merge check, a
@@ -381,8 +414,8 @@ worker, status and summary. A task of the request counts as open until its repor
     `git -C "<repo>" symbolic-ref --short refs/remotes/origin/HEAD` without its `origin/`.
 
   On a pass, set the task `accepted`, run `claude stop <id>`, then **The worker's workspace
-  branch** below, then `claude rm <id>`, delete the
-  worker and its `held` entries from the file once `claude rm` succeeds, and tell the user the
+  branch** below, then `claude rm` on each of its sessions as the `claude rm` item below says, delete the
+  worker and its `held` entries from the file once every `claude rm` succeeds, and tell the user the
   branch landed, the worker is removed, and to pull the default branch in `<hub>/<repo>`. In the
   same write, each waiting entry whose `after` names the worker loses its `after` and gains the
   report's PR or merge commit in its `scope`, since its worker cannot read this repository: it is
@@ -435,8 +468,18 @@ worker, status and summary. A task of the request counts as open until its repor
   worktree has uncommitted changes. When the user wants such a worktree discarded, show
   `git -C "<worker folder>" status --short` and give them
   `git -C "<worker folder>" reset --hard && git -C "<worker folder>" clean -fd` to run themselves, then run
-  `claude rm <id>`. Delete the worker from the file once `claude rm` succeeds, and with it every
-  `held` entry naming it, telling the user which ones were dropped.
+  `claude rm <id>`. It also refuses while the branch holds commits that exist on no remote, as
+  after a squash merge whose remote branch was deleted, and prints a
+  `claude rm <id> --discard-unpushed <commit>@<worktree-id>` command: give that command to the
+  user to run, since it deletes those commits.
+  After a late follow-up (step 5), `claude agents --json --all` lists several sessions under the
+  worker's name: run `claude rm` on each, the newest `startedAt` first. A later session's
+  removal removes only that session. The first session's, which created the worktree, removes
+  the worktree and the branch, and is the one the refusals above stop, for any session's
+  commits. Only that order, on stopped sessions, was tried live.
+  Delete the worker from the file once every one of its sessions' `claude rm` has succeeded, and
+  with it every `held` entry naming it, telling the user which ones were dropped. Until then
+  keep it `closed`, with `session_id` set to a session still listed.
 - A worker set `lost`, at load or mid-session: tell the user its repository, worktree and
   branch. When its newest task is `sent`, offer a re-brief and wait for the answer, and on yes
   start a fresh worker as step 4 says with the same task block as its `t1` and the same `repo`,
@@ -492,16 +535,12 @@ worker, status and summary. A task of the request counts as open until its repor
   worker.
 - **A new task gets a fresh worker.** A follow-up, such as a change the user asks for before
   answering a report, goes to an existing worker when the worker is `idle` and the follow-up is
-  in the same area as its last task. A new unrelated task still gets a fresh worker. A late
-  follow-up does not re-read the worker's whole conversation uncached, because the plugin relies
-  on Claude Code's idle compaction, which the start command's
-  `CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS` sets to 100000 tokens: an idle conversation past that
-  size is compacted about an hour after its last request, before its one-hour prompt cache
-  expires, so the follow-up starts from the summary. Claude Code does this only with
-  auto-compaction on, on the one-hour cache, which is the default on a Claude subscription within
-  plan usage while an API key, usage credits or a cloud provider get five minutes, with the
-  machine awake, in an interactive session, and, before v2.1.314, only where Claude Code can fetch
-  its feature flags. Whether a background worker counts as interactive is not yet verified.
+  in the same area as its last task. A new unrelated task still gets a fresh worker. Past 55 idle
+  minutes the follow-up goes to a new session in the worker's worktree, as step 5's **A late
+  follow-up** says, because Claude Code documents idle compaction only for an interactive
+  terminal, the VS Code chat panel and the desktop app's Code tab, it was never seen in a
+  `claude --bg` worker, and a message to the idle session would read its whole conversation
+  again uncached once its one-hour prompt cache expires.
 - **Never poll.** Wait for the worker's message or the idle notice. Do not call `ListAgents` in a
   loop.
 - **Deleting a worker's uncommitted work is the user's act.** Never force a removal.
